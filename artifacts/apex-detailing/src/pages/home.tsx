@@ -112,7 +112,9 @@ const services = [
 ];
 
 const gallery = [
-  { id: 1, title: "Paint Correction", beforeAfter: true, color: "from-blue-900 to-[#3496FF]" },
+  { id: 1, title: "Paint Correction", beforeAfter: true, color: "from-blue-900 to-[#3496FF]", images: [
+    `${import.meta.env.BASE_URL}images/paint-correction-1.jpg`,
+  ], currentImageIndex: 0 },
   { id: 2, title: "Ceramic Coating", beforeAfter: false, color: "from-[#A886CD] to-purple-900", video: `${import.meta.env.BASE_URL}videos/ceramic-demo.mp4` },
   { id: 3, title: "Interior Restoration", beforeAfter: true, color: "from-blue-900 to-indigo-900" },
   { id: 4, title: "Exterior Detail", beforeAfter: false, color: "from-purple-900 to-black" },
