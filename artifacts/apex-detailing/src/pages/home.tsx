@@ -464,38 +464,6 @@ export default function Home() {
         <div className="absolute inset-0 z-0 opacity-40">
           <div className="absolute top-[20%] left-[10%] w-96 h-96 bg-[#A886CD] rounded-full mix-blend-screen filter blur-[100px] animate-[pulse_8s_ease-in-out_infinite]" />
           <div className="absolute bottom-[20%] right-[10%] w-96 h-96 bg-[#3496FF] rounded-full mix-blend-screen filter blur-[100px] animate-[pulse_8s_ease-in-out_infinite_1s]" />
-          
-          {/* Vehicle Silhouette */}
-          <svg className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] opacity-75" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice">
-            {/* Jeep Silhouette - Filled */}
-            <g fill="#3496FF" opacity="0.9">
-              {/* Body */}
-              <path d="M 320 190 L 520 185 L 540 280 L 300 280 Z" />
-              
-              {/* Cabin */}
-              <rect x="330" y="130" width="140" height="70" rx="10" />
-              
-              {/* Hood */}
-              <path d="M 320 190 L 380 140 L 420 140 L 480 190 Z" />
-              
-              {/* Bumper */}
-              <rect x="280" y="220" width="240" height="40" rx="3" />
-            </g>
-            
-            {/* Windshield - Semi transparent */}
-            <path d="M 340 140 L 400 80 L 460 140 Z" fill="#A886CD" opacity="0.7" />
-            
-            {/* Wheels */}
-            <circle cx="350" cy="290" r="35" fill="#A886CD" opacity="0.8" />
-            <circle cx="350" cy="290" r="22" fill="#0a0a0a" opacity="0.9" />
-            
-            <circle cx="490" cy="290" r="35" fill="#A886CD" opacity="0.8" />
-            <circle cx="490" cy="290" r="22" fill="#0a0a0a" opacity="0.9" />
-            
-            {/* Roof Rack */}
-            <rect x="340" y="110" width="120" height="20" rx="3" fill="#3496FF" opacity="0.7" />
-          </svg>
-          
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0a0a0a]/80 to-[#0a0a0a]" />
         </div>
 
