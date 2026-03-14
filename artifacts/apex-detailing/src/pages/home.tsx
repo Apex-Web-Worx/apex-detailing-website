@@ -760,8 +760,10 @@ export default function Home() {
                       muted
                       autoPlay
                       loop
+                      playsInline
+                      controls={false}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
                   </>
                 ) : item.images && item.images.length > 0 ? (
                   <>
