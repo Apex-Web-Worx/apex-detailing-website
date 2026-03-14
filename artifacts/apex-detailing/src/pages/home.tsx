@@ -357,17 +357,19 @@ export default function Home() {
   useEffect(() => {
     let bubbleId = 0;
     const interval = setInterval(() => {
+      const drift = (Math.random() - 0.5) * 100; // -50px to +50px drift
       const newBubble = {
         id: bubbleId++,
         left: Math.random() * 100,
-        duration: 4 + Math.random() * 2,
+        duration: 12 + Math.random() * 6, // 12-18 seconds
+        drift,
       };
       setBubbles((prev) => [...prev, newBubble]);
 
       setTimeout(() => {
         setBubbles((prev) => prev.filter((b) => b.id !== newBubble.id));
       }, newBubble.duration * 1000);
-    }, 800);
+    }, 1200); // Spawn every 1.2 seconds
 
     return () => clearInterval(interval);
   }, []);
@@ -478,18 +480,22 @@ export default function Home() {
       </nav>
 
       {/* Bubbles */}
-      {bubbles.map((bubble) => (
-        <div
-          key={bubble.id}
-          className="bubble"
-          style={{
-            width: `${40 + Math.random() * 60}px`,
-            height: `${40 + Math.random() * 60}px`,
-            left: `${bubble.left}%`,
-            animation: `bubble-float ${bubble.duration}s ease-in linear forwards`,
-          }}
-        />
-      ))}
+      {bubbles.map((bubble) => {
+        const size = 35 + Math.random() * 80;
+        return (
+          <div
+            key={bubble.id}
+            className="bubble"
+            style={{
+              width: `${size}px`,
+              height: `${size}px`,
+              left: `${bubble.left}%`,
+              animation: `bubble-float ${bubble.duration}s ease-in linear forwards`,
+              "--drift": `${bubble.drift}px`,
+            } as React.CSSProperties}
+          />
+        );
+      })}
 
       {/* Hero Section */}
       <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
