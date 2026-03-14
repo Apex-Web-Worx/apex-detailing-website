@@ -189,6 +189,129 @@ const googleReviews = [
   },
 ];
 
+function AddonsSection() {
+  const [expandedAddon, setExpandedAddon] = useState(null);
+
+  const interiorAddons = [
+    {
+      id: "pet-hair",
+      name: "Pet Hair Removal",
+      price: "$0 – $100",
+      description: "Cost depends on carpet type and pet hair amount."
+    },
+    {
+      id: "deep-shampooing",
+      name: "Deep Shampooing & Stain Removal",
+      price: "$120+",
+      description: "Deep shampooing and stain removal is an intensive cleaning process designed to eliminate deeply embedded dirt, odors, and stubborn stains from carpets and upholstery. High-quality cleaning solutions and powerful extraction equipment lift contaminants from the fibers, leaving surfaces sanitized, refreshed, and looking like new."
+    },
+    {
+      id: "plastic-uv",
+      name: "Interior Plastic UV Treatment",
+      price: "$60",
+      description: ""
+    }
+  ];
+
+  const exteriorAddons = [
+    {
+      id: "wash-clay-wax",
+      name: "Wash, Clay & Wax",
+      price: "Sedan: $150 | SUV: $175–$200",
+      description: ""
+    },
+    {
+      id: "dress-exterior",
+      name: "Dress Exterior Plastic",
+      price: "$45",
+      description: ""
+    },
+    {
+      id: "clay-bar",
+      name: "Clay Bar Treatment",
+      price: "$55+",
+      description: ""
+    },
+    {
+      id: "headlight",
+      name: "Headlight Restoration",
+      price: "$100",
+      description: ""
+    },
+    {
+      id: "spot-scratch",
+      name: "Spot Scratch & Swirl Removal",
+      price: "$40+",
+      description: ""
+    },
+    {
+      id: "engine-bay",
+      name: "Engine Bay Cleaning",
+      price: "$60+",
+      description: ""
+    }
+  ];
+
+  const AddonCard = ({ addon }) => (
+    <div
+      className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-all cursor-pointer group"
+      onMouseEnter={() => addon.description && setExpandedAddon(addon.id)}
+      onMouseLeave={() => setExpandedAddon(null)}
+      onClick={() => addon.description && setExpandedAddon(expandedAddon === addon.id ? null : addon.id)}
+    >
+      <h4 className="text-base font-bold text-white mb-1">{addon.name}</h4>
+      <p className="text-[#3496FF] font-bold text-sm">{addon.price}</p>
+      {expandedAddon === addon.id && addon.description && (
+        <p className="text-gray-300 text-xs mt-3 leading-relaxed animate-in fade-in duration-300">
+          {addon.description}
+        </p>
+      )}
+    </div>
+  );
+
+  return (
+    <div className="mt-24 pt-16 border-t border-white/10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        {/* Interior Addons */}
+        <div>
+          <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+              Interior Addons
+            </span>
+          </h3>
+          <p className="text-gray-400 text-sm mb-6">
+            Optional Services (Extra Charges Apply)
+          </p>
+          
+          <div className="space-y-4">
+            {interiorAddons.map(addon => (
+              <AddonCard key={addon.id} addon={addon} />
+            ))}
+          </div>
+        </div>
+
+        {/* Exterior Addons */}
+        <div>
+          <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+              Exterior Addons
+            </span>
+          </h3>
+          <p className="text-gray-400 text-sm mb-6">
+            Optional Services (Extra Charges Apply)
+          </p>
+          
+          <div className="space-y-4">
+            {exteriorAddons.map(addon => (
+              <AddonCard key={addon.id} addon={addon} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -445,83 +568,7 @@ export default function Home() {
           </div>
 
           {/* Addons Section - Two Column Layout */}
-          <div className="mt-24 pt-16 border-t border-white/10">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              {/* Interior Addons */}
-              <div>
-                <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4">
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
-                    Interior Addons
-                  </span>
-                </h3>
-                <p className="text-gray-400 text-sm mb-6">
-                  Optional Services (Extra Charges Apply)
-                </p>
-                
-                <div className="space-y-4">
-                  <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
-                    <h4 className="text-base font-bold text-white mb-1">Pet Hair Removal</h4>
-                    <p className="text-[#3496FF] font-bold text-sm">$0 – $100</p>
-                    <p className="text-gray-400 text-xs mt-2">Cost depends on carpet type and pet hair amount.</p>
-                  </div>
-
-                  <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
-                    <h4 className="text-base font-bold text-white mb-1">Deep Shampooing & Stain Removal</h4>
-                    <p className="text-[#3496FF] font-bold text-sm">$120+</p>
-                  </div>
-
-                  <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
-                    <h4 className="text-base font-bold text-white mb-1">Interior Plastic UV Treatment</h4>
-                    <p className="text-[#3496FF] font-bold text-sm">$60</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Exterior Addons */}
-              <div>
-                <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4">
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
-                    Exterior Addons
-                  </span>
-                </h3>
-                <p className="text-gray-400 text-sm mb-6">
-                  Optional Services (Extra Charges Apply)
-                </p>
-                
-                <div className="space-y-4">
-                  <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
-                    <h4 className="text-base font-bold text-white mb-1">Wash, Clay & Wax</h4>
-                    <p className="text-[#3496FF] font-bold text-xs">Sedan: $150 | SUV: $175–$200</p>
-                  </div>
-
-                  <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
-                    <h4 className="text-base font-bold text-white mb-1">Dress Exterior Plastic</h4>
-                    <p className="text-[#3496FF] font-bold text-sm">$45</p>
-                  </div>
-
-                  <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
-                    <h4 className="text-base font-bold text-white mb-1">Clay Bar Treatment</h4>
-                    <p className="text-[#3496FF] font-bold text-sm">$55+</p>
-                  </div>
-
-                  <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
-                    <h4 className="text-base font-bold text-white mb-1">Headlight Restoration</h4>
-                    <p className="text-[#3496FF] font-bold text-sm">$100</p>
-                  </div>
-
-                  <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
-                    <h4 className="text-base font-bold text-white mb-1">Spot Scratch & Swirl Removal</h4>
-                    <p className="text-[#3496FF] font-bold text-sm">$40+</p>
-                  </div>
-
-                  <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
-                    <h4 className="text-base font-bold text-white mb-1">Engine Bay Cleaning</h4>
-                    <p className="text-[#3496FF] font-bold text-sm">$60+</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <AddonsSection />
         </div>
       </section>
 
