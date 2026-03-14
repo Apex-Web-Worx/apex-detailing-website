@@ -22,7 +22,7 @@ import {
 
 const CALENDLY_LINK = "https://calendly.com/apexdetailingsf/detailing-appointment";
 const INSTAGRAM_LINK = "https://www.instagram.com/apexdetailing_sf";
-const FACEBOOK_LINK = "https://www.facebook.com/apexdetailingsf";
+const FACEBOOK_LINK = "https://www.facebook.com/profile.php?id=61556776603500";
 const GOOGLE_REVIEWS_LINK = "https://www.google.com/search?q=Apex+Detailing&stick=H4sIAAAAAAAA_-NgU1IxqEiySE1NNLBMTrE0MEs0NLQyqDA1NLQwNE4xtDQzNzEzNEhcxMrnWJBaoeCSWpKYmZOZlw4Asn_-zDkAAAA&hl=en&mat=CcIO9BqJOsD8ElYBTVDHnnxyNghw-j2BeR4ij5jLdc0SeYrElIPH-Aq0ZuK6O8WT2yF1vWHO7tGxejyLiXsPHGKTtfQJq-8n3QWKG1vjf-yuPtfCuuaWSfTNtBNHCmAP8g&authuser=2";
 
 const services = [
