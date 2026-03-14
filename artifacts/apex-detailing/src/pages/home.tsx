@@ -219,7 +219,7 @@ export default function Home() {
               <img
                 src={`${import.meta.env.BASE_URL}images/logo.png`}
                 alt="Apex Detailing Logo"
-                className="h-10 w-auto object-contain"
+                className="h-16 w-auto object-contain"
               />
             </div>
 
@@ -796,7 +796,7 @@ export default function Home() {
                 <img
                   src={`${import.meta.env.BASE_URL}images/logo.png`}
                   alt="Apex Detailing Logo"
-                  className="h-12 w-auto object-contain"
+                  className="h-14 w-auto object-contain"
                 />
               </div>
               <p className="text-gray-400 mb-6 font-medium">
