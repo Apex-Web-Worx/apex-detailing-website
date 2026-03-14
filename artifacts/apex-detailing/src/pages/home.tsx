@@ -112,18 +112,18 @@ const services = [
 ];
 
 const gallery = [
-  { id: 1, title: "Paint Correction", color: "from-blue-900 to-[#3496FF]", images: [
+  { id: 1, title: "Paint Correction", beforeAfter: true, color: "from-blue-900 to-[#3496FF]", images: [
     `${import.meta.env.BASE_URL}images/paint-correction-1.jpg`,
   ], currentImageIndex: 0 },
-  { id: 2, title: "Ceramic Coating", color: "from-[#A886CD] to-purple-900", video: `${import.meta.env.BASE_URL}videos/ceramic-demo.mp4` },
-  { id: 3, title: "Interior Restoration", color: "from-blue-900 to-indigo-900", images: [
+  { id: 2, title: "Ceramic Coating", beforeAfter: false, color: "from-[#A886CD] to-purple-900", video: `${import.meta.env.BASE_URL}videos/ceramic-demo.mp4` },
+  { id: 3, title: "Interior Restoration", beforeAfter: true, color: "from-blue-900 to-indigo-900", images: [
     `${import.meta.env.BASE_URL}images/interior-restoration-1.jpg`,
     `${import.meta.env.BASE_URL}images/interior-restoration-2.jpg`,
     `${import.meta.env.BASE_URL}images/interior-restoration-3.jpg`,
     `${import.meta.env.BASE_URL}images/interior-restoration-4.jpg`,
     `${import.meta.env.BASE_URL}images/interior-restoration-5.jpg`,
   ], currentImageIndex: 0 },
-  { id: 4, title: "Exterior Detail", color: "from-purple-900 to-black", images: [
+  { id: 4, title: "Exterior Detail", beforeAfter: false, color: "from-purple-900 to-black", images: [
     `${import.meta.env.BASE_URL}images/exterior-detail-1.jpg`,
     `${import.meta.env.BASE_URL}images/exterior-detail-2.jpg`,
   ], currentImageIndex: 0 },
@@ -629,8 +629,13 @@ export default function Home() {
                       Video
                     </span>
                   )}
+                  {item.beforeAfter && (
+                    <span className="inline-block px-3 py-1 bg-[#3496FF] text-black font-black text-xs uppercase tracking-widest rounded mb-3">
+                      Results After
+                    </span>
+                  )}
                   <h4 className="text-2xl font-black text-white">{item.title}</h4>
-                  {item.images && item.images.length > 0 && (
+                  {item.images && item.images.length > 1 && (
                     <p className="text-xs text-gray-300 mt-2">
                       {item.images.length} {item.images.length === 1 ? 'result' : 'results'}
                     </p>
