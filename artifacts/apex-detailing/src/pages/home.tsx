@@ -464,6 +464,49 @@ export default function Home() {
         <div className="absolute inset-0 z-0 opacity-40">
           <div className="absolute top-[20%] left-[10%] w-96 h-96 bg-[#A886CD] rounded-full mix-blend-screen filter blur-[100px] animate-[pulse_8s_ease-in-out_infinite]" />
           <div className="absolute bottom-[20%] right-[10%] w-96 h-96 bg-[#3496FF] rounded-full mix-blend-screen filter blur-[100px] animate-[pulse_8s_ease-in-out_infinite_1s]" />
+          
+          {/* Vehicle Silhouette */}
+          <svg className="absolute bottom-0 right-0 w-full h-full opacity-[0.08] mix-blend-screen" viewBox="0 0 800 400" preserveAspectRatio="xMaxYMax slice">
+            <defs>
+              <linearGradient id="vehicleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style={{ stopColor: "#3496FF", stopOpacity: 0.8 }} />
+                <stop offset="100%" style={{ stopColor: "#A886CD", stopOpacity: 0.8 }} />
+              </linearGradient>
+            </defs>
+            {/* Jeep Silhouette */}
+            <g fill="url(#vehicleGradient)">
+              {/* Bumper & Grille */}
+              <rect x="280" y="220" width="240" height="40" />
+              <rect x="300" y="190" width="200" height="30" rx="5" />
+              
+              {/* Hood */}
+              <path d="M 320 190 L 380 140 L 420 140 L 480 190 Z" />
+              
+              {/* Windshield */}
+              <path d="M 340 140 L 400 80 L 460 140 Z" opacity="0.6" />
+              
+              {/* Cabin */}
+              <rect x="330" y="130" width="140" height="70" rx="10" />
+              
+              {/* Rear */}
+              <path d="M 470 190 L 500 185 L 520 210 Z" />
+              
+              {/* Body */}
+              <path d="M 320 190 L 520 185 L 540 280 L 300 280 Z" />
+              
+              {/* Left Wheel */}
+              <circle cx="350" cy="290" r="35" />
+              <circle cx="350" cy="290" r="28" fill="#0a0a0a" />
+              
+              {/* Right Wheel */}
+              <circle cx="490" cy="290" r="35" />
+              <circle cx="490" cy="290" r="28" fill="#0a0a0a" />
+              
+              {/* Roof Rack */}
+              <rect x="340" y="110" width="120" height="20" rx="3" opacity="0.7" />
+            </g>
+          </svg>
+          
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0a0a0a]/80 to-[#0a0a0a]" />
         </div>
 
