@@ -187,7 +187,7 @@
   }
 
   /* Soap bubbles animations */
-  @keyframes float-bubble {
+  @keyframes float-bubble-1 {
     0% {
       transform: translateY(0) translateX(0);
       opacity: 0;
@@ -199,7 +199,75 @@
       opacity: 1;
     }
     100% {
-      transform: translateY(-100vh) translateX(20px);
+      transform: translateY(-100vh) translateX(60px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes float-bubble-2 {
+    0% {
+      transform: translateY(0) translateX(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100vh) translateX(-80px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes float-bubble-3 {
+    0% {
+      transform: translateY(0) translateX(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100vh) translateX(100px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes float-bubble-4 {
+    0% {
+      transform: translateY(0) translateX(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100vh) translateX(-120px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes float-bubble-5 {
+    0% {
+      transform: translateY(0) translateX(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100vh) translateX(40px);
       opacity: 0;
     }
   }
@@ -227,8 +295,27 @@
       inset 2px 2px 6px rgba(255, 255, 255, 0.6),
       0 8px 16px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(3px);
-    animation: float-bubble linear forwards;
     border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .soap-bubble:nth-child(1) {
+    animation: float-bubble-1 linear forwards;
+  }
+
+  .soap-bubble:nth-child(2) {
+    animation: float-bubble-2 linear forwards;
+  }
+
+  .soap-bubble:nth-child(3) {
+    animation: float-bubble-3 linear forwards;
+  }
+
+  .soap-bubble:nth-child(4) {
+    animation: float-bubble-4 linear forwards;
+  }
+
+  .soap-bubble:nth-child(5) {
+    animation: float-bubble-5 linear forwards;
   }
 
   .soap-bubble::before {
