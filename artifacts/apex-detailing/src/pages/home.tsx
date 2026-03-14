@@ -526,9 +526,12 @@ export default function Home() {
               href={INSTAGRAM_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-bold text-sm tracking-widest hover:text-[#A886CD] transition-colors uppercase"
+              className="group relative inline-flex items-center justify-center px-6 py-3 font-bold text-white transition-all duration-300 ease-in-out bg-gradient-to-r from-[#A886CD]/20 to-[#3496FF]/20 border border-[#A886CD] rounded-lg hover:from-[#A886CD]/40 hover:to-[#3496FF]/40 hover:border-[#3496FF]"
             >
-              View More on Instagram <ChevronRight className="w-4 h-4" />
+              <span className="flex items-center gap-2">
+                <Instagram className="w-5 h-5" />
+                Follow on Instagram <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </span>
             </a>
           </div>
 
@@ -553,6 +556,22 @@ export default function Home() {
                 </div>
               </div>
             ))}
+          </div>
+
+          <div className="mt-16 text-center">
+            <p className="text-gray-400 text-lg mb-6">See more stunning transformations on Instagram</p>
+            <a
+              href={INSTAGRAM_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative inline-flex items-center justify-center px-10 py-5 font-black text-white text-lg transition-all duration-300 ease-in-out bg-gradient-to-r from-[#A886CD] to-[#3496FF] rounded-xl overflow-hidden shadow-[0_0_40px_rgba(168,134,205,0.4)] hover:shadow-[0_0_60px_rgba(52,150,255,0.6)] hover:scale-105"
+            >
+              <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#3496FF] to-[#A886CD] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <span className="relative flex items-center gap-3">
+                <Instagram className="w-6 h-6" />
+                Follow @apexdetailing_sf
+              </span>
+            </a>
           </div>
         </div>
       </section>
