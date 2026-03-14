@@ -4,5 +4,6 @@ export const modules: ModuleMap = {
   "./components/mockups/apex-landing/BoldEnergetic.tsx": () => import("../components/mockups/apex-landing/BoldEnergetic.tsx"),
   "./components/mockups/apex-landing/DarkNeon.tsx": () => import("../components/mockups/apex-landing/DarkNeon.tsx"),
   "./components/mockups/apex-landing/PremiumLuxury.tsx": () => import("../components/mockups/apex-landing/PremiumLuxury.tsx"),
-  "./components/mockups/apex-landing/SleekMinimal.tsx": () => import("../components/mockups/apex-landing/SleekMinimal.tsx")
+  "./components/mockups/apex-landing/SleekMinimal.tsx": () => import("../components/mockups/apex-landing/SleekMinimal.tsx"),
+  "./components/mockups/apex-landing/StoryBrandVersion.tsx": () => import("../components/mockups/apex-landing/StoryBrandVersion.tsx")
 };
