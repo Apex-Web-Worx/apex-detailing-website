@@ -126,6 +126,9 @@ const gallery = [
   { id: 4, title: "Exterior Detail", beforeAfter: true, color: "from-purple-900 to-black", images: [
     `${import.meta.env.BASE_URL}images/exterior-detail-1.jpg`,
     `${import.meta.env.BASE_URL}images/exterior-detail-2.jpg`,
+    `${import.meta.env.BASE_URL}images/exterior-detail-3.jpg`,
+    `${import.meta.env.BASE_URL}images/exterior-detail-4.jpg`,
+    `${import.meta.env.BASE_URL}images/exterior-detail-5.jpg`,
   ], currentImageIndex: 0 },
 ];
 
