@@ -185,4 +185,49 @@
     margin: 0 8px;
     vertical-align: middle;
   }
+
+  /* Soap bubbles animations */
+  @keyframes float-bubble {
+    0% {
+      transform: translateY(0) translateX(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100vh) translateX(20px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes shimmer {
+    0%, 100% {
+      background-position: -200% center;
+    }
+    50% {
+      background-position: 200% center;
+    }
+  }
+
+  .soap-bubble {
+    position: absolute;
+    border-radius: 50%;
+    box-shadow: inset -2px -2px 4px rgba(255, 255, 255, 0.4), inset 2px 2px 4px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(2px);
+    animation: float-bubble linear forwards;
+  }
+
+  .soap-bubble::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), transparent, rgba(100, 150, 255, 0.2));
+    animation: shimmer 3s ease-in-out infinite;
+    background-size: 400% center;
+  }
 }
