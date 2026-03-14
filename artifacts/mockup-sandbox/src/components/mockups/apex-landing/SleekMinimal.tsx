@@ -169,7 +169,7 @@ export default function SleekMinimal() {
         <div className="container mx-auto px-6 relative z-10 flex flex-col items-center text-center mt-12">
           <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm mb-8">
             <span className="w-2 h-2 rounded-full bg-[#A886CD] animate-pulse"></span>
-            <span className="text-xs font-medium tracking-[0.15em] text-white/80 uppercase">Premium Vehicle Detailing in Nixa ★ Ozark ★ Springfield</span>
+            <span className="text-xs font-medium tracking-[0.15em] text-white/80 uppercase">Premium Vehicle Detailing in Nixa ● Ozark ● Springfield</span>
           </div>
           
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[1.1] mb-6 max-w-5xl">
@@ -178,7 +178,7 @@ export default function SleekMinimal() {
           </h1>
           
           <p className="text-lg md:text-xl text-white/60 font-light max-w-2xl mb-12 leading-relaxed">
-            Elevating automotive care in Nixa ★ Ozark ★ Springfield. Experience meticulous craftsmanship and uncompromising quality.
+            Elevating automotive care in Nixa ● Ozark ● Springfield. Experience meticulous craftsmanship and uncompromising quality.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center gap-6">
@@ -278,7 +278,7 @@ export default function SleekMinimal() {
                   Apex Detailing was founded on a simple principle: treating every vehicle as a masterpiece. We don't just wash cars; we perform automotive restoration.
                 </p>
                 <p>
-                  Serving the Nixa ★ Ozark ★ Springfield areas, we bring premium detailing services directly to you. Whether it's removing years of swirl marks or applying a 5-year ceramic coating, our methodical approach ensures perfection.
+                  Serving the Nixa ● Ozark ● Springfield areas, we bring premium detailing services directly to you. Whether it's removing years of swirl marks or applying a 5-year ceramic coating, our methodical approach ensures perfection.
                 </p>
               </div>
               
@@ -460,7 +460,7 @@ export default function SleekMinimal() {
                 <span className="text-xl font-light tracking-[0.2em] uppercase">Apex</span>
               </div>
               <p className="text-white/50 text-sm font-light leading-relaxed mb-8 max-w-xs">
-                Premium automotive detailing services for those who demand excellence in the Nixa ★ Ozark ★ Springfield areas.
+                Premium automotive detailing services for those who demand excellence in the Nixa ● Ozark ● Springfield areas.
               </p>
               <div className="flex gap-4">
                 <a href="https://www.instagram.com/apexdetailing_sf" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white transition-colors">

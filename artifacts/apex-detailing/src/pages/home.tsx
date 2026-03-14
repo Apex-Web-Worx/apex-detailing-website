@@ -493,7 +493,7 @@ export default function Home() {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#A886CD]/10 to-[#3496FF]/10 border border-[#A886CD]/30 backdrop-blur-sm mb-8">
             <span className="flex h-2 w-2 rounded-full bg-[#3496FF] animate-pulse" />
             <span className="text-sm font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#A886CD] to-[#3496FF] uppercase">
-              Nixa ★ Ozark ★ Springfield Premium Detailing
+              Nixa ● Ozark ● Springfield Premium Detailing
             </span>
           </div>
 
@@ -506,7 +506,7 @@ export default function Home() {
 
           <p className="max-w-2xl text-lg md:text-xl text-gray-300 mb-10 font-medium">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] via-[#A886CD] to-[#3496FF]">Premium auto detailing, ceramic coating, and paint correction</span> services serving
-            <span className="text-[#3496FF] font-bold"> Nixa ★ Ozark ★ Springfield</span>. We bring the showroom shine to your vehicle.
+            <span className="text-[#3496FF] font-bold"> Nixa ● Ozark ● Springfield</span>. We bring the showroom shine to your vehicle.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
@@ -681,7 +681,7 @@ export default function Home() {
 
               <div className="space-y-6 text-gray-400 text-lg mb-10">
                 <p>
-                  Where passion, precision, and purpose come together to serve you with excellence. Serving the Nixa ★ Ozark ★ Springfield areas, we specialize in high-quality car detailing that restores beauty, protects value, and reflects the pride you have in your vehicle.
+                  Where passion, precision, and purpose come together to serve you with excellence. Serving the Nixa ● Ozark ● Springfield areas, we specialize in high-quality car detailing that restores beauty, protects value, and reflects the pride you have in your vehicle.
                 </p>
                 <p>
                   Our dedication to quality and customer satisfaction has helped us become <strong className="text-white">#1 Ranked in Nixa for 2024 and 2025</strong>, a recognition we are truly grateful for.
