@@ -118,6 +118,10 @@ const gallery = [
   { id: 2, title: "Ceramic Coating", beforeAfter: false, color: "from-[#A886CD] to-purple-900", video: `${import.meta.env.BASE_URL}videos/ceramic-demo.mp4` },
   { id: 3, title: "Interior Restoration", beforeAfter: true, color: "from-blue-900 to-indigo-900", images: [
     `${import.meta.env.BASE_URL}images/interior-restoration-1.jpg`,
+    `${import.meta.env.BASE_URL}images/interior-restoration-2.jpg`,
+    `${import.meta.env.BASE_URL}images/interior-restoration-3.jpg`,
+    `${import.meta.env.BASE_URL}images/interior-restoration-4.jpg`,
+    `${import.meta.env.BASE_URL}images/interior-restoration-5.jpg`,
   ], currentImageIndex: 0 },
   { id: 4, title: "Exterior Detail", beforeAfter: false, color: "from-purple-900 to-black", images: [
     `${import.meta.env.BASE_URL}images/exterior-detail-1.jpg`,
