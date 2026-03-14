@@ -207,7 +207,7 @@ export function BoldEnergetic() {
         <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8">
             <span className="flex h-2 w-2 rounded-full bg-[#3496FF] animate-pulse"></span>
-            <span className="text-sm font-bold tracking-widest text-gray-300 uppercase">Premium Vehicle Detailing in Nixa / Ozark / Springfield</span>
+            <span className="text-sm font-bold tracking-widest text-gray-300 uppercase">Premium Vehicle Detailing in Nixa ★ Ozark ★ Springfield</span>
           </div>
           
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] mb-6 drop-shadow-2xl uppercase">
@@ -218,7 +218,7 @@ export function BoldEnergetic() {
           </h1>
           
           <p className="max-w-2xl text-lg md:text-xl text-gray-400 mb-10 font-medium">
-            Premium mobile auto detailing, ceramic coating, and paint correction services serving Nixa / Ozark / Springfield. We bring the showroom shine to your driveway.
+            Premium mobile auto detailing, ceramic coating, and paint correction services serving Nixa ★ Ozark ★ Springfield. We bring the showroom shine to your driveway.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
@@ -357,7 +357,7 @@ export function BoldEnergetic() {
                   Apex Detailing was founded on a simple principle: providing unmatched quality and convenience to car owners in the Ozarks. We don't cut corners, we polish them.
                 </p>
                 <p>
-                  As a mobile detailing service, we bring our fully-equipped setup directly to your home or office in Nixa / Ozark / Springfield. You get your time back while we restore your vehicle to pristine condition.
+                  As a mobile detailing service, we bring our fully-equipped setup directly to your home or office in Nixa ★ Ozark ★ Springfield. You get your time back while we restore your vehicle to pristine condition.
                 </p>
               </div>
               
@@ -470,7 +470,7 @@ export function BoldEnergetic() {
                 Ready to Experience <br/>The Apex Difference?
               </h2>
               <p className="text-xl text-gray-400 mb-10 font-medium">
-                Book your appointment today. Our mobile unit will come to your location in Nixa / Ozark / Springfield.
+                Book your appointment today. Our mobile unit will come to your location in Nixa ★ Ozark ★ Springfield.
               </p>
               <a
                 href="https://calendly.com/apexdetailingsf/detailing-appointment"
@@ -541,7 +541,7 @@ export function BoldEnergetic() {
               <ul className="space-y-4 text-gray-400">
                 <li className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-[#3496FF] shrink-0 mt-0.5" />
-                  <span>Serving Nixa / Ozark / Springfield, Missouri (Mobile Service)</span>
+                  <span>Serving Nixa ★ Ozark ★ Springfield, Missouri (Mobile Service)</span>
                 </li>
                 {/* Email and Phone placeholders for visual completeness */}
                 <li className="flex items-center gap-3 hover:text-white transition-colors cursor-pointer">
