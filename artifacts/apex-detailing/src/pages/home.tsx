@@ -123,7 +123,7 @@ const gallery = [
     `${import.meta.env.BASE_URL}images/interior-restoration-4.jpg`,
     `${import.meta.env.BASE_URL}images/interior-restoration-5.jpg`,
   ], currentImageIndex: 0 },
-  { id: 4, title: "Exterior Detail", beforeAfter: false, color: "from-purple-900 to-black", images: [
+  { id: 4, title: "Exterior Detail", beforeAfter: true, color: "from-purple-900 to-black", images: [
     `${import.meta.env.BASE_URL}images/exterior-detail-1.jpg`,
     `${import.meta.env.BASE_URL}images/exterior-detail-2.jpg`,
   ], currentImageIndex: 0 },
