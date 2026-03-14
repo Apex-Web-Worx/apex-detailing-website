@@ -835,15 +835,15 @@ export default function Home() {
               <ul className="space-y-4 text-gray-400">
                 <li className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-[#3496FF] shrink-0 mt-0.5" />
-                  <span>Located in Springfield, Nixa, and Ozark, Missouri</span>
+                  <span>Located in the Nixa<br />1114 E Lakota St, 65714</span>
                 </li>
                 <li className="flex items-center gap-3 hover:text-white transition-colors cursor-pointer">
                   <Phone className="w-5 h-5 text-[#A886CD]" />
-                  <span>Contact us via social media</span>
+                  <a href="tel:417-527-6165" className="hover:text-[#3496FF] transition-colors">417-527-6165</a>
                 </li>
-                <li className="flex items-center gap-3 hover:text-white transition-colors cursor-pointer">
-                  <Mail className="w-5 h-5 text-[#3496FF]" />
-                  <span>DM for inquiries</span>
+                <li className="flex items-start gap-3">
+                  <Mail className="w-5 h-5 text-[#3496FF] shrink-0 mt-0.5" />
+                  <span>Contact us via<br />social media</span>
                 </li>
               </ul>
             </div>
