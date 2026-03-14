@@ -494,11 +494,10 @@ export default function Home() {
                 <p>
                   <strong className="text-white">Experience the Apex difference — where faith fuels our service and quality drives every detail.</strong>
                 </p>
-              </div>
-
-              <div className="border-t border-white/10 pt-6 mt-8">
-                <p className="text-white font-black text-lg">Mikhail Gurov</p>
-                <p className="text-[#A886CD] font-bold">Founder & Detailing Specialist</p>
+                <div className="mt-8 pt-6 border-t border-white/10">
+                  <p className="text-white font-black text-lg">Mikhail Gurov</p>
+                  <p className="text-[#A886CD] font-bold">Founder & Detailing Specialist</p>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
