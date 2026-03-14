@@ -698,7 +698,7 @@ export default function Home() {
               {[
                 { rating: "5.0", reviews: "Excellent", description: "Rating" },
                 { rating: "100%", reviews: "Positive", description: "Customer Rating" },
-                { rating: "24h", reviews: "Response", description: "Support Time" },
+                { rating: "5 Hours", reviews: "Response", description: "Support Time" },
               ].map((stat, i) => (
                 <div key={i} className="text-center p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:border-white/20 transition-colors">
                   <p className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF] mb-2">
