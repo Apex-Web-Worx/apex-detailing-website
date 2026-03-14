@@ -224,7 +224,7 @@ function AddonsSection() {
       id: "dress-exterior",
       name: "Dress Exterior Plastic",
       price: "$45",
-      description: ""
+      description: "Exterior Plastic Dressing is a detailing service that restores and protects the plastic and rubber trim on the outside of your vehicle. A professional-grade dressing is applied to faded or dull plastic surfaces to bring back their deep, rich color while adding protection against sun damage and weather."
     },
     {
       id: "clay-bar",
