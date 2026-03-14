@@ -456,7 +456,7 @@ export default function Home() {
                   className="absolute inset-0 bg-cover bg-center mix-blend-luminosity scale-100 group-hover:scale-105 transition-transform duration-1000"
                   style={{
                     backgroundImage:
-                      "url('https://images.unsplash.com/photo-1601362840469-51e4d8d58785?auto=format&fit=crop&q=80')",
+                      `url('${import.meta.env.BASE_URL}images/about-hero.jpg')`,
                   }}
                 />
                 <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black to-transparent z-20">
