@@ -318,6 +318,24 @@ export default function Home() {
   const [activeSection, setActiveSection] = useState("home");
   const [selectedGalleryItem, setSelectedGalleryItem] = useState<typeof gallery[0] | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const handleGalleryItemClick = (item: typeof gallery[0]) => {
+    setSelectedGalleryItem(item);
+    setCurrentImageIndex(0);
+  };
+
+  const nextImage = () => {
+    if (selectedGalleryItem?.images && currentImageIndex < selectedGalleryItem.images.length - 1) {
+      setCurrentImageIndex(currentImageIndex + 1);
+    }
+  };
+
+  const prevImage = () => {
+    if (currentImageIndex > 0) {
+      setCurrentImageIndex(currentImageIndex - 1);
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -753,7 +771,7 @@ export default function Home() {
               <div
                 key={item.id}
                 className="group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer"
-                onClick={() => setSelectedGalleryItem(item)}
+                onClick={() => handleGalleryItemClick(item)}
               >
                 {item.video ? (
                   <>
@@ -870,11 +888,46 @@ export default function Home() {
                 controls
               />
             ) : selectedGalleryItem.images && selectedGalleryItem.images.length > 0 ? (
-              <img
-                src={selectedGalleryItem.images[0]}
-                alt={selectedGalleryItem.title}
-                className={`${isFullscreen ? 'w-full h-full' : 'w-full h-full'} object-contain ${!isFullscreen && 'rounded-xl'}`}
-              />
+              <>
+                <img
+                  src={selectedGalleryItem.images[currentImageIndex]}
+                  alt={`${selectedGalleryItem.title} - Image ${currentImageIndex + 1}`}
+                  className={`${isFullscreen ? 'w-full h-full' : 'w-full h-full'} object-contain ${!isFullscreen && 'rounded-xl'}`}
+                />
+                
+                {/* Previous Button */}
+                {currentImageIndex > 0 && (
+                  <button
+                    onClick={prevImage}
+                    className="absolute left-6 top-1/2 transform -translate-y-1/2 text-white hover:text-[#3496FF] transition-colors z-20 bg-black/30 hover:bg-black/50 p-3 rounded-full"
+                    aria-label="Previous image"
+                  >
+                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                )}
+
+                {/* Next Button */}
+                {selectedGalleryItem.images.length > 1 && currentImageIndex < selectedGalleryItem.images.length - 1 && (
+                  <button
+                    onClick={nextImage}
+                    className="absolute right-6 top-1/2 transform -translate-y-1/2 text-white hover:text-[#3496FF] transition-colors z-20 bg-black/30 hover:bg-black/50 p-3 rounded-full"
+                    aria-label="Next image"
+                  >
+                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                )}
+
+                {/* Image Counter */}
+                {selectedGalleryItem.images.length > 1 && (
+                  <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-full text-sm font-semibold">
+                    {currentImageIndex + 1} / {selectedGalleryItem.images.length}
+                  </div>
+                )}
+              </>
             ) : null}
           </div>
         </div>
