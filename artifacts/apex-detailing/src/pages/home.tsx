@@ -316,6 +316,7 @@ export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [bubbles, setBubbles] = useState<Array<{ id: number; left: number; duration: number }>>([]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -351,6 +352,24 @@ export default function Home() {
     return () => {
       Object.values(observers).forEach((observer) => observer.disconnect());
     };
+  }, []);
+
+  useEffect(() => {
+    let bubbleId = 0;
+    const interval = setInterval(() => {
+      const newBubble = {
+        id: bubbleId++,
+        left: Math.random() * 100,
+        duration: 4 + Math.random() * 2,
+      };
+      setBubbles((prev) => [...prev, newBubble]);
+
+      setTimeout(() => {
+        setBubbles((prev) => prev.filter((b) => b.id !== newBubble.id));
+      }, newBubble.duration * 1000);
+    }, 800);
+
+    return () => clearInterval(interval);
   }, []);
 
   const scrollToSection = (id: string) => {
@@ -457,6 +476,20 @@ export default function Home() {
           </div>
         </div>
       </nav>
+
+      {/* Bubbles */}
+      {bubbles.map((bubble) => (
+        <div
+          key={bubble.id}
+          className="bubble"
+          style={{
+            width: `${40 + Math.random() * 60}px`,
+            height: `${40 + Math.random() * 60}px`,
+            left: `${bubble.left}%`,
+            animation: `bubble-float ${bubble.duration}s ease-in linear forwards`,
+          }}
+        />
+      ))}
 
       {/* Hero Section */}
       <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
