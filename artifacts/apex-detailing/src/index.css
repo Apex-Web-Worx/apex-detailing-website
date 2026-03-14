@@ -339,8 +339,8 @@
     position: absolute;
     border-radius: 50%;
     background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.1) 15%, transparent 60%),
-                radial-gradient(circle at 70% 70%, rgba(64, 224, 208, 0.12), transparent 50%),
-                radial-gradient(circle at center, rgba(72, 209, 204, 0.08), rgba(100, 200, 230, 0.05));
+                radial-gradient(circle at 70% 70%, rgba(52, 150, 255, 0.12), transparent 50%),
+                radial-gradient(circle at center, rgba(168, 134, 205, 0.08), rgba(52, 150, 255, 0.05));
     box-shadow: 
       inset -3px -3px 8px rgba(0, 0, 0, 0.15),
       inset 2px 2px 6px rgba(255, 255, 255, 0.4),
@@ -401,8 +401,8 @@
     background: conic-gradient(
       from 180deg at 40% 40%,
       rgba(255, 255, 255, 0.25),
-      rgba(64, 224, 208, 0.1),
-      rgba(100, 200, 230, 0.08),
+      rgba(52, 150, 255, 0.1),
+      rgba(168, 134, 205, 0.08),
       transparent
     );
     animation: bubble-shine 4s ease-in-out infinite;
