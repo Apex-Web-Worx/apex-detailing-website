@@ -143,6 +143,15 @@
   }
 }
 
+@keyframes circle-blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
 @layer utilities {
   /* Hide ugly search cancel button in Chrome */
   input[type="search"]::-webkit-search-cancel-button {
@@ -154,5 +163,12 @@
     content: attr(data-placeholder);
     color: hsl(var(--muted-foreground));
     pointer-events: none;
+  }
+
+  .location-separator {
+    display: inline-block;
+    color: #3496FF;
+    animation: circle-blink 1.5s ease-in-out infinite;
+    margin: 0 0.25em;
   }
 }

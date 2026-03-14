@@ -15,7 +15,8 @@ export function StoryBrandVersion() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const locations = "Nixa ● Ozark ● Springfield";
+  const locations = "Nixa <LocationSeparator /> Ozark <LocationSeparator /> Springfield";
+  const LocationSeparator = () => <span className="location-separator">●</span>;
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white font-sans">
