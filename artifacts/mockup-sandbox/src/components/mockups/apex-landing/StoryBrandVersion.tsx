@@ -15,7 +15,7 @@ export function StoryBrandVersion() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const locations = "Springfield / Nixa / Ozark";
+  const locations = "Nixa / Ozark / Springfield";
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white font-sans">
