@@ -197,7 +197,7 @@ function AddonsSection() {
       id: "pet-hair",
       name: "Pet Hair Removal",
       price: "$0 – $100",
-      description: "Cost depends on carpet type and pet hair amount."
+      description: "Pet hair removal is a specialized interior detailing service designed to extract stubborn pet hair from seats, carpets, floor mats, and other fabric surfaces inside the vehicle. Professional tools such as rubber brushes, specialized vacuums, air compressors, and detailing tools are used to loosen and remove hair that is deeply embedded in upholstery fibers."
     },
     {
       id: "deep-shampooing",
