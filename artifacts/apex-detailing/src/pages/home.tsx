@@ -351,6 +351,15 @@ export default function Home() {
               <span className="font-bold">Expert Detailing</span>
             </div>
           </div>
+
+          <div className="mt-12 flex flex-wrap justify-center items-center gap-4">
+            <span className="text-sm font-bold tracking-widest text-gray-400 uppercase">Service Areas:</span>
+            <div className="flex gap-3">
+              <span className="px-4 py-2 bg-gradient-to-r from-[#A886CD]/20 to-[#3496FF]/20 border border-[#A886CD]/50 rounded-full text-white font-semibold text-sm">Nixa</span>
+              <span className="px-4 py-2 bg-gradient-to-r from-[#A886CD]/20 to-[#3496FF]/20 border border-[#3496FF]/50 rounded-full text-white font-semibold text-sm">Ozarks</span>
+              <span className="px-4 py-2 bg-gradient-to-r from-[#A886CD]/20 to-[#3496FF]/20 border border-[#A886CD]/50 rounded-full text-white font-semibold text-sm">Springfield</span>
+            </div>
+          </div>
         </div>
       </section>
 
