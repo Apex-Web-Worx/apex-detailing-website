@@ -466,7 +466,7 @@ export default function Home() {
           <div className="absolute bottom-[20%] right-[10%] w-96 h-96 bg-[#3496FF] rounded-full mix-blend-screen filter blur-[100px] animate-[pulse_8s_ease-in-out_infinite_1s]" />
           
           {/* Vehicle Silhouette */}
-          <svg className="absolute bottom-0 right-0 w-full h-full opacity-[0.08] mix-blend-screen" viewBox="0 0 800 400" preserveAspectRatio="xMaxYMax slice">
+          <svg className="absolute bottom-0 right-0 w-full h-full opacity-[0.25] mix-blend-screen" viewBox="0 0 800 400" preserveAspectRatio="xMaxYMax slice">
             <defs>
               <linearGradient id="vehicleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" style={{ stopColor: "#3496FF", stopOpacity: 0.8 }} />
