@@ -167,13 +167,16 @@
 
   .location-separator {
     display: inline-block;
-    width: 0.4em;
-    height: 0.4em;
-    min-width: 0.4em;
-    min-height: 0.4em;
+    width: 6px;
+    height: 6px;
+    min-width: 6px;
+    min-height: 6px;
+    font-size: 6px;
+    line-height: 6px;
     color: #3496FF;
     animation: circle-blink 1.5s ease-in-out infinite;
     animation-delay: 0s;
-    margin: 0 0.25em;
+    margin: 0 4px;
+    vertical-align: middle;
   }
 }
