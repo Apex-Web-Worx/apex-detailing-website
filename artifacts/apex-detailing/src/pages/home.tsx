@@ -17,6 +17,7 @@ import {
   Clock,
   Award,
   ExternalLink,
+  Wand2,
 } from "lucide-react";
 
 const CALENDLY_LINK = "https://calendly.com/apexdetailingsf/detailing-appointment";
@@ -75,6 +76,20 @@ const services = [
       "Extensive vacuuming of the interior",
       "Floor mats steam-cleaned",
       "Steam-cleaning of brake and gas pedals",
+    ],
+  },
+  {
+    id: "full-detailing",
+    title: "Full Detailing",
+    description:
+      "The ultimate package! Includes interior and exterior detailed cleaning and protection. Get your vehicle looking showroom fresh inside and out. Add-ons available to customize your package.",
+    icon: <Wand2 className="w-10 h-10 text-[#A886CD]" />,
+    features: [
+      "Complete Exterior Detailing",
+      "Complete Interior Detailing",
+      "Paint Protection",
+      "Professional Results",
+      "Customizable Add-ons",
     ],
   },
   {
