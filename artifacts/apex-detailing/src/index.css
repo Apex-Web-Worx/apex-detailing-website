@@ -88,10 +88,16 @@
 
 @keyframes button-shine {
   0%, 100% {
-    text-shadow: 0 0 0.5rem rgba(52, 150, 255, 0.3);
+    text-shadow: 0 0 0.4rem rgba(52, 150, 255, 0.2);
+  }
+  25% {
+    text-shadow: 0 0 1.5rem rgba(52, 150, 255, 1), 0 -0.1rem 0.3rem rgba(52, 150, 255, 0.8), 0 0.1rem 0.3rem rgba(52, 150, 255, 0.8);
   }
   50% {
-    text-shadow: 0 0 1.2rem rgba(52, 150, 255, 1), 0 0 2rem rgba(52, 150, 255, 0.5);
+    text-shadow: 0 0 0.3rem rgba(52, 150, 255, 0.4);
+  }
+  75% {
+    text-shadow: 0 0 1.8rem rgba(52, 150, 255, 1), 0 -0.15rem 0.4rem rgba(52, 150, 255, 0.9), 0 0.15rem 0.4rem rgba(52, 150, 255, 0.9);
   }
 }
 
