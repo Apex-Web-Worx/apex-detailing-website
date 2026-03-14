@@ -92,15 +92,6 @@ const services = [
     features: ["Swirl Mark Removal", "Deep Gloss Restoration", "Enhances Resale Value"],
   },
   {
-    id: "headlight-restoration",
-    title: "Headlight Restoration",
-    description:
-      "Fix foggy, yellowed headlights to improve nighttime visibility and dramatically improve your car's appearance.",
-    icon: <CheckCircle2 className="w-10 h-10 text-[#3496FF]" />,
-    pricing: "$100+",
-    features: ["Improves Safety", "Removes Oxidation", "UV Protection Applied"],
-  },
-  {
     id: "ceramic-coating",
     title: "Ceramic Coating",
     description:
