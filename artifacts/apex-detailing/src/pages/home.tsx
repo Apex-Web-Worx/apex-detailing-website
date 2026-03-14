@@ -31,7 +31,6 @@ const services = [
     title: "Ceramic Coating",
     description:
       "Ultimate protection and extreme gloss for your vehicle's paint. Lasts for years, making maintenance washes a breeze.",
-    footerDescription: "Long-lasting nano-ceramic protective coating",
     icon: <Shield className="w-10 h-10 text-[#3496FF]" />,
     pricing: "Call for Quote",
     features: ["Up to 5 Years Protection", "Extreme Hydrophobics", "Scratch Resistance"],
@@ -41,7 +40,6 @@ const services = [
     title: "Paint Correction",
     description:
       "Remove swirl marks, light scratches, and oxidation to restore your paint to a flawless, mirror-like finish.",
-    footerDescription: "Swirl and scratch removal for mirror-like shine",
     icon: <Sparkles className="w-10 h-10 text-[#A886CD]" />,
     pricing: "$300-$600",
     features: ["Swirl Mark Removal", "Deep Gloss Restoration", "Enhances Resale Value"],
@@ -51,7 +49,6 @@ const services = [
     title: "Exterior Detailing",
     description:
       "Comprehensive exterior cleaning and protection to make your car turn heads everywhere you go. Add-ons available to customize your package.",
-    footerDescription: "Hand wash, tires, wheels, and protective sealant",
     icon: <Car className="w-10 h-10 text-[#3496FF]" />,
     pricing: "$150",
     pricingDetails: ["Coupe / Sedan: $150", "Truck / Jeep / SUV: $200"],
@@ -68,7 +65,6 @@ const services = [
     title: "Interior Detailing",
     description:
       "Comprehensive interior cleaning that transforms every surface. From carpets to leather to air vents. Add-ons available to customize your package.",
-    footerDescription: "Deep clean carpets, seats, vents, and leather care",
     icon: <Droplets className="w-10 h-10 text-[#A886CD]" />,
     pricing: "$200",
     pricingDetails: ["2-Row: $200 – $300", "3-Row: $250 – $350"],
@@ -93,7 +89,6 @@ const services = [
     title: "Full Detailing",
     description:
       "The ultimate package! Includes interior and exterior detailed cleaning and protection. Get your vehicle looking showroom fresh inside and out. Add-ons available to customize your package.",
-    footerDescription: "Complete interior & exterior restoration package",
     icon: <Wand2 className="w-10 h-10 text-[#A886CD]" />,
     pricing: "$300",
     pricingDetails: ["Coupe / Sedan: $300-$400", "Truck / Jeep / 2-Row SUV: $350 – $450", "Minivan / 3-Row SUV: $350 – $500"],
@@ -110,7 +105,6 @@ const services = [
     title: "Headlight Restoration",
     description:
       "Fix foggy, yellowed headlights to improve nighttime visibility and dramatically improve your car's appearance.",
-    footerDescription: "Restore clarity and brightness to foggy headlights",
     icon: <CheckCircle2 className="w-10 h-10 text-[#3496FF]" />,
     pricing: "$100+",
     features: ["Improves Safety", "Removes Oxidation", "UV Protection Applied"],
@@ -840,17 +834,13 @@ export default function Home() {
 
             <div>
               <h4 className="font-black text-lg uppercase tracking-wider mb-6">Services</h4>
-              <ul className="space-y-4 text-gray-400">
+              <ul className="space-y-3 font-medium text-gray-400">
                 {services.map((service) => (
                   <li
                     key={service.id}
-                    className="hover:text-white transition-colors cursor-pointer"
+                    className="hover:text-white transition-colors cursor-pointer flex items-center gap-2"
                   >
-                    <div className="flex items-start gap-2 mb-1">
-                      <ChevronRight className="w-3 h-3 text-[#A886CD] mt-0.5 shrink-0" />
-                      <span className="font-medium text-white">{service.title}</span>
-                    </div>
-                    <p className="text-xs text-gray-500 ml-5">{service.footerDescription}</p>
+                    <ChevronRight className="w-3 h-3 text-[#A886CD]" /> {service.title}
                   </li>
                 ))}
               </ul>
