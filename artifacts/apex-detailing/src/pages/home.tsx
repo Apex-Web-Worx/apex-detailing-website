@@ -341,7 +341,7 @@ export default function Home() {
       const element = document.getElementById(id);
       if (element) {
         const observer = new IntersectionObserver(callback, {
-          threshold: 0.3,
+          threshold: [0, 0.1, 0.2],
         });
         observer.observe(element);
         observers[id] = observer;
