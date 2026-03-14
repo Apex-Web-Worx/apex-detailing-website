@@ -209,7 +209,7 @@ function AddonsSection() {
       id: "plastic-uv",
       name: "Interior Plastic UV Treatment",
       price: "$60",
-      description: ""
+      description: "Interior Plastic UV Treatment protects dashboards, door panels, and other plastic surfaces from sun damage. The treatment restores the original appearance while adding a protective layer that helps prevent fading, cracking, and discoloration."
     }
   ];
 
