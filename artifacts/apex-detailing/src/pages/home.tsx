@@ -317,6 +317,7 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [selectedGalleryItem, setSelectedGalleryItem] = useState<typeof gallery[0] | null>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -833,17 +834,35 @@ export default function Home() {
         >
           <button
             onClick={() => setSelectedGalleryItem(null)}
-            className="absolute top-6 right-6 text-white hover:text-[#3496FF] transition-colors"
+            className="absolute top-6 right-16 text-white hover:text-[#3496FF] transition-colors z-10"
             aria-label="Close"
           >
             <X className="w-8 h-8" />
           </button>
 
-          <div className="relative max-w-4xl w-full max-h-[90vh] flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+          <button
+            onClick={() => setIsFullscreen(!isFullscreen)}
+            className="absolute top-6 right-6 text-white hover:text-[#3496FF] transition-colors z-10"
+            aria-label={isFullscreen ? "Minimize" : "Maximize"}
+          >
+            {isFullscreen ? (
+              <div className="w-8 h-8 flex items-center justify-center">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 9V5m0 0H5m4 0l-4 4m0 6v4m0 0H5m4 0l-4-4m6-6h4v4m0 0v4m0-4h4m-4 0l4 4m-6-10h4m0 0v-4m0 4h4m-4 0l4-4" />
+                </svg>
+              </div>
+            ) : (
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6v4m12 0h4v-4m0 12h-4v4m-12 0H6v-4" />
+              </svg>
+            )}
+          </button>
+
+          <div className={`relative flex items-center justify-center ${isFullscreen ? 'w-screen h-screen' : 'max-w-4xl max-h-[90vh]'}`} onClick={(e) => e.stopPropagation()}>
             {selectedGalleryItem.video ? (
               <video
                 src={selectedGalleryItem.video}
-                className="w-full h-full object-contain rounded-xl"
+                className={`${isFullscreen ? 'w-full h-full' : 'w-full h-full'} object-contain ${!isFullscreen && 'rounded-xl'}`}
                 muted
                 autoPlay
                 loop
@@ -854,7 +873,7 @@ export default function Home() {
               <img
                 src={selectedGalleryItem.images[0]}
                 alt={selectedGalleryItem.title}
-                className="w-full h-full object-contain rounded-xl"
+                className={`${isFullscreen ? 'w-full h-full' : 'w-full h-full'} object-contain ${!isFullscreen && 'rounded-xl'}`}
               />
             ) : null}
           </div>
