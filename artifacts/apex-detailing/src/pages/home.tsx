@@ -109,6 +109,22 @@ const services = [
     pricing: "Call for Quote",
     features: ["Up to 5 Years Protection", "Extreme Hydrophobics", "Scratch Resistance"],
   },
+  {
+    id: "wash-clay-wax",
+    title: "Wash, Clay & Wax",
+    description:
+      "First, the vehicle receives a thorough hand wash to remove dirt, dust, and road grime. Next, a clay bar treatment is used to safely remove embedded contaminants such as tar, brake dust, and industrial fallout that normal washing cannot remove. Finally, a protective wax coating is applied to enhance shine, protect the paint, and help repel water and dirt.",
+    icon: <Sparkles className="w-10 h-10 text-[#A886CD]" />,
+    pricing: "$250",
+    pricingDetails: ["Sedan: $250", "SUV: $300–$350"],
+    features: [
+      "Thorough Hand Wash",
+      "Clay Bar Treatment",
+      "Professional Wax Coating",
+      "Enhanced Paint Protection",
+      "Water & Dirt Repellent",
+    ],
+  },
 ];
 
 const gallery = [
