@@ -316,7 +316,7 @@ export default function Home() {
           <div className="mt-16 flex flex-wrap justify-center items-center gap-8 opacity-60 hover:opacity-100 transition-all duration-500">
             <div className="flex items-center gap-2">
               <Award className="w-6 h-6 text-[#A886CD]" />
-              <span className="font-bold">Professional</span>
+              <span className="font-bold">Professional Detailers</span>
             </div>
             <div className="flex items-center gap-2">
               <Star className="w-6 h-6 text-[#3496FF]" fill="currentColor" />
