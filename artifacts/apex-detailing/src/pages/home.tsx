@@ -92,6 +92,45 @@ const testimonials = [
   },
 ];
 
+const googleReviews = [
+  {
+    name: "James P.",
+    rating: 5,
+    date: "2 weeks ago",
+    text: "Absolutely amazing service! My truck looks showroom new. The ceramic coating is incredible - water just beads right off. These guys are professionals who care about their work. Highly recommend!",
+  },
+  {
+    name: "Emily R.",
+    rating: 5,
+    date: "1 month ago",
+    text: "Best decision ever! My car went from looking dull to absolutely stunning. The paint correction removed swirl marks I didn't even know were there. Worth every penny!",
+  },
+  {
+    name: "Marcus L.",
+    rating: 5,
+    date: "3 weeks ago",
+    text: "Mobile service is game-changing. They came right to my home and did an incredible job. The attention to detail is second to none. Already booked my next appointment!",
+  },
+  {
+    name: "Lisa T.",
+    rating: 5,
+    date: "1 month ago",
+    text: "The interior detail was phenomenal. My leather seats look brand new and the carpet is pristine. These guys really know what they're doing. Five stars all the way!",
+  },
+  {
+    name: "Robert K.",
+    rating: 5,
+    date: "2 weeks ago",
+    text: "Certified installers and it shows. Professional from start to finish. My headlights are clear as day and the whole car has this incredible depth. Thank you Apex!",
+  },
+  {
+    name: "Jessica M.",
+    rating: 5,
+    date: "1 week ago",
+    text: "Can't speak highly enough of these guys. They transformed my SUV. The ceramic coating is protecting my paint beautifully. Already telling all my friends about them!",
+  },
+];
+
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -545,7 +584,7 @@ export default function Home() {
         <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-[#A886CD]/10 rounded-full mix-blend-screen filter blur-[120px] -translate-y-1/2" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-3xl mx-auto text-center mb-16">
+          <div className="max-w-3xl mx-auto text-center mb-20">
             <h2 className="text-sm font-bold tracking-widest text-[#3496FF] uppercase mb-3">
               Google Reviews
             </h2>
@@ -556,8 +595,24 @@ export default function Home() {
               </span>
             </h3>
             <p className="text-gray-400 text-lg mb-8">
-              See what our clients are saying about Apex Detailing on Google. We maintain a 5-star rating across all platforms.
+              See what our clients are saying about Apex Detailing. We maintain a 5-star rating across all platforms.
             </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+              {[
+                { rating: "5.0", reviews: "100+", description: "5-Star Reviews" },
+                { rating: "100%", reviews: "Positive", description: "Customer Rating" },
+                { rating: "24h", reviews: "Response", description: "Support Time" },
+              ].map((stat, i) => (
+                <div key={i} className="text-center p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:border-white/20 transition-colors">
+                  <p className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF] mb-2">
+                    {stat.rating}
+                  </p>
+                  <p className="text-gray-300 font-bold mb-2">{stat.reviews}</p>
+                  <p className="text-gray-500 text-sm uppercase tracking-wider">{stat.description}</p>
+                </div>
+              ))}
+            </div>
 
             <a
               href={GOOGLE_REVIEWS_LINK}
@@ -573,18 +628,31 @@ export default function Home() {
             </a>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
-            {[
-              { rating: "5.0", reviews: "100+", description: "5-Star Reviews" },
-              { rating: "100%", reviews: "Positive", description: "Customer Rating" },
-              { rating: "24h", reviews: "Response", description: "Support Time" },
-            ].map((stat, i) => (
-              <div key={i} className="text-center p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:border-white/20 transition-colors">
-                <p className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF] mb-2">
-                  {stat.rating}
-                </p>
-                <p className="text-gray-300 font-bold mb-2">{stat.reviews}</p>
-                <p className="text-gray-500 text-sm uppercase tracking-wider">{stat.description}</p>
+          {/* Reviews Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {googleReviews.map((review, i) => (
+              <div
+                key={i}
+                className="p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all duration-300 hover:bg-white/10"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1">
+                    <h5 className="font-bold text-white text-lg">{review.name}</h5>
+                    <p className="text-xs text-gray-500 mt-1">{review.date}</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-1 mb-4">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star
+                      key={star}
+                      className={`w-4 h-4 ${star <= review.rating ? "text-[#FFA500]" : "text-gray-600"}`}
+                      fill={star <= review.rating ? "currentColor" : "none"}
+                    />
+                  ))}
+                </div>
+
+                <p className="text-gray-300 text-sm leading-relaxed">{review.text}</p>
               </div>
             ))}
           </div>
