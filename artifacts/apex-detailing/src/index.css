@@ -338,15 +338,15 @@
   .soap-bubble {
     position: absolute;
     border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.02) 15%, transparent 60%),
-                radial-gradient(circle at 70% 70%, rgba(168, 134, 205, 0.05), transparent 50%),
-                radial-gradient(circle at center, rgba(168, 134, 205, 0.03), rgba(168, 134, 205, 0.02));
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.04) 15%, transparent 60%),
+                radial-gradient(circle at 70% 70%, rgba(168, 134, 205, 0.10), transparent 50%),
+                radial-gradient(circle at center, rgba(168, 134, 205, 0.06), rgba(168, 134, 205, 0.04));
     box-shadow: 
-      inset -3px -3px 8px rgba(0, 0, 0, 0.03),
-      inset 2px 2px 6px rgba(255, 255, 255, 0.08),
-      0 8px 16px rgba(0, 0, 0, 0.02);
+      inset -3px -3px 8px rgba(0, 0, 0, 0.05),
+      inset 2px 2px 6px rgba(255, 255, 255, 0.12),
+      0 8px 16px rgba(0, 0, 0, 0.03);
     backdrop-filter: blur(3px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .soap-bubble:nth-child(1) {
@@ -388,7 +388,7 @@
     left: 20%;
     width: 40%;
     height: 40%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.12), transparent 70%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.20), transparent 70%);
     border-radius: 50%;
     filter: blur(2px);
   }
@@ -400,9 +400,9 @@
     border-radius: 50%;
     background: conic-gradient(
       from 180deg at 40% 40%,
-      rgba(255, 255, 255, 0.05),
-      rgba(168, 134, 205, 0.03),
-      rgba(168, 134, 205, 0.02),
+      rgba(255, 255, 255, 0.10),
+      rgba(168, 134, 205, 0.07),
+      rgba(168, 134, 205, 0.05),
       transparent
     );
     animation: bubble-shine 4s ease-in-out infinite;
