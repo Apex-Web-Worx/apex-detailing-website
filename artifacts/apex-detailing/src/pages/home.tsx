@@ -481,18 +481,17 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Floating Bubbles - Across Entire Page */}
-      <div className="soap-bubble fixed top-[5%] left-[5%] w-12 h-12 pointer-events-none" style={{ animationDuration: '16s', animationDelay: '0s', zIndex: 10 }} />
-      <div className="soap-bubble fixed top-[25%] left-[15%] w-16 h-16 pointer-events-none" style={{ animationDuration: '18s', animationDelay: '1s', zIndex: 10 }} />
-      <div className="soap-bubble fixed top-[60%] right-[10%] w-20 h-20 pointer-events-none" style={{ animationDuration: '20s', animationDelay: '2s', zIndex: 10 }} />
-      <div className="soap-bubble fixed top-[45%] right-[5%] w-14 h-14 pointer-events-none" style={{ animationDuration: '17s', animationDelay: '0.5s', zIndex: 10 }} />
-      <div className="soap-bubble fixed top-[80%] left-[40%] w-10 h-10 pointer-events-none" style={{ animationDuration: '19s', animationDelay: '1.5s', zIndex: 10 }} />
-      <div className="soap-bubble fixed top-[35%] left-[25%] w-6 h-6 pointer-events-none" style={{ animationDuration: '15s', animationDelay: '0.8s', zIndex: 10 }} />
-      <div className="soap-bubble fixed top-[70%] right-[20%] w-8 h-8 pointer-events-none" style={{ animationDuration: '17s', animationDelay: '2.5s', zIndex: 10 }} />
-      <div className="soap-bubble fixed top-[50%] left-[60%] w-7 h-7 pointer-events-none" style={{ animationDuration: '16s', animationDelay: '1.2s', zIndex: 10 }} />
-
       {/* Hero Section */}
       <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+        {/* Soap Bubbles in Header */}
+        <div className="soap-bubble absolute top-[5%] left-[5%] w-12 h-12" style={{ animationDuration: '16s', animationDelay: '0s' }} />
+        <div className="soap-bubble absolute top-[10%] left-[15%] w-16 h-16" style={{ animationDuration: '18s', animationDelay: '1s' }} />
+        <div className="soap-bubble absolute top-[8%] right-[10%] w-20 h-20" style={{ animationDuration: '20s', animationDelay: '2s' }} />
+        <div className="soap-bubble absolute top-[15%] right-[5%] w-14 h-14" style={{ animationDuration: '17s', animationDelay: '0.5s' }} />
+        <div className="soap-bubble absolute top-[3%] left-[40%] w-10 h-10" style={{ animationDuration: '19s', animationDelay: '1.5s' }} />
+        <div className="soap-bubble absolute top-[12%] left-[25%] w-6 h-6" style={{ animationDuration: '15s', animationDelay: '0.8s' }} />
+        <div className="soap-bubble absolute top-[7%] right-[20%] w-8 h-8" style={{ animationDuration: '17s', animationDelay: '2.5s' }} />
+        <div className="soap-bubble absolute top-[20%] left-[60%] w-7 h-7" style={{ animationDuration: '16s', animationDelay: '1.2s' }} />
 
         <div className="absolute inset-0 z-0 opacity-40">
           <div className="absolute top-[20%] left-[10%] w-96 h-96 bg-[#A886CD] rounded-full mix-blend-screen filter blur-[100px] animate-[pulse_8s_ease-in-out_infinite]" />
