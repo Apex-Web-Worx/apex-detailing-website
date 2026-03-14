@@ -32,6 +32,7 @@ const services = [
     description:
       "Ultimate protection and extreme gloss for your vehicle's paint. Lasts for years, making maintenance washes a breeze.",
     icon: <Shield className="w-10 h-10 text-[#3496FF]" />,
+    pricing: "Call for Quote",
     features: ["Up to 5 Years Protection", "Extreme Hydrophobics", "Scratch Resistance"],
   },
   {
@@ -40,6 +41,7 @@ const services = [
     description:
       "Remove swirl marks, light scratches, and oxidation to restore your paint to a flawless, mirror-like finish.",
     icon: <Sparkles className="w-10 h-10 text-[#A886CD]" />,
+    pricing: "$300-$600",
     features: ["Swirl Mark Removal", "Deep Gloss Restoration", "Enhances Resale Value"],
   },
   {
@@ -48,6 +50,8 @@ const services = [
     description:
       "Comprehensive exterior cleaning and protection to make your car turn heads everywhere you go. Add-ons available to customize your package.",
     icon: <Car className="w-10 h-10 text-[#3496FF]" />,
+    pricing: "$150",
+    pricingDetails: ["Coupe / Sedan: $150", "Truck / Jeep / SUV: $200"],
     features: [
       "Detailed hand wash",
       "Exterior windows and mirrors cleaned",
@@ -62,6 +66,8 @@ const services = [
     description:
       "Comprehensive interior cleaning that transforms every surface. From carpets to leather to air vents. Add-ons available to customize your package.",
     icon: <Droplets className="w-10 h-10 text-[#A886CD]" />,
+    pricing: "$200",
+    pricingDetails: ["2-Row: $200 – $300", "3-Row: $250 – $350"],
     features: [
       "Air vents cleaned",
       "Free air fresheners",
@@ -84,6 +90,8 @@ const services = [
     description:
       "The ultimate package! Includes interior and exterior detailed cleaning and protection. Get your vehicle looking showroom fresh inside and out. Add-ons available to customize your package.",
     icon: <Wand2 className="w-10 h-10 text-[#A886CD]" />,
+    pricing: "$300",
+    pricingDetails: ["Coupe / Sedan: $300-$400", "Truck / Jeep / 2-Row SUV: $350 – $450", "Minivan / 3-Row SUV: $350 – $500"],
     features: [
       "Complete Exterior Detailing",
       "Complete Interior Detailing",
@@ -98,6 +106,7 @@ const services = [
     description:
       "Fix foggy, yellowed headlights to improve nighttime visibility and dramatically improve your car's appearance.",
     icon: <CheckCircle2 className="w-10 h-10 text-[#3496FF]" />,
+    pricing: "$100+",
     features: ["Improves Safety", "Removes Oxidation", "UV Protection Applied"],
   },
 ];
@@ -377,9 +386,19 @@ export default function Home() {
                   <div className="mb-6 p-4 rounded-xl bg-white/5 inline-flex w-fit group-hover:scale-110 group-hover:bg-white/10 transition-all duration-500">
                     {service.icon}
                   </div>
-                  <h4 className="text-2xl font-black mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#A886CD] group-hover:to-[#3496FF] transition-all duration-300">
+                  <h4 className="text-2xl font-black mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#A886CD] group-hover:to-[#3496FF] transition-all duration-300">
                     {service.title}
                   </h4>
+                  <p className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF] mb-4">
+                    {service.pricing}
+                  </p>
+                  {service.pricingDetails && (
+                    <div className="mb-4 text-sm text-gray-300 bg-white/5 p-3 rounded-lg">
+                      {service.pricingDetails.map((detail, i) => (
+                        <p key={i} className="text-xs mb-1">{detail}</p>
+                      ))}
+                    </div>
+                  )}
                   <p className="text-gray-400 mb-6 flex-grow">{service.description}</p>
                   <ul className="space-y-2 mb-8">
                     {service.features.map((feature, i) => (
