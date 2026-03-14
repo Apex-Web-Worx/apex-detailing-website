@@ -144,9 +144,9 @@ const testimonials = [
     text: "The interior detail was mind-blowing. With two kids, my SUV was a disaster zone. They got out stains I thought were permanent and it smells brand new again.",
   },
   {
-    name: "David R.",
-    location: "Ozark, MO",
-    text: "Professional, punctual, and passionate about their work. The convenience of them coming to me is great, but the quality of the finish is what will keep me coming back.",
+    name: "Marcus T.",
+    location: "Springfield, MO",
+    text: "My car's ceramic coating makes it look showroom-new. The team explained everything they were doing and showed incredible attention to detail. Worth every penny.",
   },
 ];
 
