@@ -230,7 +230,7 @@ function AddonsSection() {
       id: "clay-bar",
       name: "Clay Bar Treatment",
       price: "$55+",
-      description: ""
+      description: "Clay Bar Treatment is a detailing process that removes embedded contaminants from your vehicle's paint that regular washing cannot eliminate. Using a specialized clay bar and lubricant, the surface is gently treated to lift off bonded particles such as brake dust, tar, tree sap, and industrial fallout. This process leaves the paint smooth to the touch, improves the vehicle's shine, and prepares the surface for wax, sealant, or ceramic coating."
     },
     {
       id: "headlight",
