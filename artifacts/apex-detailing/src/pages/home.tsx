@@ -484,11 +484,11 @@ export default function Home() {
       {/* Hero Section */}
       <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
         {/* Soap Bubbles */}
-        <div className="soap-bubble absolute top-[5%] left-[5%] w-12 h-12 bg-gradient-to-br from-[#A886CD]/30 to-[#3496FF]/20" style={{ animationDuration: '8s', animationDelay: '0s' }} />
-        <div className="soap-bubble absolute top-[10%] left-[15%] w-16 h-16 bg-gradient-to-br from-[#3496FF]/25 to-[#A886CD]/15" style={{ animationDuration: '10s', animationDelay: '1s' }} />
-        <div className="soap-bubble absolute top-[8%] right-[10%] w-20 h-20 bg-gradient-to-br from-[#A886CD]/20 to-[#3496FF]/25" style={{ animationDuration: '12s', animationDelay: '2s' }} />
-        <div className="soap-bubble absolute top-[15%] right-[5%] w-14 h-14 bg-gradient-to-br from-[#3496FF]/30 to-[#A886CD]/20" style={{ animationDuration: '9s', animationDelay: '0.5s' }} />
-        <div className="soap-bubble absolute top-[3%] left-[40%] w-10 h-10 bg-gradient-to-br from-[#A886CD]/25 to-[#3496FF]/30" style={{ animationDuration: '11s', animationDelay: '1.5s' }} />
+        <div className="soap-bubble absolute top-[5%] left-[5%] w-12 h-12" style={{ animationDuration: '8s', animationDelay: '0s' }} />
+        <div className="soap-bubble absolute top-[10%] left-[15%] w-16 h-16" style={{ animationDuration: '10s', animationDelay: '1s' }} />
+        <div className="soap-bubble absolute top-[8%] right-[10%] w-20 h-20" style={{ animationDuration: '12s', animationDelay: '2s' }} />
+        <div className="soap-bubble absolute top-[15%] right-[5%] w-14 h-14" style={{ animationDuration: '9s', animationDelay: '0.5s' }} />
+        <div className="soap-bubble absolute top-[3%] left-[40%] w-10 h-10" style={{ animationDuration: '11s', animationDelay: '1.5s' }} />
 
         <div className="absolute inset-0 z-0 opacity-40">
           <div className="absolute top-[20%] left-[10%] w-96 h-96 bg-[#A886CD] rounded-full mix-blend-screen filter blur-[100px] animate-[pulse_8s_ease-in-out_infinite]" />

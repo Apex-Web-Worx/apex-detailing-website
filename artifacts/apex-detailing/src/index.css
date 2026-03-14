@@ -204,30 +204,57 @@
     }
   }
 
-  @keyframes shimmer {
-    0%, 100% {
-      background-position: -200% center;
+  @keyframes bubble-shine {
+    0% {
+      background-position: -200% -200%;
     }
     50% {
-      background-position: 200% center;
+      background-position: 200% 200%;
+    }
+    100% {
+      background-position: -200% -200%;
     }
   }
 
   .soap-bubble {
     position: absolute;
     border-radius: 50%;
-    box-shadow: inset -2px -2px 4px rgba(255, 255, 255, 0.4), inset 2px 2px 4px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(2px);
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2) 15%, transparent 60%),
+                radial-gradient(circle at 70% 70%, rgba(52, 150, 255, 0.15), transparent 50%),
+                radial-gradient(circle at center, rgba(168, 134, 205, 0.1), rgba(52, 150, 255, 0.08));
+    box-shadow: 
+      inset -3px -3px 8px rgba(0, 0, 0, 0.3),
+      inset 2px 2px 6px rgba(255, 255, 255, 0.6),
+      0 8px 16px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(3px);
     animation: float-bubble linear forwards;
+    border: 1px solid rgba(255, 255, 255, 0.3);
   }
 
   .soap-bubble::before {
     content: '';
     position: absolute;
+    top: 15%;
+    left: 20%;
+    width: 40%;
+    height: 40%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.9), transparent 70%);
+    border-radius: 50%;
+    filter: blur(2px);
+  }
+
+  .soap-bubble::after {
+    content: '';
+    position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), transparent, rgba(100, 150, 255, 0.2));
-    animation: shimmer 3s ease-in-out infinite;
-    background-size: 400% center;
+    background: conic-gradient(
+      from 180deg at 40% 40%,
+      rgba(255, 255, 255, 0.4),
+      rgba(52, 150, 255, 0.15),
+      rgba(168, 134, 205, 0.1),
+      transparent
+    );
+    animation: bubble-shine 4s ease-in-out infinite;
   }
 }
