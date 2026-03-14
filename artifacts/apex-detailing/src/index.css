@@ -86,6 +86,15 @@
   }
 }
 
+@keyframes button-shine {
+  0%, 100% {
+    text-shadow: 0 0 0.3rem rgba(52, 150, 255, 0);
+  }
+  50% {
+    text-shadow: 0 0 0.6rem rgba(52, 150, 255, 0.6);
+  }
+}
+
 @layer utilities {
   input[type="search"]::-webkit-search-cancel-button {
     @apply hidden;
@@ -93,5 +102,9 @@
   
   .logo-shine {
     animation: logo-shine 2.5s ease-in-out infinite;
+  }
+  
+  .button-shine {
+    animation: button-shine 3s ease-in-out infinite;
   }
 }
