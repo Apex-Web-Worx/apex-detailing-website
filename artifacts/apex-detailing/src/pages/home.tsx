@@ -611,51 +611,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Instagram Section */}
-      <section className="py-24 relative overflow-hidden bg-[#0d0d0d]">
-        <div className="absolute left-0 top-0 w-[500px] h-[500px] bg-[#A886CD]/10 rounded-full mix-blend-screen filter blur-[120px] -translate-x-1/2 -translate-y-1/2" />
-
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-sm font-bold tracking-widest text-[#3496FF] uppercase mb-3">
-              Follow Our Journey
-            </h2>
-            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-6">
-              Instagram{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
-                Gallery
-              </span>
-            </h3>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto mb-8">
-              See our latest detailing transformations on Instagram
-            </p>
-            <a
-              href={INSTAGRAM_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative inline-flex items-center justify-center px-10 py-5 font-black text-white text-lg transition-all duration-300 ease-in-out bg-gradient-to-r from-[#A886CD] to-[#3496FF] rounded-xl overflow-hidden shadow-[0_0_40px_rgba(168,134,205,0.4)] hover:shadow-[0_0_60px_rgba(52,150,255,0.6)] hover:scale-105"
-            >
-              <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#3496FF] to-[#A886CD] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <span className="relative flex items-center gap-3">
-                <Instagram className="w-6 h-6" />
-                @apexdetailing_sf
-              </span>
-            </a>
-          </div>
-
-          <div className="relative w-full h-[600px] rounded-2xl overflow-hidden border border-white/10 bg-black">
-            <iframe
-              src="https://www.instagram.com/apexdetailing_sf/embed"
-              width="100%"
-              height="100%"
-              frameBorder="0"
-              scrolling="no"
-              className="w-full h-full"
-            />
-          </div>
-        </div>
-      </section>
-
       {/* Testimonials */}
       <section id="testimonials" className="py-24 relative overflow-hidden">
         <div className="absolute right-0 bottom-0 w-[600px] h-[600px] bg-[#3496FF]/10 rounded-full mix-blend-screen filter blur-[150px]" />
