@@ -120,7 +120,7 @@ export function PremiumLuxury() {
             <div className="flex items-center gap-4 mb-8">
               <div className="h-[1px] w-12 bg-[#D4A853]" />
               <p className="text-[#D4A853] text-[10px] sm:text-xs uppercase tracking-[0.3em] font-semibold">
-                Premium Vehicle Detailing in Nixa <span className="location-separator">—</span> Ozark <span className="location-separator">—</span> Springfield
+                Premium Vehicle Detailing in Nixa  Ozark  Springfield
               </p>
             </div>
             
@@ -297,7 +297,7 @@ export function PremiumLuxury() {
                   Apex Detailing was founded on a simple premise: vehicles are more than transportation; they are investments and passions that deserve expert care.
                 </p>
                 <p>
-                  Serving Nixa <span className="location-separator">—</span> Ozark <span className="location-separator">—</span> Springfield, we bring unparalleled convenience without compromising on quality. Our mobile service delivers a studio-grade detailing experience directly to your driveway.
+                  Serving Nixa  Ozark  Springfield, we bring unparalleled convenience without compromising on quality. Our mobile service delivers a studio-grade detailing experience directly to your driveway.
                 </p>
               </div>
 
@@ -455,7 +455,7 @@ export function PremiumLuxury() {
                 <li>
                   <a href={CALENDLY_LINK} target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-[#D4A853] text-sm flex items-center gap-3 transition-colors">
                     <MapPin size={16} className="text-[#D4A853]" />
-                    Mobile Service: Nixa <span className="location-separator">—</span> Ozark <span className="location-separator">—</span> Springfield
+                    Mobile Service: Nixa  Ozark  Springfield
                   </a>
                 </li>
                 <li>
