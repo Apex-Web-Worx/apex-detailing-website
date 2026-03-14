@@ -375,6 +375,12 @@ export default function Home() {
             </p>
           </div>
 
+          <div className="mb-12 p-6 rounded-xl bg-white/5 border border-[#A886CD]/30 backdrop-blur-sm max-w-3xl mx-auto">
+            <p className="text-gray-300 text-sm leading-relaxed">
+              <span className="font-black text-[#A886CD]">Pricing Note:</span> The price ranges listed below are standard for the majority of vehicles. The final cost will depend on the condition of your vehicle and any additional services you request. For a more accurate estimate, please contact us directly.
+            </p>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((service, index) => (
               <div
