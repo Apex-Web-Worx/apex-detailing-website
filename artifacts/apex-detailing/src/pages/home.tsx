@@ -113,9 +113,7 @@ const services = [
 
 const gallery = [
   { id: 1, title: "Paint Correction", beforeAfter: true, color: "from-blue-900 to-[#3496FF]" },
-  { id: 2, title: "Ceramic Coating", beforeAfter: false, color: "from-[#A886CD] to-purple-900", images: [
-    `${import.meta.env.BASE_URL}images/ceramic-3.jpg`,
-  ], currentImageIndex: 0 },
+  { id: 2, title: "Ceramic Coating", beforeAfter: false, color: "from-[#A886CD] to-purple-900", video: `${import.meta.env.BASE_URL}videos/ceramic-demo.mp4` },
   { id: 3, title: "Interior Restoration", beforeAfter: true, color: "from-blue-900 to-indigo-900" },
   { id: 4, title: "Exterior Detail", beforeAfter: false, color: "from-purple-900 to-black" },
 ];
@@ -586,7 +584,18 @@ export default function Home() {
                 key={item.id}
                 className="group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer"
               >
-                {item.images && item.images.length > 0 ? (
+                {item.video ? (
+                  <>
+                    <video
+                      src={item.video}
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      muted
+                      autoPlay
+                      loop
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+                  </>
+                ) : item.images && item.images.length > 0 ? (
                   <>
                     <img
                       src={item.images[0]}
@@ -604,6 +613,11 @@ export default function Home() {
                   </>
                 )}
                 <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                  {item.video && (
+                    <span className="inline-block px-3 py-1 bg-[#A886CD] text-black font-black text-xs uppercase tracking-widest rounded mb-3">
+                      Video
+                    </span>
+                  )}
                   {item.beforeAfter && (
                     <span className="inline-block px-3 py-1 bg-[#3496FF] text-black font-black text-xs uppercase tracking-widest rounded mb-3">
                       Before & After
