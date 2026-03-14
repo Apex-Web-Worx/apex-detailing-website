@@ -369,6 +369,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white font-['Mulish'] overflow-x-hidden selection:bg-[#A886CD] selection:text-white">
+      {/* Texture Overlay */}
+      <div className="texture-overlay" />
       {/* Navigation */}
       <nav
         className={`fixed top-0 w-full z-50 transition-all duration-300 overflow-hidden ${
