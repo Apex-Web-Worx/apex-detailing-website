@@ -354,8 +354,8 @@ export default function Home() {
                   <p className="text-gray-400 mb-6 flex-grow">{service.description}</p>
                   <ul className="space-y-2 mb-8">
                     {service.features.map((feature, i) => (
-                      <li key={i} className="flex items-center gap-2 text-sm text-gray-300 font-medium">
-                        <CheckCircle2 className="w-4 h-4 text-[#3496FF]" />
+                      <li key={i} className="flex items-start gap-2 text-sm text-gray-300 font-medium">
+                        <CheckCircle2 className="w-4 h-4 text-[#3496FF] mt-0.5 shrink-0" />
                         {feature}
                       </li>
                     ))}
