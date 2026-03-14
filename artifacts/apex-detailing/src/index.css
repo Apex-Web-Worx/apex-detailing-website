@@ -86,18 +86,12 @@
   }
 }
 
-@keyframes button-shine {
+@keyframes header-shine {
   0%, 100% {
-    text-shadow: 0 0 0.4rem rgba(52, 150, 255, 0.2);
-  }
-  25% {
-    text-shadow: 0 0 1.5rem rgba(52, 150, 255, 1), 0 -0.1rem 0.3rem rgba(52, 150, 255, 0.8), 0 0.1rem 0.3rem rgba(52, 150, 255, 0.8);
+    text-shadow: 0 0 0.5rem rgba(52, 150, 255, 0.3), 0 0 1rem rgba(168, 134, 205, 0.2);
   }
   50% {
-    text-shadow: 0 0 0.3rem rgba(52, 150, 255, 0.4);
-  }
-  75% {
-    text-shadow: 0 0 1.8rem rgba(52, 150, 255, 1), 0 -0.15rem 0.4rem rgba(52, 150, 255, 0.9), 0 0.15rem 0.4rem rgba(52, 150, 255, 0.9);
+    text-shadow: 0 0 1.2rem rgba(52, 150, 255, 0.8), 0 0 1.8rem rgba(168, 134, 205, 0.5);
   }
 }
 
@@ -110,7 +104,7 @@
     animation: logo-shine 2.5s ease-in-out infinite;
   }
   
-  .button-shine {
-    animation: button-shine 3s ease-in-out infinite;
+  .header-shine {
+    animation: header-shine 2.5s ease-in-out infinite;
   }
 }

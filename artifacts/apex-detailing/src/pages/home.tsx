@@ -315,6 +315,7 @@ function AddonsSection() {
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -322,6 +323,34 @@ export default function Home() {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const sections = ["home", "services", "about", "gallery", "testimonials"];
+    const observers = {};
+
+    const callback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    sections.forEach((id) => {
+      const element = document.getElementById(id);
+      if (element) {
+        const observer = new IntersectionObserver(callback, {
+          threshold: 0.3,
+        });
+        observer.observe(element);
+        observers[id] = observer;
+      }
+    });
+
+    return () => {
+      Object.values(observers).forEach((observer) => observer.disconnect());
+    };
   }, []);
 
   const scrollToSection = (id: string) => {
@@ -366,7 +395,11 @@ export default function Home() {
                 <button
                   key={item}
                   onClick={() => scrollToSection(item.toLowerCase())}
-                  className="text-gray-300 hover:text-white font-semibold text-sm tracking-wider uppercase transition-colors relative group"
+                  className={`font-semibold text-sm tracking-wider uppercase transition-colors relative group ${
+                    activeSection === item.toLowerCase()
+                      ? "text-white header-shine"
+                      : "text-gray-300 hover:text-white"
+                  }`}
                 >
                   {item}
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#A886CD] to-[#3496FF] transition-all duration-300 group-hover:w-full" />
