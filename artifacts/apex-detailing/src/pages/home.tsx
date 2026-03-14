@@ -399,9 +399,9 @@ export default function Home() {
                       ))}
                     </div>
                     <div>
-                      <p className="font-black text-white text-lg leading-tight">100+</p>
+                      <p className="font-black text-white text-lg leading-tight">⭐⭐⭐⭐⭐</p>
                       <p className="text-xs font-bold tracking-wider text-gray-400 uppercase">
-                        5-Star Reviews
+                        5-Star Rated
                       </p>
                     </div>
                   </div>
@@ -588,9 +588,9 @@ export default function Home() {
               Google Reviews
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-6">
-              Trusted by{" "}
+              Trusted by Our{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
-                100+ Happy Customers
+                Happy Customers
               </span>
             </h3>
             <p className="text-gray-400 text-lg mb-8">
@@ -599,7 +599,7 @@ export default function Home() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
               {[
-                { rating: "5.0", reviews: "100+", description: "5-Star Reviews" },
+                { rating: "5.0", reviews: "Excellent", description: "Rating" },
                 { rating: "100%", reviews: "Positive", description: "Customer Rating" },
                 { rating: "24h", reviews: "Response", description: "Support Time" },
               ].map((stat, i) => (
