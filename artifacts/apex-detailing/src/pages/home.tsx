@@ -767,10 +767,11 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {gallery.map((item) => (
+            {gallery.map((item, index) => (
               <div
                 key={item.id}
-                className="group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer"
+                className="group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer gallery-item-animate"
+                style={{ animationDelay: `${index * 0.1}s` }}
                 onClick={() => handleGalleryItemClick(item)}
               >
                 {item.video ? (
@@ -892,7 +893,8 @@ export default function Home() {
                 <img
                   src={selectedGalleryItem.images[currentImageIndex]}
                   alt={`${selectedGalleryItem.title} - Image ${currentImageIndex + 1}`}
-                  className={`${isFullscreen ? 'w-full h-full' : 'w-full h-full'} object-contain ${!isFullscreen && 'rounded-xl'}`}
+                  className={`image-animate ${isFullscreen ? 'w-full h-full' : 'w-full h-full'} object-contain ${!isFullscreen && 'rounded-xl'}`}
+                  key={currentImageIndex}
                 />
                 
                 {/* Previous Button */}
