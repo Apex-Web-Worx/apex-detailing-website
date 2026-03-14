@@ -242,7 +242,7 @@ function AddonsSection() {
       id: "engine-bay",
       name: "Engine Bay Cleaning",
       price: "$60+",
-      description: ""
+      description: "Engine Bay Cleaning is a detailing service that safely cleans the engine compartment to remove built-up dirt, grease, dust, and debris. Using specialized cleaners and careful techniques, the engine bay is degreased, gently washed, and dried to restore a clean and well-maintained appearance."
     }
   ];
 
