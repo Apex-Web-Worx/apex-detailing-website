@@ -144,9 +144,9 @@ const testimonials = [
     text: "The interior detail was mind-blowing. With two kids, my SUV was a disaster zone. They got out stains I thought were permanent and it smells brand new again.",
   },
   {
-    name: "Marcus T.",
-    location: "Springfield, MO",
-    text: "My car's ceramic coating makes it look showroom-new. The team explained everything they were doing and showed incredible attention to detail. Worth every penny.",
+    name: "Jennifer M.",
+    location: "Nixa, MO",
+    text: "They completely restored my headlights and the difference is night and day. Professional, thorough, and they even took care to protect my vehicle. Highly recommend!",
   },
 ];
 
