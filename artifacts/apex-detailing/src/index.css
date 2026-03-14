@@ -350,35 +350,35 @@
   }
 
   .soap-bubble:nth-child(1) {
-    animation: float-bubble-1 linear forwards;
+    animation: float-bubble-1 linear infinite;
   }
 
   .soap-bubble:nth-child(2) {
-    animation: float-bubble-2 linear forwards;
+    animation: float-bubble-2 linear infinite;
   }
 
   .soap-bubble:nth-child(3) {
-    animation: float-bubble-3 linear forwards;
+    animation: float-bubble-3 linear infinite;
   }
 
   .soap-bubble:nth-child(4) {
-    animation: float-bubble-4 linear forwards;
+    animation: float-bubble-4 linear infinite;
   }
 
   .soap-bubble:nth-child(5) {
-    animation: float-bubble-5 linear forwards;
+    animation: float-bubble-5 linear infinite;
   }
 
   .soap-bubble:nth-child(6) {
-    animation: float-bubble-6 linear forwards;
+    animation: float-bubble-6 linear infinite;
   }
 
   .soap-bubble:nth-child(7) {
-    animation: float-bubble-7 linear forwards;
+    animation: float-bubble-7 linear infinite;
   }
 
   .soap-bubble:nth-child(8) {
-    animation: float-bubble-8 linear forwards;
+    animation: float-bubble-8 linear infinite;
   }
 
   .soap-bubble::before {
