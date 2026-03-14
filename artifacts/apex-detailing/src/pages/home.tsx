@@ -45,9 +45,15 @@ const services = [
     id: "exterior-detailing",
     title: "Exterior Detailing",
     description:
-      "Thorough hand wash, decontamination, and protection to make your car turn heads everywhere you go.",
+      "Comprehensive exterior cleaning and protection to make your car turn heads everywhere you go. Add-ons available to customize your package.",
     icon: <Car className="w-10 h-10 text-[#3496FF]" />,
-    features: ["Foam Cannon Wash", "Iron Decontamination", "Spray Wax Finish"],
+    features: [
+      "Detailed hand wash",
+      "Exterior windows and mirrors cleaned",
+      "Wheels and tires cleaned, polished, and dressed",
+      "Door jambs wiped down",
+      "Spray sealant for 1-month protection",
+    ],
   },
   {
     id: "interior-detailing",
