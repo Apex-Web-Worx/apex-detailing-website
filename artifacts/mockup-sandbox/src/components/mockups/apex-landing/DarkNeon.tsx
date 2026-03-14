@@ -118,7 +118,7 @@ export function DarkNeon() {
         <div className="container mx-auto px-6 relative z-10 text-center flex flex-col items-center">
           <div className="inline-block mb-6 px-4 py-1.5 border border-[#BF00FF]/50 bg-[#BF00FF]/10 backdrop-blur-sm rounded-full">
             <span className="uppercase tracking-[0.2em] text-xs font-bold text-[#BF00FF] [text-shadow:0_0_8px_rgba(191,0,255,0.8)]">
-              Premium Vehicle Detailing in Nixa  Ozark  Springfield
+              Premium Vehicle Detailing in Nixa Ozark Springfield, MO
             </span>
           </div>
           
@@ -218,7 +218,7 @@ export function DarkNeon() {
               </h2>
               <div className="space-y-6 text-gray-400 font-light text-lg">
                 <p>
-                  Apex Detailing operates at the intersection of technology and artistry. We don't just clean vehicles; we engineer perfection. Serving Nixa  Ozark  Springfield with uncompromising quality.
+                  Apex Detailing operates at the intersection of technology and artistry. We don't just clean vehicles; we engineer perfection. Serving Nixa Ozark Springfield, MO with uncompromising quality.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6">
                   <div className="border-l-2 border-[#00F0FF] pl-4">
@@ -313,7 +313,7 @@ export function DarkNeon() {
                 </span>
               </a>
               <p className="text-gray-400 font-light max-w-sm mb-8">
-                Prestige vehicle detailing services for those who demand absolute perfection in Nixa  Ozark  Springfield.
+                Prestige vehicle detailing services for those who demand absolute perfection in Nixa Ozark Springfield, MO.
               </p>
               <div className="flex gap-4">
                 <a href="https://www.instagram.com/apexdetailing_sf" target="_blank" rel="noreferrer" className="w-10 h-10 border border-white/20 flex items-center justify-center text-gray-400 hover:text-[#00F0FF] hover:border-[#00F0FF] hover:[box-shadow:0_0_10px_rgba(0,240,255,0.3)] transition-all">
