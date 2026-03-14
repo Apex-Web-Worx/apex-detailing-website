@@ -860,9 +860,31 @@ export default function Home() {
                   <Phone className="w-5 h-5 text-[#A886CD]" />
                   <a href="tel:417-527-6165" className="hover:text-[#3496FF] transition-colors">417-527-6165</a>
                 </li>
-                <li className="flex items-start gap-3">
+                <li className="flex items-start gap-3 group cursor-pointer">
                   <Mail className="w-5 h-5 text-[#3496FF] shrink-0 mt-0.5" />
-                  <span>Contact us via<br />social media</span>
+                  <div className="flex flex-col">
+                    <span className="group-hover:hidden">Contact us via<br />social media</span>
+                    <div className="hidden group-hover:flex gap-3 pt-2">
+                      <a
+                        href={INSTAGRAM_LINK}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 rounded-lg bg-white/10 hover:bg-gradient-to-r hover:from-[#A886CD] hover:to-[#3496FF] transition-all"
+                        title="Instagram"
+                      >
+                        <Instagram className="w-5 h-5 text-white" />
+                      </a>
+                      <a
+                        href={FACEBOOK_LINK}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 rounded-lg bg-white/10 hover:bg-gradient-to-r hover:from-[#A886CD] hover:to-[#3496FF] transition-all"
+                        title="Facebook"
+                      >
+                        <Facebook className="w-5 h-5 text-white" />
+                      </a>
+                    </div>
+                  </div>
                 </li>
               </ul>
             </div>
