@@ -316,6 +316,7 @@ export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [selectedGalleryItem, setSelectedGalleryItem] = useState<typeof gallery[0] | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -751,6 +752,7 @@ export default function Home() {
               <div
                 key={item.id}
                 className="group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer"
+                onClick={() => setSelectedGalleryItem(item)}
               >
                 {item.video ? (
                   <>
@@ -822,6 +824,42 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Gallery Lightbox Modal */}
+      {selectedGalleryItem && (
+        <div
+          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setSelectedGalleryItem(null)}
+        >
+          <button
+            onClick={() => setSelectedGalleryItem(null)}
+            className="absolute top-6 right-6 text-white hover:text-[#3496FF] transition-colors"
+            aria-label="Close"
+          >
+            <X className="w-8 h-8" />
+          </button>
+
+          <div className="relative max-w-4xl w-full max-h-[90vh] flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+            {selectedGalleryItem.video ? (
+              <video
+                src={selectedGalleryItem.video}
+                className="w-full h-full object-contain rounded-xl"
+                muted
+                autoPlay
+                loop
+                playsInline
+                controls
+              />
+            ) : selectedGalleryItem.images && selectedGalleryItem.images.length > 0 ? (
+              <img
+                src={selectedGalleryItem.images[0]}
+                alt={selectedGalleryItem.title}
+                className="w-full h-full object-contain rounded-xl"
+              />
+            ) : null}
+          </div>
+        </div>
+      )}
 
       {/* Testimonials */}
       <section id="testimonials" className="py-24 relative overflow-hidden">
