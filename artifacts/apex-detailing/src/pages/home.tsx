@@ -633,6 +633,9 @@ export default function Home() {
                 <p className="italic">
                   Our business is built on <span className="text-[#3496FF] font-semibold">Christian</span> values, with <span className="text-[#3496FF] font-semibold">Christ</span> at the center of everything we do. We believe in working with integrity, serving others with a joyful heart, and honoring <span className="text-[#3496FF] font-semibold">God</span> through the quality of our craft.
                 </p>
+                <p className="italic text-[#A886CD] text-sm mt-4">
+                  "Whatever you do, work at it with all your heart, as working for the Lord, not for men. Colossians 3:23 (NIV)"
+                </p>
                 <p>
                   Apex Detailing was founded by Mikhail, who is known for his meticulous nature and commitment to perfection. What started as a personal passion for detailing has grown into a trusted service grounded in faith, excellence, and care.
                 </p>
