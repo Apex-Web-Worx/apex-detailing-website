@@ -560,7 +560,13 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-24 relative z-10 border-t border-white/5 bg-[#0d0d0d]">
+      <section id="services" className="py-24 relative z-10 border-t border-white/5 bg-[#0d0d0d] overflow-hidden">
+        {/* Soap Bubbles in Services Section */}
+        <div className="soap-bubble absolute top-[5%] left-[5%] w-12 h-12" style={{ animationDuration: '16s', animationDelay: '0s' }} />
+        <div className="soap-bubble absolute top-[20%] right-[10%] w-16 h-16" style={{ animationDuration: '18s', animationDelay: '1s' }} />
+        <div className="soap-bubble absolute bottom-[10%] left-[15%] w-20 h-20" style={{ animationDuration: '20s', animationDelay: '2s' }} />
+        <div className="soap-bubble absolute top-[40%] right-[5%] w-14 h-14" style={{ animationDuration: '17s', animationDelay: '0.5s' }} />
+        <div className="soap-bubble absolute bottom-[20%] left-[40%] w-10 h-10" style={{ animationDuration: '19s', animationDelay: '1.5s' }} />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-sm font-bold tracking-widest text-[#3496FF] uppercase mb-3">
