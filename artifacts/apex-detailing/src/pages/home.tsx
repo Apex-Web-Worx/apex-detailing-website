@@ -444,79 +444,80 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Interior Addons Section */}
+          {/* Addons Section - Two Column Layout */}
           <div className="mt-24 pt-16 border-t border-white/10">
-            <div className="max-w-3xl mx-auto">
-              <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tight mb-8">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
-                  Available Interior Addons
-                </span>
-              </h3>
-              <p className="text-gray-400 text-lg mb-8">
-                Optional Services Based on Your Request (Extra Charges Apply)
-              </p>
-              
-              <div className="space-y-6">
-                <div className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
-                  <h4 className="text-xl font-bold text-white mb-2">Pet Hair Removal</h4>
-                  <p className="text-[#3496FF] font-bold text-lg mb-3">$0 – $100</p>
-                  <p className="text-gray-400 text-sm">The cost depends on the type of carpet and the amount of pet hair. For significant amounts of pet hair, additional labor may be necessary.</p>
-                </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              {/* Interior Addons */}
+              <div>
+                <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4">
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+                    Interior Addons
+                  </span>
+                </h3>
+                <p className="text-gray-400 text-sm mb-6">
+                  Optional Services (Extra Charges Apply)
+                </p>
+                
+                <div className="space-y-4">
+                  <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
+                    <h4 className="text-base font-bold text-white mb-1">Pet Hair Removal</h4>
+                    <p className="text-[#3496FF] font-bold text-sm">$0 – $100</p>
+                    <p className="text-gray-400 text-xs mt-2">Cost depends on carpet type and pet hair amount.</p>
+                  </div>
 
-                <div className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
-                  <h4 className="text-xl font-bold text-white mb-2">Deep Shampooing and Intensive Stain Removal with Extraction for Seats</h4>
-                  <p className="text-[#3496FF] font-bold text-lg mb-3">$120+</p>
-                </div>
+                  <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
+                    <h4 className="text-base font-bold text-white mb-1">Deep Shampooing & Stain Removal</h4>
+                    <p className="text-[#3496FF] font-bold text-sm">$120+</p>
+                  </div>
 
-                <div className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
-                  <h4 className="text-xl font-bold text-white mb-2">Dress Interior Plastic UV Treatment</h4>
-                  <p className="text-[#3496FF] font-bold text-lg">$60</p>
+                  <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
+                    <h4 className="text-base font-bold text-white mb-1">Interior Plastic UV Treatment</h4>
+                    <p className="text-[#3496FF] font-bold text-sm">$60</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* Exterior Addons Section */}
-          <div className="mt-24 pt-16 border-t border-white/10">
-            <div className="max-w-3xl mx-auto">
-              <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tight mb-8">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
-                  Available Exterior Addons
-                </span>
-              </h3>
-              <p className="text-gray-400 text-lg mb-8">
-                Optional Services Based on Your Request (Extra Charges Apply)
-              </p>
-              
-              <div className="space-y-6">
-                <div className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
-                  <h4 className="text-xl font-bold text-white mb-2">Wash, Clay, and Wax</h4>
-                  <p className="text-[#3496FF] font-bold text-lg mb-3">Coupe / Sedan: $150 | Truck / SUV / Jeep / Minivan: $175 – $200</p>
-                </div>
+              {/* Exterior Addons */}
+              <div>
+                <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4">
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+                    Exterior Addons
+                  </span>
+                </h3>
+                <p className="text-gray-400 text-sm mb-6">
+                  Optional Services (Extra Charges Apply)
+                </p>
+                
+                <div className="space-y-4">
+                  <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
+                    <h4 className="text-base font-bold text-white mb-1">Wash, Clay & Wax</h4>
+                    <p className="text-[#3496FF] font-bold text-xs">Sedan: $150 | SUV: $175–$200</p>
+                  </div>
 
-                <div className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
-                  <h4 className="text-xl font-bold text-white mb-2">Dress Exterior Plastic</h4>
-                  <p className="text-[#3496FF] font-bold text-lg">$45</p>
-                </div>
+                  <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
+                    <h4 className="text-base font-bold text-white mb-1">Dress Exterior Plastic</h4>
+                    <p className="text-[#3496FF] font-bold text-sm">$45</p>
+                  </div>
 
-                <div className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
-                  <h4 className="text-xl font-bold text-white mb-2">Clay Bar Treatment</h4>
-                  <p className="text-[#3496FF] font-bold text-lg">$55+</p>
-                </div>
+                  <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
+                    <h4 className="text-base font-bold text-white mb-1">Clay Bar Treatment</h4>
+                    <p className="text-[#3496FF] font-bold text-sm">$55+</p>
+                  </div>
 
-                <div className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
-                  <h4 className="text-xl font-bold text-white mb-2">Headlight Restoration (Pair)</h4>
-                  <p className="text-[#3496FF] font-bold text-lg">$100</p>
-                </div>
+                  <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
+                    <h4 className="text-base font-bold text-white mb-1">Headlight Restoration</h4>
+                    <p className="text-[#3496FF] font-bold text-sm">$100</p>
+                  </div>
 
-                <div className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
-                  <h4 className="text-xl font-bold text-white mb-2">Hand-applied Spot Scratch and Swirl Removal</h4>
-                  <p className="text-[#3496FF] font-bold text-lg">$40+</p>
-                </div>
+                  <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
+                    <h4 className="text-base font-bold text-white mb-1">Spot Scratch & Swirl Removal</h4>
+                    <p className="text-[#3496FF] font-bold text-sm">$40+</p>
+                  </div>
 
-                <div className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
-                  <h4 className="text-xl font-bold text-white mb-2">Engine Bay Cleaning</h4>
-                  <p className="text-[#3496FF] font-bold text-lg">$60+</p>
+                  <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
+                    <h4 className="text-base font-bold text-white mb-1">Engine Bay Cleaning</h4>
+                    <p className="text-[#3496FF] font-bold text-sm">$60+</p>
+                  </div>
                 </div>
               </div>
             </div>
