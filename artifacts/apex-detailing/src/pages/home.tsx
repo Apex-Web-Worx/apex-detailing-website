@@ -94,40 +94,40 @@ const testimonials = [
 
 const googleReviews = [
   {
-    name: "James P.",
+    name: "David Sallee",
     rating: 5,
-    date: "2 weeks ago",
-    text: "Absolutely amazing service! My truck looks showroom new. The ceramic coating is incredible - water just beads right off. These guys are professionals who care about their work. Highly recommend!",
+    date: "Google Review",
+    text: "Misha's waxing was fantastic and very, very reasonable. I would recommend him to anyone. Made my BMW X5 look like brand new. Also did extra treatment on wheels at no charge. Misha was very professional and he knows his stuff on detailing. Great young man and father of three.",
   },
   {
-    name: "Emily R.",
+    name: "larry perkins",
     rating: 5,
-    date: "1 month ago",
-    text: "Best decision ever! My car went from looking dull to absolutely stunning. The paint correction removed swirl marks I didn't even know were there. Worth every penny!",
+    date: "Google Review",
+    text: "Read reviews of Apex Detailing and decided to give them a try. Wow, Michail did a full detail of the inside of my Lexus and a wash and claybar of the exterior. I am very picky about my car and the detail he did made the interior look better than when I purchased the car. I can highly recommend Michail and I will use him again on my Lexus.",
   },
   {
-    name: "Marcus L.",
+    name: "Mark Coble",
     rating: 5,
-    date: "3 weeks ago",
-    text: "Mobile service is game-changing. They came right to my home and did an incredible job. The attention to detail is second to none. Already booked my next appointment!",
+    date: "Google Review",
+    text: "Apex Detailing made our Honda look like the day it was new! We are very satisfied with the quality of workmanship and would highly recommend Apex for anyone looking to restore their vehicle's appearance to showroom condition.",
   },
   {
-    name: "Lisa T.",
+    name: "Darrell Coad",
     rating: 5,
-    date: "1 month ago",
-    text: "The interior detail was phenomenal. My leather seats look brand new and the carpet is pristine. These guys really know what they're doing. Five stars all the way!",
+    date: "Google Review",
+    text: "Mikhail with Apex Detailing did the exterior of my truck and when I went to pick it up I could not believe how great my truck looked, like brand new. He is a Christian and such a delightful person, I give him top of the scale performance, will definitely be going back.",
   },
   {
-    name: "Robert K.",
+    name: "Zach Maddox",
     rating: 5,
-    date: "2 weeks ago",
-    text: "Certified installers and it shows. Professional from start to finish. My headlights are clear as day and the whole car has this incredible depth. Thank you Apex!",
+    date: "Google Review",
+    text: "Apex did a great job detailing our SUV. Very professional and reasonably priced.",
   },
   {
-    name: "Jessica M.",
+    name: "Nicolle Mckeag",
     rating: 5,
-    date: "1 week ago",
-    text: "Can't speak highly enough of these guys. They transformed my SUV. The ceramic coating is protecting my paint beautifully. Already telling all my friends about them!",
+    date: "Google Review",
+    text: "Apex got my car looking better than ever, and this isn't the first time I've gotten it detailed. The owner is very detail oriented and made my car shine inside and out. Turn around time was great and my car was ready in time for my visitors.",
   },
 ];
 
