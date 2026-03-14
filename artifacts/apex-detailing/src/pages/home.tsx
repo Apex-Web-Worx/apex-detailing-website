@@ -792,6 +792,7 @@ export default function Home() {
                       src={item.images[0]}
                       alt={item.title}
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      style={{ filter: 'brightness(1.15) contrast(1.15)' }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
                   </>
@@ -893,6 +894,7 @@ export default function Home() {
                   src={selectedGalleryItem.images[currentImageIndex]}
                   alt={`${selectedGalleryItem.title} - Image ${currentImageIndex + 1}`}
                   className={`${isFullscreen ? 'w-full h-full' : 'w-full h-full'} object-contain ${!isFullscreen && 'rounded-xl'}`}
+                  style={{ filter: 'brightness(1.15) contrast(1.15)' }}
                 />
                 
                 {/* Previous Button */}
