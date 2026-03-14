@@ -236,7 +236,7 @@ function AddonsSection() {
       id: "headlight",
       name: "Headlight Restoration",
       price: "$100",
-      description: ""
+      description: "Headlight Restoration is a detailing service that removes oxidation, haze, and yellowing from vehicle headlights to restore clarity and brightness. Over time, sun exposure and environmental contaminants can make headlights cloudy, reducing visibility and the overall appearance of your vehicle."
     },
     {
       id: "spot-scratch",
