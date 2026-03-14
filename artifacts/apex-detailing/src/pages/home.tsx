@@ -297,10 +297,10 @@ export default function Home() {
         </div>
 
         <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#A886CD]/10 to-[#3496FF]/10 border border-[#A886CD]/30 backdrop-blur-sm mb-8">
             <span className="flex h-2 w-2 rounded-full bg-[#3496FF] animate-pulse" />
-            <span className="text-sm font-bold tracking-widest text-gray-300 uppercase">
-              Prestige Vehicle Detailing in Nixa/Ozarks/Springfield
+            <span className="text-sm font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#A886CD] to-[#3496FF] uppercase">
+              Springfield, Nixa, Ozark Premium Detailing
             </span>
           </div>
 
@@ -311,9 +311,9 @@ export default function Home() {
             </span>
           </h1>
 
-          <p className="max-w-2xl text-lg md:text-xl text-gray-400 mb-10 font-medium">
-            Premium auto detailing, ceramic coating, and paint correction services serving
-            Springfield, Nixa, and Ozark. We bring the showroom shine to your vehicle.
+          <p className="max-w-2xl text-lg md:text-xl text-gray-300 mb-10 font-medium">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] via-[#A886CD] to-[#3496FF]">Premium auto detailing, ceramic coating, and paint correction</span> services serving
+            <span className="text-[#3496FF] font-bold"> Springfield, Nixa, and Ozark</span>. We bring the showroom shine to your vehicle.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
