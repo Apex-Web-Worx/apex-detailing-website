@@ -16,11 +16,13 @@ import {
   CheckCircle2,
   Clock,
   Award,
+  ExternalLink,
 } from "lucide-react";
 
 const CALENDLY_LINK = "https://calendly.com/apexdetailingsf/detailing-appointment";
 const INSTAGRAM_LINK = "https://www.instagram.com/apexdetailing_sf";
 const FACEBOOK_LINK = "https://www.facebook.com/apexdetailingsf";
+const GOOGLE_REVIEWS_LINK = "https://www.google.com/search?q=Apex+Detailing&stick=H4sIAAAAAAAA_-NgU1IxqEiySE1NNLBMTrE0MEs0NLQyqDA1NLQwNE4xtDQzNzEzNEhcxMrnWJBaoeCSWpKYmZOZlw4Asn_-zDkAAAA&hl=en&mat=CcIO9BqJOsD8ElYBTVDHnnxyNghw-j2BeR4ij5jLdc0SeYrElIPH-Aq0ZuK6O8WT2yF1vWHO7tGxejyLiXsPHGKTtfQJq-8n3QWKG1vjf-yuPtfCuuaWSfTNtBNHCmAP8g&authuser=2";
 
 const services = [
   {
@@ -518,6 +520,71 @@ export default function Home() {
                     {testimonial.location}
                   </p>
                 </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-16 flex justify-center">
+            <a
+              href={GOOGLE_REVIEWS_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 ease-in-out bg-transparent border border-white/20 rounded-lg hover:border-[#3496FF] hover:bg-[#3496FF]/10"
+            >
+              <span className="flex items-center gap-2">
+                Read More on Google{" "}
+                <ExternalLink className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Google Reviews Showcase */}
+      <section className="py-24 relative bg-[#0d0d0d] border-y border-white/5 overflow-hidden">
+        <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-[#A886CD]/10 rounded-full mix-blend-screen filter blur-[120px] -translate-y-1/2" />
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <h2 className="text-sm font-bold tracking-widest text-[#3496FF] uppercase mb-3">
+              Google Reviews
+            </h2>
+            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-6">
+              Trusted by{" "}
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+                100+ Happy Customers
+              </span>
+            </h3>
+            <p className="text-gray-400 text-lg mb-8">
+              See what our clients are saying about Apex Detailing on Google. We maintain a 5-star rating across all platforms.
+            </p>
+
+            <a
+              href={GOOGLE_REVIEWS_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative inline-flex items-center justify-center px-10 py-5 font-black text-white text-lg transition-all duration-300 ease-in-out bg-gradient-to-r from-[#A886CD] to-[#3496FF] rounded-xl overflow-hidden shadow-[0_0_40px_rgba(168,134,205,0.4)] hover:shadow-[0_0_60px_rgba(52,150,255,0.6)] hover:scale-105"
+            >
+              <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#3496FF] to-[#A886CD] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <span className="relative flex items-center gap-3">
+                View All Reviews on Google{" "}
+                <ExternalLink className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </a>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+            {[
+              { rating: "5.0", reviews: "100+", description: "5-Star Reviews" },
+              { rating: "100%", reviews: "Positive", description: "Customer Rating" },
+              { rating: "24h", reviews: "Response", description: "Support Time" },
+            ].map((stat, i) => (
+              <div key={i} className="text-center p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:border-white/20 transition-colors">
+                <p className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF] mb-2">
+                  {stat.rating}
+                </p>
+                <p className="text-gray-300 font-bold mb-2">{stat.reviews}</p>
+                <p className="text-gray-500 text-sm uppercase tracking-wider">{stat.description}</p>
               </div>
             ))}
           </div>
