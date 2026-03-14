@@ -631,7 +631,7 @@ export default function Home() {
                   Our dedication to quality and customer satisfaction has helped us become <strong className="text-white">#1 Ranked in Nixa for 2024 and 2025</strong>, a recognition we are truly grateful for.
                 </p>
                 <p className="italic">
-                  Our business is built on Christian values, with Christ at the center of everything we do. We believe in working with integrity, serving others with a joyful heart, and honoring God through the quality of our craft.
+                  Our business is built on <span className="text-[#3496FF] font-semibold">Christian</span> values, with <span className="text-[#3496FF] font-semibold">Christ</span> at the center of everything we do. We believe in working with integrity, serving others with a joyful heart, and honoring God through the quality of our craft.
                 </p>
                 <p>
                   Apex Detailing was founded by Mikhail, who is known for his meticulous nature and commitment to perfection. What started as a personal passion for detailing has grown into a trusted service grounded in faith, excellence, and care.
