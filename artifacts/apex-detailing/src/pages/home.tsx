@@ -761,8 +761,7 @@ export default function Home() {
                 The Apex Difference?
               </h2>
               <p className="text-xl text-gray-400 mb-10 font-medium">
-                Book your appointment today. Schedule a service in
-                Springfield, Nixa, or Ozark.
+                Book your appointment today.
               </p>
               <a
                 href={CALENDLY_LINK}
