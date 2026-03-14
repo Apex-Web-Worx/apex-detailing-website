@@ -113,7 +113,11 @@ const services = [
 
 const gallery = [
   { id: 1, title: "Paint Correction", beforeAfter: true, color: "from-blue-900 to-[#3496FF]" },
-  { id: 2, title: "Ceramic Coating", beforeAfter: false, color: "from-[#A886CD] to-purple-900" },
+  { id: 2, title: "Ceramic Coating", beforeAfter: false, color: "from-[#A886CD] to-purple-900", images: [
+    `${import.meta.env.BASE_URL}images/ceramic-1.jpg`,
+    `${import.meta.env.BASE_URL}images/ceramic-2.jpg`,
+    `${import.meta.env.BASE_URL}images/ceramic-3.jpg`,
+  ], currentImageIndex: 0 },
   { id: 3, title: "Interior Restoration", beforeAfter: true, color: "from-blue-900 to-indigo-900" },
   { id: 4, title: "Exterior Detail", beforeAfter: false, color: "from-purple-900 to-black" },
 ];
@@ -584,10 +588,23 @@ export default function Home() {
                 key={item.id}
                 className="group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer"
               >
-                <div
-                  className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-80 group-hover:scale-105 transition-transform duration-700`}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+                {item.images && item.images.length > 0 ? (
+                  <>
+                    <img
+                      src={item.images[0]}
+                      alt={item.title}
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+                  </>
+                ) : (
+                  <>
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-80 group-hover:scale-105 transition-transform duration-700`}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+                  </>
+                )}
                 <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                   {item.beforeAfter && (
                     <span className="inline-block px-3 py-1 bg-[#3496FF] text-black font-black text-xs uppercase tracking-widest rounded mb-3">
@@ -595,6 +612,11 @@ export default function Home() {
                     </span>
                   )}
                   <h4 className="text-2xl font-black text-white">{item.title}</h4>
+                  {item.images && item.images.length > 1 && (
+                    <p className="text-xs text-gray-300 mt-2">
+                      {item.images.length} results
+                    </p>
+                  )}
                   <div className="w-12 h-1 bg-gradient-to-r from-[#A886CD] to-[#3496FF] mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100" />
                 </div>
               </div>
