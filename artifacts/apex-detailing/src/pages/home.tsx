@@ -763,6 +763,11 @@ export default function Home() {
               <p className="text-xl text-gray-400 mb-10 font-medium">
                 Book your appointment today.
               </p>
+              <div className="mb-8 p-6 rounded-xl bg-white/5 border border-[#3496FF]/30 backdrop-blur-sm max-w-2xl">
+                <p className="text-gray-300 text-sm leading-relaxed">
+                  <span className="font-black text-[#3496FF]">Important:</span> All scheduling needs to be done prior to your visit. We appreciate your understanding and encourage you to book ahead to secure your preferred time.
+                </p>
+              </div>
               <a
                 href={CALENDLY_LINK}
                 target="_blank"
