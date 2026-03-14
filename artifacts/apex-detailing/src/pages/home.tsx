@@ -27,15 +27,6 @@ const GOOGLE_REVIEWS_LINK = "https://www.google.com/search?q=Apex+Detailing&stic
 
 const services = [
   {
-    id: "ceramic-coating",
-    title: "Ceramic Coating",
-    description:
-      "Ultimate protection and extreme gloss for your vehicle's paint. Lasts for years, making maintenance washes a breeze.",
-    icon: <Shield className="w-10 h-10 text-[#3496FF]" />,
-    pricing: "Call for Quote",
-    features: ["Up to 5 Years Protection", "Extreme Hydrophobics", "Scratch Resistance"],
-  },
-  {
     id: "paint-correction",
     title: "Paint Correction",
     description:
@@ -108,6 +99,15 @@ const services = [
     icon: <CheckCircle2 className="w-10 h-10 text-[#3496FF]" />,
     pricing: "$100+",
     features: ["Improves Safety", "Removes Oxidation", "UV Protection Applied"],
+  },
+  {
+    id: "ceramic-coating",
+    title: "Ceramic Coating",
+    description:
+      "Ultimate protection and extreme gloss for your vehicle's paint. Lasts for years, making maintenance washes a breeze.",
+    icon: <Shield className="w-10 h-10 text-[#3496FF]" />,
+    pricing: "Call for Quote",
+    features: ["Up to 5 Years Protection", "Extreme Hydrophobics", "Scratch Resistance"],
   },
 ];
 
