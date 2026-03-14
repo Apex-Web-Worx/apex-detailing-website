@@ -391,12 +391,29 @@ export default function Home() {
     <div className="min-h-screen bg-[#0a0a0a] text-white font-['Mulish'] overflow-x-hidden selection:bg-[#A886CD] selection:text-white">
       {/* Navigation */}
       <nav
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        className={`fixed top-0 w-full z-50 transition-all duration-300 overflow-hidden ${
           isScrolled
             ? "bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/10 py-3 shadow-[0_0_20px_rgba(52,150,255,0.1)]"
             : "bg-transparent py-5"
         }`}
       >
+        {/* Bubbles in Header */}
+        {bubbles.map((bubble) => {
+          const size = 35 + Math.random() * 80;
+          return (
+            <div
+              key={bubble.id}
+              className="bubble"
+              style={{
+                width: `${size}px`,
+                height: `${size}px`,
+                left: `${bubble.left}%`,
+                animation: `bubble-float ${bubble.duration}s ease-in linear forwards`,
+                "--drift": `${bubble.drift}px`,
+              } as React.CSSProperties}
+            />
+          );
+        })}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             <div
@@ -478,24 +495,6 @@ export default function Home() {
           </div>
         </div>
       </nav>
-
-      {/* Bubbles */}
-      {bubbles.map((bubble) => {
-        const size = 35 + Math.random() * 80;
-        return (
-          <div
-            key={bubble.id}
-            className="bubble"
-            style={{
-              width: `${size}px`,
-              height: `${size}px`,
-              left: `${bubble.left}%`,
-              animation: `bubble-float ${bubble.duration}s ease-in linear forwards`,
-              "--drift": `${bubble.drift}px`,
-            } as React.CSSProperties}
-          />
-        );
-      })}
 
       {/* Hero Section */}
       <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
