@@ -854,7 +854,14 @@ export default function Home() {
               <ul className="space-y-4 text-gray-400">
                 <li className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-[#3496FF] shrink-0 mt-0.5" />
-                  <span>Located in the Nixa<br />1114 E Lakota St, 65714</span>
+                  <a
+                    href="https://www.google.com/maps/search/1114+E+Lakota+St,+65714+Nixa,+MO"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-[#3496FF] transition-colors cursor-pointer"
+                  >
+                    <span>Located in the Nixa<br />1114 E Lakota St, 65714</span>
+                  </a>
                 </li>
                 <li className="flex items-center gap-3 hover:text-white transition-colors cursor-pointer">
                   <Phone className="w-5 h-5 text-[#A886CD]" />
