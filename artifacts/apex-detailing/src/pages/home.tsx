@@ -114,8 +114,6 @@ const services = [
 const gallery = [
   { id: 1, title: "Paint Correction", beforeAfter: true, color: "from-blue-900 to-[#3496FF]" },
   { id: 2, title: "Ceramic Coating", beforeAfter: false, color: "from-[#A886CD] to-purple-900", images: [
-    `${import.meta.env.BASE_URL}images/ceramic-1.jpg`,
-    `${import.meta.env.BASE_URL}images/ceramic-2.jpg`,
     `${import.meta.env.BASE_URL}images/ceramic-3.jpg`,
   ], currentImageIndex: 0 },
   { id: 3, title: "Interior Restoration", beforeAfter: true, color: "from-blue-900 to-indigo-900" },
