@@ -475,6 +475,52 @@ export default function Home() {
               </div>
             </div>
           </div>
+
+          {/* Exterior Addons Section */}
+          <div className="mt-24 pt-16 border-t border-white/10">
+            <div className="max-w-3xl mx-auto">
+              <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tight mb-8">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+                  Available Exterior Addons
+                </span>
+              </h3>
+              <p className="text-gray-400 text-lg mb-8">
+                Optional Services Based on Your Request (Extra Charges Apply)
+              </p>
+              
+              <div className="space-y-6">
+                <div className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
+                  <h4 className="text-xl font-bold text-white mb-2">Wash, Clay, and Wax</h4>
+                  <p className="text-[#3496FF] font-bold text-lg mb-3">Coupe / Sedan: $150 | Truck / SUV / Jeep / Minivan: $175 – $200</p>
+                </div>
+
+                <div className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
+                  <h4 className="text-xl font-bold text-white mb-2">Dress Exterior Plastic</h4>
+                  <p className="text-[#3496FF] font-bold text-lg">$45</p>
+                </div>
+
+                <div className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
+                  <h4 className="text-xl font-bold text-white mb-2">Clay Bar Treatment</h4>
+                  <p className="text-[#3496FF] font-bold text-lg">$55+</p>
+                </div>
+
+                <div className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
+                  <h4 className="text-xl font-bold text-white mb-2">Headlight Restoration (Pair)</h4>
+                  <p className="text-[#3496FF] font-bold text-lg">$100</p>
+                </div>
+
+                <div className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
+                  <h4 className="text-xl font-bold text-white mb-2">Hand-applied Spot Scratch and Swirl Removal</h4>
+                  <p className="text-[#3496FF] font-bold text-lg">$40+</p>
+                </div>
+
+                <div className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-[#3496FF] transition-colors">
+                  <h4 className="text-xl font-bold text-white mb-2">Engine Bay Cleaning</h4>
+                  <p className="text-[#3496FF] font-bold text-lg">$60+</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
