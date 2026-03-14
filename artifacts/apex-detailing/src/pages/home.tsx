@@ -67,13 +67,20 @@ const services = [
     ],
   },
   {
-    id: "paint-correction",
-    title: "Paint Correction",
+    id: "wash-clay-wax",
+    title: "Wash, Clay & Wax",
     description:
-      "Remove swirl marks, light scratches, and oxidation to restore your paint to a flawless, mirror-like finish.",
+      "First, the vehicle receives a thorough hand wash to remove dirt, dust, and road grime. Next, a clay bar treatment is used to safely remove embedded contaminants such as tar, brake dust, and industrial fallout that normal washing cannot remove. Finally, a protective wax coating is applied to enhance shine, protect the paint, and help repel water and dirt.",
     icon: <Sparkles className="w-10 h-10 text-[#A886CD]" />,
-    pricing: "$300-$600",
-    features: ["Swirl Mark Removal", "Deep Gloss Restoration", "Enhances Resale Value"],
+    pricing: "$250",
+    pricingDetails: ["Sedan: $250", "SUV: $300–$350"],
+    features: [
+      "Thorough Hand Wash",
+      "Clay Bar Treatment",
+      "Professional Wax Coating",
+      "Enhanced Paint Protection",
+      "Water & Dirt Repellent",
+    ],
   },
   {
     id: "headlight-restoration",
@@ -94,20 +101,13 @@ const services = [
     features: ["Up to 5 Years Protection", "Extreme Hydrophobics", "Scratch Resistance"],
   },
   {
-    id: "wash-clay-wax",
-    title: "Wash, Clay & Wax",
+    id: "paint-correction",
+    title: "Paint Correction",
     description:
-      "First, the vehicle receives a thorough hand wash to remove dirt, dust, and road grime. Next, a clay bar treatment is used to safely remove embedded contaminants such as tar, brake dust, and industrial fallout that normal washing cannot remove. Finally, a protective wax coating is applied to enhance shine, protect the paint, and help repel water and dirt.",
+      "Remove swirl marks, light scratches, and oxidation to restore your paint to a flawless, mirror-like finish.",
     icon: <Sparkles className="w-10 h-10 text-[#A886CD]" />,
-    pricing: "$250",
-    pricingDetails: ["Sedan: $250", "SUV: $300–$350"],
-    features: [
-      "Thorough Hand Wash",
-      "Clay Bar Treatment",
-      "Professional Wax Coating",
-      "Enhanced Paint Protection",
-      "Water & Dirt Repellent",
-    ],
+    pricing: "$300-$600",
+    features: ["Swirl Mark Removal", "Deep Gloss Restoration", "Enhances Resale Value"],
   },
 ];
 
