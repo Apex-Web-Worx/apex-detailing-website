@@ -217,7 +217,7 @@ function AddonsSection() {
     {
       id: "wash-clay-wax",
       name: "Wash, Clay & Wax",
-      price: "Sedan: $150 | SUV: $175–$200",
+      price: "Sedan: $250 | SUV: $300–$350",
       description: "First, the vehicle receives a thorough hand wash to remove dirt, dust, and road grime. Next, a clay bar treatment is used to safely remove embedded contaminants such as tar, brake dust, and industrial fallout that normal washing cannot remove. Finally, a protective wax coating is applied to enhance shine, protect the paint, and help repel water and dirt."
     },
     {
