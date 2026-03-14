@@ -239,12 +239,6 @@ function AddonsSection() {
       description: "Headlight Restoration is a detailing service that removes oxidation, haze, and yellowing from vehicle headlights to restore clarity and brightness. Over time, sun exposure and environmental contaminants can make headlights cloudy, reducing visibility and the overall appearance of your vehicle."
     },
     {
-      id: "spot-scratch",
-      name: "Spot Scratch & Swirl Removal",
-      price: "$40+",
-      description: ""
-    },
-    {
       id: "engine-bay",
       name: "Engine Bay Cleaning",
       price: "$60+",
