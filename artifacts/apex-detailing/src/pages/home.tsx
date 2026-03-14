@@ -393,7 +393,7 @@ export default function Home() {
       <div className="texture-overlay" />
       {/* Navigation */}
       <nav
-        className={`fixed top-0 w-full z-50 transition-all duration-300 overflow-hidden ${
+        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
           isScrolled
             ? "bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/10 py-3 shadow-[0_0_20px_rgba(52,150,255,0.1)]"
             : "bg-transparent py-5"
@@ -455,7 +455,7 @@ export default function Home() {
         </div>
 
         <div
-          className={`md:hidden absolute top-full left-0 w-full bg-[#0a0a0a] border-b border-white/10 transition-all duration-300 ease-in-out overflow-hidden ${
+          className={`md:hidden fixed top-20 left-0 right-0 w-full bg-[#0a0a0a] border-b border-white/10 transition-all duration-300 ease-in-out overflow-hidden z-40 ${
             mobileMenuOpen ? "max-h-[400px] opacity-100 py-4" : "max-h-0 opacity-0 py-0"
           }`}
         >
