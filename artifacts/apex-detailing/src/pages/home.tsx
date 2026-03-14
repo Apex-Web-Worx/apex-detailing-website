@@ -27,28 +27,19 @@ const GOOGLE_REVIEWS_LINK = "https://www.google.com/search?q=Apex+Detailing&stic
 
 const services = [
   {
-    id: "paint-correction",
-    title: "Paint Correction",
+    id: "full-detailing",
+    title: "Full Detailing",
     description:
-      "Remove swirl marks, light scratches, and oxidation to restore your paint to a flawless, mirror-like finish.",
-    icon: <Sparkles className="w-10 h-10 text-[#A886CD]" />,
-    pricing: "$300-$600",
-    features: ["Swirl Mark Removal", "Deep Gloss Restoration", "Enhances Resale Value"],
-  },
-  {
-    id: "exterior-detailing",
-    title: "Exterior Detailing",
-    description:
-      "Comprehensive exterior cleaning and protection to make your car turn heads everywhere you go. Add-ons available to customize your package.",
-    icon: <Car className="w-10 h-10 text-[#3496FF]" />,
-    pricing: "$150",
-    pricingDetails: ["Coupe / Sedan: $150", "Truck / Jeep / SUV: $200"],
+      "The ultimate package! Includes interior and exterior detailed cleaning and protection. Get your vehicle looking showroom fresh inside and out. Add-ons available to customize your package.",
+    icon: <Wand2 className="w-10 h-10 text-[#A886CD]" />,
+    pricing: "$300",
+    pricingDetails: ["Coupe / Sedan: $300-$400", "Truck / Jeep / 2-Row SUV: $350 – $450", "Minivan / 3-Row SUV: $350 – $500"],
     features: [
-      "Detailed hand wash",
-      "Exterior windows and mirrors cleaned",
-      "Wheels and tires cleaned, polished, and dressed",
-      "Door jambs wiped down",
-      "Spray sealant for 1-month protection",
+      "Complete Exterior Detailing",
+      "Complete Interior Detailing",
+      "Paint Protection",
+      "Professional Results",
+      "Customizable Add-ons",
     ],
   },
   {
@@ -76,20 +67,29 @@ const services = [
     ],
   },
   {
-    id: "full-detailing",
-    title: "Full Detailing",
+    id: "exterior-detailing",
+    title: "Exterior Detailing",
     description:
-      "The ultimate package! Includes interior and exterior detailed cleaning and protection. Get your vehicle looking showroom fresh inside and out. Add-ons available to customize your package.",
-    icon: <Wand2 className="w-10 h-10 text-[#A886CD]" />,
-    pricing: "$300",
-    pricingDetails: ["Coupe / Sedan: $300-$400", "Truck / Jeep / 2-Row SUV: $350 – $450", "Minivan / 3-Row SUV: $350 – $500"],
+      "Comprehensive exterior cleaning and protection to make your car turn heads everywhere you go. Add-ons available to customize your package.",
+    icon: <Car className="w-10 h-10 text-[#3496FF]" />,
+    pricing: "$150",
+    pricingDetails: ["Coupe / Sedan: $150", "Truck / Jeep / SUV: $200"],
     features: [
-      "Complete Exterior Detailing",
-      "Complete Interior Detailing",
-      "Paint Protection",
-      "Professional Results",
-      "Customizable Add-ons",
+      "Detailed hand wash",
+      "Exterior windows and mirrors cleaned",
+      "Wheels and tires cleaned, polished, and dressed",
+      "Door jambs wiped down",
+      "Spray sealant for 1-month protection",
     ],
+  },
+  {
+    id: "paint-correction",
+    title: "Paint Correction",
+    description:
+      "Remove swirl marks, light scratches, and oxidation to restore your paint to a flawless, mirror-like finish.",
+    icon: <Sparkles className="w-10 h-10 text-[#A886CD]" />,
+    pricing: "$300-$600",
+    features: ["Swirl Mark Removal", "Deep Gloss Restoration", "Enhances Resale Value"],
   },
   {
     id: "headlight-restoration",
