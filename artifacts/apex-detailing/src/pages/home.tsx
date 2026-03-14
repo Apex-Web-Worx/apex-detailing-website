@@ -67,22 +67,6 @@ const services = [
     ],
   },
   {
-    id: "exterior-detailing",
-    title: "Exterior Detailing",
-    description:
-      "Comprehensive exterior cleaning and protection to make your car turn heads everywhere you go. Add-ons available to customize your package.",
-    icon: <Car className="w-10 h-10 text-[#3496FF]" />,
-    pricing: "$150",
-    pricingDetails: ["Coupe / Sedan: $150", "Truck / Jeep / SUV: $200"],
-    features: [
-      "Detailed hand wash",
-      "Exterior windows and mirrors cleaned",
-      "Wheels and tires cleaned, polished, and dressed",
-      "Door jambs wiped down",
-      "Spray sealant for 1-month protection",
-    ],
-  },
-  {
     id: "paint-correction",
     title: "Paint Correction",
     description:
@@ -90,6 +74,15 @@ const services = [
     icon: <Sparkles className="w-10 h-10 text-[#A886CD]" />,
     pricing: "$300-$600",
     features: ["Swirl Mark Removal", "Deep Gloss Restoration", "Enhances Resale Value"],
+  },
+  {
+    id: "headlight-restoration",
+    title: "Headlight Restoration",
+    description:
+      "Fix foggy, yellowed headlights to improve nighttime visibility and dramatically improve your car's appearance.",
+    icon: <CheckCircle2 className="w-10 h-10 text-[#3496FF]" />,
+    pricing: "$100+",
+    features: ["Improves Safety", "Removes Oxidation", "UV Protection Applied"],
   },
   {
     id: "ceramic-coating",
@@ -221,6 +214,12 @@ function AddonsSection() {
   ];
 
   const exteriorAddons = [
+    {
+      id: "exterior-detailing",
+      name: "Exterior Detailing",
+      price: "Sedan: $150 | SUV: $200",
+      description: "Comprehensive exterior cleaning and protection to make your car turn heads everywhere you go. Includes detailed hand wash, exterior windows and mirrors cleaning, wheels and tires cleaned, polished, and dressed, door jambs wiped down, and spray sealant for 1-month protection."
+    },
     {
       id: "wash-clay-wax",
       name: "Wash, Clay & Wax",
