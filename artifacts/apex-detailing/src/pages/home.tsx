@@ -579,17 +579,6 @@ export default function Home() {
                 </span>
               </h3>
             </div>
-            <a
-              href={INSTAGRAM_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative inline-flex items-center justify-center px-6 py-3 font-bold text-white transition-all duration-300 ease-in-out bg-gradient-to-r from-[#A886CD]/20 to-[#3496FF]/20 border border-[#A886CD] rounded-lg hover:from-[#A886CD]/40 hover:to-[#3496FF]/40 hover:border-[#3496FF]"
-            >
-              <span className="flex items-center gap-2">
-                <Instagram className="w-5 h-5" />
-                Follow on Instagram <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </span>
-            </a>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
