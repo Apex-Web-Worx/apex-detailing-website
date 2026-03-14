@@ -299,7 +299,7 @@ export default function Home() {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8">
             <span className="flex h-2 w-2 rounded-full bg-[#3496FF] animate-pulse" />
             <span className="text-sm font-bold tracking-widest text-gray-300 uppercase">
-              Prestige Vehicle Detailing in Nixa/Ozarks
+              Prestige Vehicle Detailing in Nixa/Ozarks/Springfield
             </span>
           </div>
 
