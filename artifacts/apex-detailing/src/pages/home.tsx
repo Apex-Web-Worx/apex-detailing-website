@@ -466,25 +466,39 @@ export default function Home() {
 
             <div className="order-1 lg:order-2">
               <h2 className="text-sm font-bold tracking-widest text-[#A886CD] uppercase mb-3">
-                The Apex Standard
+                About Us
               </h2>
               <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-8 leading-tight">
-                Not Just a Wash. <br />
-                An{" "}
+                Welcome to{" "}
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
-                  Obsession.
+                  Apex Detailing
                 </span>
               </h3>
 
               <div className="space-y-6 text-gray-400 text-lg mb-10">
                 <p>
-                  Apex Detailing was founded on a simple principle: providing unmatched quality and
-                  excellence to car owners in the Ozarks. We don't cut corners, we polish them.
+                  Where passion, precision, and purpose come together to serve you with excellence. Serving the Springfield | Ozark | Nixa areas, we specialize in high-quality car detailing that restores beauty, protects value, and reflects the pride you have in your vehicle.
                 </p>
                 <p>
-                  With our state-of-the-art facility and expert team, we restore your vehicle to
-                  pristine condition in Springfield, Nixa, and Ozark. You'll love the results.
+                  Our dedication to quality and customer satisfaction has helped us become <strong className="text-white">#1 Ranked in Nixa for 2024 and 2025</strong>, a recognition we are truly grateful for.
                 </p>
+                <p className="italic">
+                  Our business is built on Christian values, with Christ at the center of everything we do. We believe in working with integrity, serving others with a joyful heart, and honoring God through the quality of our craft.
+                </p>
+                <p>
+                  Apex Detailing was founded by Mikhail, who is known for his meticulous nature and commitment to perfection. What started as a personal passion for detailing has grown into a trusted service grounded in faith, excellence, and care.
+                </p>
+                <p>
+                  At Apex, we use only premium-grade chemicals and professional techniques to ensure every vehicle gets the attention it deserves — inside and out. Whether it's a deep interior clean, paint correction, or exterior protection, our goal is to go above and beyond your expectations.
+                </p>
+                <p>
+                  <strong className="text-white">Experience the Apex difference — where faith fuels our service and quality drives every detail.</strong>
+                </p>
+              </div>
+
+              <div className="border-t border-white/10 pt-6 mt-8">
+                <p className="text-white font-black text-lg">Mikhail Gurov</p>
+                <p className="text-[#A886CD] font-bold">Founder & Detailing Specialist</p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
