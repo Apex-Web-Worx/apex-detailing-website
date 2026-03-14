@@ -267,8 +267,8 @@ export default function Home() {
           </h1>
 
           <p className="max-w-2xl text-lg md:text-xl text-gray-400 mb-10 font-medium">
-            Premium mobile auto detailing, ceramic coating, and paint correction services serving
-            Springfield, Nixa, and Ozark. We bring the showroom shine to your driveway.
+            Premium auto detailing, ceramic coating, and paint correction services serving
+            Springfield, Nixa, and Ozark. We bring the showroom shine to your vehicle.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
@@ -303,8 +303,8 @@ export default function Home() {
               <span className="font-bold">5-Star Rated</span>
             </div>
             <div className="flex items-center gap-2">
-              <MapPin className="w-6 h-6 text-[#A886CD]" />
-              <span className="font-bold">Mobile Service</span>
+              <Shield className="w-6 h-6 text-[#A886CD]" />
+              <span className="font-bold">Expert Detailing</span>
             </div>
           </div>
         </div>
@@ -425,22 +425,16 @@ export default function Home() {
               <div className="space-y-6 text-gray-400 text-lg mb-10">
                 <p>
                   Apex Detailing was founded on a simple principle: providing unmatched quality and
-                  convenience to car owners in the Ozarks. We don't cut corners, we polish them.
+                  excellence to car owners in the Ozarks. We don't cut corners, we polish them.
                 </p>
                 <p>
-                  As a mobile detailing service, we bring our fully-equipped setup directly to your
-                  home or office in Springfield, Nixa, and Ozark. You get your time back while we
-                  restore your vehicle to pristine condition.
+                  With our state-of-the-art facility and expert team, we restore your vehicle to
+                  pristine condition in Springfield, Nixa, and Ozark. You'll love the results.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {[
-                  {
-                    title: "Mobile Service",
-                    desc: "We come to you, fully equipped",
-                    icon: <MapPin className="text-[#3496FF]" />,
-                  },
                   {
                     title: "Premium Products",
                     desc: "Professional-grade chemicals only",
@@ -455,6 +449,11 @@ export default function Home() {
                     title: "Flexible Scheduling",
                     desc: "Book easily online anytime",
                     icon: <Clock className="text-[#A886CD]" />,
+                  },
+                  {
+                    title: "Expert Team",
+                    desc: "Certified professionals on staff",
+                    icon: <Sparkles className="text-[#3496FF]" />,
                   },
                 ].map((item, i) => (
                   <div key={i} className="flex gap-4">
@@ -671,7 +670,7 @@ export default function Home() {
                 The Apex Difference?
               </h2>
               <p className="text-xl text-gray-400 mb-10 font-medium">
-                Book your appointment today. Our mobile unit will come to your location in
+                Book your appointment today. Visit our facility or schedule a service in
                 Springfield, Nixa, or Ozark.
               </p>
               <a
@@ -703,8 +702,8 @@ export default function Home() {
                 />
               </div>
               <p className="text-gray-400 mb-6 font-medium">
-                Prestige vehicle detailing and ceramic coating services. Mobile perfection delivered
-                to your doorstep.
+                Prestige vehicle detailing and ceramic coating services. Expert craftsmanship,
+                exceptional results.
               </p>
               <div className="flex gap-4">
                 <a
@@ -763,7 +762,7 @@ export default function Home() {
               <ul className="space-y-4 text-gray-400">
                 <li className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-[#3496FF] shrink-0 mt-0.5" />
-                  <span>Serving Springfield, Nixa, and Ozark, Missouri (Mobile Service)</span>
+                  <span>Located in Springfield, Nixa, and Ozark, Missouri</span>
                 </li>
                 <li className="flex items-center gap-3 hover:text-white transition-colors cursor-pointer">
                   <Phone className="w-5 h-5 text-[#A886CD]" />
