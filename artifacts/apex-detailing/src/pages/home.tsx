@@ -338,6 +338,21 @@ export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  const [heroImageIndex, setHeroImageIndex] = useState(0);
+
+  const heroImages = [
+    `${import.meta.env.BASE_URL}images/hero-1.jpg`,
+    `${import.meta.env.BASE_URL}images/hero-2.jpg`,
+    `${import.meta.env.BASE_URL}images/hero-3.jpg`,
+  ];
+
+  // Auto-rotate hero images
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setHeroImageIndex((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   const handleGalleryItemClick = (item: typeof gallery[0]) => {
     setSelectedGalleryItem(item);
@@ -521,7 +536,7 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+      <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden" style={{ backgroundImage: `url('${heroImages[heroImageIndex]}')`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed', transition: 'background-image 0.8s ease-in-out' }}>
         {/* Soap Bubbles in Header */}
         <div className="soap-bubble absolute top-[5%] left-[5%] w-12 h-12" style={{ animationDuration: '16s', animationDelay: '0s' }} />
         <div className="soap-bubble absolute top-[10%] left-[15%] w-16 h-16" style={{ animationDuration: '18s', animationDelay: '1s' }} />
