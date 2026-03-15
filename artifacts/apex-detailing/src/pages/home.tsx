@@ -867,16 +867,16 @@ export default function Home() {
                 )}
                 <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                   {item.video && (
-                    <span className="inline-block px-3 py-1 bg-[#A886CD] text-black font-black text-xs uppercase tracking-widest rounded mb-3">
+                    <span className="inline-block px-3 py-1 bg-[#A886CD] text-black font-black text-xs uppercase tracking-widest rounded mb-3 opacity-85">
                       Video
                     </span>
                   )}
                   {item.beforeAfter ? (
-                    <span className="inline-block px-3 py-1 bg-[#3496FF] text-black font-black text-xs uppercase tracking-widest rounded mb-3">
+                    <span className="inline-block px-3 py-1 bg-[#3496FF] text-black font-black text-xs uppercase tracking-widest rounded mb-3 opacity-85">
                       Results before and after
                     </span>
                   ) : item.id === 1 && (
-                    <span className="inline-block px-3 py-1 bg-[#3496FF] text-black font-black text-xs uppercase tracking-widest rounded mb-3">
+                    <span className="inline-block px-3 py-1 bg-[#3496FF] text-black font-black text-xs uppercase tracking-widest rounded mb-3 opacity-85">
                       Finished results
                     </span>
                   )}
@@ -978,7 +978,7 @@ export default function Home() {
                 
                 {/* Before/After Label */}
                 {selectedGalleryItem.beforeAfter && typeof selectedGalleryItem.images[currentImageIndex] === 'object' && (
-                  <div className="absolute top-6 left-6 bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg">
+                  <div className="absolute top-6 left-6 bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg opacity-85">
                     {selectedGalleryItem.images[currentImageIndex].label}
                   </div>
                 )}
