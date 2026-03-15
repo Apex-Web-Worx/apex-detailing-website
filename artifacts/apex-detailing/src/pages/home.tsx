@@ -339,6 +339,7 @@ export default function Home() {
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
   const [aboutImageIdx, setAboutImageIdx] = useState(0);
+  const [failedVideos, setFailedVideos] = useState<Set<number>>(new Set());
 
   const aboutImages = [
     `${import.meta.env.BASE_URL}images/about-hero.jpg`,
@@ -859,7 +860,7 @@ export default function Home() {
                 className="group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer w-full"
                 onClick={() => handleGalleryItemClick(item)}
               >
-                {item.video ? (
+                {item.video && !failedVideos.has(item.id) ? (
                   <>
                     <video
                       src={item.video}
@@ -869,6 +870,7 @@ export default function Home() {
                       loop
                       playsInline
                       controls={false}
+                      onError={() => setFailedVideos(prev => new Set(prev).add(item.id))}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
                   </>
