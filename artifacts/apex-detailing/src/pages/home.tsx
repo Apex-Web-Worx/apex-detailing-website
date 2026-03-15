@@ -117,11 +117,12 @@ const gallery = [
   ], currentImageIndex: 0 },
   { id: 2, title: "Ceramic Coating", beforeAfter: false, color: "from-[#A886CD] to-purple-900", video: `${import.meta.env.BASE_URL}videos/ceramic-coating-demo.MOV` },
   { id: 3, title: "Interior Restoration", beforeAfter: true, color: "from-blue-900 to-indigo-900", images: [
-    `${import.meta.env.BASE_URL}images/interior-restoration-1.jpg`,
-    `${import.meta.env.BASE_URL}images/interior-restoration-2.jpg`,
-    `${import.meta.env.BASE_URL}images/interior-restoration-3.jpg`,
-    `${import.meta.env.BASE_URL}images/interior-restoration-4.jpg`,
-    `${import.meta.env.BASE_URL}images/interior-restoration-5.jpg`,
+    { src: `${import.meta.env.BASE_URL}images/interior-before-1.jpg`, label: "Before" },
+    { src: `${import.meta.env.BASE_URL}images/interior-after-1.jpg`, label: "After" },
+    { src: `${import.meta.env.BASE_URL}images/interior-before-2.jpg`, label: "Before" },
+    { src: `${import.meta.env.BASE_URL}images/interior-after-2.jpg`, label: "After" },
+    { src: `${import.meta.env.BASE_URL}images/interior-before-3.jpg`, label: "Before" },
+    { src: `${import.meta.env.BASE_URL}images/interior-after-3.jpg`, label: "After" },
   ], currentImageIndex: 0 },
   { id: 4, title: "Exterior Detail", beforeAfter: true, color: "from-purple-900 to-black", images: [
     `${import.meta.env.BASE_URL}images/exterior-detail-1.jpg`,
@@ -913,11 +914,18 @@ export default function Home() {
             ) : selectedGalleryItem.images && selectedGalleryItem.images.length > 0 ? (
               <>
                 <img
-                  src={selectedGalleryItem.images[currentImageIndex]}
+                  src={typeof selectedGalleryItem.images[currentImageIndex] === 'string' ? selectedGalleryItem.images[currentImageIndex] : selectedGalleryItem.images[currentImageIndex].src}
                   alt={`${selectedGalleryItem.title} - Image ${currentImageIndex + 1}`}
                   className={`${isFullscreen ? 'w-full h-full' : 'w-full h-full'} object-contain ${!isFullscreen && 'rounded-xl'}`}
                   style={{ filter: 'brightness(1.15) contrast(1.15)' }}
                 />
+                
+                {/* Before/After Label */}
+                {selectedGalleryItem.beforeAfter && typeof selectedGalleryItem.images[currentImageIndex] === 'object' && (
+                  <div className="absolute top-6 left-6 bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg">
+                    {selectedGalleryItem.images[currentImageIndex].label}
+                  </div>
+                )}
                 
                 {/* Previous Button */}
                 {currentImageIndex > 0 && (
