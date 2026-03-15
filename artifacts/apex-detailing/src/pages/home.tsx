@@ -344,6 +344,26 @@ export default function Home() {
     }
   };
 
+  // Preload adjacent images for faster switching
+  useEffect(() => {
+    if (!selectedGalleryItem?.images) return;
+
+    const preloadImage = (index: number) => {
+      if (index >= 0 && index < selectedGalleryItem.images.length) {
+        const imageSrc = typeof selectedGalleryItem.images[index] === 'string' 
+          ? selectedGalleryItem.images[index] 
+          : selectedGalleryItem.images[index].src;
+        const img = new Image();
+        img.src = imageSrc;
+      }
+    };
+
+    // Preload next image
+    preloadImage(currentImageIndex + 1);
+    // Preload previous image
+    preloadImage(currentImageIndex - 1);
+  }, [currentImageIndex, selectedGalleryItem]);
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
