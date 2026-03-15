@@ -338,13 +338,23 @@ export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  const [aboutImageIdx, setAboutImageIdx] = useState(0);
 
   const aboutImages = [
     `${import.meta.env.BASE_URL}images/about-hero.jpg`,
     `${import.meta.env.BASE_URL}images/hero-1.jpg`,
     `${import.meta.env.BASE_URL}images/hero-2.jpg`,
     `${import.meta.env.BASE_URL}images/hero-3.jpg`,
+    `${import.meta.env.BASE_URL}images/hero-4.jpg`,
   ];
+
+  // Auto-rotate images
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setAboutImageIdx((prev) => (prev + 1) % aboutImages.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [aboutImages.length]);
 
 
   const handleGalleryItemClick = (item: typeof gallery[0]) => {
@@ -705,14 +715,18 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="order-2 lg:order-1 relative">
               <div className="aspect-[4/5] rounded-2xl overflow-hidden relative group">
-                <div
-                  className="absolute inset-0 bg-cover bg-center scale-100 group-hover:scale-105 transition-transform duration-700"
-                  style={{
-                    backgroundImage: `url('${aboutImages[0]}')`,
-                    backgroundPosition: 'center',
-                    backgroundSize: 'cover',
-                  }}
-                />
+                {/* Image container with smooth transitions */}
+                {aboutImages.map((img, idx) => (
+                  <img
+                    key={idx}
+                    src={img}
+                    alt={`About image ${idx + 1}`}
+                    className="absolute inset-0 w-full h-full object-cover scale-100 group-hover:scale-105 transition-opacity duration-1000 ease-in-out"
+                    style={{
+                      opacity: idx === aboutImageIdx ? 1 : 0,
+                    }}
+                  />
+                ))}
                 <div 
                   className="absolute inset-0 bg-gradient-to-tr from-[#A886CD]/30 to-[#3496FF]/30 group-hover:from-[#A886CD]/50 group-hover:to-[#3496FF]/50 z-10 transition-all duration-700"
                 />
