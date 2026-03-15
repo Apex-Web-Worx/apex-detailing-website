@@ -112,8 +112,9 @@ const services = [
 ];
 
 const gallery = [
-  { id: 1, title: "Paint Correction", beforeAfter: true, color: "from-blue-900 to-[#3496FF]", thumbnail: `${import.meta.env.BASE_URL}images/paint-correction-thumbnail.jpg`, images: [
+  { id: 1, title: "Paint Correction", beforeAfter: false, color: "from-blue-900 to-[#3496FF]", thumbnail: `${import.meta.env.BASE_URL}images/paint-correction-thumbnail.jpg`, images: [
     `${import.meta.env.BASE_URL}images/paint-correction-1.jpg`,
+    `${import.meta.env.BASE_URL}images/paint-correction-2.jpg`,
   ], currentImageIndex: 0 },
   { id: 2, title: "Ceramic Coating", beforeAfter: false, color: "from-[#A886CD] to-purple-900", video: `${import.meta.env.BASE_URL}videos/ceramic-coating-demo.MOV` },
   { id: 3, title: "Interior Restoration", beforeAfter: true, color: "from-blue-900 to-indigo-900", thumbnail: `${import.meta.env.BASE_URL}images/interior-restoration-thumbnail.jpg`, images: [
@@ -832,9 +833,13 @@ export default function Home() {
                       Video
                     </span>
                   )}
-                  {item.beforeAfter && (
+                  {item.beforeAfter ? (
                     <span className="inline-block px-3 py-1 bg-[#3496FF] text-black font-black text-xs uppercase tracking-widest rounded mb-3">
                       Results before and after
+                    </span>
+                  ) : item.id === 1 && (
+                    <span className="inline-block px-3 py-1 bg-[#3496FF] text-black font-black text-xs uppercase tracking-widest rounded mb-3">
+                      Finished results
                     </span>
                   )}
                   <h4 className="text-2xl font-black text-white">{item.title}</h4>
