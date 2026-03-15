@@ -320,6 +320,8 @@ export default function Home() {
   const [selectedGalleryItem, setSelectedGalleryItem] = useState<typeof gallery[0] | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
   const handleGalleryItemClick = (item: typeof gallery[0]) => {
     setSelectedGalleryItem(item);
@@ -904,7 +906,21 @@ export default function Home() {
             )}
           </button>
 
-          <div className={`relative flex items-center justify-center ${isFullscreen ? 'w-screen h-screen' : 'max-w-4xl max-h-[90vh]'}`} onClick={(e) => e.stopPropagation()}>
+          <div 
+            className={`relative flex items-center justify-center ${isFullscreen ? 'w-screen h-screen' : 'max-w-4xl max-h-[90vh]'}`} 
+            onClick={(e) => e.stopPropagation()}
+            onTouchStart={(e) => setTouchStart(e.targetTouches[0].clientX)}
+            onTouchEnd={(e) => {
+              setTouchEnd(e.changedTouches[0].clientX);
+              const distance = touchStart - e.changedTouches[0].clientX;
+              if (distance > 50 && selectedGalleryItem?.images && currentImageIndex < selectedGalleryItem.images.length - 1) {
+                nextImage();
+              }
+              if (distance < -50 && currentImageIndex > 0) {
+                prevImage();
+              }
+            }}
+          >
             {selectedGalleryItem.video ? (
               <video
                 src={selectedGalleryItem.video}
