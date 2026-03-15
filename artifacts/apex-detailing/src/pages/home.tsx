@@ -338,7 +338,6 @@ export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
-  const [aboutImageIndex, setAboutImageIndex] = useState(0);
 
   const aboutImages = [
     `${import.meta.env.BASE_URL}images/about-hero.jpg`,
@@ -347,13 +346,6 @@ export default function Home() {
     `${import.meta.env.BASE_URL}images/hero-3.jpg`,
   ];
 
-  // Auto-rotate about images
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setAboutImageIndex((prev) => (prev + 1) % aboutImages.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, []);
 
   const handleGalleryItemClick = (item: typeof gallery[0]) => {
     setSelectedGalleryItem(item);
@@ -713,17 +705,14 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="order-2 lg:order-1 relative">
               <div className="aspect-[4/5] rounded-2xl overflow-hidden relative group">
-                {/* Background image */}
                 <div
-                  key={aboutImageIndex}
-                  className="absolute inset-0 bg-cover bg-center scale-100 group-hover:scale-105 animate-fadeIn"
+                  className="absolute inset-0 bg-cover bg-center scale-100 group-hover:scale-105 transition-transform duration-700"
                   style={{
-                    backgroundImage: `url('${aboutImages[aboutImageIndex]}')`,
+                    backgroundImage: `url('${aboutImages[0]}')`,
                     backgroundPosition: 'center',
                     backgroundSize: 'cover',
                   }}
                 />
-                {/* Gradient overlay */}
                 <div 
                   className="absolute inset-0 bg-gradient-to-tr from-[#A886CD]/30 to-[#3496FF]/30 group-hover:from-[#A886CD]/50 group-hover:to-[#3496FF]/50 z-10 transition-all duration-700"
                 />
