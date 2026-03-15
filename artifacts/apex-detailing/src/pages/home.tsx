@@ -917,7 +917,7 @@ export default function Home() {
                   src={typeof selectedGalleryItem.images[currentImageIndex] === 'string' ? selectedGalleryItem.images[currentImageIndex] : selectedGalleryItem.images[currentImageIndex].src}
                   alt={`${selectedGalleryItem.title} - Image ${currentImageIndex + 1}`}
                   className={`${isFullscreen ? 'w-full h-full' : 'w-full h-full'} object-contain ${!isFullscreen && 'rounded-xl'}`}
-                  style={{ filter: 'brightness(1.15) contrast(1.15)' }}
+                  style={{ filter: 'brightness(0.95) contrast(1.05)' }}
                 />
                 
                 {/* Before/After Label */}
