@@ -339,8 +339,6 @@ export default function Home() {
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
   const [aboutImageIndex, setAboutImageIndex] = useState(0);
-  const [nextAboutImageIndex, setNextAboutImageIndex] = useState(1);
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const aboutImages = [
     `${import.meta.env.BASE_URL}images/about-hero.jpg`,
@@ -349,20 +347,11 @@ export default function Home() {
     `${import.meta.env.BASE_URL}images/hero-3.jpg`,
   ];
 
-  // Auto-rotate about images with smooth transitions
+  // Auto-rotate about images
   useEffect(() => {
     const timer = setInterval(() => {
-      setIsTransitioning(true);
-      // Complete the fade and update indices
-      setTimeout(() => {
-        setAboutImageIndex((prev) => (prev + 1) % aboutImages.length);
-        setNextAboutImageIndex((prev) => (prev + 1) % aboutImages.length);
-      }, 1200);
-      // Disable transition state after a small delay to avoid blinking
-      setTimeout(() => {
-        setIsTransitioning(false);
-      }, 1250);
-    }, 6200); // 5000ms display + 1200ms transition
+      setAboutImageIndex((prev) => (prev + 1) % aboutImages.length);
+    }, 5000);
     return () => clearInterval(timer);
   }, []);
 
@@ -724,32 +713,19 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="order-2 lg:order-1 relative">
               <div className="aspect-[4/5] rounded-2xl overflow-hidden relative group">
-                <div 
-                  className="absolute inset-0 bg-gradient-to-tr from-[#A886CD]/30 to-[#3496FF]/30 group-hover:from-[#A886CD]/50 group-hover:to-[#3496FF]/50 z-10 transition-all duration-700"
-                />
-                {/* Current image */}
+                {/* Background image */}
                 <div
-                  className="absolute inset-0 bg-cover bg-center scale-100 group-hover:scale-105"
+                  key={aboutImageIndex}
+                  className="absolute inset-0 bg-cover bg-center scale-100 group-hover:scale-105 animate-fadeIn"
                   style={{
                     backgroundImage: `url('${aboutImages[aboutImageIndex]}')`,
                     backgroundPosition: 'center',
                     backgroundSize: 'cover',
-                    opacity: isTransitioning ? 0 : 1,
-                    transition: 'opacity 1200ms ease-in-out',
-                    willChange: 'opacity',
                   }}
                 />
-                {/* Next image */}
-                <div
-                  className="absolute inset-0 bg-cover bg-center scale-100 group-hover:scale-105"
-                  style={{
-                    backgroundImage: `url('${aboutImages[nextAboutImageIndex]}')`,
-                    backgroundPosition: 'center',
-                    backgroundSize: 'cover',
-                    opacity: isTransitioning ? 1 : 0,
-                    transition: 'opacity 1200ms ease-in-out',
-                    willChange: 'opacity',
-                  }}
+                {/* Gradient overlay */}
+                <div 
+                  className="absolute inset-0 bg-gradient-to-tr from-[#A886CD]/30 to-[#3496FF]/30 group-hover:from-[#A886CD]/50 group-hover:to-[#3496FF]/50 z-10 transition-all duration-700"
                 />
                 <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black to-transparent z-20">
                   <div className="inline-flex items-center gap-3 bg-black/60 backdrop-blur-md px-6 py-3 rounded-xl border border-white/10">

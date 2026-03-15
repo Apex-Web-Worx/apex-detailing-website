@@ -134,6 +134,15 @@
   }
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @layer utilities {
   input[type="search"]::-webkit-search-cancel-button {
     @apply hidden;
@@ -184,6 +193,10 @@
     animation-delay: 0s;
     margin: 0 8px;
     vertical-align: middle;
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 1s ease-in-out forwards;
   }
 
   /* Soap bubbles animations */
