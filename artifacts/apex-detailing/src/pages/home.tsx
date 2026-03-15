@@ -338,6 +338,22 @@ export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  const [aboutImageIndex, setAboutImageIndex] = useState(0);
+
+  const aboutImages = [
+    `${import.meta.env.BASE_URL}images/about-hero.jpg`,
+    `${import.meta.env.BASE_URL}images/hero-1.jpg`,
+    `${import.meta.env.BASE_URL}images/hero-2.jpg`,
+    `${import.meta.env.BASE_URL}images/hero-3.jpg`,
+  ];
+
+  // Auto-rotate about images
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setAboutImageIndex((prev) => (prev + 1) % aboutImages.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   const handleGalleryItemClick = (item: typeof gallery[0]) => {
     setSelectedGalleryItem(item);
@@ -699,10 +715,9 @@ export default function Home() {
               <div className="aspect-[4/5] rounded-2xl overflow-hidden relative group">
                 <div className="absolute inset-0 bg-gradient-to-tr from-[#A886CD] to-[#3496FF] opacity-20 group-hover:opacity-40 transition-opacity duration-700 z-10" />
                 <div
-                  className="absolute inset-0 bg-cover bg-center mix-blend-luminosity scale-100 group-hover:scale-105 transition-transform duration-1000"
+                  className="absolute inset-0 bg-cover bg-center mix-blend-luminosity scale-100 group-hover:scale-105 transition-all duration-700"
                   style={{
-                    backgroundImage:
-                      `url('${import.meta.env.BASE_URL}images/about-hero.jpg')`,
+                    backgroundImage: `url('${aboutImages[aboutImageIndex]}')`,
                   }}
                 />
                 <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black to-transparent z-20">
