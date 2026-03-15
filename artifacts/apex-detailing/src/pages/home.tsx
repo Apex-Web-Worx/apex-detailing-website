@@ -116,7 +116,7 @@ const gallery = [
     `${import.meta.env.BASE_URL}images/paint-correction-1.jpg`,
   ], currentImageIndex: 0 },
   { id: 2, title: "Ceramic Coating", beforeAfter: false, color: "from-[#A886CD] to-purple-900", video: `${import.meta.env.BASE_URL}videos/ceramic-coating-demo.MOV` },
-  { id: 3, title: "Interior Restoration: Before and After", beforeAfter: true, color: "from-blue-900 to-indigo-900", images: [
+  { id: 3, title: "Interior Restoration: Before and After", beforeAfter: true, color: "from-blue-900 to-indigo-900", thumbnail: `${import.meta.env.BASE_URL}images/interior-restoration-thumbnail.jpg`, images: [
     { src: `${import.meta.env.BASE_URL}images/interior-before-1.jpg`, label: "Before" },
     { src: `${import.meta.env.BASE_URL}images/interior-after-1.jpg`, label: "After" },
     { src: `${import.meta.env.BASE_URL}images/interior-before-2.jpg`, label: "Before" },
@@ -811,7 +811,7 @@ export default function Home() {
                 ) : item.images && item.images.length > 0 ? (
                   <>
                     <img
-                      src={item.images[0]}
+                      src={item.thumbnail || (typeof item.images[0] === 'string' ? item.images[0] : item.images[0].src)}
                       alt={item.title}
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       style={{ filter: 'brightness(1.15) contrast(1.15)' }}
