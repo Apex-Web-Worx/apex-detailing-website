@@ -276,7 +276,7 @@ function AddonsSection() {
       onMouseLeave={() => setExpandedAddon(null)}
       onClick={() => addon.description && setExpandedAddon(expandedAddon === addon.id ? null : addon.id)}
     >
-      <h4 className="text-base font-bold text-white mb-1">{addon.name}</h4>
+      <h4 className="text-base font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#A886CD] group-hover:to-[#3496FF] transition-all duration-300">{addon.name}</h4>
       <p className="text-[#3496FF] font-bold text-sm">{addon.price}</p>
       {expandedAddon === addon.id && addon.description && (
         <p className="text-gray-300 text-xs mt-3 leading-relaxed animate-in fade-in duration-300">
