@@ -925,7 +925,10 @@ export default function Home() {
           </button>
 
           <button
-            onClick={() => setIsFullscreen(!isFullscreen)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsFullscreen(!isFullscreen);
+            }}
             className="absolute top-4 right-4 md:top-6 md:right-6 text-white hover:text-[#3496FF] transition-colors z-10 p-1"
             aria-label={isFullscreen ? "Minimize" : "Maximize"}
           >
