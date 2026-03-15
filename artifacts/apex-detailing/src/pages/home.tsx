@@ -866,11 +866,6 @@ export default function Home() {
                   </>
                 )}
                 <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                  {item.video && (
-                    <span className="inline-block px-3 py-1 bg-[#A886CD] text-black font-black text-xs uppercase tracking-widest rounded mb-3 opacity-85">
-                      Video
-                    </span>
-                  )}
                   {item.beforeAfter ? (
                     <span className="inline-block px-3 py-1 bg-[#3496FF] text-black font-black text-xs uppercase tracking-widest rounded mb-3 opacity-85">
                       Results before and after
