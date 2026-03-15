@@ -935,17 +935,7 @@ export default function Home() {
               }
             }}
           >
-            {selectedGalleryItem.video ? (
-              <video
-                src={selectedGalleryItem.video}
-                className={`${isFullscreen ? 'w-full h-full' : 'w-full h-full'} object-contain ${!isFullscreen && 'rounded-xl'}`}
-                muted
-                autoPlay
-                loop
-                playsInline
-                controls
-              />
-            ) : selectedGalleryItem.images && selectedGalleryItem.images.length > 0 ? (
+            {selectedGalleryItem.images && selectedGalleryItem.images.length > 0 ? (
               <>
                 <img
                   src={typeof selectedGalleryItem.images[currentImageIndex] === 'string' ? selectedGalleryItem.images[currentImageIndex] : selectedGalleryItem.images[currentImageIndex].src}
