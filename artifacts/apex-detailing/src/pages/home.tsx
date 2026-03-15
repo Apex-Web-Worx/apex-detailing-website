@@ -112,7 +112,7 @@ const services = [
 ];
 
 const gallery = [
-  { id: 1, title: "Paint Correction", beforeAfter: true, color: "from-blue-900 to-[#3496FF]", images: [
+  { id: 1, title: "Paint Correction", beforeAfter: true, color: "from-blue-900 to-[#3496FF]", thumbnail: `${import.meta.env.BASE_URL}images/paint-correction-thumbnail.jpg`, images: [
     `${import.meta.env.BASE_URL}images/paint-correction-1.jpg`,
   ], currentImageIndex: 0 },
   { id: 2, title: "Ceramic Coating", beforeAfter: false, color: "from-[#A886CD] to-purple-900", video: `${import.meta.env.BASE_URL}videos/ceramic-coating-demo.MOV` },
