@@ -339,7 +339,6 @@ export default function Home() {
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
   const [aboutImageIndex, setAboutImageIndex] = useState(0);
-  const [displayedImageIndex, setDisplayedImageIndex] = useState(0);
 
   const aboutImages = [
     `${import.meta.env.BASE_URL}images/about-hero.jpg`,
@@ -352,17 +351,9 @@ export default function Home() {
   useEffect(() => {
     const timer = setInterval(() => {
       setAboutImageIndex((prev) => (prev + 1) % aboutImages.length);
-    }, 8000);
+    }, 5000);
     return () => clearInterval(timer);
   }, []);
-
-  // Update displayed image after transition completes
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDisplayedImageIndex(aboutImageIndex);
-    }, 2500);
-    return () => clearTimeout(timer);
-  }, [aboutImageIndex]);
 
   const handleGalleryItemClick = (item: typeof gallery[0]) => {
     setSelectedGalleryItem(item);
@@ -722,19 +713,14 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="order-2 lg:order-1 relative">
               <div className="aspect-[4/5] rounded-2xl overflow-hidden relative group">
-                <div className="absolute inset-0 bg-gradient-to-tr from-[#A886CD] to-[#3496FF] opacity-20 group-hover:opacity-40 transition-opacity duration-700 z-10" />
-                <div
-                  className="absolute inset-0 bg-cover bg-center mix-blend-luminosity scale-100 group-hover:scale-105 transition-opacity duration-[2500ms]"
-                  style={{
-                    backgroundImage: `url('${aboutImages[displayedImageIndex]}')`,
-                    opacity: displayedImageIndex === aboutImageIndex ? 0 : 1,
-                  }}
+                <div 
+                  className="absolute inset-0 bg-gradient-to-tr from-[#A886CD]/30 to-[#3496FF]/30 group-hover:from-[#A886CD]/50 group-hover:to-[#3496FF]/50 z-10 transition-all duration-700"
                 />
                 <div
-                  className="absolute inset-0 bg-cover bg-center mix-blend-luminosity scale-100 group-hover:scale-105 transition-opacity duration-[2500ms]"
+                  className="absolute inset-0 bg-cover bg-center scale-100 group-hover:scale-105"
                   style={{
                     backgroundImage: `url('${aboutImages[aboutImageIndex]}')`,
-                    opacity: displayedImageIndex === aboutImageIndex ? 1 : 0,
+                    backgroundPosition: 'center',
                   }}
                 />
                 <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black to-transparent z-20">
