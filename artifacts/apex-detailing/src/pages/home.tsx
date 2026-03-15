@@ -880,7 +880,7 @@ export default function Home() {
                       Finished results
                     </span>
                   )}
-                  <h4 className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">{item.title}</h4>
+                  <h4 className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.8)) drop-shadow(0 1px 2px rgba(0,0,0,0.6))' }}>{item.title}</h4>
                   {item.images && item.images.length > 1 && (
                     <p className="text-xs text-gray-300 mt-2">
                       {item.images.length} {item.images.length === 1 ? 'result' : 'results'}
