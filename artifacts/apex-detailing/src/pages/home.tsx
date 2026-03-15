@@ -341,6 +341,7 @@ export default function Home() {
   const [heroImageIndex, setHeroImageIndex] = useState(0);
 
   const heroImages = [
+    `${import.meta.env.BASE_URL}images/exterior-detail-1.jpg`,
     `${import.meta.env.BASE_URL}images/hero-1.jpg`,
     `${import.meta.env.BASE_URL}images/hero-2.jpg`,
     `${import.meta.env.BASE_URL}images/hero-3.jpg`,
