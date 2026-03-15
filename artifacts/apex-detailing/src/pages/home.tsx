@@ -933,13 +933,11 @@ export default function Home() {
             aria-label={isFullscreen ? "Minimize" : "Maximize"}
           >
             {isFullscreen ? (
-              <div className="w-8 h-8 flex items-center justify-center">
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 9V5m0 0H5m4 0l-4 4m0 6v4m0 0H5m4 0l-4-4m6-6h4v4m0 0v4m0-4h4m-4 0l4 4m-6-10h4m0 0v-4m0 4h4m-4 0l4-4" />
-                </svg>
-              </div>
+              <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 9V5m0 0H5m4 0l-4 4m0 6v4m0 0H5m4 0l-4-4m6-6h4v4m0 0v4m0-4h4m-4 0l4 4m-6-10h4m0 0v-4m0 4h4m-4 0l4-4" />
+              </svg>
             ) : (
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6v4m12 0h4v-4m0 12h-4v4m-12 0H6v-4" />
               </svg>
             )}
