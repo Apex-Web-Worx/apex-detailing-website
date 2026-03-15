@@ -825,11 +825,11 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
             {gallery.map((item) => (
               <div
                 key={item.id}
-                className="group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer"
+                className="group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer w-full"
                 onClick={() => handleGalleryItemClick(item)}
               >
                 {item.video ? (

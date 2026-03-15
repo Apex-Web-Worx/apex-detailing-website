@@ -46,6 +46,13 @@ Premium car detailing marketing website for Apex Detailing (Springfield, Nixa & 
 - **Design**: Bold & Energetic variant — dark theme (#0a0a0a), purple (#A886CD) and blue (#3496FF) gradient accents, Mulish font
 - **Sections**: Hero, Services (5 cards), About, Gallery, Testimonials, CTA, Footer
 - **Services**: Ceramic Coating, Paint Correction, Exterior Detailing, Interior Detailing, Headlight Restoration
+- **Gallery**: 5 sections with before/after image pairs + video
+  - Interior Restoration: 12 images (6 before/after pairs)
+  - Exterior Detail: 4 images (2 before/after pairs)
+  - Paint Correction: 2 images
+  - Ceramic Coating: Video demo
+  - Headlights Restoration: 4 images (2 before/after pairs)
+  - Layout: Responsive grid (1 col mobile, 2 col tablet, 3 col desktop) with image preloading for instant switching
 - **Booking**: Links to Calendly (https://calendly.com/apexdetailingsf/detailing-appointment)
 - **Social**: Instagram (@apexdetailing_sf), Facebook (/apexdetailingsf)
 - **Entry**: `src/App.tsx` → `src/pages/home.tsx` (single-page, no routing needed)
