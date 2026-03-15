@@ -116,7 +116,7 @@ const gallery = [
     `${import.meta.env.BASE_URL}images/paint-correction-1.jpg`,
   ], currentImageIndex: 0 },
   { id: 2, title: "Ceramic Coating", beforeAfter: false, color: "from-[#A886CD] to-purple-900", video: `${import.meta.env.BASE_URL}videos/ceramic-coating-demo.MOV` },
-  { id: 3, title: "Interior Restoration", beforeAfter: true, color: "from-blue-900 to-indigo-900", images: [
+  { id: 3, title: "Interior Restoration: Before and After", beforeAfter: true, color: "from-blue-900 to-indigo-900", images: [
     { src: `${import.meta.env.BASE_URL}images/interior-before-1.jpg`, label: "Before" },
     { src: `${import.meta.env.BASE_URL}images/interior-after-1.jpg`, label: "After" },
     { src: `${import.meta.env.BASE_URL}images/interior-before-2.jpg`, label: "Before" },
@@ -124,7 +124,7 @@ const gallery = [
     { src: `${import.meta.env.BASE_URL}images/interior-before-3.jpg`, label: "Before" },
     { src: `${import.meta.env.BASE_URL}images/interior-after-3.jpg`, label: "After" },
   ], currentImageIndex: 0 },
-  { id: 4, title: "Exterior Detail", beforeAfter: true, color: "from-purple-900 to-black", images: [
+  { id: 4, title: "Exterior Detail: Before and After", beforeAfter: true, color: "from-purple-900 to-black", images: [
     `${import.meta.env.BASE_URL}images/exterior-detail-1.jpg`,
     `${import.meta.env.BASE_URL}images/exterior-detail-2.jpg`,
     `${import.meta.env.BASE_URL}images/exterior-detail-3.jpg`,
