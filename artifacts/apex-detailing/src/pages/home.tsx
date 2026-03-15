@@ -969,16 +969,20 @@ export default function Home() {
                 {/* Previous Button */}
                 {currentImageIndex > 0 && (
                   <button
-                    onClick={(e) => {
-                      e.preventDefault();
+                    onMouseDown={(e) => {
+                      e.stopPropagation();
+                      prevImage();
+                    }}
+                    onTouchEnd={(e) => {
                       e.stopPropagation();
                       prevImage();
                     }}
                     className="absolute left-2 md:left-6 top-1/2 transform -translate-y-1/2 text-white hover:text-[#3496FF] active:text-[#3496FF] transition-colors z-50 bg-black/50 hover:bg-black/70 active:bg-black/80 p-3 md:p-4 rounded-full cursor-pointer min-w-12 h-12 md:min-w-14 md:h-14 flex items-center justify-center"
                     aria-label="Previous image"
                     type="button"
+                    style={{ WebkitTouchCallout: 'none', WebkitUserSelect: 'none' }}
                   >
-                    <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 md:w-8 md:h-8 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                     </svg>
                   </button>
@@ -987,16 +991,20 @@ export default function Home() {
                 {/* Next Button */}
                 {selectedGalleryItem.images.length > 1 && currentImageIndex < selectedGalleryItem.images.length - 1 && (
                   <button
-                    onClick={(e) => {
-                      e.preventDefault();
+                    onMouseDown={(e) => {
+                      e.stopPropagation();
+                      nextImage();
+                    }}
+                    onTouchEnd={(e) => {
                       e.stopPropagation();
                       nextImage();
                     }}
                     className="absolute right-2 md:right-6 top-1/2 transform -translate-y-1/2 text-white hover:text-[#3496FF] active:text-[#3496FF] transition-colors z-50 bg-black/50 hover:bg-black/70 active:bg-black/80 p-3 md:p-4 rounded-full cursor-pointer min-w-12 h-12 md:min-w-14 md:h-14 flex items-center justify-center"
                     aria-label="Next image"
                     type="button"
+                    style={{ WebkitTouchCallout: 'none', WebkitUserSelect: 'none' }}
                   >
-                    <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 md:w-8 md:h-8 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </button>
