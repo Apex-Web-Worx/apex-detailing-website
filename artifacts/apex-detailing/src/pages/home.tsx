@@ -351,7 +351,7 @@ export default function Home() {
   useEffect(() => {
     const timer = setInterval(() => {
       setAboutImageIndex((prev) => (prev + 1) % aboutImages.length);
-    }, 5000);
+    }, 8000);
     return () => clearInterval(timer);
   }, []);
 
@@ -715,7 +715,7 @@ export default function Home() {
               <div className="aspect-[4/5] rounded-2xl overflow-hidden relative group">
                 <div className="absolute inset-0 bg-gradient-to-tr from-[#A886CD] to-[#3496FF] opacity-20 group-hover:opacity-40 transition-opacity duration-700 z-10" />
                 <div
-                  className="absolute inset-0 bg-cover bg-center mix-blend-luminosity scale-100 group-hover:scale-105 transition-all duration-[1500ms]"
+                  className="absolute inset-0 bg-cover bg-center mix-blend-luminosity scale-100 group-hover:scale-105 transition-all duration-[2500ms]"
                   style={{
                     backgroundImage: `url('${aboutImages[aboutImageIndex]}')`,
                   }}
