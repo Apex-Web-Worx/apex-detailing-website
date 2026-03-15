@@ -353,12 +353,15 @@ export default function Home() {
   useEffect(() => {
     const timer = setInterval(() => {
       setIsTransitioning(true);
-      // Start fade out/in
+      // Complete the fade and update indices
       setTimeout(() => {
         setAboutImageIndex((prev) => (prev + 1) % aboutImages.length);
         setNextAboutImageIndex((prev) => (prev + 1) % aboutImages.length);
-        setIsTransitioning(false);
       }, 1200);
+      // Disable transition state after a small delay to avoid blinking
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 1250);
     }, 6200); // 5000ms display + 1200ms transition
     return () => clearInterval(timer);
   }, []);
@@ -726,22 +729,26 @@ export default function Home() {
                 />
                 {/* Current image */}
                 <div
-                  className="absolute inset-0 bg-cover bg-center scale-100 group-hover:scale-105 transition-opacity duration-1200 ease-in-out"
+                  className="absolute inset-0 bg-cover bg-center scale-100 group-hover:scale-105"
                   style={{
                     backgroundImage: `url('${aboutImages[aboutImageIndex]}')`,
                     backgroundPosition: 'center',
                     backgroundSize: 'cover',
                     opacity: isTransitioning ? 0 : 1,
+                    transition: 'opacity 1200ms ease-in-out',
+                    willChange: 'opacity',
                   }}
                 />
                 {/* Next image */}
                 <div
-                  className="absolute inset-0 bg-cover bg-center scale-100 group-hover:scale-105 transition-opacity duration-1200 ease-in-out"
+                  className="absolute inset-0 bg-cover bg-center scale-100 group-hover:scale-105"
                   style={{
                     backgroundImage: `url('${aboutImages[nextAboutImageIndex]}')`,
                     backgroundPosition: 'center',
                     backgroundSize: 'cover',
                     opacity: isTransitioning ? 1 : 0,
+                    transition: 'opacity 1200ms ease-in-out',
+                    willChange: 'opacity',
                   }}
                 />
                 <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black to-transparent z-20">
