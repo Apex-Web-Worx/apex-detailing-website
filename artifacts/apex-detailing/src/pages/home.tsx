@@ -125,11 +125,10 @@ const gallery = [
     { src: `${import.meta.env.BASE_URL}images/interior-after-3.jpg`, label: "After" },
   ], currentImageIndex: 0 },
   { id: 4, title: "Exterior Detail: Before and After", beforeAfter: true, color: "from-purple-900 to-black", images: [
-    `${import.meta.env.BASE_URL}images/exterior-detail-1.jpg`,
-    `${import.meta.env.BASE_URL}images/exterior-detail-2.jpg`,
-    `${import.meta.env.BASE_URL}images/exterior-detail-3.jpg`,
-    `${import.meta.env.BASE_URL}images/exterior-detail-4.jpg`,
-    `${import.meta.env.BASE_URL}images/exterior-detail-5.jpg`,
+    { src: `${import.meta.env.BASE_URL}images/exterior-before-1.jpg`, label: "Before" },
+    { src: `${import.meta.env.BASE_URL}images/exterior-after-1.jpg`, label: "After" },
+    { src: `${import.meta.env.BASE_URL}images/exterior-before-2.jpg`, label: "Before" },
+    { src: `${import.meta.env.BASE_URL}images/exterior-after-2.jpg`, label: "After" },
   ], currentImageIndex: 0 },
 ];
 
