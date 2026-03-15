@@ -139,7 +139,7 @@ const gallery = [
     { src: `${import.meta.env.BASE_URL}images/exterior-before-2.jpg`, label: "Before" },
     { src: `${import.meta.env.BASE_URL}images/exterior-after-2.jpg`, label: "After" },
   ], currentImageIndex: 0 },
-  { id: 5, title: "Headlights Restoration", beforeAfter: true, color: "from-cyan-900 to-blue-600", thumbnail: `${import.meta.env.BASE_URL}images/headlights-restoration-thumbnail.mp4`, images: [
+  { id: 5, title: "Headlights Restoration", beforeAfter: true, color: "from-cyan-900 to-blue-600", thumbnail: `${import.meta.env.BASE_URL}images/headlights-video.mp4`, images: [
     { src: `${import.meta.env.BASE_URL}images/headlights-before-1.jpg`, label: "Before" },
     { src: `${import.meta.env.BASE_URL}images/headlights-after-1.jpg`, label: "After" },
     { src: `${import.meta.env.BASE_URL}images/headlights-before-2.jpg`, label: "Before" },
@@ -876,11 +876,13 @@ export default function Home() {
                   </>
                 ) : item.images && item.images.length > 0 ? (
                   <>
-                    {item.thumbnail?.endsWith('.mov') ? (
+                    {item.thumbnail?.endsWith('.mov') || item.thumbnail?.endsWith('.mp4') ? (
                       <video
                         src={item.thumbnail}
                         className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                         muted
+                        autoPlay
+                        loop
                         playsInline
                         controls={false}
                       />
