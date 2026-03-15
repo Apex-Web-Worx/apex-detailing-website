@@ -339,6 +339,8 @@ export default function Home() {
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
   const [aboutImageIndex, setAboutImageIndex] = useState(0);
+  const [nextAboutImageIndex, setNextAboutImageIndex] = useState(1);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const aboutImages = [
     `${import.meta.env.BASE_URL}images/about-hero.jpg`,
@@ -347,11 +349,17 @@ export default function Home() {
     `${import.meta.env.BASE_URL}images/hero-3.jpg`,
   ];
 
-  // Auto-rotate about images
+  // Auto-rotate about images with smooth transitions
   useEffect(() => {
     const timer = setInterval(() => {
-      setAboutImageIndex((prev) => (prev + 1) % aboutImages.length);
-    }, 5000);
+      setIsTransitioning(true);
+      // Start fade out/in
+      setTimeout(() => {
+        setAboutImageIndex((prev) => (prev + 1) % aboutImages.length);
+        setNextAboutImageIndex((prev) => (prev + 1) % aboutImages.length);
+        setIsTransitioning(false);
+      }, 1200);
+    }, 6200); // 5000ms display + 1200ms transition
     return () => clearInterval(timer);
   }, []);
 
@@ -716,11 +724,24 @@ export default function Home() {
                 <div 
                   className="absolute inset-0 bg-gradient-to-tr from-[#A886CD]/30 to-[#3496FF]/30 group-hover:from-[#A886CD]/50 group-hover:to-[#3496FF]/50 z-10 transition-all duration-700"
                 />
+                {/* Current image */}
                 <div
-                  className="absolute inset-0 bg-cover bg-center scale-100 group-hover:scale-105"
+                  className="absolute inset-0 bg-cover bg-center scale-100 group-hover:scale-105 transition-opacity duration-1200 ease-in-out"
                   style={{
                     backgroundImage: `url('${aboutImages[aboutImageIndex]}')`,
                     backgroundPosition: 'center',
+                    backgroundSize: 'cover',
+                    opacity: isTransitioning ? 0 : 1,
+                  }}
+                />
+                {/* Next image */}
+                <div
+                  className="absolute inset-0 bg-cover bg-center scale-100 group-hover:scale-105 transition-opacity duration-1200 ease-in-out"
+                  style={{
+                    backgroundImage: `url('${aboutImages[nextAboutImageIndex]}')`,
+                    backgroundPosition: 'center',
+                    backgroundSize: 'cover',
+                    opacity: isTransitioning ? 1 : 0,
                   }}
                 />
                 <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black to-transparent z-20">
