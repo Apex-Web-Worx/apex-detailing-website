@@ -116,7 +116,7 @@ const gallery = [
     `${import.meta.env.BASE_URL}images/paint-correction-1.jpg`,
     `${import.meta.env.BASE_URL}images/paint-correction-2.jpg`,
   ], currentImageIndex: 0 },
-  { id: 2, title: "Ceramic Coating", beforeAfter: false, color: "from-[#A886CD] to-purple-900", video: `${import.meta.env.BASE_URL}videos/ceramic-coating-demo.MOV` },
+  { id: 2, title: "Ceramic Coating", beforeAfter: true, color: "from-[#A886CD] to-purple-900", video: `${import.meta.env.BASE_URL}videos/ceramic-coating-demo.MOV` },
   { id: 3, title: "Interior Restoration", beforeAfter: true, color: "from-blue-900 to-indigo-900", thumbnail: `${import.meta.env.BASE_URL}images/interior-restoration-thumbnail.jpg`, video: `${import.meta.env.BASE_URL}images/interior-restoration-video.mov`, images: [
     { src: `${import.meta.env.BASE_URL}images/interior-before-1.jpg`, label: "Before" },
     { src: `${import.meta.env.BASE_URL}images/interior-after-1.jpg`, label: "After" },
@@ -133,13 +133,13 @@ const gallery = [
     { src: `${import.meta.env.BASE_URL}images/interior-before-7.jpg`, label: "Before" },
     { src: `${import.meta.env.BASE_URL}images/interior-after-7.jpg`, label: "After" },
   ], currentImageIndex: 0 },
-  { id: 4, title: "Exterior Detail", beforeAfter: false, color: "from-purple-900 to-black", thumbnail: `${import.meta.env.BASE_URL}images/exterior-detail-thumbnail.jpg`, video: `${import.meta.env.BASE_URL}images/exterior-detail-video.mov`, images: [
+  { id: 4, title: "Exterior Detail", beforeAfter: true, color: "from-purple-900 to-black", thumbnail: `${import.meta.env.BASE_URL}images/exterior-detail-thumbnail.jpg`, video: `${import.meta.env.BASE_URL}images/exterior-detail-video.mov`, images: [
     { src: `${import.meta.env.BASE_URL}images/exterior-before-1.jpg`, label: "Before" },
     { src: `${import.meta.env.BASE_URL}images/exterior-after-1.jpg`, label: "After" },
     { src: `${import.meta.env.BASE_URL}images/exterior-before-2.jpg`, label: "Before" },
     { src: `${import.meta.env.BASE_URL}images/exterior-after-2.jpg`, label: "After" },
   ], currentImageIndex: 0 },
-  { id: 5, title: "Headlights Restoration", beforeAfter: false, color: "from-cyan-900 to-blue-600", thumbnail: `${import.meta.env.BASE_URL}images/headlights-after-3.jpg`, video: `${import.meta.env.BASE_URL}images/headlights-restoration-video.mov`, images: [
+  { id: 5, title: "Headlights Restoration", beforeAfter: true, color: "from-cyan-900 to-blue-600", thumbnail: `${import.meta.env.BASE_URL}images/headlights-after-3.jpg`, video: `${import.meta.env.BASE_URL}images/headlights-restoration-video.mov`, images: [
     { src: `${import.meta.env.BASE_URL}images/headlights-before-1.jpg`, label: "Before" },
     { src: `${import.meta.env.BASE_URL}images/headlights-after-1.jpg`, label: "After" },
     { src: `${import.meta.env.BASE_URL}images/headlights-before-2.jpg`, label: "Before" },
