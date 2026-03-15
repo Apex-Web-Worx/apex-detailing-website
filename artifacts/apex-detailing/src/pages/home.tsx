@@ -139,7 +139,7 @@ const gallery = [
     { src: `${import.meta.env.BASE_URL}images/exterior-before-2.jpg`, label: "Before" },
     { src: `${import.meta.env.BASE_URL}images/exterior-after-2.jpg`, label: "After" },
   ], currentImageIndex: 0 },
-  { id: 5, title: "Headlights Restoration", beforeAfter: true, color: "from-cyan-900 to-blue-600", thumbnail: `${import.meta.env.BASE_URL}images/headlights-after-3.jpg`, images: [
+  { id: 5, title: "Headlights Restoration", beforeAfter: true, color: "from-cyan-900 to-blue-600", thumbnail: `${import.meta.env.BASE_URL}images/headlights-restoration-thumbnail.mov`, images: [
     { src: `${import.meta.env.BASE_URL}images/headlights-before-1.jpg`, label: "Before" },
     { src: `${import.meta.env.BASE_URL}images/headlights-after-1.jpg`, label: "After" },
     { src: `${import.meta.env.BASE_URL}images/headlights-before-2.jpg`, label: "Before" },
@@ -876,12 +876,22 @@ export default function Home() {
                   </>
                 ) : item.images && item.images.length > 0 ? (
                   <>
-                    <img
-                      src={item.thumbnail || (typeof item.images[0] === 'string' ? item.images[0] : item.images[0].src)}
-                      alt={item.title}
-                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      style={{ filter: 'brightness(1.15) contrast(1.15)' }}
-                    />
+                    {item.thumbnail?.endsWith('.mov') ? (
+                      <video
+                        src={item.thumbnail}
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        muted
+                        playsInline
+                        controls={false}
+                      />
+                    ) : (
+                      <img
+                        src={item.thumbnail || (typeof item.images[0] === 'string' ? item.images[0] : item.images[0].src)}
+                        alt={item.title}
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        style={{ filter: 'brightness(1.15) contrast(1.15)' }}
+                      />
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
                   </>
                 ) : (
