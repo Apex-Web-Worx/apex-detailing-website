@@ -116,7 +116,7 @@ const gallery = [
     `${import.meta.env.BASE_URL}images/paint-correction-1.jpg`,
   ], currentImageIndex: 0 },
   { id: 2, title: "Ceramic Coating", beforeAfter: false, color: "from-[#A886CD] to-purple-900", video: `${import.meta.env.BASE_URL}videos/ceramic-coating-demo.MOV` },
-  { id: 3, title: "Interior Restoration: Before and After", beforeAfter: true, color: "from-blue-900 to-indigo-900", thumbnail: `${import.meta.env.BASE_URL}images/interior-restoration-thumbnail.jpg`, images: [
+  { id: 3, title: "Interior Restoration", beforeAfter: true, color: "from-blue-900 to-indigo-900", thumbnail: `${import.meta.env.BASE_URL}images/interior-restoration-thumbnail.jpg`, images: [
     { src: `${import.meta.env.BASE_URL}images/interior-before-1.jpg`, label: "Before" },
     { src: `${import.meta.env.BASE_URL}images/interior-after-1.jpg`, label: "After" },
     { src: `${import.meta.env.BASE_URL}images/interior-before-2.jpg`, label: "Before" },
@@ -124,7 +124,7 @@ const gallery = [
     { src: `${import.meta.env.BASE_URL}images/interior-before-3.jpg`, label: "Before" },
     { src: `${import.meta.env.BASE_URL}images/interior-after-3.jpg`, label: "After" },
   ], currentImageIndex: 0 },
-  { id: 4, title: "Exterior Detail: Before and After", beforeAfter: true, color: "from-purple-900 to-black", images: [
+  { id: 4, title: "Exterior Detail", beforeAfter: true, color: "from-purple-900 to-black", images: [
     { src: `${import.meta.env.BASE_URL}images/exterior-before-1.jpg`, label: "Before" },
     { src: `${import.meta.env.BASE_URL}images/exterior-after-1.jpg`, label: "After" },
     { src: `${import.meta.env.BASE_URL}images/exterior-before-2.jpg`, label: "Before" },
@@ -834,7 +834,7 @@ export default function Home() {
                   )}
                   {item.beforeAfter && (
                     <span className="inline-block px-3 py-1 bg-[#3496FF] text-black font-black text-xs uppercase tracking-widest rounded mb-3">
-                      Results After
+                      Results before and after
                     </span>
                   )}
                   <h4 className="text-2xl font-black text-white">{item.title}</h4>
