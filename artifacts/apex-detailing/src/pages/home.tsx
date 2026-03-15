@@ -918,15 +918,15 @@ export default function Home() {
         >
           <button
             onClick={() => setSelectedGalleryItem(null)}
-            className="absolute top-6 right-16 text-white hover:text-[#3496FF] transition-colors z-10"
+            className="absolute top-4 right-20 md:top-6 md:right-24 text-white hover:text-[#3496FF] transition-colors z-10 p-1"
             aria-label="Close"
           >
-            <X className="w-8 h-8" />
+            <X className="w-6 h-6 md:w-8 md:h-8" />
           </button>
 
           <button
             onClick={() => setIsFullscreen(!isFullscreen)}
-            className="absolute top-6 right-6 text-white hover:text-[#3496FF] transition-colors z-10"
+            className="absolute top-4 right-4 md:top-6 md:right-6 text-white hover:text-[#3496FF] transition-colors z-10 p-1"
             aria-label={isFullscreen ? "Minimize" : "Maximize"}
           >
             {isFullscreen ? (
@@ -987,10 +987,10 @@ export default function Home() {
                 {currentImageIndex > 0 && (
                   <button
                     onClick={prevImage}
-                    className="absolute left-6 top-1/2 transform -translate-y-1/2 text-white hover:text-[#3496FF] transition-colors z-20 bg-black/30 hover:bg-black/50 p-3 rounded-full"
+                    className="absolute left-2 md:left-6 top-1/2 transform -translate-y-1/2 text-white hover:text-[#3496FF] transition-colors z-20 bg-black/40 hover:bg-black/60 p-2 md:p-3 rounded-full touch-action-manipulation"
                     aria-label="Previous image"
                   >
-                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                     </svg>
                   </button>
@@ -1000,10 +1000,10 @@ export default function Home() {
                 {selectedGalleryItem.images.length > 1 && currentImageIndex < selectedGalleryItem.images.length - 1 && (
                   <button
                     onClick={nextImage}
-                    className="absolute right-6 top-1/2 transform -translate-y-1/2 text-white hover:text-[#3496FF] transition-colors z-20 bg-black/30 hover:bg-black/50 p-3 rounded-full"
+                    className="absolute right-2 md:right-6 top-1/2 transform -translate-y-1/2 text-white hover:text-[#3496FF] transition-colors z-20 bg-black/40 hover:bg-black/60 p-2 md:p-3 rounded-full touch-action-manipulation"
                     aria-label="Next image"
                   >
-                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </button>
