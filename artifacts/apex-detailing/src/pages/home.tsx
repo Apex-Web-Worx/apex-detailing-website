@@ -139,11 +139,13 @@ const gallery = [
     { src: `${import.meta.env.BASE_URL}images/exterior-before-2.jpg`, label: "Before" },
     { src: `${import.meta.env.BASE_URL}images/exterior-after-2.jpg`, label: "After" },
   ], currentImageIndex: 0 },
-  { id: 5, title: "Headlights Restoration", beforeAfter: true, color: "from-cyan-900 to-blue-600", thumbnail: `${import.meta.env.BASE_URL}images/headlights-before-1.jpg`, images: [
+  { id: 5, title: "Headlights Restoration", beforeAfter: true, color: "from-cyan-900 to-blue-600", thumbnail: `${import.meta.env.BASE_URL}images/headlights-after-3.jpg`, images: [
     { src: `${import.meta.env.BASE_URL}images/headlights-before-1.jpg`, label: "Before" },
     { src: `${import.meta.env.BASE_URL}images/headlights-after-1.jpg`, label: "After" },
     { src: `${import.meta.env.BASE_URL}images/headlights-before-2.jpg`, label: "Before" },
     { src: `${import.meta.env.BASE_URL}images/headlights-after-2.jpg`, label: "After" },
+    { src: `${import.meta.env.BASE_URL}images/headlights-before-3.jpg`, label: "Before" },
+    { src: `${import.meta.env.BASE_URL}images/headlights-after-3.jpg`, label: "After" },
   ], currentImageIndex: 0 },
 ];
 
