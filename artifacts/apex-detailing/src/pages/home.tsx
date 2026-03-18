@@ -466,7 +466,7 @@ export default function Home() {
               <img
                 src={`${import.meta.env.BASE_URL}images/logo.png`}
                 alt="Apex Detailing Logo"
-                className="h-28 w-auto object-contain logo-shine"
+                className="h-16 md:h-24 lg:h-28 w-auto object-contain logo-shine"
                 style={{ mixBlendMode: "screen" }}
               />
             </div>
