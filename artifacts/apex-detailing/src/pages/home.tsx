@@ -1296,13 +1296,13 @@ export default function Home() {
                 <li className="flex items-start gap-3 group cursor-pointer">
                   <Mail className="w-5 h-5 text-[#3496FF] shrink-0 mt-0.5" />
                   <div className="flex flex-col">
-                    <span className="group-hover:hidden">Contact us via<br />social media</span>
-                    <div className="hidden group-hover:flex gap-3 pt-2">
+                    <span className="md:group-hover:hidden block md:block">Contact us via<br />social media</span>
+                    <div className="flex md:hidden group-hover:flex gap-3 pt-2">
                       <a
                         href={INSTAGRAM_LINK}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-white/10 hover:bg-gradient-to-r hover:from-[#A886CD] hover:to-[#3496FF] transition-all"
+                        className="p-2 rounded-lg bg-white/10 hover:bg-gradient-to-r hover:from-[#A886CD] hover:to-[#3496FF] transition-all transform hover:scale-110"
                         title="Instagram"
                       >
                         <Instagram className="w-5 h-5 text-white" />
@@ -1311,7 +1311,7 @@ export default function Home() {
                         href={FACEBOOK_LINK}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-white/10 hover:bg-gradient-to-r hover:from-[#A886CD] hover:to-[#3496FF] transition-all"
+                        className="p-2 rounded-lg bg-white/10 hover:bg-gradient-to-r hover:from-[#A886CD] hover:to-[#3496FF] transition-all transform hover:scale-110"
                         title="Facebook"
                       >
                         <Facebook className="w-5 h-5 text-white" />
@@ -1320,7 +1320,7 @@ export default function Home() {
                         href={GOOGLE_REVIEWS_LINK}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-white/10 hover:bg-[#EA4335] transition-all"
+                        className="p-2 rounded-lg bg-white/10 hover:bg-[#EA4335] transition-all transform hover:scale-110"
                         title="Google Reviews"
                       >
                         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
