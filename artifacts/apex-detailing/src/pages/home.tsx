@@ -271,22 +271,25 @@ function AddonsSection() {
     }
   ];
 
-  const AddonCard = ({ addon }) => (
-    <div
-      className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-all cursor-pointer group"
-      onMouseEnter={() => addon.description && setExpandedAddon(addon.id)}
-      onMouseLeave={() => setExpandedAddon(null)}
-      onClick={() => addon.description && setExpandedAddon(expandedAddon === addon.id ? null : addon.id)}
-    >
-      <h4 className="text-base font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#A886CD] group-hover:to-[#3496FF] transition-all duration-300">{addon.name}</h4>
-      <p className="text-[#3496FF] font-bold text-sm">{addon.price}</p>
-      {expandedAddon === addon.id && addon.description && (
-        <p className="text-gray-300 text-xs mt-3 leading-relaxed animate-in fade-in duration-300">
-          {addon.description}
-        </p>
-      )}
-    </div>
-  );
+  const AddonCard = ({ addon }) => {
+    const [isHovered, setIsHovered] = useState(false);
+    return (
+      <div
+        className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-all cursor-pointer group"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onClick={() => setIsHovered(!isHovered)}
+      >
+        <h4 className="text-base font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#A886CD] group-hover:to-[#3496FF] transition-all duration-300">{addon.name}</h4>
+        <p className="text-[#3496FF] font-bold text-sm">{addon.price}</p>
+        {isHovered && addon.description && (
+          <p className="text-gray-300 text-xs mt-3 leading-relaxed animate-in fade-in duration-300">
+            {addon.description}
+          </p>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="mt-24 pt-16 border-t border-white/10">
