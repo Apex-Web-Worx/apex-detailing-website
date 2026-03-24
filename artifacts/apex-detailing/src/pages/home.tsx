@@ -1102,20 +1102,20 @@ export default function Home() {
 
               {/* Labels */}
               <div 
-                className="absolute top-4 left-4 text-white font-black uppercase text-sm tracking-wider bg-black/50 px-3 py-2 rounded-lg backdrop-blur-sm transition-opacity duration-300"
+                className="absolute top-2 left-2 sm:top-4 sm:left-4 text-white font-black uppercase text-xs sm:text-sm tracking-wider bg-black/50 px-2 py-1 sm:px-3 sm:py-2 rounded-lg backdrop-blur-sm transition-opacity duration-300"
                 style={{ opacity: sliderPosition > 15 ? 1 : 0, pointerEvents: 'none' }}
               >
                 Before
               </div>
               <div 
-                className="absolute top-4 right-4 text-white font-black uppercase text-sm tracking-wider bg-black/50 px-3 py-2 rounded-lg backdrop-blur-sm transition-opacity duration-300"
+                className="absolute top-2 right-2 sm:top-4 sm:right-4 text-white font-black uppercase text-xs sm:text-sm tracking-wider bg-black/50 px-2 py-1 sm:px-3 sm:py-2 rounded-lg backdrop-blur-sm transition-opacity duration-300"
                 style={{ opacity: sliderPosition < 85 ? 1 : 0, pointerEvents: 'none' }}
               >
                 After
               </div>
 
               {/* Title */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white font-black uppercase text-center text-base sm:text-lg tracking-wider bg-gradient-to-r from-[#A886CD]/80 to-[#3496FF]/80 px-4 sm:px-6 py-3 rounded-lg backdrop-blur-sm">
+              <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 text-white font-black uppercase text-center text-xs sm:text-base md:text-lg tracking-wider bg-gradient-to-r from-[#A886CD]/80 to-[#3496FF]/80 px-2 sm:px-4 sm:px-6 py-2 sm:py-3 rounded-lg backdrop-blur-sm">
                 {beforeAfterPairs[currentSliderIndex].title}
               </div>
             </div>
