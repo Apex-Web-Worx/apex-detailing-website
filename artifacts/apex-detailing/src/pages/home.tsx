@@ -449,6 +449,17 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [isAnimatingSlider, isDraggingSlider, sliderDirection]);
 
+  // Auto-switch slider images
+  useEffect(() => {
+    const autoSwitchTimer = setInterval(() => {
+      setCurrentSliderIndex((prev) => (prev + 1) % beforeAfterPairs.length);
+      setSliderPosition(50);
+      setSliderDirection('forward');
+    }, 10000); // Switch every 10 seconds
+    
+    return () => clearInterval(autoSwitchTimer);
+  }, [beforeAfterPairs.length]);
+
 
   const handleGalleryItemClick = (item: typeof gallery[0]) => {
     setSelectedGalleryItem(item);
