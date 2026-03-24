@@ -25,6 +25,26 @@ const INSTAGRAM_LINK = "https://www.instagram.com/apexdetailing_sf";
 const FACEBOOK_LINK = "https://www.facebook.com/profile.php?id=61556776603500";
 const GOOGLE_REVIEWS_LINK = "https://share.google/1Kz8Ag5wVniNZ3oyb";
 
+const AddonCard = ({ addon }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  return (
+    <div
+      className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-all cursor-pointer group"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={() => setIsHovered(!isHovered)}
+    >
+      <h4 className="text-base font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#A886CD] group-hover:to-[#3496FF] transition-all duration-300">{addon.name}</h4>
+      <p className="text-[#3496FF] font-bold text-sm">{addon.price}</p>
+      {isHovered && addon.description && (
+        <p className="text-gray-300 text-xs mt-3 leading-relaxed animate-in fade-in duration-300">
+          {addon.description}
+        </p>
+      )}
+    </div>
+  );
+};
+
 const services = [
   {
     id: "full-detailing",
@@ -270,26 +290,6 @@ function AddonsSection() {
       description: "Engine Bay Cleaning is a detailing service that safely cleans the engine compartment to remove built-up dirt, grease, dust, and debris. Using specialized cleaners and careful techniques, the engine bay is degreased, gently washed, and dried to restore a clean and well-maintained appearance."
     }
   ];
-
-  const AddonCard = ({ addon }) => {
-    const [isHovered, setIsHovered] = useState(false);
-    return (
-      <div
-        className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-all cursor-pointer group"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        onClick={() => setIsHovered(!isHovered)}
-      >
-        <h4 className="text-base font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#A886CD] group-hover:to-[#3496FF] transition-all duration-300">{addon.name}</h4>
-        <p className="text-[#3496FF] font-bold text-sm">{addon.price}</p>
-        {isHovered && addon.description && (
-          <p className="text-gray-300 text-xs mt-3 leading-relaxed animate-in fade-in duration-300">
-            {addon.description}
-          </p>
-        )}
-      </div>
-    );
-  };
 
   return (
     <div className="mt-24 pt-16 border-t border-white/10">
