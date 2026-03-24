@@ -1290,10 +1290,16 @@ export default function Home() {
             <div>
               <h4 className="font-black text-lg uppercase tracking-wider mb-6">Quick Links</h4>
               <ul className="space-y-3 font-medium text-gray-400">
-                {["Home", "Services", "About", "Gallery", "Testimonials"].map((item) => (
+                {["Home", "Services", "About", "Gallery", "Testimonials", "Buy Gift Card"].map((item) => (
                   <li key={item}>
                     <button
-                      onClick={() => scrollToSection(item.toLowerCase())}
+                      onClick={() => {
+                        if (item === "Buy Gift Card") {
+                          window.open("https://app.squareup.com/gift/ML461GTYPW0JH/order", "_blank", "noopener,noreferrer");
+                          return;
+                        }
+                        scrollToSection(item.toLowerCase());
+                      }}
                       className="hover:text-white hover:translate-x-1 transition-all flex items-center gap-2"
                     >
                       <ChevronRight className="w-3 h-3 text-[#3496FF]" /> {item}
