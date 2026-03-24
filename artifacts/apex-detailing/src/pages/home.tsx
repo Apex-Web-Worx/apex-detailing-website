@@ -1384,6 +1384,14 @@ export default function Home() {
               &copy; {new Date().getFullYear()} Apex Detailing. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm text-gray-500 font-medium">
+              <a
+                href="https://app.squareup.com/gift/ML461GTYPW0JH/order"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white cursor-pointer transition-colors"
+              >
+                Buy Gift Card
+              </a>
               <span className="hover:text-white cursor-pointer transition-colors">
                 Privacy Policy
               </span>
