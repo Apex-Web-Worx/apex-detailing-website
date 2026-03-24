@@ -498,10 +498,7 @@ export default function Home() {
                       : "text-gray-300 hover:text-white"
                   }`}
                 >
-                  <span className="inline-flex items-center gap-2">
-                    {item === "Buy Gift Card" && <span aria-hidden="true">🎁</span>}
-                    {item}
-                  </span>
+                  {item}
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#A886CD] to-[#3496FF] transition-all duration-300 group-hover:w-full" />
                 </button>
               ))}
@@ -557,10 +554,7 @@ export default function Home() {
                 }}
                 className="text-left text-gray-300 hover:text-white font-semibold text-lg tracking-wider uppercase"
               >
-                <span className="inline-flex items-center gap-2">
-                  {item === "Buy Gift Card" && <span aria-hidden="true">🎁</span>}
-                  {item}
-                </span>
+                {item}
               </button>
             ))}
             <a
