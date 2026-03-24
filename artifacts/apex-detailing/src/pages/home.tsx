@@ -358,6 +358,36 @@ export default function Home() {
       after: `${import.meta.env.BASE_URL}images/interior-after-1.jpg`,
     },
     {
+      title: "Interior Restoration",
+      before: `${import.meta.env.BASE_URL}images/interior-before-2.jpg`,
+      after: `${import.meta.env.BASE_URL}images/interior-after-2.jpg`,
+    },
+    {
+      title: "Interior Restoration",
+      before: `${import.meta.env.BASE_URL}images/interior-before-3.jpg`,
+      after: `${import.meta.env.BASE_URL}images/interior-after-3.jpg`,
+    },
+    {
+      title: "Interior Restoration",
+      before: `${import.meta.env.BASE_URL}images/interior-before-4.jpg`,
+      after: `${import.meta.env.BASE_URL}images/interior-after-4.jpg`,
+    },
+    {
+      title: "Interior Restoration",
+      before: `${import.meta.env.BASE_URL}images/interior-before-5.jpg`,
+      after: `${import.meta.env.BASE_URL}images/interior-after-5.jpg`,
+    },
+    {
+      title: "Interior Restoration",
+      before: `${import.meta.env.BASE_URL}images/interior-before-6.jpg`,
+      after: `${import.meta.env.BASE_URL}images/interior-after-6.jpg`,
+    },
+    {
+      title: "Interior Restoration",
+      before: `${import.meta.env.BASE_URL}images/interior-before-7.jpg`,
+      after: `${import.meta.env.BASE_URL}images/interior-after-7.jpg`,
+    },
+    {
       title: "Exterior Detail",
       before: `${import.meta.env.BASE_URL}images/exterior-before-1.jpg`,
       after: `${import.meta.env.BASE_URL}images/exterior-after-1.jpg`,
