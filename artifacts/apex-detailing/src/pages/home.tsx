@@ -273,15 +273,12 @@ function AddonsSection() {
 
   const AddonCard = ({ addon }) => (
     <div
-      className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-all cursor-pointer group"
-      onMouseEnter={() => addon.description && setExpandedAddon(addon.id)}
-      onMouseLeave={() => setExpandedAddon(null)}
-      onClick={() => addon.description && setExpandedAddon(expandedAddon === addon.id ? null : addon.id)}
+      className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-all group"
     >
       <h4 className="text-base font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#A886CD] group-hover:to-[#3496FF] transition-all duration-300">{addon.name}</h4>
       <p className="text-[#3496FF] font-bold text-sm">{addon.price}</p>
-      {expandedAddon === addon.id && addon.description && (
-        <p className="text-gray-300 text-xs mt-3 leading-relaxed animate-in fade-in duration-300">
+      {addon.description && (
+        <p className="text-gray-300 text-xs mt-3 leading-relaxed">
           {addon.description}
         </p>
       )}
@@ -393,9 +390,24 @@ export default function Home() {
       after: `${import.meta.env.BASE_URL}images/exterior-after-1.jpg`,
     },
     {
+      title: "Exterior Detail",
+      before: `${import.meta.env.BASE_URL}images/exterior-before-2.jpg`,
+      after: `${import.meta.env.BASE_URL}images/exterior-after-2.jpg`,
+    },
+    {
       title: "Headlights Restoration",
       before: `${import.meta.env.BASE_URL}images/headlights-before-1.jpg`,
       after: `${import.meta.env.BASE_URL}images/headlights-after-1.jpg`,
+    },
+    {
+      title: "Headlights Restoration",
+      before: `${import.meta.env.BASE_URL}images/headlights-before-2.jpg`,
+      after: `${import.meta.env.BASE_URL}images/headlights-after-2.jpg`,
+    },
+    {
+      title: "Headlights Restoration",
+      before: `${import.meta.env.BASE_URL}images/headlights-before-3.jpg`,
+      after: `${import.meta.env.BASE_URL}images/headlights-after-3.jpg`,
     },
   ];
 
