@@ -1343,9 +1343,17 @@ export default function Home() {
               <ul className="space-y-4 text-gray-400">
                 <li className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-[#3496FF] shrink-0 mt-0.5" />
+                  <a
+                    href="https://www.google.com/maps/search/1114+E+Lakota+St,+65714+Nixa,+MO"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hidden md:block hover:text-[#3496FF] transition-colors cursor-pointer text-left"
+                  >
+                    <span>Located in the Nixa<br />1114 E Lakota St, 65714</span>
+                  </a>
                   <button
                     onClick={openMapChooser}
-                    className="hover:text-[#3496FF] transition-colors cursor-pointer text-left"
+                    className="md:hidden hover:text-[#3496FF] transition-colors cursor-pointer text-left"
                   >
                     <span>Located in the Nixa<br />1114 E Lakota St, 65714</span>
                   </button>
