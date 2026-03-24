@@ -346,6 +346,8 @@ export default function Home() {
   const [sliderPosition, setSliderPosition] = useState(50);
   const [isDraggingSlider, setIsDraggingSlider] = useState(false);
   const [currentSliderIndex, setCurrentSliderIndex] = useState(0);
+  const [isAnimatingSlider, setIsAnimatingSlider] = useState(true);
+  const [sliderDirection, setSliderDirection] = useState<'forward' | 'backward'>('forward');
 
   const beforeAfterPairs = [
     {
@@ -389,6 +391,33 @@ export default function Home() {
     }, 6000);
     return () => clearInterval(timer);
   }, [aboutImages.length]);
+
+  // Auto-animate slider
+  useEffect(() => {
+    if (!isAnimatingSlider || isDraggingSlider) return;
+    
+    const interval = setInterval(() => {
+      setSliderPosition((prev) => {
+        let newPos = prev;
+        if (sliderDirection === 'forward') {
+          newPos = prev + 0.5;
+          if (newPos >= 100) {
+            setSliderDirection('backward');
+            return 100;
+          }
+        } else {
+          newPos = prev - 0.5;
+          if (newPos <= 0) {
+            setSliderDirection('forward');
+            return 0;
+          }
+        }
+        return newPos;
+      });
+    }, 16);
+    
+    return () => clearInterval(interval);
+  }, [isAnimatingSlider, isDraggingSlider, sliderDirection]);
 
 
   const handleGalleryItemClick = (item: typeof gallery[0]) => {
@@ -940,11 +969,26 @@ export default function Home() {
             <div
               className="relative aspect-[4/3] rounded-3xl overflow-hidden cursor-col-resize bg-black/50 border border-white/10 group"
               onMouseMove={isDraggingSlider ? handleSliderDrag : undefined}
-              onMouseDown={() => setIsDraggingSlider(true)}
-              onMouseUp={() => setIsDraggingSlider(false)}
-              onMouseLeave={() => setIsDraggingSlider(false)}
-              onTouchStart={() => setIsDraggingSlider(true)}
-              onTouchEnd={() => setIsDraggingSlider(false)}
+              onMouseDown={() => {
+                setIsDraggingSlider(true);
+                setIsAnimatingSlider(false);
+              }}
+              onMouseUp={() => {
+                setIsDraggingSlider(false);
+                setIsAnimatingSlider(true);
+              }}
+              onMouseLeave={() => {
+                setIsDraggingSlider(false);
+                setIsAnimatingSlider(true);
+              }}
+              onTouchStart={() => {
+                setIsDraggingSlider(true);
+                setIsAnimatingSlider(false);
+              }}
+              onTouchEnd={() => {
+                setIsDraggingSlider(false);
+                setIsAnimatingSlider(true);
+              }}
               onTouchMove={isDraggingSlider ? handleSliderDrag : undefined}
               onClick={handleSliderDrag}
             >
