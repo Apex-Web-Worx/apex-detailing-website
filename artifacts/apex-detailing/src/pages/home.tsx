@@ -474,6 +474,14 @@ export default function Home() {
             </div>
 
             <div className="hidden md:flex items-center space-x-8">
+              <a
+                href="tel:417-527-6165"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-[#3496FF] transition-colors"
+                aria-label="Call Apex Detailing"
+              >
+                <Phone className="w-4 h-4 text-[#3496FF]" />
+                <span>Call</span>
+              </a>
               {["Home", "Services", "About", "Gallery", "Testimonials"].map((item) => (
                 <button
                   key={item}
@@ -502,7 +510,14 @@ export default function Home() {
               </a>
             </div>
 
-            <div className="md:hidden">
+            <div className="md:hidden flex items-center gap-2">
+              <a
+                href="tel:417-527-6165"
+                className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10 text-white hover:text-[#3496FF] hover:border-[#3496FF] transition-colors"
+                aria-label="Call Apex Detailing"
+              >
+                <Phone className="w-5 h-5" />
+              </a>
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="text-white p-2 focus:outline-none"
