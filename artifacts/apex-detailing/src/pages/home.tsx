@@ -588,31 +588,31 @@ export default function Home() {
         </div>
 
         <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#A886CD]/10 to-[#3496FF]/10 border border-[#A886CD]/30 backdrop-blur-sm mb-8">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#A886CD]/10 to-[#3496FF]/10 border border-[#A886CD]/30 backdrop-blur-sm mb-6 sm:mb-8 max-w-full">
             <span className="flex h-2 w-2 rounded-full bg-[#3496FF] animate-pulse" />
-            <span className="text-sm font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#A886CD] to-[#3496FF] uppercase">
+            <span className="text-[10px] sm:text-sm font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#A886CD] to-[#3496FF] uppercase text-center">
               Nixa Ozark Springfield, MO Premium Detailing
             </span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] mb-6 drop-shadow-2xl uppercase">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.92] sm:leading-[0.9] mb-5 sm:mb-6 drop-shadow-2xl uppercase">
             Unleash Your <br />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] via-white to-[#3496FF]">
               Car's True Potential
             </span>
           </h1>
 
-          <p className="max-w-2xl text-lg md:text-xl text-gray-300 mb-10 font-medium">
+          <p className="max-w-2xl text-base sm:text-lg md:text-xl text-gray-300 mb-8 sm:mb-10 font-medium px-1">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] via-[#A886CD] to-[#3496FF]">Premium auto detailing, ceramic coating, and paint correction</span> services serving
             <span className="text-[#3496FF] font-bold"> Nixa Ozark Springfield, MO</span>. We bring the showroom shine to your vehicle.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full sm:w-auto">
             <a
               href={CALENDLY_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative inline-flex items-center justify-center px-8 py-4 font-black text-white transition-all duration-300 ease-in-out bg-transparent border-0 rounded-lg cursor-pointer overflow-hidden text-lg"
+              className="group relative inline-flex items-center justify-center px-6 sm:px-8 py-4 font-black text-white transition-all duration-300 ease-in-out bg-transparent border-0 rounded-lg cursor-pointer overflow-hidden text-base sm:text-lg w-full sm:w-auto"
             >
               <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#A886CD] to-[#3496FF] opacity-90 group-hover:opacity-100 transition-opacity duration-300" />
               <span className="absolute inset-0 w-full h-full rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-[0_0_30px_rgba(52,150,255,0.6)]" />
@@ -635,7 +635,7 @@ export default function Home() {
             </a>
             <button
               onClick={() => scrollToSection("services")}
-              className="inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 ease-in-out bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-white/20 backdrop-blur-sm text-lg"
+              className="inline-flex items-center justify-center px-6 sm:px-8 py-4 font-bold text-white transition-all duration-300 ease-in-out bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-white/20 backdrop-blur-sm text-base sm:text-lg w-full sm:w-auto"
             >
               EXPLORE SERVICES
             </button>
@@ -690,7 +690,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             {services.map((service, index) => (
               <div
                 key={service.id}
@@ -699,7 +699,7 @@ export default function Home() {
                 }`}
               >
                 <span className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5 group-hover:from-[#A886CD] group-hover:to-[#3496FF] transition-all duration-500 opacity-50 group-hover:opacity-100" />
-                <div className="relative h-full bg-[#111] p-8 rounded-2xl flex flex-col z-10 transition-all duration-500">
+                <div className="relative h-full bg-[#111] p-6 sm:p-8 rounded-2xl flex flex-col z-10 transition-all duration-500">
                   <div className="mb-6 p-4 rounded-xl bg-white/5 inline-flex w-fit group-hover:scale-110 group-hover:bg-white/10 transition-all duration-500">
                     {service.icon}
                   </div>
@@ -755,7 +755,7 @@ export default function Home() {
         <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-[#A886CD]/10 rounded-full mix-blend-screen filter blur-[120px] -translate-y-1/2 -translate-x-1/2" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             <div className="order-2 lg:order-1 relative">
               <div className="aspect-[4/5] rounded-2xl overflow-hidden relative group">
                 {/* Image container with smooth transitions */}
@@ -801,14 +801,14 @@ export default function Home() {
               <h2 className="text-sm font-bold tracking-widest text-[#A886CD] uppercase mb-3">
                 About Us
               </h2>
-              <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-8 leading-tight">
+              <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight mb-6 sm:mb-8 leading-tight">
                 Welcome to{" "}
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
                   Apex Detailing
                 </span>
               </h3>
 
-              <div className="space-y-6 text-gray-400 text-lg mb-10">
+              <div className="space-y-5 sm:space-y-6 text-gray-400 text-base sm:text-lg mb-8 sm:mb-10">
                 <p>
                   Where passion, precision, and purpose come together to serve you with excellence. Serving the Nixa Ozark Springfield, MO areas, we specialize in high-quality car detailing that restores beauty, protects value, and reflects the pride you have in your vehicle.
                 </p>
@@ -838,7 +838,7 @@ export default function Home() {
               </div>
 
               <div className="border-t border-white/10 pt-6 mt-8">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 {[
                   {
                     title: "Premium Products",
@@ -881,7 +881,7 @@ export default function Home() {
       {/* Gallery Section */}
       <section id="gallery" className="py-24 relative bg-[#0d0d0d] border-y border-white/5">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-10 sm:mb-16 gap-6">
             <div className="max-w-2xl">
               <h2 className="text-sm font-bold tracking-widest text-[#3496FF] uppercase mb-3">
                 Our Work
@@ -895,7 +895,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 justify-items-center">
             {gallery.map((item) => (
               <div
                 key={item.id}
@@ -1237,7 +1237,7 @@ export default function Home() {
       {/* Footer */}
       <footer id="contact" className="bg-[#050505] border-t border-white/5 pt-20 pb-10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12 sm:mb-16">
             <div className="col-span-1 md:col-span-2 lg:col-span-1">
               <div className="flex items-center mb-6">
                 <img
@@ -1385,11 +1385,11 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
             <p className="text-gray-500 text-sm font-medium">
               &copy; {new Date().getFullYear()} Apex Detailing. All rights reserved.
             </p>
-            <div className="flex gap-6 text-sm text-gray-500 font-medium">
+            <div className="flex flex-wrap justify-center md:justify-end gap-4 sm:gap-6 text-sm text-gray-500 font-medium">
               <span className="hover:text-white cursor-pointer transition-colors">
                 Privacy Policy
               </span>
