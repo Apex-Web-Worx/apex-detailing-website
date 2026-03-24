@@ -349,72 +349,25 @@ export default function Home() {
   const [isAnimatingSlider, setIsAnimatingSlider] = useState(true);
   const [sliderDirection, setSliderDirection] = useState<'forward' | 'backward'>('forward');
   const [sliderFading, setSliderFading] = useState(false);
-  const [currentSetIndex, setCurrentSetIndex] = useState(0);
+  const [hasCompletedCycle, setHasCompletedCycle] = useState(false);
 
-  const sliderSets = [
+  const beforeAfterPairs = [
     {
-      name: "Interior Restoration",
-      pairs: [
-        {
-          title: "Interior Restoration",
-          before: `${import.meta.env.BASE_URL}images/interior-before-1.jpg`,
-          after: `${import.meta.env.BASE_URL}images/interior-after-1.jpg`,
-        },
-        {
-          title: "Interior Restoration",
-          before: `${import.meta.env.BASE_URL}images/interior-before-2.jpg`,
-          after: `${import.meta.env.BASE_URL}images/interior-after-2.jpg`,
-        },
-        {
-          title: "Interior Restoration",
-          before: `${import.meta.env.BASE_URL}images/interior-before-3.jpg`,
-          after: `${import.meta.env.BASE_URL}images/interior-after-3.jpg`,
-        },
-        {
-          title: "Interior Restoration",
-          before: `${import.meta.env.BASE_URL}images/interior-before-4.jpg`,
-          after: `${import.meta.env.BASE_URL}images/interior-after-4.jpg`,
-        },
-        {
-          title: "Interior Restoration",
-          before: `${import.meta.env.BASE_URL}images/interior-before-5.jpg`,
-          after: `${import.meta.env.BASE_URL}images/interior-after-5.jpg`,
-        },
-        {
-          title: "Interior Restoration",
-          before: `${import.meta.env.BASE_URL}images/interior-before-6.jpg`,
-          after: `${import.meta.env.BASE_URL}images/interior-after-6.jpg`,
-        },
-        {
-          title: "Interior Restoration",
-          before: `${import.meta.env.BASE_URL}images/interior-before-7.jpg`,
-          after: `${import.meta.env.BASE_URL}images/interior-after-7.jpg`,
-        },
-      ],
+      title: "Interior Restoration",
+      before: `${import.meta.env.BASE_URL}images/interior-before-1.jpg`,
+      after: `${import.meta.env.BASE_URL}images/interior-after-1.jpg`,
     },
     {
-      name: "Exterior Detail",
-      pairs: [
-        {
-          title: "Exterior Detail",
-          before: `${import.meta.env.BASE_URL}images/exterior-before-1.jpg`,
-          after: `${import.meta.env.BASE_URL}images/exterior-after-1.jpg`,
-        },
-      ],
+      title: "Exterior Detail",
+      before: `${import.meta.env.BASE_URL}images/exterior-before-1.jpg`,
+      after: `${import.meta.env.BASE_URL}images/exterior-after-1.jpg`,
     },
     {
-      name: "Headlights Restoration",
-      pairs: [
-        {
-          title: "Headlights Restoration",
-          before: `${import.meta.env.BASE_URL}images/headlights-before-1.jpg`,
-          after: `${import.meta.env.BASE_URL}images/headlights-after-1.jpg`,
-        },
-      ],
+      title: "Headlights Restoration",
+      before: `${import.meta.env.BASE_URL}images/headlights-before-1.jpg`,
+      after: `${import.meta.env.BASE_URL}images/headlights-after-1.jpg`,
     },
   ];
-
-  const beforeAfterPairs = sliderSets[currentSetIndex].pairs;
 
   const handleSliderDrag = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
     const container = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
@@ -468,28 +421,27 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [isAnimatingSlider, isDraggingSlider, sliderDirection]);
 
-  // Auto-switch slider images with fade transition
+  // Auto-switch slider after animation completes one full cycle
   useEffect(() => {
-    const autoSwitchTimer = setInterval(() => {
+    // Detect when slider completes a full cycle (goes from forward to backward and back to forward)
+    if (sliderDirection === 'forward' && sliderPosition === 0 && hasCompletedCycle) {
       setSliderFading(true);
       setTimeout(() => {
-        const currentPairs = sliderSets[currentSetIndex].pairs;
-        if (currentSliderIndex < currentPairs.length - 1) {
-          // Move to next pair in current set
-          setCurrentSliderIndex((prev) => prev + 1);
-        } else {
-          // Move to next set and reset pair index
-          setCurrentSetIndex((prev) => (prev + 1) % sliderSets.length);
-          setCurrentSliderIndex(0);
-        }
+        setCurrentSliderIndex((prev) => (prev + 1) % beforeAfterPairs.length);
         setSliderPosition(50);
         setSliderDirection('forward');
         setSliderFading(false);
+        setHasCompletedCycle(false);
       }, 300);
-    }, 10000); // Switch every 10 seconds
-    
-    return () => clearInterval(autoSwitchTimer);
-  }, [currentSliderIndex, currentSetIndex, sliderSets]);
+    }
+  }, [sliderDirection, sliderPosition, hasCompletedCycle, beforeAfterPairs.length]);
+
+  // Track when slider completes a full cycle
+  useEffect(() => {
+    if (sliderDirection === 'backward' && sliderPosition === 100) {
+      setHasCompletedCycle(true);
+    }
+  }, [sliderDirection, sliderPosition]);
 
 
   const handleGalleryItemClick = (item: typeof gallery[0]) => {
