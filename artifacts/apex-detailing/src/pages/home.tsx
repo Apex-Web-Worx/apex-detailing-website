@@ -349,7 +349,6 @@ export default function Home() {
   const [isAnimatingSlider, setIsAnimatingSlider] = useState(true);
   const [sliderDirection, setSliderDirection] = useState<'forward' | 'backward'>('forward');
   const [sliderFading, setSliderFading] = useState(false);
-  const [hasCompletedCycle, setHasCompletedCycle] = useState(false);
 
   const beforeAfterPairs = [
     {
@@ -421,27 +420,22 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [isAnimatingSlider, isDraggingSlider, sliderDirection]);
 
-  // Auto-switch slider after animation completes one full cycle
+  // Auto-switch slider after one complete animation cycle (20 seconds)
   useEffect(() => {
-    // Detect when slider completes a full cycle (goes from forward to backward and back to forward)
-    if (sliderDirection === 'forward' && sliderPosition === 0 && hasCompletedCycle) {
+    if (!isAnimatingSlider || isDraggingSlider) return;
+    
+    const switchTimer = setInterval(() => {
       setSliderFading(true);
       setTimeout(() => {
         setCurrentSliderIndex((prev) => (prev + 1) % beforeAfterPairs.length);
         setSliderPosition(50);
         setSliderDirection('forward');
         setSliderFading(false);
-        setHasCompletedCycle(false);
       }, 300);
-    }
-  }, [sliderDirection, sliderPosition, hasCompletedCycle, beforeAfterPairs.length]);
-
-  // Track when slider completes a full cycle
-  useEffect(() => {
-    if (sliderDirection === 'backward' && sliderPosition === 100) {
-      setHasCompletedCycle(true);
-    }
-  }, [sliderDirection, sliderPosition]);
+    }, 20000); // Switch every 20 seconds (one complete cycle)
+    
+    return () => clearInterval(switchTimer);
+  }, [isAnimatingSlider, isDraggingSlider, beforeAfterPairs.length]);
 
 
   const handleGalleryItemClick = (item: typeof gallery[0]) => {
