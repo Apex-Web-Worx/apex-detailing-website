@@ -462,6 +462,7 @@ export default function Home() {
           const nextIndex = prev + 1;
           if (nextIndex >= beforeAfterPairs.length) {
             setSliderCycleComplete(true);
+            setIsAnimatingSlider(false); // Stop animation when cycle completes
             return prev; // Stay on last image
           }
           return nextIndex;
