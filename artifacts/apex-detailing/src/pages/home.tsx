@@ -343,6 +343,36 @@ export default function Home() {
   const [aboutImageIdx, setAboutImageIdx] = useState(0);
   const [failedVideos, setFailedVideos] = useState<Set<number>>(new Set());
   const [mapChooserOpen, setMapChooserOpen] = useState(false);
+  const [sliderPosition, setSliderPosition] = useState(50);
+  const [isDraggingSlider, setIsDraggingSlider] = useState(false);
+  const [currentSliderIndex, setCurrentSliderIndex] = useState(0);
+
+  const beforeAfterPairs = [
+    {
+      title: "Interior Restoration",
+      before: `${import.meta.env.BASE_URL}images/interior-before-1.jpg`,
+      after: `${import.meta.env.BASE_URL}images/interior-after-1.jpg`,
+    },
+    {
+      title: "Exterior Detail",
+      before: `${import.meta.env.BASE_URL}images/exterior-before-1.jpg`,
+      after: `${import.meta.env.BASE_URL}images/exterior-after-1.jpg`,
+    },
+    {
+      title: "Headlights Restoration",
+      before: `${import.meta.env.BASE_URL}images/headlights-before-1.jpg`,
+      after: `${import.meta.env.BASE_URL}images/headlights-after-1.jpg`,
+    },
+  ];
+
+  const handleSliderDrag = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+    const container = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
+    const pos = e.type.includes('touch') 
+      ? (e as React.TouchEvent<HTMLDivElement>).touches[0].clientX 
+      : (e as React.MouseEvent<HTMLDivElement>).clientX;
+    const newPos = Math.max(0, Math.min(100, ((pos - container.left) / container.width) * 100));
+    setSliderPosition(newPos);
+  };
 
   const aboutImages = [
     `${import.meta.env.BASE_URL}images/about-hero.jpg`,
@@ -888,6 +918,111 @@ export default function Home() {
                 ))}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Before/After Slider Section */}
+      <section className="py-20 sm:py-24 relative bg-[#0a0a0a]">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-10 sm:mb-16">
+            <h2 className="text-sm font-bold tracking-widest text-[#A886CD] uppercase mb-3">
+              See the Difference
+            </h2>
+            <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight">
+              Before & After <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">Transformations</span>
+            </h3>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            {/* Slider */}
+            <div
+              className="relative aspect-[4/3] rounded-3xl overflow-hidden cursor-col-resize bg-black/50 border border-white/10 group"
+              onMouseMove={isDraggingSlider ? handleSliderDrag : undefined}
+              onMouseDown={() => setIsDraggingSlider(true)}
+              onMouseUp={() => setIsDraggingSlider(false)}
+              onMouseLeave={() => setIsDraggingSlider(false)}
+              onTouchStart={() => setIsDraggingSlider(true)}
+              onTouchEnd={() => setIsDraggingSlider(false)}
+              onTouchMove={isDraggingSlider ? handleSliderDrag : undefined}
+              onClick={handleSliderDrag}
+            >
+              {/* After Image (Background) */}
+              <img
+                src={beforeAfterPairs[currentSliderIndex].after}
+                alt="After"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+
+              {/* Before Image (Overlay) */}
+              <div
+                className="absolute inset-0 overflow-hidden"
+                style={{ width: `${sliderPosition}%` }}
+              >
+                <img
+                  src={beforeAfterPairs[currentSliderIndex].before}
+                  alt="Before"
+                  className="w-screen h-full object-cover"
+                  style={{ width: `${100 / (sliderPosition / 100)}%` }}
+                />
+              </div>
+
+              {/* Handle */}
+              <div
+                className="absolute top-0 bottom-0 w-1 bg-gradient-to-b from-[#A886CD] to-[#3496FF] cursor-col-resize"
+                style={{ left: `${sliderPosition}%` }}
+              >
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 rounded-full flex items-center justify-center transition-all">
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14M16 5v14" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Labels */}
+              <div className="absolute top-4 left-4 text-white font-black uppercase text-sm tracking-wider bg-black/50 px-3 py-2 rounded-lg backdrop-blur-sm">
+                Before
+              </div>
+              <div className="absolute top-4 right-4 text-white font-black uppercase text-sm tracking-wider bg-black/50 px-3 py-2 rounded-lg backdrop-blur-sm">
+                After
+              </div>
+
+              {/* Title */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white font-black uppercase text-center text-base sm:text-lg tracking-wider bg-gradient-to-r from-[#A886CD]/80 to-[#3496FF]/80 px-4 sm:px-6 py-3 rounded-lg backdrop-blur-sm">
+                {beforeAfterPairs[currentSliderIndex].title}
+              </div>
+            </div>
+
+            {/* Navigation Buttons */}
+            <div className="flex justify-center gap-4 mt-8">
+              <button
+                onClick={() => setCurrentSliderIndex((prev) => (prev - 1 + beforeAfterPairs.length) % beforeAfterPairs.length)}
+                className="px-6 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] hover:text-white transition-all font-bold text-sm"
+              >
+                ← Previous
+              </button>
+              <button
+                onClick={() => setCurrentSliderIndex((prev) => (prev + 1) % beforeAfterPairs.length)}
+                className="px-6 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] hover:text-white transition-all font-bold text-sm"
+              >
+                Next →
+              </button>
+            </div>
+
+            {/* Indicators */}
+            <div className="flex justify-center gap-2 mt-6">
+              {beforeAfterPairs.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentSliderIndex(idx)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    idx === currentSliderIndex
+                      ? "bg-gradient-to-r from-[#A886CD] to-[#3496FF] w-8"
+                      : "bg-white/30 hover:bg-white/50"
+                  }`}
+                />
+              ))}
             </div>
           </div>
         </div>
