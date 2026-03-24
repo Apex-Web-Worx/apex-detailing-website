@@ -342,6 +342,7 @@ export default function Home() {
   const [touchEnd, setTouchEnd] = useState(0);
   const [aboutImageIdx, setAboutImageIdx] = useState(0);
   const [failedVideos, setFailedVideos] = useState<Set<number>>(new Set());
+  const [mapChooserOpen, setMapChooserOpen] = useState(false);
 
   const aboutImages = [
     `${import.meta.env.BASE_URL}images/about-hero.jpg`,
@@ -445,6 +446,20 @@ export default function Home() {
       const offsetPosition = elementPosition - offset;
       window.scrollTo({ top: offsetPosition, behavior: "smooth" });
     }
+  };
+
+  const openMapChooser = () => {
+    setMapChooserOpen(true);
+  };
+
+  const openGoogleMaps = () => {
+    window.open("https://www.google.com/maps/search/1114+E+Lakota+St,+65714+Nixa,+MO", "_blank", "noopener,noreferrer");
+    setMapChooserOpen(false);
+  };
+
+  const openAppleMaps = () => {
+    window.open("https://maps.apple.com/?address=1114%20E%20Lakota%20St,%20Nixa,%20MO%2065714", "_blank", "noopener,noreferrer");
+    setMapChooserOpen(false);
   };
 
   return (
@@ -1328,14 +1343,12 @@ export default function Home() {
               <ul className="space-y-4 text-gray-400">
                 <li className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-[#3496FF] shrink-0 mt-0.5" />
-                  <a
-                    href="https://www.google.com/maps/search/1114+E+Lakota+St,+65714+Nixa,+MO"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-[#3496FF] transition-colors cursor-pointer"
+                  <button
+                    onClick={openMapChooser}
+                    className="hover:text-[#3496FF] transition-colors cursor-pointer text-left"
                   >
                     <span>Located in the Nixa<br />1114 E Lakota St, 65714</span>
-                  </a>
+                  </button>
                 </li>
                 <li className="flex items-center gap-3 hover:text-white transition-colors cursor-pointer">
                   <Phone className="w-5 h-5 text-[#A886CD]" />
@@ -1400,6 +1413,35 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {mapChooserOpen && (
+        <div className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm flex items-center justify-center px-4">
+          <div className="w-full max-w-sm rounded-2xl bg-[#111] border border-white/10 p-6 text-center shadow-2xl">
+            <h3 className="text-xl font-black uppercase tracking-wider mb-2">Open Maps</h3>
+            <p className="text-gray-400 text-sm mb-6">Choose your preferred map app.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button
+                onClick={openGoogleMaps}
+                className="px-4 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] hover:text-white transition-colors font-bold"
+              >
+                Google Maps
+              </button>
+              <button
+                onClick={openAppleMaps}
+                className="px-4 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#A886CD] hover:text-white transition-colors font-bold"
+              >
+                Apple Maps
+              </button>
+            </div>
+            <button
+              onClick={() => setMapChooserOpen(false)}
+              className="mt-4 text-sm text-gray-400 hover:text-white transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
