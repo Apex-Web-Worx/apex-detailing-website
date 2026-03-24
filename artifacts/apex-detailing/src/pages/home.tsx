@@ -482,10 +482,16 @@ export default function Home() {
                 <Phone className="w-4 h-4 text-[#3496FF]" />
                 <span>Call</span>
               </a>
-              {["Home", "Services", "About", "Gallery", "Testimonials"].map((item) => (
+              {["Home", "Services", "About", "Gallery", "Testimonials", "Buy Gift Card"].map((item) => (
                 <button
                   key={item}
-                  onClick={() => scrollToSection(item.toLowerCase())}
+                  onClick={() => {
+                    if (item === "Buy Gift Card") {
+                      window.open("https://app.squareup.com/gift/ML461GTYPW0JH/order", "_blank", "noopener,noreferrer");
+                      return;
+                    }
+                    scrollToSection(item.toLowerCase());
+                  }}
                   className={`font-semibold text-sm tracking-wider uppercase transition-colors relative group ${
                     activeSection === item.toLowerCase()
                       ? "text-white header-shine"
@@ -535,10 +541,17 @@ export default function Home() {
           }`}
         >
           <div className="flex flex-col space-y-4 px-6">
-            {["Home", "Services", "About", "Gallery", "Testimonials"].map((item) => (
+            {["Home", "Services", "About", "Gallery", "Testimonials", "Buy Gift Card"].map((item) => (
               <button
                 key={item}
-                onClick={() => scrollToSection(item.toLowerCase())}
+                onClick={() => {
+                  if (item === "Buy Gift Card") {
+                    window.open("https://app.squareup.com/gift/ML461GTYPW0JH/order", "_blank", "noopener,noreferrer");
+                    setMobileMenuOpen(false);
+                    return;
+                  }
+                  scrollToSection(item.toLowerCase());
+                }}
                 className="text-left text-gray-300 hover:text-white font-semibold text-lg tracking-wider uppercase"
               >
                 {item}
