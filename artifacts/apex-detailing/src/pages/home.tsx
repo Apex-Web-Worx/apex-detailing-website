@@ -348,6 +348,7 @@ export default function Home() {
   const [currentSliderIndex, setCurrentSliderIndex] = useState(0);
   const [isAnimatingSlider, setIsAnimatingSlider] = useState(true);
   const [sliderDirection, setSliderDirection] = useState<'forward' | 'backward'>('forward');
+  const [sliderFading, setSliderFading] = useState(false);
 
   const beforeAfterPairs = [
     {
@@ -449,12 +450,16 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [isAnimatingSlider, isDraggingSlider, sliderDirection]);
 
-  // Auto-switch slider images
+  // Auto-switch slider images with fade transition
   useEffect(() => {
     const autoSwitchTimer = setInterval(() => {
-      setCurrentSliderIndex((prev) => (prev + 1) % beforeAfterPairs.length);
-      setSliderPosition(50);
-      setSliderDirection('forward');
+      setSliderFading(true);
+      setTimeout(() => {
+        setCurrentSliderIndex((prev) => (prev + 1) % beforeAfterPairs.length);
+        setSliderPosition(50);
+        setSliderDirection('forward');
+        setSliderFading(false);
+      }, 300);
     }, 10000); // Switch every 10 seconds
     
     return () => clearInterval(autoSwitchTimer);
@@ -1037,13 +1042,14 @@ export default function Home() {
               <img
                 src={beforeAfterPairs[currentSliderIndex].after}
                 alt="After"
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
+                style={{ opacity: sliderFading ? 0 : 1 }}
               />
 
               {/* Before Image (Overlay) */}
               <div
-                className="absolute inset-0 overflow-hidden"
-                style={{ width: `${sliderPosition}%` }}
+                className="absolute inset-0 overflow-hidden transition-opacity duration-300"
+                style={{ width: `${sliderPosition}%`, opacity: sliderFading ? 0 : 1 }}
               >
                 <img
                   src={beforeAfterPairs[currentSliderIndex].before}
