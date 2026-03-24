@@ -1025,10 +1025,16 @@ export default function Home() {
               </div>
 
               {/* Labels */}
-              <div className="absolute top-4 left-4 text-white font-black uppercase text-sm tracking-wider bg-black/50 px-3 py-2 rounded-lg backdrop-blur-sm">
+              <div 
+                className="absolute top-4 left-4 text-white font-black uppercase text-sm tracking-wider bg-black/50 px-3 py-2 rounded-lg backdrop-blur-sm transition-opacity duration-300"
+                style={{ opacity: sliderPosition > 15 ? 1 : 0, pointerEvents: 'none' }}
+              >
                 Before
               </div>
-              <div className="absolute top-4 right-4 text-white font-black uppercase text-sm tracking-wider bg-black/50 px-3 py-2 rounded-lg backdrop-blur-sm">
+              <div 
+                className="absolute top-4 right-4 text-white font-black uppercase text-sm tracking-wider bg-black/50 px-3 py-2 rounded-lg backdrop-blur-sm transition-opacity duration-300"
+                style={{ opacity: sliderPosition < 85 ? 1 : 0, pointerEvents: 'none' }}
+              >
                 After
               </div>
 
