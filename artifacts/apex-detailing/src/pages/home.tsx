@@ -87,6 +87,22 @@ const services = [
     ],
   },
   {
+    id: "exterior-detailing",
+    title: "Exterior Detailing",
+    description:
+      "Comprehensive exterior cleaning and protection to make your car turn heads everywhere you go. Includes detailed hand wash, exterior windows and mirrors cleaning, wheels and tires cleaned, polished, and dressed, door jambs wiped down, and spray sealant for 1-month protection.",
+    icon: <Car className="w-10 h-10 text-[#3496FF]" />,
+    pricing: "$150",
+    pricingDetails: ["Sedan: $150", "SUV: $200–$250"],
+    features: [
+      "Detailed Hand Wash",
+      "Windows & Mirrors Cleaned",
+      "Wheels & Tires Detailed",
+      "Door Jambs Wiped",
+      "1-Month Spray Sealant",
+    ],
+  },
+  {
     id: "wash-clay-wax",
     title: "Wash, Clay & Wax",
     description:
@@ -128,22 +144,6 @@ const services = [
     icon: <Sparkles className="w-10 h-10 text-[#A886CD]" />,
     pricing: "$300-$600",
     features: ["Swirl Mark Removal", "Deep Gloss Restoration", "Enhances Resale Value"],
-  },
-  {
-    id: "exterior-detailing",
-    title: "Exterior Detailing",
-    description:
-      "Comprehensive exterior cleaning and protection to make your car turn heads everywhere you go. Includes detailed hand wash, exterior windows and mirrors cleaning, wheels and tires cleaned, polished, and dressed, door jambs wiped down, and spray sealant for 1-month protection.",
-    icon: <Car className="w-10 h-10 text-[#3496FF]" />,
-    pricing: "$150",
-    pricingDetails: ["Sedan: $150", "SUV: $200–$250"],
-    features: [
-      "Detailed Hand Wash",
-      "Windows & Mirrors Cleaned",
-      "Wheels & Tires Detailed",
-      "Door Jambs Wiped",
-      "1-Month Spray Sealant",
-    ],
   },
 ];
 
