@@ -37,7 +37,7 @@ const AddonCard = ({ addon }) => {
       <h4 className="text-base font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#A886CD] group-hover:to-[#3496FF] transition-all duration-300">{addon.name}</h4>
       <p className="text-[#3496FF] font-bold text-sm">{addon.price}</p>
       {isHovered && addon.description && (
-        <p className="text-gray-300 text-xs mt-3 leading-relaxed animate-in fade-in duration-300">
+        <p className="text-gray-300 text-xs mt-3 leading-relaxed transition-all duration-200 opacity-100">
           {addon.description}
         </p>
       )}
