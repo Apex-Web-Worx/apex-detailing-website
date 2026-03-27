@@ -580,30 +580,6 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://assets.calendly.com/assets/external/widget.js";
-    script.type = "text/javascript";
-    script.async = true;
-    script.onload = () => {
-      if (window.Calendly) {
-        window.Calendly.initBadgeWidget({
-          url: "https://calendly.com/apexdetailingsf/detailing-appointment",
-          text: "Schedule time with me",
-          color: "#3496FF",
-          textColor: "#ffffff",
-          branding: true
-        });
-      }
-    };
-    document.body.appendChild(script);
-    return () => {
-      if (document.body.contains(script)) {
-        document.body.removeChild(script);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
     const sections = ["home", "services", "about", "gallery", "testimonials"];
     const observers = {};
 
