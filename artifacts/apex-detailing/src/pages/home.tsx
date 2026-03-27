@@ -514,6 +514,15 @@ export default function Home() {
   const handleGalleryItemClick = (item: typeof gallery[0]) => {
     setSelectedGalleryItem(item);
     setCurrentImageIndex(0);
+    
+    // Preload all images immediately when gallery opens
+    if (item.images) {
+      item.images.forEach((img, index) => {
+        const imageSrc = typeof img === 'string' ? img : img.src;
+        const preloadImg = new Image();
+        preloadImg.src = imageSrc;
+      });
+    }
   };
 
   const nextImage = () => {
@@ -542,8 +551,10 @@ export default function Home() {
       }
     };
 
-    // Preload next image
-    preloadImage(currentImageIndex + 1);
+    // Preload next 3 images for faster navigation
+    for (let i = 1; i <= 3; i++) {
+      preloadImage(currentImageIndex + i);
+    }
     // Preload previous image
     preloadImage(currentImageIndex - 1);
   }, [currentImageIndex, selectedGalleryItem]);
