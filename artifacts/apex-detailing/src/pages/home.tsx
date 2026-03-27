@@ -514,17 +514,52 @@ export default function Home() {
   const handleGalleryItemClick = (item: typeof gallery[0]) => {
     setSelectedGalleryItem(item);
     setCurrentImageIndex(0);
+    
+    // Preload current and next image when gallery opens
+    if (item.images) {
+      const preloadImage = (index: number) => {
+        if (index >= 0 && index < item.images.length) {
+          const imageSrc = typeof item.images[index] === 'string' 
+            ? item.images[index] 
+            : item.images[index].src;
+          const img = new Image();
+          img.src = imageSrc;
+        }
+      };
+      preloadImage(0);
+      preloadImage(1);
+    }
   };
 
   const nextImage = () => {
     if (selectedGalleryItem?.images && currentImageIndex < selectedGalleryItem.images.length - 1) {
-      setCurrentImageIndex(currentImageIndex + 1);
+      const nextIndex = currentImageIndex + 1;
+      setCurrentImageIndex(nextIndex);
+      
+      // Preload the image after next
+      if (nextIndex + 1 < selectedGalleryItem.images.length) {
+        const imageSrc = typeof selectedGalleryItem.images[nextIndex + 1] === 'string' 
+          ? selectedGalleryItem.images[nextIndex + 1] 
+          : selectedGalleryItem.images[nextIndex + 1].src;
+        const img = new Image();
+        img.src = imageSrc;
+      }
     }
   };
 
   const prevImage = () => {
     if (currentImageIndex > 0) {
-      setCurrentImageIndex(currentImageIndex - 1);
+      const prevIndex = currentImageIndex - 1;
+      setCurrentImageIndex(prevIndex);
+      
+      // Preload the image before previous
+      if (prevIndex - 1 >= 0 && selectedGalleryItem?.images) {
+        const imageSrc = typeof selectedGalleryItem.images[prevIndex - 1] === 'string' 
+          ? selectedGalleryItem.images[prevIndex - 1] 
+          : selectedGalleryItem.images[prevIndex - 1].src;
+        const img = new Image();
+        img.src = imageSrc;
+      }
     }
   };
 
