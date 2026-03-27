@@ -1327,11 +1327,11 @@ export default function Home() {
                 {/* Previous Button */}
                 {currentImageIndex > 0 && (
                   <button
-                    onMouseDown={(e) => {
+                    onClick={(e) => {
                       e.stopPropagation();
                       prevImage();
                     }}
-                    onTouchEnd={(e) => {
+                    onTouchStart={(e) => {
                       e.stopPropagation();
                       prevImage();
                     }}
@@ -1349,11 +1349,11 @@ export default function Home() {
                 {/* Next Button */}
                 {selectedGalleryItem.images.length > 1 && currentImageIndex < selectedGalleryItem.images.length - 1 && (
                   <button
-                    onMouseDown={(e) => {
+                    onClick={(e) => {
                       e.stopPropagation();
                       nextImage();
                     }}
-                    onTouchEnd={(e) => {
+                    onTouchStart={(e) => {
                       e.stopPropagation();
                       nextImage();
                     }}
