@@ -580,17 +580,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://assets.calendly.com/assets/external/widget.js";
-    script.async = true;
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
-  useEffect(() => {
-    const sections = ["home", "services", "about", "booking", "gallery", "testimonials"];
+    const sections = ["home", "services", "about", "gallery", "testimonials"];
     const observers = {};
 
     const callback = (entries) => {
@@ -1198,29 +1188,6 @@ export default function Home() {
                   }`}
                 />
               ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Calendly Booking Section */}
-      <section id="booking" className="py-24 relative bg-[#0d0d0d] border-y border-white/5 overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-sm font-bold tracking-widest text-[#A886CD] uppercase mb-3">
-              Schedule Your Detail
-            </h2>
-            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-6">
-              Book Your <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">Appointment</span>
-            </h3>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              Choose a time that works best for you. Our calendar updates in real-time.
-            </p>
-          </div>
-
-          <div className="flex justify-center items-center">
-            <div className="w-full max-w-4xl bg-gradient-to-br from-[#A886CD]/10 to-[#3496FF]/10 border border-[#3496FF]/20 rounded-2xl overflow-hidden">
-              <div className="calendly-inline-widget" data-url="https://calendly.com/apexdetailingsf/detailing-appointment" style={{ minWidth: '320px', height: '700px' }}></div>
             </div>
           </div>
         </div>
