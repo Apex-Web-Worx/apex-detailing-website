@@ -952,7 +952,7 @@ export default function Home() {
                     ))}
                   </ul>
                   <a
-                    href={CALENDLY_LINK}
+                    href={service.bookingLink || CALENDLY_LINK}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="mt-auto inline-flex items-center gap-2 font-bold text-sm tracking-widest text-white uppercase group/btn"
