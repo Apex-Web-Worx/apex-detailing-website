@@ -197,8 +197,8 @@ const gallery = [
   const testimonials = [
     {
       text: "Apex Detailing detailed and waxed our work vehicles, including two F-250s, a Honda Accord, an Odyssey, and a GMC Yukon. We were thrilled with the results - every vehicle looked brand new. We'll definitely be bringing our personal vehicles to Apex too.",
-      author: "Sight & Sound Theater from Branson",
-      name: "Sight & Sound Theater from Branson",
+      author: "Sight & Sound Theater",
+      name: "Sight & Sound Theater",
       location: "Branson, MO",
     },
   {
