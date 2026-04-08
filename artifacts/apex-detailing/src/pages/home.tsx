@@ -1825,13 +1825,14 @@ export default function Home() {
             <p className="text-gray-400 text-sm mb-6">
               {bookingTarget === "detail" ? "Book your detail with your preferred scheduler." : "Choose a booking option."}
             </p>
-            <div className="space-y-3">
-              <button onClick={bookWithSquare} className="w-full py-3 rounded-lg bg-gradient-to-r from-[#A886CD] to-[#3496FF] font-bold text-white">
-                Square
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button onClick={bookWithSquare} className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-4 text-left hover:border-[#3496FF] transition-colors">
+                <div className="text-base font-black text-white">Square</div>
+                <div className="mt-1 text-xs text-gray-400">Only for Express Interior Detail</div>
               </button>
-              <p className="text-xs text-gray-400 text-center -mt-1">Only for Express Interior Detail</p>
-              <button onClick={bookWithCalendly} className="w-full py-3 rounded-lg bg-white/5 border border-white/10 font-bold text-white">
-                Calendly
+              <button onClick={bookWithCalendly} className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-4 text-left hover:border-[#A886CD] transition-colors">
+                <div className="text-base font-black text-white">Calendly</div>
+                <div className="mt-1 text-xs text-gray-400">For all other services</div>
               </button>
             </div>
           </div>
