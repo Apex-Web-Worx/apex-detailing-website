@@ -74,7 +74,7 @@ const services = [
     title: "Interior Detailing",
     description:
       "Comprehensive interior cleaning that transforms every surface. From carpets to leather to air vents. Add-ons available to customize your package.",
-    icon: <Droplets className="w-10 h-10 text-[#A886CD]" />,
+    icon: <Droplets className="w-10 h-10 text-[#3496FF]" />,
     pricing: "$200",
     pricingDetails: ["2-Row: $200 – $300", "3-Row: $250 – $350"],
     features: [
