@@ -202,11 +202,6 @@ const gallery = [
       location: "Branson, MO",
     },
   {
-    name: "Michael T.",
-    location: "Springfield, MO",
-    text: "Apex Detailing completely transformed my 5-year-old truck. The paint correction and ceramic coating makes it look better than the day I bought it off the lot. Incredible attention to detail.",
-  },
-  {
     name: "Sarah W.",
     location: "Nixa, MO",
     text: "The interior detail was mind-blowing. With two kids, my SUV was a disaster zone. They got out stains I thought were permanent and it smells brand new again.",
