@@ -55,7 +55,7 @@ const AddonCard = ({ addon }) => {
 const services = [
   {
     id: "full-detailing",
-    title: "Full Detailing",
+    title: "Apex Full Detailing",
     description:
       "The ultimate package! Includes interior and exterior detailed cleaning and protection. Get your vehicle looking showroom fresh inside and out. Add-ons available to customize your package.",
     icon: <Wand2 className="w-10 h-10 text-[#A886CD]" />,
@@ -71,7 +71,7 @@ const services = [
   },
   {
     id: "interior-detailing",
-    title: "Interior Detailing",
+    title: "Apex Interior Detailing",
     description:
       "Comprehensive interior cleaning that transforms every surface. From carpets to leather to air vents. Add-ons available to customize your package.",
     icon: <Droplets className="w-10 h-10 text-[#A886CD]" />,
@@ -95,7 +95,7 @@ const services = [
   },
   {
     id: "apex-express-interior-detailing",
-    title: "Apex Express Interior Detailing",
+    title: "Apex Apex Express Interior Detailing",
     description: (
       <>
         A fast, high-quality interior refresh designed to keep your vehicle clean, fresh, and presentable—without the time commitment of a full detail. This service includes a thorough vacuum, wipe-down of all interior surfaces, floor mats cleaned, interior glass polished, and a light refresh of high-touch areas. Perfect for well-maintained vehicles or as a maintenance service between full details.{" "}
@@ -118,7 +118,7 @@ const services = [
   },
   {
     id: "exterior-detailing",
-    title: "Exterior Detailing",
+    title: "Apex Exterior Detailing",
     description:
       "Comprehensive exterior cleaning and protection to make your car turn heads everywhere you go. Includes detailed hand wash, exterior windows and mirrors cleaning, wheels and tires cleaned, polished, and dressed, door jambs wiped down, and spray sealant for 1-month protection.",
     icon: <Car className="w-10 h-10 text-[#3496FF]" />,
@@ -134,7 +134,7 @@ const services = [
   },
   {
     id: "wash-clay-wax",
-    title: "Wash, Clay & Wax",
+    title: "Apex Wash, Clay & Wax",
     description:
       "First, the vehicle receives a thorough hand wash to remove dirt, dust, and road grime. Next, a clay bar treatment is used to safely remove embedded contaminants such as tar, brake dust, and industrial fallout that normal washing cannot remove. Finally, a protective wax coating is applied to enhance shine, protect the paint, and help repel water and dirt.",
     icon: <Sparkles className="w-10 h-10 text-[#A886CD]" />,
@@ -150,7 +150,7 @@ const services = [
   },
   {
     id: "headlight-restoration",
-    title: "Headlight Restoration",
+    title: "Apex Headlight Restoration",
     description:
       "Fix foggy, yellowed headlights to improve nighttime visibility and dramatically improve your car's appearance.",
     icon: <CheckCircle2 className="w-10 h-10 text-[#3496FF]" />,
@@ -159,7 +159,7 @@ const services = [
   },
   {
     id: "ceramic-coating",
-    title: "Ceramic Coating",
+    title: "Apex Ceramic Coating",
     description:
       "Ultimate protection and extreme gloss for your vehicle's paint. Lasts for years, making maintenance washes a breeze.",
     icon: <Shield className="w-10 h-10 text-[#3496FF]" />,
@@ -168,7 +168,7 @@ const services = [
   },
   {
     id: "paint-correction",
-    title: "Paint Correction",
+    title: "Apex Paint Correction",
     description:
       "Remove swirl marks, light scratches, and oxidation to restore your paint to a flawless, mirror-like finish.",
     icon: <Sparkles className="w-10 h-10 text-[#A886CD]" />,
