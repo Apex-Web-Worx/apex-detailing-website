@@ -1829,6 +1829,7 @@ export default function Home() {
               <button onClick={bookWithSquare} className="w-full py-3 rounded-lg bg-gradient-to-r from-[#A886CD] to-[#3496FF] font-bold text-white">
                 Square
               </button>
+              <p className="text-xs text-gray-400 text-center">Only for Express Interior Detail</p>
               <button onClick={bookWithCalendly} className="w-full py-3 rounded-lg bg-white/5 border border-white/10 font-bold text-white">
                 Calendly
               </button>
