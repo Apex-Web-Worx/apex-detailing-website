@@ -854,10 +854,8 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full sm:w-auto">
-            <a
-              href={CALENDLY_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
+              <a
+                onClick={() => openBookingChoice("detail")}
               className="group relative inline-flex items-center justify-center px-6 sm:px-8 py-4 font-black text-white transition-all duration-300 ease-in-out bg-transparent border-0 rounded-lg cursor-pointer overflow-hidden text-base sm:text-lg w-full sm:w-auto"
             >
               <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#A886CD] to-[#3496FF] opacity-90 group-hover:opacity-100 transition-opacity duration-300" />
