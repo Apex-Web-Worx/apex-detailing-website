@@ -160,9 +160,9 @@ const gallery = [
     `${import.meta.env.BASE_URL}images/paint-correction-2.jpg`,
     `${import.meta.env.BASE_URL}images/paint-correction-3.jpg`,
     `${import.meta.env.BASE_URL}images/paint-correction-4.jpg`,
-    "@assets/IMG_1263_1775653038704.jpeg",
-    "@assets/IMG_1226_1775653038704.jpeg",
-    "@assets/IMG_1227_1775653038704.jpeg",
+    `${import.meta.env.BASE_URL}images/paint-correction-5.jpg`,
+    `${import.meta.env.BASE_URL}images/paint-correction-6.jpg`,
+    `${import.meta.env.BASE_URL}images/paint-correction-7.jpg`,
   ], currentImageIndex: 0 },
   { id: 2, title: "Ceramic Coating", beforeAfter: true, color: "from-[#A886CD] to-purple-900", video: `${import.meta.env.BASE_URL}videos/ceramic-coating-demo.MOV` },
   { id: 3, title: "Interior Restoration", beforeAfter: true, color: "from-blue-900 to-indigo-900", thumbnail: `${import.meta.env.BASE_URL}images/interior-restoration-video.mp4`, images: [
@@ -367,6 +367,7 @@ export default function Home() {
   const [activeSection, setActiveSection] = useState("home");
   const [selectedGalleryItem, setSelectedGalleryItem] = useState<typeof gallery[0] | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isImageTransitioning, setIsImageTransitioning] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
@@ -544,33 +545,41 @@ export default function Home() {
 
   const nextImage = () => {
     if (selectedGalleryItem?.images && currentImageIndex < selectedGalleryItem.images.length - 1) {
-      const nextIndex = currentImageIndex + 1;
-      setCurrentImageIndex(nextIndex);
-      
-      // Preload the image after next
-      if (nextIndex + 1 < selectedGalleryItem.images.length) {
-        const imageSrc = typeof selectedGalleryItem.images[nextIndex + 1] === 'string' 
-          ? selectedGalleryItem.images[nextIndex + 1] 
-          : selectedGalleryItem.images[nextIndex + 1].src;
-        const img = new Image();
-        img.src = imageSrc;
-      }
+      setIsImageTransitioning(true);
+      setTimeout(() => {
+        const nextIndex = currentImageIndex + 1;
+        setCurrentImageIndex(nextIndex);
+        setIsImageTransitioning(false);
+
+        // Preload the image after next
+        if (nextIndex + 1 < selectedGalleryItem.images.length) {
+          const imageSrc = typeof selectedGalleryItem.images[nextIndex + 1] === 'string'
+            ? selectedGalleryItem.images[nextIndex + 1]
+            : selectedGalleryItem.images[nextIndex + 1].src;
+          const img = new Image();
+          img.src = imageSrc;
+        }
+      }, 200);
     }
   };
 
   const prevImage = () => {
     if (currentImageIndex > 0) {
-      const prevIndex = currentImageIndex - 1;
-      setCurrentImageIndex(prevIndex);
-      
-      // Preload the image before previous
-      if (prevIndex - 1 >= 0 && selectedGalleryItem?.images) {
-        const imageSrc = typeof selectedGalleryItem.images[prevIndex - 1] === 'string' 
-          ? selectedGalleryItem.images[prevIndex - 1] 
-          : selectedGalleryItem.images[prevIndex - 1].src;
-        const img = new Image();
-        img.src = imageSrc;
-      }
+      setIsImageTransitioning(true);
+      setTimeout(() => {
+        const prevIndex = currentImageIndex - 1;
+        setCurrentImageIndex(prevIndex);
+        setIsImageTransitioning(false);
+
+        // Preload the image before previous
+        if (prevIndex - 1 >= 0 && selectedGalleryItem?.images) {
+          const imageSrc = typeof selectedGalleryItem.images[prevIndex - 1] === 'string'
+            ? selectedGalleryItem.images[prevIndex - 1]
+            : selectedGalleryItem.images[prevIndex - 1].src;
+          const img = new Image();
+          img.src = imageSrc;
+        }
+      }, 200);
     }
   };
 
@@ -1340,8 +1349,8 @@ export default function Home() {
                 <img
                   src={typeof selectedGalleryItem.images[currentImageIndex] === 'string' ? selectedGalleryItem.images[currentImageIndex] : selectedGalleryItem.images[currentImageIndex].src}
                   alt={`${selectedGalleryItem.title} - Image ${currentImageIndex + 1}`}
-                  className={`${isFullscreen ? 'w-full h-full' : 'w-full h-full'} object-contain ${!isFullscreen && 'rounded-xl'}`}
-                  style={{ filter: 'brightness(0.95) contrast(1.05)' }}
+                  className={`${isFullscreen ? 'w-full h-full' : 'w-full h-full'} object-contain ${!isFullscreen && 'rounded-xl'} transition-opacity duration-200`}
+                  style={{ filter: 'brightness(0.95) contrast(1.05)', opacity: isImageTransitioning ? 0 : 1 }}
                 />
                 
                 {/* Before/After Label */}
