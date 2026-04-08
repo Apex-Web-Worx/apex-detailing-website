@@ -105,7 +105,7 @@ const services = [
       </>
     ),
     icon: <Droplets className="w-10 h-10 text-[#A886CD]" />,
-    pricing: "",
+    pricing: "$100",
     pricingDetails: ["2-Row: $100–$150", "3-Row: $150–$200"],
     bookingLink: "https://app.squareup.com/appointments/book/4r9v4p21agmllg/LKWK85P75KQD9/start",
     features: [
