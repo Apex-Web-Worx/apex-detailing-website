@@ -1603,9 +1603,7 @@ export default function Home() {
                 </p>
               </div>
               <a
-                href={CALENDLY_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
+                onClick={() => openBookingChoice("detail")}
                 className="group relative inline-flex items-center justify-center px-10 py-5 font-black text-white text-xl transition-all duration-300 ease-in-out bg-gradient-to-r from-[#A886CD] to-[#3496FF] rounded-xl overflow-hidden shadow-[0_0_40px_rgba(168,134,205,0.4)] hover:shadow-[0_0_60px_rgba(52,150,255,0.6)] hover:scale-105"
               >
                 <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#3496FF] to-[#A886CD] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
