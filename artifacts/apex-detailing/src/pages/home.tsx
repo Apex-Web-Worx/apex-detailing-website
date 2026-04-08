@@ -95,7 +95,7 @@ const services = [
   },
   {
     id: "apex-express-interior-detailing",
-    title: "Apex Apex Express Interior Detailing",
+    title: "Apex Express Interior Detailing",
     description: (
       <>
         A fast, high-quality interior refresh designed to keep your vehicle clean, fresh, and presentable—without the time commitment of a full detail. This service includes a thorough vacuum, wipe-down of all interior surfaces, floor mats cleaned, interior glass polished, and a light refresh of high-touch areas. Perfect for well-maintained vehicles or as a maintenance service between full details.{" "}
