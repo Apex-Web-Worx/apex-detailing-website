@@ -96,8 +96,14 @@ const services = [
   {
     id: "apex-express-interior-detailing",
     title: "Apex Express Interior Detailing",
-    description:
-      "A fast, high-quality interior refresh designed to keep your vehicle clean, fresh, and presentable—without the time commitment of a full detail. This service includes a thorough vacuum, wipe-down of all interior surfaces, floor mats cleaned, interior glass polished, and a light refresh of high-touch areas. Perfect for well-maintained vehicles or as a maintenance service between full details. Please note: Heavily soiled interiors, stains, excessive pet hair, or deep cleaning needs may require a Full Interior Detail. Final service type will be confirmed upon inspection.",
+    description: (
+      <>
+        A fast, high-quality interior refresh designed to keep your vehicle clean, fresh, and presentable—without the time commitment of a full detail. This service includes a thorough vacuum, wipe-down of all interior surfaces, floor mats cleaned, interior glass polished, and a light refresh of high-touch areas. Perfect for well-maintained vehicles or as a maintenance service between full details.{" "}
+        <span className="text-[#FFA500] font-bold">
+          Please note: Heavily soiled interiors, stains, excessive pet hair, or deep cleaning needs may require a Full Interior Detail. Final service type will be confirmed upon inspection.
+        </span>
+      </>
+    ),
     icon: <Droplets className="w-10 h-10 text-[#A886CD]" />,
     pricing: "",
     pricingDetails: ["2-Row: $100–$150", "3-Row: $150–$200"],
