@@ -1825,10 +1825,10 @@ export default function Home() {
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button onClick={bookWithSquare} className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-4 text-left hover:border-[#3496FF] transition-colors">
-                <div className="mt-1 text-xs text-gray-400">Only for Express Interior Detail</div>
+                <div className="mt-1 text-sm font-semibold text-white">Only for Express Interior Detail</div>
               </button>
               <button onClick={bookWithCalendly} className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-4 text-left hover:border-[#A886CD] transition-colors">
-                <div className="mt-1 text-xs text-gray-400">For all other services</div>
+                <div className="mt-1 text-sm font-semibold text-white">For all other services</div>
               </button>
             </div>
           </div>
