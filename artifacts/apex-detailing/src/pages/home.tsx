@@ -623,7 +623,7 @@ export default function Home() {
 
   useEffect(() => {
     const paintCorrectionTimer = setInterval(() => {
-      setPaintCorrectionPreviewIndex((prev) => (prev === 0 ? 1 : 0));
+      setPaintCorrectionPreviewIndex((prev) => (prev === 0 ? 1 : prev === 1 ? 2 : 0));
     }, 3500);
 
     return () => clearInterval(paintCorrectionTimer);
@@ -1277,6 +1277,12 @@ export default function Home() {
                           src={`${import.meta.env.BASE_URL}images/paint-correction-2.jpg`}
                           alt="Paint Correction"
                           className={`absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-opacity duration-700 ${paintCorrectionPreviewIndex === 1 ? 'opacity-100' : 'opacity-0'}`}
+                          style={{ filter: 'brightness(1.1) contrast(1.1)' }}
+                        />
+                        <img
+                          src={`${import.meta.env.BASE_URL}images/paint-correction-6.jpg`}
+                          alt="Paint Correction"
+                          className={`absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-opacity duration-700 ${paintCorrectionPreviewIndex === 2 ? 'opacity-100' : 'opacity-0'}`}
                           style={{ filter: 'brightness(1.1) contrast(1.1)' }}
                         />
                       </div>
