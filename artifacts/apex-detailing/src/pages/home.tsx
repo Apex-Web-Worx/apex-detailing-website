@@ -98,7 +98,7 @@ const services = [
     title: "Apex Express Interior Detailing",
     description:
       "A fast, high-quality interior refresh designed to keep your vehicle clean, fresh, and presentable—without the time commitment of a full detail. This service includes a thorough vacuum, wipe-down of all interior surfaces, floor mats cleaned, interior glass polished, and a light refresh of high-touch areas. Perfect for well-maintained vehicles or as a maintenance service between full details. Please note: Heavily soiled interiors, stains, excessive pet hair, or deep cleaning needs may require a Full Interior Detail. Final service type will be confirmed upon inspection.",
-    icon: <Droplets className="w-10 h-10 text-[#3496FF]" />,
+    icon: <Droplets className="w-10 h-10 text-[#A886CD]" />,
     pricing: "",
     pricingDetails: ["2-Row: $100–$150", "3-Row: $150–$200"],
     bookingLink: "https://app.squareup.com/appointments/book/4r9v4p21agmllg/LKWK85P75KQD9/start",
