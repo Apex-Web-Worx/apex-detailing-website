@@ -223,7 +223,7 @@ const googleReviews = [
     name: "larry perkins",
     rating: 5,
     date: "Google Review",
-    text: "Read reviews of Apex Detailing and decided to give them a try. Wow, Michail did a full detail of the inside of my Lexus and a wash and claybar of the exterior. I am very picky about my car and the detail he did made the interior look better than when I purchased the car. I can highly recommend Michail and I will use him again on my Lexus.",
+    text: "Apex Detailing detailed and waxed our work vehicles, including two F-250s, a Honda Accord, an Odyssey, and a GMC Yukon. We were thrilled with the results - every vehicle looked like new. We'll definitely be bringing our personal vehicles to Apex too.",
   },
   {
     name: "Mark Coble",
