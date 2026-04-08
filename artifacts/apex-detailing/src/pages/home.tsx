@@ -405,6 +405,8 @@ export default function Home() {
   const [sliderFading, setSliderFading] = useState(false);
   const [sliderCycleComplete, setSliderCycleComplete] = useState(false);
   const [paintCorrectionPreviewIndex, setPaintCorrectionPreviewIndex] = useState(0);
+  const [bookingChoiceOpen, setBookingChoiceOpen] = useState(false);
+  const [bookingTarget, setBookingTarget] = useState<"detail" | "now" | null>(null);
 
   const beforeAfterPairs = [
     {
@@ -670,6 +672,21 @@ export default function Home() {
     setMapChooserOpen(true);
   };
 
+  const openBookingChoice = (target: "detail" | "now") => {
+    setBookingTarget(target);
+    setBookingChoiceOpen(true);
+  };
+
+  const bookWithSquare = () => {
+    window.open("https://app.squareup.com/appointments/book/4r9v4p21agmllg/LKWK85P75KQD9/start", "_blank", "noopener,noreferrer");
+    setBookingChoiceOpen(false);
+  };
+
+  const bookWithCalendly = () => {
+    window.open(CALENDLY_LINK, "_blank", "noopener,noreferrer");
+    setBookingChoiceOpen(false);
+  };
+
   const openGoogleMaps = () => {
     window.open("https://www.google.com/maps/search/1114+E+Lakota+St,+65714+Nixa,+MO", "_blank", "noopener,noreferrer");
     setMapChooserOpen(false);
@@ -736,9 +753,7 @@ export default function Home() {
                 </button>
               ))}
               <a
-                href={CALENDLY_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
+                onClick={() => openBookingChoice("now")}
                 className="relative inline-flex items-center justify-center px-6 py-2.5 overflow-hidden font-bold text-white rounded-md group"
               >
                 <span className="absolute w-full h-full bg-gradient-to-br from-[#A886CD] via-[#3496FF] to-[#A886CD] group-hover:from-[#3496FF] group-hover:via-[#A886CD] group-hover:to-[#3496FF] transition-all duration-500 bg-[length:200%_200%] bg-[0%_0%] group-hover:bg-[100%_100%]" />
@@ -791,9 +806,7 @@ export default function Home() {
               </button>
             ))}
             <a
-              href={CALENDLY_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
+              onClick={() => openBookingChoice("detail")}
               className="mt-4 text-center py-3 bg-gradient-to-r from-[#A886CD] to-[#3496FF] font-bold rounded-md shadow-[0_0_15px_rgba(52,150,255,0.4)]"
             >
               BOOK NOW
@@ -1803,6 +1816,25 @@ export default function Home() {
             >
               Cancel
             </button>
+          </div>
+        </div>
+      )}
+
+      {bookingChoiceOpen && (
+        <div className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setBookingChoiceOpen(false)}>
+          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#111] p-6" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-2xl font-black uppercase tracking-tight mb-3">Choose Booking</h3>
+            <p className="text-gray-400 text-sm mb-6">
+              {bookingTarget === "detail" ? "Book your detail with your preferred scheduler." : "Choose a booking option."}
+            </p>
+            <div className="space-y-3">
+              <button onClick={bookWithSquare} className="w-full py-3 rounded-lg bg-gradient-to-r from-[#A886CD] to-[#3496FF] font-bold text-white">
+                Square
+              </button>
+              <button onClick={bookWithCalendly} className="w-full py-3 rounded-lg bg-white/5 border border-white/10 font-bold text-white">
+                Calendly
+              </button>
+            </div>
           </div>
         </div>
       )}
