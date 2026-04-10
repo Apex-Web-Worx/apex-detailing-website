@@ -19,6 +19,12 @@ import {
   ExternalLink,
   Wand2,
 } from "lucide-react";
+import img1290 from "@assets/IMG_1290_1775780654764.jpeg";
+import img1303 from "@assets/IMG_1303_1775780654764.jpeg";
+import img1297 from "@assets/IMG_1297_1775780654765.jpeg";
+import img1309 from "@assets/IMG_1309_1775780654765.jpeg";
+import img1294 from "@assets/IMG_1294_1775780654765.jpeg";
+import img1306 from "@assets/IMG_1306_1775780654765.jpeg";
 
 const CALENDLY_LINK = "https://calendly.com/apexdetailingsf/detailing-appointment";
 const INSTAGRAM_LINK = "https://www.instagram.com/apexdetailing_sf";
@@ -403,18 +409,18 @@ export default function Home() {
   const beforeAfterPairs: Array<{ title: string; before: string; after: string }> = [
     {
       title: "Interior Restoration",
-      before: `${import.meta.env.BASE_URL}images/IMG_1290_1775780654764.jpeg`,
-      after: `${import.meta.env.BASE_URL}images/IMG_1303_1775780654764.jpeg`,
+      before: img1290,
+      after: img1303,
     },
     {
       title: "Interior Restoration",
-      before: `${import.meta.env.BASE_URL}images/IMG_1297_1775780654765.jpeg`,
-      after: `${import.meta.env.BASE_URL}images/IMG_1309_1775780654765.jpeg`,
+      before: img1297,
+      after: img1309,
     },
     {
       title: "Interior Restoration",
-      before: `${import.meta.env.BASE_URL}images/IMG_1294_1775780654765.jpeg`,
-      after: `${import.meta.env.BASE_URL}images/IMG_1306_1775780654765.jpeg`,
+      before: img1294,
+      after: img1306,
     },
     {
       title: "Interior Restoration",
