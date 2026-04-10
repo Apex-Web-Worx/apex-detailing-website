@@ -403,18 +403,18 @@ export default function Home() {
   const beforeAfterPairs = [
     {
       title: "Interior Restoration",
-      before: `${import.meta.env.BASE_URL}images/interior-before-1.jpg`,
-      after: `${import.meta.env.BASE_URL}images/interior-after-1.jpg`,
+      before: `${import.meta.env.BASE_URL}images/IMG_1290_1775780654764.jpeg`,
+      after: `${import.meta.env.BASE_URL}images/IMG_1303_1775780654764.jpeg`,
     },
     {
       title: "Interior Restoration",
-      before: `${import.meta.env.BASE_URL}images/interior-before-2.jpg`,
-      after: `${import.meta.env.BASE_URL}images/interior-after-2.jpg`,
+      before: `${import.meta.env.BASE_URL}images/IMG_1297_1775780654765.jpeg`,
+      after: `${import.meta.env.BASE_URL}images/IMG_1309_1775780654765.jpeg`,
     },
     {
       title: "Interior Restoration",
-      before: `${import.meta.env.BASE_URL}images/interior-before-3.jpg`,
-      after: `${import.meta.env.BASE_URL}images/interior-after-3.jpg`,
+      before: `${import.meta.env.BASE_URL}images/IMG_1294_1775780654765.jpeg`,
+      after: `${import.meta.env.BASE_URL}images/IMG_1306_1775780654765.jpeg`,
     },
     {
       title: "Interior Restoration",
