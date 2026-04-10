@@ -25,7 +25,7 @@ const INSTAGRAM_LINK = "https://www.instagram.com/apexdetailing_sf";
 const FACEBOOK_LINK = "https://www.facebook.com/profile.php?id=61556776603500";
 const GOOGLE_REVIEWS_LINK = "https://share.google/1Kz8Ag5wVniNZ3oyb";
 
-const AddonCard = ({ addon }) => {
+const AddonCard = ({ addon }: { addon: { name: string; price: string; description?: string } }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <div
@@ -400,7 +400,7 @@ export default function Home() {
   const [bookingChoiceOpen, setBookingChoiceOpen] = useState(false);
   const [bookingTarget, setBookingTarget] = useState<"detail" | "now" | null>(null);
 
-  const beforeAfterPairs = [
+  const beforeAfterPairs: Array<{ title: string; before: string; after: string }> = [
     {
       title: "Interior Restoration",
       before: `${import.meta.env.BASE_URL}images/IMG_1290_1775780654764.jpeg`,
