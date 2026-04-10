@@ -424,18 +424,18 @@ export default function Home() {
     },
     {
       title: "Interior Restoration",
-      before: `${import.meta.env.BASE_URL}images/interior-before-4.jpg`,
-      after: `${import.meta.env.BASE_URL}images/interior-after-4.jpg`,
+      before: `${import.meta.env.BASE_URL}images/interior-before-1.jpg`,
+      after: `${import.meta.env.BASE_URL}images/interior-after-1.jpg`,
     },
     {
       title: "Interior Restoration",
-      before: `${import.meta.env.BASE_URL}images/interior-before-5.jpg`,
-      after: `${import.meta.env.BASE_URL}images/interior-after-5.jpg`,
+      before: `${import.meta.env.BASE_URL}images/interior-before-2.jpg`,
+      after: `${import.meta.env.BASE_URL}images/interior-after-2.jpg`,
     },
     {
       title: "Interior Restoration",
-      before: `${import.meta.env.BASE_URL}images/interior-before-6.jpg`,
-      after: `${import.meta.env.BASE_URL}images/interior-after-6.jpg`,
+      before: `${import.meta.env.BASE_URL}images/interior-before-3.jpg`,
+      after: `${import.meta.env.BASE_URL}images/interior-after-3.jpg`,
     },
     {
       title: "Interior Restoration",
