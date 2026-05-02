@@ -508,8 +508,9 @@ function ReschedulePanel({
               // Treat the customer's *current* slot as available so they can
               // pick the same day (just a different time).
               const dayHasOurCurrent = d.date === currentDate;
+              const isPast = d.date < today;
               const disabled =
-                d.closed || (allFull && !dayHasOurCurrent);
+                isPast || d.closed || (allFull && !dayHasOurCurrent);
               const isPicked = pickedDate === d.date;
               return (
                 <button
@@ -523,7 +524,7 @@ function ReschedulePanel({
                     isPicked
                       ? "bg-gradient-to-br from-[#A886CD] to-[#3496FF] text-white"
                       : disabled
-                        ? "bg-white/[0.02] text-gray-600 cursor-not-allowed"
+                        ? "bg-white/[0.02] text-gray-600 cursor-not-allowed opacity-50"
                         : "bg-white/[0.04] hover:bg-white/[0.08] text-white"
                   }`}
                 >
@@ -534,7 +535,13 @@ function ReschedulePanel({
                     {Number(d.date.split("-")[2])}
                   </div>
                   <div className="text-[10px] mt-1 opacity-70">
-                    {d.closed ? "Closed" : allFull && !dayHasOurCurrent ? "Full" : "Open"}
+                    {isPast
+                      ? "Past"
+                      : d.closed
+                        ? "Closed"
+                        : allFull && !dayHasOurCurrent
+                          ? "Full"
+                          : "Open"}
                   </div>
                 </button>
               );

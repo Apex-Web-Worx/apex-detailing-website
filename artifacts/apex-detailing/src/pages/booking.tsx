@@ -398,7 +398,8 @@ function DateTimeStep({
           <div className="grid grid-cols-3 sm:grid-cols-7 gap-2">
             {days.map((d) => {
               const allFull = d.slots.every((s) => !s.available);
-              const disabled = d.closed || allFull;
+              const isPast = d.date < today;
+              const disabled = isPast || d.closed || allFull;
               const isPicked = pickedDate === d.date;
               return (
                 <button
@@ -412,7 +413,7 @@ function DateTimeStep({
                     isPicked
                       ? "bg-gradient-to-br from-[#A886CD] to-[#3496FF] text-white"
                       : disabled
-                        ? "bg-white/[0.02] text-gray-600 cursor-not-allowed"
+                        ? "bg-white/[0.02] text-gray-600 cursor-not-allowed opacity-50"
                         : "bg-white/[0.04] hover:bg-white/[0.08] text-white"
                   }`}
                 >
@@ -423,7 +424,13 @@ function DateTimeStep({
                     {Number(d.date.split("-")[2])}
                   </div>
                   <div className="text-[10px] mt-1 opacity-70">
-                    {d.closed ? "Closed" : allFull ? "Full" : "Open"}
+                    {isPast
+                      ? "Past"
+                      : d.closed
+                        ? "Closed"
+                        : allFull
+                          ? "Full"
+                          : "Open"}
                   </div>
                 </button>
               );
