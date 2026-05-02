@@ -53,9 +53,12 @@ Premium car detailing marketing website for Apex Detailing (Springfield, Nixa & 
   - Ceramic Coating: Video demo
   - Headlights Restoration: 4 images (2 before/after pairs)
   - Layout: Responsive grid (1 col mobile, 2 col tablet, 3 col desktop) with image preloading for instant switching
-- **Booking**: Links to Calendly (https://calendly.com/apexdetailingsf/detailing-appointment)
+- **Booking**: Built-in custom booking flow at `/book` (replaces Calendly). Square link still used for Express Interior only.
+- **Routing**: `wouter` Router with base from `import.meta.env.BASE_URL`. Routes: `/` (home), `/book` (booking wizard), `/admin` (bookings dashboard).
+- **Booking wizard** (`src/pages/booking.tsx`): 4-step flow — Service → Date & Time → Your Info → Confirm → Success. Uses generated react-query hooks (`useListServices`, `useGetAvailability`, `useCreateBooking`).
+- **Admin dashboard** (`src/pages/admin.tsx`): password-gated (token persisted in `localStorage` as `apex_admin_token`, sent as `x-admin-token` header). Lists Upcoming / Completed / Cancelled with cancel action.
 - **Social**: Instagram (@apexdetailing_sf), Facebook (/apexdetailingsf)
-- **Entry**: `src/App.tsx` → `src/pages/home.tsx` (single-page, no routing needed)
+- **Entry**: `src/main.tsx` (wraps `<App>` in `QueryClientProvider`) → `src/App.tsx` (wouter router) → `src/pages/home.tsx`
 - **Assets**: Logo and favicon in `public/images/`
 - **Preview path**: `/`
 
@@ -66,6 +69,12 @@ Express 5 API server. Routes live in `src/routes/` and use `@workspace/api-zod` 
 - Entry: `src/index.ts` — reads `PORT`, starts Express
 - App setup: `src/app.ts` — mounts CORS, JSON/urlencoded parsing, routes at `/api`
 - Routes: `src/routes/index.ts` mounts sub-routers; `src/routes/health.ts` exposes `GET /health`
+- **Booking routes** (`src/routes/booking.ts`): `GET /booking/services`, `GET /booking/availability?startDate&endDate`, `POST /booking/bookings`. Availability helper at `src/lib/availability.ts` — fixed slots 08:00/10:00/12:00/14:00 (shop time), Sun closed, 1 booking per slot.
+- **Admin routes** (`src/routes/admin.ts`): `GET /admin/bookings` and `DELETE /admin/bookings/:id`. Auth via `x-admin-token` header against `ADMIN_TOKEN` env var (returns 500 if env var missing).
+- **Seed**: `pnpm --filter @workspace/api-server run seed` populates 6 services.
+
+### Booking system env vars
+- `ADMIN_TOKEN` (shared) — password used to access `/admin`. Currently set to placeholder `apex-admin-2026` for dev. **User should change this** via the Secrets pane before going live.
 
 ## TypeScript & Composite Projects
 

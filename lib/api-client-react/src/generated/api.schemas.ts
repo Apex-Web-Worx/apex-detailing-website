@@ -8,3 +8,74 @@
 export interface HealthStatus {
   status: string;
 }
+
+export interface Error {
+  message: string;
+}
+
+export interface Service {
+  id: number;
+  slug: string;
+  name: string;
+  description: string;
+  durationMinutes: number;
+  priceCents: number;
+  sortOrder: number;
+  active: boolean;
+}
+
+export interface TimeSlot {
+  /** HH:MM in 24-hour format */
+  time: string;
+  available: boolean;
+}
+
+export interface DayAvailability {
+  /** YYYY-MM-DD */
+  date: string;
+  closed: boolean;
+  slots: TimeSlot[];
+}
+
+export interface CreateBookingRequest {
+  serviceId: number;
+  /** YYYY-MM-DD */
+  date: string;
+  /** HH:MM */
+  time: string;
+  /** @minLength 1 */
+  customerName: string;
+  email: string;
+  /** @minLength 7 */
+  phone: string;
+  /** @minLength 1 */
+  vehicle: string;
+  notes?: string;
+}
+
+export interface Booking {
+  id: number;
+  serviceId: number;
+  serviceName: string;
+  servicePriceCents: number;
+  serviceDurationMinutes: number;
+  customerName: string;
+  email: string;
+  phone: string;
+  vehicle: string;
+  notes: string;
+  scheduledAt: string;
+  status: string;
+  createdAt: string;
+}
+
+export type GetAvailabilityParams = {
+  /**
+   * YYYY-MM-DD
+   */
+  startDate: string;
+  /**
+   * YYYY-MM-DD
+   */
+  endDate: string;
+};

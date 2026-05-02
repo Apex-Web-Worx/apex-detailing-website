@@ -26,7 +26,7 @@ import img1309 from "@assets/IMG_1309_1775780654765.jpeg";
 import img1294 from "@assets/IMG_1294_1775780654765.jpeg";
 import img1306 from "@assets/IMG_1306_1775780654765.jpeg";
 
-const CALENDLY_LINK = "https://calendly.com/apexdetailingsf/detailing-appointment";
+const BOOKING_LINK = "/book";
 const INSTAGRAM_LINK = "https://www.instagram.com/apexdetailing_sf";
 const FACEBOOK_LINK = "https://www.facebook.com/profile.php?id=61556776603500";
 const GOOGLE_REVIEWS_LINK = "https://share.google/1Kz8Ag5wVniNZ3oyb";
@@ -433,7 +433,7 @@ export default function Home() {
     },
     {
       q: "How do I book an appointment?",
-      a: "Click any 'Book Your Detail' button. You'll choose between Square (for Express Interior) or Calendly (for all other services), or call us directly at 417-527-6165. All scheduling needs to happen before your visit.",
+      a: "Click any 'Book Your Detail' button to use our online booking — pick your service, day, and time in under a minute. You can also call us directly at 417-527-6165. All scheduling needs to happen before your visit.",
     },
     {
       q: "What payment methods do you accept?",
@@ -729,7 +729,7 @@ export default function Home() {
   };
 
   const bookWithCalendly = () => {
-    window.open(CALENDLY_LINK, "_blank", "noopener,noreferrer");
+    window.location.href = BOOKING_LINK;
     setBookingChoiceOpen(false);
   };
 
@@ -1051,9 +1051,10 @@ export default function Home() {
                     ))}
                   </ul>
                   <a
-                    href={service.bookingLink || CALENDLY_LINK}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href={service.bookingLink || BOOKING_LINK}
+                    {...(service.bookingLink
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
                     className="mt-auto inline-flex items-center gap-2 font-bold text-sm tracking-widest text-white uppercase group/btn"
                   >
                     Book Now{" "}
@@ -1085,7 +1086,7 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {[
-              { step: "01", title: "Book Online", desc: "Pick your service and time through Calendly or Square in under 2 minutes.", icon: <Clock className="w-7 h-7 text-[#3496FF]" /> },
+              { step: "01", title: "Book Online", desc: "Pick your service, day, and time in under 2 minutes — right here on our site.", icon: <Clock className="w-7 h-7 text-[#3496FF]" /> },
               { step: "02", title: "We Detail", desc: "Drop your car off at our shop. We handle every surface with care, from paint to upholstery.", icon: <Sparkles className="w-7 h-7 text-[#A886CD]" /> },
               { step: "03", title: "Drive Happy", desc: "Step into a like-new vehicle and enjoy long-lasting protection and shine.", icon: <Car className="w-7 h-7 text-[#3496FF]" /> },
             ].map((s) => (
@@ -2089,7 +2090,7 @@ export default function Home() {
                 </p>
                 <div>
                   <h4 className="font-black text-white text-base mb-1">Information We Collect</h4>
-                  <p>We only collect information you voluntarily provide — your name, phone, email, vehicle details, and appointment preferences when you book or contact us. Bookings are processed through Square and Calendly under their own privacy policies.</p>
+                  <p>We only collect information you voluntarily provide — your name, phone, email, vehicle details, and appointment preferences when you book or contact us. Express Interior bookings made through Square are processed under Square's privacy policy.</p>
                 </div>
                 <div>
                   <h4 className="font-black text-white text-base mb-1">How We Use It</h4>
@@ -2111,7 +2112,7 @@ export default function Home() {
                 </p>
                 <div>
                   <h4 className="font-black text-white text-base mb-1">Booking & Scheduling</h4>
-                  <p>All scheduling must be completed before your visit through Square or Calendly. Please arrive on time. Significant delays may require rescheduling.</p>
+                  <p>All scheduling must be completed before your visit through our online booking or Square. Please arrive on time. Significant delays may require rescheduling.</p>
                 </div>
                 <div>
                   <h4 className="font-black text-white text-base mb-1">Pricing</h4>
@@ -2179,11 +2180,15 @@ export default function Home() {
               {bookingTarget === "detail" ? "Book your detail with your preferred scheduler." : "Choose a booking option."}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <button onClick={bookWithSquare} className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-4 text-left hover:border-[#3496FF] transition-colors">
-                <div className="mt-1 text-sm font-semibold text-white">Only for Express Interior Detail</div>
+              <button onClick={bookWithCalendly} className="w-full rounded-xl border border-[#A886CD]/40 bg-gradient-to-br from-[#A886CD]/10 to-[#3496FF]/5 px-4 py-4 text-left hover:border-[#A886CD] transition-colors">
+                <div className="text-xs font-bold uppercase tracking-wider text-[#A886CD] mb-1">Recommended</div>
+                <div className="text-sm font-semibold text-white">Book a Detail</div>
+                <div className="text-xs text-gray-400 mt-1">Full Detail, Ceramic, Paint Correction & more</div>
               </button>
-              <button onClick={bookWithCalendly} className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-4 text-left hover:border-[#A886CD] transition-colors">
-                <div className="mt-1 text-sm font-semibold text-white">For all other services</div>
+              <button onClick={bookWithSquare} className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-4 text-left hover:border-[#3496FF] transition-colors">
+                <div className="text-xs font-bold uppercase tracking-wider text-[#3496FF] mb-1">Quick Service</div>
+                <div className="text-sm font-semibold text-white">Express Interior Detail</div>
+                <div className="text-xs text-gray-400 mt-1">Books through Square</div>
               </button>
             </div>
           </div>

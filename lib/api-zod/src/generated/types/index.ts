@@ -6,4 +6,11 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from "./booking";
+export * from "./createBookingRequest";
+export * from "./dayAvailability";
+export * from "./error";
+export * from "./getAvailabilityParams";
 export * from "./healthStatus";
+export * from "./service";
+export * from "./timeSlot";

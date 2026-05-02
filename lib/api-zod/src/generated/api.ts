@@ -14,3 +14,92 @@ import * as zod from "zod";
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
 });
+
+/**
+ * @summary List active bookable services
+ */
+export const ListServicesResponseItem = zod.object({
+  id: zod.number(),
+  slug: zod.string(),
+  name: zod.string(),
+  description: zod.string(),
+  durationMinutes: zod.number(),
+  priceCents: zod.number(),
+  sortOrder: zod.number(),
+  active: zod.boolean(),
+});
+export const ListServicesResponse = zod.array(ListServicesResponseItem);
+
+/**
+ * @summary Get availability for a date range
+ */
+export const GetAvailabilityQueryParams = zod.object({
+  startDate: zod.coerce.string(),
+  endDate: zod.coerce.string(),
+});
+
+export const GetAvailabilityResponseItem = zod.object({
+  date: zod.string().describe("YYYY-MM-DD"),
+  closed: zod.boolean(),
+  slots: zod.array(
+    zod.object({
+      time: zod.string().describe("HH:MM in 24-hour format"),
+      available: zod.boolean(),
+    }),
+  ),
+});
+export const GetAvailabilityResponse = zod.array(GetAvailabilityResponseItem);
+
+/**
+ * @summary Create a new booking
+ */
+
+export const createBookingBodyPhoneMin = 7;
+
+export const CreateBookingBody = zod.object({
+  serviceId: zod.number(),
+  date: zod.string().describe("YYYY-MM-DD"),
+  time: zod.string().describe("HH:MM"),
+  customerName: zod.string().min(1),
+  email: zod.string().email(),
+  phone: zod.string().min(createBookingBodyPhoneMin),
+  vehicle: zod.string().min(1),
+  notes: zod.string().optional(),
+});
+
+/**
+ * @summary List all bookings (admin)
+ */
+export const AdminListBookingsHeader = zod.object({
+  "x-admin-token": zod.string(),
+});
+
+export const AdminListBookingsResponseItem = zod.object({
+  id: zod.number(),
+  serviceId: zod.number(),
+  serviceName: zod.string(),
+  servicePriceCents: zod.number(),
+  serviceDurationMinutes: zod.number(),
+  customerName: zod.string(),
+  email: zod.string(),
+  phone: zod.string(),
+  vehicle: zod.string(),
+  notes: zod.string(),
+  scheduledAt: zod.date(),
+  status: zod.string(),
+  createdAt: zod.date(),
+});
+export const AdminListBookingsResponse = zod.array(
+  AdminListBookingsResponseItem,
+);
+
+/**
+ * @summary Cancel a booking (admin)
+ */
+export const AdminCancelBookingParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const AdminCancelBookingHeader = zod.object({
+  "x-admin-token": zod.string(),
+});

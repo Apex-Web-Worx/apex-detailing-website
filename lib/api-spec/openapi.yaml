@@ -10,6 +10,10 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: booking
+    description: Customer-facing booking endpoints
+  - name: admin
+    description: Admin endpoints (password protected)
 paths:
   /healthz:
     get:
@@ -24,6 +28,122 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /booking/services:
+    get:
+      operationId: listServices
+      tags: [booking]
+      summary: List active bookable services
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Service"
+  /booking/availability:
+    get:
+      operationId: getAvailability
+      tags: [booking]
+      summary: Get availability for a date range
+      parameters:
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            description: YYYY-MM-DD
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            description: YYYY-MM-DD
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DayAvailability"
+  /booking/bookings:
+    post:
+      operationId: createBooking
+      tags: [booking]
+      summary: Create a new booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBookingRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+        "409":
+          description: Slot already taken
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /admin/bookings:
+    get:
+      operationId: adminListBookings
+      tags: [admin]
+      summary: List all bookings (admin)
+      parameters:
+        - name: x-admin-token
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Booking"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /admin/bookings/{id}:
+    delete:
+      operationId: adminCancelBooking
+      tags: [admin]
+      summary: Cancel a booking (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: x-admin-token
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Cancelled
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +153,143 @@ components:
           type: string
       required:
         - status
-
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+    Service:
+      type: object
+      properties:
+        id:
+          type: integer
+        slug:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        durationMinutes:
+          type: integer
+        priceCents:
+          type: integer
+        sortOrder:
+          type: integer
+        active:
+          type: boolean
+      required:
+        - id
+        - slug
+        - name
+        - description
+        - durationMinutes
+        - priceCents
+        - sortOrder
+        - active
+    TimeSlot:
+      type: object
+      properties:
+        time:
+          type: string
+          description: "HH:MM in 24-hour format"
+        available:
+          type: boolean
+      required:
+        - time
+        - available
+    DayAvailability:
+      type: object
+      properties:
+        date:
+          type: string
+          description: YYYY-MM-DD
+        closed:
+          type: boolean
+        slots:
+          type: array
+          items:
+            $ref: "#/components/schemas/TimeSlot"
+      required:
+        - date
+        - closed
+        - slots
+    CreateBookingRequest:
+      type: object
+      properties:
+        serviceId:
+          type: integer
+        date:
+          type: string
+          description: YYYY-MM-DD
+        time:
+          type: string
+          description: "HH:MM"
+        customerName:
+          type: string
+          minLength: 1
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+          minLength: 7
+        vehicle:
+          type: string
+          minLength: 1
+        notes:
+          type: string
+      required:
+        - serviceId
+        - date
+        - time
+        - customerName
+        - email
+        - phone
+        - vehicle
+    Booking:
+      type: object
+      properties:
+        id:
+          type: integer
+        serviceId:
+          type: integer
+        serviceName:
+          type: string
+        servicePriceCents:
+          type: integer
+        serviceDurationMinutes:
+          type: integer
+        customerName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        vehicle:
+          type: string
+        notes:
+          type: string
+        scheduledAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - serviceId
+        - serviceName
+        - servicePriceCents
+        - serviceDurationMinutes
+        - customerName
+        - email
+        - phone
+        - vehicle
+        - notes
+        - scheduledAt
+        - status
+        - createdAt
