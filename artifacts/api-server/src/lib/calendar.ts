@@ -32,14 +32,13 @@
 import { ReplitConnectors } from "@replit/connectors-sdk";
 import { db, bookingsTable } from "@workspace/db";
 import { and, eq, isNull } from "drizzle-orm";
+import { getSiteUrl } from "./site-url";
 
 const connectors = new ReplitConnectors();
 
 const CALENDAR_ID = "primary";
 const SHOP_TZ = "America/Chicago";
 const BOOKING_ID_TAG = "apexBookingId";
-
-const SITE_URL = process.env["SITE_URL"] || "https://www.apexdetailingsf.com";
 
 /**
  * Email addresses that should also see every booking on their own Google
@@ -293,7 +292,7 @@ function buildDescription(b: BookingRow): string {
   if (b.notes && b.notes.trim().length > 0) {
     lines.push("", `Notes: ${b.notes}`);
   }
-  lines.push("", `Manage in admin: ${SITE_URL}/admin`);
+  lines.push("", `Manage in admin: ${getSiteUrl()}/admin`);
   return lines.join("\n");
 }
 
@@ -305,7 +304,7 @@ function fullEventBody(b: BookingRow) {
     description: buildDescription(b),
     start: { dateTime: start.toISOString(), timeZone: SHOP_TZ },
     end: { dateTime: end.toISOString(), timeZone: SHOP_TZ },
-    source: { title: "Apex Detailing booking", url: `${SITE_URL}/admin` },
+    source: { title: "Apex Detailing booking", url: `${getSiteUrl()}/admin` },
     extendedProperties: {
       private: { [BOOKING_ID_TAG]: String(b.id) },
     },

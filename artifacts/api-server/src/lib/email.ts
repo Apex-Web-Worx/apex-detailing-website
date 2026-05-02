@@ -1,5 +1,6 @@
 import { ReplitConnectors } from "@replit/connectors-sdk";
 import { randomBytes } from "node:crypto";
+import { getSiteUrl } from "./site-url";
 
 const connectors = new ReplitConnectors();
 
@@ -7,8 +8,10 @@ export const OWNER_EMAIL = "apexdetailingsf@gmail.com";
 export const FROM_NAME = "Apex Detailing";
 export const SHOP_PHONE = "(417) 527-6165";
 export const SHOP_ADDRESS = "1114 E Lakota St, Nixa, MO 65714";
-const SITE_URL = process.env["SITE_URL"] || "https://www.apexdetailingsf.com";
-export const SHOP_WEBSITE = SITE_URL;
+// Customer-facing copy ("visit our website") always uses the live domain
+// regardless of environment, so we don't accidentally send a workspace
+// preview URL to a real customer.
+export const SHOP_WEBSITE = "https://www.apexdetailingsf.com";
 
 const SHOP_TZ = "America/Chicago";
 
@@ -45,7 +48,7 @@ function escapeHtml(s: string): string {
 }
 
 export function buildManageUrl(bookingId: number, token: string): string {
-  return `${SITE_URL}/manage/${bookingId}?token=${encodeURIComponent(token)}`;
+  return `${getSiteUrl()}/manage/${bookingId}?token=${encodeURIComponent(token)}`;
 }
 
 function encodeMimeWord(s: string): string {
