@@ -28,7 +28,24 @@ import {
   Loader2,
   MapPin,
   Phone,
+  Wand2,
+  Droplets,
+  Car,
+  Sparkles,
+  CheckCircle2,
+  Shield,
 } from "lucide-react";
+
+const SERVICE_ICONS: Record<string, { icon: typeof Wand2; color: string }> = {
+  "apex-full-detailing": { icon: Wand2, color: "text-[#A886CD]" },
+  "apex-interior-detailing": { icon: Droplets, color: "text-[#A886CD]" },
+  "apex-express-interior-detailing": { icon: Droplets, color: "text-[#A886CD]" },
+  "apex-exterior-detailing": { icon: Car, color: "text-[#3496FF]" },
+  "apex-wash-clay-wax": { icon: Sparkles, color: "text-[#A886CD]" },
+  "apex-headlight-restoration": { icon: CheckCircle2, color: "text-[#3496FF]" },
+  "apex-ceramic-coating": { icon: Shield, color: "text-[#3496FF]" },
+  "apex-paint-correction": { icon: Sparkles, color: "text-[#A886CD]" },
+};
 
 type Step = "service" | "datetime" | "info" | "confirm";
 
@@ -228,6 +245,8 @@ function ServiceStep({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {data?.map((s) => {
           const isSelected = selected?.id === s.id;
+          const iconMeta = SERVICE_ICONS[s.slug];
+          const Icon = iconMeta?.icon;
           return (
             <button
               key={s.id}
@@ -240,6 +259,11 @@ function ServiceStep({
             >
               <div className="flex items-start justify-between gap-3 mb-3">
                 <h3 className="text-lg font-bold text-white flex items-center flex-wrap gap-2">
+                  {Icon && (
+                    <span className="p-2 rounded-lg bg-white/5 inline-flex items-center justify-center">
+                      <Icon className={`w-5 h-5 ${iconMeta.color}`} />
+                    </span>
+                  )}
                   {s.name}
                   {s.slug === "apex-express-interior-detailing" && (
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white">
