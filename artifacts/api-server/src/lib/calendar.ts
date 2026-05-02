@@ -398,6 +398,82 @@ async function deleteEvent(eventId: string): Promise<WriteResult> {
   }
 }
 
+/* ------------------------------------------------------------------ */
+/* Blocked-date all-day events (admin-controlled)                      */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Add one day to a YYYY-MM-DD string. Google Calendar's all-day event
+ * `end.date` is exclusive, so a single-day all-day event needs end =
+ * start + 1 day.
+ */
+function addOneDay(yyyyMmDd: string): string {
+  const [y, m, d] = yyyyMmDd.split("-").map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d + 1));
+  const yy = dt.getUTCFullYear();
+  const mm = String(dt.getUTCMonth() + 1).padStart(2, "0");
+  const dd = String(dt.getUTCDate()).padStart(2, "0");
+  return `${yy}-${mm}-${dd}`;
+}
+
+/**
+ * Create an all-day "Shop Closed" event on the owner's calendar for an
+ * admin-blocked date. Returns the new event id, or null if the call
+ * failed (logged; never throws to the caller).
+ */
+export async function createBlockedDateEvent(
+  date: string,
+  reason: string,
+): Promise<string | null> {
+  await ensureCalendarShared();
+  const summary = reason.trim().length > 0
+    ? `Shop Closed — ${reason.trim()}`
+    : "Shop Closed";
+  const body = {
+    summary,
+    description:
+      "Day blocked in the Apex Detailing admin — no bookings will be accepted.",
+    start: { date },
+    end: { date: addOneDay(date) },
+    transparency: "opaque",
+    source: { title: "Apex Detailing block", url: `${getSiteUrl()}/admin` },
+  };
+  try {
+    const res = await callCalendar(
+      `/calendar/v3/calendars/${encodeURIComponent(
+        CALENDAR_ID,
+      )}/events?sendUpdates=none`,
+      { method: "POST", body },
+    );
+    if (!res.ok) {
+      const txt = await res.text().catch(() => "");
+      console.error(
+        `[calendar] block create failed: HTTP ${res.status} ${res.statusText} ${txt}`,
+      );
+      return null;
+    }
+    const json = (await res.json()) as { id?: string };
+    return json.id ?? null;
+  } catch (err) {
+    console.error("[calendar] block create threw:", err);
+    return null;
+  }
+}
+
+/**
+ * Delete a previously-created blocked-date event. Treats 404/410 as
+ * success (already gone). Logs and swallows any error so admin-route
+ * callers never fail because of a calendar outage.
+ */
+export async function deleteBlockedDateEvent(
+  eventId: string,
+): Promise<void> {
+  const result = await deleteEvent(eventId);
+  if (result === "error") {
+    // Already logged inside deleteEvent.
+  }
+}
+
 /**
  * Look up an event by our booking-id tag. Used to find duplicates /
  * orphans created by a previous failed sync. Excludes events that Google

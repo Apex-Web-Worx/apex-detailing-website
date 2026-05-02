@@ -3,7 +3,11 @@ import { db, bookingsTable, blockedDatesTable } from "@workspace/db";
 import { and, asc, eq } from "drizzle-orm";
 import { parseDateString, shopLocalDateString, shopLocalTimeString, todayInShopLocal } from "../lib/availability";
 import { type BookingEmailData } from "../lib/email";
-import { syncBookingCalendar } from "../lib/calendar";
+import {
+  syncBookingCalendar,
+  createBlockedDateEvent,
+  deleteBlockedDateEvent,
+} from "../lib/calendar";
 import { notifyBookingCancelled } from "../lib/notify";
 
 const router: IRouter = Router();
@@ -111,6 +115,17 @@ router.post("/admin/blocked-dates", requireAdmin, async (req, res) => {
       .insert(blockedDatesTable)
       .values({ date, reason: reasonStr })
       .returning();
+    // Fire-and-forget calendar sync so admin response stays fast even if
+    // Google is slow. On success we persist the event id back to the row
+    // so the matching DELETE can clean it up later.
+    void createBlockedDateEvent(date, reasonStr).then(async (eventId) => {
+      if (eventId) {
+        await db
+          .update(blockedDatesTable)
+          .set({ googleEventId: eventId })
+          .where(eq(blockedDatesTable.id, created.id));
+      }
+    });
     res.status(201).json(created);
   } catch (err) {
     let cur: unknown = err;
@@ -140,7 +155,15 @@ router.delete("/admin/blocked-dates/:date", requireAdmin, async (req, res) => {
     res.status(400).json({ message: "Invalid date. Use YYYY-MM-DD." });
     return;
   }
+  // Read first so we can clean up the calendar event after the row is gone.
+  const [existing] = await db
+    .select({ googleEventId: blockedDatesTable.googleEventId })
+    .from(blockedDatesTable)
+    .where(eq(blockedDatesTable.date, date));
   await db.delete(blockedDatesTable).where(eq(blockedDatesTable.date, date));
+  if (existing?.googleEventId) {
+    void deleteBlockedDateEvent(existing.googleEventId);
+  }
   res.status(204).send();
 });
 
