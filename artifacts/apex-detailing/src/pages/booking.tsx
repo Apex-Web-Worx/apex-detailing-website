@@ -8,7 +8,6 @@ import {
   type Booking,
 } from "@workspace/api-client-react";
 import {
-  formatDuration,
   formatTime12h,
   formatDateLong,
   formatDateShort,
@@ -223,10 +222,6 @@ function ServiceStep({
                 {s.description}
               </p>
               <div className="flex items-center gap-3 text-xs text-gray-500">
-                <span className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5" />
-                  {formatDuration(s.durationMinutes)}
-                </span>
                 <span className="text-[#3496FF] font-bold flex items-center gap-1 ml-auto opacity-0 group-hover:opacity-100 transition">
                   Select <ArrowRight className="w-3.5 h-3.5" />
                 </span>
@@ -314,8 +309,7 @@ function DateTimeStep({
       </button>
       <h1 className="text-3xl sm:text-4xl font-black mb-2">Pick a date & time</h1>
       <p className="text-gray-400 mb-8">
-        Booking <span className="text-white font-semibold">{service.name}</span> ·{" "}
-        {formatDuration(service.durationMinutes)}
+        Booking <span className="text-white font-semibold">{service.name}</span>
       </p>
 
       {/* Date picker */}
@@ -629,10 +623,6 @@ function ConfirmStep({
 
       <div className="rounded-2xl border border-white/10 bg-white/[0.02] divide-y divide-white/5">
         <SummaryRow label="Service" value={service.name} />
-        <SummaryRow
-          label="Duration"
-          value={formatDuration(service.durationMinutes)}
-        />
         <SummaryRow
           label="When"
           value={`${formatDateLong(date)} at ${formatTime12h(time)}`}
