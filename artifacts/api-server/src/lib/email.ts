@@ -229,7 +229,6 @@ function detailRows(b: BookingEmailData): { label: string; value: string; highli
     { label: "Service", value: b.serviceName },
     { label: "Date", value: formatDateLong(b.date), highlight: true },
     { label: "Time", value: formatTime12h(b.time), highlight: true },
-    { label: "Duration", value: `${b.serviceDurationMinutes} min` },
     { label: "Vehicle", value: b.vehicle },
   ];
 }
@@ -276,7 +275,6 @@ function customerText(b: BookingEmailData): string {
     `Service: ${b.serviceName}`,
     `Date: ${formatDateLong(b.date)}`,
     `Time: ${formatTime12h(b.time)}`,
-    `Duration: ${b.serviceDurationMinutes} min`,
     `Vehicle: ${b.vehicle}`,
     ``,
     `Drop-off: ${SHOP_ADDRESS}`,
