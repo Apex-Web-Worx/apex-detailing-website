@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link, useLocation } from "wouter";
 import {
   Menu,
   X,
@@ -397,6 +398,7 @@ function AddonsSection() {
 }
 
 export default function Home() {
+  const [, setLocation] = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
@@ -729,8 +731,8 @@ export default function Home() {
   };
 
   const bookWithCalendly = () => {
-    window.location.href = BOOKING_LINK;
     setBookingChoiceOpen(false);
+    setLocation(BOOKING_LINK);
   };
 
   const openGoogleMaps = () => {
@@ -1050,16 +1052,25 @@ export default function Home() {
                       </li>
                     ))}
                   </ul>
-                  <a
-                    href={service.bookingLink || BOOKING_LINK}
-                    {...(service.bookingLink
-                      ? { target: "_blank", rel: "noopener noreferrer" }
-                      : {})}
-                    className="mt-auto inline-flex items-center gap-2 font-bold text-sm tracking-widest text-white uppercase group/btn"
-                  >
-                    Book Now{" "}
-                    <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 group-hover/btn:text-[#3496FF] transition-all" />
-                  </a>
+                  {service.bookingLink ? (
+                    <a
+                      href={service.bookingLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-auto inline-flex items-center gap-2 font-bold text-sm tracking-widest text-white uppercase group/btn"
+                    >
+                      Book Now{" "}
+                      <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 group-hover/btn:text-[#3496FF] transition-all" />
+                    </a>
+                  ) : (
+                    <Link
+                      href={BOOKING_LINK}
+                      className="mt-auto inline-flex items-center gap-2 font-bold text-sm tracking-widest text-white uppercase group/btn"
+                    >
+                      Book Now{" "}
+                      <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 group-hover/btn:text-[#3496FF] transition-all" />
+                    </Link>
+                  )}
                 </div>
               </div>
             ))}
