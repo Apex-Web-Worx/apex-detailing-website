@@ -869,6 +869,9 @@ export default function Home() {
             src={`${import.meta.env.BASE_URL}images/hero-2.jpg`}
             alt="Apex Detailing freshly detailed vehicle"
             className="w-full h-full object-cover opacity-25"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/60 via-[#0a0a0a]/80 to-[#0a0a0a]" />
         </div>
