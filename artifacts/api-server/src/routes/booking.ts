@@ -148,8 +148,33 @@ router.get("/booking/availability", async (req, res) => {
   const blockedSet = new Set(blocked.map((r) => r.date));
 
   const today = todayInShopLocal();
-  const serviceIdNum =
-    parsed.data.serviceId !== undefined ? Number(parsed.data.serviceId) : null;
+
+  // If the caller passed serviceId, resolve the slug now (one query) so
+  // we can filter day-by-day with the slug-based allow-list. An invalid
+  // / unresolvable id short-circuits the entire response to closed (the
+  // service simply isn't bookable). Without this short-circuit, an
+  // invalid id would still return normal slots Mon-Thu/Sat because the
+  // slug allow-list only gates Fridays.
+  let serviceSlug: string | null = null;
+  let unresolvableService = false;
+  if (parsed.data.serviceId !== undefined) {
+    const id = Number(parsed.data.serviceId);
+    if (Number.isFinite(id) && id > 0) {
+      const [svc] = await db
+        .select({ slug: servicesTable.slug })
+        .from(servicesTable)
+        .where(
+          and(eq(servicesTable.id, id), eq(servicesTable.active, true)),
+        );
+      if (svc) {
+        serviceSlug = svc.slug;
+      } else {
+        unresolvableService = true;
+      }
+    } else {
+      unresolvableService = true;
+    }
+  }
 
   const out: Array<{
     date: string;
@@ -168,12 +193,17 @@ router.get("/booking/availability", async (req, res) => {
       isClosedShopDate(dateStr) || isPastDay || blockedSet.has(dateStr);
 
     // Slot list for the day. If the user already picked a service and the
-    // service isn't bookable on this day (e.g. Friday + non-Express), the
-    // resulting list is empty and the day shows as closed.
-    let slotsForDay: readonly string[] = getSlotsForDate(dateStr);
-    if (serviceIdNum !== null) {
+    // service isn't bookable on this day (e.g. Friday + a non-allowlisted
+    // service), the resulting list is empty and the day shows as closed.
+    // If the supplied serviceId was unresolvable, every day collapses to
+    // empty/closed regardless of weekday.
+    let slotsForDay: readonly string[] = unresolvableService
+      ? []
+      : getSlotsForDate(dateStr);
+    if (serviceSlug !== null) {
+      const slug = serviceSlug;
       slotsForDay = slotsForDay.filter((t) =>
-        isSlotAllowedForService(dateStr, t, serviceIdNum),
+        isSlotAllowedForService(dateStr, t, slug),
       );
     }
 
@@ -240,8 +270,9 @@ router.post("/booking/bookings", async (req, res) => {
     return;
   }
 
-  // Combined: rejects bad time strings, Sundays, and (Friday + non-Express).
-  if (!isSlotAllowedForService(body.date, body.time, service.id)) {
+  // Combined: rejects bad time strings, Sundays, and (Friday + a service
+  // that isn't on the Friday allow-list).
+  if (!isSlotAllowedForService(body.date, body.time, service.slug)) {
     res
       .status(400)
       .json({ message: "That time slot is not available for this service." });
@@ -448,9 +479,19 @@ router.post("/booking/manage/:id/reschedule", async (req, res) => {
     return;
   }
 
-  // Combined: rejects bad time strings, Sundays, and (Friday + non-Express)
-  // for the booking's existing service.
-  if (!isSlotAllowedForService(newDate, newTime, booking.serviceId)) {
+  // Combined: rejects bad time strings, Sundays, and (Friday + a service
+  // not on the Friday allow-list) for the booking's existing service.
+  // We need the service slug for the Friday check, so look it up from the
+  // serviceId snapshot stored on the booking row.
+  const [bookingService] = await db
+    .select({ slug: servicesTable.slug })
+    .from(servicesTable)
+    .where(eq(servicesTable.id, booking.serviceId));
+  if (!bookingService) {
+    res.status(500).json({ message: "Service for this booking not found." });
+    return;
+  }
+  if (!isSlotAllowedForService(newDate, newTime, bookingService.slug)) {
     res.status(400).json({
       message: "That time slot is not available for this service.",
     });

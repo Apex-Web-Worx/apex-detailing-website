@@ -12,7 +12,6 @@ import {
   formatDateShort,
   formatDateTimeLong,
   formatDuration,
-  formatPrice,
   formatTime12h,
   todayDateString,
   addDaysToDateString,
@@ -227,7 +226,6 @@ function ManageBody({
         <Row label="Service" value={booking.serviceName} />
         <Row label="When" value={formatDateTimeLong(scheduledIso)} highlight />
         <Row label="Duration" value={formatDuration(booking.serviceDurationMinutes)} />
-        <Row label="Price" value={formatPrice(booking.servicePriceCents)} />
         <Row label="Vehicle" value={booking.vehicle} />
       </div>
 

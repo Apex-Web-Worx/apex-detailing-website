@@ -8,7 +8,6 @@ import {
   type Booking,
 } from "@workspace/api-client-react";
 import {
-  formatPrice,
   formatDuration,
   formatTime12h,
   formatDateLong,
@@ -219,9 +218,6 @@ function ServiceStep({
             >
               <div className="flex items-start justify-between gap-3 mb-3">
                 <h3 className="text-lg font-bold text-white">{s.name}</h3>
-                <span className="text-xl font-black bg-gradient-to-r from-[#A886CD] to-[#3496FF] bg-clip-text text-transparent flex-shrink-0">
-                  {formatPrice(s.priceCents)}
-                </span>
               </div>
               <p className="text-sm text-gray-400 mb-4 leading-relaxed">
                 {s.description}
@@ -319,7 +315,7 @@ function DateTimeStep({
       <h1 className="text-3xl sm:text-4xl font-black mb-2">Pick a date & time</h1>
       <p className="text-gray-400 mb-8">
         Booking <span className="text-white font-semibold">{service.name}</span> ·{" "}
-        {formatDuration(service.durationMinutes)} · {formatPrice(service.priceCents)}
+        {formatDuration(service.durationMinutes)}
       </p>
 
       {/* Date picker */}
@@ -622,10 +618,10 @@ function ConfirmStep({
           label="Duration"
           value={formatDuration(service.durationMinutes)}
         />
-        <SummaryRow label="Price" value={formatPrice(service.priceCents)} highlight />
         <SummaryRow
           label="When"
           value={`${formatDateLong(date)} at ${formatTime12h(time)}`}
+          highlight
         />
         <SummaryRow label="Customer" value={form.customerName} />
         <SummaryRow label="Email" value={form.email} />
@@ -715,14 +711,6 @@ function ConfirmationView({ booking }: { booking: Booking }) {
               Confirmation
             </div>
             <div className="text-lg font-black">#{String(booking.id).padStart(5, "0")}</div>
-          </div>
-          <div className="text-right">
-            <div className="text-xs uppercase tracking-wider text-gray-500 font-bold mb-1">
-              Total
-            </div>
-            <div className="text-2xl font-black bg-gradient-to-r from-[#A886CD] to-[#3496FF] bg-clip-text text-transparent">
-              {formatPrice(booking.servicePriceCents)}
-            </div>
           </div>
         </div>
         <SummaryRow label="Service" value={booking.serviceName} />

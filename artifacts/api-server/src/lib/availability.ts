@@ -2,7 +2,8 @@
  * Booking time slots vary by day of week:
  *   Sun        — closed
  *   Mon..Thu   — 07:30 and 08:00 (any service)
- *   Fri        — 07:00, 11:00 and 15:00 (Express Wash & Vacuum only)
+ *   Fri        — 07:00, 11:00 and 15:00 (only services in
+ *                FRIDAY_ALLOWED_SERVICE_SLUGS)
  *   Sat        — 07:30 and 08:00 (any service)
  */
 const REGULAR_SLOTS = ["07:30", "08:00"] as const;
@@ -19,10 +20,14 @@ export const ALL_TIME_SLOTS = [
 export type TimeSlot = (typeof ALL_TIME_SLOTS)[number];
 
 /**
- * Service id of the only service bookable on Fridays.
- * Matches the seed: id 1 = "Express Wash & Vacuum".
+ * Service slugs allowed to book on Fridays. Slug-based (not id-based) so
+ * the rule survives reseeds / id renumbering.
  */
-export const FRIDAY_ONLY_SERVICE_ID = 1;
+export const FRIDAY_ALLOWED_SERVICE_SLUGS = new Set<string>([
+  "apex-express-interior-detailing",
+  "apex-exterior-detailing",
+  "apex-headlight-restoration",
+]);
 
 export const SHOP_TIMEZONE = "America/Chicago";
 
@@ -139,17 +144,18 @@ export function getSlotsForDate(yyyyMmDd: string): readonly string[] {
 
 /**
  * True if {date, time} is a real bookable slot AND the given service is
- * allowed in that slot. Encapsulates Sunday-closed and Friday-express-only.
+ * allowed in that slot. Encapsulates Sunday-closed and the Friday allow-list.
  */
 export function isSlotAllowedForService(
   yyyyMmDd: string,
   time: string,
-  serviceId: number,
+  serviceSlug: string,
 ): boolean {
   if (!getSlotsForDate(yyyyMmDd).includes(time)) return false;
   const d = parseDateString(yyyyMmDd);
   if (!d) return false;
-  if (d.getUTCDay() === 5 && serviceId !== FRIDAY_ONLY_SERVICE_ID) return false;
+  if (d.getUTCDay() === 5 && !FRIDAY_ALLOWED_SERVICE_SLUGS.has(serviceSlug))
+    return false;
   return true;
 }
 

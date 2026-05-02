@@ -35,10 +35,6 @@ function formatTime12h(time24: string): string {
   return `${h12}:${String(m).padStart(2, "0")} ${period}`;
 }
 
-function formatPrice(cents: number): string {
-  return `$${(cents / 100).toFixed(2)}`;
-}
-
 function escapeHtml(s: string): string {
   return s
     .replace(/&/g, "&amp;")
@@ -231,10 +227,9 @@ export interface BookingEmailData {
 function detailRows(b: BookingEmailData): { label: string; value: string; highlight?: boolean }[] {
   return [
     { label: "Service", value: b.serviceName },
-    { label: "Date", value: formatDateLong(b.date) },
-    { label: "Time", value: formatTime12h(b.time) },
+    { label: "Date", value: formatDateLong(b.date), highlight: true },
+    { label: "Time", value: formatTime12h(b.time), highlight: true },
     { label: "Duration", value: `${b.serviceDurationMinutes} min` },
-    { label: "Price", value: formatPrice(b.servicePriceCents), highlight: true },
     { label: "Vehicle", value: b.vehicle },
   ];
 }
@@ -282,7 +277,6 @@ function customerText(b: BookingEmailData): string {
     `Date: ${formatDateLong(b.date)}`,
     `Time: ${formatTime12h(b.time)}`,
     `Duration: ${b.serviceDurationMinutes} min`,
-    `Price: ${formatPrice(b.servicePriceCents)}`,
     `Vehicle: ${b.vehicle}`,
     ``,
     `Drop-off: ${SHOP_ADDRESS}`,
@@ -308,7 +302,6 @@ function ownerHtml(b: BookingEmailData): string {
     { label: "Phone", value: b.phone },
     { label: "Vehicle", value: b.vehicle },
     { label: "Duration", value: `${b.serviceDurationMinutes} min` },
-    { label: "Price", value: formatPrice(b.servicePriceCents), highlight: true },
   ];
   if (b.notes) rows.push({ label: "Notes", value: b.notes });
 
@@ -337,7 +330,6 @@ function ownerText(b: BookingEmailData): string {
     `Phone: ${b.phone}`,
     `Vehicle: ${b.vehicle}`,
     `Duration: ${b.serviceDurationMinutes} min`,
-    `Price: ${formatPrice(b.servicePriceCents)}`,
     b.notes ? `Notes: ${b.notes}` : null,
     ``,
     `Dashboard: ${SHOP_WEBSITE}/admin`,
