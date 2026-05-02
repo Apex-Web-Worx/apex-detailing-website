@@ -437,7 +437,7 @@ export default function Home() {
     },
     {
       q: "What payment methods do you accept?",
-      a: "Cash, all major credit/debit cards, and digital payments through Square. Gift cards are also available year-round.",
+      a: "Cash, all major credit/debit cards, and digital payments through Square. Digital gift cards are also available year-round.",
     },
     {
       q: "What if my vehicle is in really rough shape?",
@@ -445,7 +445,7 @@ export default function Home() {
     },
     {
       q: "Do you offer gift cards?",
-      a: "Yes — physical and digital gift cards are available through our Square store. They're a perfect gift for any car owner.",
+      a: "Yes — digital gift cards are available through our Square store. They're a perfect gift for any car owner.",
     },
   ];
 
