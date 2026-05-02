@@ -1083,7 +1083,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {[
               { step: "01", title: "Book Online", desc: "Pick your service and time through Calendly or Square in under 2 minutes.", icon: <Clock className="w-7 h-7 text-[#3496FF]" /> },
-              { step: "02", title: "We Detail", desc: "Drop your car off at our Nixa shop. We handle every surface with care, from paint to upholstery.", icon: <Sparkles className="w-7 h-7 text-[#A886CD]" /> },
+              { step: "02", title: "We Detail", desc: "Drop your car off at our shop. We handle every surface with care, from paint to upholstery.", icon: <Sparkles className="w-7 h-7 text-[#A886CD]" /> },
               { step: "03", title: "Drive Happy", desc: "Step into a like-new vehicle and enjoy long-lasting protection and shine.", icon: <Car className="w-7 h-7 text-[#3496FF]" /> },
             ].map((s) => (
               <div key={s.step} className="relative p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-white/20 transition-colors">
