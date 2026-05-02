@@ -429,7 +429,7 @@ export default function Home() {
     },
     {
       q: "How long does a detail take?",
-      a: "Most interior or exterior details take 2–4 hours. Full details usually run 4–6 hours, and ceramic coatings or paint correction can take a full day depending on vehicle condition.",
+      a: "Most interior or exterior details take 2–4 hours. Full details usually run 4–6 hours — and sometimes up to 10 hours for heavily soiled vehicles. Ceramic coatings or paint correction can take a full day depending on vehicle condition.",
     },
     {
       q: "How do I book an appointment?",
