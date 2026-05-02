@@ -424,8 +424,8 @@ export default function Home() {
 
   const faqs = [
     {
-      q: "Do you come to me, or do I bring my car to you?",
-      a: "Both! We offer mobile service throughout Nixa, Ozark, and Springfield, and you can also bring your vehicle to our shop at 1114 E Lakota St in Nixa.",
+      q: "Where are you located?",
+      a: "Our shop is at 1114 E Lakota St in Nixa, MO. We proudly serve customers from Nixa, Ozark, Springfield, and the surrounding Ozarks communities.",
     },
     {
       q: "How long does a detail take?",
@@ -974,7 +974,7 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-2">
               <MapPin className="w-6 h-6 text-[#A886CD]" />
-              <span className="font-bold">Mobile or In-Shop</span>
+              <span className="font-bold">Located in Nixa, MO</span>
             </div>
           </div>
 
@@ -1083,7 +1083,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {[
               { step: "01", title: "Book Online", desc: "Pick your service and time through Calendly or Square in under 2 minutes.", icon: <Clock className="w-7 h-7 text-[#3496FF]" /> },
-              { step: "02", title: "We Detail", desc: "Bring your car to our Nixa shop or we come to you. We handle every surface with care.", icon: <Sparkles className="w-7 h-7 text-[#A886CD]" /> },
+              { step: "02", title: "We Detail", desc: "Drop your car off at our Nixa shop. We handle every surface with care, from paint to upholstery.", icon: <Sparkles className="w-7 h-7 text-[#A886CD]" /> },
               { step: "03", title: "Drive Happy", desc: "Step into a like-new vehicle and enjoy long-lasting protection and shine.", icon: <Car className="w-7 h-7 text-[#3496FF]" /> },
             ].map((s) => (
               <div key={s.step} className="relative p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-white/20 transition-colors">
@@ -1705,7 +1705,7 @@ export default function Home() {
               </span>
             </h3>
             <p className="text-gray-400 text-lg">
-              Based in Nixa, Missouri — covering surrounding Greene & Christian County communities. Mobile detailing available within ~25 miles.
+              Located in Nixa, Missouri — proudly serving customers from across Greene & Christian Counties. Drop your vehicle off at our shop.
             </p>
           </div>
 
