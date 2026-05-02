@@ -28,7 +28,6 @@ export type TimeSlot = (typeof ALL_TIME_SLOTS)[number];
  */
 export const FRIDAY_ONLY_SERVICE_SLUGS = new Set<string>([
   "apex-express-interior-detailing",
-  "apex-exterior-detailing",
   "apex-headlight-restoration",
 ]);
 
