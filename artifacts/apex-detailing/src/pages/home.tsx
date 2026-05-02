@@ -972,10 +972,6 @@ export default function Home() {
               <span className="font-bold">Professional Detailers</span>
             </div>
             <div className="flex items-center gap-2">
-              <Shield className="w-6 h-6 text-[#3496FF]" />
-              <span className="font-bold">Insured & Trusted</span>
-            </div>
-            <div className="flex items-center gap-2">
               <MapPin className="w-6 h-6 text-[#A886CD]" />
               <span className="font-bold">Located in Nixa, MO</span>
             </div>
