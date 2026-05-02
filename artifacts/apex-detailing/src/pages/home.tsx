@@ -114,7 +114,6 @@ const services = [
     icon: <Droplets className="w-10 h-10 text-[#A886CD]" />,
     pricing: "$100",
     pricingDetails: ["2-Row: $100–$150", "3-Row: $150–$200"],
-    bookingLink: "https://app.squareup.com/appointments/book/4r9v4p21agmllg/LKWK85P75KQD9/start",
     features: [
       "Thorough Vacuum",
       "Interior Surfaces Wiped Down",
@@ -419,8 +418,6 @@ export default function Home() {
   const [sliderFading, setSliderFading] = useState(false);
   const [sliderCycleComplete, setSliderCycleComplete] = useState(false);
   const [paintCorrectionPreviewIndex, setPaintCorrectionPreviewIndex] = useState(0);
-  const [bookingChoiceOpen, setBookingChoiceOpen] = useState(false);
-  const [bookingTarget, setBookingTarget] = useState<"detail" | "now" | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [legalModal, setLegalModal] = useState<"privacy" | "terms" | null>(null);
 
@@ -720,18 +717,7 @@ export default function Home() {
     setMapChooserOpen(true);
   };
 
-  const openBookingChoice = (target: "detail" | "now") => {
-    setBookingTarget(target);
-    setBookingChoiceOpen(true);
-  };
-
-  const bookWithSquare = () => {
-    window.open("https://app.squareup.com/appointments/book/4r9v4p21agmllg/LKWK85P75KQD9/start", "_blank", "noopener,noreferrer");
-    setBookingChoiceOpen(false);
-  };
-
-  const bookWithCalendly = () => {
-    setBookingChoiceOpen(false);
+  const goToBooking = () => {
     setLocation(BOOKING_LINK);
   };
 
@@ -801,8 +787,8 @@ export default function Home() {
                 </button>
               ))}
               <a
-                onClick={() => openBookingChoice("now")}
-                className="relative inline-flex items-center justify-center px-6 py-2.5 overflow-hidden font-bold text-white rounded-md group"
+                onClick={goToBooking}
+                className="relative inline-flex items-center justify-center px-6 py-2.5 overflow-hidden font-bold text-white rounded-md group cursor-pointer"
               >
                 <span className="absolute w-full h-full bg-gradient-to-br from-[#A886CD] via-[#3496FF] to-[#A886CD] group-hover:from-[#3496FF] group-hover:via-[#A886CD] group-hover:to-[#3496FF] transition-all duration-500 bg-[length:200%_200%] bg-[0%_0%] group-hover:bg-[100%_100%]" />
                 <span className="absolute inset-1 bg-[#0a0a0a] rounded-[4px] transition-all duration-300 group-hover:bg-opacity-0" />
@@ -854,8 +840,8 @@ export default function Home() {
               </button>
             ))}
             <a
-              onClick={() => openBookingChoice("detail")}
-              className="mt-4 text-center py-3 bg-gradient-to-r from-[#A886CD] to-[#3496FF] font-bold rounded-md shadow-[0_0_15px_rgba(52,150,255,0.4)]"
+              onClick={goToBooking}
+              className="mt-4 text-center py-3 bg-gradient-to-r from-[#A886CD] to-[#3496FF] font-bold rounded-md shadow-[0_0_15px_rgba(52,150,255,0.4)] cursor-pointer"
             >
               BOOK NOW
             </a>
@@ -915,7 +901,7 @@ export default function Home() {
 
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full sm:w-auto">
               <a
-                onClick={() => openBookingChoice("detail")}
+                onClick={goToBooking}
               className="group relative inline-flex items-center justify-center px-6 sm:px-8 py-4 font-black text-white transition-all duration-300 ease-in-out bg-transparent border-0 rounded-lg cursor-pointer overflow-hidden text-base sm:text-lg w-full sm:w-auto"
             >
               <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#A886CD] to-[#3496FF] opacity-90 group-hover:opacity-100 transition-opacity duration-300" />
@@ -1052,25 +1038,13 @@ export default function Home() {
                       </li>
                     ))}
                   </ul>
-                  {service.bookingLink ? (
-                    <a
-                      href={service.bookingLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-auto inline-flex items-center gap-2 font-bold text-sm tracking-widest text-white uppercase group/btn"
-                    >
-                      Book Now{" "}
-                      <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 group-hover/btn:text-[#3496FF] transition-all" />
-                    </a>
-                  ) : (
-                    <Link
-                      href={BOOKING_LINK}
-                      className="mt-auto inline-flex items-center gap-2 font-bold text-sm tracking-widest text-white uppercase group/btn"
-                    >
-                      Book Now{" "}
-                      <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 group-hover/btn:text-[#3496FF] transition-all" />
-                    </Link>
-                  )}
+                  <Link
+                    href={BOOKING_LINK}
+                    className="mt-auto inline-flex items-center gap-2 font-bold text-sm tracking-widest text-white uppercase group/btn"
+                  >
+                    Book Now{" "}
+                    <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 group-hover/btn:text-[#3496FF] transition-all" />
+                  </Link>
                 </div>
               </div>
             ))}
@@ -1847,8 +1821,8 @@ export default function Home() {
                 </p>
               </div>
               <a
-                onClick={() => openBookingChoice("detail")}
-                className="group relative inline-flex items-center justify-center px-10 py-5 font-black text-white text-xl transition-all duration-300 ease-in-out bg-gradient-to-r from-[#A886CD] to-[#3496FF] rounded-xl overflow-hidden shadow-[0_0_40px_rgba(168,134,205,0.4)] hover:shadow-[0_0_60px_rgba(52,150,255,0.6)] hover:scale-105"
+                onClick={goToBooking}
+                className="group relative inline-flex items-center justify-center px-10 py-5 font-black text-white text-xl transition-all duration-300 ease-in-out bg-gradient-to-r from-[#A886CD] to-[#3496FF] rounded-xl overflow-hidden shadow-[0_0_40px_rgba(168,134,205,0.4)] hover:shadow-[0_0_60px_rgba(52,150,255,0.6)] hover:scale-105 cursor-pointer"
               >
                 <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#3496FF] to-[#A886CD] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <span className="relative flex items-center gap-3">
@@ -2058,7 +2032,7 @@ export default function Home() {
           CALL NOW
         </a>
         <button
-          onClick={() => openBookingChoice("now")}
+          onClick={goToBooking}
           className="flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-gradient-to-r from-[#A886CD] to-[#3496FF] font-black text-sm text-white shadow-[0_0_15px_rgba(52,150,255,0.4)]"
         >
           BOOK NOW
@@ -2101,7 +2075,7 @@ export default function Home() {
                 </p>
                 <div>
                   <h4 className="font-black text-white text-base mb-1">Information We Collect</h4>
-                  <p>We only collect information you voluntarily provide — your name, phone, email, vehicle details, and appointment preferences when you book or contact us. Express Interior bookings made through Square are processed under Square's privacy policy.</p>
+                  <p>We only collect information you voluntarily provide — your name, phone, email, vehicle details, and appointment preferences when you book or contact us.</p>
                 </div>
                 <div>
                   <h4 className="font-black text-white text-base mb-1">How We Use It</h4>
@@ -2123,7 +2097,7 @@ export default function Home() {
                 </p>
                 <div>
                   <h4 className="font-black text-white text-base mb-1">Booking & Scheduling</h4>
-                  <p>All scheduling must be completed before your visit through our online booking or Square. Please arrive on time. Significant delays may require rescheduling.</p>
+                  <p>All scheduling must be completed before your visit through our online booking. Please arrive on time. Significant delays may require rescheduling.</p>
                 </div>
                 <div>
                   <h4 className="font-black text-white text-base mb-1">Pricing</h4>
@@ -2183,28 +2157,6 @@ export default function Home() {
         </div>
       )}
 
-      {bookingChoiceOpen && (
-        <div className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setBookingChoiceOpen(false)}>
-          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#111] p-6" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-2xl font-black uppercase tracking-tight mb-3">Choose Booking</h3>
-            <p className="text-gray-400 text-sm mb-6">
-              {bookingTarget === "detail" ? "Book your detail with your preferred scheduler." : "Choose a booking option."}
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <button onClick={bookWithCalendly} className="w-full rounded-xl border border-[#A886CD]/40 bg-gradient-to-br from-[#A886CD]/10 to-[#3496FF]/5 px-4 py-4 text-left hover:border-[#A886CD] transition-colors">
-                <div className="text-xs font-bold uppercase tracking-wider text-[#A886CD] mb-1">Recommended</div>
-                <div className="text-sm font-semibold text-white">Book a Detail</div>
-                <div className="text-xs text-gray-400 mt-1">Full Detail, Ceramic, Paint Correction & more</div>
-              </button>
-              <button onClick={bookWithSquare} className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-4 text-left hover:border-[#3496FF] transition-colors">
-                <div className="text-xs font-bold uppercase tracking-wider text-[#3496FF] mb-1">Quick Service</div>
-                <div className="text-sm font-semibold text-white">Express Interior Detail</div>
-                <div className="text-xs text-gray-400 mt-1">Books through Square</div>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
