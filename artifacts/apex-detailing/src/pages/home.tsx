@@ -433,7 +433,7 @@ export default function Home() {
     },
     {
       q: "How do I book an appointment?",
-      a: "Click any 'Book Your Detail' button. You'll choose between Square (for Express Interior) or Calendly (for all other services). All scheduling needs to happen before your visit.",
+      a: "Click any 'Book Your Detail' button. You'll choose between Square (for Express Interior) or Calendly (for all other services), or call us directly at 417-527-6165. All scheduling needs to happen before your visit.",
     },
     {
       q: "What payment methods do you accept?",
