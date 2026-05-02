@@ -6,7 +6,9 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from "./blockedDate";
 export * from "./booking";
+export * from "./createBlockedDateRequest";
 export * from "./createBookingRequest";
 export * from "./dayAvailability";
 export * from "./error";

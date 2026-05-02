@@ -4,7 +4,12 @@ import {
   useAdminListBookings,
   adminCancelBooking,
   getAdminListBookingsQueryKey,
+  useAdminListBlockedDates,
+  adminAddBlockedDate,
+  adminUnblockDate,
+  getAdminListBlockedDatesQueryKey,
   type Booking,
+  type BlockedDate,
 } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -18,11 +23,16 @@ import {
   Trash2,
   Car,
   StickyNote,
+  CalendarOff,
+  Plus,
+  X as XIcon,
 } from "lucide-react";
 import {
+  formatDateLong,
   formatDateTimeLong,
   formatPrice,
   formatDuration,
+  todayDateString,
 } from "@/lib/format";
 
 const TOKEN_KEY = "apex_admin_token";
@@ -252,7 +262,176 @@ function Dashboard({
             ))}
           </Section>
         )}
+
+        <BlockedDatesPanel token={token} />
       </main>
+    </div>
+  );
+}
+
+function BlockedDatesPanel({ token }: { token: string }) {
+  const queryClient = useQueryClient();
+  const { data, isLoading } = useAdminListBlockedDates({
+    request: { headers: { "x-admin-token": token } },
+    query: {
+      queryKey: getAdminListBlockedDatesQueryKey(),
+      retry: false,
+    },
+  });
+  const [date, setDate] = useState("");
+  const [reason, setReason] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const blocked = data ?? [];
+  const today = todayDateString();
+  const upcomingBlocked = blocked.filter((b) => b.date >= today);
+
+  const refresh = () =>
+    queryClient.invalidateQueries({
+      queryKey: getAdminListBlockedDatesQueryKey(),
+    });
+
+  const add = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!date) return;
+    setSubmitting(true);
+    setError(null);
+    try {
+      await adminAddBlockedDate(
+        { date, reason: reason.trim() },
+        { headers: { "x-admin-token": token } },
+      );
+      setDate("");
+      setReason("");
+      refresh();
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Could not block date";
+      // Try to surface a friendlier message for the common cases
+      if (/409/.test(msg)) {
+        setError("That date is already blocked.");
+      } else if (/400/.test(msg)) {
+        setError("Pick a valid date that is today or later.");
+      } else {
+        setError(msg);
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const remove = async (d: string) => {
+    if (!confirm(`Re-open ${formatDateLong(d)}? Customers will be able to book it again.`)) {
+      return;
+    }
+    try {
+      await adminUnblockDate(d, { headers: { "x-admin-token": token } });
+      refresh();
+    } catch (e) {
+      alert(`Could not re-open: ${e instanceof Error ? e.message : "unknown"}`);
+    }
+  };
+
+  return (
+    <section className="mt-12 pt-8 border-t border-white/10">
+      <div className="flex items-center gap-3 mb-2">
+        <CalendarOff className="w-5 h-5 text-[#A886CD]" />
+        <h2 className="text-xl font-black">Block off days</h2>
+      </div>
+      <p className="text-sm text-gray-400 mb-5">
+        Mark a date as closed (vacation, personal day, etc.) so customers can't book it. Sundays are already closed automatically.
+      </p>
+
+      <form
+        onSubmit={add}
+        className="flex flex-col sm:flex-row gap-3 mb-5 p-4 rounded-2xl border border-white/10 bg-white/[0.02]"
+      >
+        <input
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          min={today}
+          required
+          className="px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#3496FF] focus:outline-none focus:ring-2 focus:ring-[#3496FF]/20 transition text-white"
+        />
+        <input
+          type="text"
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+          placeholder="Reason (optional, e.g. Family trip)"
+          maxLength={200}
+          className="flex-1 px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#3496FF] focus:outline-none focus:ring-2 focus:ring-[#3496FF]/20 transition text-white placeholder:text-gray-500"
+        />
+        <button
+          type="submit"
+          disabled={!date || submitting}
+          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white font-bold disabled:opacity-50 hover:shadow-lg hover:shadow-[#3496FF]/30 transition flex items-center justify-center gap-2 whitespace-nowrap"
+        >
+          {submitting ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <Plus className="w-4 h-4" />
+          )}
+          Block date
+        </button>
+      </form>
+
+      {error && (
+        <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-sm">
+          {error}
+        </div>
+      )}
+
+      {isLoading ? (
+        <div className="flex items-center gap-3 text-gray-400 py-6 justify-center">
+          <Loader2 className="w-4 h-4 animate-spin" /> Loading blocked dates…
+        </div>
+      ) : upcomingBlocked.length === 0 ? (
+        <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-8 text-center">
+          <p className="text-gray-400 text-sm">
+            No upcoming blocked days. The shop is open every day except Sundays.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {upcomingBlocked.map((b) => (
+            <BlockedDateCard
+              key={b.id}
+              blocked={b}
+              onRemove={() => remove(b.date)}
+            />
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
+function BlockedDateCard({
+  blocked,
+  onRemove,
+}: {
+  blocked: BlockedDate;
+  onRemove: () => void;
+}) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 flex items-start justify-between gap-3">
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2 text-[#A886CD] font-bold text-sm mb-1">
+          <CalendarOff className="w-4 h-4" />
+          {formatDateLong(blocked.date)}
+        </div>
+        {blocked.reason && (
+          <p className="text-sm text-gray-400 truncate">{blocked.reason}</p>
+        )}
+      </div>
+      <button
+        onClick={onRemove}
+        title="Re-open this day"
+        className="p-1.5 rounded-lg text-gray-500 hover:text-red-300 hover:bg-red-500/10 border border-transparent hover:border-red-500/20 transition"
+      >
+        <XIcon className="w-4 h-4" />
+      </button>
     </div>
   );
 }

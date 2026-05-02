@@ -1,5 +1,10 @@
 import { Router, type IRouter } from "express";
-import { db, servicesTable, bookingsTable } from "@workspace/db";
+import {
+  db,
+  servicesTable,
+  bookingsTable,
+  blockedDatesTable,
+} from "@workspace/db";
 import { and, asc, eq, gte, lte } from "drizzle-orm";
 import {
   CreateBookingBody,
@@ -49,24 +54,37 @@ router.get("/booking/availability", async (req, res) => {
   const rangeStartUtc = new Date(startDate.getTime() - 24 * 60 * 60 * 1000);
   const rangeEndUtc = new Date(endDate.getTime() + 48 * 60 * 60 * 1000);
 
-  const bookings = await db
-    .select({
-      scheduledAt: bookingsTable.scheduledAt,
-    })
-    .from(bookingsTable)
-    .where(
-      and(
-        gte(bookingsTable.scheduledAt, rangeStartUtc),
-        lte(bookingsTable.scheduledAt, rangeEndUtc),
-        eq(bookingsTable.status, "confirmed"),
+  const [bookings, blocked] = await Promise.all([
+    db
+      .select({
+        scheduledAt: bookingsTable.scheduledAt,
+      })
+      .from(bookingsTable)
+      .where(
+        and(
+          gte(bookingsTable.scheduledAt, rangeStartUtc),
+          lte(bookingsTable.scheduledAt, rangeEndUtc),
+          eq(bookingsTable.status, "confirmed"),
+        ),
       ),
-    );
+    db
+      .select({ date: blockedDatesTable.date })
+      .from(blockedDatesTable)
+      .where(
+        and(
+          gte(blockedDatesTable.date, parsed.data.startDate),
+          lte(blockedDatesTable.date, parsed.data.endDate),
+        ),
+      ),
+  ]);
 
   // Build a Set of "YYYY-MM-DD HH:MM" taken slots in shop-local time.
   const taken = new Set<string>();
   for (const b of bookings) {
     taken.add(`${shopLocalDateString(b.scheduledAt)} ${shopLocalTimeString(b.scheduledAt)}`);
   }
+
+  const blockedSet = new Set(blocked.map((r) => r.date));
 
   const today = todayInShopLocal();
   const out: Array<{
@@ -82,7 +100,8 @@ router.get("/booking/availability", async (req, res) => {
   ) {
     const dateStr = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")}`;
     const isPast = dateStr < today;
-    const closed = isClosedShopDate(dateStr) || isPast;
+    const closed =
+      isClosedShopDate(dateStr) || isPast || blockedSet.has(dateStr);
     const slots = TIME_SLOTS.map((time) => ({
       time,
       available: !closed && !taken.has(`${dateStr} ${time}`),
@@ -122,6 +141,15 @@ router.post("/booking/bookings", async (req, res) => {
   }
   if (body.date < todayInShopLocal()) {
     res.status(400).json({ message: "Cannot book a date in the past" });
+    return;
+  }
+
+  const [blockedRow] = await db
+    .select({ id: blockedDatesTable.id })
+    .from(blockedDatesTable)
+    .where(eq(blockedDatesTable.date, body.date));
+  if (blockedRow) {
+    res.status(400).json({ message: "Shop is closed on this day" });
     return;
   }
 

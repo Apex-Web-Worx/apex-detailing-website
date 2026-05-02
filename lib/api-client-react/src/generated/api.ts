@@ -17,7 +17,9 @@ import type {
 } from "@tanstack/react-query";
 
 import type {
+  BlockedDate,
   Booking,
+  CreateBlockedDateRequest,
   CreateBookingRequest,
   DayAvailability,
   Error,
@@ -523,4 +525,250 @@ export const useAdminCancelBooking = <
   TContext
 > => {
   return useMutation(getAdminCancelBookingMutationOptions(options));
+};
+
+/**
+ * @summary List blocked (closed) dates
+ */
+export const getAdminListBlockedDatesUrl = () => {
+  return `/api/admin/blocked-dates`;
+};
+
+export const adminListBlockedDates = async (
+  options?: RequestInit,
+): Promise<BlockedDate[]> => {
+  return customFetch<BlockedDate[]>(getAdminListBlockedDatesUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getAdminListBlockedDatesQueryKey = () => {
+  return [`/api/admin/blocked-dates`] as const;
+};
+
+export const getAdminListBlockedDatesQueryOptions = <
+  TData = Awaited<ReturnType<typeof adminListBlockedDates>>,
+  TError = ErrorType<Error>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof adminListBlockedDates>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getAdminListBlockedDatesQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof adminListBlockedDates>>
+  > = ({ signal }) => adminListBlockedDates({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof adminListBlockedDates>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type AdminListBlockedDatesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof adminListBlockedDates>>
+>;
+export type AdminListBlockedDatesQueryError = ErrorType<Error>;
+
+/**
+ * @summary List blocked (closed) dates
+ */
+
+export function useAdminListBlockedDates<
+  TData = Awaited<ReturnType<typeof adminListBlockedDates>>,
+  TError = ErrorType<Error>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof adminListBlockedDates>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getAdminListBlockedDatesQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Block a date so customers cannot book it
+ */
+export const getAdminAddBlockedDateUrl = () => {
+  return `/api/admin/blocked-dates`;
+};
+
+export const adminAddBlockedDate = async (
+  createBlockedDateRequest: CreateBlockedDateRequest,
+  options?: RequestInit,
+): Promise<BlockedDate> => {
+  return customFetch<BlockedDate>(getAdminAddBlockedDateUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createBlockedDateRequest),
+  });
+};
+
+export const getAdminAddBlockedDateMutationOptions = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof adminAddBlockedDate>>,
+    TError,
+    { data: BodyType<CreateBlockedDateRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof adminAddBlockedDate>>,
+  TError,
+  { data: BodyType<CreateBlockedDateRequest> },
+  TContext
+> => {
+  const mutationKey = ["adminAddBlockedDate"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminAddBlockedDate>>,
+    { data: BodyType<CreateBlockedDateRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return adminAddBlockedDate(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminAddBlockedDateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminAddBlockedDate>>
+>;
+export type AdminAddBlockedDateMutationBody =
+  BodyType<CreateBlockedDateRequest>;
+export type AdminAddBlockedDateMutationError = ErrorType<Error>;
+
+/**
+ * @summary Block a date so customers cannot book it
+ */
+export const useAdminAddBlockedDate = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof adminAddBlockedDate>>,
+    TError,
+    { data: BodyType<CreateBlockedDateRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof adminAddBlockedDate>>,
+  TError,
+  { data: BodyType<CreateBlockedDateRequest> },
+  TContext
+> => {
+  return useMutation(getAdminAddBlockedDateMutationOptions(options));
+};
+
+/**
+ * @summary Remove a blocked date (re-open it)
+ */
+export const getAdminUnblockDateUrl = (date: string) => {
+  return `/api/admin/blocked-dates/${date}`;
+};
+
+export const adminUnblockDate = async (
+  date: string,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getAdminUnblockDateUrl(date), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getAdminUnblockDateMutationOptions = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof adminUnblockDate>>,
+    TError,
+    { date: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof adminUnblockDate>>,
+  TError,
+  { date: string },
+  TContext
+> => {
+  const mutationKey = ["adminUnblockDate"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminUnblockDate>>,
+    { date: string }
+  > = (props) => {
+    const { date } = props ?? {};
+
+    return adminUnblockDate(date, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminUnblockDateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminUnblockDate>>
+>;
+
+export type AdminUnblockDateMutationError = ErrorType<Error>;
+
+/**
+ * @summary Remove a blocked date (re-open it)
+ */
+export const useAdminUnblockDate = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof adminUnblockDate>>,
+    TError,
+    { date: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof adminUnblockDate>>,
+  TError,
+  { date: string },
+  TContext
+> => {
+  return useMutation(getAdminUnblockDateMutationOptions(options));
 };

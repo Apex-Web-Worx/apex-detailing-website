@@ -144,6 +144,99 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /admin/blocked-dates:
+    get:
+      operationId: adminListBlockedDates
+      tags: [admin]
+      summary: List blocked (closed) dates
+      parameters:
+        - name: x-admin-token
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BlockedDate"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: adminAddBlockedDate
+      tags: [admin]
+      summary: Block a date so customers cannot book it
+      parameters:
+        - name: x-admin-token
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBlockedDateRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlockedDate"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: Already blocked
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /admin/blocked-dates/{date}:
+    delete:
+      operationId: adminUnblockDate
+      tags: [admin]
+      summary: Remove a blocked date (re-open it)
+      parameters:
+        - name: date
+          in: path
+          required: true
+          schema:
+            type: string
+            description: YYYY-MM-DD
+        - name: x-admin-token
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Unblocked
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     HealthStatus:
@@ -248,6 +341,34 @@ components:
         - email
         - phone
         - vehicle
+    BlockedDate:
+      type: object
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+          description: YYYY-MM-DD
+        reason:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - date
+        - reason
+        - createdAt
+    CreateBlockedDateRequest:
+      type: object
+      properties:
+        date:
+          type: string
+          description: YYYY-MM-DD
+        reason:
+          type: string
+      required:
+        - date
     Booking:
       type: object
       properties:

@@ -53,6 +53,20 @@ export interface CreateBookingRequest {
   notes?: string;
 }
 
+export interface BlockedDate {
+  id: number;
+  /** YYYY-MM-DD */
+  date: string;
+  reason: string;
+  createdAt: string;
+}
+
+export interface CreateBlockedDateRequest {
+  /** YYYY-MM-DD */
+  date: string;
+  reason?: string;
+}
+
 export interface Booking {
   id: number;
   serviceId: number;

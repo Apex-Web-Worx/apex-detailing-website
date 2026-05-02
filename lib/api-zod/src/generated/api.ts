@@ -103,3 +103,43 @@ export const AdminCancelBookingParams = zod.object({
 export const AdminCancelBookingHeader = zod.object({
   "x-admin-token": zod.string(),
 });
+
+/**
+ * @summary List blocked (closed) dates
+ */
+export const AdminListBlockedDatesHeader = zod.object({
+  "x-admin-token": zod.string(),
+});
+
+export const AdminListBlockedDatesResponseItem = zod.object({
+  id: zod.number(),
+  date: zod.string().describe("YYYY-MM-DD"),
+  reason: zod.string(),
+  createdAt: zod.date(),
+});
+export const AdminListBlockedDatesResponse = zod.array(
+  AdminListBlockedDatesResponseItem,
+);
+
+/**
+ * @summary Block a date so customers cannot book it
+ */
+export const AdminAddBlockedDateHeader = zod.object({
+  "x-admin-token": zod.string(),
+});
+
+export const AdminAddBlockedDateBody = zod.object({
+  date: zod.string().describe("YYYY-MM-DD"),
+  reason: zod.string().optional(),
+});
+
+/**
+ * @summary Remove a blocked date (re-open it)
+ */
+export const AdminUnblockDateParams = zod.object({
+  date: zod.coerce.string(),
+});
+
+export const AdminUnblockDateHeader = zod.object({
+  "x-admin-token": zod.string(),
+});
