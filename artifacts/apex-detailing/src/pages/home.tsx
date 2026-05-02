@@ -866,7 +866,7 @@ export default function Home() {
         {/* Hero Background Image */}
         <div className="absolute inset-0 z-0">
           <img
-            src={`${import.meta.env.BASE_URL}images/hero-1.jpg`}
+            src={`${import.meta.env.BASE_URL}images/hero-2.jpg`}
             alt="Apex Detailing freshly detailed vehicle"
             className="w-full h-full object-cover opacity-25"
           />
