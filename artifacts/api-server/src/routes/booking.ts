@@ -22,13 +22,13 @@ import {
   shopLocalTimeString,
   todayInShopLocal,
 } from "../lib/availability";
-import {
-  sendBookingEmails,
-  sendCancellationEmails,
-  sendRescheduleEmails,
-  type BookingEmailData,
-} from "../lib/email";
+import { type BookingEmailData } from "../lib/email";
 import { syncBookingCalendar } from "../lib/calendar";
+import {
+  notifyBookingCreated,
+  notifyBookingCancelled,
+  notifyBookingRescheduled,
+} from "../lib/notify";
 
 const router: IRouter = Router();
 
@@ -319,11 +319,7 @@ router.post("/booking/bookings", async (req, res) => {
     // Fire-and-forget: send confirmation emails AND create the owner's
     // Google Calendar event after responding, so a slow or failing third
     // party never blocks the booking response.
-    sendBookingEmails(bookingToEmailData(created, body.date, body.time)).catch(
-      (err) => {
-        console.error("[email] sendBookingEmails failed:", err);
-      },
-    );
+    notifyBookingCreated(bookingToEmailData(created, body.date, body.time));
     void syncBookingCalendar(created.id);
     return;
   } catch (err) {
@@ -422,11 +418,7 @@ router.post("/booking/manage/:id/cancel", async (req, res) => {
   res.status(204).send();
 
   const cancelled = updatedRows[0]!;
-  sendCancellationEmails(bookingToEmailData(cancelled), "customer").catch(
-    (err) => {
-      console.error("[email] sendCancellationEmails (customer) failed:", err);
-    },
-  );
+  notifyBookingCancelled(bookingToEmailData(cancelled), "customer");
   void syncBookingCalendar(cancelled.id);
 });
 
@@ -523,9 +515,18 @@ router.post("/booking/manage/:id/reschedule", async (req, res) => {
   // The partial unique index protects us from racing with a fresh booking
   // grabbing the new slot (Postgres surfaces 23505 → mapped to 409 below).
   try {
+    // When the slot actually moves, also clear reminder_sent_at so the
+    // 24h reminder cron will fire again for the new appointment time.
+    // (Same-slot reschedules — a no-op the customer didn't realize was
+    // a no-op — must NOT clear it, or we'd re-text someone we already
+    // reminded.)
     const updatedRows = await db
       .update(bookingsTable)
-      .set({ scheduledAt: newScheduledAt })
+      .set(
+        isSameSlot
+          ? { scheduledAt: newScheduledAt }
+          : { scheduledAt: newScheduledAt, reminderSentAt: null },
+      )
       .where(
         and(
           eq(bookingsTable.id, booking.id),
@@ -550,12 +551,10 @@ router.post("/booking/manage/:id/reschedule", async (req, res) => {
     // the same slot they already had). The UPDATE still succeeded — just
     // no semantic change.
     if (!isSameSlot) {
-      sendRescheduleEmails({
+      notifyBookingRescheduled({
         oldDate,
         oldTime,
         booking: bookingToEmailData(updated, newDate, newTime),
-      }).catch((err) => {
-        console.error("[email] sendRescheduleEmails failed:", err);
       });
       void syncBookingCalendar(updated.id);
     }

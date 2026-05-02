@@ -513,7 +513,14 @@ function InfoStep({
         </div>
       </div>
 
-      <div className="flex justify-end mt-8">
+      <p className="text-xs text-gray-500 leading-relaxed mt-6">
+        By booking, you agree to receive appointment confirmations and a
+        reminder text from Apex Detailing at the phone number above. Reply
+        STOP at any time to opt out, or HELP for help. Message and data
+        rates may apply. Message frequency varies.
+      </p>
+
+      <div className="flex justify-end mt-6">
         <button
           disabled={!valid}
           onClick={onNext}

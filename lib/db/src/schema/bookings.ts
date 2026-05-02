@@ -36,6 +36,11 @@ export const bookingsTable = pgTable(
     //     response, so a transient outage simply leaves this NULL,
     //   - cancellations clear it back to NULL after deleting the event.
     googleEventId: text("google_event_id"),
+    // When the 24-hour reminder SMS was sent for this booking. Nullable
+    // because most rows haven't reached the reminder window yet (or were
+    // booked less than 24h out and skip the reminder entirely). The
+    // reminders cron uses this to guarantee at-most-once delivery.
+    reminderSentAt: timestamp("reminder_sent_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),

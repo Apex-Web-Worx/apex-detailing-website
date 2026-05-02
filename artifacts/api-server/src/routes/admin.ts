@@ -2,8 +2,9 @@ import { Router, type IRouter, type Request, type Response, type NextFunction } 
 import { db, bookingsTable, blockedDatesTable } from "@workspace/db";
 import { and, asc, eq } from "drizzle-orm";
 import { parseDateString, shopLocalDateString, shopLocalTimeString, todayInShopLocal } from "../lib/availability";
-import { sendCancellationEmails, type BookingEmailData } from "../lib/email";
+import { type BookingEmailData } from "../lib/email";
 import { syncBookingCalendar } from "../lib/calendar";
+import { notifyBookingCancelled } from "../lib/notify";
 
 const router: IRouter = Router();
 
@@ -77,9 +78,7 @@ router.delete("/admin/bookings/:id", requireAdmin, async (req, res) => {
 
   const cancelled = cancelledRows[0];
   if (cancelled) {
-    sendCancellationEmails(bookingToEmailData(cancelled), "owner").catch((err) => {
-      console.error("[email] admin cancellation notify failed:", err);
-    });
+    notifyBookingCancelled(bookingToEmailData(cancelled), "admin");
     void syncBookingCalendar(cancelled.id);
   }
 });

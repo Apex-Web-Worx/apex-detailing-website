@@ -5,14 +5,14 @@ const connectors = new ReplitConnectors();
 
 export const OWNER_EMAIL = "apexdetailingsf@gmail.com";
 export const FROM_NAME = "Apex Detailing";
-const SHOP_PHONE = "(417) 527-6165";
-const SHOP_ADDRESS = "1114 E Lakota St, Nixa, MO 65714";
+export const SHOP_PHONE = "(417) 527-6165";
+export const SHOP_ADDRESS = "1114 E Lakota St, Nixa, MO 65714";
 const SITE_URL = process.env["SITE_URL"] || "https://www.apexdetailingsf.com";
-const SHOP_WEBSITE = SITE_URL;
+export const SHOP_WEBSITE = SITE_URL;
 
 const SHOP_TZ = "America/Chicago";
 
-function formatDateLong(date: string): string {
+export function formatDateLong(date: string): string {
   const [y, m, d] = date.split("-").map(Number);
   if (!y || !m || !d) return date;
   const dt = new Date(Date.UTC(y, m - 1, d, 12));
@@ -25,7 +25,7 @@ function formatDateLong(date: string): string {
   }).format(dt);
 }
 
-function formatTime12h(time24: string): string {
+export function formatTime12h(time24: string): string {
   const [hStr, mStr] = time24.split(":");
   const h = Number(hStr);
   const m = Number(mStr);
