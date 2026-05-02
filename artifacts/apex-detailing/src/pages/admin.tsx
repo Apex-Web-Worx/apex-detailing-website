@@ -26,6 +26,9 @@ import {
   CalendarOff,
   Plus,
   X as XIcon,
+  ChevronDown,
+  ChevronRight,
+  Filter,
 } from "lucide-react";
 import {
   formatDateLong,
@@ -203,6 +206,32 @@ function Dashboard({
   );
   const cancelled = bookings.filter((b) => b.status === "cancelled");
 
+  // ----- Active-bookings filters (date + service type) -----
+  const [filterDate, setFilterDate] = useState<string>("");
+  const [filterService, setFilterService] = useState<string>("");
+  const serviceOptions = Array.from(
+    new Set(upcoming.map((b) => b.serviceName)),
+  ).sort();
+  const filteredUpcoming = upcoming.filter((b) => {
+    if (filterService && b.serviceName !== filterService) return false;
+    if (filterDate) {
+      const bookingDate = new Date(
+        b.scheduledAt as unknown as string,
+      )
+        .toISOString()
+        .slice(0, 10);
+      // Compare in shop-local date by using the YYYY-MM-DD prefix of
+      // the local string; cheaper than re-parsing the timezone here
+      // and good enough for an exact-day match.
+      const local = new Date(
+        b.scheduledAt as unknown as string,
+      ).toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
+      if (local !== filterDate && bookingDate !== filterDate) return false;
+    }
+    return true;
+  });
+  const filtersActive = filterDate !== "" || filterService !== "";
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
       <header className="border-b border-white/10 bg-[#0a0a0a]/95 backdrop-blur sticky top-0 z-30">
@@ -254,15 +283,59 @@ function Dashboard({
         )}
 
         {upcoming.length > 0 && (
-          <Section title="Upcoming">
-            {upcoming.map((b) => (
-              <BookingCard key={b.id} booking={b} onCancel={() => cancel(b.id)} />
-            ))}
+          <Section
+            title="Upcoming"
+            count={filteredUpcoming.length}
+            totalCount={upcoming.length}
+          >
+            <div className="mb-4 flex flex-wrap items-center gap-2 rounded-xl border border-white/10 bg-white/[0.02] p-3">
+              <Filter className="w-4 h-4 text-gray-500" />
+              <input
+                type="date"
+                value={filterDate}
+                onChange={(e) => setFilterDate(e.target.value)}
+                className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-[#3496FF]"
+                aria-label="Filter by date"
+              />
+              <select
+                value={filterService}
+                onChange={(e) => setFilterService(e.target.value)}
+                className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-[#3496FF]"
+                aria-label="Filter by service type"
+              >
+                <option value="">All services</option>
+                {serviceOptions.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+              {filtersActive && (
+                <button
+                  onClick={() => {
+                    setFilterDate("");
+                    setFilterService("");
+                  }}
+                  className="text-xs text-gray-400 hover:text-white px-2 py-1 rounded-lg hover:bg-white/5 flex items-center gap-1"
+                >
+                  <XIcon className="w-3 h-3" /> Clear
+                </button>
+              )}
+            </div>
+            {filteredUpcoming.length === 0 ? (
+              <div className="rounded-xl border border-white/10 bg-white/[0.02] p-6 text-center text-sm text-gray-500">
+                No upcoming bookings match these filters.
+              </div>
+            ) : (
+              filteredUpcoming.map((b) => (
+                <BookingCard key={b.id} booking={b} onCancel={() => cancel(b.id)} />
+              ))
+            )}
           </Section>
         )}
 
         {past.length > 0 && (
-          <Section title="Completed">
+          <Section title="Completed" count={past.length} collapsible defaultOpen={false}>
             {past.map((b) => (
               <BookingCard key={b.id} booking={b} muted />
             ))}
@@ -270,7 +343,12 @@ function Dashboard({
         )}
 
         {cancelled.length > 0 && (
-          <Section title="Cancelled">
+          <Section
+            title="Cancelled"
+            count={cancelled.length}
+            collapsible
+            defaultOpen={false}
+          >
             {cancelled.map((b) => (
               <BookingCard key={b.id} booking={b} muted strikethrough />
             ))}
@@ -453,16 +531,57 @@ function BlockedDateCard({
 function Section({
   title,
   children,
+  count,
+  totalCount,
+  collapsible = false,
+  defaultOpen = true,
 }: {
   title: string;
   children: React.ReactNode;
+  count?: number;
+  totalCount?: number;
+  collapsible?: boolean;
+  defaultOpen?: boolean;
 }) {
+  const [open, setOpen] = useState(defaultOpen);
+  const showHeader = collapsible || count !== undefined;
+  const headerLabel = (
+    <>
+      {title}
+      {count !== undefined && (
+        <span className="ml-2 text-gray-600 normal-case tracking-normal font-semibold">
+          {totalCount !== undefined && totalCount !== count
+            ? `${count} of ${totalCount}`
+            : count}
+        </span>
+      )}
+    </>
+  );
   return (
     <section className="mb-8">
-      <h2 className="text-xs uppercase tracking-widest text-gray-500 font-bold mb-3">
-        {title}
-      </h2>
-      <div className="space-y-3">{children}</div>
+      {showHeader &&
+        (collapsible ? (
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            className="flex items-center gap-2 mb-3 text-xs uppercase tracking-widest text-gray-500 hover:text-white font-bold w-full text-left"
+            aria-expanded={open}
+          >
+            {open ? (
+              <ChevronDown className="w-4 h-4" />
+            ) : (
+              <ChevronRight className="w-4 h-4" />
+            )}
+            {headerLabel}
+          </button>
+        ) : (
+          <h2 className="text-xs uppercase tracking-widest text-gray-500 font-bold mb-3">
+            {headerLabel}
+          </h2>
+        ))}
+      {(!collapsible || open) && (
+        <div className="space-y-3">{children}</div>
+      )}
     </section>
   );
 }
