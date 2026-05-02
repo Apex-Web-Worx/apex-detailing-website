@@ -1,10 +1,12 @@
 /**
  * Booking time slots vary by day of week:
  *   Sun        — closed
- *   Mon..Thu   — 07:30 and 08:00 (any service)
+ *   Mon..Thu   — 07:30 and 08:00 (only services NOT in
+ *                FRIDAY_ONLY_SERVICE_SLUGS)
  *   Fri        — 07:00, 11:00 and 15:00 (only services in
- *                FRIDAY_ALLOWED_SERVICE_SLUGS)
- *   Sat        — 07:30 and 08:00 (any service)
+ *                FRIDAY_ONLY_SERVICE_SLUGS)
+ *   Sat        — 07:30 and 08:00 (only services NOT in
+ *                FRIDAY_ONLY_SERVICE_SLUGS)
  */
 const REGULAR_SLOTS = ["07:30", "08:00"] as const;
 const FRIDAY_SLOTS = ["07:00", "11:00", "15:00"] as const;
@@ -20,10 +22,11 @@ export const ALL_TIME_SLOTS = [
 export type TimeSlot = (typeof ALL_TIME_SLOTS)[number];
 
 /**
- * Service slugs allowed to book on Fridays. Slug-based (not id-based) so
- * the rule survives reseeds / id renumbering.
+ * Service slugs that are bookable ONLY on Fridays (and conversely, the only
+ * services bookable on Fridays). Slug-based (not id-based) so the rule
+ * survives reseeds / id renumbering.
  */
-export const FRIDAY_ALLOWED_SERVICE_SLUGS = new Set<string>([
+export const FRIDAY_ONLY_SERVICE_SLUGS = new Set<string>([
   "apex-express-interior-detailing",
   "apex-exterior-detailing",
   "apex-headlight-restoration",
@@ -144,7 +147,11 @@ export function getSlotsForDate(yyyyMmDd: string): readonly string[] {
 
 /**
  * True if {date, time} is a real bookable slot AND the given service is
- * allowed in that slot. Encapsulates Sunday-closed and the Friday allow-list.
+ * allowed in that slot. Encapsulates:
+ *   - Sunday closed
+ *   - Friday-only services (apex-express-interior, apex-exterior,
+ *     apex-headlight-restoration) are bookable on Fridays ONLY
+ *   - All other services are bookable Mon-Thu and Sat ONLY (NOT Friday)
  */
 export function isSlotAllowedForService(
   yyyyMmDd: string,
@@ -154,8 +161,12 @@ export function isSlotAllowedForService(
   if (!getSlotsForDate(yyyyMmDd).includes(time)) return false;
   const d = parseDateString(yyyyMmDd);
   if (!d) return false;
-  if (d.getUTCDay() === 5 && !FRIDAY_ALLOWED_SERVICE_SLUGS.has(serviceSlug))
-    return false;
+  const isFriday = d.getUTCDay() === 5;
+  const isFridayOnlyService = FRIDAY_ONLY_SERVICE_SLUGS.has(serviceSlug);
+  // Friday-only services on a non-Friday → not allowed
+  if (!isFriday && isFridayOnlyService) return false;
+  // Non-Friday-only services on a Friday → not allowed
+  if (isFriday && !isFridayOnlyService) return false;
   return true;
 }
 
