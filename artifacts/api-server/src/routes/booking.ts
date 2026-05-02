@@ -5,7 +5,7 @@ import {
   bookingsTable,
   blockedDatesTable,
 } from "@workspace/db";
-import { and, asc, eq, gte, lte } from "drizzle-orm";
+import { and, asc, eq, gte, lte, ne } from "drizzle-orm";
 import {
   CreateBookingBody,
   GetAvailabilityQueryParams,
@@ -140,9 +140,22 @@ router.get("/booking/availability", async (req, res) => {
   ]);
 
   // Build a Set of "YYYY-MM-DD HH:MM" taken slots in shop-local time.
+  // Also build a Set of dates that are *fully* taken because a regular
+  // (non-Friday) detail was booked. Regular details can take most of the
+  // day (up to ~10 hours), so a single confirmed Mon-Thu/Sat booking
+  // consumes the entire day. Friday slots (express/headlight) are short
+  // and can coexist, so they only block their own time.
   const taken = new Set<string>();
+  const fullyBookedDates = new Set<string>();
   for (const b of bookings) {
-    taken.add(`${shopLocalDateString(b.scheduledAt)} ${shopLocalTimeString(b.scheduledAt)}`);
+    const dateStr = shopLocalDateString(b.scheduledAt);
+    const timeStr = shopLocalTimeString(b.scheduledAt);
+    taken.add(`${dateStr} ${timeStr}`);
+    const parsed = parseDateString(dateStr);
+    const isFriday = parsed?.getUTCDay() === 5;
+    if (!isFriday) {
+      fullyBookedDates.add(dateStr);
+    }
   }
 
   const blockedSet = new Set(blocked.map((r) => r.date));
@@ -208,11 +221,13 @@ router.get("/booking/availability", async (req, res) => {
     }
 
     const closed = dayClosed || slotsForDay.length === 0;
+    const dayFullyBooked = fullyBookedDates.has(dateStr);
 
     const slots = slotsForDay.map((time) => ({
       time,
       available:
         !closed &&
+        !dayFullyBooked &&
         !taken.has(`${dateStr} ${time}`) &&
         !isPastSlot(dateStr, time),
     }));
@@ -283,6 +298,33 @@ router.post("/booking/bookings", async (req, res) => {
       .status(400)
       .json({ message: "That time has already passed. Please pick a later slot." });
     return;
+  }
+
+  // Whole-day lock for regular (non-Friday) details: a confirmed booking
+  // on a Mon-Thu/Sat date consumes the entire day (up to ~10 hours of
+  // detailing), so block any additional booking attempts on that date.
+  // Friday slots (express/headlight) are short and can coexist.
+  if (dateObj.getUTCDay() !== 5) {
+    const dayStart = buildScheduledAt(body.date, "00:00") ??
+      new Date(Date.UTC(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate()));
+    const dayEnd = new Date(dayStart.getTime() + 36 * 60 * 60 * 1000);
+    const [conflicting] = await db
+      .select({ id: bookingsTable.id })
+      .from(bookingsTable)
+      .where(
+        and(
+          gte(bookingsTable.scheduledAt, dayStart),
+          lte(bookingsTable.scheduledAt, dayEnd),
+          eq(bookingsTable.status, "confirmed"),
+        ),
+      )
+      .limit(1);
+    if (conflicting) {
+      res.status(409).json({
+        message: "That day is fully booked. Please choose another day.",
+      });
+      return;
+    }
   }
 
   const scheduledAt = buildScheduledAt(body.date, body.time);
@@ -494,6 +536,33 @@ router.post("/booking/manage/:id/reschedule", async (req, res) => {
       .status(400)
       .json({ message: "That time has already passed. Please pick a later slot." });
     return;
+  }
+
+  // Whole-day lock for regular (non-Friday) details — same rule as create.
+  // Excludes the current booking so the customer can move within the same day.
+  const newDateObj = parseDateString(newDate);
+  if (newDateObj && newDateObj.getUTCDay() !== 5) {
+    const dayStart = buildScheduledAt(newDate, "00:00") ??
+      new Date(Date.UTC(newDateObj.getUTCFullYear(), newDateObj.getUTCMonth(), newDateObj.getUTCDate()));
+    const dayEnd = new Date(dayStart.getTime() + 36 * 60 * 60 * 1000);
+    const [conflicting] = await db
+      .select({ id: bookingsTable.id })
+      .from(bookingsTable)
+      .where(
+        and(
+          gte(bookingsTable.scheduledAt, dayStart),
+          lte(bookingsTable.scheduledAt, dayEnd),
+          eq(bookingsTable.status, "confirmed"),
+          ne(bookingsTable.id, booking.id),
+        ),
+      )
+      .limit(1);
+    if (conflicting) {
+      res.status(409).json({
+        message: "That day is fully booked. Please choose another day.",
+      });
+      return;
+    }
   }
 
   const newScheduledAt = buildScheduledAt(newDate, newTime);
