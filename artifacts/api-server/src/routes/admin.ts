@@ -3,6 +3,7 @@ import { db, bookingsTable, blockedDatesTable } from "@workspace/db";
 import { and, asc, eq } from "drizzle-orm";
 import { parseDateString, shopLocalDateString, shopLocalTimeString, todayInShopLocal } from "../lib/availability";
 import { sendCancellationEmails, type BookingEmailData } from "../lib/email";
+import { syncBookingCalendar } from "../lib/calendar";
 
 const router: IRouter = Router();
 
@@ -79,6 +80,7 @@ router.delete("/admin/bookings/:id", requireAdmin, async (req, res) => {
     sendCancellationEmails(bookingToEmailData(cancelled), "owner").catch((err) => {
       console.error("[email] admin cancellation notify failed:", err);
     });
+    void syncBookingCalendar(cancelled.id);
   }
 });
 

@@ -26,6 +26,7 @@ import {
   sendRescheduleEmails,
   type BookingEmailData,
 } from "../lib/email";
+import { syncBookingCalendar } from "../lib/calendar";
 
 const router: IRouter = Router();
 
@@ -254,13 +255,15 @@ router.post("/booking/bookings", async (req, res) => {
 
     res.status(201).json(created);
 
-    // Fire-and-forget: send confirmation emails after responding so a slow
-    // or failing email provider never blocks the booking response.
+    // Fire-and-forget: send confirmation emails AND create the owner's
+    // Google Calendar event after responding, so a slow or failing third
+    // party never blocks the booking response.
     sendBookingEmails(bookingToEmailData(created, body.date, body.time)).catch(
       (err) => {
         console.error("[email] sendBookingEmails failed:", err);
       },
     );
+    void syncBookingCalendar(created.id);
     return;
   } catch (err) {
     if (pgErrorCode(err) === "23505") {
@@ -357,11 +360,13 @@ router.post("/booking/manage/:id/cancel", async (req, res) => {
 
   res.status(204).send();
 
-  sendCancellationEmails(bookingToEmailData(updatedRows[0]!), "customer").catch(
+  const cancelled = updatedRows[0]!;
+  sendCancellationEmails(bookingToEmailData(cancelled), "customer").catch(
     (err) => {
       console.error("[email] sendCancellationEmails (customer) failed:", err);
     },
   );
+  void syncBookingCalendar(cancelled.id);
 });
 
 router.post("/booking/manage/:id/reschedule", async (req, res) => {
@@ -459,8 +464,9 @@ router.post("/booking/manage/:id/reschedule", async (req, res) => {
     const updated = updatedRows[0]!;
     res.json(updated);
 
-    // Don't email for a no-op (customer picked the same slot they already
-    // had). The UPDATE still succeeded — just no semantic change.
+    // Don't email or move the calendar entry for a no-op (customer picked
+    // the same slot they already had). The UPDATE still succeeded — just
+    // no semantic change.
     if (!isSameSlot) {
       sendRescheduleEmails({
         oldDate,
@@ -469,6 +475,7 @@ router.post("/booking/manage/:id/reschedule", async (req, res) => {
       }).catch((err) => {
         console.error("[email] sendRescheduleEmails failed:", err);
       });
+      void syncBookingCalendar(updated.id);
     }
     return;
   } catch (err) {

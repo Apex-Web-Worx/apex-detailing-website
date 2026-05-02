@@ -29,6 +29,13 @@ export const bookingsTable = pgTable(
     // (/manage/:id?token=...). Nullable for backwards-compat with rows
     // created before this column existed; new rows always receive one.
     manageToken: text("manage_token"),
+    // Google Calendar event id on the owner's primary calendar. Nullable
+    // because:
+    //   - rows created before this column existed have no event,
+    //   - calendar event creation is fire-and-forget after the HTTP
+    //     response, so a transient outage simply leaves this NULL,
+    //   - cancellations clear it back to NULL after deleting the event.
+    googleEventId: text("google_event_id"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),
