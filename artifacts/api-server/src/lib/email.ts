@@ -179,10 +179,15 @@ function emailShell(args: {
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0a;padding:32px 16px;">
     <tr><td align="center">
       <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#111111;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;">
+        <tr><td style="background:#0a0a0a;padding:28px 32px 16px 32px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <a href="${SHOP_WEBSITE}" style="text-decoration:none;display:inline-block;">
+            <img src="${SHOP_WEBSITE}/images/logo.png" alt="Apex Detailing" width="160" style="display:block;width:160px;max-width:60%;height:auto;border:0;outline:none;margin:0 auto;" />
+          </a>
+        </td></tr>
         <tr><td style="background:${args.headerGradient};padding:28px 32px;">
-          <div style="font-size:13px;color:rgba(255,255,255,0.9);letter-spacing:1.5px;font-weight:700;">${escapeHtml(args.eyebrow)}</div>
-          <div style="font-size:22px;font-weight:900;color:#ffffff;margin-top:6px;">${escapeHtml(args.headline)}</div>
-          ${args.subhead ? `<div style="font-size:14px;color:rgba(255,255,255,0.95);margin-top:6px;">${escapeHtml(args.subhead)}</div>` : ""}
+          <div style="font-size:13px;color:rgba(255,255,255,0.9);letter-spacing:1.5px;font-weight:700;font-family:'Mulish',Helvetica,Arial,sans-serif;">${escapeHtml(args.eyebrow)}</div>
+          <div style="font-size:24px;font-weight:900;color:#ffffff;margin-top:6px;line-height:1.2;font-family:'Mulish',Helvetica,Arial,sans-serif;letter-spacing:-0.3px;">${escapeHtml(args.headline)}</div>
+          ${args.subhead ? `<div style="font-size:14px;color:rgba(255,255,255,0.95);margin-top:8px;font-family:'Mulish',Helvetica,Arial,sans-serif;">${escapeHtml(args.subhead)}</div>` : ""}
         </td></tr>
         <tr><td style="padding:28px 32px;">${args.bodyHtml}</td></tr>
         <tr><td style="background:#0a0a0a;padding:18px 32px;text-align:center;border-top:1px solid rgba(255,255,255,0.08);">
