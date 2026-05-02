@@ -256,8 +256,8 @@ export function customerHtml(b: BookingEmailData): string {
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:rgba(52,150,255,0.08);border:1px solid rgba(52,150,255,0.25);border-radius:12px;padding:18px;margin-bottom:24px;">
       <tr><td>
         <div style="color:#3496FF;font-weight:700;font-size:14px;margin-bottom:6px;">Drop-Off Location</div>
-        <div style="color:#ffffff;font-size:14px;line-height:1.5;">${escapeHtml(SHOP_ADDRESS)}</div>
-        <div style="color:#cccccc;font-size:13px;margin-top:8px;">Please arrive a few minutes early for check-in.</div>
+        <a href="https://maps.apple.com/?address=1114%20E%20Lakota%20St,%20Nixa,%20MO%2065714" style="color:#ffffff;font-size:14px;line-height:1.5;text-decoration:none;font-weight:700;">${escapeHtml(SHOP_ADDRESS)}</a>
+        <div style="color:#cccccc;font-size:13px;margin-top:8px;">Tap the address to open your maps app.</div>
       </td></tr>
     </table>
     ${manageBlock}
