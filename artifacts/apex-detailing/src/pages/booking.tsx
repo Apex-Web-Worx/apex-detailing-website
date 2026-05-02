@@ -24,6 +24,7 @@ import {
   ChevronRight,
   Clock,
   DollarSign,
+  Zap,
   Loader2,
   MapPin,
   Phone,
@@ -238,7 +239,14 @@ function ServiceStep({
               }`}
             >
               <div className="flex items-start justify-between gap-3 mb-3">
-                <h3 className="text-lg font-bold text-white">{s.name}</h3>
+                <h3 className="text-lg font-bold text-white flex items-center flex-wrap gap-2">
+                  {s.name}
+                  {s.slug === "apex-express-interior-detailing" && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white">
+                      <Zap className="w-3 h-3" /> Express
+                    </span>
+                  )}
+                </h3>
               </div>
               <p className="text-sm text-gray-400 mb-4 leading-relaxed">
                 {s.description}
