@@ -398,6 +398,14 @@ async function loadBookingByToken(
 
   if (!row) return "not_found";
   if (!tokensMatch(row.manageToken, tokenParam)) return "not_found";
+  // Manage links expire 24 hours after the appointment's scheduled time.
+  // Past that, the dashboard is treated as gone — same response as an
+  // unknown booking so the customer-facing page shows the friendly
+  // "your booking link has expired" message.
+  const MANAGE_LINK_TTL_MS = 24 * 60 * 60 * 1000;
+  if (row.scheduledAt.getTime() + MANAGE_LINK_TTL_MS < Date.now()) {
+    return "not_found";
+  }
   return row;
 }
 
