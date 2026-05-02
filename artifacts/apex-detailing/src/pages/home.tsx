@@ -107,7 +107,7 @@ const services = [
       <>
         A fast, high-quality interior refresh designed to keep your vehicle clean, fresh, and presentable—without the time commitment of a full detail. This service includes a thorough vacuum, wipe-down of all interior surfaces, floor mats cleaned, interior glass polished, and a light refresh of high-touch areas. Perfect for well-maintained vehicles or as a maintenance service between full details.{" "}
         <span className="text-[#FFA500] font-bold">
-          Please note: Heavily soiled interiors, stains, excessive pet hair, or deep cleaning needs may require a Full Interior Detail. Final service type will be confirmed upon inspection.
+          This service is intended only to maintain a semi-clean vehicle. Heavily soiled interiors, stains, excessive pet hair, or deep cleaning needs may require a Full Interior Detail. Final service type will be confirmed upon inspection.
         </span>
       </>
     ),

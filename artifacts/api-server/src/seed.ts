@@ -28,7 +28,7 @@ const seeds = [
     slug: "apex-express-interior-detailing",
     name: "Apex Express Interior Detailing",
     description:
-      "A fast, high-quality interior refresh designed to keep your vehicle clean, fresh, and presentable — without the time commitment of a full detail. Note: heavily soiled interiors, stains, excessive pet hair, or deep cleaning needs may require a Full Interior Detail. Final service type confirmed upon inspection.",
+      "A fast, high-quality interior refresh designed to keep your vehicle clean, fresh, and presentable — without the time commitment of a full detail. This service is intended only to maintain a semi-clean vehicle. Note: heavily soiled interiors, stains, excessive pet hair, or deep cleaning needs may require a Full Interior Detail. Final service type confirmed upon inspection.",
     durationMinutes: 90,
     priceCents: 0,
     sortOrder: 30,

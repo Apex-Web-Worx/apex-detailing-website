@@ -62,13 +62,35 @@ export default function BookingPage() {
       {/* Top Bar */}
       <header className="border-b border-white/10 bg-[#0a0a0a]/95 backdrop-blur sticky top-0 z-30">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link
-            href="/"
-            className="flex items-center gap-2 text-gray-300 hover:text-white transition"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm font-medium">Back to site</span>
-          </Link>
+          {confirmed || step === "service" ? (
+            <Link
+              href="/"
+              className="flex items-center gap-2 text-gray-300 hover:text-white transition"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span className="text-sm font-medium">Back to site</span>
+            </Link>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                if (step === "datetime") setStep("service");
+                else if (step === "info") setStep("datetime");
+                else if (step === "confirm") setStep("info");
+              }}
+              className="flex items-center gap-2 text-gray-300 hover:text-white transition"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span className="text-sm font-medium">
+                Back to{" "}
+                {step === "datetime"
+                  ? "service"
+                  : step === "info"
+                    ? "date & time"
+                    : "your info"}
+              </span>
+            </button>
+          )}
           <div className="text-sm font-bold tracking-widest text-white/80">
             BOOK A DETAIL
           </div>
