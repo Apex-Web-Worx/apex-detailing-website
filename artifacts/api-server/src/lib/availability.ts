@@ -1,5 +1,28 @@
-export const TIME_SLOTS = ["08:00", "10:00", "12:00", "14:00"] as const;
-export type TimeSlot = (typeof TIME_SLOTS)[number];
+/**
+ * Booking time slots vary by day of week:
+ *   Sun        — closed
+ *   Mon..Thu   — 07:30 and 08:00 (any service)
+ *   Fri        — 07:00, 11:00 and 15:00 (Express Wash & Vacuum only)
+ *   Sat        — 07:30 and 08:00 (any service)
+ */
+const REGULAR_SLOTS = ["07:30", "08:00"] as const;
+const FRIDAY_SLOTS = ["07:00", "11:00", "15:00"] as const;
+
+/** Union of every slot value that exists on any day. */
+export const ALL_TIME_SLOTS = [
+  "07:00",
+  "07:30",
+  "08:00",
+  "11:00",
+  "15:00",
+] as const;
+export type TimeSlot = (typeof ALL_TIME_SLOTS)[number];
+
+/**
+ * Service id of the only service bookable on Fridays.
+ * Matches the seed: id 1 = "Express Wash & Vacuum".
+ */
+export const FRIDAY_ONLY_SERVICE_ID = 1;
 
 export const SHOP_TIMEZONE = "America/Chicago";
 
@@ -102,6 +125,35 @@ export function isClosedShopDate(yyyyMmDd: string): boolean {
 }
 
 /**
+ * The bookable time slots for a given calendar date, taking the day of week
+ * into account. Returns an empty list for days the shop is closed.
+ */
+export function getSlotsForDate(yyyyMmDd: string): readonly string[] {
+  const d = parseDateString(yyyyMmDd);
+  if (!d) return [];
+  const dow = d.getUTCDay();
+  if (dow === 0) return []; // Sun closed
+  if (dow === 5) return FRIDAY_SLOTS; // Fri express only
+  return REGULAR_SLOTS;
+}
+
+/**
+ * True if {date, time} is a real bookable slot AND the given service is
+ * allowed in that slot. Encapsulates Sunday-closed and Friday-express-only.
+ */
+export function isSlotAllowedForService(
+  yyyyMmDd: string,
+  time: string,
+  serviceId: number,
+): boolean {
+  if (!getSlotsForDate(yyyyMmDd).includes(time)) return false;
+  const d = parseDateString(yyyyMmDd);
+  if (!d) return false;
+  if (d.getUTCDay() === 5 && serviceId !== FRIDAY_ONLY_SERVICE_ID) return false;
+  return true;
+}
+
+/**
  * Build a UTC Date corresponding to {date, time} interpreted in the shop's
  * local timezone. DST-safe: we probe both standard- and DST-offset candidates
  * and pick the one whose Intl-formatted local parts match the requested
@@ -133,4 +185,11 @@ export function buildScheduledAt(date: string, time: string): Date | null {
 /** Returns today's date in shop-local time as YYYY-MM-DD. */
 export function todayInShopLocal(): string {
   return shopLocalDateString(new Date());
+}
+
+/** True if the {date, time} slot starts at-or-before "now". */
+export function isPastSlot(yyyyMmDd: string, time: string): boolean {
+  const slot = buildScheduledAt(yyyyMmDd, time);
+  if (!slot) return true;
+  return slot.getTime() <= Date.now();
 }

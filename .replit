@@ -1,4 +1,4 @@
-modules = ["nodejs-24"]
+modules = ["nodejs-24", "python-3.11"]
 
 [[artifacts]]
 id = "artifacts/api-server"
@@ -30,6 +30,7 @@ timeoutMs = 20000
 
 [userenv.shared]
 ADMIN_TOKEN = "!3Lopasas123"
+OWNER_CALENDAR_VIEWER_EMAILS = "gurova.krista@gmail.com"
 
 [nix]
 channel = "stable-25_05"

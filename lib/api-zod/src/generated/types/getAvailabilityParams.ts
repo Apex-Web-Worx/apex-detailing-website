@@ -15,4 +15,8 @@ export type GetAvailabilityParams = {
    * YYYY-MM-DD
    */
   endDate: string;
+  /**
+   * When provided, slots are filtered to those bookable for this service (e.g. Fridays only return slots for the Express service).
+   */
+  serviceId?: number;
 };

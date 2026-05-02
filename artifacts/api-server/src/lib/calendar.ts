@@ -41,6 +41,23 @@ const BOOKING_ID_TAG = "apexBookingId";
 
 const SITE_URL = process.env["SITE_URL"] || "https://www.apexdetailingsf.com";
 
+/**
+ * Email addresses that should also see every booking on their own Google
+ * Calendar (e.g. the owner's spouse). The owner's primary calendar is
+ * shared with these addresses as a one-time, idempotent ACL rule on first
+ * sync — once shared, every event automatically appears under the
+ * recipient's "Other calendars" list.
+ *
+ * Opt-in only: must be set explicitly via the `OWNER_CALENDAR_VIEWER_EMAILS`
+ * env var (comma-separated). When unset, no sharing is performed. Booking
+ * events contain customer PII so we deliberately do not bake any address
+ * into source.
+ */
+const VIEWER_EMAILS = (process.env["OWNER_CALENDAR_VIEWER_EMAILS"] ?? "")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+
 /* ------------------------------------------------------------------ */
 /* Per-booking serialization                                           */
 /* ------------------------------------------------------------------ */
@@ -72,6 +89,12 @@ export function syncBookingCalendar(bookingId: number): Promise<void> {
 type BookingRow = typeof bookingsTable.$inferSelect;
 
 async function doSync(bookingId: number): Promise<void> {
+  // First-call-wins: ensure the calendar is shared with the configured
+  // viewer emails (e.g. owner's spouse) once per process. Idempotent —
+  // Google's POST /acl returns the same rule id when called repeatedly
+  // for the same scope+role.
+  await ensureCalendarShared();
+
   let row: BookingRow | undefined;
   try {
     [row] = await db
@@ -89,6 +112,66 @@ async function doSync(bookingId: number): Promise<void> {
   } else {
     await reconcileNonConfirmed(row);
   }
+}
+
+/* ------------------------------------------------------------------ */
+/* Calendar sharing (one-time per process)                             */
+/* ------------------------------------------------------------------ */
+
+// Tracks per-viewer share state so we don't hammer Google ACL on every
+// sync but DO retry any address whose previous attempt failed (e.g.
+// transient network or quota error). A cached `true` means a prior call
+// already returned 2xx (or 409 already-exists) and Google upserts make
+// re-trying a no-op anyway. Anything else falls through to retry on the
+// next sync.
+const aclSharedOk = new Map<string, boolean>();
+let aclInflight: Promise<void> | null = null;
+
+function ensureCalendarShared(): Promise<void> {
+  // Coalesce concurrent calls in the same tick, but never cache the
+  // promise across ticks — otherwise a single failure would freeze the
+  // share forever (architect issue #2, prior review).
+  if (aclInflight) return aclInflight;
+  aclInflight = (async () => {
+    try {
+      for (const email of VIEWER_EMAILS) {
+        if (aclSharedOk.get(email)) continue;
+        try {
+          const res = await callCalendar(
+            `/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/acl`,
+            {
+              method: "POST",
+              body: {
+                role: "reader",
+                scope: { type: "user", value: email },
+              },
+            },
+          );
+          // 200/201 = created, 409 = ACL rule already exists. Both are
+          // terminal-success states — mark and move on.
+          if (res.ok || res.status === 409) {
+            aclSharedOk.set(email, true);
+            if (res.ok) {
+              console.log(`[calendar] Shared calendar with ${email}`);
+            }
+          } else {
+            const txt = await res.text().catch(() => "");
+            console.warn(
+              `[calendar] ACL share for ${email}: HTTP ${res.status} ${txt} (will retry on next sync)`,
+            );
+          }
+        } catch (err) {
+          console.error(
+            `[calendar] ACL share for ${email} threw (will retry on next sync):`,
+            err,
+          );
+        }
+      }
+    } finally {
+      aclInflight = null;
+    }
+  })();
+  return aclInflight;
 }
 
 async function reconcileConfirmed(row: BookingRow): Promise<void> {

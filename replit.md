@@ -69,7 +69,15 @@ Express 5 API server. Routes live in `src/routes/` and use `@workspace/api-zod` 
 - Entry: `src/index.ts` — reads `PORT`, starts Express
 - App setup: `src/app.ts` — mounts CORS, JSON/urlencoded parsing, routes at `/api`
 - Routes: `src/routes/index.ts` mounts sub-routers; `src/routes/health.ts` exposes `GET /health`
-- **Booking routes** (`src/routes/booking.ts`): `GET /booking/services`, `GET /booking/availability?startDate&endDate`, `POST /booking/bookings`. Availability helper at `src/lib/availability.ts` — fixed slots 08:00/10:00/12:00/14:00 (shop time), Sun closed, 1 booking per slot. Race-safety via partial unique index `bookings_confirmed_slot_unique on (scheduled_at) WHERE status='confirmed'` — double-book attempts surface as 409.
+- **Booking routes** (`src/routes/booking.ts`): `GET /booking/services`, `GET /booking/availability?startDate&endDate&serviceId?`, `POST /booking/bookings`. Availability helper at `src/lib/availability.ts`:
+  - **Schedule** (shop time, `America/Chicago`):
+    - Sun: closed
+    - Mon-Thu, Sat: 07:30 and 08:00 (any service)
+    - Fri: 07:00, 11:00, 15:00 — **Express Wash & Vacuum only** (`FRIDAY_ONLY_SERVICE_ID = 1`)
+  - 1 booking per slot. Race-safety via partial unique index `bookings_confirmed_slot_unique on (scheduled_at) WHERE status='confirmed'` — double-book attempts surface as 409.
+  - `getSlotsForDate(yyyymmdd)` returns the per-day slot list. `isSlotAllowedForService(date, time, serviceId)` is the canonical check used by both `POST /bookings` and `POST /manage/:id/reschedule` — combines "valid time string", "Sundays closed", and "Friday Express-only" into one predicate.
+  - `isPastSlot(date, time)` rejects today's already-passed slots (down to the minute); used by both create and reschedule. The availability response also marks past slots `available: false` so the UI greys them out.
+  - `GET /availability` accepts an optional `serviceId` query param. When supplied, slot lists are filtered to slots the service can be booked into (so Friday is closed for non-Express services). The frontend wizard always supplies it after the customer picks a service; the manage/reschedule UI supplies the booking's existing serviceId.
 - **Customer self-manage** (`src/routes/booking.ts`): each booking gets a 24-byte base64url `manageToken` returned in the create response. Token-gated endpoints (no admin auth):
   - `GET /booking/manage/:id?token=…` — fetch booking
   - `POST /booking/manage/:id/cancel?token=…` — customer-initiated cancellation
@@ -77,12 +85,14 @@ Express 5 API server. Routes live in `src/routes/` and use `@workspace/api-zod` 
 - **Admin routes** (`src/routes/admin.ts`): `GET/DELETE /admin/bookings[/:id]` for bookings, `GET/POST /admin/blocked-dates` and `DELETE /admin/blocked-dates/:date` for managing closed days. Auth via `x-admin-token` header against `ADMIN_TOKEN` env var (returns 500 if env var missing). `blocked_dates` table has unique index on `date`; duplicate block attempts return 409, past dates return 400. Booking creation and availability both consult the blocked-dates table. Admin DELETE sends a customer cancellation email when the row was previously confirmed.
 - **Email** (`src/lib/email.ts`): Gmail-via-Replit-connector; per-message random MIME boundary + base64-encoded bodies (defends against header/MIME injection from customer-controlled fields). Three flows: `sendBookingEmails` (confirmation), `sendCancellationEmails(b, "customer"|"owner")`, `sendRescheduleEmails({oldDate, oldTime, booking})`. Customer confirmation + reschedule emails embed a "Manage your booking" CTA → `${SITE_URL}/manage/:id?token=…`. `SITE_URL` env var defaults to `https://www.apexdetailingsf.com`.
 - **Google Calendar** (`src/lib/calendar.ts`): owner's primary calendar via the Replit `google-calendar` connector. Single public function `syncBookingCalendar(bookingId)` — call sites (POST /booking/bookings, /manage/:id/reschedule, /manage/:id/cancel, admin DELETE) just fire it after the DB write that changed the booking. The function is a state-based reconciler: serializes per-booking via an in-memory queue, reloads the row, then ensures the calendar matches: confirmed+no-event → create + adopt id (compare-and-set on `google_event_id`); confirmed+event → patch in place (recreate if 404/410); cancelled → delete event + clear id + sweep up any orphans tagged `extendedProperties.private.apexBookingId`. This design is robust to create/reschedule/cancel arriving in quick succession (no duplicate or orphan events). All calls are fire-and-forget after the HTTP response. Event payload puts customer name + vehicle in the title, contact info + notes in the description; time zone `America/Chicago`. Single-process assumption — if we scale horizontally, replace the in-memory queue with a row lock or worker.
+  - **Calendar sharing for spouse / additional viewers**: on the first sync of each process, `ensureCalendarShared()` POSTs an ACL rule (role `reader`, scope user) for each address in `OWNER_CALENDAR_VIEWER_EMAILS` (env var, comma-separated). Idempotent — Google upserts on the same scope so re-runs on every server start are safe. After this one-time share, every booking event automatically appears on the viewer's own Google Calendar under "Other calendars". **Opt-in only — no hardcoded fallback** because event payloads contain customer PII (name, phone, email, vehicle, notes); if the env var is unset, no sharing happens.
 - **Seed**: `pnpm --filter @workspace/api-server run seed` populates 6 services.
 
 ### Booking system env vars
 - `ADMIN_TOKEN` (shared) — password used to access `/admin`.
 - `SITE_URL` (optional) — base URL used to build the customer manage link inside emails. Defaults to `https://www.apexdetailingsf.com`.
 - `OWNER_EMAIL` / `FROM_NAME` are constants in `email.ts` (`apexdetailingsf@gmail.com` / `Apex Detailing`).
+- `OWNER_CALENDAR_VIEWER_EMAILS` (comma-separated) — Google accounts that the owner's calendar is auto-shared with so they see every booking on their own calendar (e.g. owner's spouse). Configured via Replit environment / Secrets — value is intentionally not committed because event payloads contain customer PII (name, phone, email, vehicle, notes). Unset = sharing disabled.
 
 ## TypeScript & Composite Projects
 

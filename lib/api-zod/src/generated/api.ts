@@ -36,6 +36,7 @@ export const ListServicesResponse = zod.array(ListServicesResponseItem);
 export const GetAvailabilityQueryParams = zod.object({
   startDate: zod.coerce.string(),
   endDate: zod.coerce.string(),
+  serviceId: zod.coerce.number().optional(),
 });
 
 export const GetAvailabilityResponseItem = zod.object({

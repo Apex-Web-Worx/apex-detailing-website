@@ -60,6 +60,12 @@ paths:
           schema:
             type: string
             description: YYYY-MM-DD
+        - name: serviceId
+          in: query
+          required: false
+          schema:
+            type: integer
+            description: When provided, slots are filtered to those bookable for this service (e.g. Fridays only return slots for the Express service).
       responses:
         "200":
           description: OK

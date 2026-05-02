@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link } from "wouter";
 import {
   useListServices,
@@ -139,6 +139,13 @@ export default function BookingPage() {
           <ServiceStep
             selected={service}
             onSelect={(s) => {
+              // Clear any previously-picked slot when the service changes,
+              // since service-specific availability (e.g. Friday Express
+              // only) means the prior slot may no longer be valid.
+              if (!service || s.id !== service.id) {
+                setDate(null);
+                setTime(null);
+              }
               setService(s);
               setStep("datetime");
             }}
@@ -260,10 +267,39 @@ function DateTimeStep({
   const { data, isLoading } = useGetAvailability({
     startDate: windowStart,
     endDate,
+    serviceId: service.id,
   });
 
   const days = data ?? [];
   const selectedDay = days.find((d) => d.date === pickedDate);
+
+  // If service-filtered availability now reports the previously-picked
+  // slot as missing/unavailable (e.g. user switched from Express to
+  // Interior after picking a Friday slot), clear the stale selection so
+  // the Continue button can't ferry an invalid combo to the API.
+  const pickedSlotStillValid =
+    !pickedDate ||
+    !pickedTime ||
+    Boolean(
+      selectedDay &&
+        !selectedDay.closed &&
+        selectedDay.slots.some((s) => s.time === pickedTime && s.available),
+    );
+  useEffect(() => {
+    if (!data) return;
+    if (pickedDate && (!selectedDay || selectedDay.closed)) {
+      setPickedDate(null);
+      setPickedTime(null);
+      return;
+    }
+    if (
+      pickedTime &&
+      selectedDay &&
+      !selectedDay.slots.some((s) => s.time === pickedTime && s.available)
+    ) {
+      setPickedTime(null);
+    }
+  }, [data, pickedDate, pickedTime, selectedDay]);
 
   const goPrev = () => {
     const prev = addDaysToDateString(windowStart, -14);
@@ -394,7 +430,7 @@ function DateTimeStep({
 
       <div className="flex justify-end">
         <button
-          disabled={!pickedDate || !pickedTime}
+          disabled={!pickedDate || !pickedTime || !pickedSlotStillValid}
           onClick={() => onSelect(pickedDate!, pickedTime!)}
           className="px-8 py-3 rounded-full bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white font-bold disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-[#3496FF]/30 transition flex items-center gap-2"
         >

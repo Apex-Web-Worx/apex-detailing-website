@@ -12,9 +12,11 @@ import {
 } from "@workspace/api-zod";
 import { randomBytes, timingSafeEqual } from "node:crypto";
 import {
-  TIME_SLOTS,
   buildScheduledAt,
+  getSlotsForDate,
   isClosedShopDate,
+  isPastSlot,
+  isSlotAllowedForService,
   parseDateString,
   shopLocalDateString,
   shopLocalTimeString,
@@ -146,6 +148,9 @@ router.get("/booking/availability", async (req, res) => {
   const blockedSet = new Set(blocked.map((r) => r.date));
 
   const today = todayInShopLocal();
+  const serviceIdNum =
+    parsed.data.serviceId !== undefined ? Number(parsed.data.serviceId) : null;
+
   const out: Array<{
     date: string;
     closed: boolean;
@@ -158,12 +163,28 @@ router.get("/booking/availability", async (req, res) => {
     d.setUTCDate(d.getUTCDate() + 1)
   ) {
     const dateStr = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")}`;
-    const isPast = dateStr < today;
-    const closed =
-      isClosedShopDate(dateStr) || isPast || blockedSet.has(dateStr);
-    const slots = TIME_SLOTS.map((time) => ({
+    const isPastDay = dateStr < today;
+    const dayClosed =
+      isClosedShopDate(dateStr) || isPastDay || blockedSet.has(dateStr);
+
+    // Slot list for the day. If the user already picked a service and the
+    // service isn't bookable on this day (e.g. Friday + non-Express), the
+    // resulting list is empty and the day shows as closed.
+    let slotsForDay: readonly string[] = getSlotsForDate(dateStr);
+    if (serviceIdNum !== null) {
+      slotsForDay = slotsForDay.filter((t) =>
+        isSlotAllowedForService(dateStr, t, serviceIdNum),
+      );
+    }
+
+    const closed = dayClosed || slotsForDay.length === 0;
+
+    const slots = slotsForDay.map((time) => ({
       time,
-      available: !closed && !taken.has(`${dateStr} ${time}`),
+      available:
+        !closed &&
+        !taken.has(`${dateStr} ${time}`) &&
+        !isPastSlot(dateStr, time),
     }));
     out.push({ date: dateStr, closed, slots });
   }
@@ -184,22 +205,17 @@ router.post("/booking/bookings", async (req, res) => {
 
   const body = parsed.data;
 
-  if (!TIME_SLOTS.includes(body.time as (typeof TIME_SLOTS)[number])) {
-    res.status(400).json({ message: "Invalid time slot" });
-    return;
-  }
-
   const dateObj = parseDateString(body.date);
   if (!dateObj) {
     res.status(400).json({ message: "Invalid date format. Use YYYY-MM-DD." });
     return;
   }
-  if (isClosedShopDate(body.date)) {
-    res.status(400).json({ message: "Shop is closed on this day" });
-    return;
-  }
   if (body.date < todayInShopLocal()) {
     res.status(400).json({ message: "Cannot book a date in the past" });
+    return;
+  }
+  if (isClosedShopDate(body.date)) {
+    res.status(400).json({ message: "Shop is closed on this day" });
     return;
   }
 
@@ -221,6 +237,20 @@ router.post("/booking/bookings", async (req, res) => {
 
   if (!service) {
     res.status(400).json({ message: "Selected service is not available" });
+    return;
+  }
+
+  // Combined: rejects bad time strings, Sundays, and (Friday + non-Express).
+  if (!isSlotAllowedForService(body.date, body.time, service.id)) {
+    res
+      .status(400)
+      .json({ message: "That time slot is not available for this service." });
+    return;
+  }
+  if (isPastSlot(body.date, body.time)) {
+    res
+      .status(400)
+      .json({ message: "That time has already passed. Please pick a later slot." });
     return;
   }
 
@@ -396,10 +426,6 @@ router.post("/booking/manage/:id/reschedule", async (req, res) => {
       .json({ message: "This appointment has already passed and cannot be rescheduled online." });
     return;
   }
-  if (!TIME_SLOTS.includes(newTime as (typeof TIME_SLOTS)[number])) {
-    res.status(400).json({ message: "Invalid time slot" });
-    return;
-  }
   if (!parseDateString(newDate)) {
     res.status(400).json({ message: "Invalid date format. Use YYYY-MM-DD." });
     return;
@@ -419,6 +445,21 @@ router.post("/booking/manage/:id/reschedule", async (req, res) => {
     .where(eq(blockedDatesTable.date, newDate));
   if (blockedRow) {
     res.status(400).json({ message: "Shop is closed on this day" });
+    return;
+  }
+
+  // Combined: rejects bad time strings, Sundays, and (Friday + non-Express)
+  // for the booking's existing service.
+  if (!isSlotAllowedForService(newDate, newTime, booking.serviceId)) {
+    res.status(400).json({
+      message: "That time slot is not available for this service.",
+    });
+    return;
+  }
+  if (isPastSlot(newDate, newTime)) {
+    res
+      .status(400)
+      .json({ message: "That time has already passed. Please pick a later slot." });
     return;
   }
 

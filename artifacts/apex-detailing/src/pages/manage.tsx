@@ -420,6 +420,7 @@ function ReschedulePanel({
   const { data, isLoading } = useGetAvailability({
     startDate: windowStart,
     endDate,
+    serviceId: booking.serviceId,
   });
 
   const days = data ?? [];
