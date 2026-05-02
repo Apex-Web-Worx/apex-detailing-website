@@ -419,6 +419,40 @@ export default function Home() {
   const [paintCorrectionPreviewIndex, setPaintCorrectionPreviewIndex] = useState(0);
   const [bookingChoiceOpen, setBookingChoiceOpen] = useState(false);
   const [bookingTarget, setBookingTarget] = useState<"detail" | "now" | null>(null);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [legalModal, setLegalModal] = useState<"privacy" | "terms" | null>(null);
+
+  const faqs = [
+    {
+      q: "Do you come to me, or do I bring my car to you?",
+      a: "Both! We offer mobile service throughout Nixa, Ozark, and Springfield, and you can also bring your vehicle to our shop at 1114 E Lakota St in Nixa.",
+    },
+    {
+      q: "How long does a detail take?",
+      a: "Most interior or exterior details take 2–4 hours. Full details usually run 4–6 hours, and ceramic coatings or paint correction can take a full day depending on vehicle condition.",
+    },
+    {
+      q: "How do I book an appointment?",
+      a: "Click any 'Book Your Detail' button. You'll choose between Square (for Express Interior) or Calendly (for all other services). All scheduling needs to happen before your visit.",
+    },
+    {
+      q: "What payment methods do you accept?",
+      a: "Cash, all major credit/debit cards, and digital payments through Square. Gift cards are also available year-round.",
+    },
+    {
+      q: "What if my vehicle is in really rough shape?",
+      a: "No problem — we handle heavy pet hair, deep stains, and serious build-up. Heavily soiled interiors may require a Full Interior Detail rather than the Express service. Final pricing is confirmed at inspection.",
+    },
+    {
+      q: "Do you offer gift cards?",
+      a: "Yes — physical and digital gift cards are available through our Square store. They're a perfect gift for any car owner.",
+    },
+  ];
+
+  const serviceCities = [
+    "Nixa", "Ozark", "Springfield", "Republic", "Battlefield",
+    "Rogersville", "Strafford", "Willard", "Sparta", "Highlandville",
+  ];
 
   const beforeAfterPairs: Array<{ title: string; before: string; after: string }> = [
     {
@@ -829,6 +863,15 @@ export default function Home() {
 
       {/* Hero Section */}
       <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+        {/* Hero Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src={`${import.meta.env.BASE_URL}images/hero-1.jpg`}
+            alt="Apex Detailing freshly detailed vehicle"
+            className="w-full h-full object-cover opacity-25"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/60 via-[#0a0a0a]/80 to-[#0a0a0a]" />
+        </div>
         {/* Soap Bubbles in Header */}
         <div className="soap-bubble absolute top-[5%] left-[5%] w-12 h-12" style={{ animationDuration: '16s', animationDelay: '0s' }} />
         <div className="soap-bubble absolute top-[10%] left-[15%] w-16 h-16" style={{ animationDuration: '18s', animationDelay: '1s' }} />
@@ -897,18 +940,41 @@ export default function Home() {
             </button>
           </div>
 
-          <div className="mt-16 flex flex-wrap justify-center items-center gap-8 opacity-60 hover:opacity-100 transition-all duration-500">
+          {/* Google Reviews Badge */}
+          <a
+            href={GOOGLE_REVIEWS_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 inline-flex items-center gap-3 px-5 py-3 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:border-[#FFA500]/60 transition-colors"
+            aria-label="See our Google reviews"
+          >
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            <span className="font-bold text-white text-sm sm:text-base">5.0</span>
+            <div className="flex gap-0.5">
+              {[1,2,3,4,5].map((s) => (
+                <Star key={s} className="w-3.5 h-3.5 text-[#FFA500]" fill="currentColor" />
+              ))}
+            </div>
+            <span className="text-gray-300 text-xs sm:text-sm font-medium">on Google</span>
+          </a>
+
+          <div className="mt-10 flex flex-wrap justify-center items-center gap-6 sm:gap-8 opacity-70 hover:opacity-100 transition-all duration-500">
             <div className="flex items-center gap-2">
               <Award className="w-6 h-6 text-[#A886CD]" />
               <span className="font-bold">Professional Detailers</span>
             </div>
             <div className="flex items-center gap-2">
-              <Star className="w-6 h-6 text-[#3496FF]" fill="currentColor" />
-              <span className="font-bold">5-Star Rated</span>
+              <Shield className="w-6 h-6 text-[#3496FF]" />
+              <span className="font-bold">Insured & Trusted</span>
             </div>
             <div className="flex items-center gap-2">
-              <Shield className="w-6 h-6 text-[#A886CD]" />
-              <span className="font-bold">Expert Detailing</span>
+              <MapPin className="w-6 h-6 text-[#A886CD]" />
+              <span className="font-bold">Mobile or In-Shop</span>
             </div>
           </div>
 
@@ -997,6 +1063,37 @@ export default function Home() {
 
           {/* Addons Section - Two Column Layout */}
           <AddonsSection />
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="py-20 sm:py-24 relative bg-[#0a0a0a] border-t border-white/5 overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <h2 className="text-sm font-bold tracking-widest text-[#A886CD] uppercase mb-3">
+              How It Works
+            </h2>
+            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight">
+              Three Simple{" "}
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+                Steps
+              </span>
+            </h3>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {[
+              { step: "01", title: "Book Online", desc: "Pick your service and time through Calendly or Square in under 2 minutes.", icon: <Clock className="w-7 h-7 text-[#3496FF]" /> },
+              { step: "02", title: "We Detail", desc: "Bring your car to our Nixa shop or we come to you. We handle every surface with care.", icon: <Sparkles className="w-7 h-7 text-[#A886CD]" /> },
+              { step: "03", title: "Drive Happy", desc: "Step into a like-new vehicle and enjoy long-lasting protection and shine.", icon: <Car className="w-7 h-7 text-[#3496FF]" /> },
+            ].map((s) => (
+              <div key={s.step} className="relative p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-white/20 transition-colors">
+                <div className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF] mb-4">{s.step}</div>
+                <div className="mb-4">{s.icon}</div>
+                <h4 className="text-xl font-black uppercase tracking-tight mb-2">{s.title}</h4>
+                <p className="text-gray-400 text-sm leading-relaxed">{s.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -1593,6 +1690,128 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Service Area */}
+      <section className="py-20 sm:py-24 relative bg-[#0a0a0a] border-t border-white/5 overflow-hidden">
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#3496FF]/10 rounded-full mix-blend-screen filter blur-[120px]" />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <h2 className="text-sm font-bold tracking-widest text-[#3496FF] uppercase mb-3">
+              Service Area
+            </h2>
+            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-4">
+              Serving the{" "}
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+                Ozarks
+              </span>
+            </h3>
+            <p className="text-gray-400 text-lg">
+              Based in Nixa, Missouri — covering surrounding Greene & Christian County communities. Mobile detailing available within ~25 miles.
+            </p>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            <div className="flex flex-wrap justify-center gap-3 mb-10">
+              {serviceCities.map((city) => (
+                <div
+                  key={city}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 hover:border-[#3496FF]/50 transition-colors"
+                >
+                  <MapPin className="w-3.5 h-3.5 text-[#3496FF]" />
+                  <span className="text-sm font-bold text-gray-200">{city}, MO</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <a
+                href="tel:417-527-6165"
+                className="flex items-center gap-3 p-5 rounded-xl bg-white/5 border border-white/10 hover:border-[#A886CD]/50 transition-colors"
+              >
+                <Phone className="w-5 h-5 text-[#A886CD]" />
+                <div>
+                  <p className="text-xs text-gray-500 uppercase tracking-wider font-bold">Call</p>
+                  <p className="text-white font-bold">417-527-6165</p>
+                </div>
+              </a>
+              <a
+                href="https://www.google.com/maps/search/1114+E+Lakota+St,+65714+Nixa,+MO"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 p-5 rounded-xl bg-white/5 border border-white/10 hover:border-[#3496FF]/50 transition-colors"
+              >
+                <MapPin className="w-5 h-5 text-[#3496FF]" />
+                <div>
+                  <p className="text-xs text-gray-500 uppercase tracking-wider font-bold">Shop</p>
+                  <p className="text-white font-bold">1114 E Lakota St, Nixa</p>
+                </div>
+              </a>
+              <div className="flex items-center gap-3 p-5 rounded-xl bg-white/5 border border-white/10">
+                <Clock className="w-5 h-5 text-[#A886CD]" />
+                <div>
+                  <p className="text-xs text-gray-500 uppercase tracking-wider font-bold">Hours</p>
+                  <p className="text-white font-bold">Mon–Sat · 8am – 6pm</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20 sm:py-24 relative bg-[#0d0d0d] border-t border-white/5 overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <h2 className="text-sm font-bold tracking-widest text-[#A886CD] uppercase mb-3">
+              FAQ
+            </h2>
+            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight">
+              Frequently Asked{" "}
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+                Questions
+              </span>
+            </h3>
+          </div>
+
+          <div className="max-w-3xl mx-auto space-y-3">
+            {faqs.map((faq, i) => {
+              const isOpen = openFaq === i;
+              return (
+                <div
+                  key={i}
+                  className={`rounded-xl border backdrop-blur-sm transition-colors ${
+                    isOpen ? "bg-white/10 border-[#3496FF]/40" : "bg-white/5 border-white/10 hover:border-white/20"
+                  }`}
+                >
+                  <button
+                    onClick={() => setOpenFaq(isOpen ? null : i)}
+                    className="w-full flex items-center justify-between gap-4 p-5 text-left"
+                    aria-expanded={isOpen}
+                  >
+                    <span className="font-bold text-white text-base sm:text-lg">{faq.q}</span>
+                    <ChevronRight
+                      className={`w-5 h-5 shrink-0 text-[#3496FF] transition-transform duration-300 ${
+                        isOpen ? "rotate-90" : ""
+                      }`}
+                    />
+                  </button>
+                  <div
+                    className={`grid transition-all duration-300 ease-in-out ${
+                      isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <p className="px-5 pb-5 text-gray-300 text-sm sm:text-base leading-relaxed">
+                        {faq.a}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-24 relative z-10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -1739,6 +1958,14 @@ export default function Home() {
                   <Phone className="w-5 h-5 text-[#A886CD]" />
                   <a href="tel:417-527-6165" className="hover:text-[#3496FF] transition-colors">417-527-6165</a>
                 </li>
+                <li className="flex items-start gap-3">
+                  <Clock className="w-5 h-5 text-[#A886CD] shrink-0 mt-0.5" />
+                  <div className="text-sm">
+                    <p className="text-white font-bold">Mon – Sat</p>
+                    <p className="text-gray-400">8:00 AM – 6:00 PM</p>
+                    <p className="text-gray-500 mt-1">Closed Sundays</p>
+                  </div>
+                </li>
                 <li className="flex items-start gap-3 group cursor-pointer">
                   <Mail className="w-5 h-5 text-[#3496FF] shrink-0 mt-0.5" />
                   <div className="flex flex-col">
@@ -1788,16 +2015,129 @@ export default function Home() {
               &copy; {new Date().getFullYear()} Apex Detailing. All rights reserved.
             </p>
             <div className="flex flex-wrap justify-center md:justify-end gap-4 sm:gap-6 text-sm text-gray-500 font-medium">
-              <span className="hover:text-white cursor-pointer transition-colors">
+              <button
+                onClick={() => setLegalModal("privacy")}
+                className="hover:text-white cursor-pointer transition-colors"
+              >
                 Privacy Policy
-              </span>
-              <span className="hover:text-white cursor-pointer transition-colors">
+              </button>
+              <button
+                onClick={() => setLegalModal("terms")}
+                className="hover:text-white cursor-pointer transition-colors"
+              >
                 Terms of Service
-              </span>
+              </button>
             </div>
           </div>
         </div>
       </footer>
+
+      {/* Sticky Mobile Action Bar */}
+      <div className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#0a0a0a]/95 backdrop-blur-md border-t border-white/10 px-3 py-2 grid grid-cols-2 gap-2 shadow-[0_-4px_20px_rgba(0,0,0,0.5)]">
+        <a
+          href="tel:417-527-6165"
+          className="flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-white/10 border border-white/15 font-bold text-sm text-white"
+          aria-label="Call Apex Detailing"
+        >
+          <Phone className="w-4 h-4 text-[#3496FF]" />
+          CALL NOW
+        </a>
+        <button
+          onClick={() => openBookingChoice("now")}
+          className="flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-gradient-to-r from-[#A886CD] to-[#3496FF] font-black text-sm text-white shadow-[0_0_15px_rgba(52,150,255,0.4)]"
+        >
+          BOOK NOW
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
+      {/* Spacer so sticky bar doesn't overlap content on mobile */}
+      <div className="md:hidden h-20" aria-hidden="true" />
+
+      {/* Legal Modal: Privacy / Terms */}
+      {legalModal && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center px-4 py-8"
+          onClick={() => setLegalModal(null)}
+        >
+          <div
+            className="w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl bg-[#111] border border-white/10 p-6 sm:p-8 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-4 mb-4">
+              <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-tight">
+                {legalModal === "privacy" ? "Privacy Policy" : "Terms of Service"}
+              </h3>
+              <button
+                onClick={() => setLegalModal(null)}
+                className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                aria-label="Close"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-6">
+              Last updated: {new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+            </p>
+
+            {legalModal === "privacy" ? (
+              <div className="space-y-4 text-gray-300 text-sm leading-relaxed">
+                <p>
+                  Apex Detailing ("we", "us") respects your privacy. This page explains what limited information we collect when you use this site or contact us, and how we use it.
+                </p>
+                <div>
+                  <h4 className="font-black text-white text-base mb-1">Information We Collect</h4>
+                  <p>We only collect information you voluntarily provide — your name, phone, email, vehicle details, and appointment preferences when you book or contact us. Bookings are processed through Square and Calendly under their own privacy policies.</p>
+                </div>
+                <div>
+                  <h4 className="font-black text-white text-base mb-1">How We Use It</h4>
+                  <p>To schedule and complete your service, send appointment reminders, follow up on the work performed, and respond to your questions. We do not sell or share your information with third parties for marketing.</p>
+                </div>
+                <div>
+                  <h4 className="font-black text-white text-base mb-1">Cookies & Analytics</h4>
+                  <p>This site may use basic analytics cookies to understand traffic. You can disable cookies in your browser at any time.</p>
+                </div>
+                <div>
+                  <h4 className="font-black text-white text-base mb-1">Contact</h4>
+                  <p>Questions about your data? Call <a href="tel:417-527-6165" className="text-[#3496FF] underline">417-527-6165</a> or message us on Instagram or Facebook.</p>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4 text-gray-300 text-sm leading-relaxed">
+                <p>
+                  By booking a service or using this site, you agree to the following terms.
+                </p>
+                <div>
+                  <h4 className="font-black text-white text-base mb-1">Booking & Scheduling</h4>
+                  <p>All scheduling must be completed before your visit through Square or Calendly. Please arrive on time. Significant delays may require rescheduling.</p>
+                </div>
+                <div>
+                  <h4 className="font-black text-white text-base mb-1">Pricing</h4>
+                  <p>Listed prices are starting points and reflect standard vehicle conditions. Final pricing is confirmed at inspection and depends on vehicle size, condition, and any add-on services.</p>
+                </div>
+                <div>
+                  <h4 className="font-black text-white text-base mb-1">Cancellations</h4>
+                  <p>Please give at least 24 hours' notice for cancellations or reschedules so we can offer the slot to other customers.</p>
+                </div>
+                <div>
+                  <h4 className="font-black text-white text-base mb-1">Vehicle Condition & Liability</h4>
+                  <p>We take great care with every vehicle. Customers are responsible for removing valuables before service. Pre-existing damage, mechanical issues, or worn materials are not the responsibility of Apex Detailing.</p>
+                </div>
+                <div>
+                  <h4 className="font-black text-white text-base mb-1">Satisfaction</h4>
+                  <p>If something isn't right, contact us within 24 hours of service and we'll make it right.</p>
+                </div>
+              </div>
+            )}
+
+            <button
+              onClick={() => setLegalModal(null)}
+              className="mt-6 w-full py-3 rounded-lg bg-gradient-to-r from-[#A886CD] to-[#3496FF] font-black text-white"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
 
       {mapChooserOpen && (
         <div className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm flex items-center justify-center px-4">
