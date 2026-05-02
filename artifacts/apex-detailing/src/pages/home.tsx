@@ -437,7 +437,7 @@ export default function Home() {
     },
     {
       q: "What payment methods do you accept?",
-      a: "We accept Square (all major credit/debit cards), Venmo, and Zelle. Digital gift cards are also available year-round through our Square store.",
+      a: "We accept cash, Square (all major credit/debit cards), Venmo, and Zelle. Digital gift cards are also available year-round through our Square store.",
     },
     {
       q: "What if my vehicle is in really rough shape?",
