@@ -19,5 +19,7 @@ export interface Booking {
   notes: string;
   scheduledAt: Date;
   status: string;
+  /** Returned to the booking creator and via the manage endpoints. Used in the customer self-manage URL. */
+  manageToken?: string | null;
   createdAt: Date;
 }

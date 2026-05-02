@@ -19,12 +19,16 @@ import type {
 import type {
   BlockedDate,
   Booking,
+  CancelManagedBookingParams,
   CreateBlockedDateRequest,
   CreateBookingRequest,
   DayAvailability,
   Error,
   GetAvailabilityParams,
+  GetManagedBookingParams,
   HealthStatus,
+  RescheduleBookingRequest,
+  RescheduleManagedBookingParams,
   Service,
 } from "./api.schemas";
 
@@ -366,6 +370,340 @@ export const useCreateBooking = <
   TContext
 > => {
   return useMutation(getCreateBookingMutationOptions(options));
+};
+
+/**
+ * @summary Get a booking via the customer's self-manage link
+ */
+export const getGetManagedBookingUrl = (
+  id: number,
+  params: GetManagedBookingParams,
+) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/booking/manage/${id}?${stringifiedParams}`
+    : `/api/booking/manage/${id}`;
+};
+
+export const getManagedBooking = async (
+  id: number,
+  params: GetManagedBookingParams,
+  options?: RequestInit,
+): Promise<Booking> => {
+  return customFetch<Booking>(getGetManagedBookingUrl(id, params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetManagedBookingQueryKey = (
+  id: number,
+  params?: GetManagedBookingParams,
+) => {
+  return [`/api/booking/manage/${id}`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetManagedBookingQueryOptions = <
+  TData = Awaited<ReturnType<typeof getManagedBooking>>,
+  TError = ErrorType<Error>,
+>(
+  id: number,
+  params: GetManagedBookingParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getManagedBooking>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetManagedBookingQueryKey(id, params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getManagedBooking>>
+  > = ({ signal }) =>
+    getManagedBooking(id, params, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getManagedBooking>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetManagedBookingQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getManagedBooking>>
+>;
+export type GetManagedBookingQueryError = ErrorType<Error>;
+
+/**
+ * @summary Get a booking via the customer's self-manage link
+ */
+
+export function useGetManagedBooking<
+  TData = Awaited<ReturnType<typeof getManagedBooking>>,
+  TError = ErrorType<Error>,
+>(
+  id: number,
+  params: GetManagedBookingParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getManagedBooking>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetManagedBookingQueryOptions(id, params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Cancel a booking via the customer's self-manage link
+ */
+export const getCancelManagedBookingUrl = (
+  id: number,
+  params: CancelManagedBookingParams,
+) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/booking/manage/${id}/cancel?${stringifiedParams}`
+    : `/api/booking/manage/${id}/cancel`;
+};
+
+export const cancelManagedBooking = async (
+  id: number,
+  params: CancelManagedBookingParams,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getCancelManagedBookingUrl(id, params), {
+    ...options,
+    method: "POST",
+  });
+};
+
+export const getCancelManagedBookingMutationOptions = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof cancelManagedBooking>>,
+    TError,
+    { id: number; params: CancelManagedBookingParams },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof cancelManagedBooking>>,
+  TError,
+  { id: number; params: CancelManagedBookingParams },
+  TContext
+> => {
+  const mutationKey = ["cancelManagedBooking"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof cancelManagedBooking>>,
+    { id: number; params: CancelManagedBookingParams }
+  > = (props) => {
+    const { id, params } = props ?? {};
+
+    return cancelManagedBooking(id, params, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CancelManagedBookingMutationResult = NonNullable<
+  Awaited<ReturnType<typeof cancelManagedBooking>>
+>;
+
+export type CancelManagedBookingMutationError = ErrorType<Error>;
+
+/**
+ * @summary Cancel a booking via the customer's self-manage link
+ */
+export const useCancelManagedBooking = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof cancelManagedBooking>>,
+    TError,
+    { id: number; params: CancelManagedBookingParams },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof cancelManagedBooking>>,
+  TError,
+  { id: number; params: CancelManagedBookingParams },
+  TContext
+> => {
+  return useMutation(getCancelManagedBookingMutationOptions(options));
+};
+
+/**
+ * @summary Reschedule a booking via the customer's self-manage link
+ */
+export const getRescheduleManagedBookingUrl = (
+  id: number,
+  params: RescheduleManagedBookingParams,
+) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/booking/manage/${id}/reschedule?${stringifiedParams}`
+    : `/api/booking/manage/${id}/reschedule`;
+};
+
+export const rescheduleManagedBooking = async (
+  id: number,
+  rescheduleBookingRequest: RescheduleBookingRequest,
+  params: RescheduleManagedBookingParams,
+  options?: RequestInit,
+): Promise<Booking> => {
+  return customFetch<Booking>(getRescheduleManagedBookingUrl(id, params), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(rescheduleBookingRequest),
+  });
+};
+
+export const getRescheduleManagedBookingMutationOptions = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof rescheduleManagedBooking>>,
+    TError,
+    {
+      id: number;
+      data: BodyType<RescheduleBookingRequest>;
+      params: RescheduleManagedBookingParams;
+    },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof rescheduleManagedBooking>>,
+  TError,
+  {
+    id: number;
+    data: BodyType<RescheduleBookingRequest>;
+    params: RescheduleManagedBookingParams;
+  },
+  TContext
+> => {
+  const mutationKey = ["rescheduleManagedBooking"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof rescheduleManagedBooking>>,
+    {
+      id: number;
+      data: BodyType<RescheduleBookingRequest>;
+      params: RescheduleManagedBookingParams;
+    }
+  > = (props) => {
+    const { id, data, params } = props ?? {};
+
+    return rescheduleManagedBooking(id, data, params, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type RescheduleManagedBookingMutationResult = NonNullable<
+  Awaited<ReturnType<typeof rescheduleManagedBooking>>
+>;
+export type RescheduleManagedBookingMutationBody =
+  BodyType<RescheduleBookingRequest>;
+export type RescheduleManagedBookingMutationError = ErrorType<Error>;
+
+/**
+ * @summary Reschedule a booking via the customer's self-manage link
+ */
+export const useRescheduleManagedBooking = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof rescheduleManagedBooking>>,
+    TError,
+    {
+      id: number;
+      data: BodyType<RescheduleBookingRequest>;
+      params: RescheduleManagedBookingParams;
+    },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof rescheduleManagedBooking>>,
+  TError,
+  {
+    id: number;
+    data: BodyType<RescheduleBookingRequest>;
+    params: RescheduleManagedBookingParams;
+  },
+  TContext
+> => {
+  return useMutation(getRescheduleManagedBookingMutationOptions(options));
 };
 
 /**

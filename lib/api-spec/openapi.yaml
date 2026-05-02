@@ -93,6 +93,113 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /booking/manage/{id}:
+    get:
+      operationId: getManagedBooking
+      tags: [booking]
+      summary: Get a booking via the customer's self-manage link
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: token
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+        "404":
+          description: Not found or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /booking/manage/{id}/cancel:
+    post:
+      operationId: cancelManagedBooking
+      tags: [booking]
+      summary: Cancel a booking via the customer's self-manage link
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: token
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Cancelled
+        "400":
+          description: Cannot cancel (e.g. already passed)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Not found or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /booking/manage/{id}/reschedule:
+    post:
+      operationId: rescheduleManagedBooking
+      tags: [booking]
+      summary: Reschedule a booking via the customer's self-manage link
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: token
+          in: query
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RescheduleBookingRequest"
+      responses:
+        "200":
+          description: Rescheduled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Not found or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: Slot already taken
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /admin/bookings:
     get:
       operationId: adminListBookings
@@ -369,6 +476,18 @@ components:
           type: string
       required:
         - date
+    RescheduleBookingRequest:
+      type: object
+      properties:
+        date:
+          type: string
+          description: YYYY-MM-DD
+        time:
+          type: string
+          description: "HH:MM"
+      required:
+        - date
+        - time
     Booking:
       type: object
       properties:
@@ -397,6 +516,10 @@ components:
           format: date-time
         status:
           type: string
+        manageToken:
+          type: string
+          nullable: true
+          description: Returned to the booking creator and via the manage endpoints. Used in the customer self-manage URL.
         createdAt:
           type: string
           format: date-time

@@ -25,6 +25,10 @@ export const bookingsTable = pgTable(
     notes: text("notes").notNull().default(""),
     scheduledAt: timestamp("scheduled_at", { withTimezone: true }).notNull(),
     status: text("status").notNull().default("confirmed"),
+    // Per-booking secret used in the customer's self-manage link
+    // (/manage/:id?token=...). Nullable for backwards-compat with rows
+    // created before this column existed; new rows always receive one.
+    manageToken: text("manage_token"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),

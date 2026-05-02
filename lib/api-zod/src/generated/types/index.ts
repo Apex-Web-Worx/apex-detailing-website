@@ -8,11 +8,15 @@
 
 export * from "./blockedDate";
 export * from "./booking";
+export * from "./cancelManagedBookingParams";
 export * from "./createBlockedDateRequest";
 export * from "./createBookingRequest";
 export * from "./dayAvailability";
 export * from "./error";
 export * from "./getAvailabilityParams";
+export * from "./getManagedBookingParams";
 export * from "./healthStatus";
+export * from "./rescheduleBookingRequest";
+export * from "./rescheduleManagedBookingParams";
 export * from "./service";
 export * from "./timeSlot";

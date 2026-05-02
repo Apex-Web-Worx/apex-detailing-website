@@ -67,6 +67,13 @@ export interface CreateBlockedDateRequest {
   reason?: string;
 }
 
+export interface RescheduleBookingRequest {
+  /** YYYY-MM-DD */
+  date: string;
+  /** HH:MM */
+  time: string;
+}
+
 export interface Booking {
   id: number;
   serviceId: number;
@@ -80,6 +87,8 @@ export interface Booking {
   notes: string;
   scheduledAt: string;
   status: string;
+  /** Returned to the booking creator and via the manage endpoints. Used in the customer self-manage URL. */
+  manageToken?: string | null;
   createdAt: string;
 }
 
@@ -92,4 +101,16 @@ export type GetAvailabilityParams = {
    * YYYY-MM-DD
    */
   endDate: string;
+};
+
+export type GetManagedBookingParams = {
+  token: string;
+};
+
+export type CancelManagedBookingParams = {
+  token: string;
+};
+
+export type RescheduleManagedBookingParams = {
+  token: string;
 };

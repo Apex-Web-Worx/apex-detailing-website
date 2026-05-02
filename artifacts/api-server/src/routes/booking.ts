@@ -10,6 +10,7 @@ import {
   CreateBookingBody,
   GetAvailabilityQueryParams,
 } from "@workspace/api-zod";
+import { randomBytes, timingSafeEqual } from "node:crypto";
 import {
   TIME_SLOTS,
   buildScheduledAt,
@@ -19,9 +20,65 @@ import {
   shopLocalTimeString,
   todayInShopLocal,
 } from "../lib/availability";
-import { sendBookingEmails } from "../lib/email";
+import {
+  sendBookingEmails,
+  sendCancellationEmails,
+  sendRescheduleEmails,
+  type BookingEmailData,
+} from "../lib/email";
 
 const router: IRouter = Router();
+
+function generateManageToken(): string {
+  return randomBytes(24).toString("base64url");
+}
+
+// Constant-time string comparison to prevent timing-based token enumeration.
+function tokensMatch(a: string | null | undefined, b: string): boolean {
+  if (!a || a.length !== b.length) return false;
+  const bufA = Buffer.from(a, "utf8");
+  const bufB = Buffer.from(b, "utf8");
+  if (bufA.length !== bufB.length) return false;
+  return timingSafeEqual(bufA, bufB);
+}
+
+// Walk the cause chain looking for a Postgres error code (e.g. 23505 unique
+// violation).
+function pgErrorCode(err: unknown): string | undefined {
+  let cur: unknown = err;
+  for (let i = 0; i < 5 && cur; i++) {
+    if (typeof cur === "object" && cur !== null && "code" in cur) {
+      const code = (cur as { code?: unknown }).code;
+      if (typeof code === "string") return code;
+    }
+    cur =
+      typeof cur === "object" && cur !== null && "cause" in cur
+        ? (cur as { cause?: unknown }).cause
+        : undefined;
+  }
+  return undefined;
+}
+
+function bookingToEmailData(
+  b: typeof bookingsTable.$inferSelect,
+  overrideDate?: string,
+  overrideTime?: string,
+): BookingEmailData {
+  return {
+    id: b.id,
+    manageToken: b.manageToken,
+    customerName: b.customerName,
+    email: b.email,
+    phone: b.phone,
+    vehicle: b.vehicle,
+    notes: b.notes ?? "",
+    serviceName: b.serviceName,
+    servicePriceCents: b.servicePriceCents,
+    serviceDurationMinutes: b.serviceDurationMinutes,
+    date: overrideDate ?? shopLocalDateString(b.scheduledAt),
+    time: overrideTime ?? shopLocalTimeString(b.scheduledAt),
+  };
+}
 
 router.get("/booking/services", async (_req, res) => {
   const rows = await db
@@ -191,6 +248,7 @@ router.post("/booking/bookings", async (req, res) => {
         notes: body.notes ?? "",
         scheduledAt,
         status: "confirmed",
+        manageToken: generateManageToken(),
       })
       .returning();
 
@@ -198,36 +256,223 @@ router.post("/booking/bookings", async (req, res) => {
 
     // Fire-and-forget: send confirmation emails after responding so a slow
     // or failing email provider never blocks the booking response.
-    sendBookingEmails({
-      customerName: body.customerName,
-      email: body.email,
-      phone: body.phone,
-      vehicle: body.vehicle,
-      notes: body.notes ?? "",
-      serviceName: service.name,
-      servicePriceCents: service.priceCents,
-      serviceDurationMinutes: service.durationMinutes,
-      date: body.date,
-      time: body.time,
-    }).catch((err) => {
-      console.error("[email] sendBookingEmails failed:", err);
-    });
+    sendBookingEmails(bookingToEmailData(created, body.date, body.time)).catch(
+      (err) => {
+        console.error("[email] sendBookingEmails failed:", err);
+      },
+    );
     return;
   } catch (err) {
-    // Walk the cause chain looking for a Postgres unique-violation (23505)
-    let cur: unknown = err;
-    let pgCode: unknown;
-    for (let i = 0; i < 5 && cur; i++) {
-      if (typeof cur === "object" && cur !== null && "code" in cur) {
-        pgCode = (cur as { code?: unknown }).code;
-        if (pgCode) break;
-      }
-      cur =
-        typeof cur === "object" && cur !== null && "cause" in cur
-          ? (cur as { cause?: unknown }).cause
-          : undefined;
+    if (pgErrorCode(err) === "23505") {
+      res.status(409).json({
+        message: "Sorry — that time slot was just taken. Please pick another.",
+      });
+      return;
     }
-    if (pgCode === "23505") {
+    throw err;
+  }
+});
+
+/* ------------------------------------------------------------------ */
+/* Customer self-manage endpoints (token-gated, no admin auth)        */
+/* ------------------------------------------------------------------ */
+
+// Loads a booking by id and verifies the manage token in constant time.
+// Treats both "no such id" and "wrong/missing token" as 404 — never reveal
+// whether an id exists to a holder of an invalid token.
+async function loadBookingByToken(
+  idParam: unknown,
+  tokenParam: unknown,
+): Promise<typeof bookingsTable.$inferSelect | "not_found"> {
+  const id = Number(idParam);
+  if (!Number.isFinite(id) || id <= 0) return "not_found";
+  if (typeof tokenParam !== "string" || tokenParam.length === 0)
+    return "not_found";
+
+  const [row] = await db
+    .select()
+    .from(bookingsTable)
+    .where(eq(bookingsTable.id, id));
+
+  if (!row) return "not_found";
+  if (!tokensMatch(row.manageToken, tokenParam)) return "not_found";
+  return row;
+}
+
+router.get("/booking/manage/:id", async (req, res) => {
+  const result = await loadBookingByToken(req.params.id, req.query["token"]);
+  if (result === "not_found") {
+    res.status(404).json({ message: "Booking not found" });
+    return;
+  }
+  res.json(result);
+});
+
+router.post("/booking/manage/:id/cancel", async (req, res) => {
+  const result = await loadBookingByToken(req.params.id, req.query["token"]);
+  if (result === "not_found") {
+    res.status(404).json({ message: "Booking not found" });
+    return;
+  }
+  const booking = result;
+
+  // Pre-flight checks against the snapshot. These can race with another
+  // writer, so they are advisory only — the authoritative decision happens
+  // in the predicate UPDATE below, which is atomic.
+  if (booking.status !== "confirmed") {
+    res.status(400).json({ message: "This booking is already cancelled." });
+    return;
+  }
+  if (booking.scheduledAt < new Date()) {
+    res
+      .status(400)
+      .json({ message: "This appointment has already passed and cannot be cancelled online." });
+    return;
+  }
+
+  // Atomic transition: only cancel if the row is still confirmed AND still on
+  // the slot we just read. Anything else means another writer beat us and we
+  // bail without sending an email.
+  const updatedRows = await db
+    .update(bookingsTable)
+    .set({ status: "cancelled" })
+    .where(
+      and(
+        eq(bookingsTable.id, booking.id),
+        eq(bookingsTable.status, "confirmed"),
+        eq(bookingsTable.scheduledAt, booking.scheduledAt),
+      ),
+    )
+    .returning();
+
+  if (updatedRows.length === 0) {
+    // Lost the race — somebody else (admin cancel, customer reschedule,
+    // duplicate click) modified this booking between our read and write.
+    res.status(409).json({
+      message:
+        "This booking was just changed in another window. Refresh and try again.",
+    });
+    return;
+  }
+
+  res.status(204).send();
+
+  sendCancellationEmails(bookingToEmailData(updatedRows[0]!), "customer").catch(
+    (err) => {
+      console.error("[email] sendCancellationEmails (customer) failed:", err);
+    },
+  );
+});
+
+router.post("/booking/manage/:id/reschedule", async (req, res) => {
+  const result = await loadBookingByToken(req.params.id, req.query["token"]);
+  if (result === "not_found") {
+    res.status(404).json({ message: "Booking not found" });
+    return;
+  }
+  const booking = result;
+
+  const body = (req.body ?? {}) as { date?: unknown; time?: unknown };
+  if (typeof body.date !== "string" || typeof body.time !== "string") {
+    res.status(400).json({ message: "date and time are required" });
+    return;
+  }
+  const newDate = body.date;
+  const newTime = body.time;
+
+  // Snapshot pre-flight — final source of truth is the predicate UPDATE.
+  if (booking.status !== "confirmed") {
+    res.status(400).json({ message: "This booking is cancelled and cannot be rescheduled." });
+    return;
+  }
+  if (booking.scheduledAt < new Date()) {
+    res
+      .status(400)
+      .json({ message: "This appointment has already passed and cannot be rescheduled online." });
+    return;
+  }
+  if (!TIME_SLOTS.includes(newTime as (typeof TIME_SLOTS)[number])) {
+    res.status(400).json({ message: "Invalid time slot" });
+    return;
+  }
+  if (!parseDateString(newDate)) {
+    res.status(400).json({ message: "Invalid date format. Use YYYY-MM-DD." });
+    return;
+  }
+  if (newDate < todayInShopLocal()) {
+    res.status(400).json({ message: "Cannot reschedule to a date in the past" });
+    return;
+  }
+  if (isClosedShopDate(newDate)) {
+    res.status(400).json({ message: "Shop is closed on this day" });
+    return;
+  }
+
+  const [blockedRow] = await db
+    .select({ id: blockedDatesTable.id })
+    .from(blockedDatesTable)
+    .where(eq(blockedDatesTable.date, newDate));
+  if (blockedRow) {
+    res.status(400).json({ message: "Shop is closed on this day" });
+    return;
+  }
+
+  const newScheduledAt = buildScheduledAt(newDate, newTime);
+  if (!newScheduledAt) {
+    res.status(400).json({ message: "Invalid date or time" });
+    return;
+  }
+
+  const oldDate = shopLocalDateString(booking.scheduledAt);
+  const oldTime = shopLocalTimeString(booking.scheduledAt);
+  const isSameSlot =
+    newScheduledAt.getTime() === booking.scheduledAt.getTime();
+
+  // Atomic update: require the row to still be confirmed AND still on the
+  // slot we just read. This protects us from:
+  //   - racing with admin delete (status would have changed)
+  //   - racing with another reschedule (scheduled_at would have changed)
+  //   - duplicate clicks (second click finds a different scheduled_at)
+  // The partial unique index protects us from racing with a fresh booking
+  // grabbing the new slot (Postgres surfaces 23505 → mapped to 409 below).
+  try {
+    const updatedRows = await db
+      .update(bookingsTable)
+      .set({ scheduledAt: newScheduledAt })
+      .where(
+        and(
+          eq(bookingsTable.id, booking.id),
+          eq(bookingsTable.status, "confirmed"),
+          eq(bookingsTable.scheduledAt, booking.scheduledAt),
+        ),
+      )
+      .returning();
+
+    if (updatedRows.length === 0) {
+      res.status(409).json({
+        message:
+          "This booking was just changed in another window. Refresh and try again.",
+      });
+      return;
+    }
+
+    const updated = updatedRows[0]!;
+    res.json(updated);
+
+    // Don't email for a no-op (customer picked the same slot they already
+    // had). The UPDATE still succeeded — just no semantic change.
+    if (!isSameSlot) {
+      sendRescheduleEmails({
+        oldDate,
+        oldTime,
+        booking: bookingToEmailData(updated, newDate, newTime),
+      }).catch((err) => {
+        console.error("[email] sendRescheduleEmails failed:", err);
+      });
+    }
+    return;
+  } catch (err) {
+    if (pgErrorCode(err) === "23505") {
       res.status(409).json({
         message: "Sorry — that time slot was just taken. Please pick another.",
       });

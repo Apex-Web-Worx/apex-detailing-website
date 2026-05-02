@@ -1,7 +1,8 @@
 import { Router, type IRouter, type Request, type Response, type NextFunction } from "express";
 import { db, bookingsTable, blockedDatesTable } from "@workspace/db";
-import { asc, eq } from "drizzle-orm";
-import { parseDateString, todayInShopLocal } from "../lib/availability";
+import { and, asc, eq } from "drizzle-orm";
+import { parseDateString, shopLocalDateString, shopLocalTimeString, todayInShopLocal } from "../lib/availability";
+import { sendCancellationEmails, type BookingEmailData } from "../lib/email";
 
 const router: IRouter = Router();
 
@@ -21,6 +22,25 @@ function requireAdmin(req: Request, res: Response, next: NextFunction) {
   next();
 }
 
+function bookingToEmailData(
+  b: typeof bookingsTable.$inferSelect,
+): BookingEmailData {
+  return {
+    id: b.id,
+    manageToken: b.manageToken,
+    customerName: b.customerName,
+    email: b.email,
+    phone: b.phone,
+    vehicle: b.vehicle,
+    notes: b.notes ?? "",
+    serviceName: b.serviceName,
+    servicePriceCents: b.servicePriceCents,
+    serviceDurationMinutes: b.serviceDurationMinutes,
+    date: shopLocalDateString(b.scheduledAt),
+    time: shopLocalTimeString(b.scheduledAt),
+  };
+}
+
 router.get("/admin/bookings", requireAdmin, async (_req, res) => {
   const rows = await db
     .select()
@@ -35,11 +55,31 @@ router.delete("/admin/bookings/:id", requireAdmin, async (req, res) => {
     res.status(400).json({ message: "Invalid id" });
     return;
   }
-  await db
+
+  // Atomic confirmed→cancelled transition. RETURNING gives us the row the
+  // customer email should describe (its scheduled_at could have just changed
+  // via /booking/manage/:id/reschedule, so we can't trust a pre-read). If 0
+  // rows are returned, either the id doesn't exist or the row was already
+  // cancelled — in both cases we don't email.
+  const cancelledRows = await db
     .update(bookingsTable)
     .set({ status: "cancelled" })
-    .where(eq(bookingsTable.id, id));
+    .where(
+      and(
+        eq(bookingsTable.id, id),
+        eq(bookingsTable.status, "confirmed"),
+      ),
+    )
+    .returning();
+
   res.status(204).send();
+
+  const cancelled = cancelledRows[0];
+  if (cancelled) {
+    sendCancellationEmails(bookingToEmailData(cancelled), "owner").catch((err) => {
+      console.error("[email] admin cancellation notify failed:", err);
+    });
+  }
 });
 
 router.get("/admin/blocked-dates", requireAdmin, async (_req, res) => {

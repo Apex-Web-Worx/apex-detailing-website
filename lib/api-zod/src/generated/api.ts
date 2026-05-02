@@ -68,6 +68,88 @@ export const CreateBookingBody = zod.object({
 });
 
 /**
+ * @summary Get a booking via the customer's self-manage link
+ */
+export const GetManagedBookingParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const GetManagedBookingQueryParams = zod.object({
+  token: zod.coerce.string(),
+});
+
+export const GetManagedBookingResponse = zod.object({
+  id: zod.number(),
+  serviceId: zod.number(),
+  serviceName: zod.string(),
+  servicePriceCents: zod.number(),
+  serviceDurationMinutes: zod.number(),
+  customerName: zod.string(),
+  email: zod.string(),
+  phone: zod.string(),
+  vehicle: zod.string(),
+  notes: zod.string(),
+  scheduledAt: zod.date(),
+  status: zod.string(),
+  manageToken: zod
+    .string()
+    .nullish()
+    .describe(
+      "Returned to the booking creator and via the manage endpoints. Used in the customer self-manage URL.",
+    ),
+  createdAt: zod.date(),
+});
+
+/**
+ * @summary Cancel a booking via the customer's self-manage link
+ */
+export const CancelManagedBookingParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const CancelManagedBookingQueryParams = zod.object({
+  token: zod.coerce.string(),
+});
+
+/**
+ * @summary Reschedule a booking via the customer's self-manage link
+ */
+export const RescheduleManagedBookingParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const RescheduleManagedBookingQueryParams = zod.object({
+  token: zod.coerce.string(),
+});
+
+export const RescheduleManagedBookingBody = zod.object({
+  date: zod.string().describe("YYYY-MM-DD"),
+  time: zod.string().describe("HH:MM"),
+});
+
+export const RescheduleManagedBookingResponse = zod.object({
+  id: zod.number(),
+  serviceId: zod.number(),
+  serviceName: zod.string(),
+  servicePriceCents: zod.number(),
+  serviceDurationMinutes: zod.number(),
+  customerName: zod.string(),
+  email: zod.string(),
+  phone: zod.string(),
+  vehicle: zod.string(),
+  notes: zod.string(),
+  scheduledAt: zod.date(),
+  status: zod.string(),
+  manageToken: zod
+    .string()
+    .nullish()
+    .describe(
+      "Returned to the booking creator and via the manage endpoints. Used in the customer self-manage URL.",
+    ),
+  createdAt: zod.date(),
+});
+
+/**
  * @summary List all bookings (admin)
  */
 export const AdminListBookingsHeader = zod.object({
@@ -87,6 +169,12 @@ export const AdminListBookingsResponseItem = zod.object({
   notes: zod.string(),
   scheduledAt: zod.date(),
   status: zod.string(),
+  manageToken: zod
+    .string()
+    .nullish()
+    .describe(
+      "Returned to the booking creator and via the manage endpoints. Used in the customer self-manage URL.",
+    ),
   createdAt: zod.date(),
 });
 export const AdminListBookingsResponse = zod.array(

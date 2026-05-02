@@ -54,7 +54,7 @@ Premium car detailing marketing website for Apex Detailing (Springfield, Nixa & 
   - Headlights Restoration: 4 images (2 before/after pairs)
   - Layout: Responsive grid (1 col mobile, 2 col tablet, 3 col desktop) with image preloading for instant switching
 - **Booking**: Built-in custom booking flow at `/book` (replaces Calendly). Square link still used for Express Interior only.
-- **Routing**: `wouter` Router with base from `import.meta.env.BASE_URL`. Routes: `/` (home), `/book` (booking wizard), `/admin` (bookings dashboard).
+- **Routing**: `wouter` Router with base from `import.meta.env.BASE_URL`. Routes: `/` (home), `/book` (booking wizard), `/manage/:id` (customer self-serve cancel/reschedule, requires `?token=` query), `/admin` (bookings dashboard).
 - **Booking wizard** (`src/pages/booking.tsx`): 4-step flow — Service → Date & Time → Your Info → Confirm → Success. Uses generated react-query hooks (`useListServices`, `useGetAvailability`, `useCreateBooking`).
 - **Admin dashboard** (`src/pages/admin.tsx`): password-gated (token persisted in `localStorage` as `apex_admin_token`, sent as `x-admin-token` header). Lists Upcoming / Completed / Cancelled with cancel action. Includes a **Block off days** panel for marking dates as closed (vacations, personal days) — blocked dates appear greyed out in the customer date picker and are rejected at the API.
 - **Social**: Instagram (@apexdetailing_sf), Facebook (/apexdetailingsf)
@@ -69,12 +69,19 @@ Express 5 API server. Routes live in `src/routes/` and use `@workspace/api-zod` 
 - Entry: `src/index.ts` — reads `PORT`, starts Express
 - App setup: `src/app.ts` — mounts CORS, JSON/urlencoded parsing, routes at `/api`
 - Routes: `src/routes/index.ts` mounts sub-routers; `src/routes/health.ts` exposes `GET /health`
-- **Booking routes** (`src/routes/booking.ts`): `GET /booking/services`, `GET /booking/availability?startDate&endDate`, `POST /booking/bookings`. Availability helper at `src/lib/availability.ts` — fixed slots 08:00/10:00/12:00/14:00 (shop time), Sun closed, 1 booking per slot.
-- **Admin routes** (`src/routes/admin.ts`): `GET/DELETE /admin/bookings[/:id]` for bookings, `GET/POST /admin/blocked-dates` and `DELETE /admin/blocked-dates/:date` for managing closed days. Auth via `x-admin-token` header against `ADMIN_TOKEN` env var (returns 500 if env var missing). `blocked_dates` table has unique index on `date`; duplicate block attempts return 409, past dates return 400. Booking creation and availability both consult the blocked-dates table.
+- **Booking routes** (`src/routes/booking.ts`): `GET /booking/services`, `GET /booking/availability?startDate&endDate`, `POST /booking/bookings`. Availability helper at `src/lib/availability.ts` — fixed slots 08:00/10:00/12:00/14:00 (shop time), Sun closed, 1 booking per slot. Race-safety via partial unique index `bookings_confirmed_slot_unique on (scheduled_at) WHERE status='confirmed'` — double-book attempts surface as 409.
+- **Customer self-manage** (`src/routes/booking.ts`): each booking gets a 24-byte base64url `manageToken` returned in the create response. Token-gated endpoints (no admin auth):
+  - `GET /booking/manage/:id?token=…` — fetch booking
+  - `POST /booking/manage/:id/cancel?token=…` — customer-initiated cancellation
+  - `POST /booking/manage/:id/reschedule?token=…` body `{date, time}` — move slot, validated against shop hours / blocked-dates / past-date / unique-slot constraints. Token compared with `crypto.timingSafeEqual`. Past appointments are rejected (400). Bookings created before this column existed have `manage_token = NULL` and cannot be self-managed (call to manage instead).
+- **Admin routes** (`src/routes/admin.ts`): `GET/DELETE /admin/bookings[/:id]` for bookings, `GET/POST /admin/blocked-dates` and `DELETE /admin/blocked-dates/:date` for managing closed days. Auth via `x-admin-token` header against `ADMIN_TOKEN` env var (returns 500 if env var missing). `blocked_dates` table has unique index on `date`; duplicate block attempts return 409, past dates return 400. Booking creation and availability both consult the blocked-dates table. Admin DELETE sends a customer cancellation email when the row was previously confirmed.
+- **Email** (`src/lib/email.ts`): Gmail-via-Replit-connector; per-message random MIME boundary + base64-encoded bodies (defends against header/MIME injection from customer-controlled fields). Three flows: `sendBookingEmails` (confirmation), `sendCancellationEmails(b, "customer"|"owner")`, `sendRescheduleEmails({oldDate, oldTime, booking})`. Customer confirmation + reschedule emails embed a "Manage your booking" CTA → `${SITE_URL}/manage/:id?token=…`. `SITE_URL` env var defaults to `https://www.apexdetailingsf.com`.
 - **Seed**: `pnpm --filter @workspace/api-server run seed` populates 6 services.
 
 ### Booking system env vars
-- `ADMIN_TOKEN` (shared) — password used to access `/admin`. Currently set to placeholder `apex-admin-2026` for dev. **User should change this** via the Secrets pane before going live.
+- `ADMIN_TOKEN` (shared) — password used to access `/admin`.
+- `SITE_URL` (optional) — base URL used to build the customer manage link inside emails. Defaults to `https://www.apexdetailingsf.com`.
+- `OWNER_EMAIL` / `FROM_NAME` are constants in `email.ts` (`apexdetailingsf@gmail.com` / `Apex Detailing`).
 
 ## TypeScript & Composite Projects
 
