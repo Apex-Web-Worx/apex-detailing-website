@@ -91,8 +91,20 @@ function Login({ onSubmit }: { onSubmit: (t: string) => void }) {
     <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center p-4">
       <form
         onSubmit={handle}
+        method="post"
+        action="#"
         className="w-full max-w-md rounded-2xl border border-white/10 bg-white/[0.02] p-8"
       >
+        <input
+          type="text"
+          name="username"
+          value="apex-admin"
+          autoComplete="username"
+          readOnly
+          aria-hidden="true"
+          tabIndex={-1}
+          style={{ display: "none" }}
+        />
         <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#A886CD] to-[#3496FF] flex items-center justify-center mx-auto mb-6">
           <Lock className="w-6 h-6 text-white" />
         </div>
@@ -102,10 +114,12 @@ function Login({ onSubmit }: { onSubmit: (t: string) => void }) {
         </p>
         <input
           type="password"
+          name="password"
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="Password"
           autoFocus
+          autoComplete="current-password"
           className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#3496FF] focus:outline-none focus:ring-2 focus:ring-[#3496FF]/20 transition mb-4"
         />
         {error && (
