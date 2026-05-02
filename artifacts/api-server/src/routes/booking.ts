@@ -19,6 +19,7 @@ import {
   shopLocalTimeString,
   todayInShopLocal,
 } from "../lib/availability";
+import { sendBookingEmails } from "../lib/email";
 
 const router: IRouter = Router();
 
@@ -194,6 +195,24 @@ router.post("/booking/bookings", async (req, res) => {
       .returning();
 
     res.status(201).json(created);
+
+    // Fire-and-forget: send confirmation emails after responding so a slow
+    // or failing email provider never blocks the booking response.
+    sendBookingEmails({
+      customerName: body.customerName,
+      email: body.email,
+      phone: body.phone,
+      vehicle: body.vehicle,
+      notes: body.notes ?? "",
+      serviceName: service.name,
+      servicePriceCents: service.priceCents,
+      serviceDurationMinutes: service.durationMinutes,
+      date: body.date,
+      time: body.time,
+    }).catch((err) => {
+      console.error("[email] sendBookingEmails failed:", err);
+    });
+    return;
   } catch (err) {
     // Walk the cause chain looking for a Postgres unique-violation (23505)
     let cur: unknown = err;
