@@ -80,7 +80,14 @@ const seeds = [
   },
 ];
 
-async function main() {
+/**
+ * Idempotent. Safe to call on every server boot — re-runs are no-ops
+ * once the catalog matches. Used both by the CLI seed script and by
+ * the api-server's startup hook so a fresh production database
+ * (which Replit Publish provisions empty) auto-populates without us
+ * having to remember to run the script manually.
+ */
+export async function runSeed(): Promise<void> {
   const newSlugs = seeds.map((s) => s.slug);
 
   // Deactivate any service whose slug isn't in the new catalog. We don't
@@ -93,7 +100,7 @@ async function main() {
     .where(notInArray(servicesTable.slug, newSlugs))
     .returning({ slug: servicesTable.slug });
   for (const row of deactivated) {
-    console.log(`Deactivated (no longer in catalog): ${row.slug}`);
+    console.log(`[seed] deactivated (no longer in catalog): ${row.slug}`);
   }
 
   for (const s of seeds) {
@@ -106,17 +113,24 @@ async function main() {
         .update(servicesTable)
         .set({ ...s, active: true })
         .where(eq(servicesTable.slug, s.slug));
-      console.log(`Updated: ${s.slug}`);
     } else {
       await db.insert(servicesTable).values({ ...s, active: true });
-      console.log(`Inserted: ${s.slug}`);
+      console.log(`[seed] inserted: ${s.slug}`);
     }
   }
-  console.log("Seed complete");
-  process.exit(0);
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+// CLI entrypoint: only runs when invoked directly via `tsx ./src/seed.ts`,
+// not when the module is imported by the server. Uses an explicit
+// env-var gate to stay compatible with both ESM and the bundler.
+if (process.env["RUN_AS_CLI"] === "1" || process.argv[1]?.endsWith("seed.ts")) {
+  runSeed()
+    .then(() => {
+      console.log("Seed complete");
+      process.exit(0);
+    })
+    .catch((err) => {
+      console.error(err);
+      process.exit(1);
+    });
+}
