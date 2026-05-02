@@ -1,0 +1,14 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "8-DYO5WImO2_DblT7PD9M"
+uri = "file://screenshots/email-customer.jpg"
+type = "image"
+title = "Customer confirmation email"
+
+[[outputs]]
+id = "gXbWiXuuAErjiN9JzG4xP"
+uri = "file://screenshots/email-owner.jpg"
+type = "image"
+title = "Owner notification email"

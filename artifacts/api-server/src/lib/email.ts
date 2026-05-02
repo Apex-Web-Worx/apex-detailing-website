@@ -241,7 +241,7 @@ function detailRows(b: BookingEmailData): { label: string; value: string; highli
   ];
 }
 
-function customerHtml(b: BookingEmailData): string {
+export function customerHtml(b: BookingEmailData): string {
   const manageBlock = b.manageToken
     ? `<div style="text-align:center;margin-bottom:24px;">
          ${ctaButton(buildManageUrl(b.id, b.manageToken), "Manage Your Booking")}
@@ -299,7 +299,7 @@ function customerText(b: BookingEmailData): string {
     .join("\n");
 }
 
-function ownerHtml(b: BookingEmailData): string {
+export function ownerHtml(b: BookingEmailData): string {
   const dateLong = formatDateLong(b.date);
   const time12 = formatTime12h(b.time);
   const rows: { label: string; value: string; highlight?: boolean }[] = [
