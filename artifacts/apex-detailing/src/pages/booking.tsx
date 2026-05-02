@@ -517,7 +517,15 @@ function InfoStep({
         By booking, you agree to receive appointment confirmations and a
         reminder text from Apex Detailing at the phone number above. Reply
         STOP at any time to opt out, or HELP for help. Message and data
-        rates may apply. Message frequency varies.
+        rates may apply. Message frequency varies. See our{" "}
+        <Link href="/privacy" className="text-[#3496FF] hover:underline">
+          Privacy Policy
+        </Link>{" "}
+        and{" "}
+        <Link href="/terms" className="text-[#3496FF] hover:underline">
+          Terms &amp; Conditions
+        </Link>
+        .
       </p>
 
       <div className="flex justify-end mt-6">

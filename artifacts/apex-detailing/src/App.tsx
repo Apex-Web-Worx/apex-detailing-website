@@ -3,6 +3,8 @@ import Home from "@/pages/home";
 import BookingPage from "@/pages/booking";
 import ManagePage from "@/pages/manage";
 import AdminPage from "@/pages/admin";
+import PrivacyPage from "@/pages/privacy";
+import TermsPage from "@/pages/terms";
 import NotFound from "@/pages/not-found";
 
 function App() {
@@ -15,6 +17,8 @@ function App() {
         <Route path="/book" component={BookingPage} />
         <Route path="/manage/:id" component={ManagePage} />
         <Route path="/admin" component={AdminPage} />
+        <Route path="/privacy" component={PrivacyPage} />
+        <Route path="/terms" component={TermsPage} />
         <Route component={NotFound} />
       </Switch>
     </Router>
