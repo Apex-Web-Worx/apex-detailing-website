@@ -773,7 +773,7 @@ export default function Home() {
                   key={item}
                   onClick={() => {
                     if (item === "Buy Gift Card") {
-                      window.open("https://app.squareup.com/gift/ML461GTYPW0JH/order", "_blank", "noopener,noreferrer");
+                      window.location.href = `${import.meta.env.BASE_URL}gift-cards`;
                       return;
                     }
                     scrollToSection(item.toLowerCase());
@@ -830,7 +830,7 @@ export default function Home() {
                 key={item}
                 onClick={() => {
                   if (item === "Buy Gift Card") {
-                    window.open("https://app.squareup.com/gift/ML461GTYPW0JH/order", "_blank", "noopener,noreferrer");
+                    window.location.href = `${import.meta.env.BASE_URL}gift-cards`;
                     setMobileMenuOpen(false);
                     return;
                   }
@@ -914,9 +914,7 @@ export default function Home() {
               </span>
             </a>
             <a
-              href="https://app.squareup.com/gift/ML461GTYPW0JH/order"
-              target="_blank"
-              rel="noopener noreferrer"
+              href={`${import.meta.env.BASE_URL}gift-cards`}
               className="relative inline-flex items-center justify-center px-6 py-2.5 overflow-hidden font-bold text-white rounded-md group"
             >
               <span className="absolute w-full h-full bg-gradient-to-br from-[#3496FF] via-[#A886CD] to-[#3496FF] group-hover:from-[#A886CD] group-hover:via-[#3496FF] group-hover:to-[#A886CD] transition-all duration-500 bg-[length:200%_200%] bg-[0%_0%] group-hover:bg-[100%_100%]" />
@@ -1928,7 +1926,7 @@ export default function Home() {
                     <button
                       onClick={() => {
                         if (item === "Buy Gift Card") {
-                          window.open("https://app.squareup.com/gift/ML461GTYPW0JH/order", "_blank", "noopener,noreferrer");
+                          window.location.href = `${import.meta.env.BASE_URL}gift-cards`;
                           return;
                         }
                         scrollToSection(item.toLowerCase());
