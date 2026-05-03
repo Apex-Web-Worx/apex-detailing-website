@@ -36,6 +36,7 @@ import {
   ChevronDown,
   ChevronRight,
   Filter,
+  Check as CheckIcon,
 } from "lucide-react";
 import {
   formatDateLong,
@@ -863,6 +864,7 @@ function DetailsTab({
   const [notes, setNotes] = useState(booking.notes ?? "");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   const dirty =
     customerName !== booking.customerName ||
@@ -882,13 +884,28 @@ function DetailsTab({
         { customerName, email, phone, vehicle, notes },
         { headers: { "x-admin-token": token } },
       );
-      onSaved();
+      setSuccess(true);
+      setTimeout(() => onSaved(), 1500);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not save changes.");
     } finally {
       setSubmitting(false);
     }
   };
+
+  if (success) {
+    return (
+      <div className="py-10 text-center" data-testid="details-saved">
+        <div className="mx-auto w-14 h-14 rounded-full bg-green-500/15 border border-green-500/30 flex items-center justify-center mb-4">
+          <CheckIcon className="w-7 h-7 text-green-400" />
+        </div>
+        <h3 className="text-lg font-semibold mb-1">Booking details updated</h3>
+        <p className="text-sm text-gray-400">
+          Calendar event re-synced. No notification was sent to the customer.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={submit} className="space-y-4">
@@ -1007,6 +1024,9 @@ function RescheduleTab({
   const [pickedTime, setPickedTime] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<{ date: string; time: string } | null>(
+    null,
+  );
 
   const endDate = useMemo(
     () => addDaysToDateString(windowStart, 13),
@@ -1045,13 +1065,34 @@ function RescheduleTab({
         { date: pickedDate, time: pickedTime },
         { headers: { "x-admin-token": token } },
       );
-      onSaved();
+      setSuccess({ date: pickedDate, time: pickedTime });
+      setTimeout(() => onSaved(), 1800);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not reschedule.");
     } finally {
       setSubmitting(false);
     }
   };
+
+  if (success) {
+    return (
+      <div className="py-10 text-center" data-testid="reschedule-saved">
+        <div className="mx-auto w-14 h-14 rounded-full bg-green-500/15 border border-green-500/30 flex items-center justify-center mb-4">
+          <CheckIcon className="w-7 h-7 text-green-400" />
+        </div>
+        <h3 className="text-lg font-semibold mb-1">Appointment rescheduled</h3>
+        <p className="text-sm text-gray-300 mb-3">
+          New time:{" "}
+          <span className="text-white font-semibold">
+            {formatDateLong(success.date)} at {formatTime12h(success.time)}
+          </span>
+        </p>
+        <p className="text-sm text-gray-400">
+          Confirmation sent to {booking.customerName} via email and SMS.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div>
