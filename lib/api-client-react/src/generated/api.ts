@@ -30,6 +30,7 @@ import type {
   RescheduleBookingRequest,
   RescheduleManagedBookingParams,
   Service,
+  UpdateBookingRequest,
 } from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
@@ -863,6 +864,181 @@ export const useAdminCancelBooking = <
   TContext
 > => {
   return useMutation(getAdminCancelBookingMutationOptions(options));
+};
+
+/**
+ * @summary Update a booking's customer details (admin)
+ */
+export const getAdminUpdateBookingUrl = (id: number) => {
+  return `/api/admin/bookings/${id}`;
+};
+
+export const adminUpdateBooking = async (
+  id: number,
+  updateBookingRequest: UpdateBookingRequest,
+  options?: RequestInit,
+): Promise<Booking> => {
+  return customFetch<Booking>(getAdminUpdateBookingUrl(id), {
+    ...options,
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(updateBookingRequest),
+  });
+};
+
+export const getAdminUpdateBookingMutationOptions = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof adminUpdateBooking>>,
+    TError,
+    { id: number; data: BodyType<UpdateBookingRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof adminUpdateBooking>>,
+  TError,
+  { id: number; data: BodyType<UpdateBookingRequest> },
+  TContext
+> => {
+  const mutationKey = ["adminUpdateBooking"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminUpdateBooking>>,
+    { id: number; data: BodyType<UpdateBookingRequest> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return adminUpdateBooking(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminUpdateBookingMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminUpdateBooking>>
+>;
+export type AdminUpdateBookingMutationBody = BodyType<UpdateBookingRequest>;
+export type AdminUpdateBookingMutationError = ErrorType<Error>;
+
+/**
+ * @summary Update a booking's customer details (admin)
+ */
+export const useAdminUpdateBooking = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof adminUpdateBooking>>,
+    TError,
+    { id: number; data: BodyType<UpdateBookingRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof adminUpdateBooking>>,
+  TError,
+  { id: number; data: BodyType<UpdateBookingRequest> },
+  TContext
+> => {
+  return useMutation(getAdminUpdateBookingMutationOptions(options));
+};
+
+/**
+ * @summary Reschedule a booking (admin)
+ */
+export const getAdminRescheduleBookingUrl = (id: number) => {
+  return `/api/admin/bookings/${id}/reschedule`;
+};
+
+export const adminRescheduleBooking = async (
+  id: number,
+  rescheduleBookingRequest: RescheduleBookingRequest,
+  options?: RequestInit,
+): Promise<Booking> => {
+  return customFetch<Booking>(getAdminRescheduleBookingUrl(id), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(rescheduleBookingRequest),
+  });
+};
+
+export const getAdminRescheduleBookingMutationOptions = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof adminRescheduleBooking>>,
+    TError,
+    { id: number; data: BodyType<RescheduleBookingRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof adminRescheduleBooking>>,
+  TError,
+  { id: number; data: BodyType<RescheduleBookingRequest> },
+  TContext
+> => {
+  const mutationKey = ["adminRescheduleBooking"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminRescheduleBooking>>,
+    { id: number; data: BodyType<RescheduleBookingRequest> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return adminRescheduleBooking(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminRescheduleBookingMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminRescheduleBooking>>
+>;
+export type AdminRescheduleBookingMutationBody =
+  BodyType<RescheduleBookingRequest>;
+export type AdminRescheduleBookingMutationError = ErrorType<Error>;
+
+/**
+ * @summary Reschedule a booking (admin)
+ */
+export const useAdminRescheduleBooking = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof adminRescheduleBooking>>,
+    TError,
+    { id: number; data: BodyType<RescheduleBookingRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof adminRescheduleBooking>>,
+  TError,
+  { id: number; data: BodyType<RescheduleBookingRequest> },
+  TContext
+> => {
+  return useMutation(getAdminRescheduleBookingMutationOptions(options));
 };
 
 /**

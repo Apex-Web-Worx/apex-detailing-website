@@ -1,13 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import {
   useAdminListBookings,
   adminCancelBooking,
+  adminUpdateBooking,
+  adminRescheduleBooking,
   getAdminListBookingsQueryKey,
   useAdminListBlockedDates,
   adminAddBlockedDate,
   adminUnblockDate,
   getAdminListBlockedDatesQueryKey,
+  useGetAvailability,
   type Booking,
   type BlockedDate,
 } from "@workspace/api-client-react";
@@ -15,10 +18,14 @@ import { useQueryClient } from "@tanstack/react-query";
 import {
   ArrowLeft,
   Calendar,
+  Check,
+  ChevronLeft,
+  Clock,
   Loader2,
   LogOut,
   Lock,
   Mail,
+  Pencil,
   Phone,
   Trash2,
   Car,
@@ -32,11 +39,34 @@ import {
 } from "lucide-react";
 import {
   formatDateLong,
+  formatDateShort,
   formatDateTimeLong,
   formatPrice,
   formatDuration,
+  formatTime12h,
   todayDateString,
+  addDaysToDateString,
 } from "@/lib/format";
+
+function scheduledAtToShopDate(iso: string): string {
+  const d = new Date(iso);
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Chicago",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(d);
+}
+
+function scheduledAtToShopTime(iso: string): string {
+  const d = new Date(iso);
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone: "America/Chicago",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(d);
+}
 
 const TOKEN_KEY = "apex_admin_token";
 
@@ -197,6 +227,8 @@ function Dashboard({
     }
   };
 
+  const [editing, setEditing] = useState<Booking | null>(null);
+
   const bookings = data ?? [];
   const upcoming = bookings.filter(
     (b) => b.status === "confirmed" && new Date(b.scheduledAt as unknown as string) >= new Date(),
@@ -328,7 +360,12 @@ function Dashboard({
               </div>
             ) : (
               filteredUpcoming.map((b) => (
-                <BookingCard key={b.id} booking={b} onCancel={() => cancel(b.id)} />
+                <BookingCard
+                  key={b.id}
+                  booking={b}
+                  onCancel={() => cancel(b.id)}
+                  onEdit={() => setEditing(b)}
+                />
               ))
             )}
           </Section>
@@ -357,6 +394,19 @@ function Dashboard({
 
         <BlockedDatesPanel token={token} />
       </main>
+
+      {editing && (
+        <EditBookingModal
+          booking={editing}
+          token={token}
+          onClose={() => setEditing(null)}
+          onSaved={() => {
+            queryClient.invalidateQueries({
+              queryKey: getAdminListBookingsQueryKey(),
+            });
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -589,11 +639,13 @@ function Section({
 function BookingCard({
   booking,
   onCancel,
+  onEdit,
   muted,
   strikethrough,
 }: {
   booking: Booking;
   onCancel?: () => void;
+  onEdit?: () => void;
   muted?: boolean;
   strikethrough?: boolean;
 }) {
@@ -654,14 +706,505 @@ function BookingCard({
             )}
           </div>
         </div>
-        {onCancel && (
-          <button
-            onClick={onCancel}
-            className="flex items-center gap-1.5 text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10 px-3 py-1.5 rounded-lg border border-red-500/20 transition self-start"
-          >
-            <Trash2 className="w-3.5 h-3.5" /> Cancel
-          </button>
+        {(onEdit || onCancel) && (
+          <div className="flex items-center gap-2 self-start">
+            {onEdit && (
+              <button
+                onClick={onEdit}
+                className="flex items-center gap-1.5 text-xs text-[#3496FF] hover:text-white hover:bg-[#3496FF]/10 px-3 py-1.5 rounded-lg border border-[#3496FF]/30 transition"
+              >
+                <Pencil className="w-3.5 h-3.5" /> Edit
+              </button>
+            )}
+            {onCancel && (
+              <button
+                onClick={onCancel}
+                className="flex items-center gap-1.5 text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10 px-3 py-1.5 rounded-lg border border-red-500/20 transition"
+              >
+                <Trash2 className="w-3.5 h-3.5" /> Cancel
+              </button>
+            )}
+          </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Admin Edit Modal ---------- */
+function EditBookingModal({
+  booking,
+  token,
+  onClose,
+  onSaved,
+}: {
+  booking: Booking;
+  token: string;
+  onClose: () => void;
+  onSaved: () => void;
+}) {
+  const [tab, setTab] = useState<"details" | "reschedule">("details");
+
+  // Lock background scroll while open + close on Escape.
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm p-0 sm:p-4"
+      onClick={onClose}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="w-full sm:max-w-2xl bg-[#0a0a0a] border border-white/10 rounded-t-2xl sm:rounded-2xl max-h-[95vh] overflow-y-auto"
+      >
+        <div className="sticky top-0 z-10 bg-[#0a0a0a] border-b border-white/10 px-5 py-4 flex items-center justify-between">
+          <div className="min-w-0 flex-1 pr-3">
+            <h2 className="text-lg font-bold truncate">
+              Edit booking #{String(booking.id).padStart(5, "0")}
+            </h2>
+            <p className="text-xs text-gray-500 truncate">
+              {booking.customerName} · {booking.serviceName}
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            className="w-9 h-9 flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-white/5"
+          >
+            <XIcon className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="px-5 pt-4 flex gap-2 border-b border-white/10">
+          <TabButton active={tab === "details"} onClick={() => setTab("details")}>
+            Details
+          </TabButton>
+          <TabButton
+            active={tab === "reschedule"}
+            onClick={() => setTab("reschedule")}
+          >
+            Reschedule
+          </TabButton>
+        </div>
+
+        <div className="p-5">
+          {tab === "details" ? (
+            <DetailsTab
+              booking={booking}
+              token={token}
+              onSaved={() => {
+                onSaved();
+                onClose();
+              }}
+            />
+          ) : (
+            <RescheduleTab
+              booking={booking}
+              token={token}
+              onSaved={() => {
+                onSaved();
+                onClose();
+              }}
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TabButton({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`px-4 py-2.5 text-sm font-bold border-b-2 -mb-px transition ${
+        active
+          ? "text-white border-[#3496FF]"
+          : "text-gray-400 border-transparent hover:text-white"
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function DetailsTab({
+  booking,
+  token,
+  onSaved,
+}: {
+  booking: Booking;
+  token: string;
+  onSaved: () => void;
+}) {
+  const [customerName, setCustomerName] = useState(booking.customerName);
+  const [email, setEmail] = useState(booking.email);
+  const [phone, setPhone] = useState(booking.phone);
+  const [vehicle, setVehicle] = useState(booking.vehicle);
+  const [notes, setNotes] = useState(booking.notes ?? "");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const dirty =
+    customerName !== booking.customerName ||
+    email !== booking.email ||
+    phone !== booking.phone ||
+    vehicle !== booking.vehicle ||
+    notes !== (booking.notes ?? "");
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!dirty) return;
+    setSubmitting(true);
+    setError(null);
+    try {
+      await adminUpdateBooking(
+        booking.id,
+        { customerName, email, phone, vehicle, notes },
+        { headers: { "x-admin-token": token } },
+      );
+      onSaved();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not save changes.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <form onSubmit={submit} className="space-y-4">
+      <Field label="Customer name">
+        <input
+          value={customerName}
+          onChange={(e) => setCustomerName(e.target.value)}
+          required
+          className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#3496FF] focus:outline-none focus:ring-2 focus:ring-[#3496FF]/20 transition"
+        />
+      </Field>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Field label="Phone">
+          <input
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            required
+            className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#3496FF] focus:outline-none focus:ring-2 focus:ring-[#3496FF]/20 transition"
+          />
+        </Field>
+        <Field label="Email">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#3496FF] focus:outline-none focus:ring-2 focus:ring-[#3496FF]/20 transition"
+          />
+        </Field>
+      </div>
+      <Field label="Vehicle">
+        <input
+          value={vehicle}
+          onChange={(e) => setVehicle(e.target.value)}
+          required
+          className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#3496FF] focus:outline-none focus:ring-2 focus:ring-[#3496FF]/20 transition"
+        />
+      </Field>
+      <Field label="Notes">
+        <textarea
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          rows={3}
+          className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#3496FF] focus:outline-none focus:ring-2 focus:ring-[#3496FF]/20 transition resize-none"
+        />
+      </Field>
+
+      {error && (
+        <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-sm">
+          {error}
+        </div>
+      )}
+
+      <p className="text-xs text-gray-500">
+        Saving updates the booking record and re-syncs the Google Calendar event. The customer is not emailed.
+      </p>
+
+      <div className="flex justify-end gap-3 pt-2">
+        <button
+          type="submit"
+          disabled={!dirty || submitting}
+          className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white font-bold disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-[#3496FF]/30 transition flex items-center justify-center gap-2"
+        >
+          {submitting ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" /> Saving…
+            </>
+          ) : (
+            <>
+              <Check className="w-4 h-4" /> Save changes
+            </>
+          )}
+        </button>
+      </div>
+    </form>
+  );
+}
+
+function Field({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <label className="block">
+      <span className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5 block">
+        {label}
+      </span>
+      {children}
+    </label>
+  );
+}
+
+function RescheduleTab({
+  booking,
+  token,
+  onSaved,
+}: {
+  booking: Booking;
+  token: string;
+  onSaved: () => void;
+}) {
+  const scheduledIso =
+    typeof booking.scheduledAt === "string"
+      ? booking.scheduledAt
+      : new Date(booking.scheduledAt as unknown as string).toISOString();
+  const currentDate = scheduledAtToShopDate(scheduledIso);
+  const currentTime = scheduledAtToShopTime(scheduledIso);
+
+  const today = todayDateString();
+  const [windowStart, setWindowStart] = useState(today);
+  const [pickedDate, setPickedDate] = useState<string | null>(null);
+  const [pickedTime, setPickedTime] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const endDate = useMemo(
+    () => addDaysToDateString(windowStart, 13),
+    [windowStart],
+  );
+
+  const { data, isLoading } = useGetAvailability({
+    startDate: windowStart,
+    endDate,
+    serviceId: booking.serviceId,
+  });
+
+  const days = data ?? [];
+  const selectedDay = days.find((d) => d.date === pickedDate);
+
+  const goPrev = () => {
+    const prev = addDaysToDateString(windowStart, -14);
+    setWindowStart(prev < today ? today : prev);
+  };
+  const goNext = () => setWindowStart(addDaysToDateString(windowStart, 14));
+
+  useEffect(() => {
+    setError(null);
+  }, [pickedDate, pickedTime]);
+
+  const isCurrentSlot =
+    pickedDate === currentDate && pickedTime === currentTime;
+
+  const submit = async () => {
+    if (!pickedDate || !pickedTime) return;
+    setSubmitting(true);
+    setError(null);
+    try {
+      await adminRescheduleBooking(
+        booking.id,
+        { date: pickedDate, time: pickedTime },
+        { headers: { "x-admin-token": token } },
+      );
+      onSaved();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not reschedule.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div>
+      <p className="text-sm text-gray-400 mb-5">
+        Current:{" "}
+        <span className="text-white font-semibold">
+          {formatDateTimeLong(scheduledIso)}
+        </span>
+      </p>
+
+      <div className="rounded-xl border border-white/10 bg-white/[0.02] p-4 mb-4">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-xs font-bold text-gray-300 uppercase tracking-wide">
+            <Calendar className="w-3.5 h-3.5 inline mr-2 -mt-0.5" />
+            Select a day
+          </h3>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={goPrev}
+              disabled={windowStart === today}
+              className="w-8 h-8 rounded-lg border border-white/10 hover:bg-white/5 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+              aria-label="Previous"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <button
+              onClick={goNext}
+              className="w-8 h-8 rounded-lg border border-white/10 hover:bg-white/5 flex items-center justify-center"
+              aria-label="Next"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {isLoading ? (
+          <div className="flex items-center gap-3 text-gray-400 py-8 justify-center text-sm">
+            <Loader2 className="w-4 h-4 animate-spin" /> Checking availability…
+          </div>
+        ) : (
+          <div className="grid grid-cols-3 sm:grid-cols-7 gap-2">
+            {days.map((d) => {
+              const allFull = d.slots.every((s) => !s.available);
+              const dayHasOurCurrent = d.date === currentDate;
+              const isPast = d.date < today;
+              const disabled =
+                isPast || d.closed || (allFull && !dayHasOurCurrent);
+              const isPicked = pickedDate === d.date;
+              return (
+                <button
+                  key={d.date}
+                  onClick={() => {
+                    setPickedDate(d.date);
+                    setPickedTime(null);
+                  }}
+                  disabled={disabled}
+                  className={`p-3 rounded-xl text-center transition ${
+                    isPicked
+                      ? "bg-gradient-to-br from-[#A886CD] to-[#3496FF] text-white"
+                      : disabled
+                        ? "bg-white/[0.02] text-gray-600 cursor-not-allowed opacity-50"
+                        : "bg-white/[0.04] hover:bg-white/[0.08] text-white"
+                  }`}
+                >
+                  <div className="text-[10px] uppercase font-bold tracking-wider opacity-80">
+                    {formatDateShort(d.date).split(",")[0]}
+                  </div>
+                  <div className="text-lg font-bold leading-tight mt-1">
+                    {Number(d.date.split("-")[2])}
+                  </div>
+                  <div className="text-[10px] mt-1 opacity-70">
+                    {isPast
+                      ? "Past"
+                      : d.closed
+                        ? "Closed"
+                        : allFull && !dayHasOurCurrent
+                          ? "Full"
+                          : "Open"}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {selectedDay && !selectedDay.closed && (
+        <div className="rounded-xl border border-white/10 bg-white/[0.02] p-4 mb-5">
+          <h3 className="text-xs font-bold text-gray-300 uppercase tracking-wide mb-3">
+            <Clock className="w-3.5 h-3.5 inline mr-2 -mt-0.5" />
+            {formatDateLong(selectedDay.date)}
+          </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            {selectedDay.slots.map((slot) => {
+              const isOwnCurrent =
+                selectedDay.date === currentDate && slot.time === currentTime;
+              const available = slot.available || isOwnCurrent;
+              const isPicked = pickedTime === slot.time;
+              return (
+                <button
+                  key={slot.time}
+                  onClick={() => setPickedTime(slot.time)}
+                  disabled={!available}
+                  className={`py-3 rounded-xl font-bold transition text-sm ${
+                    isPicked
+                      ? "bg-gradient-to-br from-[#A886CD] to-[#3496FF] text-white"
+                      : available
+                        ? "bg-white/[0.04] hover:bg-white/[0.08] text-white border border-white/10"
+                        : "bg-white/[0.02] text-gray-600 cursor-not-allowed line-through"
+                  }`}
+                >
+                  {formatTime12h(slot.time)}
+                  {isOwnCurrent && (
+                    <div className="text-[10px] font-normal opacity-70 mt-0.5">
+                      (current)
+                    </div>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {error && (
+        <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-sm">
+          {error}
+        </div>
+      )}
+
+      <p className="text-xs text-gray-500 mb-4">
+        Confirming sends the customer the standard reschedule email and moves the Google Calendar event.
+      </p>
+
+      <div className="flex justify-end gap-3">
+        <button
+          onClick={submit}
+          disabled={
+            !pickedDate || !pickedTime || isCurrentSlot || submitting
+          }
+          className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white font-bold disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-[#3496FF]/30 transition flex items-center justify-center gap-2"
+        >
+          {submitting ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" /> Updating…
+            </>
+          ) : (
+            <>
+              {isCurrentSlot ? "Pick a different time" : "Confirm new time"}
+              <Check className="w-4 h-4" />
+            </>
+          )}
+        </button>
       </div>
     </div>
   );

@@ -67,6 +67,20 @@ export interface CreateBlockedDateRequest {
   reason?: string;
 }
 
+/**
+ * At least one field must be provided.
+ */
+export interface UpdateBookingRequest {
+  /** @minLength 1 */
+  customerName?: string;
+  email?: string;
+  /** @minLength 7 */
+  phone?: string;
+  /** @minLength 1 */
+  vehicle?: string;
+  notes?: string;
+}
+
 export interface RescheduleBookingRequest {
   /** YYYY-MM-DD */
   date: string;

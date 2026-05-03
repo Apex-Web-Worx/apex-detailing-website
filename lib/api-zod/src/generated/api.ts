@@ -194,6 +194,89 @@ export const AdminCancelBookingHeader = zod.object({
 });
 
 /**
+ * @summary Update a booking's customer details (admin)
+ */
+export const AdminUpdateBookingParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const AdminUpdateBookingHeader = zod.object({
+  "x-admin-token": zod.string(),
+});
+
+export const adminUpdateBookingBodyPhoneMin = 7;
+
+export const AdminUpdateBookingBody = zod
+  .object({
+    customerName: zod.string().min(1).optional(),
+    email: zod.string().email().optional(),
+    phone: zod.string().min(adminUpdateBookingBodyPhoneMin).optional(),
+    vehicle: zod.string().min(1).optional(),
+    notes: zod.string().optional(),
+  })
+  .describe("At least one field must be provided.");
+
+export const AdminUpdateBookingResponse = zod.object({
+  id: zod.number(),
+  serviceId: zod.number(),
+  serviceName: zod.string(),
+  servicePriceCents: zod.number(),
+  serviceDurationMinutes: zod.number(),
+  customerName: zod.string(),
+  email: zod.string(),
+  phone: zod.string(),
+  vehicle: zod.string(),
+  notes: zod.string(),
+  scheduledAt: zod.date(),
+  status: zod.string(),
+  manageToken: zod
+    .string()
+    .nullish()
+    .describe(
+      "Returned to the booking creator and via the manage endpoints. Used in the customer self-manage URL.",
+    ),
+  createdAt: zod.date(),
+});
+
+/**
+ * @summary Reschedule a booking (admin)
+ */
+export const AdminRescheduleBookingParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const AdminRescheduleBookingHeader = zod.object({
+  "x-admin-token": zod.string(),
+});
+
+export const AdminRescheduleBookingBody = zod.object({
+  date: zod.string().describe("YYYY-MM-DD"),
+  time: zod.string().describe("HH:MM"),
+});
+
+export const AdminRescheduleBookingResponse = zod.object({
+  id: zod.number(),
+  serviceId: zod.number(),
+  serviceName: zod.string(),
+  servicePriceCents: zod.number(),
+  serviceDurationMinutes: zod.number(),
+  customerName: zod.string(),
+  email: zod.string(),
+  phone: zod.string(),
+  vehicle: zod.string(),
+  notes: zod.string(),
+  scheduledAt: zod.date(),
+  status: zod.string(),
+  manageToken: zod
+    .string()
+    .nullish()
+    .describe(
+      "Returned to the booking creator and via the manage endpoints. Used in the customer self-manage URL.",
+    ),
+  createdAt: zod.date(),
+});
+
+/**
  * @summary List blocked (closed) dates
  */
 export const AdminListBlockedDatesHeader = zod.object({

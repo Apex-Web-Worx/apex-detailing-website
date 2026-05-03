@@ -13,7 +13,7 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - **API framework**: Express 5
 - **Database**: PostgreSQL + Drizzle ORM
 - **Validation**: Zod (`zod/v4`), `drizzle-zod`
-- **API codegen**: Orval (from OpenAPI spec)
+- **API codegen**: Orval (from OpenAPI spec) — after spec changes, run `pnpm --filter @workspace/api-spec run codegen` then `cd lib/api-client-react && npx tsc` to refresh the composite project's `.d.ts` files (otherwise `apex-detailing` typecheck won't see new exports)
 - **Build**: esbuild (CJS bundle)
 
 ## Structure

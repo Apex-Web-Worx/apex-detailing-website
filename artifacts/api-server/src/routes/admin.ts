@@ -1,14 +1,23 @@
 import { Router, type IRouter, type Request, type Response, type NextFunction } from "express";
-import { db, bookingsTable, blockedDatesTable } from "@workspace/db";
-import { and, asc, eq } from "drizzle-orm";
-import { parseDateString, shopLocalDateString, shopLocalTimeString, todayInShopLocal } from "../lib/availability";
+import { db, bookingsTable, blockedDatesTable, servicesTable } from "@workspace/db";
+import { and, asc, eq, gte, lte, ne } from "drizzle-orm";
+import {
+  buildScheduledAt,
+  isClosedShopDate,
+  isPastSlot,
+  isSlotAllowedForService,
+  parseDateString,
+  shopLocalDateString,
+  shopLocalTimeString,
+  todayInShopLocal,
+} from "../lib/availability";
 import { type BookingEmailData } from "../lib/email";
 import {
   syncBookingCalendar,
   createBlockedDateEvent,
   deleteBlockedDateEvent,
 } from "../lib/calendar";
-import { notifyBookingCancelled } from "../lib/notify";
+import { notifyBookingCancelled, notifyBookingRescheduled } from "../lib/notify";
 
 const router: IRouter = Router();
 
@@ -84,6 +93,299 @@ router.delete("/admin/bookings/:id", requireAdmin, async (req, res) => {
   if (cancelled) {
     notifyBookingCancelled(bookingToEmailData(cancelled), "admin");
     void syncBookingCalendar(cancelled.id);
+  }
+});
+
+// Walk the cause chain looking for a Postgres error code (e.g. 23505).
+function pgErrorCode(err: unknown): string | undefined {
+  let cur: unknown = err;
+  for (let i = 0; i < 5 && cur; i++) {
+    if (typeof cur === "object" && cur !== null && "code" in cur) {
+      const code = (cur as { code?: unknown }).code;
+      if (typeof code === "string") return code;
+    }
+    cur =
+      typeof cur === "object" && cur !== null && "cause" in cur
+        ? (cur as { cause?: unknown }).cause
+        : undefined;
+  }
+  return undefined;
+}
+
+router.patch("/admin/bookings/:id", requireAdmin, async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isFinite(id) || id <= 0) {
+    res.status(400).json({ message: "Invalid id" });
+    return;
+  }
+
+  const body = (req.body ?? {}) as {
+    customerName?: unknown;
+    email?: unknown;
+    phone?: unknown;
+    vehicle?: unknown;
+    notes?: unknown;
+  };
+
+  const update: Partial<typeof bookingsTable.$inferInsert> = {};
+
+  if (body.customerName !== undefined) {
+    if (typeof body.customerName !== "string" || body.customerName.trim().length === 0) {
+      res.status(400).json({ message: "customerName must be a non-empty string" });
+      return;
+    }
+    update.customerName = body.customerName.trim();
+  }
+  if (body.email !== undefined) {
+    if (typeof body.email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) {
+      res.status(400).json({ message: "email must be a valid email address" });
+      return;
+    }
+    update.email = body.email.trim();
+  }
+  if (body.phone !== undefined) {
+    if (typeof body.phone !== "string" || body.phone.trim().length < 7) {
+      res.status(400).json({ message: "phone must be at least 7 characters" });
+      return;
+    }
+    update.phone = body.phone.trim();
+  }
+  if (body.vehicle !== undefined) {
+    if (typeof body.vehicle !== "string" || body.vehicle.trim().length === 0) {
+      res.status(400).json({ message: "vehicle must be a non-empty string" });
+      return;
+    }
+    update.vehicle = body.vehicle.trim();
+  }
+  if (body.notes !== undefined) {
+    if (typeof body.notes !== "string") {
+      res.status(400).json({ message: "notes must be a string" });
+      return;
+    }
+    update.notes = body.notes;
+  }
+
+  if (Object.keys(update).length === 0) {
+    res.status(400).json({ message: "No fields to update" });
+    return;
+  }
+
+  const [existing] = await db
+    .select()
+    .from(bookingsTable)
+    .where(eq(bookingsTable.id, id));
+  if (!existing) {
+    res.status(404).json({ message: "Booking not found" });
+    return;
+  }
+  // Mirror the UI rule (Edit only shown for upcoming bookings) on the API
+  // surface so a stale tab / direct curl can't revive a cancelled or past
+  // booking by editing it.
+  if (existing.status !== "confirmed") {
+    res.status(400).json({ message: "Cannot edit a cancelled booking." });
+    return;
+  }
+  if (existing.scheduledAt < new Date()) {
+    res.status(400).json({ message: "Cannot edit a past booking." });
+    return;
+  }
+
+  // Compare-and-swap on the snapshot we just read. If the row was changed
+  // (cancelled, rescheduled, or another admin edit) between read and write,
+  // we lose the race and surface a 409 so the admin can refresh and retry.
+  const updatedRows = await db
+    .update(bookingsTable)
+    .set(update)
+    .where(
+      and(
+        eq(bookingsTable.id, id),
+        eq(bookingsTable.status, "confirmed"),
+        eq(bookingsTable.scheduledAt, existing.scheduledAt),
+      ),
+    )
+    .returning();
+
+  if (updatedRows.length === 0) {
+    res.status(409).json({
+      message:
+        "This booking was just changed in another window. Refresh and try again.",
+    });
+    return;
+  }
+
+  const updated = updatedRows[0]!;
+  res.json(updated);
+
+  // Re-sync the Google Calendar event so it reflects the new customer info.
+  void syncBookingCalendar(updated.id);
+});
+
+router.post("/admin/bookings/:id/reschedule", requireAdmin, async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isFinite(id) || id <= 0) {
+    res.status(400).json({ message: "Invalid id" });
+    return;
+  }
+
+  const body = (req.body ?? {}) as { date?: unknown; time?: unknown };
+  if (typeof body.date !== "string" || typeof body.time !== "string") {
+    res.status(400).json({ message: "date and time are required" });
+    return;
+  }
+  const newDate = body.date;
+  const newTime = body.time;
+
+  const [booking] = await db
+    .select()
+    .from(bookingsTable)
+    .where(eq(bookingsTable.id, id));
+  if (!booking) {
+    res.status(404).json({ message: "Booking not found" });
+    return;
+  }
+
+  if (booking.status !== "confirmed") {
+    res.status(400).json({ message: "This booking is cancelled and cannot be rescheduled." });
+    return;
+  }
+  if (booking.scheduledAt < new Date()) {
+    res
+      .status(400)
+      .json({ message: "This appointment has already passed and cannot be rescheduled." });
+    return;
+  }
+  if (!parseDateString(newDate)) {
+    res.status(400).json({ message: "Invalid date format. Use YYYY-MM-DD." });
+    return;
+  }
+  if (newDate < todayInShopLocal()) {
+    res.status(400).json({ message: "Cannot reschedule to a date in the past" });
+    return;
+  }
+  if (isClosedShopDate(newDate)) {
+    res.status(400).json({ message: "Shop is closed on this day" });
+    return;
+  }
+
+  const [blockedRow] = await db
+    .select({ id: blockedDatesTable.id })
+    .from(blockedDatesTable)
+    .where(eq(blockedDatesTable.date, newDate));
+  if (blockedRow) {
+    res.status(400).json({ message: "Shop is closed on this day" });
+    return;
+  }
+
+  const [bookingService] = await db
+    .select({ slug: servicesTable.slug })
+    .from(servicesTable)
+    .where(eq(servicesTable.id, booking.serviceId));
+  if (!bookingService) {
+    res.status(500).json({ message: "Service for this booking not found." });
+    return;
+  }
+  if (!isSlotAllowedForService(newDate, newTime, bookingService.slug)) {
+    res.status(400).json({
+      message: "That time slot is not available for this service.",
+    });
+    return;
+  }
+  if (isPastSlot(newDate, newTime)) {
+    res
+      .status(400)
+      .json({ message: "That time has already passed. Please pick a later slot." });
+    return;
+  }
+
+  // Whole-day lock for non-Friday details (excluding this booking).
+  const newDateObj = parseDateString(newDate);
+  if (newDateObj && newDateObj.getUTCDay() !== 5) {
+    const dayStart =
+      buildScheduledAt(newDate, "00:00") ??
+      new Date(
+        Date.UTC(
+          newDateObj.getUTCFullYear(),
+          newDateObj.getUTCMonth(),
+          newDateObj.getUTCDate(),
+        ),
+      );
+    const dayEnd = new Date(dayStart.getTime() + 36 * 60 * 60 * 1000);
+    const [conflicting] = await db
+      .select({ id: bookingsTable.id })
+      .from(bookingsTable)
+      .where(
+        and(
+          gte(bookingsTable.scheduledAt, dayStart),
+          lte(bookingsTable.scheduledAt, dayEnd),
+          eq(bookingsTable.status, "confirmed"),
+          ne(bookingsTable.id, booking.id),
+        ),
+      )
+      .limit(1);
+    if (conflicting) {
+      res.status(409).json({
+        message: "That day is fully booked. Please choose another day.",
+      });
+      return;
+    }
+  }
+
+  const newScheduledAt = buildScheduledAt(newDate, newTime);
+  if (!newScheduledAt) {
+    res.status(400).json({ message: "Invalid date or time" });
+    return;
+  }
+
+  const oldDate = shopLocalDateString(booking.scheduledAt);
+  const oldTime = shopLocalTimeString(booking.scheduledAt);
+  const isSameSlot =
+    newScheduledAt.getTime() === booking.scheduledAt.getTime();
+
+  try {
+    const updatedRows = await db
+      .update(bookingsTable)
+      .set(
+        isSameSlot
+          ? { scheduledAt: newScheduledAt }
+          : { scheduledAt: newScheduledAt, reminderSentAt: null },
+      )
+      .where(
+        and(
+          eq(bookingsTable.id, booking.id),
+          eq(bookingsTable.status, "confirmed"),
+          eq(bookingsTable.scheduledAt, booking.scheduledAt),
+        ),
+      )
+      .returning();
+
+    if (updatedRows.length === 0) {
+      res.status(409).json({
+        message:
+          "This booking was just changed in another window. Refresh and try again.",
+      });
+      return;
+    }
+
+    const updated = updatedRows[0]!;
+    res.json(updated);
+
+    if (!isSameSlot) {
+      notifyBookingRescheduled({
+        oldDate,
+        oldTime,
+        booking: bookingToEmailData(updated),
+      });
+      void syncBookingCalendar(updated.id);
+    }
+    return;
+  } catch (err) {
+    if (pgErrorCode(err) === "23505") {
+      res.status(409).json({
+        message: "Sorry — that time slot was just taken. Please pick another.",
+      });
+      return;
+    }
+    throw err;
   }
 });
 

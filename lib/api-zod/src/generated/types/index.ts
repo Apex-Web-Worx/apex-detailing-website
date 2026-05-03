@@ -20,3 +20,4 @@ export * from "./rescheduleBookingRequest";
 export * from "./rescheduleManagedBookingParams";
 export * from "./service";
 export * from "./timeSlot";
+export * from "./updateBookingRequest";
