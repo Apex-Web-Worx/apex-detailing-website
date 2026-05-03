@@ -12,6 +12,12 @@ uri = "file://attached_assets/apex-gift-card-square-v2.png"
 type = "image"
 title = "apex gift card v2 metallic"
 
+[[generated]]
+id = "grZ2X5twPJ3FbWtmOCEe9"
+uri = "file://attached_assets/apex-gift-card-square-v3.png"
+type = "image"
+title = "apex gift card v3 flat lay"
+
 [[outputs]]
 id = "8-DYO5WImO2_DblT7PD9M"
 uri = "file://screenshots/email-customer.jpg"
@@ -35,3 +41,9 @@ id = "pi-UD-9kol1_aZ6_V2DAi"
 uri = "file://attached_assets/apex-gift-card-square-v2.png"
 type = "image"
 title = "Apex Detailing — Gift Card Artwork (V2: Glossy Paint)"
+
+[[outputs]]
+id = "yEmgVF6SKCkSUpIu_UmB8"
+uri = "file://attached_assets/apex-gift-card-square-v3.png"
+type = "image"
+title = "Apex Detailing — Gift Card Artwork (V3: Gift Presentation)"
