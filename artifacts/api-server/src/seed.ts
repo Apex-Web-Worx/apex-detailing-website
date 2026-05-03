@@ -2,9 +2,10 @@ import { db, servicesTable } from "@workspace/db";
 import { eq, notInArray } from "drizzle-orm";
 
 // New "Apex" elite catalog (replaces the prior 6-service list).
-// priceCents is intentionally 0 across the board — the website no longer
-// shows prices to customers ("Call/text for quote" vibe). The column stays
-// in the schema for now in case we re-introduce pricing later.
+// priceCents represents the "starting at" price shown on the booking
+// service-picker. A value of 0 is treated as "Call for quote" by the
+// frontend (currently only Ceramic Coating). Final pricing is always
+// confirmed in person and may vary by vehicle size / condition.
 const seeds = [
   {
     slug: "apex-full-detailing",
@@ -12,7 +13,7 @@ const seeds = [
     description:
       "The ultimate package — interior and exterior detailed cleaning and protection. Get your vehicle looking showroom fresh inside and out. Add-ons available to customize your package.",
     durationMinutes: 360,
-    priceCents: 0,
+    priceCents: 30000,
     sortOrder: 10,
   },
   {
@@ -21,7 +22,7 @@ const seeds = [
     description:
       "Comprehensive interior cleaning that transforms every surface — from carpets to leather to air vents. Add-ons available to customize your package.",
     durationMinutes: 240,
-    priceCents: 0,
+    priceCents: 20000,
     sortOrder: 20,
   },
   {
@@ -30,7 +31,7 @@ const seeds = [
     description:
       "A fast, high-quality interior refresh designed to keep your vehicle clean, fresh, and presentable — without the time commitment of a full detail. This service is intended only to maintain a semi-clean vehicle. Note: heavily soiled interiors, stains, excessive pet hair, or deep cleaning needs may require a Full Interior Detail. Final service type confirmed upon inspection.",
     durationMinutes: 90,
-    priceCents: 0,
+    priceCents: 10000,
     sortOrder: 30,
   },
   {
@@ -39,7 +40,7 @@ const seeds = [
     description:
       "Comprehensive exterior cleaning and protection to make your car turn heads everywhere you go. Detailed hand wash, windows & mirrors, wheels & tires detailed, door jambs wiped, 1-month spray sealant.",
     durationMinutes: 180,
-    priceCents: 0,
+    priceCents: 15000,
     sortOrder: 40,
   },
   {
@@ -48,7 +49,7 @@ const seeds = [
     description:
       "Thorough hand wash, clay bar treatment to remove embedded contaminants, and a protective wax coating to enhance shine, protect the paint, and repel water and dirt.",
     durationMinutes: 180,
-    priceCents: 0,
+    priceCents: 25000,
     sortOrder: 50,
   },
   {
@@ -57,7 +58,7 @@ const seeds = [
     description:
       "Fix foggy, yellowed headlights to improve nighttime visibility and dramatically improve your car's appearance. Removes oxidation and applies UV protection.",
     durationMinutes: 90,
-    priceCents: 0,
+    priceCents: 10000,
     sortOrder: 60,
   },
   {
@@ -66,6 +67,7 @@ const seeds = [
     description:
       "Ultimate protection and extreme gloss for your vehicle's paint. Lasts for years, making maintenance washes a breeze. Up to 5 years of protection, extreme hydrophobics, scratch resistance.",
     durationMinutes: 600,
+    // Custom-quoted — frontend shows "Call for quote" when priceCents === 0.
     priceCents: 0,
     sortOrder: 70,
   },
@@ -75,7 +77,7 @@ const seeds = [
     description:
       "Remove swirl marks, light scratches, and oxidation to restore your paint to a flawless, mirror-like finish. Deep gloss restoration that enhances resale value.",
     durationMinutes: 480,
-    priceCents: 0,
+    priceCents: 30000,
     sortOrder: 80,
   },
 ];

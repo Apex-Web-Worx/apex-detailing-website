@@ -955,18 +955,18 @@ export default function Home() {
             <span className="text-gray-300 text-xs sm:text-sm font-medium">on Google</span>
           </a>
 
-          <div className="mt-10 flex flex-wrap justify-center items-center gap-6 sm:gap-8 opacity-70 hover:opacity-100 transition-all duration-500">
+          <div className="mt-10 flex flex-wrap justify-center items-center gap-6 sm:gap-8 opacity-80 hover:opacity-100 transition-all duration-500">
             <div className="flex items-center gap-2">
-              <Award className="w-6 h-6 text-[#A886CD]" />
-              <span className="font-bold">Professional Detailers</span>
+              <Shield className="w-6 h-6 text-[#A886CD]" />
+              <span className="font-bold">Re-Do Guarantee</span>
             </div>
             <div className="flex items-center gap-2">
-              <Shield className="w-6 h-6 text-[#3496FF]" />
-              <span className="font-bold">Trusted</span>
+              <Award className="w-6 h-6 text-[#3496FF]" />
+              <span className="font-bold">5.0★ on Google</span>
             </div>
             <div className="flex items-center gap-2">
               <MapPin className="w-6 h-6 text-[#A886CD]" />
-              <span className="font-bold">Located in Nixa, MO</span>
+              <span className="font-bold">Shop-Based · Nixa, MO</span>
             </div>
           </div>
 
@@ -1019,6 +1019,16 @@ export default function Home() {
                   </div>
                   <h4 className="text-2xl font-black mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#A886CD] group-hover:to-[#3496FF] transition-all duration-300 flex items-center flex-wrap gap-2">
                     {service.title}
+                    {service.id === "full-detailing" && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white group-hover:bg-none group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
+                        <Star className="w-3 h-3" fill="currentColor" /> Most Booked
+                      </span>
+                    )}
+                    {service.id === "wash-clay-wax" && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#3496FF] text-white group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
+                        Best Value
+                      </span>
+                    )}
                     {service.id === "apex-express-interior-detailing" && (
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white group-hover:bg-none group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
                         <Zap className="w-3 h-3" /> Express

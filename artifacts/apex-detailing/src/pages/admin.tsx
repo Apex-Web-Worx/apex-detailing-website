@@ -610,7 +610,9 @@ function BookingCard({
           <div className="flex items-center gap-3 mb-2">
             <h3 className="text-lg font-bold">{booking.serviceName}</h3>
             <span className="text-sm font-black bg-gradient-to-r from-[#A886CD] to-[#3496FF] bg-clip-text text-transparent">
-              {formatPrice(booking.servicePriceCents)}
+              {booking.servicePriceCents > 0
+                ? formatPrice(booking.servicePriceCents)
+                : "Custom quote"}
             </span>
             <span className="text-xs text-gray-500">
               · {formatDuration(booking.serviceDurationMinutes)}

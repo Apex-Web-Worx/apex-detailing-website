@@ -12,9 +12,22 @@ import {
   formatDateLong,
   formatDateShort,
   formatDateTimeLong,
+  formatPrice,
+  formatDuration,
   todayDateString,
   addDaysToDateString,
 } from "@/lib/format";
+
+// Slug-based merchandising badges shown on the service-picker cards.
+// Keep these short — the badge sits inline next to the title.
+const SERVICE_BADGES: Record<
+  string,
+  { label: string; tone: "popular" | "value" | "express" }
+> = {
+  "apex-full-detailing": { label: "Most Booked", tone: "popular" },
+  "apex-wash-clay-wax": { label: "Best Value", tone: "value" },
+  "apex-express-interior-detailing": { label: "Express", tone: "express" },
+};
 import {
   ArrowLeft,
   ArrowRight,
@@ -247,14 +260,18 @@ function ServiceStep({
           const isSelected = selected?.id === s.id;
           const iconMeta = SERVICE_ICONS[s.slug];
           const Icon = iconMeta?.icon;
+          const badge = SERVICE_BADGES[s.slug];
+          const isPopular = badge?.tone === "popular";
           return (
             <button
               key={s.id}
               onClick={() => onSelect(s)}
-              className={`text-left p-6 rounded-2xl border transition group hover:-translate-y-0.5 hover:shadow-2xl ${
+              className={`relative text-left p-6 rounded-2xl border transition group hover:-translate-y-0.5 hover:shadow-2xl ${
                 isSelected
                   ? "border-[#3496FF] bg-gradient-to-br from-[#3496FF]/10 to-[#A886CD]/5"
-                  : "border-white/10 bg-white/[0.02] hover:border-[#3496FF]/40"
+                  : isPopular
+                    ? "border-[#A886CD]/50 bg-gradient-to-br from-[#A886CD]/[0.06] to-transparent hover:border-[#A886CD]"
+                    : "border-white/10 bg-white/[0.02] hover:border-[#3496FF]/40"
               }`}
             >
               <div className="flex items-start justify-between gap-3 mb-3">
@@ -265,12 +282,41 @@ function ServiceStep({
                     </span>
                   )}
                   {s.name}
-                  {s.slug === "apex-express-interior-detailing" && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white">
-                      <Zap className="w-3 h-3" /> Express
+                  {badge && (
+                    <span
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider text-white ${
+                        badge.tone === "popular"
+                          ? "bg-gradient-to-r from-[#A886CD] to-[#3496FF]"
+                          : badge.tone === "value"
+                            ? "bg-[#3496FF]"
+                            : "bg-gradient-to-r from-[#A886CD] to-[#3496FF]"
+                      }`}
+                    >
+                      {badge.tone === "express" && <Zap className="w-3 h-3" />}
+                      {badge.label}
                     </span>
                   )}
                 </h3>
+              </div>
+              <div className="flex items-baseline gap-2 mb-3 flex-wrap">
+                {s.priceCents > 0 ? (
+                  <>
+                    <span className="text-xs uppercase tracking-wider text-gray-500 font-semibold">
+                      Starting at
+                    </span>
+                    <span className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+                      {formatPrice(s.priceCents)}
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-base font-black bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+                    Call for quote
+                  </span>
+                )}
+                <span className="text-xs text-gray-500 flex items-center gap-1">
+                  <Clock className="w-3 h-3" />
+                  {formatDuration(s.durationMinutes)}
+                </span>
               </div>
               <p className="text-sm text-gray-400 mb-4 leading-relaxed">
                 {s.description}
