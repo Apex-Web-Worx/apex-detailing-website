@@ -1034,9 +1034,16 @@ export default function Home() {
                       </span>
                     )}
                   </h4>
-                  <p className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF] mb-4">
-                    {service.pricing}
-                  </p>
+                  <div className="mb-4">
+                    {!/call/i.test(service.pricing) && (
+                      <p className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-0.5">
+                        Starting at
+                      </p>
+                    )}
+                    <p className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+                      {service.pricing}
+                    </p>
+                  </div>
                   {service.pricingDetails && (
                     <div className="mb-4 text-sm text-gray-300 bg-white/5 p-3 rounded-lg">
                       {service.pricingDetails.map((detail, i) => (
