@@ -12,7 +12,7 @@ const seeds = [
     name: "Apex Full Detailing",
     description:
       "The ultimate package — interior and exterior detailed cleaning and protection. Get your vehicle looking showroom fresh inside and out. Add-ons available to customize your package.",
-    durationMinutes: 360,
+    durationMinutes: 480,
     priceCents: 30000,
     sortOrder: 10,
   },
@@ -21,7 +21,7 @@ const seeds = [
     name: "Apex Interior Detailing",
     description:
       "Comprehensive interior cleaning that transforms every surface — from carpets to leather to air vents. Add-ons available to customize your package.",
-    durationMinutes: 240,
+    durationMinutes: 360,
     priceCents: 20000,
     sortOrder: 20,
   },
