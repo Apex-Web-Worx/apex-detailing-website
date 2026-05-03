@@ -1181,7 +1181,7 @@ export default function Home() {
                   "Whatever you do, work at it with all your heart, as working for the Lord, not for men. Colossians 3:23 (NIV)"
                 </p>
                 <p>
-                  Apex Detailing was founded by Mikhail, who is known for his meticulous nature and commitment to perfection. What started as a personal passion for detailing has grown into a trusted service grounded in faith, excellence, and care.
+                  Apex Detailing was founded by Michail, who is known for his meticulous nature and commitment to perfection. What started as a personal passion for detailing has grown into a trusted service grounded in faith, excellence, and care.
                 </p>
                 <p>
                   At Apex, we use only premium-grade chemicals and professional techniques to ensure every vehicle gets the attention it deserves — inside and out. Whether it's a deep interior clean, paint correction, or exterior protection, our goal is to go above and beyond your expectations.
@@ -1194,7 +1194,7 @@ export default function Home() {
                     <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-[#A886CD] to-[#3496FF] blur-md opacity-60" />
                     <img
                       src={ownerPhoto}
-                      alt="Mikhail Gurov, Founder of Apex Detailing"
+                      alt="Michail Gurov, Founder of Apex Detailing"
                       className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-2 border-white/20"
                     />
                   </div>
@@ -1203,7 +1203,7 @@ export default function Home() {
                       Meet your detailer
                     </p>
                     <p className="text-white font-black text-lg sm:text-xl leading-tight">
-                      Mikhail Gurov
+                      Michail Gurov
                     </p>
                     <p className="text-[#A886CD] font-bold text-sm">
                       Founder &amp; Detailing Specialist
