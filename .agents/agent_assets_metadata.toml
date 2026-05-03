@@ -1,5 +1,10 @@
 uploads = []
-generated = []
+
+[[generated]]
+id = "cbPCbNwtuyAazRElDbBe7"
+uri = "file://attached_assets/apex-gift-card-square.png"
+type = "image"
+title = "apex gift card square upload"
 
 [[outputs]]
 id = "8-DYO5WImO2_DblT7PD9M"
@@ -12,3 +17,9 @@ id = "gXbWiXuuAErjiN9JzG4xP"
 uri = "file://screenshots/email-owner.jpg"
 type = "image"
 title = "Owner notification email"
+
+[[outputs]]
+id = "oYUPbPnz7uQMeCL75JSq2"
+uri = "file://attached_assets/apex-gift-card-square.png"
+type = "image"
+title = "Apex Detailing — Square Gift Card Artwork"
