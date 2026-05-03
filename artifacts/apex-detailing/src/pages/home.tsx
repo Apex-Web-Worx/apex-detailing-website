@@ -1754,7 +1754,7 @@ export default function Home() {
                 <Clock className="w-5 h-5 text-[#A886CD]" />
                 <div>
                   <p className="text-xs text-gray-500 uppercase tracking-wider font-bold">Hours</p>
-                  <p className="text-white font-bold">Mon–Sat · 8am – 6pm</p>
+                  <p className="text-white font-bold">Mon–Sat · 7am – 6pm</p>
                 </div>
               </div>
             </div>
@@ -1967,7 +1967,7 @@ export default function Home() {
                   <Clock className="w-5 h-5 text-[#A886CD] shrink-0 mt-0.5" />
                   <div className="text-sm">
                     <p className="text-white font-bold">Mon – Sat</p>
-                    <p className="text-gray-400">8:00 AM – 6:00 PM</p>
+                    <p className="text-gray-400">7:00 AM – 6:00 PM</p>
                     <p className="text-gray-500 mt-1">Closed Sundays</p>
                   </div>
                 </li>

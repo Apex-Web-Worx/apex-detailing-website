@@ -746,7 +746,7 @@ function ConfirmStep({
         <MapPin className="w-5 h-5 text-[#3496FF] flex-shrink-0 mt-0.5" />
         <div>
           <p className="font-bold text-white mb-1">Drop off at our shop</p>
-          <p>1114 E Lakota St, Nixa, MO 65714. We're open Mon–Sat 8 AM – 6 PM.</p>
+          <p>1114 E Lakota St, Nixa, MO 65714. We're open Mon–Sat 7 AM – 6 PM.</p>
         </div>
       </div>
 
