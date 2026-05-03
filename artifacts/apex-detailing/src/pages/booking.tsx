@@ -24,8 +24,8 @@ const SERVICE_BADGES: Record<
   string,
   { label: string; tone: "popular" | "value" | "express" }
 > = {
-  "apex-full-detailing": { label: "Most Booked", tone: "popular" },
-  "apex-wash-clay-wax": { label: "Best Value", tone: "value" },
+  "apex-interior-detailing": { label: "Most Booked", tone: "popular" },
+  "apex-full-detailing": { label: "Best Value", tone: "value" },
   "apex-express-interior-detailing": { label: "Express", tone: "express" },
 };
 import {

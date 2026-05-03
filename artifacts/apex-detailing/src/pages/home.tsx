@@ -1019,12 +1019,12 @@ export default function Home() {
                   </div>
                   <h4 className="text-2xl font-black mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#A886CD] group-hover:to-[#3496FF] transition-all duration-300 flex items-center flex-wrap gap-2">
                     {service.title}
-                    {service.id === "full-detailing" && (
+                    {service.id === "interior-detailing" && (
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white group-hover:bg-none group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
                         <Star className="w-3 h-3" fill="currentColor" /> Most Booked
                       </span>
                     )}
-                    {service.id === "wash-clay-wax" && (
+                    {service.id === "full-detailing" && (
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#3496FF] text-white group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
                         Best Value
                       </span>
