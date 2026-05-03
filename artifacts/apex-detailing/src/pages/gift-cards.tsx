@@ -284,6 +284,9 @@ export default function GiftCardsPage() {
                   <h4 className="text-2xl font-black uppercase tracking-tight mb-1">
                     {pkg.name}
                   </h4>
+                  <p className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-0.5">
+                    Starting at
+                  </p>
                   <p className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF] mb-1 leading-none">
                     ${pkg.amount}
                   </p>
