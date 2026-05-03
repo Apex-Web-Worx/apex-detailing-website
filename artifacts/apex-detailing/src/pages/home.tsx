@@ -21,6 +21,7 @@ import {
   Wand2,
   Zap,
 } from "lucide-react";
+import ownerPhoto from "@assets/ChatGPT_Image_May_2,_2026,_08_13_52_PM_1777770867408.png";
 import img1290 from "@assets/IMG_1290_1775780654764.jpeg";
 import img1303 from "@assets/IMG_1303_1775780654764.jpeg";
 import img1297 from "@assets/IMG_1297_1775780654765.jpeg";
@@ -958,7 +959,7 @@ export default function Home() {
           <div className="mt-10 flex flex-wrap justify-center items-center gap-6 sm:gap-8 opacity-80 hover:opacity-100 transition-all duration-500">
             <div className="flex items-center gap-2">
               <Shield className="w-6 h-6 text-[#A886CD]" />
-              <span className="font-bold">Re-Do Guarantee</span>
+              <span className="font-bold">Owner-Operated · Insured</span>
             </div>
             <div className="flex items-center gap-2">
               <Award className="w-6 h-6 text-[#3496FF]" />
@@ -1188,11 +1189,27 @@ export default function Home() {
                 <p>
                   <strong className="text-white">Experience the Apex difference — where faith fuels our service and quality drives every detail.</strong>
                 </p>
-                <p className="mt-6">
-                  <span className="text-white font-black text-lg">Mikhail Gurov</span>
-                  <br />
-                  <span className="text-[#A886CD] font-bold">Founder & Detailing Specialist</span>
-                </p>
+                <div className="mt-8 flex items-center gap-5 p-5 rounded-2xl bg-white/[0.03] border border-white/10">
+                  <div className="relative shrink-0">
+                    <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-[#A886CD] to-[#3496FF] blur-md opacity-60" />
+                    <img
+                      src={ownerPhoto}
+                      alt="Mikhail Gurov, Founder of Apex Detailing"
+                      className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-2 border-white/20"
+                    />
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-wider text-gray-500 font-bold mb-1">
+                      Meet your detailer
+                    </p>
+                    <p className="text-white font-black text-lg sm:text-xl leading-tight">
+                      Mikhail Gurov
+                    </p>
+                    <p className="text-[#A886CD] font-bold text-sm">
+                      Founder &amp; Detailing Specialist
+                    </p>
+                  </div>
+                </div>
               </div>
 
               <div className="border-t border-white/10 pt-6 mt-8">
