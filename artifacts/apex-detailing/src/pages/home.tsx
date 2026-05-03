@@ -959,7 +959,7 @@ export default function Home() {
           <div className="mt-10 flex flex-wrap justify-center items-center gap-6 sm:gap-8 opacity-80 hover:opacity-100 transition-all duration-500">
             <div className="flex items-center gap-2">
               <Shield className="w-6 h-6 text-[#A886CD]" />
-              <span className="font-bold">Re-Do Guarantee</span>
+              <span className="font-bold">Satisfaction Guaranteed</span>
             </div>
             <div className="flex items-center gap-2">
               <Award className="w-6 h-6 text-[#3496FF]" />
