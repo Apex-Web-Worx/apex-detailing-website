@@ -233,6 +233,41 @@ export default function BookingPage() {
           />
         )}
       </main>
+
+      <footer className="border-t border-white/10 bg-[#0a0a0a] mt-8">
+        <div className="max-w-5xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+          <div className="flex items-center gap-2 text-center sm:text-left">
+            <span>Questions? Call</span>
+            <a
+              href="tel:417-527-6165"
+              className="text-[#3496FF] font-semibold hover:underline"
+            >
+              417-527-6165
+            </a>
+            <span className="hidden sm:inline">to book by phone</span>
+          </div>
+          <nav className="flex items-center gap-5">
+            <Link href="/" className="hover:text-white transition">
+              Home
+            </Link>
+            <Link href="/privacy" className="hover:text-white transition">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="hover:text-white transition">
+              Terms &amp; Conditions
+            </Link>
+          </nav>
+        </div>
+        <div className="max-w-5xl mx-auto px-4 pb-6 text-xs text-gray-600 text-center sm:text-left">
+          By booking with Apex Detailing you may receive transactional SMS
+          related to your appointment. Reply STOP to opt out. Msg &amp; data
+          rates may apply. See{" "}
+          <Link href="/privacy" className="underline hover:text-gray-400">
+            Privacy Policy
+          </Link>
+          .
+        </div>
+      </footer>
     </div>
   );
 }
