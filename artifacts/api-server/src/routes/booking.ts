@@ -180,14 +180,20 @@ router.get("/booking/availability", async (req, res) => {
     }
   }
 
-  // Build set of (date,time) taken slots and a set of dates fully locked
-  // because a whole-day-locking service got booked there.
+  // Build set of (date,time) taken slots, a set of dates fully locked
+  // because a whole-day-locking service got booked there, and a set of
+  // dates that have ANY confirmed booking (used to mark whole-day-lock
+  // services as unavailable on days where a non-locking service already
+  // booked — e.g. Apex Interior is unbookable Friday once Express
+  // Interior takes any slot, because Apex Interior's rule is whole-day).
   const taken = new Set<string>();
   const fullyBookedDates = new Set<string>();
+  const anyBookingDates = new Set<string>();
   for (const b of bookings) {
     const dateStr = shopLocalDateString(b.scheduledAt);
     const timeStr = shopLocalTimeString(b.scheduledAt);
     taken.add(`${dateStr} ${timeStr}`);
+    anyBookingDates.add(dateStr);
     const dParsed = parseDateString(dateStr);
     if (dParsed) {
       const dow = dParsed.getUTCDay();
@@ -243,11 +249,20 @@ router.get("/booking/availability", async (req, res) => {
     const closed = dayClosed || slotsForDay.length === 0;
     const dayFullyBooked = fullyBookedDates.has(dateStr);
 
+    // If a service is selected and that service's rule for this day
+    // whole-day-locks, ANY existing booking on this date blocks every
+    // slot (mirrors the POST /bookings whole-day check).
+    const selectedRuleLocksThisDay =
+      serviceSlug !== null &&
+      serviceRulesByDow.get(dow)?.wholeDayLock === true &&
+      anyBookingDates.has(dateStr);
+
     const slots = slotsForDay.map((time) => ({
       time,
       available:
         !closed &&
         !dayFullyBooked &&
+        !selectedRuleLocksThisDay &&
         !taken.has(`${dateStr} ${time}`) &&
         !isPastSlot(dateStr, time),
     }));
