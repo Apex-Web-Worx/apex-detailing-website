@@ -68,6 +68,7 @@ interface Form {
   phone: string;
   vehicle: string;
   notes: string;
+  smsConsent: boolean;
 }
 
 const EMPTY_FORM: Form = {
@@ -76,6 +77,7 @@ const EMPTY_FORM: Form = {
   phone: "",
   vehicle: "",
   notes: "",
+  smsConsent: false,
 };
 
 export default function BookingPage() {
@@ -554,7 +556,8 @@ function InfoStep({
     form.customerName.trim().length > 0 &&
     /\S+@\S+\.\S+/.test(form.email) &&
     form.phone.replace(/\D/g, "").length >= 7 &&
-    form.vehicle.trim().length > 0;
+    form.vehicle.trim().length > 0 &&
+    form.smsConsent === true;
 
   return (
     <section>
@@ -614,20 +617,41 @@ function InfoStep({
         </div>
       </div>
 
-      <p className="text-xs text-gray-500 leading-relaxed mt-6">
-        By booking, you agree to receive appointment confirmations and a
-        reminder text from Apex Detailing at the phone number above. Reply
-        STOP at any time to opt out, or HELP for help. Message and data
-        rates may apply. Message frequency varies. See our{" "}
-        <Link href="/privacy" className="text-[#3496FF] hover:underline">
-          Privacy Policy
-        </Link>{" "}
-        and{" "}
-        <Link href="/terms" className="text-[#3496FF] hover:underline">
-          Terms &amp; Conditions
-        </Link>
-        .
-      </p>
+      <label
+        htmlFor="sms-consent"
+        className="mt-6 flex items-start gap-3 p-4 rounded-xl bg-white/[0.03] border border-white/10 cursor-pointer hover:bg-white/[0.05] transition"
+      >
+        <input
+          id="sms-consent"
+          type="checkbox"
+          checked={form.smsConsent}
+          onChange={(e) =>
+            onChange({ ...form, smsConsent: e.target.checked })
+          }
+          className="mt-1 w-5 h-5 accent-[#3496FF] flex-shrink-0 cursor-pointer"
+        />
+        <span className="text-xs text-gray-400 leading-relaxed">
+          I agree to receive transactional text messages from{" "}
+          <span className="text-white font-semibold">Apex Detailing</span>{" "}
+          at the phone number above, including appointment confirmations,
+          reschedule and cancellation notices, and a one-time reminder
+          approximately 24 hours before my appointment. Message frequency
+          is approximately 2–4 messages per appointment. Reply{" "}
+          <span className="text-white font-semibold">STOP</span> to
+          unsubscribe, or <span className="text-white font-semibold">HELP</span>{" "}
+          for help. Message and data rates may apply. My phone number and
+          consent will not be sold or shared with third parties for
+          marketing. See our{" "}
+          <Link href="/privacy" className="text-[#3496FF] hover:underline">
+            Privacy Policy
+          </Link>{" "}
+          and{" "}
+          <Link href="/terms" className="text-[#3496FF] hover:underline">
+            Terms &amp; Conditions
+          </Link>
+          .
+        </span>
+      </label>
 
       <div className="flex justify-end mt-6">
         <button
