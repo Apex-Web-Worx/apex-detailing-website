@@ -1,8 +1,8 @@
 {
-  "name": "Apex Detailing",
-  "short_name": "Apex Detail",
-  "description": "Premium auto detailing in Nixa, Springfield & Ozark MO. Book your appointment.",
-  "start_url": "/",
+  "name": "Apex Detailing Admin",
+  "short_name": "Apex Admin",
+  "description": "Apex Detailing booking dashboard.",
+  "start_url": "/admin",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
