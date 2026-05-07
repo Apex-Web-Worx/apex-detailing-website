@@ -449,6 +449,191 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /admin/service-rules:
+    get:
+      operationId: adminListServiceRules
+      tags: [admin]
+      summary: List all service-day rules with their slots
+      parameters:
+        - name: x-admin-token
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ServiceDayRule"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: adminCreateServiceRule
+      tags: [admin]
+      summary: Create a new (service, day-of-week) rule with optional initial slots
+      parameters:
+        - name: x-admin-token
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateServiceRuleRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceDayRule"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: A rule for that service+day already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /admin/service-rules/{id}:
+    patch:
+      operationId: adminUpdateServiceRule
+      tags: [admin]
+      summary: Toggle whole_day_lock or active flag on a rule
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: x-admin-token
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateServiceRuleRequest"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceDayRule"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: adminDeleteServiceRule
+      tags: [admin]
+      summary: Delete a service-day rule (cascades to its slots)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: x-admin-token
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Deleted
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /admin/service-rules/{id}/slots:
+    post:
+      operationId: adminAddRuleSlot
+      tags: [admin]
+      summary: Add a time slot (HH:MM) to a service-day rule
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: x-admin-token
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddRuleSlotRequest"
+      responses:
+        "201":
+          description: Added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RuleSlot"
+        "409":
+          description: Slot already exists for this rule
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /admin/service-rules/{id}/slots/{slotId}:
+    delete:
+      operationId: adminRemoveRuleSlot
+      tags: [admin]
+      summary: Remove a time slot from a service-day rule
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: slotId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: x-admin-token
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Removed
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     HealthStatus:
@@ -612,6 +797,80 @@ components:
       required:
         - date
         - time
+    RuleSlot:
+      type: object
+      properties:
+        id:
+          type: integer
+        time:
+          type: string
+          description: "HH:MM"
+      required: [id, time]
+    ServiceDayRule:
+      type: object
+      properties:
+        id:
+          type: integer
+        serviceId:
+          type: integer
+        serviceSlug:
+          type: string
+        serviceName:
+          type: string
+        dayOfWeek:
+          type: integer
+          minimum: 0
+          maximum: 6
+          description: 0=Sun..6=Sat
+        wholeDayLock:
+          type: boolean
+        active:
+          type: boolean
+        slots:
+          type: array
+          items:
+            $ref: "#/components/schemas/RuleSlot"
+      required:
+        - id
+        - serviceId
+        - serviceSlug
+        - serviceName
+        - dayOfWeek
+        - wholeDayLock
+        - active
+        - slots
+    CreateServiceRuleRequest:
+      type: object
+      properties:
+        serviceId:
+          type: integer
+        dayOfWeek:
+          type: integer
+          minimum: 0
+          maximum: 6
+        wholeDayLock:
+          type: boolean
+        slots:
+          type: array
+          items:
+            type: string
+            description: "HH:MM"
+      required: [serviceId, dayOfWeek, wholeDayLock]
+    UpdateServiceRuleRequest:
+      type: object
+      minProperties: 1
+      properties:
+        wholeDayLock:
+          type: boolean
+        active:
+          type: boolean
+    AddRuleSlotRequest:
+      type: object
+      properties:
+        time:
+          type: string
+          description: "HH:MM"
+      required: [time]
     Booking:
       type: object
       properties:

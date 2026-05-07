@@ -1,16 +1,26 @@
 import { Router, type IRouter, type Request, type Response, type NextFunction } from "express";
-import { db, bookingsTable, blockedDatesTable, servicesTable } from "@workspace/db";
-import { and, asc, eq, gte, lte, ne } from "drizzle-orm";
+import {
+  db,
+  bookingsTable,
+  blockedDatesTable,
+  servicesTable,
+  serviceDayRulesTable,
+  serviceDaySlotsTable,
+} from "@workspace/db";
+import { and, asc, eq, gte, inArray, lte, ne } from "drizzle-orm";
 import {
   buildScheduledAt,
   isClosedShopDate,
   isPastSlot,
-  isSlotAllowedForService,
   parseDateString,
   shopLocalDateString,
   shopLocalTimeString,
   todayInShopLocal,
 } from "../lib/availability";
+import {
+  getRuleForServiceIdDay,
+  isDayWholeDayLocked,
+} from "../lib/availability-rules";
 import { type BookingEmailData } from "../lib/email";
 import {
   syncBookingCalendar,
@@ -276,15 +286,16 @@ router.post("/admin/bookings/:id/reschedule", requireAdmin, async (req, res) => 
     return;
   }
 
-  const [bookingService] = await db
-    .select({ slug: servicesTable.slug })
-    .from(servicesTable)
-    .where(eq(servicesTable.id, booking.serviceId));
-  if (!bookingService) {
-    res.status(500).json({ message: "Service for this booking not found." });
+  const newDateObj = parseDateString(newDate);
+  if (!newDateObj) {
+    res.status(400).json({ message: "Invalid date format. Use YYYY-MM-DD." });
     return;
   }
-  if (!isSlotAllowedForService(newDate, newTime, bookingService.slug)) {
+  const newRule = await getRuleForServiceIdDay(
+    booking.serviceId,
+    newDateObj.getUTCDay(),
+  );
+  if (!newRule || !newRule.slots.includes(newTime)) {
     res.status(400).json({
       message: "That time slot is not available for this service.",
     });
@@ -297,9 +308,8 @@ router.post("/admin/bookings/:id/reschedule", requireAdmin, async (req, res) => 
     return;
   }
 
-  // Whole-day lock for non-Friday details (excluding this booking).
-  const newDateObj = parseDateString(newDate);
-  if (newDateObj && newDateObj.getUTCDay() !== 5) {
+  // Whole-day-lock semantics (excluding this booking).
+  if (newRule.wholeDayLock) {
     const dayStart =
       buildScheduledAt(newDate, "00:00") ??
       new Date(
@@ -328,6 +338,11 @@ router.post("/admin/bookings/:id/reschedule", requireAdmin, async (req, res) => 
       });
       return;
     }
+  } else if (await isDayWholeDayLocked(newDate, booking.id)) {
+    res.status(409).json({
+      message: "That day is fully booked. Please choose another day.",
+    });
+    return;
   }
 
   const newScheduledAt = buildScheduledAt(newDate, newTime);
@@ -468,5 +483,263 @@ router.delete("/admin/blocked-dates/:date", requireAdmin, async (req, res) => {
   }
   res.status(204).send();
 });
+
+/* -------------------------------------------------------------------- */
+/* Service-day rule CRUD (admin-editable booking schedule)              */
+/* -------------------------------------------------------------------- */
+
+const TIME_RE = /^\d{2}:\d{2}$/;
+
+function isValidTimeStr(t: unknown): t is string {
+  if (typeof t !== "string" || !TIME_RE.test(t)) return false;
+  const [h, m] = t.split(":").map(Number);
+  return h !== undefined && m !== undefined && h >= 0 && h <= 23 && m >= 0 && m <= 59;
+}
+
+router.get("/admin/service-rules", requireAdmin, async (_req, res) => {
+  const ruleRows = await db
+    .select({
+      id: serviceDayRulesTable.id,
+      serviceId: serviceDayRulesTable.serviceId,
+      serviceSlug: servicesTable.slug,
+      serviceName: servicesTable.name,
+      dayOfWeek: serviceDayRulesTable.dayOfWeek,
+      wholeDayLock: serviceDayRulesTable.wholeDayLock,
+      active: serviceDayRulesTable.active,
+    })
+    .from(serviceDayRulesTable)
+    .innerJoin(
+      servicesTable,
+      eq(serviceDayRulesTable.serviceId, servicesTable.id),
+    )
+    .orderBy(
+      asc(servicesTable.sortOrder),
+      asc(servicesTable.id),
+      asc(serviceDayRulesTable.dayOfWeek),
+    );
+
+  const ruleIds = ruleRows.map((r) => r.id);
+  const slotRows = ruleIds.length
+    ? await db
+        .select({
+          id: serviceDaySlotsTable.id,
+          ruleId: serviceDaySlotsTable.ruleId,
+          time: serviceDaySlotsTable.time,
+        })
+        .from(serviceDaySlotsTable)
+        .where(inArray(serviceDaySlotsTable.ruleId, ruleIds))
+        .orderBy(asc(serviceDaySlotsTable.time))
+    : [];
+  const slotsByRule = new Map<number, { id: number; time: string }[]>();
+  for (const s of slotRows) {
+    const arr = slotsByRule.get(s.ruleId) ?? [];
+    arr.push({ id: s.id, time: s.time });
+    slotsByRule.set(s.ruleId, arr);
+  }
+  res.json(
+    ruleRows.map((r) => ({ ...r, slots: slotsByRule.get(r.id) ?? [] })),
+  );
+});
+
+router.post("/admin/service-rules", requireAdmin, async (req, res) => {
+  const body = (req.body ?? {}) as {
+    serviceId?: unknown;
+    dayOfWeek?: unknown;
+    wholeDayLock?: unknown;
+    slots?: unknown;
+  };
+  const serviceId = Number(body.serviceId);
+  const dayOfWeek = Number(body.dayOfWeek);
+  const wholeDayLock = body.wholeDayLock === true;
+  if (!Number.isFinite(serviceId) || serviceId <= 0) {
+    res.status(400).json({ message: "serviceId is required" });
+    return;
+  }
+  if (!Number.isInteger(dayOfWeek) || dayOfWeek < 0 || dayOfWeek > 6) {
+    res.status(400).json({ message: "dayOfWeek must be 0..6" });
+    return;
+  }
+  const initialSlots: string[] = [];
+  if (Array.isArray(body.slots)) {
+    for (const t of body.slots) {
+      if (!isValidTimeStr(t)) {
+        res.status(400).json({ message: `Invalid slot time: ${String(t)}` });
+        return;
+      }
+      if (!initialSlots.includes(t)) initialSlots.push(t);
+    }
+  }
+  const [svc] = await db
+    .select({ id: servicesTable.id })
+    .from(servicesTable)
+    .where(eq(servicesTable.id, serviceId));
+  if (!svc) {
+    res.status(400).json({ message: "Unknown serviceId" });
+    return;
+  }
+  try {
+    const [rule] = await db
+      .insert(serviceDayRulesTable)
+      .values({ serviceId, dayOfWeek, wholeDayLock, active: true })
+      .returning();
+    if (initialSlots.length > 0) {
+      await db
+        .insert(serviceDaySlotsTable)
+        .values(initialSlots.map((time) => ({ ruleId: rule.id, time })));
+    }
+    const slotRows = await db
+      .select({ id: serviceDaySlotsTable.id, time: serviceDaySlotsTable.time })
+      .from(serviceDaySlotsTable)
+      .where(eq(serviceDaySlotsTable.ruleId, rule.id))
+      .orderBy(asc(serviceDaySlotsTable.time));
+    const [withSvc] = await db
+      .select({
+        slug: servicesTable.slug,
+        name: servicesTable.name,
+      })
+      .from(servicesTable)
+      .where(eq(servicesTable.id, serviceId));
+    res.status(201).json({
+      id: rule.id,
+      serviceId: rule.serviceId,
+      serviceSlug: withSvc?.slug ?? "",
+      serviceName: withSvc?.name ?? "",
+      dayOfWeek: rule.dayOfWeek,
+      wholeDayLock: rule.wholeDayLock,
+      active: rule.active,
+      slots: slotRows,
+    });
+  } catch (err) {
+    if (pgErrorCode(err) === "23505") {
+      res.status(409).json({
+        message: "A rule for that service and day already exists.",
+      });
+      return;
+    }
+    throw err;
+  }
+});
+
+router.patch("/admin/service-rules/:id", requireAdmin, async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isFinite(id)) {
+    res.status(400).json({ message: "Invalid id" });
+    return;
+  }
+  const body = (req.body ?? {}) as {
+    wholeDayLock?: unknown;
+    active?: unknown;
+  };
+  const patch: { wholeDayLock?: boolean; active?: boolean; updatedAt: Date } = {
+    updatedAt: new Date(),
+  };
+  if (typeof body.wholeDayLock === "boolean") patch.wholeDayLock = body.wholeDayLock;
+  if (typeof body.active === "boolean") patch.active = body.active;
+  if (Object.keys(patch).length === 1) {
+    res.status(400).json({ message: "At least one field is required" });
+    return;
+  }
+  const [updated] = await db
+    .update(serviceDayRulesTable)
+    .set(patch)
+    .where(eq(serviceDayRulesTable.id, id))
+    .returning();
+  if (!updated) {
+    res.status(404).json({ message: "Rule not found" });
+    return;
+  }
+  const [svc] = await db
+    .select({ slug: servicesTable.slug, name: servicesTable.name })
+    .from(servicesTable)
+    .where(eq(servicesTable.id, updated.serviceId));
+  const slotRows = await db
+    .select({ id: serviceDaySlotsTable.id, time: serviceDaySlotsTable.time })
+    .from(serviceDaySlotsTable)
+    .where(eq(serviceDaySlotsTable.ruleId, updated.id))
+    .orderBy(asc(serviceDaySlotsTable.time));
+  res.json({
+    id: updated.id,
+    serviceId: updated.serviceId,
+    serviceSlug: svc?.slug ?? "",
+    serviceName: svc?.name ?? "",
+    dayOfWeek: updated.dayOfWeek,
+    wholeDayLock: updated.wholeDayLock,
+    active: updated.active,
+    slots: slotRows,
+  });
+});
+
+router.delete("/admin/service-rules/:id", requireAdmin, async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isFinite(id)) {
+    res.status(400).json({ message: "Invalid id" });
+    return;
+  }
+  await db.delete(serviceDayRulesTable).where(eq(serviceDayRulesTable.id, id));
+  res.status(204).send();
+});
+
+router.post(
+  "/admin/service-rules/:id/slots",
+  requireAdmin,
+  async (req, res) => {
+    const ruleId = Number(req.params.id);
+    if (!Number.isFinite(ruleId)) {
+      res.status(400).json({ message: "Invalid id" });
+      return;
+    }
+    const body = (req.body ?? {}) as { time?: unknown };
+    if (!isValidTimeStr(body.time)) {
+      res.status(400).json({ message: "time must be HH:MM (24-hour)" });
+      return;
+    }
+    const [rule] = await db
+      .select({ id: serviceDayRulesTable.id })
+      .from(serviceDayRulesTable)
+      .where(eq(serviceDayRulesTable.id, ruleId));
+    if (!rule) {
+      res.status(404).json({ message: "Rule not found" });
+      return;
+    }
+    try {
+      const [slot] = await db
+        .insert(serviceDaySlotsTable)
+        .values({ ruleId, time: body.time })
+        .returning({
+          id: serviceDaySlotsTable.id,
+          time: serviceDaySlotsTable.time,
+        });
+      res.status(201).json(slot);
+    } catch (err) {
+      if (pgErrorCode(err) === "23505") {
+        res.status(409).json({ message: "That slot already exists." });
+        return;
+      }
+      throw err;
+    }
+  },
+);
+
+router.delete(
+  "/admin/service-rules/:id/slots/:slotId",
+  requireAdmin,
+  async (req, res) => {
+    const ruleId = Number(req.params.id);
+    const slotId = Number(req.params.slotId);
+    if (!Number.isFinite(ruleId) || !Number.isFinite(slotId)) {
+      res.status(400).json({ message: "Invalid id" });
+      return;
+    }
+    await db
+      .delete(serviceDaySlotsTable)
+      .where(
+        and(
+          eq(serviceDaySlotsTable.id, slotId),
+          eq(serviceDaySlotsTable.ruleId, ruleId),
+        ),
+      );
+    res.status(204).send();
+  },
+);
 
 export default router;

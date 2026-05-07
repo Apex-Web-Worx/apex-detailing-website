@@ -1,5 +1,30 @@
-import { db, servicesTable } from "@workspace/db";
-import { eq, notInArray } from "drizzle-orm";
+import {
+  db,
+  servicesTable,
+  serviceDayRulesTable,
+  serviceDaySlotsTable,
+} from "@workspace/db";
+import { eq, notInArray, inArray } from "drizzle-orm";
+
+/**
+ * Default day/time rules to install on a fresh database. Mirrors the
+ * previously-hardcoded behavior:
+ *   - Express Interior + Headlight Restoration → Friday only,
+ *     07:00 / 11:00 / 15:00, NOT whole-day locked (multiple bookings
+ *     can coexist across slots).
+ *   - All other (long) services → Mon-Thu and Sat, 07:30 / 08:00,
+ *     whole-day locked (one booking consumes the day).
+ *
+ * Only seeded when zero rules exist. Once the owner edits rules from the
+ * admin UI we never overwrite their config on subsequent boots.
+ */
+const FRIDAY_SHORT_SLUGS = new Set([
+  "apex-express-interior-detailing",
+  "apex-headlight-restoration",
+]);
+const FRIDAY_SHORT_SLOTS = ["07:00", "11:00", "15:00"];
+const REGULAR_LONG_SLOTS = ["07:30", "08:00"];
+const MON_THRU_SAT_NON_FRI = [1, 2, 3, 4, 6]; // 0=Sun..6=Sat
 
 // New "Apex" elite catalog (replaces the prior 6-service list).
 // priceCents represents the "starting at" price shown on the booking
@@ -118,6 +143,42 @@ export async function runSeed(): Promise<void> {
     } else {
       await db.insert(servicesTable).values({ ...s, active: true });
       console.log(`[seed] inserted: ${s.slug}`);
+    }
+  }
+
+  await seedDefaultDayRulesIfEmpty();
+}
+
+async function seedDefaultDayRulesIfEmpty(): Promise<void> {
+  const existing = await db.select({ id: serviceDayRulesTable.id }).from(serviceDayRulesTable).limit(1);
+  if (existing.length > 0) {
+    return; // owner has configured rules — never overwrite
+  }
+  const services = await db
+    .select({ id: servicesTable.id, slug: servicesTable.slug })
+    .from(servicesTable)
+    .where(inArray(servicesTable.slug, seeds.map((s) => s.slug)));
+  for (const svc of services) {
+    if (FRIDAY_SHORT_SLUGS.has(svc.slug)) {
+      const [rule] = await db
+        .insert(serviceDayRulesTable)
+        .values({ serviceId: svc.id, dayOfWeek: 5, wholeDayLock: false, active: true })
+        .returning();
+      await db
+        .insert(serviceDaySlotsTable)
+        .values(FRIDAY_SHORT_SLOTS.map((time) => ({ ruleId: rule.id, time })));
+      console.log(`[seed] rules: ${svc.slug} → Fri ${FRIDAY_SHORT_SLOTS.join(",")} (per-slot)`);
+    } else {
+      for (const dow of MON_THRU_SAT_NON_FRI) {
+        const [rule] = await db
+          .insert(serviceDayRulesTable)
+          .values({ serviceId: svc.id, dayOfWeek: dow, wholeDayLock: true, active: true })
+          .returning();
+        await db
+          .insert(serviceDaySlotsTable)
+          .values(REGULAR_LONG_SLOTS.map((time) => ({ ruleId: rule.id, time })));
+      }
+      console.log(`[seed] rules: ${svc.slug} → Mon-Thu+Sat ${REGULAR_LONG_SLOTS.join(",")} (whole-day)`);
     }
   }
 }

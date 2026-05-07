@@ -17,11 +17,13 @@ import type {
 } from "@tanstack/react-query";
 
 import type {
+  AddRuleSlotRequest,
   BlockedDate,
   Booking,
   CancelManagedBookingParams,
   CreateBlockedDateRequest,
   CreateBookingRequest,
+  CreateServiceRuleRequest,
   DayAvailability,
   Error,
   GetAvailabilityParams,
@@ -29,8 +31,11 @@ import type {
   HealthStatus,
   RescheduleBookingRequest,
   RescheduleManagedBookingParams,
+  RuleSlot,
   Service,
+  ServiceDayRule,
   UpdateBookingRequest,
+  UpdateServiceRuleRequest,
 } from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
@@ -1285,4 +1290,510 @@ export const useAdminUnblockDate = <
   TContext
 > => {
   return useMutation(getAdminUnblockDateMutationOptions(options));
+};
+
+/**
+ * @summary List all service-day rules with their slots
+ */
+export const getAdminListServiceRulesUrl = () => {
+  return `/api/admin/service-rules`;
+};
+
+export const adminListServiceRules = async (
+  options?: RequestInit,
+): Promise<ServiceDayRule[]> => {
+  return customFetch<ServiceDayRule[]>(getAdminListServiceRulesUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getAdminListServiceRulesQueryKey = () => {
+  return [`/api/admin/service-rules`] as const;
+};
+
+export const getAdminListServiceRulesQueryOptions = <
+  TData = Awaited<ReturnType<typeof adminListServiceRules>>,
+  TError = ErrorType<Error>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof adminListServiceRules>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getAdminListServiceRulesQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof adminListServiceRules>>
+  > = ({ signal }) => adminListServiceRules({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof adminListServiceRules>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type AdminListServiceRulesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof adminListServiceRules>>
+>;
+export type AdminListServiceRulesQueryError = ErrorType<Error>;
+
+/**
+ * @summary List all service-day rules with their slots
+ */
+
+export function useAdminListServiceRules<
+  TData = Awaited<ReturnType<typeof adminListServiceRules>>,
+  TError = ErrorType<Error>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof adminListServiceRules>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getAdminListServiceRulesQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Create a new (service, day-of-week) rule with optional initial slots
+ */
+export const getAdminCreateServiceRuleUrl = () => {
+  return `/api/admin/service-rules`;
+};
+
+export const adminCreateServiceRule = async (
+  createServiceRuleRequest: CreateServiceRuleRequest,
+  options?: RequestInit,
+): Promise<ServiceDayRule> => {
+  return customFetch<ServiceDayRule>(getAdminCreateServiceRuleUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createServiceRuleRequest),
+  });
+};
+
+export const getAdminCreateServiceRuleMutationOptions = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof adminCreateServiceRule>>,
+    TError,
+    { data: BodyType<CreateServiceRuleRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof adminCreateServiceRule>>,
+  TError,
+  { data: BodyType<CreateServiceRuleRequest> },
+  TContext
+> => {
+  const mutationKey = ["adminCreateServiceRule"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminCreateServiceRule>>,
+    { data: BodyType<CreateServiceRuleRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return adminCreateServiceRule(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminCreateServiceRuleMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminCreateServiceRule>>
+>;
+export type AdminCreateServiceRuleMutationBody =
+  BodyType<CreateServiceRuleRequest>;
+export type AdminCreateServiceRuleMutationError = ErrorType<Error>;
+
+/**
+ * @summary Create a new (service, day-of-week) rule with optional initial slots
+ */
+export const useAdminCreateServiceRule = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof adminCreateServiceRule>>,
+    TError,
+    { data: BodyType<CreateServiceRuleRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof adminCreateServiceRule>>,
+  TError,
+  { data: BodyType<CreateServiceRuleRequest> },
+  TContext
+> => {
+  return useMutation(getAdminCreateServiceRuleMutationOptions(options));
+};
+
+/**
+ * @summary Toggle whole_day_lock or active flag on a rule
+ */
+export const getAdminUpdateServiceRuleUrl = (id: number) => {
+  return `/api/admin/service-rules/${id}`;
+};
+
+export const adminUpdateServiceRule = async (
+  id: number,
+  updateServiceRuleRequest: UpdateServiceRuleRequest,
+  options?: RequestInit,
+): Promise<ServiceDayRule> => {
+  return customFetch<ServiceDayRule>(getAdminUpdateServiceRuleUrl(id), {
+    ...options,
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(updateServiceRuleRequest),
+  });
+};
+
+export const getAdminUpdateServiceRuleMutationOptions = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof adminUpdateServiceRule>>,
+    TError,
+    { id: number; data: BodyType<UpdateServiceRuleRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof adminUpdateServiceRule>>,
+  TError,
+  { id: number; data: BodyType<UpdateServiceRuleRequest> },
+  TContext
+> => {
+  const mutationKey = ["adminUpdateServiceRule"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminUpdateServiceRule>>,
+    { id: number; data: BodyType<UpdateServiceRuleRequest> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return adminUpdateServiceRule(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminUpdateServiceRuleMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminUpdateServiceRule>>
+>;
+export type AdminUpdateServiceRuleMutationBody =
+  BodyType<UpdateServiceRuleRequest>;
+export type AdminUpdateServiceRuleMutationError = ErrorType<Error>;
+
+/**
+ * @summary Toggle whole_day_lock or active flag on a rule
+ */
+export const useAdminUpdateServiceRule = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof adminUpdateServiceRule>>,
+    TError,
+    { id: number; data: BodyType<UpdateServiceRuleRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof adminUpdateServiceRule>>,
+  TError,
+  { id: number; data: BodyType<UpdateServiceRuleRequest> },
+  TContext
+> => {
+  return useMutation(getAdminUpdateServiceRuleMutationOptions(options));
+};
+
+/**
+ * @summary Delete a service-day rule (cascades to its slots)
+ */
+export const getAdminDeleteServiceRuleUrl = (id: number) => {
+  return `/api/admin/service-rules/${id}`;
+};
+
+export const adminDeleteServiceRule = async (
+  id: number,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getAdminDeleteServiceRuleUrl(id), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getAdminDeleteServiceRuleMutationOptions = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof adminDeleteServiceRule>>,
+    TError,
+    { id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof adminDeleteServiceRule>>,
+  TError,
+  { id: number },
+  TContext
+> => {
+  const mutationKey = ["adminDeleteServiceRule"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminDeleteServiceRule>>,
+    { id: number }
+  > = (props) => {
+    const { id } = props ?? {};
+
+    return adminDeleteServiceRule(id, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminDeleteServiceRuleMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminDeleteServiceRule>>
+>;
+
+export type AdminDeleteServiceRuleMutationError = ErrorType<Error>;
+
+/**
+ * @summary Delete a service-day rule (cascades to its slots)
+ */
+export const useAdminDeleteServiceRule = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof adminDeleteServiceRule>>,
+    TError,
+    { id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof adminDeleteServiceRule>>,
+  TError,
+  { id: number },
+  TContext
+> => {
+  return useMutation(getAdminDeleteServiceRuleMutationOptions(options));
+};
+
+/**
+ * @summary Add a time slot (HH:MM) to a service-day rule
+ */
+export const getAdminAddRuleSlotUrl = (id: number) => {
+  return `/api/admin/service-rules/${id}/slots`;
+};
+
+export const adminAddRuleSlot = async (
+  id: number,
+  addRuleSlotRequest: AddRuleSlotRequest,
+  options?: RequestInit,
+): Promise<RuleSlot> => {
+  return customFetch<RuleSlot>(getAdminAddRuleSlotUrl(id), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(addRuleSlotRequest),
+  });
+};
+
+export const getAdminAddRuleSlotMutationOptions = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof adminAddRuleSlot>>,
+    TError,
+    { id: number; data: BodyType<AddRuleSlotRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof adminAddRuleSlot>>,
+  TError,
+  { id: number; data: BodyType<AddRuleSlotRequest> },
+  TContext
+> => {
+  const mutationKey = ["adminAddRuleSlot"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminAddRuleSlot>>,
+    { id: number; data: BodyType<AddRuleSlotRequest> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return adminAddRuleSlot(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminAddRuleSlotMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminAddRuleSlot>>
+>;
+export type AdminAddRuleSlotMutationBody = BodyType<AddRuleSlotRequest>;
+export type AdminAddRuleSlotMutationError = ErrorType<Error>;
+
+/**
+ * @summary Add a time slot (HH:MM) to a service-day rule
+ */
+export const useAdminAddRuleSlot = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof adminAddRuleSlot>>,
+    TError,
+    { id: number; data: BodyType<AddRuleSlotRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof adminAddRuleSlot>>,
+  TError,
+  { id: number; data: BodyType<AddRuleSlotRequest> },
+  TContext
+> => {
+  return useMutation(getAdminAddRuleSlotMutationOptions(options));
+};
+
+/**
+ * @summary Remove a time slot from a service-day rule
+ */
+export const getAdminRemoveRuleSlotUrl = (id: number, slotId: number) => {
+  return `/api/admin/service-rules/${id}/slots/${slotId}`;
+};
+
+export const adminRemoveRuleSlot = async (
+  id: number,
+  slotId: number,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getAdminRemoveRuleSlotUrl(id, slotId), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getAdminRemoveRuleSlotMutationOptions = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof adminRemoveRuleSlot>>,
+    TError,
+    { id: number; slotId: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof adminRemoveRuleSlot>>,
+  TError,
+  { id: number; slotId: number },
+  TContext
+> => {
+  const mutationKey = ["adminRemoveRuleSlot"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminRemoveRuleSlot>>,
+    { id: number; slotId: number }
+  > = (props) => {
+    const { id, slotId } = props ?? {};
+
+    return adminRemoveRuleSlot(id, slotId, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminRemoveRuleSlotMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminRemoveRuleSlot>>
+>;
+
+export type AdminRemoveRuleSlotMutationError = ErrorType<Error>;
+
+/**
+ * @summary Remove a time slot from a service-day rule
+ */
+export const useAdminRemoveRuleSlot = <
+  TError = ErrorType<Error>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof adminRemoveRuleSlot>>,
+    TError,
+    { id: number; slotId: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof adminRemoveRuleSlot>>,
+  TError,
+  { id: number; slotId: number },
+  TContext
+> => {
+  return useMutation(getAdminRemoveRuleSlotMutationOptions(options));
 };

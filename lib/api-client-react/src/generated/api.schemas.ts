@@ -88,6 +88,49 @@ export interface RescheduleBookingRequest {
   time: string;
 }
 
+export interface RuleSlot {
+  id: number;
+  /** HH:MM */
+  time: string;
+}
+
+export interface ServiceDayRule {
+  id: number;
+  serviceId: number;
+  serviceSlug: string;
+  serviceName: string;
+  /**
+   * 0=Sun..6=Sat
+   * @minimum 0
+   * @maximum 6
+   */
+  dayOfWeek: number;
+  wholeDayLock: boolean;
+  active: boolean;
+  slots: RuleSlot[];
+}
+
+export interface CreateServiceRuleRequest {
+  serviceId: number;
+  /**
+   * @minimum 0
+   * @maximum 6
+   */
+  dayOfWeek: number;
+  wholeDayLock: boolean;
+  slots?: string[];
+}
+
+export interface UpdateServiceRuleRequest {
+  wholeDayLock?: boolean;
+  active?: boolean;
+}
+
+export interface AddRuleSlotRequest {
+  /** HH:MM */
+  time: string;
+}
+
 export interface Booking {
   id: number;
   serviceId: number;

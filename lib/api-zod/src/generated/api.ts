@@ -315,3 +315,133 @@ export const AdminUnblockDateParams = zod.object({
 export const AdminUnblockDateHeader = zod.object({
   "x-admin-token": zod.string(),
 });
+
+/**
+ * @summary List all service-day rules with their slots
+ */
+export const AdminListServiceRulesHeader = zod.object({
+  "x-admin-token": zod.string(),
+});
+
+export const adminListServiceRulesResponseDayOfWeekMin = 0;
+export const adminListServiceRulesResponseDayOfWeekMax = 6;
+
+export const AdminListServiceRulesResponseItem = zod.object({
+  id: zod.number(),
+  serviceId: zod.number(),
+  serviceSlug: zod.string(),
+  serviceName: zod.string(),
+  dayOfWeek: zod
+    .number()
+    .min(adminListServiceRulesResponseDayOfWeekMin)
+    .max(adminListServiceRulesResponseDayOfWeekMax)
+    .describe("0=Sun..6=Sat"),
+  wholeDayLock: zod.boolean(),
+  active: zod.boolean(),
+  slots: zod.array(
+    zod.object({
+      id: zod.number(),
+      time: zod.string().describe("HH:MM"),
+    }),
+  ),
+});
+export const AdminListServiceRulesResponse = zod.array(
+  AdminListServiceRulesResponseItem,
+);
+
+/**
+ * @summary Create a new (service, day-of-week) rule with optional initial slots
+ */
+export const AdminCreateServiceRuleHeader = zod.object({
+  "x-admin-token": zod.string(),
+});
+
+export const adminCreateServiceRuleBodyDayOfWeekMin = 0;
+export const adminCreateServiceRuleBodyDayOfWeekMax = 6;
+
+export const AdminCreateServiceRuleBody = zod.object({
+  serviceId: zod.number(),
+  dayOfWeek: zod
+    .number()
+    .min(adminCreateServiceRuleBodyDayOfWeekMin)
+    .max(adminCreateServiceRuleBodyDayOfWeekMax),
+  wholeDayLock: zod.boolean(),
+  slots: zod.array(zod.string().describe("HH:MM")).optional(),
+});
+
+/**
+ * @summary Toggle whole_day_lock or active flag on a rule
+ */
+export const AdminUpdateServiceRuleParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const AdminUpdateServiceRuleHeader = zod.object({
+  "x-admin-token": zod.string(),
+});
+
+export const AdminUpdateServiceRuleBody = zod.object({
+  wholeDayLock: zod.boolean().optional(),
+  active: zod.boolean().optional(),
+});
+
+export const adminUpdateServiceRuleResponseDayOfWeekMin = 0;
+export const adminUpdateServiceRuleResponseDayOfWeekMax = 6;
+
+export const AdminUpdateServiceRuleResponse = zod.object({
+  id: zod.number(),
+  serviceId: zod.number(),
+  serviceSlug: zod.string(),
+  serviceName: zod.string(),
+  dayOfWeek: zod
+    .number()
+    .min(adminUpdateServiceRuleResponseDayOfWeekMin)
+    .max(adminUpdateServiceRuleResponseDayOfWeekMax)
+    .describe("0=Sun..6=Sat"),
+  wholeDayLock: zod.boolean(),
+  active: zod.boolean(),
+  slots: zod.array(
+    zod.object({
+      id: zod.number(),
+      time: zod.string().describe("HH:MM"),
+    }),
+  ),
+});
+
+/**
+ * @summary Delete a service-day rule (cascades to its slots)
+ */
+export const AdminDeleteServiceRuleParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const AdminDeleteServiceRuleHeader = zod.object({
+  "x-admin-token": zod.string(),
+});
+
+/**
+ * @summary Add a time slot (HH:MM) to a service-day rule
+ */
+export const AdminAddRuleSlotParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const AdminAddRuleSlotHeader = zod.object({
+  "x-admin-token": zod.string(),
+});
+
+export const AdminAddRuleSlotBody = zod.object({
+  time: zod.string().describe("HH:MM"),
+});
+
+/**
+ * @summary Remove a time slot from a service-day rule
+ */
+export const AdminRemoveRuleSlotParams = zod.object({
+  id: zod.coerce.number(),
+  slotId: zod.coerce.number(),
+});
+
+export const AdminRemoveRuleSlotHeader = zod.object({
+  "x-admin-token": zod.string(),
+});

@@ -13,15 +13,21 @@ import {
 import { randomBytes, timingSafeEqual } from "node:crypto";
 import {
   buildScheduledAt,
-  getSlotsForDate,
   isClosedShopDate,
   isPastSlot,
-  isSlotAllowedForService,
   parseDateString,
   shopLocalDateString,
   shopLocalTimeString,
   todayInShopLocal,
 } from "../lib/availability";
+import {
+  getAllActiveRulesByDow,
+  getRuleForServiceIdDay,
+  getRuleForServiceSlugDay,
+  isDayWholeDayLocked,
+  wholeDayLockServiceIdsByDow,
+  type RuleWithSlots,
+} from "../lib/availability-rules";
 import { type BookingEmailData } from "../lib/email";
 import { syncBookingCalendar } from "../lib/calendar";
 import {
@@ -119,6 +125,7 @@ router.get("/booking/availability", async (req, res) => {
     db
       .select({
         scheduledAt: bookingsTable.scheduledAt,
+        serviceId: bookingsTable.serviceId,
       })
       .from(bookingsTable)
       .where(
@@ -139,55 +146,59 @@ router.get("/booking/availability", async (req, res) => {
       ),
   ]);
 
-  // Build a Set of "YYYY-MM-DD HH:MM" taken slots in shop-local time.
-  // Also build a Set of dates that are *fully* taken because a regular
-  // (non-Friday) detail was booked. Regular details can take most of the
-  // day (up to ~10 hours), so a single confirmed Mon-Thu/Sat booking
-  // consumes the entire day. Friday slots (express/headlight) are short
-  // and can coexist, so they only block their own time.
+  // Resolve the optional serviceId → slug now so we can use service-aware
+  // rule lookups. An unresolvable id short-circuits to closed for every day.
+  let serviceSlug: string | null = null;
+  let unresolvableService = false;
+  if (parsed.data.serviceId !== undefined) {
+    const sid = Number(parsed.data.serviceId);
+    if (Number.isFinite(sid) && sid > 0) {
+      const [svc] = await db
+        .select({ slug: servicesTable.slug })
+        .from(servicesTable)
+        .where(and(eq(servicesTable.id, sid), eq(servicesTable.active, true)));
+      if (svc) serviceSlug = svc.slug;
+      else unresolvableService = true;
+    } else {
+      unresolvableService = true;
+    }
+  }
+
+  // Pull all active rules once. When no service is selected we render the
+  // union of slots configured for that day-of-week across all services.
+  // When a service IS selected we filter to that service's specific slots.
+  const rulesByDow = await getAllActiveRulesByDow();
+  const lockingServiceIdsByDow = wholeDayLockServiceIdsByDow(rulesByDow);
+
+  // For per-service mode, also pre-load that service's rules keyed by dow.
+  const serviceRulesByDow = new Map<number, RuleWithSlots>();
+  if (serviceSlug !== null && !unresolvableService) {
+    for (const [dow, rules] of rulesByDow) {
+      const r = rules.find((rr) => rr.serviceSlug === serviceSlug);
+      if (r) serviceRulesByDow.set(dow, r);
+    }
+  }
+
+  // Build set of (date,time) taken slots and a set of dates fully locked
+  // because a whole-day-locking service got booked there.
   const taken = new Set<string>();
   const fullyBookedDates = new Set<string>();
   for (const b of bookings) {
     const dateStr = shopLocalDateString(b.scheduledAt);
     const timeStr = shopLocalTimeString(b.scheduledAt);
     taken.add(`${dateStr} ${timeStr}`);
-    const parsed = parseDateString(dateStr);
-    const isFriday = parsed?.getUTCDay() === 5;
-    if (!isFriday) {
-      fullyBookedDates.add(dateStr);
+    const dParsed = parseDateString(dateStr);
+    if (dParsed) {
+      const dow = dParsed.getUTCDay();
+      const lockingIds = lockingServiceIdsByDow.get(dow);
+      if (lockingIds && lockingIds.has(b.serviceId)) {
+        fullyBookedDates.add(dateStr);
+      }
     }
   }
 
   const blockedSet = new Set(blocked.map((r) => r.date));
-
   const today = todayInShopLocal();
-
-  // If the caller passed serviceId, resolve the slug now (one query) so
-  // we can filter day-by-day with the slug-based allow-list. An invalid
-  // / unresolvable id short-circuits the entire response to closed (the
-  // service simply isn't bookable). Without this short-circuit, an
-  // invalid id would still return normal slots Mon-Thu/Sat because the
-  // slug allow-list only gates Fridays.
-  let serviceSlug: string | null = null;
-  let unresolvableService = false;
-  if (parsed.data.serviceId !== undefined) {
-    const id = Number(parsed.data.serviceId);
-    if (Number.isFinite(id) && id > 0) {
-      const [svc] = await db
-        .select({ slug: servicesTable.slug })
-        .from(servicesTable)
-        .where(
-          and(eq(servicesTable.id, id), eq(servicesTable.active, true)),
-        );
-      if (svc) {
-        serviceSlug = svc.slug;
-      } else {
-        unresolvableService = true;
-      }
-    } else {
-      unresolvableService = true;
-    }
-  }
 
   const out: Array<{
     date: string;
@@ -201,23 +212,31 @@ router.get("/booking/availability", async (req, res) => {
     d.setUTCDate(d.getUTCDate() + 1)
   ) {
     const dateStr = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")}`;
+    const dow = d.getUTCDay();
     const isPastDay = dateStr < today;
     const dayClosed =
       isClosedShopDate(dateStr) || isPastDay || blockedSet.has(dateStr);
 
-    // Slot list for the day. If the user already picked a service and the
-    // service isn't bookable on this day (e.g. Friday + a non-allowlisted
-    // service), the resulting list is empty and the day shows as closed.
-    // If the supplied serviceId was unresolvable, every day collapses to
-    // empty/closed regardless of weekday.
-    let slotsForDay: readonly string[] = unresolvableService
-      ? []
-      : getSlotsForDate(dateStr);
-    if (serviceSlug !== null) {
-      const slug = serviceSlug;
-      slotsForDay = slotsForDay.filter((t) =>
-        isSlotAllowedForService(dateStr, t, slug),
-      );
+    // Compute the slot list for this day.
+    let slotsForDay: string[] = [];
+    if (!unresolvableService) {
+      if (serviceSlug !== null) {
+        const r = serviceRulesByDow.get(dow);
+        slotsForDay = r ? [...r.slots] : [];
+      } else {
+        // Union of every active service's slots for this day-of-week.
+        const rules = rulesByDow.get(dow) ?? [];
+        const seen = new Set<string>();
+        for (const r of rules) {
+          for (const t of r.slots) {
+            if (!seen.has(t)) {
+              seen.add(t);
+              slotsForDay.push(t);
+            }
+          }
+        }
+        slotsForDay.sort();
+      }
     }
 
     const closed = dayClosed || slotsForDay.length === 0;
@@ -285,9 +304,10 @@ router.post("/booking/bookings", async (req, res) => {
     return;
   }
 
-  // Combined: rejects bad time strings, Sundays, and (Friday + a service
-  // that isn't on the Friday allow-list).
-  if (!isSlotAllowedForService(body.date, body.time, service.slug)) {
+  // Look up the day-of-week rule for this service. No rule = service
+  // isn't bookable that day. Wrong slot = not in the configured times.
+  const rule = await getRuleForServiceIdDay(service.id, dateObj.getUTCDay());
+  if (!rule || !rule.slots.includes(body.time)) {
     res
       .status(400)
       .json({ message: "That time slot is not available for this service." });
@@ -300,11 +320,14 @@ router.post("/booking/bookings", async (req, res) => {
     return;
   }
 
-  // Whole-day lock for regular (non-Friday) details: a confirmed booking
-  // on a Mon-Thu/Sat date consumes the entire day (up to ~10 hours of
-  // detailing), so block any additional booking attempts on that date.
-  // Friday slots (express/headlight) are short and can coexist.
-  if (dateObj.getUTCDay() !== 5) {
+  // Whole-day lock check:
+  //  - If THIS booking's rule has whole_day_lock=true, the whole day must
+  //    be empty (no other bookings of any service that day).
+  //  - If THIS booking's rule is per-slot, we still need to block when
+  //    some other booking on the same day used a whole-day-locking rule
+  //    (e.g. somebody booked a Full Detail at 07:30, can't drop in an
+  //    Express Interior on top of it).
+  if (rule.wholeDayLock) {
     const dayStart = buildScheduledAt(body.date, "00:00") ??
       new Date(Date.UTC(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate()));
     const dayEnd = new Date(dayStart.getTime() + 36 * 60 * 60 * 1000);
@@ -325,6 +348,11 @@ router.post("/booking/bookings", async (req, res) => {
       });
       return;
     }
+  } else if (await isDayWholeDayLocked(body.date)) {
+    res.status(409).json({
+      message: "That day is fully booked. Please choose another day.",
+    });
+    return;
   }
 
   const scheduledAt = buildScheduledAt(body.date, body.time);
@@ -521,19 +549,17 @@ router.post("/booking/manage/:id/reschedule", async (req, res) => {
     return;
   }
 
-  // Combined: rejects bad time strings, Sundays, and (Friday + a service
-  // not on the Friday allow-list) for the booking's existing service.
-  // We need the service slug for the Friday check, so look it up from the
-  // serviceId snapshot stored on the booking row.
-  const [bookingService] = await db
-    .select({ slug: servicesTable.slug })
-    .from(servicesTable)
-    .where(eq(servicesTable.id, booking.serviceId));
-  if (!bookingService) {
-    res.status(500).json({ message: "Service for this booking not found." });
+  const newDateObj = parseDateString(newDate);
+  if (!newDateObj) {
+    res.status(400).json({ message: "Invalid date format. Use YYYY-MM-DD." });
     return;
   }
-  if (!isSlotAllowedForService(newDate, newTime, bookingService.slug)) {
+  // DB-backed rule lookup for the booking's existing service.
+  const newRule = await getRuleForServiceIdDay(
+    booking.serviceId,
+    newDateObj.getUTCDay(),
+  );
+  if (!newRule || !newRule.slots.includes(newTime)) {
     res.status(400).json({
       message: "That time slot is not available for this service.",
     });
@@ -546,10 +572,9 @@ router.post("/booking/manage/:id/reschedule", async (req, res) => {
     return;
   }
 
-  // Whole-day lock for regular (non-Friday) details — same rule as create.
-  // Excludes the current booking so the customer can move within the same day.
-  const newDateObj = parseDateString(newDate);
-  if (newDateObj && newDateObj.getUTCDay() !== 5) {
+  // Same whole-day-lock semantics as create — but exclude the current
+  // booking so the customer can move within the same day.
+  if (newRule.wholeDayLock) {
     const dayStart = buildScheduledAt(newDate, "00:00") ??
       new Date(Date.UTC(newDateObj.getUTCFullYear(), newDateObj.getUTCMonth(), newDateObj.getUTCDate()));
     const dayEnd = new Date(dayStart.getTime() + 36 * 60 * 60 * 1000);
@@ -571,6 +596,11 @@ router.post("/booking/manage/:id/reschedule", async (req, res) => {
       });
       return;
     }
+  } else if (await isDayWholeDayLocked(newDate, booking.id)) {
+    res.status(409).json({
+      message: "That day is fully booked. Please choose another day.",
+    });
+    return;
   }
 
   const newScheduledAt = buildScheduledAt(newDate, newTime);

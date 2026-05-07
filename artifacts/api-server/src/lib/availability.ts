@@ -1,35 +1,13 @@
 /**
- * Booking time slots vary by day of week:
- *   Sun        — closed
- *   Mon..Thu   — 07:30 and 08:00 (only services NOT in
- *                FRIDAY_ONLY_SERVICE_SLUGS)
- *   Fri        — 07:00, 11:00 and 15:00 (only services in
- *                FRIDAY_ONLY_SERVICE_SLUGS)
- *   Sat        — 07:30 and 08:00 (only services NOT in
- *                FRIDAY_ONLY_SERVICE_SLUGS)
+ * Pure date / timezone helpers. The actual slot configuration (which
+ * services are bookable on which days, at which times, with whole-day
+ * locks or not) is stored in the database (`service_day_rules` +
+ * `service_day_slots`) and accessed via `./availability-rules.ts`.
+ *
+ * What lives here: YYYY-MM-DD parsing, shop-local timezone math, and
+ * the static "Sundays are closed" rule that doesn't need to be
+ * configurable.
  */
-const REGULAR_SLOTS = ["07:30", "08:00"] as const;
-const FRIDAY_SLOTS = ["07:00", "11:00", "15:00"] as const;
-
-/** Union of every slot value that exists on any day. */
-export const ALL_TIME_SLOTS = [
-  "07:00",
-  "07:30",
-  "08:00",
-  "11:00",
-  "15:00",
-] as const;
-export type TimeSlot = (typeof ALL_TIME_SLOTS)[number];
-
-/**
- * Service slugs that are bookable ONLY on Fridays (and conversely, the only
- * services bookable on Fridays). Slug-based (not id-based) so the rule
- * survives reseeds / id renumbering.
- */
-export const FRIDAY_ONLY_SERVICE_SLUGS = new Set<string>([
-  "apex-express-interior-detailing",
-  "apex-headlight-restoration",
-]);
 
 export const SHOP_TIMEZONE = "America/Chicago";
 
@@ -129,44 +107,6 @@ export function isClosedShopDate(yyyyMmDd: string): boolean {
   const d = parseDateString(yyyyMmDd);
   if (!d) return true;
   return d.getUTCDay() === 0;
-}
-
-/**
- * The bookable time slots for a given calendar date, taking the day of week
- * into account. Returns an empty list for days the shop is closed.
- */
-export function getSlotsForDate(yyyyMmDd: string): readonly string[] {
-  const d = parseDateString(yyyyMmDd);
-  if (!d) return [];
-  const dow = d.getUTCDay();
-  if (dow === 0) return []; // Sun closed
-  if (dow === 5) return FRIDAY_SLOTS; // Fri express only
-  return REGULAR_SLOTS;
-}
-
-/**
- * True if {date, time} is a real bookable slot AND the given service is
- * allowed in that slot. Encapsulates:
- *   - Sunday closed
- *   - Friday-only services (apex-express-interior, apex-exterior,
- *     apex-headlight-restoration) are bookable on Fridays ONLY
- *   - All other services are bookable Mon-Thu and Sat ONLY (NOT Friday)
- */
-export function isSlotAllowedForService(
-  yyyyMmDd: string,
-  time: string,
-  serviceSlug: string,
-): boolean {
-  if (!getSlotsForDate(yyyyMmDd).includes(time)) return false;
-  const d = parseDateString(yyyyMmDd);
-  if (!d) return false;
-  const isFriday = d.getUTCDay() === 5;
-  const isFridayOnlyService = FRIDAY_ONLY_SERVICE_SLUGS.has(serviceSlug);
-  // Friday-only services on a non-Friday → not allowed
-  if (!isFriday && isFridayOnlyService) return false;
-  // Non-Friday-only services on a Friday → not allowed
-  if (isFriday && !isFridayOnlyService) return false;
-  return true;
 }
 
 /**

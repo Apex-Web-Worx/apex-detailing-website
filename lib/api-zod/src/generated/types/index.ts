@@ -6,11 +6,13 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from "./addRuleSlotRequest";
 export * from "./blockedDate";
 export * from "./booking";
 export * from "./cancelManagedBookingParams";
 export * from "./createBlockedDateRequest";
 export * from "./createBookingRequest";
+export * from "./createServiceRuleRequest";
 export * from "./dayAvailability";
 export * from "./error";
 export * from "./getAvailabilityParams";
@@ -18,6 +20,9 @@ export * from "./getManagedBookingParams";
 export * from "./healthStatus";
 export * from "./rescheduleBookingRequest";
 export * from "./rescheduleManagedBookingParams";
+export * from "./ruleSlot";
 export * from "./service";
+export * from "./serviceDayRule";
 export * from "./timeSlot";
 export * from "./updateBookingRequest";
+export * from "./updateServiceRuleRequest";
