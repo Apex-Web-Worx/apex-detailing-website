@@ -217,6 +217,43 @@ export async function isSlotAllowedForServiceDb(
  * Optionally excludes a specific booking id (used by reschedule paths
  * so a booking moving within its own day doesn't block itself).
  */
+/**
+ * Returns true if any confirmed booking exists on the given shop-local
+ * date (regardless of which service). Optionally excludes a single
+ * booking id (used by reschedule paths so a booking moving within its
+ * own day doesn't block itself). Used by whole-day-lock create/reschedule
+ * checks: if the new rule whole-day-locks, no other booking may exist
+ * that day.
+ *
+ * Uses a padded scheduled_at window then filters precisely by
+ * shop-local date string — DST-safe, and won't pick up bookings that
+ * happen to fall on the next/previous calendar day in UTC.
+ */
+export async function hasOtherConfirmedBookingOnDate(
+  yyyyMmDd: string,
+  excludeBookingId?: number,
+): Promise<boolean> {
+  const d = parseDateString(yyyyMmDd);
+  if (!d) return false;
+  const dayStart = new Date(d.getTime() - 24 * 60 * 60 * 1000);
+  const dayEnd = new Date(d.getTime() + 48 * 60 * 60 * 1000);
+  const candidates = await db
+    .select({ id: bookingsTable.id, scheduledAt: bookingsTable.scheduledAt })
+    .from(bookingsTable)
+    .where(
+      and(
+        gte(bookingsTable.scheduledAt, dayStart),
+        lte(bookingsTable.scheduledAt, dayEnd),
+        eq(bookingsTable.status, "confirmed"),
+      ),
+    );
+  return candidates.some(
+    (b) =>
+      shopLocalDateString(b.scheduledAt) === yyyyMmDd &&
+      b.id !== excludeBookingId,
+  );
+}
+
 export async function isDayWholeDayLocked(
   yyyyMmDd: string,
   excludeBookingId?: number,

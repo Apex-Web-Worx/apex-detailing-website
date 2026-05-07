@@ -20,6 +20,7 @@ import {
 import {
   getRuleForServiceIdDay,
   isDayWholeDayLocked,
+  hasOtherConfirmedBookingOnDate,
 } from "../lib/availability-rules";
 import { type BookingEmailData } from "../lib/email";
 import {
@@ -310,29 +311,7 @@ router.post("/admin/bookings/:id/reschedule", requireAdmin, async (req, res) => 
 
   // Whole-day-lock semantics (excluding this booking).
   if (newRule.wholeDayLock) {
-    const dayStart =
-      buildScheduledAt(newDate, "00:00") ??
-      new Date(
-        Date.UTC(
-          newDateObj.getUTCFullYear(),
-          newDateObj.getUTCMonth(),
-          newDateObj.getUTCDate(),
-        ),
-      );
-    const dayEnd = new Date(dayStart.getTime() + 36 * 60 * 60 * 1000);
-    const [conflicting] = await db
-      .select({ id: bookingsTable.id })
-      .from(bookingsTable)
-      .where(
-        and(
-          gte(bookingsTable.scheduledAt, dayStart),
-          lte(bookingsTable.scheduledAt, dayEnd),
-          eq(bookingsTable.status, "confirmed"),
-          ne(bookingsTable.id, booking.id),
-        ),
-      )
-      .limit(1);
-    if (conflicting) {
+    if (await hasOtherConfirmedBookingOnDate(newDate, booking.id)) {
       res.status(409).json({
         message: "That day is fully booked. Please choose another day.",
       });

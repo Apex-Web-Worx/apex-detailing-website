@@ -25,6 +25,7 @@ import {
   getRuleForServiceIdDay,
   getRuleForServiceSlugDay,
   isDayWholeDayLocked,
+  hasOtherConfirmedBookingOnDate,
   wholeDayLockServiceIdsByDow,
   type RuleWithSlots,
 } from "../lib/availability-rules";
@@ -328,21 +329,7 @@ router.post("/booking/bookings", async (req, res) => {
   //    (e.g. somebody booked a Full Detail at 07:30, can't drop in an
   //    Express Interior on top of it).
   if (rule.wholeDayLock) {
-    const dayStart = buildScheduledAt(body.date, "00:00") ??
-      new Date(Date.UTC(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate()));
-    const dayEnd = new Date(dayStart.getTime() + 36 * 60 * 60 * 1000);
-    const [conflicting] = await db
-      .select({ id: bookingsTable.id })
-      .from(bookingsTable)
-      .where(
-        and(
-          gte(bookingsTable.scheduledAt, dayStart),
-          lte(bookingsTable.scheduledAt, dayEnd),
-          eq(bookingsTable.status, "confirmed"),
-        ),
-      )
-      .limit(1);
-    if (conflicting) {
+    if (await hasOtherConfirmedBookingOnDate(body.date)) {
       res.status(409).json({
         message: "That day is fully booked. Please choose another day.",
       });
@@ -575,22 +562,7 @@ router.post("/booking/manage/:id/reschedule", async (req, res) => {
   // Same whole-day-lock semantics as create — but exclude the current
   // booking so the customer can move within the same day.
   if (newRule.wholeDayLock) {
-    const dayStart = buildScheduledAt(newDate, "00:00") ??
-      new Date(Date.UTC(newDateObj.getUTCFullYear(), newDateObj.getUTCMonth(), newDateObj.getUTCDate()));
-    const dayEnd = new Date(dayStart.getTime() + 36 * 60 * 60 * 1000);
-    const [conflicting] = await db
-      .select({ id: bookingsTable.id })
-      .from(bookingsTable)
-      .where(
-        and(
-          gte(bookingsTable.scheduledAt, dayStart),
-          lte(bookingsTable.scheduledAt, dayEnd),
-          eq(bookingsTable.status, "confirmed"),
-          ne(bookingsTable.id, booking.id),
-        ),
-      )
-      .limit(1);
-    if (conflicting) {
+    if (await hasOtherConfirmedBookingOnDate(newDate, booking.id)) {
       res.status(409).json({
         message: "That day is fully booked. Please choose another day.",
       });
