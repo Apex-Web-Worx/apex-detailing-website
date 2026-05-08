@@ -226,7 +226,6 @@ export interface BookingEmailData {
   vehicle: string;
   notes: string;
   serviceName: string;
-  servicePriceCents: number;
   serviceDurationMinutes: number;
   date: string;
   time: string;

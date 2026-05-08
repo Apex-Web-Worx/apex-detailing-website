@@ -285,11 +285,7 @@ function buildDescription(b: BookingRow): string {
     `Phone: ${b.phone}`,
     `Email: ${b.email}`,
     `Vehicle: ${b.vehicle}`,
-    `Service: ${b.serviceName} (${b.serviceDurationMinutes} min · ${
-      b.servicePriceCents > 0
-        ? `$${(b.servicePriceCents / 100).toFixed(2)}`
-        : "custom quote"
-    })`,
+    `Service: ${b.serviceName} (${b.serviceDurationMinutes} min)`,
   ];
   if (b.notes && b.notes.trim().length > 0) {
     lines.push("", `Notes: ${b.notes}`);

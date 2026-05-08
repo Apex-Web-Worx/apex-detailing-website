@@ -60,7 +60,6 @@ function bookingToEmailData(
     vehicle: b.vehicle,
     notes: b.notes ?? "",
     serviceName: b.serviceName,
-    servicePriceCents: b.servicePriceCents,
     serviceDurationMinutes: b.serviceDurationMinutes,
     date: shopLocalDateString(b.scheduledAt),
     time: shopLocalTimeString(b.scheduledAt),

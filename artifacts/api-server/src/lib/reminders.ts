@@ -89,7 +89,6 @@ async function runOnce(): Promise<void> {
       vehicle: booking.vehicle,
       notes: booking.notes ?? "",
       serviceName: booking.serviceName,
-      servicePriceCents: booking.servicePriceCents,
       serviceDurationMinutes: booking.serviceDurationMinutes,
       date: shopLocalDateString(booking.scheduledAt),
       time: shopLocalTimeString(booking.scheduledAt),
