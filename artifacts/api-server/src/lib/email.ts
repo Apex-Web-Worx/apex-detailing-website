@@ -5,6 +5,10 @@ import { getSiteUrl } from "./site-url";
 const connectors = new ReplitConnectors();
 
 export const OWNER_EMAIL = "apexdetailingsf@gmail.com";
+// Additional recipients CC'd on every owner-facing notification (new
+// booking, reschedule, cancellation). Customer-facing emails are not
+// affected.
+export const OWNER_CC_EMAILS = ["gurova.krista@gmail.com"];
 export const FROM_NAME = "Apex Detailing";
 export const SHOP_PHONE = "(417) 527-6165";
 export const SHOP_ADDRESS = "1114 E Lakota St, Nixa, MO 65714";
@@ -79,6 +83,7 @@ function buildRawMessage(args: {
   fromName: string;
   fromEmail: string;
   to: string;
+  cc?: string[];
   replyTo?: string;
   subject: string;
   html: string;
@@ -88,9 +93,13 @@ function buildRawMessage(args: {
   // maliciously match the boundary token.
   const boundary = `apex_${randomBytes(12).toString("hex")}`;
 
+  const ccList = (args.cc ?? []).filter(Boolean);
   const headers = [
     `From: "${encodeMimeWord(args.fromName)}" <${sanitizeHeaderValue(args.fromEmail)}>`,
     `To: ${sanitizeHeaderValue(args.to)}`,
+    ccList.length > 0
+      ? `Cc: ${ccList.map((c) => sanitizeHeaderValue(c)).join(", ")}`
+      : null,
     args.replyTo ? `Reply-To: ${sanitizeHeaderValue(args.replyTo)}` : null,
     `Subject: ${encodeMimeWord(args.subject)}`,
     `MIME-Version: 1.0`,
@@ -128,6 +137,7 @@ function buildRawMessage(args: {
 
 async function sendViaGmail(args: {
   to: string;
+  cc?: string[];
   replyTo?: string;
   subject: string;
   html: string;
@@ -137,6 +147,7 @@ async function sendViaGmail(args: {
     fromName: FROM_NAME,
     fromEmail: OWNER_EMAIL,
     to: args.to,
+    cc: args.cc,
     replyTo: args.replyTo,
     subject: args.subject,
     html: args.html,
@@ -359,6 +370,7 @@ export async function sendBookingEmails(b: BookingEmailData): Promise<void> {
     }),
     sendViaGmail({
       to: OWNER_EMAIL,
+      cc: OWNER_CC_EMAILS,
       replyTo: b.email,
       subject: ownerSubject,
       html: ownerHtml(b),
@@ -473,6 +485,7 @@ export async function sendCancellationEmails(
     }),
     sendViaGmail({
       to: OWNER_EMAIL,
+      cc: OWNER_CC_EMAILS,
       replyTo: b.email,
       subject: `Cancelled (${by}): ${b.serviceName} — ${dateLong} ${formatTime12h(b.time)}`,
       html: ownerCancelHtml(b, by),
@@ -600,6 +613,7 @@ export async function sendRescheduleEmails(d: RescheduleEmailData): Promise<void
     }),
     sendViaGmail({
       to: OWNER_EMAIL,
+      cc: OWNER_CC_EMAILS,
       replyTo: b.email,
       subject: `Rescheduled: ${b.customerName} — ${newDateLong} ${formatTime12h(b.time)}`,
       html: ownerRescheduleHtml(d),
