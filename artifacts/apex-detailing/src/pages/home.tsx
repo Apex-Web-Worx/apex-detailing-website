@@ -162,7 +162,7 @@ const services = [
     description:
       "Fix foggy, yellowed headlights to improve nighttime visibility and dramatically improve your car's appearance.",
     icon: <CheckCircle2 className="w-10 h-10 text-[#3496FF]" />,
-    pricing: "$100+",
+    pricing: "$125",
     features: ["Improves Safety", "Removes Oxidation", "UV Protection Applied"],
   },
   {

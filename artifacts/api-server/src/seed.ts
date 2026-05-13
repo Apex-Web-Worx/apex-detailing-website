@@ -83,7 +83,7 @@ const seeds = [
     description:
       "Fix foggy, yellowed headlights to improve nighttime visibility and dramatically improve your car's appearance. Removes oxidation and applies UV protection.",
     durationMinutes: 90,
-    priceCents: 12000,
+    priceCents: 12500,
     sortOrder: 60,
   },
   {
