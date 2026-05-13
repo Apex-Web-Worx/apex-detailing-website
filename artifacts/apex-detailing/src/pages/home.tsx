@@ -178,9 +178,9 @@ const services = [
     id: "paint-correction",
     title: "Apex Paint Correction",
     description:
-      "Remove swirl marks, light scratches, and oxidation to restore your paint to a flawless, mirror-like finish.",
+      "Remove swirl marks, light scratches, and oxidation to restore your paint to a flawless, mirror-like finish. Pricing starts at $300 for a single-stage correction and goes up to $1,100 for a full two-step correction, depending on the condition of your vehicle.",
     icon: <Sparkles className="w-10 h-10 text-[#A886CD]" />,
-    pricing: "$300-$600",
+    pricing: "$300 – $1,100",
     features: ["Swirl Mark Removal", "Deep Gloss Restoration", "Enhances Resale Value"],
   },
 ];
