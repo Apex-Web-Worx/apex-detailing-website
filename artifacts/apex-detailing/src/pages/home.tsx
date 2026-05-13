@@ -774,28 +774,37 @@ export default function Home() {
                 <Phone className="w-4 h-4 text-[#3496FF]" />
                 <span>Call</span>
               </a>
-              {["Home", "Services", "About", "Gallery", "Testimonials", "Buy Gift Card"].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => {
-                    if (item === "Buy Gift Card") {
-                      window.location.href = `${import.meta.env.BASE_URL}gift-cards`;
-                      return;
-                    }
-                    scrollToSection(item.toLowerCase());
-                  }}
-                  className={`font-semibold text-sm tracking-wider uppercase transition-colors relative group ${
-                    activeSection === item.toLowerCase()
-                      ? "text-white header-shine"
-                      : "text-gray-300 hover:text-white"
-                  }`}
-                >
-                  {item === "Buy Gift Card" ? "Buy Gift Card" : item}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#A886CD] to-[#3496FF] transition-all duration-300 group-hover:w-full" />
-                </button>
-              ))}
+              {["Home", "Services", "About", "Gallery", "Testimonials", "Buy Gift Card"].map((item) => {
+                const isGiftCard = item === "Buy Gift Card";
+                const href = isGiftCard
+                  ? `${import.meta.env.BASE_URL}gift-cards`
+                  : `#${item.toLowerCase()}`;
+                return (
+                  <a
+                    key={item}
+                    href={href}
+                    onClick={(e) => {
+                      if (isGiftCard) return;
+                      e.preventDefault();
+                      scrollToSection(item.toLowerCase());
+                    }}
+                    className={`font-semibold text-sm tracking-wider uppercase transition-colors relative group ${
+                      activeSection === item.toLowerCase()
+                        ? "text-white header-shine"
+                        : "text-gray-300 hover:text-white"
+                    }`}
+                  >
+                    {item}
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#A886CD] to-[#3496FF] transition-all duration-300 group-hover:w-full" />
+                  </a>
+                );
+              })}
               <a
-                onClick={goToBooking}
+                href={BOOKING_LINK}
+                onClick={(e) => {
+                  e.preventDefault();
+                  goToBooking();
+                }}
                 className="relative inline-flex items-center justify-center px-6 py-2.5 overflow-hidden font-bold text-white rounded-md group cursor-pointer"
               >
                 <span className="absolute w-full h-full bg-gradient-to-br from-[#A886CD] via-[#3496FF] to-[#A886CD] group-hover:from-[#3496FF] group-hover:via-[#A886CD] group-hover:to-[#3496FF] transition-all duration-500 bg-[length:200%_200%] bg-[0%_0%] group-hover:bg-[100%_100%]" />
@@ -831,24 +840,35 @@ export default function Home() {
           }`}
         >
           <div className="flex flex-col space-y-4 px-6">
-            {["Home", "Services", "About", "Gallery", "Testimonials", "Buy Gift Card"].map((item) => (
-              <button
-                key={item}
-                onClick={() => {
-                  if (item === "Buy Gift Card") {
-                    window.location.href = `${import.meta.env.BASE_URL}gift-cards`;
-                    setMobileMenuOpen(false);
-                    return;
-                  }
-                  scrollToSection(item.toLowerCase());
-                }}
-                className="text-left text-gray-300 hover:text-white font-semibold text-lg tracking-wider uppercase"
-              >
-                {item === "Buy Gift Card" ? "Buy Gift Card" : item}
-              </button>
-            ))}
+            {["Home", "Services", "About", "Gallery", "Testimonials", "Buy Gift Card"].map((item) => {
+              const isGiftCard = item === "Buy Gift Card";
+              const href = isGiftCard
+                ? `${import.meta.env.BASE_URL}gift-cards`
+                : `#${item.toLowerCase()}`;
+              return (
+                <a
+                  key={item}
+                  href={href}
+                  onClick={(e) => {
+                    if (isGiftCard) {
+                      setMobileMenuOpen(false);
+                      return;
+                    }
+                    e.preventDefault();
+                    scrollToSection(item.toLowerCase());
+                  }}
+                  className="text-left text-gray-300 hover:text-white font-semibold text-lg tracking-wider uppercase"
+                >
+                  {item}
+                </a>
+              );
+            })}
             <a
-              onClick={goToBooking}
+              href={BOOKING_LINK}
+              onClick={(e) => {
+                e.preventDefault();
+                goToBooking();
+              }}
               className="mt-4 text-center py-3 bg-gradient-to-r from-[#A886CD] to-[#3496FF] font-bold rounded-md shadow-[0_0_15px_rgba(52,150,255,0.4)] cursor-pointer"
             >
               BOOK NOW
@@ -909,7 +929,11 @@ export default function Home() {
 
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full sm:w-auto">
               <a
-                onClick={goToBooking}
+                href={BOOKING_LINK}
+                onClick={(e) => {
+                  e.preventDefault();
+                  goToBooking();
+                }}
               className="group relative inline-flex items-center justify-center px-6 sm:px-8 py-4 font-black text-white transition-all duration-300 ease-in-out bg-transparent border-0 rounded-lg cursor-pointer overflow-hidden text-base sm:text-lg w-full sm:w-auto"
             >
               <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#A886CD] to-[#3496FF] opacity-90 group-hover:opacity-100 transition-opacity duration-300" />
@@ -929,12 +953,16 @@ export default function Home() {
                 BUY GIFT CARD <ChevronRight className="w-4 h-4" />
               </span>
             </a>
-            <button
-              onClick={() => scrollToSection("services")}
+            <a
+              href="#services"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection("services");
+              }}
               className="inline-flex items-center justify-center px-6 sm:px-8 py-4 font-bold text-white transition-all duration-300 ease-in-out bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-white/20 backdrop-blur-sm text-base sm:text-lg w-full sm:w-auto"
             >
               EXPLORE SERVICES
-            </button>
+            </a>
           </div>
 
           {/* Google Reviews Badge */}
@@ -1934,22 +1962,27 @@ export default function Home() {
             <div>
               <h4 className="font-black text-lg uppercase tracking-wider mb-6">Quick Links</h4>
               <ul className="space-y-3 font-medium text-gray-400">
-                {["Home", "Services", "About", "Gallery", "Testimonials", "Buy Gift Card"].map((item) => (
-                  <li key={item}>
-                    <button
-                      onClick={() => {
-                        if (item === "Buy Gift Card") {
-                          window.location.href = `${import.meta.env.BASE_URL}gift-cards`;
-                          return;
-                        }
-                        scrollToSection(item.toLowerCase());
-                      }}
-                      className="hover:text-white hover:translate-x-1 transition-all flex items-center gap-2"
-                    >
-                      <ChevronRight className="w-3 h-3 text-[#3496FF]" /> {item}
-                    </button>
-                  </li>
-                ))}
+                {["Home", "Services", "About", "Gallery", "Testimonials", "Buy Gift Card"].map((item) => {
+                  const isGiftCard = item === "Buy Gift Card";
+                  const href = isGiftCard
+                    ? `${import.meta.env.BASE_URL}gift-cards`
+                    : `#${item.toLowerCase()}`;
+                  return (
+                    <li key={item}>
+                      <a
+                        href={href}
+                        onClick={(e) => {
+                          if (isGiftCard) return;
+                          e.preventDefault();
+                          scrollToSection(item.toLowerCase());
+                        }}
+                        className="hover:text-white hover:translate-x-1 transition-all flex items-center gap-2"
+                      >
+                        <ChevronRight className="w-3 h-3 text-[#3496FF]" /> {item}
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
 
