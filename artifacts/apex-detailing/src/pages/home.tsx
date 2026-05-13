@@ -178,9 +178,15 @@ const services = [
     id: "paint-correction",
     title: "Apex Paint Correction",
     description:
-      "Remove swirl marks, light scratches, and oxidation to restore your paint to a flawless, mirror-like finish. Pricing starts at $300 for a single-stage correction and goes up to $1,100 for a full two-step correction, depending on the condition of your vehicle.",
+      "Restore your paint to a flawless, mirror-like finish. We offer four levels of correction depending on the condition of your vehicle and the result you're after — from a quick gloss refresh to full show-level restoration.",
     icon: <Sparkles className="w-10 h-10 text-[#A886CD]" />,
-    pricing: "$300 – $1,100",
+    pricing: "$300+",
+    pricingDetails: [
+      "Paint Enhancement — starting at $300: Light machine polish for added gloss, minor haze removal, and better shine. Great for vehicles that just need a refresh.",
+      "1-Step Paint Correction — starting at $600: Includes wash, iron removal, clay bar, single-stage machine polish, and sealant. Removes light swirls, haze, and minor defects.",
+      "2-Step Paint Correction — starting at $1,100: Includes compound + polish for deeper swirl/scratch removal and stronger reflection. Recommended before ceramic coating.",
+      "Advanced Paint Correction — starting at $1,800: For heavily swirled, oxidized, black, or show-level vehicles. Final price depends on paint condition, size, and desired result.",
+    ],
     features: ["Swirl Mark Removal", "Deep Gloss Restoration", "Enhances Resale Value"],
   },
 ];
