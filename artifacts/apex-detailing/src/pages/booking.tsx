@@ -259,9 +259,10 @@ export default function BookingPage() {
           </nav>
         </div>
         <div className="max-w-5xl mx-auto px-4 pb-6 text-xs text-gray-600 text-center sm:text-left">
-          By booking with Apex Detailing you may receive transactional SMS
-          related to your appointment. Reply STOP to opt out. Msg &amp; data
-          rates may apply. See{" "}
+          SMS notifications are optional and require a separate opt-in on
+          the booking form — they are not a condition of booking. If you
+          opt in, reply STOP to opt out at any time. Msg &amp; data rates
+          may apply. See{" "}
           <Link href="/privacy" className="underline hover:text-gray-400">
             Privacy Policy
           </Link>
@@ -591,8 +592,7 @@ function InfoStep({
     form.customerName.trim().length > 0 &&
     /\S+@\S+\.\S+/.test(form.email) &&
     form.phone.replace(/\D/g, "").length >= 7 &&
-    form.vehicle.trim().length > 0 &&
-    form.smsConsent === true;
+    form.vehicle.trim().length > 0;
 
   return (
     <section>
@@ -666,6 +666,7 @@ function InfoStep({
           className="mt-1 w-5 h-5 accent-[#3496FF] flex-shrink-0 cursor-pointer"
         />
         <span className="text-xs text-gray-400 leading-relaxed">
+          <span className="text-white font-semibold">Optional:</span>{" "}
           I agree to receive transactional text messages from{" "}
           <span className="text-white font-semibold">Apex Detailing</span>{" "}
           at the phone number above, including appointment confirmations,
@@ -674,9 +675,11 @@ function InfoStep({
           is approximately 2–4 messages per appointment. Reply{" "}
           <span className="text-white font-semibold">STOP</span> to
           unsubscribe, or <span className="text-white font-semibold">HELP</span>{" "}
-          for help. Message and data rates may apply. My phone number and
-          consent will not be sold or shared with third parties for
-          marketing. See our{" "}
+          for help. Message and data rates may apply. Consent is{" "}
+          <span className="text-white font-semibold">not</span> a condition
+          of booking — leave this unchecked and we'll only contact you by
+          email and phone. My phone number and consent will not be sold or
+          shared with third parties for marketing. See our{" "}
           <Link href="/privacy" className="text-[#3496FF] hover:underline">
             Privacy Policy
           </Link>{" "}
