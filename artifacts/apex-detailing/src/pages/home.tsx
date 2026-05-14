@@ -427,6 +427,7 @@ export default function Home() {
   const [sliderCycleComplete, setSliderCycleComplete] = useState(false);
   const [paintCorrectionPreviewIndex, setPaintCorrectionPreviewIndex] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [openPaintFaq, setOpenPaintFaq] = useState<number | null>(null);
   const [legalModal, setLegalModal] = useState<"privacy" | "terms" | null>(null);
 
   const faqs = [
@@ -453,6 +454,41 @@ export default function Home() {
     {
       q: "Do you offer gift cards?",
       a: "Yes — digital gift cards are available through our Square store. They're a perfect gift for any car owner.",
+    },
+  ];
+
+  const paintFaqs = [
+    {
+      q: "What is paint correction?",
+      a: "Paint correction is a professional process that removes imperfections from your vehicle's paint by machine polishing the clear coat. Over time, your paint can develop swirl marks, light scratches, oxidation, water spots, holograms, fading or dullness, and surface contamination. The goal is to restore clarity, depth, and gloss while making your paint look significantly cleaner and newer. Before any correction begins, your vehicle goes through proper preparation which may include a hand wash, iron decontamination, clay bar treatment, and paint inspection to ensure the paint is clean and safe to polish.",
+    },
+    {
+      q: "What is a 1-Step Paint Correction?",
+      a: "A 1-step correction is ideal for vehicles with light imperfections. This process includes a light cutting polish that removes minor swirl marks, improves gloss and shine, reduces light scratches, and enhances paint clarity. A 1-step correction typically removes 50–70% of paint defects depending on paint condition and hardness. Best for newer vehicles, light swirl marks, vehicles that already have decent paint condition, and owners wanting a noticeable improvement without heavy correction.",
+    },
+    {
+      q: "What is a 2-Step Paint Correction?",
+      a: "A 2-step correction is a more aggressive restoration process for vehicles with heavier imperfections. Step 1 uses a heavy compound that removes deeper scratches, corrects oxidation, eliminates heavier swirl marks, and removes deeper paint defects. Step 2 uses a finishing polish that refines the paint, restores gloss, removes haze from compounding, and creates a deep mirror-like finish. A 2-step correction can remove 70–90%+ of paint defects depending on paint thickness and condition. Best for older vehicles, heavily neglected paint, deep swirls and scratches, and vehicles needing major restoration. Some scratches may be too deep to remove safely if they've gone through the clear coat.",
+    },
+    {
+      q: "Why does pricing vary?",
+      a: "Every vehicle is different. Pricing depends on vehicle size, paint condition, level of contamination, time needed for preparation, and whether your vehicle needs a 1-step or 2-step correction. Heavily contaminated vehicles require additional prep time before polishing can safely begin.",
+    },
+    {
+      q: "Do I need paint protection after correction?",
+      a: "Yes — protection is highly recommended after paint correction. Once the paint is polished, adding protection helps preserve the results and keeps your vehicle cleaner longer. Our paint sealant provides 6–8 months of protection against dirt buildup, water spots, UV exposure, road grime, and minor surface wear, while adding extra gloss and making future washes easier.",
+    },
+    {
+      q: "Can you apply ceramic coating after correction?",
+      a: "Yes. Ceramic coating is a premium option for longer-term protection and durability. Benefits include longer-lasting protection, strong water beading, easier maintenance, UV protection, and enhanced gloss.",
+    },
+    {
+      q: "How long does paint correction take?",
+      a: "Most paint correction services take anywhere from 1 full day to multiple days, depending on the vehicle size and paint condition.",
+    },
+    {
+      q: "Will paint correction remove all scratches?",
+      a: "Not always. Paint correction can remove many imperfections, but scratches that are too deep may require wet sanding, touch-up paint, or may be unsafe to fully remove.",
     },
   ];
 
@@ -1845,6 +1881,61 @@ export default function Home() {
                 >
                   <button
                     onClick={() => setOpenFaq(isOpen ? null : i)}
+                    className="w-full flex items-center justify-between gap-4 p-5 text-left"
+                    aria-expanded={isOpen}
+                  >
+                    <span className="font-bold text-white text-base sm:text-lg">{faq.q}</span>
+                    <ChevronRight
+                      className={`w-5 h-5 shrink-0 text-[#3496FF] transition-transform duration-300 ${
+                        isOpen ? "rotate-90" : ""
+                      }`}
+                    />
+                  </button>
+                  <div
+                    className={`grid transition-all duration-300 ease-in-out ${
+                      isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <p className="px-5 pb-5 text-gray-300 text-sm sm:text-base leading-relaxed">
+                        {faq.a}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Paint Correction FAQ Section */}
+      <section className="py-20 sm:py-24 relative bg-[#0a0a0a] border-t border-white/5 overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <h2 className="text-sm font-bold tracking-widest text-[#3496FF] uppercase mb-3">
+              Paint Correction
+            </h2>
+            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight">
+              Paint Correction{" "}
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+                FAQ
+              </span>
+            </h3>
+          </div>
+
+          <div className="max-w-3xl mx-auto space-y-3">
+            {paintFaqs.map((faq, i) => {
+              const isOpen = openPaintFaq === i;
+              return (
+                <div
+                  key={i}
+                  className={`rounded-xl border backdrop-blur-sm transition-colors ${
+                    isOpen ? "bg-white/10 border-[#3496FF]/40" : "bg-white/5 border-white/10 hover:border-white/20"
+                  }`}
+                >
+                  <button
+                    onClick={() => setOpenPaintFaq(isOpen ? null : i)}
                     className="w-full flex items-center justify-between gap-4 p-5 text-left"
                     aria-expanded={isOpen}
                   >
