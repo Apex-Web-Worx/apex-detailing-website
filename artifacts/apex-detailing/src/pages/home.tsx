@@ -719,7 +719,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const sections = ["home", "services", "about", "gallery", "testimonials"];
+    const sections = ["home", "services", "about", "gallery", "testimonials", "faq"];
     const observers = {};
 
     const callback = (entries) => {
@@ -821,7 +821,7 @@ export default function Home() {
                 <Phone className="w-4 h-4 text-[#3496FF]" />
                 <span>Call</span>
               </a>
-              {["Home", "Services", "About", "Gallery", "Testimonials", "Buy Gift Card"].map((item) => {
+              {["Home", "Services", "About", "Gallery", "Testimonials", "FAQ", "Buy Gift Card"].map((item) => {
                 const isGiftCard = item === "Buy Gift Card";
                 const href = isGiftCard
                   ? `${import.meta.env.BASE_URL}gift-cards`
@@ -1866,7 +1866,7 @@ export default function Home() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 sm:py-24 relative bg-[#0d0d0d] border-t border-white/5 overflow-hidden">
+      <section id="faq" className="py-20 sm:py-24 relative bg-[#0d0d0d] border-t border-white/5 overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-sm font-bold tracking-widest text-[#A886CD] uppercase mb-3">
@@ -2032,7 +2032,7 @@ export default function Home() {
             <div>
               <h4 className="font-black text-lg uppercase tracking-wider mb-6">Quick Links</h4>
               <ul className="space-y-3 font-medium text-gray-400">
-                {["Home", "Services", "About", "Gallery", "Testimonials", "Buy Gift Card"].map((item) => {
+                {["Home", "Services", "About", "Gallery", "Testimonials", "FAQ", "Buy Gift Card"].map((item) => {
                   const isGiftCard = item === "Buy Gift Card";
                   const href = isGiftCard
                     ? `${import.meta.env.BASE_URL}gift-cards`
