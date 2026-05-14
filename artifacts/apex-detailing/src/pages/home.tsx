@@ -887,7 +887,7 @@ export default function Home() {
           }`}
         >
           <div className="flex flex-col space-y-4 px-6">
-            {["Home", "Services", "About", "Gallery", "Testimonials", "Buy Gift Card"].map((item) => {
+            {["Home", "Services", "About", "Gallery", "Testimonials", "FAQ", "Buy Gift Card"].map((item) => {
               const isGiftCard = item === "Buy Gift Card";
               const href = isGiftCard
                 ? `${import.meta.env.BASE_URL}gift-cards`
