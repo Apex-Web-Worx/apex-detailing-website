@@ -51,6 +51,8 @@ export interface CreateBookingRequest {
   /** @minLength 1 */
   vehicle: string;
   notes?: string;
+  /** Whether the customer opted in to transactional SMS. Defaults to false; when false the server skips all customer-facing SMS for this booking. */
+  smsConsent?: boolean;
 }
 
 export interface BlockedDate {

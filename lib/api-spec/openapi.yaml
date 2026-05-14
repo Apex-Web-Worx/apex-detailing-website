@@ -730,6 +730,9 @@ components:
           minLength: 1
         notes:
           type: string
+        smsConsent:
+          type: boolean
+          description: "Whether the customer opted in to transactional SMS. Defaults to false; when false the server skips all customer-facing SMS for this booking."
       required:
         - serviceId
         - date

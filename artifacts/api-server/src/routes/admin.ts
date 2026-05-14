@@ -63,6 +63,7 @@ function bookingToEmailData(
     serviceDurationMinutes: b.serviceDurationMinutes,
     date: shopLocalDateString(b.scheduledAt),
     time: shopLocalTimeString(b.scheduledAt),
+    smsConsent: b.smsConsent,
   };
 }
 

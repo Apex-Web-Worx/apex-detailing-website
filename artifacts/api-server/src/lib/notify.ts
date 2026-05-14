@@ -49,15 +49,29 @@ function ownerTpl(b: BookingEmailData) {
 /* Public API — one function per booking event                          */
 /* ------------------------------------------------------------------ */
 
+// Customer-facing SMS is gated on this. Per the Twilio A2P 10DLC campaign
+// description, when a customer leaves the optional consent box unchecked
+// we promised to contact them only by email and phone — so every customer
+// SMS path consults this helper. Owner SMS is sent unconditionally.
+function maySmsCustomer(b: BookingEmailData, kind: string): boolean {
+  if (b.smsConsent) return true;
+  console.info(
+    `[notify] skipping ${kind} #${b.id}: customer did not opt in to SMS`,
+  );
+  return false;
+}
+
 export function notifyBookingCreated(b: BookingEmailData): void {
   sendBookingEmails(b).catch((err) =>
     console.error("[notify] sendBookingEmails failed:", err),
   );
-  void sendSms({
-    to: b.phone,
-    body: smsCustomerConfirm(customerTpl(b)),
-    context: `customer-confirm #${b.id}`,
-  });
+  if (maySmsCustomer(b, "customer-confirm")) {
+    void sendSms({
+      to: b.phone,
+      body: smsCustomerConfirm(customerTpl(b)),
+      context: `customer-confirm #${b.id}`,
+    });
+  }
   void sendSms({
     to: OWNER_SMS_TO,
     body: smsOwnerNew(ownerTpl(b)),
@@ -73,11 +87,13 @@ export function notifyBookingRescheduled(args: {
   sendRescheduleEmails(args).catch((err) =>
     console.error("[notify] sendRescheduleEmails failed:", err),
   );
-  void sendSms({
-    to: args.booking.phone,
-    body: smsCustomerReschedule(customerTpl(args.booking)),
-    context: `customer-reschedule #${args.booking.id}`,
-  });
+  if (maySmsCustomer(args.booking, "customer-reschedule")) {
+    void sendSms({
+      to: args.booking.phone,
+      body: smsCustomerReschedule(customerTpl(args.booking)),
+      context: `customer-reschedule #${args.booking.id}`,
+    });
+  }
   void sendSms({
     to: OWNER_SMS_TO,
     body: smsOwnerReschedule(
@@ -100,11 +116,13 @@ export function notifyBookingCancelled(
   sendCancellationEmails(b, emailBy).catch((err) =>
     console.error("[notify] sendCancellationEmails failed:", err),
   );
-  void sendSms({
-    to: b.phone,
-    body: smsCustomerCancel(customerTpl(b), emailBy),
-    context: `customer-cancel #${b.id}`,
-  });
+  if (maySmsCustomer(b, "customer-cancel")) {
+    void sendSms({
+      to: b.phone,
+      body: smsCustomerCancel(customerTpl(b), emailBy),
+      context: `customer-cancel #${b.id}`,
+    });
+  }
   void sendSms({
     to: OWNER_SMS_TO,
     body: smsOwnerCancel(ownerTpl(b), by),
@@ -117,6 +135,9 @@ export function notifyReminder24h(b: BookingEmailData): Promise<void> {
   // Returned as a promise so the cron can await + only mark
   // reminder_sent_at after the SMS attempt resolves. sendSms itself
   // never throws.
+  if (!maySmsCustomer(b, "customer-reminder")) {
+    return Promise.resolve();
+  }
   return sendSms({
     to: b.phone,
     body: smsCustomerReminder(customerTpl(b)),

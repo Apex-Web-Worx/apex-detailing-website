@@ -83,10 +83,10 @@ function bookingToEmailData(
     vehicle: b.vehicle,
     notes: b.notes ?? "",
     serviceName: b.serviceName,
-    servicePriceCents: b.servicePriceCents,
     serviceDurationMinutes: b.serviceDurationMinutes,
     date: overrideDate ?? shopLocalDateString(b.scheduledAt),
     time: overrideTime ?? shopLocalTimeString(b.scheduledAt),
+    smsConsent: b.smsConsent,
   };
 }
 
@@ -383,6 +383,7 @@ router.post("/booking/bookings", async (req, res) => {
         scheduledAt,
         status: "confirmed",
         manageToken: generateManageToken(),
+        smsConsent: body.smsConsent ?? false,
       })
       .returning();
 

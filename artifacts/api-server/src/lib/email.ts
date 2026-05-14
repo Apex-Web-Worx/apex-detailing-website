@@ -240,6 +240,11 @@ export interface BookingEmailData {
   serviceDurationMinutes: number;
   date: string;
   time: string;
+  // True when the customer opted in to transactional SMS via the booking
+  // form (or, for admin-entered bookings, when staff verbally confirmed
+  // consent on the phone). Gates customer-facing SMS in notify.ts. Email
+  // sends are unaffected.
+  smsConsent: boolean;
 }
 
 function detailRows(b: BookingEmailData): { label: string; value: string; highlight?: boolean }[] {

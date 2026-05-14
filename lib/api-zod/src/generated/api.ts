@@ -66,6 +66,12 @@ export const CreateBookingBody = zod.object({
   phone: zod.string().min(createBookingBodyPhoneMin),
   vehicle: zod.string().min(1),
   notes: zod.string().optional(),
+  smsConsent: zod
+    .boolean()
+    .optional()
+    .describe(
+      "Whether the customer opted in to transactional SMS. Defaults to false; when false the server skips all customer-facing SMS for this booking.",
+    ),
 });
 
 /**

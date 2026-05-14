@@ -5,6 +5,7 @@ import {
   serial,
   timestamp,
   uniqueIndex,
+  boolean,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
@@ -41,6 +42,13 @@ export const bookingsTable = pgTable(
     // booked less than 24h out and skip the reminder entirely). The
     // reminders cron uses this to guarantee at-most-once delivery.
     reminderSentAt: timestamp("reminder_sent_at", { withTimezone: true }),
+    // Whether the customer ticked the optional SMS consent checkbox on
+    // the booking form. When false, customer-facing SMS (confirmation,
+    // 24h reminder, reschedule, cancellation) MUST be skipped — Twilio's
+    // A2P 10DLC campaign description promises consent is not a condition
+    // of booking and that we will only contact non-opted-in customers by
+    // email and phone. Owner-facing SMS is unaffected.
+    smsConsent: boolean("sms_consent").notNull().default(false),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),

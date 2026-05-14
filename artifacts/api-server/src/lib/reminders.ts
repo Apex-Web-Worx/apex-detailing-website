@@ -92,6 +92,7 @@ async function runOnce(): Promise<void> {
       serviceDurationMinutes: booking.serviceDurationMinutes,
       date: shopLocalDateString(booking.scheduledAt),
       time: shopLocalTimeString(booking.scheduledAt),
+      smsConsent: booking.smsConsent,
     };
     await notifyReminder24h(data);
   }

@@ -766,6 +766,7 @@ function ConfirmStep({
           phone: form.phone.trim(),
           vehicle: form.vehicle.trim(),
           notes: form.notes.trim(),
+          smsConsent: form.smsConsent,
         },
       });
       onConfirmed(result);
