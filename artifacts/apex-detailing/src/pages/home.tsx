@@ -426,69 +426,80 @@ export default function Home() {
   const [sliderFading, setSliderFading] = useState(false);
   const [sliderCycleComplete, setSliderCycleComplete] = useState(false);
   const [paintCorrectionPreviewIndex, setPaintCorrectionPreviewIndex] = useState(0);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [openPaintFaq, setOpenPaintFaq] = useState<number | null>(null);
+  const [openFaq, setOpenFaq] = useState<string | null>(null);
+  const [activeFaqCategory, setActiveFaqCategory] = useState<"General" | "Paint Correction">("General");
   const [legalModal, setLegalModal] = useState<"privacy" | "terms" | null>(null);
 
-  const faqs = [
+  const faqs: Array<{ q: string; a: string; category: string }> = [
     {
       q: "Where are you located?",
       a: "Our shop is at 1114 E Lakota St in Nixa, MO. We proudly serve customers from Nixa, Ozark, Springfield, and the surrounding Ozarks communities.",
+      category: "General",
     },
     {
       q: "How long does a detail take?",
       a: "Most interior or exterior details take 2–4 hours. Full details usually run 4–6 hours — and sometimes up to 10 hours for heavily soiled vehicles. Ceramic coatings or paint correction can take a full day depending on vehicle condition.",
+      category: "General",
     },
     {
       q: "How do I book an appointment?",
       a: "Click any 'Book Your Detail' button to use our online booking — pick your service, day, and time in under a minute. You can also call us directly at 417-527-6165. All scheduling needs to happen before your visit.",
+      category: "General",
     },
     {
       q: "What payment methods do you accept?",
       a: "We accept cash, Square (all major credit/debit cards), Venmo, and Zelle. Digital gift cards are also available year-round through our Square store.",
+      category: "General",
     },
     {
       q: "What if my vehicle is in really rough shape?",
       a: "No problem — we handle heavy pet hair, deep stains, and serious build-up. Heavily soiled interiors may require a Full Interior Detail rather than the Express service. Final pricing is confirmed at inspection.",
+      category: "General",
     },
     {
       q: "Do you offer gift cards?",
       a: "Yes — digital gift cards are available through our Square store. They're a perfect gift for any car owner.",
+      category: "General",
     },
-  ];
-
-  const paintFaqs = [
     {
       q: "What is paint correction?",
       a: "Paint correction is a professional process that removes imperfections from your vehicle's paint by machine polishing the clear coat. Over time, your paint can develop swirl marks, light scratches, oxidation, water spots, holograms, fading or dullness, and surface contamination. The goal is to restore clarity, depth, and gloss while making your paint look significantly cleaner and newer. Before any correction begins, your vehicle goes through proper preparation which may include a hand wash, iron decontamination, clay bar treatment, and paint inspection to ensure the paint is clean and safe to polish.",
+      category: "Paint Correction",
     },
     {
       q: "What is a 1-Step Paint Correction?",
       a: "A 1-step correction is ideal for vehicles with light imperfections. This process includes a light cutting polish that removes minor swirl marks, improves gloss and shine, reduces light scratches, and enhances paint clarity. A 1-step correction typically removes 50–70% of paint defects depending on paint condition and hardness. Best for newer vehicles, light swirl marks, vehicles that already have decent paint condition, and owners wanting a noticeable improvement without heavy correction.",
+      category: "Paint Correction",
     },
     {
       q: "What is a 2-Step Paint Correction?",
       a: "A 2-step correction is a more aggressive restoration process for vehicles with heavier imperfections. Step 1 uses a heavy compound that removes deeper scratches, corrects oxidation, eliminates heavier swirl marks, and removes deeper paint defects. Step 2 uses a finishing polish that refines the paint, restores gloss, removes haze from compounding, and creates a deep mirror-like finish. A 2-step correction can remove 70–90%+ of paint defects depending on paint thickness and condition. Best for older vehicles, heavily neglected paint, deep swirls and scratches, and vehicles needing major restoration. Some scratches may be too deep to remove safely if they've gone through the clear coat.",
+      category: "Paint Correction",
     },
     {
       q: "Why does pricing vary?",
       a: "Every vehicle is different. Pricing depends on vehicle size, paint condition, level of contamination, time needed for preparation, and whether your vehicle needs a 1-step or 2-step correction. Heavily contaminated vehicles require additional prep time before polishing can safely begin.",
+      category: "Paint Correction",
     },
     {
       q: "Do I need paint protection after correction?",
       a: "Yes — protection is highly recommended after paint correction. Once the paint is polished, adding protection helps preserve the results and keeps your vehicle cleaner longer. Our paint sealant provides 6–8 months of protection against dirt buildup, water spots, UV exposure, road grime, and minor surface wear, while adding extra gloss and making future washes easier.",
+      category: "Paint Correction",
     },
     {
       q: "Can you apply ceramic coating after correction?",
       a: "Yes. Ceramic coating is a premium option for longer-term protection and durability. Benefits include longer-lasting protection, strong water beading, easier maintenance, UV protection, and enhanced gloss.",
+      category: "Paint Correction",
     },
     {
       q: "How long does paint correction take?",
       a: "Most paint correction services take anywhere from 1 full day to multiple days, depending on the vehicle size and paint condition.",
+      category: "Paint Correction",
     },
     {
       q: "Will paint correction remove all scratches?",
       a: "Not always. Paint correction can remove many imperfections, but scratches that are too deep may require wet sanding, touch-up paint, or may be unsafe to fully remove.",
+      category: "Paint Correction",
     },
   ];
 
@@ -1869,97 +1880,65 @@ export default function Home() {
             </h3>
           </div>
 
-          <div className="max-w-3xl mx-auto space-y-3">
-            {faqs.map((faq, i) => {
-              const isOpen = openFaq === i;
-              return (
-                <div
-                  key={i}
-                  className={`rounded-xl border backdrop-blur-sm transition-colors ${
-                    isOpen ? "bg-white/10 border-[#3496FF]/40" : "bg-white/5 border-white/10 hover:border-white/20"
-                  }`}
-                >
-                  <button
-                    onClick={() => setOpenFaq(isOpen ? null : i)}
-                    className="w-full flex items-center justify-between gap-4 p-5 text-left"
-                    aria-expanded={isOpen}
-                  >
-                    <span className="font-bold text-white text-base sm:text-lg">{faq.q}</span>
-                    <ChevronRight
-                      className={`w-5 h-5 shrink-0 text-[#3496FF] transition-transform duration-300 ${
-                        isOpen ? "rotate-90" : ""
-                      }`}
-                    />
-                  </button>
-                  <div
-                    className={`grid transition-all duration-300 ease-in-out ${
-                      isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-                    }`}
-                  >
-                    <div className="overflow-hidden">
-                      <p className="px-5 pb-5 text-gray-300 text-sm sm:text-base leading-relaxed">
-                        {faq.a}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Paint Correction FAQ Section */}
-      <section className="py-20 sm:py-24 relative bg-[#0a0a0a] border-t border-white/5 overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <h2 className="text-sm font-bold tracking-widest text-[#3496FF] uppercase mb-3">
-              Paint Correction
-            </h2>
-            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight">
-              Paint Correction{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
-                FAQ
-              </span>
-            </h3>
+          {/* Category pills */}
+          <div className="flex items-center justify-center gap-3 mb-10">
+            {(["General", "Paint Correction"] as const).map((cat) => (
+              <button
+                key={cat}
+                onClick={() => {
+                  setActiveFaqCategory(cat);
+                  setOpenFaq(null);
+                }}
+                className={`px-5 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all duration-300 border ${
+                  activeFaqCategory === cat
+                    ? "bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white border-transparent shadow-[0_0_20px_rgba(52,150,255,0.3)]"
+                    : "bg-white/5 text-gray-400 border-white/10 hover:border-white/30 hover:text-white"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
           </div>
 
           <div className="max-w-3xl mx-auto space-y-3">
-            {paintFaqs.map((faq, i) => {
-              const isOpen = openPaintFaq === i;
-              return (
-                <div
-                  key={i}
-                  className={`rounded-xl border backdrop-blur-sm transition-colors ${
-                    isOpen ? "bg-white/10 border-[#3496FF]/40" : "bg-white/5 border-white/10 hover:border-white/20"
-                  }`}
-                >
-                  <button
-                    onClick={() => setOpenPaintFaq(isOpen ? null : i)}
-                    className="w-full flex items-center justify-between gap-4 p-5 text-left"
-                    aria-expanded={isOpen}
-                  >
-                    <span className="font-bold text-white text-base sm:text-lg">{faq.q}</span>
-                    <ChevronRight
-                      className={`w-5 h-5 shrink-0 text-[#3496FF] transition-transform duration-300 ${
-                        isOpen ? "rotate-90" : ""
-                      }`}
-                    />
-                  </button>
+            {faqs
+              .filter((faq) => faq.category === activeFaqCategory)
+              .map((faq, i) => {
+                const key = `${activeFaqCategory}-${i}`;
+                const isOpen = openFaq === key;
+                return (
                   <div
-                    className={`grid transition-all duration-300 ease-in-out ${
-                      isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                    key={key}
+                    className={`rounded-xl border backdrop-blur-sm transition-colors ${
+                      isOpen ? "bg-white/10 border-[#3496FF]/40" : "bg-white/5 border-white/10 hover:border-white/20"
                     }`}
                   >
-                    <div className="overflow-hidden">
-                      <p className="px-5 pb-5 text-gray-300 text-sm sm:text-base leading-relaxed">
-                        {faq.a}
-                      </p>
+                    <button
+                      onClick={() => setOpenFaq(isOpen ? null : key)}
+                      className="w-full flex items-center justify-between gap-4 p-5 text-left"
+                      aria-expanded={isOpen}
+                    >
+                      <span className="font-bold text-white text-base sm:text-lg">{faq.q}</span>
+                      <ChevronRight
+                        className={`w-5 h-5 shrink-0 text-[#3496FF] transition-transform duration-300 ${
+                          isOpen ? "rotate-90" : ""
+                        }`}
+                      />
+                    </button>
+                    <div
+                      className={`grid transition-all duration-300 ease-in-out ${
+                        isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                      }`}
+                    >
+                      <div className="overflow-hidden">
+                        <p className="px-5 pb-5 text-gray-300 text-sm sm:text-base leading-relaxed">
+                          {faq.a}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         </div>
       </section>
