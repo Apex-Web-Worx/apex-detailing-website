@@ -28,6 +28,8 @@ import img1297 from "@assets/IMG_1297_1775780654765.jpeg";
 import img1309 from "@assets/IMG_1309_1775780654765.jpeg";
 import img1294 from "@assets/IMG_1294_1775780654765.jpeg";
 import img1306 from "@assets/IMG_1306_1775780654765.jpeg";
+import paintCorrectionBefore from "@assets/IMG_1662_1779061738951.jpeg";
+import paintCorrectionAfter from "@assets/IMG_1668_1779061738951.jpeg";
 
 const BOOKING_LINK = "/book";
 const INSTAGRAM_LINK = "https://www.instagram.com/apexdetailing_sf";
@@ -568,6 +570,11 @@ export default function Home() {
       title: "Headlights Restoration",
       before: `${import.meta.env.BASE_URL}images/headlights-before-3.jpg`,
       after: `${import.meta.env.BASE_URL}images/headlights-after-3.jpg`,
+    },
+    {
+      title: "Paint Correction",
+      before: paintCorrectionBefore,
+      after: paintCorrectionAfter,
     },
   ];
 
