@@ -150,15 +150,21 @@ export function isPastSlot(yyyyMmDd: string, time: string): boolean {
   return slot.getTime() <= Date.now();
 }
 
-/** Minimum hours in advance a customer must book. */
+/** Minimum hours in advance a customer must book for early morning slots. */
 const LEAD_TIME_MS = 10 * 60 * 60 * 1000;
+const EARLY_AM_SLOTS = new Set(["07:30", "08:00"]);
 
-/** True if the {date, time} slot is too close to "now" (within the lead
- *  time window). Customers cannot book slots that are less than 10 hours
- *  away. This supersedes `isPastSlot` — a past slot is also too soon.
+/** True if the {date, time} slot is too close to "now" for the customer
+ *  to book. Only the 07:30 and 08:00 early morning slots require a 10-hour
+ *  lead time; all other slots are simply blocked once their start time has
+ *  passed.
  */
 export function isTooSoon(yyyyMmDd: string, time: string): boolean {
   const slot = buildScheduledAt(yyyyMmDd, time);
   if (!slot) return true;
-  return slot.getTime() <= Date.now() + LEAD_TIME_MS;
+  if (slot.getTime() <= Date.now()) return true;
+  if (EARLY_AM_SLOTS.has(time)) {
+    return slot.getTime() <= Date.now() + LEAD_TIME_MS;
+  }
+  return false;
 }
