@@ -1008,7 +1008,7 @@ export default function Home() {
               </span>
             </a>
             <a
-              href="#services"
+              href={`${import.meta.env.BASE_URL}#services`}
               onClick={(e) => {
                 e.preventDefault();
                 scrollToSection("services");
@@ -1970,7 +1970,11 @@ export default function Home() {
                 </p>
               </div>
               <a
-                onClick={goToBooking}
+                href={BOOKING_LINK}
+                onClick={(e) => {
+                  e.preventDefault();
+                  goToBooking();
+                }}
                 className="group relative inline-flex items-center justify-center px-10 py-5 font-black text-white text-xl transition-all duration-300 ease-in-out bg-gradient-to-r from-[#A886CD] to-[#3496FF] rounded-xl overflow-hidden shadow-[0_0_40px_rgba(168,134,205,0.4)] hover:shadow-[0_0_60px_rgba(52,150,255,0.6)] hover:scale-105 cursor-pointer"
               >
                 <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#3496FF] to-[#A886CD] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -2185,13 +2189,17 @@ export default function Home() {
           <Phone className="w-4 h-4 text-[#3496FF]" />
           CALL NOW
         </a>
-        <button
-          onClick={goToBooking}
+        <a
+          href={BOOKING_LINK}
+          onClick={(e) => {
+            e.preventDefault();
+            goToBooking();
+          }}
           className="flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-gradient-to-r from-[#A886CD] to-[#3496FF] font-black text-sm text-white shadow-[0_0_15px_rgba(52,150,255,0.4)]"
         >
           BOOK NOW
           <ChevronRight className="w-4 h-4" />
-        </button>
+        </a>
       </div>
       {/* Spacer so sticky bar doesn't overlap content on mobile */}
       <div className="md:hidden h-20" aria-hidden="true" />

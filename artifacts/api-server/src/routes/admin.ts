@@ -12,6 +12,7 @@ import {
   buildScheduledAt,
   isClosedShopDate,
   isPastSlot,
+  isTooSoon,
   parseDateString,
   shopLocalDateString,
   shopLocalTimeString,
@@ -306,6 +307,12 @@ router.post("/admin/bookings/:id/reschedule", requireAdmin, async (req, res) => 
     res
       .status(400)
       .json({ message: "That time has already passed. Please pick a later slot." });
+    return;
+  }
+  if (isTooSoon(newDate, newTime)) {
+    res.status(400).json({
+      message: "That appointment is too soon. Please pick a slot at least 10 hours from now.",
+    });
     return;
   }
 

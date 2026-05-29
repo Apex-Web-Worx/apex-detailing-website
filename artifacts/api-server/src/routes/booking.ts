@@ -15,6 +15,7 @@ import {
   buildScheduledAt,
   isClosedShopDate,
   isPastSlot,
+  isTooSoon,
   parseDateString,
   shopLocalDateString,
   shopLocalTimeString,
@@ -264,7 +265,8 @@ router.get("/booking/availability", async (req, res) => {
         !dayFullyBooked &&
         !selectedRuleLocksThisDay &&
         !taken.has(`${dateStr} ${time}`) &&
-        !isPastSlot(dateStr, time),
+        !isPastSlot(dateStr, time) &&
+        !isTooSoon(dateStr, time),
     }));
     out.push({ date: dateStr, closed, slots });
   }
@@ -333,6 +335,12 @@ router.post("/booking/bookings", async (req, res) => {
     res
       .status(400)
       .json({ message: "That time has already passed. Please pick a later slot." });
+    return;
+  }
+  if (isTooSoon(body.date, body.time)) {
+    res.status(400).json({
+      message: "That appointment is too soon. Please pick a slot at least 10 hours from now.",
+    });
     return;
   }
 
@@ -572,6 +580,12 @@ router.post("/booking/manage/:id/reschedule", async (req, res) => {
     res
       .status(400)
       .json({ message: "That time has already passed. Please pick a later slot." });
+    return;
+  }
+  if (isTooSoon(newDate, newTime)) {
+    res.status(400).json({
+      message: "That appointment is too soon. Please pick a slot at least 10 hours from now.",
+    });
     return;
   }
 

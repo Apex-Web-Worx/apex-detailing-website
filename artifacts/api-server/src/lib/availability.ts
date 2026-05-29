@@ -149,3 +149,16 @@ export function isPastSlot(yyyyMmDd: string, time: string): boolean {
   if (!slot) return true;
   return slot.getTime() <= Date.now();
 }
+
+/** Minimum hours in advance a customer must book. */
+const LEAD_TIME_MS = 10 * 60 * 60 * 1000;
+
+/** True if the {date, time} slot is too close to "now" (within the lead
+ *  time window). Customers cannot book slots that are less than 10 hours
+ *  away. This supersedes `isPastSlot` — a past slot is also too soon.
+ */
+export function isTooSoon(yyyyMmDd: string, time: string): boolean {
+  const slot = buildScheduledAt(yyyyMmDd, time);
+  if (!slot) return true;
+  return slot.getTime() <= Date.now() + LEAD_TIME_MS;
+}
