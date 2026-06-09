@@ -503,6 +503,61 @@ export default function Home() {
       a: "Not always. Paint correction can remove many imperfections, but scratches that are too deep may require wet sanding, touch-up paint, or may be unsafe to fully remove.",
       category: "Paint Correction",
     },
+    {
+      q: "What is ceramic coating?",
+      a: "Ceramic coating is a premium protective layer that bonds to your vehicle's paint, providing long-lasting protection while enhancing gloss and making maintenance easier.",
+      category: "Ceramic Coating",
+    },
+    {
+      q: "Why should I ceramic coat my vehicle?",
+      a: "Deep, mirror-like shine. Protection from UV rays and oxidation. Helps resist stains and contaminants. Makes washing easier. Keeps your vehicle cleaner longer. Preserves your paint's appearance.",
+      category: "Ceramic Coating",
+    },
+    {
+      q: "What's included in the ceramic coating package?",
+      a: "Full hand wash, iron decontamination treatment, clay bar treatment, paint polishing for maximum gloss, paint preparation and panel wipe, professional ceramic coating application, and final quality inspection.",
+      category: "Ceramic Coating",
+    },
+    {
+      q: "Does a brand-new vehicle need paint polishing?",
+      a: "Yes. Even new vehicles often have light swirl marks, dealership wash scratches, and minor imperfections. Proper paint preparation ensures the best possible finish before the coating is applied.",
+      category: "Ceramic Coating",
+    },
+    {
+      q: "How long does the ceramic coating process take?",
+      a: "Most ceramic coating services take 1-2 days, depending on the size of the vehicle and the amount of paint correction needed.",
+      category: "Ceramic Coating",
+    },
+    {
+      q: "How long will ceramic coating last?",
+      a: "With proper maintenance and safe washing methods, ceramic coating can provide years of protection and shine.",
+      category: "Ceramic Coating",
+    },
+    {
+      q: "Will ceramic coating prevent scratches?",
+      a: "Ceramic coating is not scratch-proof, but it helps protect against minor wash-induced swirl marks and everyday wear.",
+      category: "Ceramic Coating",
+    },
+    {
+      q: "Does ceramic coating eliminate the need to wash my car?",
+      a: "No, but it makes cleaning much easier. Dirt, mud, and road grime don't stick as easily, helping your vehicle stay cleaner for longer.",
+      category: "Ceramic Coating",
+    },
+    {
+      q: "Can ceramic coating be applied to windows and wheels?",
+      a: "Yes! Exterior glass and wheels can also be protected, making them easier to clean and maintain.",
+      category: "Ceramic Coating",
+    },
+    {
+      q: "How should I maintain my ceramic-coated vehicle?",
+      a: "We recommend regular hand washes using pH-neutral soap and avoiding automatic car washes with brushes to maximize the life of the coating.",
+      category: "Ceramic Coating",
+    },
+    {
+      q: "Is ceramic coating worth it?",
+      a: "Absolutely! Ceramic coating is one of the best ways to protect your investment, reduce maintenance, and keep your vehicle looking its best for years.",
+      category: "Ceramic Coating",
+    },
   ];
 
   const serviceCities = [
@@ -1889,7 +1944,7 @@ export default function Home() {
 
           {/* Category pills */}
           <div className="flex items-center justify-center gap-3 mb-10">
-            {(["General", "Paint Correction"] as const).map((cat) => (
+            {(["General", "Paint Correction", "Ceramic Coating"] as const).map((cat) => (
               <button
                 key={cat}
                 onClick={() => {
