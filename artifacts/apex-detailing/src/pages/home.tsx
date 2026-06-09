@@ -1207,16 +1207,44 @@ export default function Home() {
         <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-[#A886CD]/10 rounded-full mix-blend-screen filter blur-[120px] -translate-y-1/2 -translate-x-1/2" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-10 lg:gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             <div className="order-2 lg:order-1 relative">
-              <div className="aspect-[4/3] rounded-2xl overflow-hidden relative border border-white/10">
-                <iframe
-                  src={`${import.meta.env.BASE_URL}video`}
-                  className="absolute inset-0 w-full h-full"
-                  allow="autoplay"
-                  frameBorder={0}
-                  title="Apex Detailing Showcase"
+              <div className="aspect-[4/5] rounded-2xl overflow-hidden relative group">
+                {/* Image container with smooth transitions */}
+                {aboutImages.map((img, idx) => (
+                  <img
+                    key={idx}
+                    src={img}
+                    alt={`About image ${idx + 1}`}
+                    className="absolute inset-0 w-full h-full object-cover scale-100 group-hover:scale-105 transition-opacity duration-1000 ease-in-out"
+                    style={{
+                      opacity: idx === aboutImageIdx ? 1 : 0,
+                    }}
+                  />
+                ))}
+                <div
+                  className="absolute inset-0 bg-gradient-to-tr from-[#A886CD]/30 to-[#3496FF]/30 group-hover:from-[#A886CD]/50 group-hover:to-[#3496FF]/50 z-10 transition-all duration-700"
                 />
+                <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black to-transparent z-20">
+                  <div className="inline-flex items-center gap-3 bg-black/60 backdrop-blur-md px-6 py-3 rounded-xl border border-white/10">
+                    <div className="flex -space-x-3">
+                      {[1, 2, 3, 4].map((i) => (
+                        <div
+                          key={i}
+                          className="w-10 h-10 rounded-full border-2 border-black bg-gray-800 flex items-center justify-center overflow-hidden"
+                        >
+                          <Star className="w-5 h-5 text-[#3496FF]" fill="currentColor" />
+                        </div>
+                      ))}
+                    </div>
+                    <div>
+                      <p className="font-black text-white text-lg leading-tight">⭐⭐⭐⭐⭐</p>
+                      <p className="text-xs font-bold tracking-wider text-gray-400 uppercase">
+                        5-Star Rated
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-gradient-to-br from-[#A886CD] to-[#3496FF] rounded-2xl -z-10 blur-xl opacity-50" />
             </div>
