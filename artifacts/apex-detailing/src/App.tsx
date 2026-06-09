@@ -7,6 +7,7 @@ import GiftCardsPage from "@/pages/gift-cards";
 import PrivacyPage from "@/pages/privacy";
 import TermsPage from "@/pages/terms";
 import NotFound from "@/pages/not-found";
+import VideoTemplate from "@/components/video/VideoTemplate";
 
 function App() {
   const base = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
@@ -21,6 +22,7 @@ function App() {
         <Route path="/gift-cards" component={GiftCardsPage} />
         <Route path="/privacy" component={PrivacyPage} />
         <Route path="/terms" component={TermsPage} />
+        <Route path="/video" component={VideoTemplate} />
         <Route component={NotFound} />
       </Switch>
     </Router>
