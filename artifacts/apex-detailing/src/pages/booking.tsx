@@ -22,11 +22,12 @@ import {
 // Keep these short — the badge sits inline next to the title.
 const SERVICE_BADGES: Record<
   string,
-  { label: string; tone: "popular" | "value" | "express" }
+  { label: string; tone: "popular" | "value" | "express" | "notice" }
 > = {
   "apex-interior-detailing": { label: "Most Booked", tone: "popular" },
   "apex-full-detailing": { label: "Best Value", tone: "value" },
   "apex-express-interior-detailing": { label: "Express", tone: "express" },
+  "apex-ceramic-coating": { label: "3-Day Notice", tone: "notice" },
 };
 import {
   ArrowLeft,
@@ -327,7 +328,9 @@ function ServiceStep({
                           ? "bg-gradient-to-r from-[#A886CD] to-[#3496FF]"
                           : badge.tone === "value"
                             ? "bg-[#3496FF]"
-                            : "bg-gradient-to-r from-[#A886CD] to-[#3496FF]"
+                            : badge.tone === "notice"
+                              ? "bg-amber-500"
+                              : "bg-gradient-to-r from-[#A886CD] to-[#3496FF]"
                       }`}
                     >
                       {badge.tone === "express" && <Zap className="w-3 h-3" />}

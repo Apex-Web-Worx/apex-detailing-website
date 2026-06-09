@@ -16,6 +16,7 @@ import {
   isClosedShopDate,
   isPastSlot,
   isTooSoon,
+  isTooSoonForCeramic,
   parseDateString,
   shopLocalDateString,
   shopLocalTimeString,
@@ -258,12 +259,17 @@ router.get("/booking/availability", async (req, res) => {
       serviceRulesByDow.get(dow)?.wholeDayLock === true &&
       anyBookingDates.has(dateStr);
 
+    // Ceramic Coating: 3-day advance notice (first 3 days unavailable).
+    const isCeramicTooSoon =
+      serviceSlug === "apex-ceramic-coating" && isTooSoonForCeramic(dateStr);
+
     const slots = slotsForDay.map((time) => ({
       time,
       available:
         !closed &&
         !dayFullyBooked &&
         !selectedRuleLocksThisDay &&
+        !isCeramicTooSoon &&
         !taken.has(`${dateStr} ${time}`) &&
         !isPastSlot(dateStr, time) &&
         !isTooSoon(dateStr, time),
@@ -340,6 +346,14 @@ router.post("/booking/bookings", async (req, res) => {
   if (isTooSoon(body.date, body.time)) {
     res.status(400).json({
       message: "That appointment is too soon. Please pick a slot at least 10 hours from now.",
+    });
+    return;
+  }
+
+  // Ceramic Coating requires 3-day advance notice (so you can order materials).
+  if (service.slug === "apex-ceramic-coating" && isTooSoonForCeramic(body.date)) {
+    res.status(400).json({
+      message: "Ceramic Coating requires at least 3 days advance notice. Please choose a later date.",
     });
     return;
   }
@@ -585,6 +599,22 @@ router.post("/booking/manage/:id/reschedule", async (req, res) => {
   if (isTooSoon(newDate, newTime)) {
     res.status(400).json({
       message: "That appointment is too soon. Please pick a slot at least 10 hours from now.",
+    });
+    return;
+  }
+
+  // Ceramic Coating requires 3-day advance notice.
+  const bookingService = await db
+    .select({ slug: servicesTable.slug })
+    .from(servicesTable)
+    .where(eq(servicesTable.id, booking.serviceId))
+    .then((r) => r[0]);
+  if (
+    bookingService?.slug === "apex-ceramic-coating" &&
+    isTooSoonForCeramic(newDate)
+  ) {
+    res.status(400).json({
+      message: "Ceramic Coating requires at least 3 days advance notice. Please choose a later date.",
     });
     return;
   }

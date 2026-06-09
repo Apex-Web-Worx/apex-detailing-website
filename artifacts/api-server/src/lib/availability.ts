@@ -168,3 +168,17 @@ export function isTooSoon(yyyyMmDd: string, time: string): boolean {
   }
   return false;
 }
+
+const THREE_DAY_MS = 3 * 24 * 60 * 60 * 1000;
+
+/** True if the date is too soon for ceramic coating (needs 3-day advance). */
+export function isTooSoonForCeramic(yyyyMmDd: string): boolean {
+  const d = parseDateString(yyyyMmDd);
+  if (!d) return true;
+  // Today midnight in shop-local
+  const today = parseDateString(todayInShopLocal());
+  if (!today) return true;
+  // The date must be at least 3 days after today (so today+0, +1, +2 are blocked)
+  const daysApart = (d.getTime() - today.getTime()) / (24 * 60 * 60 * 1000);
+  return daysApart < 3;
+}
