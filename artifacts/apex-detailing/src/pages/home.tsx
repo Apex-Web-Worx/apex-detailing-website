@@ -204,7 +204,6 @@ const gallery = [
     `${import.meta.env.BASE_URL}images/paint-correction-7.jpg`,
   ], currentImageIndex: 0 },
   { id: 2, title: "Ceramic Coating", beforeAfter: true, color: "from-[#A886CD] to-purple-900", video: `${import.meta.env.BASE_URL}videos/ceramic-coating-demo.MOV` },
-  { id: 6, title: "Ceramic Coating Results", beforeAfter: true, color: "from-[#A886CD] to-[#3496FF]", video: `${import.meta.env.BASE_URL}videos/ceramic-coating-results.mov` },
   { id: 3, title: "Interior Restoration", beforeAfter: true, color: "from-blue-900 to-indigo-900", thumbnail: `${import.meta.env.BASE_URL}images/interior-restoration-video.mp4`, images: [
     { src: img1290, label: "Before" },
     { src: img1303, label: "After" },
@@ -687,8 +686,9 @@ export default function Home() {
 
         // Preload the image after next
         if (nextIndex + 1 < selectedGalleryItem.images.length) {
-          const nextImg = selectedGalleryItem.images[nextIndex + 1];
-          const imageSrc = typeof nextImg === 'string' ? nextImg : (nextImg as { src: string }).src;
+          const imageSrc = typeof selectedGalleryItem.images[nextIndex + 1] === 'string'
+            ? selectedGalleryItem.images[nextIndex + 1]
+            : selectedGalleryItem.images[nextIndex + 1].src;
           const img = new Image();
           img.src = imageSrc;
         }
@@ -706,8 +706,9 @@ export default function Home() {
 
         // Preload the image before previous
         if (prevIndex - 1 >= 0 && selectedGalleryItem?.images) {
-          const prevImg = selectedGalleryItem.images[prevIndex - 1];
-          const imageSrc = typeof prevImg === 'string' ? prevImg : (prevImg as { src: string }).src;
+          const imageSrc = typeof selectedGalleryItem.images[prevIndex - 1] === 'string'
+            ? selectedGalleryItem.images[prevIndex - 1]
+            : selectedGalleryItem.images[prevIndex - 1].src;
           const img = new Image();
           img.src = imageSrc;
         }
@@ -726,9 +727,9 @@ export default function Home() {
 
   useEffect(() => {
     const sections = ["home", "services", "about", "gallery", "testimonials", "faq"];
-    const observers: Record<string, IntersectionObserver> = {};
+    const observers = {};
 
-    const callback = (entries: IntersectionObserverEntry[]) => {
+    const callback = (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           setActiveSection(entry.target.id);
@@ -1221,7 +1222,7 @@ export default function Home() {
                     }}
                   />
                 ))}
-                <div
+                <div 
                   className="absolute inset-0 bg-gradient-to-tr from-[#A886CD]/30 to-[#3496FF]/30 group-hover:from-[#A886CD]/50 group-hover:to-[#3496FF]/50 z-10 transition-all duration-700"
                 />
                 <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black to-transparent z-20">

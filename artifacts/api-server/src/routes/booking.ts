@@ -29,8 +29,6 @@ import {
   isDayWholeDayLocked,
   hasOtherConfirmedBookingOnDate,
   wholeDayLockServiceIdsByDow,
-  acquireDayLock,
-  TransactionAbortError,
   type RuleWithSlots,
 } from "../lib/availability-rules";
 import { type BookingEmailData } from "../lib/email";
@@ -103,20 +101,26 @@ router.get("/booking/services", async (_req, res) => {
   res.json(rows);
 });
 
-async function computeAvailability(
-  startDateStr: string,
-  endDateStr: string,
-  serviceSlug?: string,
-): Promise<Array<{
-  date: string;
-  closed: boolean;
-  slots: { time: string; available: boolean }[];
-}>> {
-  const startDate = parseDateString(startDateStr);
-  const endDate = parseDateString(endDateStr);
-  if (!startDate || !endDate) return [];
-  if (endDate < startDate) return [];
+router.get("/booking/availability", async (req, res) => {
+  const parsed = GetAvailabilityQueryParams.safeParse(req.query);
+  if (!parsed.success) {
+    res.status(400).json({ message: "Invalid query parameters" });
+    return;
+  }
 
+  const startDate = parseDateString(parsed.data.startDate);
+  const endDate = parseDateString(parsed.data.endDate);
+  if (!startDate || !endDate) {
+    res.status(400).json({ message: "Invalid date format. Use YYYY-MM-DD." });
+    return;
+  }
+  if (endDate < startDate) {
+    res.status(400).json({ message: "endDate must be >= startDate" });
+    return;
+  }
+
+  // Date strings cover the full window in local time. Pad the SQL window
+  // generously so we don't miss any bookings due to TZ offset.
   const rangeStartUtc = new Date(startDate.getTime() - 24 * 60 * 60 * 1000);
   const rangeEndUtc = new Date(endDate.getTime() + 48 * 60 * 60 * 1000);
 
@@ -139,23 +143,51 @@ async function computeAvailability(
       .from(blockedDatesTable)
       .where(
         and(
-          gte(blockedDatesTable.date, startDateStr),
-          lte(blockedDatesTable.date, endDateStr),
+          gte(blockedDatesTable.date, parsed.data.startDate),
+          lte(blockedDatesTable.date, parsed.data.endDate),
         ),
       ),
   ]);
 
+  // Resolve the optional serviceId → slug now so we can use service-aware
+  // rule lookups. An unresolvable id short-circuits to closed for every day.
+  let serviceSlug: string | null = null;
+  let unresolvableService = false;
+  if (parsed.data.serviceId !== undefined) {
+    const sid = Number(parsed.data.serviceId);
+    if (Number.isFinite(sid) && sid > 0) {
+      const [svc] = await db
+        .select({ slug: servicesTable.slug })
+        .from(servicesTable)
+        .where(and(eq(servicesTable.id, sid), eq(servicesTable.active, true)));
+      if (svc) serviceSlug = svc.slug;
+      else unresolvableService = true;
+    } else {
+      unresolvableService = true;
+    }
+  }
+
+  // Pull all active rules once. When no service is selected we render the
+  // union of slots configured for that day-of-week across all services.
+  // When a service IS selected we filter to that service's specific slots.
   const rulesByDow = await getAllActiveRulesByDow();
   const lockingServiceIdsByDow = wholeDayLockServiceIdsByDow(rulesByDow);
 
+  // For per-service mode, also pre-load that service's rules keyed by dow.
   const serviceRulesByDow = new Map<number, RuleWithSlots>();
-  if (serviceSlug) {
+  if (serviceSlug !== null && !unresolvableService) {
     for (const [dow, rules] of rulesByDow) {
       const r = rules.find((rr) => rr.serviceSlug === serviceSlug);
       if (r) serviceRulesByDow.set(dow, r);
     }
   }
 
+  // Build set of (date,time) taken slots, a set of dates fully locked
+  // because a whole-day-locking service got booked there, and a set of
+  // dates that have ANY confirmed booking (used to mark whole-day-lock
+  // services as unavailable on days where a non-locking service already
+  // booked — e.g. Apex Interior is unbookable Friday once Express
+  // Interior takes any slot, because Apex Interior's rule is whole-day).
   const taken = new Set<string>();
   const fullyBookedDates = new Set<string>();
   const anyBookingDates = new Set<string>();
@@ -194,32 +226,40 @@ async function computeAvailability(
     const dayClosed =
       isClosedShopDate(dateStr) || isPastDay || blockedSet.has(dateStr);
 
+    // Compute the slot list for this day.
     let slotsForDay: string[] = [];
-    if (serviceSlug) {
-      const r = serviceRulesByDow.get(dow);
-      slotsForDay = r ? [...r.slots] : [];
-    } else {
-      const rules = rulesByDow.get(dow) ?? [];
-      const seen = new Set<string>();
-      for (const r of rules) {
-        for (const t of r.slots) {
-          if (!seen.has(t)) {
-            seen.add(t);
-            slotsForDay.push(t);
+    if (!unresolvableService) {
+      if (serviceSlug !== null) {
+        const r = serviceRulesByDow.get(dow);
+        slotsForDay = r ? [...r.slots] : [];
+      } else {
+        // Union of every active service's slots for this day-of-week.
+        const rules = rulesByDow.get(dow) ?? [];
+        const seen = new Set<string>();
+        for (const r of rules) {
+          for (const t of r.slots) {
+            if (!seen.has(t)) {
+              seen.add(t);
+              slotsForDay.push(t);
+            }
           }
         }
+        slotsForDay.sort();
       }
-      slotsForDay.sort();
     }
 
     const closed = dayClosed || slotsForDay.length === 0;
     const dayFullyBooked = fullyBookedDates.has(dateStr);
 
+    // If a service is selected and that service's rule for this day
+    // whole-day-locks, ANY existing booking on this date blocks every
+    // slot (mirrors the POST /bookings whole-day check).
     const selectedRuleLocksThisDay =
-      serviceSlug !== undefined &&
+      serviceSlug !== null &&
       serviceRulesByDow.get(dow)?.wholeDayLock === true &&
       anyBookingDates.has(dateStr);
 
+    // Ceramic Coating: 3-day advance notice (first 3 days unavailable).
     const isCeramicTooSoon =
       serviceSlug === "apex-ceramic-coating" && isTooSoonForCeramic(dateStr);
 
@@ -237,85 +277,6 @@ async function computeAvailability(
     out.push({ date: dateStr, closed, slots });
   }
 
-  return out;
-}
-
-router.get("/booking/availability", async (req, res) => {
-  const parsed = GetAvailabilityQueryParams.safeParse(req.query);
-  if (!parsed.success) {
-    res.status(400).json({ message: "Invalid query parameters" });
-    return;
-  }
-
-  const startDate = parseDateString(parsed.data.startDate);
-  const endDate = parseDateString(parsed.data.endDate);
-  if (!startDate || !endDate) {
-    res.status(400).json({ message: "Invalid date format. Use YYYY-MM-DD." });
-    return;
-  }
-  if (endDate < startDate) {
-    res.status(400).json({ message: "endDate must be >= startDate" });
-    return;
-  }
-
-  let serviceSlug: string | undefined;
-  let unresolvableService = false;
-  if (parsed.data.serviceId !== undefined) {
-    const sid = Number(parsed.data.serviceId);
-    if (Number.isFinite(sid) && sid > 0) {
-      const [svc] = await db
-        .select({ slug: servicesTable.slug })
-        .from(servicesTable)
-        .where(and(eq(servicesTable.id, sid), eq(servicesTable.active, true)));
-      if (svc) serviceSlug = svc.slug;
-      else unresolvableService = true;
-    } else {
-      unresolvableService = true;
-    }
-  }
-
-  if (unresolvableService) {
-    res.status(400).json({ message: "Service not found" });
-    return;
-  }
-
-  const out = await computeAvailability(
-    parsed.data.startDate,
-    parsed.data.endDate,
-    serviceSlug,
-  );
-  res.json(out);
-});
-
-router.get("/booking/services/:slug/availability", async (req, res) => {
-  const slug = req.params.slug;
-  const startDate = req.query["startDate"];
-  const endDate = req.query["endDate"];
-  if (typeof startDate !== "string" || typeof endDate !== "string") {
-    res.status(400).json({ message: "startDate and endDate are required" });
-    return;
-  }
-  const startDateObj = parseDateString(startDate);
-  const endDateObj = parseDateString(endDate);
-  if (!startDateObj || !endDateObj) {
-    res.status(400).json({ message: "Invalid date format. Use YYYY-MM-DD." });
-    return;
-  }
-  if (endDateObj < startDateObj) {
-    res.status(400).json({ message: "endDate must be >= startDate" });
-    return;
-  }
-
-  const [svc] = await db
-    .select({ slug: servicesTable.slug })
-    .from(servicesTable)
-    .where(and(eq(servicesTable.slug, slug), eq(servicesTable.active, true)));
-  if (!svc) {
-    res.status(404).json({ message: "Service not found" });
-    return;
-  }
-
-  const out = await computeAvailability(startDate, endDate, svc.slug);
   res.json(out);
 });
 
@@ -397,56 +358,56 @@ router.post("/booking/bookings", async (req, res) => {
     return;
   }
 
+  // Whole-day lock check:
+  //  - If THIS booking's rule has whole_day_lock=true, the whole day must
+  //    be empty (no other bookings of any service that day).
+  //  - If THIS booking's rule is per-slot, we still need to block when
+  //    some other booking on the same day used a whole-day-locking rule
+  //    (e.g. somebody booked a Full Detail at 07:30, can't drop in an
+  //    Express Interior on top of it).
+  if (rule.wholeDayLock) {
+    if (await hasOtherConfirmedBookingOnDate(body.date)) {
+      res.status(409).json({
+        message: "That day is fully booked. Please choose another day.",
+      });
+      return;
+    }
+  } else if (await isDayWholeDayLocked(body.date)) {
+    res.status(409).json({
+      message: "That day is fully booked. Please choose another day.",
+    });
+    return;
+  }
+
   const scheduledAt = buildScheduledAt(body.date, body.time);
   if (!scheduledAt) {
     res.status(400).json({ message: "Invalid date or time" });
     return;
   }
 
-  // Run insert inside a transaction with a per-day advisory lock to
-  // eliminate the whole-day-lock race condition: two concurrent requests
-  // can both pass the pre-insert check, but the lock forces them to
-  // serialize around the insert so only one wins.
+  // Race-safe insert: rely on the partial unique index
+  // bookings_confirmed_slot_unique on (scheduled_at) WHERE status='confirmed'.
+  // A double-booking attempt produces a Postgres unique-violation (23505)
+  // which we surface as a 409 Conflict.
   try {
-    const [created] = await db.transaction(async (tx) => {
-      await acquireDayLock(tx, body.date);
-
-      // Re-check whole-day-lock inside the transaction so the lock is
-      // holding when we read.  This is the authoritative check.
-      if (rule.wholeDayLock) {
-        if (await hasOtherConfirmedBookingOnDate(body.date, undefined, tx)) {
-          throw new TransactionAbortError(
-            409,
-            "That day is fully booked. Please choose another day.",
-          );
-        }
-      } else if (await isDayWholeDayLocked(body.date, undefined, tx)) {
-        throw new TransactionAbortError(
-          409,
-          "That day is fully booked. Please choose another day.",
-        );
-      }
-
-      const [row] = await tx
-        .insert(bookingsTable)
-        .values({
-          serviceId: service.id,
-          serviceName: service.name,
-          servicePriceCents: service.priceCents,
-          serviceDurationMinutes: service.durationMinutes,
-          customerName: body.customerName,
-          email: body.email,
-          phone: body.phone,
-          vehicle: body.vehicle,
-          notes: body.notes ?? "",
-          scheduledAt,
-          status: "confirmed",
-          manageToken: generateManageToken(),
-          smsConsent: body.smsConsent ?? false,
-        })
-        .returning();
-      return [row];
-    });
+    const [created] = await db
+      .insert(bookingsTable)
+      .values({
+        serviceId: service.id,
+        serviceName: service.name,
+        servicePriceCents: service.priceCents,
+        serviceDurationMinutes: service.durationMinutes,
+        customerName: body.customerName,
+        email: body.email,
+        phone: body.phone,
+        vehicle: body.vehicle,
+        notes: body.notes ?? "",
+        scheduledAt,
+        status: "confirmed",
+        manageToken: generateManageToken(),
+        smsConsent: body.smsConsent ?? false,
+      })
+      .returning();
 
     res.status(201).json(created);
 
@@ -457,10 +418,6 @@ router.post("/booking/bookings", async (req, res) => {
     void syncBookingCalendar(created.id);
     return;
   } catch (err) {
-    if (err instanceof TransactionAbortError) {
-      res.status(err.statusCode).json({ message: err.message });
-      return;
-    }
     if (pgErrorCode(err) === "23505") {
       res.status(409).json({
         message: "Sorry — that time slot was just taken. Please pick another.",
@@ -662,6 +619,22 @@ router.post("/booking/manage/:id/reschedule", async (req, res) => {
     return;
   }
 
+  // Same whole-day-lock semantics as create — but exclude the current
+  // booking so the customer can move within the same day.
+  if (newRule.wholeDayLock) {
+    if (await hasOtherConfirmedBookingOnDate(newDate, booking.id)) {
+      res.status(409).json({
+        message: "That day is fully booked. Please choose another day.",
+      });
+      return;
+    }
+  } else if (await isDayWholeDayLocked(newDate, booking.id)) {
+    res.status(409).json({
+      message: "That day is fully booked. Please choose another day.",
+    });
+    return;
+  }
+
   const newScheduledAt = buildScheduledAt(newDate, newTime);
   if (!newScheduledAt) {
     res.status(400).json({ message: "Invalid date or time" });
@@ -673,56 +646,44 @@ router.post("/booking/manage/:id/reschedule", async (req, res) => {
   const isSameSlot =
     newScheduledAt.getTime() === booking.scheduledAt.getTime();
 
+  // Atomic update: require the row to still be confirmed AND still on the
+  // slot we just read. This protects us from:
+  //   - racing with admin delete (status would have changed)
+  //   - racing with another reschedule (scheduled_at would have changed)
+  //   - duplicate clicks (second click finds a different scheduled_at)
+  // The partial unique index protects us from racing with a fresh booking
+  // grabbing the new slot (Postgres surfaces 23505 → mapped to 409 below).
   try {
-    const updated = await db.transaction(async (tx) => {
-      await acquireDayLock(tx, newDate);
+    // When the slot actually moves, also clear reminder_sent_at so the
+    // 24h reminder cron will fire again for the new appointment time.
+    // (Same-slot reschedules — a no-op the customer didn't realize was
+    // a no-op — must NOT clear it, or we'd re-text someone we already
+    // reminded.)
+    const updatedRows = await db
+      .update(bookingsTable)
+      .set(
+        isSameSlot
+          ? { scheduledAt: newScheduledAt }
+          : { scheduledAt: newScheduledAt, reminderSentAt: null },
+      )
+      .where(
+        and(
+          eq(bookingsTable.id, booking.id),
+          eq(bookingsTable.status, "confirmed"),
+          eq(bookingsTable.scheduledAt, booking.scheduledAt),
+        ),
+      )
+      .returning();
 
-      // Re-check whole-day-lock inside the transaction.
-      if (newRule.wholeDayLock) {
-        if (await hasOtherConfirmedBookingOnDate(newDate, booking.id, tx)) {
-          throw new TransactionAbortError(
-            409,
-            "That day is fully booked. Please choose another day.",
-          );
-        }
-      } else if (await isDayWholeDayLocked(newDate, booking.id, tx)) {
-        throw new TransactionAbortError(
-          409,
-          "That day is fully booked. Please choose another day.",
-        );
-      }
-
-      // When the slot actually moves, also clear reminder_sent_at so the
-      // 24h reminder cron will fire again for the new appointment time.
-      // (Same-slot reschedules — a no-op the customer didn't realize was
-      // a no-op — must NOT clear it, or we'd re-text someone we already
-      // reminded.)
-      const updatedRows = await tx
-        .update(bookingsTable)
-        .set(
-          isSameSlot
-            ? { scheduledAt: newScheduledAt }
-            : { scheduledAt: newScheduledAt, reminderSentAt: null },
-        )
-        .where(
-          and(
-            eq(bookingsTable.id, booking.id),
-            eq(bookingsTable.status, "confirmed"),
-            eq(bookingsTable.scheduledAt, booking.scheduledAt),
-          ),
-        )
-        .returning();
-
-      if (updatedRows.length === 0) {
-        throw new TransactionAbortError(
-          409,
+    if (updatedRows.length === 0) {
+      res.status(409).json({
+        message:
           "This booking was just changed in another window. Refresh and try again.",
-        );
-      }
+      });
+      return;
+    }
 
-      return updatedRows[0]!;
-    });
-
+    const updated = updatedRows[0]!;
     res.json(updated);
 
     // Don't email or move the calendar entry for a no-op (customer picked
@@ -738,10 +699,6 @@ router.post("/booking/manage/:id/reschedule", async (req, res) => {
     }
     return;
   } catch (err) {
-    if (err instanceof TransactionAbortError) {
-      res.status(err.statusCode).json({ message: err.message });
-      return;
-    }
     if (pgErrorCode(err) === "23505") {
       res.status(409).json({
         message: "Sorry — that time slot was just taken. Please pick another.",

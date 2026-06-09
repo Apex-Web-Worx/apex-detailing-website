@@ -24,7 +24,7 @@ import {
   servicesTable,
   bookingsTable,
 } from "@workspace/db";
-import { and, asc, eq, gte, lte, inArray, sql } from "drizzle-orm";
+import { and, asc, eq, gte, lte, inArray } from "drizzle-orm";
 import { parseDateString, shopLocalDateString } from "./availability";
 
 export interface RuleWithSlots {
@@ -89,9 +89,8 @@ export async function getRuleForServiceSlugDay(
 export async function getRuleForServiceIdDay(
   serviceId: number,
   dayOfWeek: number,
-  tx: Omit<typeof db, "$client"> = db,
 ): Promise<RuleWithSlots | null> {
-  const [row] = await tx
+  const [row] = await db
     .select({
       ruleId: serviceDayRulesTable.id,
       serviceId: serviceDayRulesTable.serviceId,
@@ -114,7 +113,7 @@ export async function getRuleForServiceIdDay(
       ),
     );
   if (!row) return null;
-  const slotRows = await tx
+  const slotRows = await db
     .select({ time: serviceDaySlotsTable.time })
     .from(serviceDaySlotsTable)
     .where(eq(serviceDaySlotsTable.ruleId, row.ruleId))
@@ -213,37 +212,6 @@ export async function isSlotAllowedForServiceDb(
 }
 
 /**
- * Thrown inside a db.transaction() callback when a pre-insert validation
- * check fails (e.g. whole-day-lock conflict). The transaction is rolled
- * back automatically, and the caller catches this and surfaces the stored
- * HTTP status code.
- */
-export class TransactionAbortError extends Error {
-  constructor(
-    public statusCode: number,
-    message: string,
-  ) {
-    super(message);
-    this.name = "TransactionAbortError";
-  }
-}
-
-/**
- * Acquire a transaction-scoped advisory lock keyed by the date string.
- * This serializes all booking operations (create/reschedule) on the same
- * day, eliminating the whole-day-lock race condition where two concurrent
- * requests could both pass the pre-insert check and then both insert.
- */
-export async function acquireDayLock(
-  tx: Omit<typeof db, "$client">,
-  yyyyMmDd: string,
-): Promise<void> {
-  const [year, month, day] = yyyyMmDd.split("-").map(Number);
-  const key = (year * 10000 + month * 100 + day) % 2147483647;
-  await tx.execute(sql`SELECT pg_advisory_xact_lock(42, ${key})`);
-}
-
-/**
  * Day-level lock check: returns true if a confirmed booking exists on
  * yyyyMmDd whose service has whole_day_lock=true for that day-of-week.
  * Optionally excludes a specific booking id (used by reschedule paths
@@ -264,13 +232,12 @@ export async function acquireDayLock(
 export async function hasOtherConfirmedBookingOnDate(
   yyyyMmDd: string,
   excludeBookingId?: number,
-  tx: Omit<typeof db, "$client"> = db,
 ): Promise<boolean> {
   const d = parseDateString(yyyyMmDd);
   if (!d) return false;
   const dayStart = new Date(d.getTime() - 24 * 60 * 60 * 1000);
   const dayEnd = new Date(d.getTime() + 48 * 60 * 60 * 1000);
-  const candidates = await tx
+  const candidates = await db
     .select({ id: bookingsTable.id, scheduledAt: bookingsTable.scheduledAt })
     .from(bookingsTable)
     .where(
@@ -290,14 +257,13 @@ export async function hasOtherConfirmedBookingOnDate(
 export async function isDayWholeDayLocked(
   yyyyMmDd: string,
   excludeBookingId?: number,
-  tx: Omit<typeof db, "$client"> = db,
 ): Promise<boolean> {
   const d = parseDateString(yyyyMmDd);
   if (!d) return false;
   const dow = d.getUTCDay();
 
   // Find services that whole-day-lock this day-of-week.
-  const lockingRules = await tx
+  const lockingRules = await db
     .select({ serviceId: serviceDayRulesTable.serviceId })
     .from(serviceDayRulesTable)
     .where(
@@ -314,7 +280,7 @@ export async function isDayWholeDayLocked(
   // timezone safety, then filter precisely by shop-local date string.
   const dayStart = new Date(d.getTime() - 24 * 60 * 60 * 1000);
   const dayEnd = new Date(d.getTime() + 48 * 60 * 60 * 1000);
-  const candidates = await tx
+  const candidates = await db
     .select({ id: bookingsTable.id, scheduledAt: bookingsTable.scheduledAt })
     .from(bookingsTable)
     .where(
