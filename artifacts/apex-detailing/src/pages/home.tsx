@@ -1207,9 +1207,9 @@ export default function Home() {
         <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-[#A886CD]/10 rounded-full mix-blend-screen filter blur-[120px] -translate-y-1/2 -translate-x-1/2" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-10 lg:gap-16 items-center">
             <div className="order-2 lg:order-1 relative">
-              <div className="aspect-video rounded-2xl overflow-hidden relative border border-white/10">
+              <div className="aspect-[4/3] rounded-2xl overflow-hidden relative border border-white/10">
                 <iframe
                   src={`${import.meta.env.BASE_URL}video`}
                   className="absolute inset-0 w-full h-full"
