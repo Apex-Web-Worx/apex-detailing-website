@@ -23,6 +23,8 @@ import {
   getRuleForServiceIdDay,
   isDayWholeDayLocked,
   hasOtherConfirmedBookingOnDate,
+  acquireDayLock,
+  TransactionAbortError,
 } from "../lib/availability-rules";
 import { type BookingEmailData } from "../lib/email";
 import {
@@ -333,21 +335,6 @@ router.post("/admin/bookings/:id/reschedule", requireAdmin, async (req, res) => 
     return;
   }
 
-  // Whole-day-lock semantics (excluding this booking).
-  if (newRule.wholeDayLock) {
-    if (await hasOtherConfirmedBookingOnDate(newDate, booking.id)) {
-      res.status(409).json({
-        message: "That day is fully booked. Please choose another day.",
-      });
-      return;
-    }
-  } else if (await isDayWholeDayLocked(newDate, booking.id)) {
-    res.status(409).json({
-      message: "That day is fully booked. Please choose another day.",
-    });
-    return;
-  }
-
   const newScheduledAt = buildScheduledAt(newDate, newTime);
   if (!newScheduledAt) {
     res.status(400).json({ message: "Invalid date or time" });
@@ -360,31 +347,49 @@ router.post("/admin/bookings/:id/reschedule", requireAdmin, async (req, res) => 
     newScheduledAt.getTime() === booking.scheduledAt.getTime();
 
   try {
-    const updatedRows = await db
-      .update(bookingsTable)
-      .set(
-        isSameSlot
-          ? { scheduledAt: newScheduledAt }
-          : { scheduledAt: newScheduledAt, reminderSentAt: null },
-      )
-      .where(
-        and(
-          eq(bookingsTable.id, booking.id),
-          eq(bookingsTable.status, "confirmed"),
-          eq(bookingsTable.scheduledAt, booking.scheduledAt),
-        ),
-      )
-      .returning();
+    const updated = await db.transaction(async (tx) => {
+      await acquireDayLock(tx, newDate);
 
-    if (updatedRows.length === 0) {
-      res.status(409).json({
-        message:
+      if (newRule.wholeDayLock) {
+        if (await hasOtherConfirmedBookingOnDate(newDate, booking.id, tx)) {
+          throw new TransactionAbortError(
+            409,
+            "That day is fully booked. Please choose another day.",
+          );
+        }
+      } else if (await isDayWholeDayLocked(newDate, booking.id, tx)) {
+        throw new TransactionAbortError(
+          409,
+          "That day is fully booked. Please choose another day.",
+        );
+      }
+
+      const updatedRows = await tx
+        .update(bookingsTable)
+        .set(
+          isSameSlot
+            ? { scheduledAt: newScheduledAt }
+            : { scheduledAt: newScheduledAt, reminderSentAt: null },
+        )
+        .where(
+          and(
+            eq(bookingsTable.id, booking.id),
+            eq(bookingsTable.status, "confirmed"),
+            eq(bookingsTable.scheduledAt, booking.scheduledAt),
+          ),
+        )
+        .returning();
+
+      if (updatedRows.length === 0) {
+        throw new TransactionAbortError(
+          409,
           "This booking was just changed in another window. Refresh and try again.",
-      });
-      return;
-    }
+        );
+      }
 
-    const updated = updatedRows[0]!;
+      return updatedRows[0]!;
+    });
+
     res.json(updated);
 
     if (!isSameSlot) {
@@ -397,6 +402,10 @@ router.post("/admin/bookings/:id/reschedule", requireAdmin, async (req, res) => 
     }
     return;
   } catch (err) {
+    if (err instanceof TransactionAbortError) {
+      res.status(err.statusCode).json({ message: err.message });
+      return;
+    }
     if (pgErrorCode(err) === "23505") {
       res.status(409).json({
         message: "Sorry — that time slot was just taken. Please pick another.",
