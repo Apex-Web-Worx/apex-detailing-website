@@ -189,49 +189,64 @@ export default function BookingPage() {
       <main className="max-w-5xl mx-auto px-4 py-8 pb-32">
         {confirmed ? (
           <ConfirmationView booking={confirmed} />
-        ) : step === "service" ? (
-          <ServiceStep
-            selected={service}
-            onSelect={(s) => {
-              // Clear any previously-picked slot when the service changes,
-              // since service-specific availability (e.g. Friday Express
-              // only) means the prior slot may no longer be valid.
-              if (!service || s.id !== service.id) {
-                setDate(null);
-                setTime(null);
-              }
-              setService(s);
-              setStep("datetime");
-            }}
-          />
-        ) : step === "datetime" ? (
-          <DateTimeStep
-            service={service!}
-            date={date}
-            time={time}
-            onSelect={(d, t) => {
-              setDate(d);
-              setTime(t);
-              setStep("info");
-            }}
-            onBack={() => setStep("service")}
-          />
-        ) : step === "info" ? (
-          <InfoStep
-            form={form}
-            onChange={setForm}
-            onBack={() => setStep("datetime")}
-            onNext={() => setStep("confirm")}
-          />
         ) : (
-          <ConfirmStep
-            service={service!}
-            date={date!}
-            time={time!}
-            form={form}
-            onBack={() => setStep("info")}
-            onConfirmed={(b) => setConfirmed(b)}
-          />
+          <>
+            {/* Video banner to motivate customers */}
+            {!confirmed && (
+              <div className="mb-8 rounded-2xl overflow-hidden border border-white/10 aspect-video relative">
+                <iframe
+                  src={`${import.meta.env.BASE_URL}video`}
+                  className="absolute inset-0 w-full h-full"
+                  allow="autoplay"
+                  frameBorder={0}
+                />
+              </div>
+            )}
+            {step === "service" ? (
+              <ServiceStep
+                selected={service}
+                onSelect={(s) => {
+                  // Clear any previously-picked slot when the service changes,
+                  // since service-specific availability (e.g. Friday Express
+                  // only) means the prior slot may no longer be valid.
+                  if (!service || s.id !== service.id) {
+                    setDate(null);
+                    setTime(null);
+                  }
+                  setService(s);
+                  setStep("datetime");
+                }}
+              />
+            ) : step === "datetime" ? (
+              <DateTimeStep
+                service={service!}
+                date={date}
+                time={time}
+                onSelect={(d, t) => {
+                  setDate(d);
+                  setTime(t);
+                  setStep("info");
+                }}
+                onBack={() => setStep("service")}
+              />
+            ) : step === "info" ? (
+              <InfoStep
+                form={form}
+                onChange={setForm}
+                onBack={() => setStep("datetime")}
+                onNext={() => setStep("confirm")}
+              />
+            ) : (
+              <ConfirmStep
+                service={service!}
+                date={date!}
+                time={time!}
+                form={form}
+                onBack={() => setStep("info")}
+                onConfirmed={(b) => setConfirmed(b)}
+              />
+            )}
+          </>
         )}
       </main>
 
