@@ -203,8 +203,9 @@ const gallery = [
     `${import.meta.env.BASE_URL}images/paint-correction-6.jpg`,
     `${import.meta.env.BASE_URL}images/paint-correction-7.jpg`,
   ], currentImageIndex: 0 },
-  { id: 2, title: "Ceramic Coating", beforeAfter: true, color: "from-[#A886CD] to-purple-900", video: `${import.meta.env.BASE_URL}videos/ceramic-coating-demo.MOV` },
-  { id: 6, title: "Ceramic Coating Results", beforeAfter: true, color: "from-[#A886CD] to-[#3496FF]", video: `${import.meta.env.BASE_URL}videos/ceramic-coating-results.mov` },
+  { id: 2, title: "Ceramic Coating", beforeAfter: true, color: "from-[#A886CD] to-purple-900", thumbnail: `${import.meta.env.BASE_URL}images/ceramic-coating-results-1.png`, video: `${import.meta.env.BASE_URL}videos/ceramic-coating-demo.MOV`, images: [
+    { src: `${import.meta.env.BASE_URL}images/ceramic-coating-results-1.png`, label: "After" },
+  ], currentImageIndex: 0 },
   { id: 3, title: "Interior Restoration", beforeAfter: true, color: "from-blue-900 to-indigo-900", thumbnail: `${import.meta.env.BASE_URL}images/interior-restoration-video.mp4`, images: [
     { src: img1290, label: "Before" },
     { src: img1303, label: "After" },
@@ -678,7 +679,9 @@ export default function Home() {
   };
 
   const nextImage = () => {
-    if (selectedGalleryItem?.images && currentImageIndex < selectedGalleryItem.images.length - 1) {
+    if (!selectedGalleryItem) return;
+    const totalSlides = (selectedGalleryItem.video ? 1 : 0) + (selectedGalleryItem.images?.length || 0);
+    if (currentImageIndex < totalSlides - 1) {
       setIsImageTransitioning(true);
       setTimeout(() => {
         const nextIndex = currentImageIndex + 1;
@@ -686,8 +689,10 @@ export default function Home() {
         setIsImageTransitioning(false);
 
         // Preload the image after next
-        if (nextIndex + 1 < selectedGalleryItem.images.length) {
-          const nextImg = selectedGalleryItem.images[nextIndex + 1];
+        const imageOffset = selectedGalleryItem.video ? 1 : 0;
+        const nextImageIdx = nextIndex - imageOffset;
+        if (selectedGalleryItem?.images && nextImageIdx + 1 < selectedGalleryItem.images.length) {
+          const nextImg = selectedGalleryItem.images[nextImageIdx + 1];
           const imageSrc = typeof nextImg === 'string' ? nextImg : (nextImg as { src: string }).src;
           const img = new Image();
           img.src = imageSrc;
@@ -1496,7 +1501,17 @@ export default function Home() {
                 className="group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer w-full"
                 onClick={() => handleGalleryItemClick(item)}
               >
-                {item.video && !failedVideos.has(item.id) ? (
+                {item.thumbnail && !item.thumbnail.endsWith('.mov') && !item.thumbnail.endsWith('.mp4') ? (
+                  <>
+                    <img
+                      src={item.thumbnail}
+                      alt={item.title}
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      style={{ filter: 'brightness(1.15) contrast(1.15)' }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+                  </>
+                ) : item.video && !failedVideos.has(item.id) ? (
                   <>
                     <video
                       src={item.video}
@@ -1631,24 +1646,69 @@ export default function Home() {
               }
             }}
           >
-            {selectedGalleryItem.images && selectedGalleryItem.images.length > 0 ? (
+            {selectedGalleryItem.video && currentImageIndex === 0 ? (
               <>
-                <img
-                  src={typeof selectedGalleryItem.images[currentImageIndex] === 'string' ? selectedGalleryItem.images[currentImageIndex] : selectedGalleryItem.images[currentImageIndex].src}
-                  alt={`${selectedGalleryItem.title} - Image ${currentImageIndex + 1}`}
-                  className={`${isFullscreen ? 'w-full h-full' : 'w-full h-full'} object-contain ${!isFullscreen && 'rounded-xl'} transition-opacity duration-200`}
-                  style={{ filter: 'brightness(0.95) contrast(1.05)', opacity: isImageTransitioning ? 0 : 1 }}
+                <video
+                  src={selectedGalleryItem.video}
+                  className={`${isFullscreen ? 'w-full h-full' : 'w-full h-full'} object-contain ${!isFullscreen && 'rounded-xl'}`}
+                  controls
+                  autoPlay
+                  playsInline
                 />
                 
-                {/* Before/After Label */}
-                {selectedGalleryItem.beforeAfter && typeof selectedGalleryItem.images[currentImageIndex] === 'object' && (
+                {/* Before/After Label for video */}
+                {selectedGalleryItem.beforeAfter && (
                   <div className="absolute top-6 left-6 bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg opacity-85">
-                    {selectedGalleryItem.images[currentImageIndex].label}
+                    Results before and after
                   </div>
                 )}
                 
+                {/* Next Button */}
+                {selectedGalleryItem.images && selectedGalleryItem.images.length > 0 && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      nextImage();
+                    }}
+                    className="absolute right-2 md:right-6 top-1/2 transform -translate-y-1/2 text-white hover:text-[#3496FF] active:text-[#3496FF] transition-colors z-50 bg-black/50 hover:bg-black/70 active:bg-black/80 p-3 md:p-4 rounded-full cursor-pointer min-w-12 h-12 md:min-w-14 md:h-14 flex items-center justify-center"
+                    aria-label="Next image"
+                    type="button"
+                  >
+                    <svg className="w-6 h-6 md:w-8 md:h-8 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                )}
+              </>
+            ) : selectedGalleryItem.images && selectedGalleryItem.images.length > 0 ? (
+              <>
+                {(() => {
+                  const imgIndex = currentImageIndex - (selectedGalleryItem.video ? 1 : 0);
+                  const img = selectedGalleryItem.images[imgIndex];
+                  if (!img) return null;
+                  const imgSrc = typeof img === 'string' ? img : img.src;
+                  const imgLabel = typeof img === 'object' ? img.label : undefined;
+                  return (
+                    <>
+                      <img
+                        src={imgSrc}
+                        alt={`${selectedGalleryItem.title} - Image ${imgIndex + 1}`}
+                        className={`${isFullscreen ? 'w-full h-full' : 'w-full h-full'} object-contain ${!isFullscreen && 'rounded-xl'} transition-opacity duration-200`}
+                        style={{ filter: 'brightness(0.95) contrast(1.05)', opacity: isImageTransitioning ? 0 : 1 }}
+                      />
+
+                      {/* Before/After Label */}
+                      {selectedGalleryItem.beforeAfter && imgLabel && (
+                        <div className="absolute top-6 left-6 bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg opacity-85">
+                          {imgLabel}
+                        </div>
+                      )}
+                    </>
+                  );
+                })()}
+
                 {/* Previous Button */}
-                {currentImageIndex > 0 && (
+                {(selectedGalleryItem.video || currentImageIndex > 0) && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -1665,26 +1725,29 @@ export default function Home() {
                 )}
 
                 {/* Next Button */}
-                {selectedGalleryItem.images.length > 1 && currentImageIndex < selectedGalleryItem.images.length - 1 && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      nextImage();
-                    }}
-                    className="absolute right-2 md:right-6 top-1/2 transform -translate-y-1/2 text-white hover:text-[#3496FF] active:text-[#3496FF] transition-colors z-50 bg-black/50 hover:bg-black/70 active:bg-black/80 p-3 md:p-4 rounded-full cursor-pointer min-w-12 h-12 md:min-w-14 md:h-14 flex items-center justify-center"
-                    aria-label="Next image"
-                    type="button"
-                  >
-                    <svg className="w-6 h-6 md:w-8 md:h-8 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </button>
-                )}
+                {(() => {
+                  const totalSlides = (selectedGalleryItem.video ? 1 : 0) + selectedGalleryItem.images.length;
+                  return currentImageIndex < totalSlides - 1 && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        nextImage();
+                      }}
+                      className="absolute right-2 md:right-6 top-1/2 transform -translate-y-1/2 text-white hover:text-[#3496FF] active:text-[#3496FF] transition-colors z-50 bg-black/50 hover:bg-black/70 active:bg-black/80 p-3 md:p-4 rounded-full cursor-pointer min-w-12 h-12 md:min-w-14 md:h-14 flex items-center justify-center"
+                      aria-label="Next image"
+                      type="button"
+                    >
+                      <svg className="w-6 h-6 md:w-8 md:h-8 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  );
+                })()}
 
                 {/* Image Counter */}
                 {selectedGalleryItem.images.length > 1 && (
                   <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-full text-sm font-semibold">
-                    {currentImageIndex + 1} / {selectedGalleryItem.images.length}
+                    {currentImageIndex - (selectedGalleryItem.video ? 1 : 0) + 1} / {selectedGalleryItem.images.length}
                   </div>
                 )}
               </>
