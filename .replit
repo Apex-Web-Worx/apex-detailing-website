@@ -34,3 +34,7 @@ OWNER_CALENDAR_VIEWER_EMAILS = "gurova.krista@gmail.com"
 
 [nix]
 channel = "stable-25_05"
+
+[[ports]]
+localPort = 23624
+externalPort = 80
