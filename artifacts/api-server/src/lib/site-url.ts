@@ -19,11 +19,11 @@ export function getSiteUrl(): string {
     return explicit.replace(/\/+$/, "");
   }
   if (process.env["NODE_ENV"] === "production") {
-    return "https://www.apexdetailingsf.com";
+    return "https://www.apexdetailing.net";
   }
   const devDomain = process.env["REPLIT_DEV_DOMAIN"]?.trim();
   if (devDomain) {
     return `https://${devDomain.replace(/\/+$/, "")}`;
   }
-  return "https://www.apexdetailingsf.com";
+  return "https://www.apexdetailing.net";
 }

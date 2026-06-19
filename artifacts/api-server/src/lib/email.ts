@@ -4,7 +4,7 @@ import { getSiteUrl } from "./site-url";
 
 const connectors = new ReplitConnectors();
 
-export const OWNER_EMAIL = "apexdetailingsf@gmail.com";
+export const OWNER_EMAIL = "apexdetailing.net@gmail.com";
 // Additional recipients CC'd on every owner-facing notification (new
 // booking, reschedule, cancellation). Customer-facing emails are not
 // affected.
@@ -15,7 +15,7 @@ export const SHOP_ADDRESS = "1114 E Lakota St, Nixa, MO 65714";
 // Customer-facing copy ("visit our website") always uses the live domain
 // regardless of environment, so we don't accidentally send a workspace
 // preview URL to a real customer.
-export const SHOP_WEBSITE = "https://www.apexdetailingsf.com";
+export const SHOP_WEBSITE = "https://www.apexdetailing.net";
 
 const SHOP_TZ = "America/Chicago";
 
@@ -202,7 +202,7 @@ function emailShell(args: {
         </td></tr>
         <tr><td style="padding:28px 32px;">${args.bodyHtml}</td></tr>
         <tr><td style="background:#0a0a0a;padding:18px 32px;text-align:center;border-top:1px solid rgba(255,255,255,0.08);">
-          <a href="${SHOP_WEBSITE}" style="color:#3496FF;text-decoration:none;font-size:13px;">apexdetailingsf.com</a>
+          <a href="${SHOP_WEBSITE}" style="color:#3496FF;text-decoration:none;font-size:13px;">apexdetailing.net</a>
           <div style="color:#666666;font-size:12px;margin-top:6px;">${escapeHtml(SHOP_ADDRESS)} &middot; ${SHOP_PHONE}</div>
         </td></tr>
       </table>

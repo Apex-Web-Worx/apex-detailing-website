@@ -39,7 +39,7 @@ export default function TermsPage() {
             <h2 className="text-xl font-bold text-white mb-3">About these terms</h2>
             <p>
               These Terms &amp; Conditions govern your use of the Apex
-              Detailing website (apexdetailingsf.com) and the detailing
+              Detailing website (apexdetailing.net) and the detailing
               services we provide at our shop located at 1114 E Lakota St,
               Nixa, MO 65714. By booking an appointment with us, you agree
               to these terms.
@@ -192,10 +192,10 @@ export default function TermsPage() {
             <p>
               Questions? Call (417) 527-6165 or email{" "}
               <a
-                href="mailto:apexdetailingsf@gmail.com"
+                href="mailto:apexdetailing.net@gmail.com"
                 className="text-[#3496FF] hover:underline"
               >
-                apexdetailingsf@gmail.com
+                apexdetailing.net@gmail.com
               </a>
               .
             </p>

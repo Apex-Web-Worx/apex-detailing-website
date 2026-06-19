@@ -43,7 +43,7 @@ export default function PrivacyPage() {
               Apex Detailing (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or
               &ldquo;our&rdquo;) is a vehicle detailing shop located at 1114
               E Lakota St, Nixa, MO 65714. You can reach us by phone at
-              (417) 527-6165 or by email at apexdetailingsf@gmail.com. This
+              (417) 527-6165 or by email at apexdetailing.net@gmail.com. This
               policy explains what information we collect when you book a
               service with us, how we use it, and the limited situations in
               which it may be shared.
@@ -116,7 +116,7 @@ export default function PrivacyPage() {
               text from us. Reply{" "}
               <span className="text-white font-semibold">HELP</span> for
               help, or contact us directly at (417) 527-6165 or
-              apexdetailingsf@gmail.com.
+              apexdetailing.net@gmail.com.
             </p>
             <p>
               <span className="text-white font-semibold">
@@ -164,7 +164,7 @@ export default function PrivacyPage() {
               We keep your booking records as long as needed to operate our
               business and meet basic recordkeeping needs. You may request
               deletion of your records at any time by emailing
-              apexdetailingsf@gmail.com.
+              apexdetailing.net@gmail.com.
             </p>
           </section>
 
@@ -197,10 +197,10 @@ export default function PrivacyPage() {
               Questions about your data or this policy? Call (417) 527-6165
               or email{" "}
               <a
-                href="mailto:apexdetailingsf@gmail.com"
+                href="mailto:apexdetailing.net@gmail.com"
                 className="text-[#3496FF] hover:underline"
               >
-                apexdetailingsf@gmail.com
+                apexdetailing.net@gmail.com
               </a>
               . You can also see our{" "}
               <Link href="/terms" className="text-[#3496FF] hover:underline">

@@ -3,6 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <script>
+      // Redirect old domain to apexdetailing.net (301-equivalent client-side redirect)
+      if (window.location.hostname === 'apexdetailingsf.com' || window.location.hostname === 'www.apexdetailingsf.com') {
+        window.location.replace('https://www.apexdetailing.net' + window.location.pathname + window.location.search);
+      }
+    </script>
     <title>Apex Detailing - Premium Car Detailing in Springfield, Nixa & Ozark, MO</title>
     <meta name="description" content="Detailing in Nixa, Ozark, Springfield MO. Premium auto detailing with ceramic coating, paint correction, interior detailing, and headlight restoration. 5-star rated service." />
     <meta name="keywords" content="detailing in Nixa, detailing in Ozark, detailing in Springfield MO, car detailing Nixa MO, auto detailing Springfield, ceramic coating Ozark, paint correction, interior detailing, headlight restoration" />
@@ -12,12 +18,12 @@
     <meta property="og:title" content="Apex Detailing - Premium Car Detailing in Nixa, Springfield & Ozark" />
     <meta property="og:description" content="Professional auto detailing, ceramic coating, and paint correction in Nixa, Springfield, and Ozark, Missouri. Bring your vehicle to showroom condition." />
     <meta property="og:type" content="business.business" />
-    <meta property="og:url" content="https://www.apexdetailingsf.com" />
-    <meta property="og:image" content="https://www.apexdetailingsf.com/images/logo.png" />
+    <meta property="og:url" content="https://www.apexdetailing.net" />
+    <meta property="og:image" content="https://www.apexdetailing.net/images/logo.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Apex Detailing - Premium Car Detailing in Nixa, MO" />
     <meta name="twitter:description" content="Professional auto detailing services in Nixa, Springfield & Ozark. Ceramic coating, paint correction, interior detailing." />
-    <link rel="canonical" href="https://www.apexdetailingsf.com" />
+    <link rel="canonical" href="https://www.apexdetailing.net" />
     <link rel="icon" type="image/png" href="/images/favicon.png" />
     <!-- PWA / iOS "Add to Home Screen" support -->
     <link rel="manifest" href="/manifest.webmanifest" />
@@ -35,7 +41,7 @@
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
       "name": "Apex Detailing",
-      "image": "https://www.apexdetailingsf.com/images/logo.png",
+      "image": "https://www.apexdetailing.net/images/logo.png",
       "description": "Premium auto detailing, ceramic coating, paint correction, and interior detailing services in Nixa, Springfield, and Ozark, Missouri.",
       "telephone": "+1-417-527-6165",
       "address": {
@@ -51,7 +57,7 @@
         "Springfield, MO",
         "Ozark, MO"
       ],
-      "url": "https://www.apexdetailingsf.com",
+      "url": "https://www.apexdetailing.net",
       "sameAs": [
         "https://www.instagram.com/apexdetailing_sf",
         "https://www.facebook.com/profile.php?id=61556776603500"
