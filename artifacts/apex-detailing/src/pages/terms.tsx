@@ -192,10 +192,10 @@ export default function TermsPage() {
             <p>
               Questions? Call (417) 527-6165 or email{" "}
               <a
-                href="mailto:apexdetailingsf@gmail.com"
+                href="mailto:apexdetailing.net@gmail.com"
                 className="text-[#3496FF] hover:underline"
               >
-                apexdetailingsf@gmail.com
+                apexdetailing.net@gmail.com
               </a>
               .
             </p>

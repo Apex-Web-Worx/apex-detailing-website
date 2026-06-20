@@ -4,7 +4,7 @@ import { getSiteUrl } from "./site-url";
 
 const connectors = new ReplitConnectors();
 
-export const OWNER_EMAIL = "apexdetailingsf@gmail.com";
+export const OWNER_EMAIL = "apexdetailing.net@gmail.com";
 // Additional recipients CC'd on every owner-facing notification (new
 // booking, reschedule, cancellation). Customer-facing emails are not
 // affected.
