@@ -825,13 +825,26 @@ export default function Home() {
     };
   }, []);
 
+  const paintCorrectionImages = [
+    `${import.meta.env.BASE_URL}images/paint-correction-5.jpg`,
+    `${import.meta.env.BASE_URL}images/paint-correction-2.jpg`,
+    `${import.meta.env.BASE_URL}images/paint-correction-6.jpg`,
+    `${import.meta.env.BASE_URL}images/paint-correction-1.jpg`,
+    `${import.meta.env.BASE_URL}images/paint-correction-3.jpg`,
+    `${import.meta.env.BASE_URL}images/paint-correction-4.jpg`,
+    `${import.meta.env.BASE_URL}images/paint-correction-7.jpg`,
+    `${import.meta.env.BASE_URL}images/gallery/paint-correction/IMG_1968.jpeg`,
+    `${import.meta.env.BASE_URL}images/gallery/paint-correction/IMG_1969.jpeg`,
+    `${import.meta.env.BASE_URL}images/gallery/paint-correction/IMG_1970.jpeg`,
+  ];
+
   useEffect(() => {
     const paintCorrectionTimer = setInterval(() => {
-      setPaintCorrectionPreviewIndex((prev) => (prev === 0 ? 1 : prev === 1 ? 2 : 0));
+      setPaintCorrectionPreviewIndex((prev) => (prev + 1) % paintCorrectionImages.length);
     }, 3500);
 
     return () => clearInterval(paintCorrectionTimer);
-  }, []);
+  }, [paintCorrectionImages.length]);
 
 
   const scrollToSection = (id: string) => {
@@ -1603,24 +1616,15 @@ export default function Home() {
                       />
                     ) : item.id === 1 ? (
                       <div className="absolute inset-0">
-                        <img
-                          src={`${import.meta.env.BASE_URL}images/paint-correction-5.jpg`}
-                          alt="Paint Correction"
-                          className={`absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-opacity duration-700 ${paintCorrectionPreviewIndex === 0 ? 'opacity-100' : 'opacity-0'}`}
-                          style={{ filter: 'brightness(1.1) contrast(1.1)' }}
-                        />
-                        <img
-                          src={`${import.meta.env.BASE_URL}images/paint-correction-2.jpg`}
-                          alt="Paint Correction"
-                          className={`absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-opacity duration-700 ${paintCorrectionPreviewIndex === 1 ? 'opacity-100' : 'opacity-0'}`}
-                          style={{ filter: 'brightness(1.1) contrast(1.1)' }}
-                        />
-                        <img
-                          src={`${import.meta.env.BASE_URL}images/paint-correction-6.jpg`}
-                          alt="Paint Correction"
-                          className={`absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-opacity duration-700 ${paintCorrectionPreviewIndex === 2 ? 'opacity-100' : 'opacity-0'}`}
-                          style={{ filter: 'brightness(1.1) contrast(1.1)' }}
-                        />
+                        {paintCorrectionImages.map((src, idx) => (
+                          <img
+                            key={src}
+                            src={src}
+                            alt="Paint Correction"
+                            className={`absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-opacity duration-700 ${paintCorrectionPreviewIndex === idx ? 'opacity-100' : 'opacity-0'}`}
+                            style={{ filter: 'brightness(1.1) contrast(1.1)' }}
+                          />
+                        ))}
                       </div>
                     ) : (
                       <img
