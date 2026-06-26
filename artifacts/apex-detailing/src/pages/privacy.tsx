@@ -211,6 +211,27 @@ export default function PrivacyPage() {
           </section>
         </div>
       </main>
+
+      <footer className="border-t border-white/10 bg-[#0a0a0a] py-8">
+        <div className="flex flex-col items-center justify-center gap-3 text-center">
+          <a
+            href="https://www.apexwebworx.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex flex-col items-center gap-3 hover:opacity-100 transition-all"
+            aria-label="APEX WEB WORX"
+          >
+            <img
+              src={`${import.meta.env.BASE_URL}images/apex-webworx-logo.png`}
+              alt="APEX WEB WORX"
+              className="h-10 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity"
+            />
+            <p className="text-gray-500 text-xs font-medium uppercase tracking-widest group-hover:text-white transition-colors">
+              Designed and developed by <span className="text-[#3496FF] font-bold">APEX WEB WORX</span>
+            </p>
+          </a>
+        </div>
+      </footer>
     </div>
   );
 }
