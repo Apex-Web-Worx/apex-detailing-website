@@ -280,7 +280,7 @@ export default function BookingPage() {
             <img
               src={`${import.meta.env.BASE_URL}images/apex-webworx-logo.png`}
               alt="APEX WEB WORX"
-              className="h-8 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity"
+              className="h-14 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity"
             />
             <p className="text-gray-500 text-xs font-medium uppercase tracking-widest group-hover:text-white transition-colors">
               Designed and developed by <span className="text-[#3496FF] font-bold">APEX WEB WORX</span>
