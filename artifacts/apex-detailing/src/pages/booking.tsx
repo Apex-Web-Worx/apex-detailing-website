@@ -81,6 +81,14 @@ const EMPTY_FORM: Form = {
   smsConsent: true,
 };
 
+// Auto-format phone as user types: (XXX) XXX-XXXX
+function formatPhone(raw: string): string {
+  const digits = raw.replace(/\D/g, "").slice(0, 10);
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+}
+
 export default function BookingPage() {
   const [step, setStep] = useState<Step>("service");
   const [service, setService] = useState<Service | null>(null);
@@ -649,7 +657,7 @@ function InfoStep({
           required
           type="tel"
           value={form.phone}
-          onChange={(v) => onChange({ ...form, phone: v })}
+          onChange={(v) => onChange({ ...form, phone: formatPhone(v) })}
           placeholder="(417) 555-0123"
         />
         <Field
