@@ -284,8 +284,6 @@ function Dashboard({
   const past = bookings.filter(
     (b) => b.status === "confirmed" && new Date(b.scheduledAt as unknown as string) < new Date(),
   );
-  const cancelled = bookings.filter((b) => b.status === "cancelled");
-
   // ----- Active-bookings filters (date + service type) -----
   const [filterDate, setFilterDate] = useState<string>("");
   const [filterService, setFilterService] = useState<string>("");
@@ -337,8 +335,7 @@ function Dashboard({
           <div>
             <h1 className="text-3xl font-black">Appointments</h1>
             <p className="text-gray-400 text-sm mt-1">
-              {upcoming.length} upcoming · {past.length} completed · {cancelled.length}{" "}
-              cancelled
+              {upcoming.length} upcoming · {past.length} completed
             </p>
           </div>
           <button
@@ -427,18 +424,6 @@ function Dashboard({
           </Section>
         )}
 
-        {cancelled.length > 0 && (
-          <Section
-            title="Cancelled"
-            count={cancelled.length}
-            collapsible
-            defaultOpen={false}
-          >
-            {cancelled.map((b) => (
-              <BookingCard key={b.id} booking={b} muted strikethrough />
-            ))}
-          </Section>
-        )}
 
         <BlockedDatesPanel token={token} />
         <ServiceRulesPanel token={token} />
