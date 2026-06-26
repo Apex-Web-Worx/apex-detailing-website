@@ -714,6 +714,20 @@ export default function Home() {
   }, [isAnimatingSlider, isDraggingSlider, sliderCycleComplete, beforeAfterPairs.length]);
 
 
+  // Auto-rotate gallery images when lightbox is open
+  useEffect(() => {
+    if (!selectedGalleryItem) return;
+    const timer = setInterval(() => {
+      setCurrentImageIndex((prev) => {
+        if (!selectedGalleryItem.images) return prev;
+        const next = prev + 1;
+        if (next >= selectedGalleryItem.images.length) return 0;
+        return next;
+      });
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [selectedGalleryItem]);
+
   const handleGalleryItemClick = (item: typeof gallery[0]) => {
     setSelectedGalleryItem(item);
     setCurrentImageIndex(0);
