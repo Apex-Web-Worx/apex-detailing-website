@@ -199,8 +199,8 @@ export function smsCustomerReschedule(b: TemplateBooking): string {
 export function smsCustomerCancel(b: TemplateBooking, by: "customer" | "owner"): string {
   const tail =
     by === "owner"
-      ? `If you didn't request this, please call us. To rebook visit ${SHOP_WEBSITE}/booking.`
-      : `Sorry to see you go. To rebook visit ${SHOP_WEBSITE}/booking.`;
+      ? `If you didn't request this, please call us. To rebook visit ${SHOP_WEBSITE}/book.`
+      : `Sorry to see you go. To rebook visit ${SHOP_WEBSITE}/book.`;
   return `Apex Detailing: Your appointment for ${b.dateLong} at ${b.time12} has been cancelled. ${tail} ${STOP}`;
 }
 
