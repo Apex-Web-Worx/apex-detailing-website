@@ -1,291 +1,257 @@
 #!/usr/bin/env python3
-"""Generate Apex Detailing business card assets (front + back) at print resolution."""
+"""Generate Apex Detailing business cards using the user's actual logo PNG."""
 
 from __future__ import annotations
 
+import argparse
+import base64
 import textwrap
 from pathlib import Path
 
-import cairosvg
+from PIL import Image, ImageDraw, ImageFont
 
 OUTPUT_DIR = Path(__file__).parent
+DEFAULT_LOGO = OUTPUT_DIR / "apex-hex-logo.png"
 CARD_W = 1050  # 3.5" @ 300 DPI
 CARD_H = 600   # 2" @ 300 DPI
 
-GRADIENT = """
-  <defs>
-    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#E040A0"/>
-      <stop offset="50%" stop-color="#A060D0"/>
-      <stop offset="100%" stop-color="#40D0F0"/>
-    </linearGradient>
-    <linearGradient id="brandGradV" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#E040A0"/>
-      <stop offset="100%" stop-color="#40D0F0"/>
-    </linearGradient>
-    <linearGradient id="accentLine" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#E040A0" stop-opacity="0"/>
-      <stop offset="20%" stop-color="#E040A0"/>
-      <stop offset="50%" stop-color="#A060D0"/>
-      <stop offset="80%" stop-color="#40D0F0"/>
-      <stop offset="100%" stop-color="#40D0F0" stop-opacity="0"/>
-    </linearGradient>
-  </defs>
-"""
-
-LOGO_SVG = textwrap.dedent(
-    f"""
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 480" width="420" height="480">
-{GRADIENT}
-
-  <!-- Outer hex frame -->
-  <path d="M210 18 L372 112 L372 308 L210 402 L48 308 L48 112 Z"
-        fill="none" stroke="url(#brandGrad)" stroke-width="3.5" stroke-linejoin="round"/>
-  <path d="M210 34 L356 120 L356 300 L210 386 L64 300 L64 120 Z"
-        fill="none" stroke="url(#brandGrad)" stroke-width="1.5" stroke-linejoin="round" opacity="0.7"/>
-
-  <!-- Sunburst -->
-  <g transform="translate(210,118)" opacity="0.85">
-    <circle cx="0" cy="0" r="8" fill="none" stroke="url(#brandGrad)" stroke-width="1.2"/>
-    <line x1="0" y1="-34" x2="0" y2="-52" stroke="url(#brandGrad)" stroke-width="1.2"/>
-    <line x1="24" y1="-24" x2="37" y2="-37" stroke="url(#brandGrad)" stroke-width="1.2"/>
-    <line x1="34" y1="0" x2="52" y2="0" stroke="url(#brandGrad)" stroke-width="1.2"/>
-    <line x1="24" y1="24" x2="37" y2="37" stroke="url(#brandGrad)" stroke-width="1.2"/>
-    <line x1="0" y1="34" x2="0" y2="52" stroke="url(#brandGrad)" stroke-width="1.2"/>
-    <line x1="-24" y1="24" x2="-37" y2="37" stroke="url(#brandGrad)" stroke-width="1.2"/>
-    <line x1="-34" y1="0" x2="-52" y2="0" stroke="url(#brandGrad)" stroke-width="1.2"/>
-    <line x1="-24" y1="-24" x2="-37" y2="-37" stroke="url(#brandGrad)" stroke-width="1.2"/>
-  </g>
-
-  <!-- Mountains -->
-  <path d="M72 168 L98 132 L124 168" fill="none" stroke="url(#brandGrad)" stroke-width="1.8" stroke-linejoin="round"/>
-  <path d="M296 168 L322 132 L348 168" fill="none" stroke="url(#brandGrad)" stroke-width="1.8" stroke-linejoin="round"/>
-
-  <!-- Sports car (top-down outline) -->
-  <g transform="translate(210,118)" fill="none" stroke="url(#brandGrad)" stroke-width="2" stroke-linejoin="round">
-    <path d="M-42 8 C-28 -10 28 -10 42 8 L48 18 C52 24 52 30 48 36 L42 46 C28 64 -28 64 -42 46 L-48 36 C-52 30 -52 24 -48 18 Z"/>
-    <path d="M-18 8 L18 8" stroke-width="1.5"/>
-    <path d="M-30 46 L30 46" stroke-width="1.5"/>
-    <ellipse cx="-28" cy="30" rx="7" ry="10" stroke-width="1.5"/>
-    <ellipse cx="28" cy="30" rx="7" ry="10" stroke-width="1.5"/>
-    <path d="M-8 -2 L8 -2" stroke-width="1.2"/>
-  </g>
-
-  <!-- Road waves -->
-  <path d="M95 178 Q130 188 165 178 T235 178 T305 178" fill="none" stroke="url(#brandGrad)" stroke-width="1.5" opacity="0.8"/>
-  <path d="M95 188 Q130 198 165 188 T235 188 T305 188" fill="none" stroke="url(#brandGrad)" stroke-width="1.5" opacity="0.6"/>
-
-  <!-- APEX -->
-  <text x="210" y="268" text-anchor="middle"
-        font-family="Inter, Helvetica Neue, Arial, sans-serif"
-        font-size="62" font-weight="800" font-style="italic"
-        fill="none" stroke="url(#brandGrad)" stroke-width="2.2"
-        letter-spacing="2">APEX</text>
-
-  <!-- DETAILING -->
-  <text x="210" y="302" text-anchor="middle"
-        font-family="Inter, Helvetica Neue, Arial, sans-serif"
-        font-size="18" font-weight="500"
-        fill="url(#brandGrad)" letter-spacing="12">DETAILING</text>
-
-  <!-- Bottom accent -->
-  <line x1="150" y1="352" x2="270" y2="352" stroke="url(#brandGrad)" stroke-width="1.2" opacity="0.7"/>
-  <path d="M210 362 L214 370 L210 378 L206 370 Z" fill="url(#brandGrad)" opacity="0.9"/>
-  <line x1="150" y1="388" x2="270" y2="388" stroke="url(#brandGrad)" stroke-width="1.2" opacity="0.7"/>
-</svg>
-"""
-).strip()
-
-FRONT_SVG = textwrap.dedent(
-    f"""
-<svg xmlns="http://www.w3.org/2000/svg" width="{CARD_W}" height="{CARD_H}" viewBox="0 0 {CARD_W} {CARD_H}">
-{GRADIENT}
-  <rect width="{CARD_W}" height="{CARD_H}" fill="#000000"/>
-  <g transform="translate({CARD_W // 2},{CARD_H // 2}) scale(0.82) translate(-210,-240)">
-    <!-- Inline logo on front -->
-    <path d="M210 18 L372 112 L372 308 L210 402 L48 308 L48 112 Z"
-          fill="none" stroke="url(#brandGrad)" stroke-width="3.5" stroke-linejoin="round"/>
-    <path d="M210 34 L356 120 L356 300 L210 386 L64 300 L64 120 Z"
-          fill="none" stroke="url(#brandGrad)" stroke-width="1.5" stroke-linejoin="round" opacity="0.7"/>
-    <g transform="translate(210,118)" opacity="0.85">
-      <circle cx="0" cy="0" r="8" fill="none" stroke="url(#brandGrad)" stroke-width="1.2"/>
-      <line x1="0" y1="-34" x2="0" y2="-52" stroke="url(#brandGrad)" stroke-width="1.2"/>
-      <line x1="24" y1="-24" x2="37" y2="-37" stroke="url(#brandGrad)" stroke-width="1.2"/>
-      <line x1="34" y1="0" x2="52" y2="0" stroke="url(#brandGrad)" stroke-width="1.2"/>
-      <line x1="24" y1="24" x2="37" y2="37" stroke="url(#brandGrad)" stroke-width="1.2"/>
-      <line x1="0" y1="34" x2="0" y2="52" stroke="url(#brandGrad)" stroke-width="1.2"/>
-      <line x1="-24" y1="24" x2="-37" y2="37" stroke="url(#brandGrad)" stroke-width="1.2"/>
-      <line x1="-34" y1="0" x2="-52" y2="0" stroke="url(#brandGrad)" stroke-width="1.2"/>
-      <line x1="-24" y1="-24" x2="-37" y2="-37" stroke="url(#brandGrad)" stroke-width="1.2"/>
-    </g>
-    <path d="M72 168 L98 132 L124 168" fill="none" stroke="url(#brandGrad)" stroke-width="1.8" stroke-linejoin="round"/>
-    <path d="M296 168 L322 132 L348 168" fill="none" stroke="url(#brandGrad)" stroke-width="1.8" stroke-linejoin="round"/>
-    <g transform="translate(210,118)" fill="none" stroke="url(#brandGrad)" stroke-width="2" stroke-linejoin="round">
-      <path d="M-42 8 C-28 -10 28 -10 42 8 L48 18 C52 24 52 30 48 36 L42 46 C28 64 -28 64 -42 46 L-48 36 C-52 30 -52 24 -48 18 Z"/>
-      <path d="M-18 8 L18 8" stroke-width="1.5"/>
-      <path d="M-30 46 L30 46" stroke-width="1.5"/>
-      <ellipse cx="-28" cy="30" rx="7" ry="10" stroke-width="1.5"/>
-      <ellipse cx="28" cy="30" rx="7" ry="10" stroke-width="1.5"/>
-      <path d="M-8 -2 L8 -2" stroke-width="1.2"/>
-    </g>
-    <path d="M95 178 Q130 188 165 178 T235 178 T305 178" fill="none" stroke="url(#brandGrad)" stroke-width="1.5" opacity="0.8"/>
-    <path d="M95 188 Q130 198 165 188 T235 188 T305 188" fill="none" stroke="url(#brandGrad)" stroke-width="1.5" opacity="0.6"/>
-    <text x="210" y="268" text-anchor="middle"
-          font-family="Inter, Helvetica Neue, Arial, sans-serif"
-          font-size="62" font-weight="800" font-style="italic"
-          fill="none" stroke="url(#brandGrad)" stroke-width="2.2"
-          letter-spacing="2">APEX</text>
-    <text x="210" y="302" text-anchor="middle"
-          font-family="Inter, Helvetica Neue, Arial, sans-serif"
-          font-size="18" font-weight="500"
-          fill="url(#brandGrad)" letter-spacing="12">DETAILING</text>
-    <line x1="150" y1="352" x2="270" y2="352" stroke="url(#brandGrad)" stroke-width="1.2" opacity="0.7"/>
-    <path d="M210 362 L214 370 L210 378 L206 370 Z" fill="url(#brandGrad)" opacity="0.9"/>
-    <line x1="150" y1="388" x2="270" y2="388" stroke="url(#brandGrad)" stroke-width="1.2" opacity="0.7"/>
-  </g>
-</svg>
-"""
-).strip()
-
-BACK_SVG = textwrap.dedent(
-    f"""
-<svg xmlns="http://www.w3.org/2000/svg" width="{CARD_W}" height="{CARD_H}" viewBox="0 0 {CARD_W} {CARD_H}">
-{GRADIENT}
-  <rect width="{CARD_W}" height="{CARD_H}" fill="#000000"/>
-
-  <!-- Subtle corner accents -->
-  <path d="M0 0 L80 0 L0 80 Z" fill="url(#brandGrad)" opacity="0.08"/>
-  <path d="M{CARD_W} {CARD_H} L{CARD_W - 80} {CARD_H} L{CARD_W} {CARD_H - 80} Z" fill="url(#brandGrad)" opacity="0.08"/>
-
-  <!-- Top brand mark -->
-  <text x="{CARD_W // 2}" y="95" text-anchor="middle"
-        font-family="Inter, Helvetica Neue, Arial, sans-serif"
-        font-size="34" font-weight="800" font-style="italic"
-        fill="none" stroke="url(#brandGrad)" stroke-width="1.4"
-        letter-spacing="3">APEX</text>
-  <text x="{CARD_W // 2}" y="125" text-anchor="middle"
-        font-family="Inter, Helvetica Neue, Arial, sans-serif"
-        font-size="11" font-weight="500"
-        fill="url(#brandGrad)" letter-spacing="8">DETAILING</text>
-
-  <line x1="200" y1="148" x2="850" y2="148" stroke="url(#accentLine)" stroke-width="2"/>
-
-  <text x="{CARD_W // 2}" y="195" text-anchor="middle"
-        font-family="Inter, Helvetica Neue, Arial, sans-serif"
-        font-size="13" font-weight="400" fill="#888888" letter-spacing="3">
-    ELEVATE YOUR RIDE TO ITS PEAK SHINE
-  </text>
-
-  <!-- Contact block -->
-  <text x="{CARD_W // 2}" y="275" text-anchor="middle"
-        font-family="Inter, Helvetica Neue, Arial, sans-serif"
-        font-size="28" font-weight="700" fill="#FFFFFF">(417) 527-6165</text>
-
-  <text x="{CARD_W // 2}" y="325" text-anchor="middle"
-        font-family="Inter, Helvetica Neue, Arial, sans-serif"
-        font-size="17" font-weight="500" fill="#40D0F0">apexdetailing.net</text>
-
-  <text x="{CARD_W // 2}" y="365" text-anchor="middle"
-        font-family="Inter, Helvetica Neue, Arial, sans-serif"
-        font-size="14" font-weight="400" fill="#CCCCCC">apexdetailing.net@gmail.com</text>
-
-  <text x="{CARD_W // 2}" y="410" text-anchor="middle"
-        font-family="Inter, Helvetica Neue, Arial, sans-serif"
-        font-size="14" font-weight="400" fill="#AAAAAA">1114 E Lakota St · Nixa, MO 65714</text>
-
-  <text x="{CARD_W // 2}" y="450" text-anchor="middle"
-        font-family="Inter, Helvetica Neue, Arial, sans-serif"
-        font-size="13" font-weight="500" fill="#A060D0">@apexdetailing_sf</text>
-
-  <text x="{CARD_W // 2}" y="485" text-anchor="middle"
-        font-family="Inter, Helvetica Neue, Arial, sans-serif"
-        font-size="11" font-weight="400" fill="#666666" letter-spacing="2">
-    SPRINGFIELD · NIXA · OZARK
-  </text>
-
-  <line x1="200" y1="520" x2="850" y2="520" stroke="url(#accentLine)" stroke-width="1.5"/>
-</svg>
-"""
-).strip()
-
-PRINT_SHEET_SVG = textwrap.dedent(
-    f"""
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="2550" height="1650" viewBox="0 0 2550 1650">
-  <rect width="2550" height="1650" fill="#1a1a1a"/>
-  <text x="1275" y="60" text-anchor="middle" fill="#666"
-        font-family="Inter, sans-serif" font-size="24">APEX DETAILING — Business Card Print Sheet (3.5" × 2" @ 300 DPI)</text>
-
-  <!-- Front -->
-  <g transform="translate(150,120)">
-    <rect width="{CARD_W}" height="{CARD_H}" fill="#000" stroke="#333" stroke-width="2"/>
-    <text x="0" y="-15" fill="#888" font-family="Inter, sans-serif" font-size="18">FRONT</text>
-    <svg x="0" y="0" width="{CARD_W}" height="{CARD_H}" viewBox="0 0 {CARD_W} {CARD_H}">
-      {FRONT_SVG.split('<svg')[1].split('>', 1)[1].rsplit('</svg>', 1)[0]}
-    </svg>
-  </g>
-
-  <!-- Back -->
-  <g transform="translate(1350,120)">
-    <rect width="{CARD_W}" height="{CARD_H}" fill="#000" stroke="#333" stroke-width="2"/>
-    <text x="0" y="-15" fill="#888" font-family="Inter, sans-serif" font-size="18">BACK</text>
-    <svg x="0" y="0" width="{CARD_W}" height="{CARD_H}" viewBox="0 0 {CARD_W} {CARD_H}">
-      {BACK_SVG.split('<svg')[1].split('>', 1)[1].rsplit('</svg>', 1)[0]}
-    </svg>
-  </g>
-
-  <!-- Mockup preview -->
-  <g transform="translate(150,820)">
-    <text x="0" y="0" fill="#888" font-family="Inter, sans-serif" font-size="18">PREVIEW (stacked)</text>
-    <g transform="translate(0,30) rotate(-3)">
-      <rect width="{CARD_W}" height="{CARD_H}" fill="#000" stroke="#444" stroke-width="1" rx="8"/>
-      <svg x="0" y="0" width="{CARD_W}" height="{CARD_H}" viewBox="0 0 {CARD_W} {CARD_H}">
-        {FRONT_SVG.split('<svg')[1].split('>', 1)[1].rsplit('</svg>', 1)[0]}
-      </svg>
-    </g>
-    <g transform="translate(40,50) rotate(2)">
-      <rect width="{CARD_W}" height="{CARD_H}" fill="#000" stroke="#444" stroke-width="1" rx="8"/>
-      <svg x="0" y="0" width="{CARD_W}" height="{CARD_H}" viewBox="0 0 {CARD_W} {CARD_H}">
-        {BACK_SVG.split('<svg')[1].split('>', 1)[1].rsplit('</svg>', 1)[0]}
-      </svg>
-    </g>
-  </g>
-</svg>
-"""
-).strip()
+CONTACT = {
+    "phone": "(417) 527-6165",
+    "website": "apexdetailing.net",
+    "email": "apexdetailing.net@gmail.com",
+    "address": "1114 E Lakota St · Nixa, MO 65714",
+    "instagram": "@apexdetailing_sf",
+    "tagline": "ELEVATE YOUR RIDE TO ITS PEAK SHINE",
+    "areas": "SPRINGFIELD · NIXA · OZARK",
+}
 
 
-def render_svg(svg: str, path: Path, width: int | None = None, height: int | None = None) -> None:
-    kwargs: dict = {"bytestring": svg.encode("utf-8"), "write_to": str(path)}
-    if width:
-        kwargs["output_width"] = width
-    if height:
-        kwargs["output_height"] = height
-    cairosvg.svg2png(**kwargs)
-    print(f"  ✓ {path.name}")
+def load_font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
+    candidates = [
+        "/usr/share/fonts/truetype/macos/Inter-Bold.ttf" if bold else "/usr/share/fonts/truetype/macos/Inter-Regular.ttf",
+        "/usr/share/fonts/truetype/macos/Inter-SemiBold.ttf" if bold else "/usr/share/fonts/truetype/macos/Inter-Medium.ttf",
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+    ]
+    for path in candidates:
+        try:
+            return ImageFont.truetype(path, size)
+        except OSError:
+            continue
+    return ImageFont.load_default()
+
+
+def remove_light_background(img: Image.Image, threshold: int = 235) -> Image.Image:
+    """Make near-white pixels transparent so a white-background logo works on black."""
+    rgba = img.convert("RGBA")
+    pixels = rgba.load()
+    width, height = rgba.size
+    for y in range(height):
+        for x in range(width):
+            r, g, b, a = pixels[x, y]
+            if r >= threshold and g >= threshold and b >= threshold:
+                pixels[x, y] = (r, g, b, 0)
+    return rgba
+
+
+def fit_logo(logo: Image.Image, max_w: int, max_h: int) -> Image.Image:
+    ratio = min(max_w / logo.width, max_h / logo.height)
+    new_size = (max(1, int(logo.width * ratio)), max(1, int(logo.height * ratio)))
+    return logo.resize(new_size, Image.LANCZOS)
+
+
+def paste_centered(base: Image.Image, overlay: Image.Image, y_offset: int = 0) -> None:
+    x = (base.width - overlay.width) // 2
+    y = (base.height - overlay.height) // 2 + y_offset
+    base.paste(overlay, (x, y), overlay)
+
+
+def draw_gradient_line(draw: ImageDraw.ImageDraw, y: int, width: int, height: int = 2) -> None:
+    for x in range(width):
+        t = x / max(width - 1, 1)
+        if t < 0.5:
+            r = int(224 + (160 - 224) * (t / 0.5))
+            g = int(64 + (96 - 64) * (t / 0.5))
+            b = int(160 + (208 - 160) * (t / 0.5))
+        else:
+            tt = (t - 0.5) / 0.5
+            r = int(160 + (64 - 160) * tt)
+            g = int(96 + (208 - 96) * tt)
+            b = int(208 + (240 - 208) * tt)
+        draw.line([(x, y), (x, y + height)], fill=(r, g, b))
+
+
+def create_front(logo: Image.Image) -> Image.Image:
+    card = Image.new("RGB", (CARD_W, CARD_H), "#000000")
+    fitted = fit_logo(logo, int(CARD_W * 0.78), int(CARD_H * 0.82))
+    paste_centered(card, fitted)
+    return card
+
+
+def create_back(small_logo: Image.Image | None = None) -> Image.Image:
+    card = Image.new("RGB", (CARD_W, CARD_H), "#000000")
+    draw = ImageDraw.Draw(card)
+
+    draw_gradient_line(draw, 118, CARD_W, 2)
+    draw_gradient_line(draw, 518, CARD_W, 1)
+
+    if small_logo is not None:
+        fitted = fit_logo(small_logo, 220, 120)
+        paste_centered(card, fitted, y_offset=-190)
+
+    draw.text(
+        (CARD_W // 2, 150),
+        CONTACT["tagline"],
+        fill="#888888",
+        font=load_font(13),
+        anchor="mm",
+    )
+    draw.text(
+        (CARD_W // 2, 255),
+        CONTACT["phone"],
+        fill="#FFFFFF",
+        font=load_font(30, bold=True),
+        anchor="mm",
+    )
+    draw.text(
+        (CARD_W // 2, 310),
+        CONTACT["website"],
+        fill="#40D0F0",
+        font=load_font(18, bold=True),
+        anchor="mm",
+    )
+    draw.text(
+        (CARD_W // 2, 350),
+        CONTACT["email"],
+        fill="#CCCCCC",
+        font=load_font(14),
+        anchor="mm",
+    )
+    draw.text(
+        (CARD_W // 2, 395),
+        CONTACT["address"],
+        fill="#AAAAAA",
+        font=load_font(14),
+        anchor="mm",
+    )
+    draw.text(
+        (CARD_W // 2, 435),
+        CONTACT["instagram"],
+        fill="#A060D0",
+        font=load_font(13, bold=True),
+        anchor="mm",
+    )
+    draw.text(
+        (CARD_W // 2, 475),
+        CONTACT["areas"],
+        fill="#666666",
+        font=load_font(11),
+        anchor="mm",
+    )
+    return card
+
+
+def create_preview(front: Image.Image, back: Image.Image) -> Image.Image:
+    scale = 2
+    fw, fh = front.width * scale, front.height * scale
+    front_l = front.resize((fw, fh), Image.LANCZOS)
+    back_l = back.resize((fw, fh), Image.LANCZOS)
+
+    pad = 60
+    label_h = 50
+    canvas = Image.new("RGB", (pad * 3 + fw * 2, pad * 2 + label_h + fh + 40), "#111111")
+    draw = ImageDraw.Draw(canvas)
+    title_font = load_font(28, bold=True)
+    label_font = load_font(20, bold=True)
+
+    draw.text((canvas.width // 2, 20), "APEX DETAILING — Business Card Preview", fill="#888888", anchor="mt", font=title_font)
+
+    y = pad + 30
+    draw.text((pad + fw // 2, y), "FRONT", fill="#E040A0", anchor="mt", font=label_font)
+    canvas.paste(front_l, (pad, y + label_h))
+
+    x2 = pad * 2 + fw
+    draw.text((x2 + fw // 2, y), "BACK", fill="#40D0F0", anchor="mt", font=label_font)
+    canvas.paste(back_l, (x2, y + label_h))
+    return canvas
+
+
+def write_html_preview(front_path: Path, back_path: Path, preview_path: Path, html_path: Path) -> None:
+    def b64(path: Path) -> str:
+        data = base64.b64encode(path.read_bytes()).decode("ascii")
+        return f"data:image/png;base64,{data}"
+
+    html = textwrap.dedent(
+        f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apex Detailing — Business Card Preview</title>
+  <style>
+    body {{ margin: 0; background: #0a0a0a; color: #fff; font-family: Inter, system-ui, sans-serif; padding: 2rem; }}
+    h1, p {{ text-align: center; }}
+    p {{ color: #888; }}
+    .grid {{ display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }}
+    img {{ max-width: min(100%, 520px); border-radius: 8px; box-shadow: 0 8px 32px rgba(0,0,0,.6); }}
+    .preview {{ text-align: center; margin-top: 3rem; }}
+  </style>
+</head>
+<body>
+  <h1>APEX DETAILING — Business Card</h1>
+  <p>Built from your uploaded logo file</p>
+  <div class="grid">
+    <div><h3>Front</h3><img src="{b64(front_path)}" alt="Front" /></div>
+    <div><h3>Back</h3><img src="{b64(back_path)}" alt="Back" /></div>
+  </div>
+  <div class="preview">
+    <h3>Combined Preview</h3>
+    <img src="{b64(preview_path)}" alt="Preview" />
+  </div>
+</body>
+</html>"""
+    )
+    html_path.write_text(html, encoding="utf-8")
+
+
+def generate(logo_path: Path) -> None:
+    if not logo_path.exists():
+        raise FileNotFoundError(
+            f"Logo file not found: {logo_path}\n"
+            "Save your hex logo PNG to attached_assets/apex-hex-logo.png and run again."
+        )
+
+    logo = remove_light_background(Image.open(logo_path))
+    front = create_front(logo)
+    back = create_back(small_logo=logo)
+    preview = create_preview(front, back)
+
+    front_path = OUTPUT_DIR / "apex-business-card-front.png"
+    back_path = OUTPUT_DIR / "apex-business-card-back.png"
+    preview_path = OUTPUT_DIR / "apex-business-card-preview.png"
+    html_path = OUTPUT_DIR / "business-card-preview.html"
+
+    front.save(front_path, "PNG")
+    back.save(back_path, "PNG")
+    preview.save(preview_path, "PNG")
+    write_html_preview(front_path, back_path, preview_path, html_path)
+
+    print(f"Using logo: {logo_path}")
+    print(f"Saved: {front_path.name}")
+    print(f"Saved: {back_path.name}")
+    print(f"Saved: {preview_path.name}")
+    print(f"Saved: {html_path.name}")
 
 
 def main() -> None:
-    assets = {
-        "apex-business-card-logo.svg": LOGO_SVG,
-        "apex-business-card-front.svg": FRONT_SVG,
-        "apex-business-card-back.svg": BACK_SVG,
-        "apex-business-card-print-sheet.svg": PRINT_SHEET_SVG,
-    }
-
-    print("Writing SVG assets...")
-    for name, content in assets.items():
-        path = OUTPUT_DIR / name
-        path.write_text(content, encoding="utf-8")
-        print(f"  ✓ {name}")
-
-    print("\nRendering PNG assets...")
-    render_svg(LOGO_SVG, OUTPUT_DIR / "apex-business-card-logo.png", 840, 960)
-    render_svg(FRONT_SVG, OUTPUT_DIR / "apex-business-card-front.png", CARD_W, CARD_H)
-    render_svg(BACK_SVG, OUTPUT_DIR / "apex-business-card-back.png", CARD_W, CARD_H)
-    render_svg(PRINT_SHEET_SVG, OUTPUT_DIR / "apex-business-card-print-sheet.png", 2550, 1650)
-
-    print("\nDone! Files saved to attached_assets/")
+    parser = argparse.ArgumentParser(description="Generate Apex Detailing business cards from a logo PNG")
+    parser.add_argument(
+        "--logo",
+        type=Path,
+        default=DEFAULT_LOGO,
+        help=f"Path to your logo PNG (default: {DEFAULT_LOGO.name})",
+    )
+    args = parser.parse_args()
+    generate(args.logo)
 
 
 if __name__ == "__main__":
