@@ -17,13 +17,11 @@ DEFAULT_LOGO = OUTPUT_DIR / "apex-hex-logo.png"
 LOGOS_REPO = "https://github.com/apexwebworxusa-svg/logos"
 LOGOS_RAW_BASE = "https://raw.githubusercontent.com/apexwebworxusa-svg/logos/main"
 LOGO_CANDIDATES = [
+    "apex-logo-primary.png",
+    "06-primary-light-bg.png",
+    "06-primary-light-bg (1).png",
     "apex-detailing-hex.png",
-    "apex-detailing-hex-logo.png",
     "apex-detailing-logo.png",
-    "apex-detailing.png",
-    "APEX-DETAILING-HEX.png",
-    "APEX-DETAILING.png",
-    "hex-logo.png",
     "logo.png",
 ]
 CARD_W = 1050  # 3.5" @ 300 DPI
