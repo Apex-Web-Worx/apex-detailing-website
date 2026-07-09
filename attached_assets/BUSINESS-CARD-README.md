@@ -2,15 +2,21 @@
 
 ## Important: use your real logo file
 
-Chat image uploads are **not** saved into this project automatically.
+Your logos live at: https://github.com/apexwebworxusa-svg/logos
 
-To generate the business card with your exact hex logo:
+That repo is currently **private**, so the cloud agent cannot download from it unless you either:
 
-1. Save your logo PNG to:
+1. **Make the repo public temporarily**, then run:
+
+   ```bash
+   python3 attached_assets/generate-business-card.py --from-github
+   ```
+
+2. **Copy your hex logo PNG** into this project as:
 
    `attached_assets/apex-hex-logo.png`
 
-2. Run:
+   then run:
 
    ```bash
    python3 attached_assets/generate-business-card.py

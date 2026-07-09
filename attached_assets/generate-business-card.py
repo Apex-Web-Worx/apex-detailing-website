@@ -6,12 +6,26 @@ from __future__ import annotations
 import argparse
 import base64
 import textwrap
+import urllib.error
+import urllib.request
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
 OUTPUT_DIR = Path(__file__).parent
 DEFAULT_LOGO = OUTPUT_DIR / "apex-hex-logo.png"
+LOGOS_REPO = "https://github.com/apexwebworxusa-svg/logos"
+LOGOS_RAW_BASE = "https://raw.githubusercontent.com/apexwebworxusa-svg/logos/main"
+LOGO_CANDIDATES = [
+    "apex-detailing-hex.png",
+    "apex-detailing-hex-logo.png",
+    "apex-detailing-logo.png",
+    "apex-detailing.png",
+    "APEX-DETAILING-HEX.png",
+    "APEX-DETAILING.png",
+    "hex-logo.png",
+    "logo.png",
+]
 CARD_W = 1050  # 3.5" @ 300 DPI
 CARD_H = 600   # 2" @ 300 DPI
 
@@ -213,12 +227,50 @@ def write_html_preview(front_path: Path, back_path: Path, preview_path: Path, ht
     html_path.write_text(html, encoding="utf-8")
 
 
+def fetch_logo_from_github() -> Path:
+    """Try to download the hex logo from the user's GitHub logos repo."""
+    for name in LOGO_CANDIDATES:
+        url = f"{LOGOS_RAW_BASE}/{name}"
+        try:
+            with urllib.request.urlopen(url, timeout=20) as response:
+                data = response.read()
+            if len(data) < 1000:
+                continue
+            dest = OUTPUT_DIR / "apex-hex-logo.png"
+            dest.write_bytes(data)
+            print(f"Downloaded logo from GitHub: {name}")
+            return dest
+        except urllib.error.HTTPError as exc:
+            if exc.code != 404:
+                raise
+        except urllib.error.URLError:
+            break
+    raise FileNotFoundError(
+        f"Could not download a logo from {LOGOS_REPO}.\n"
+        "The repo may be private. Make it public temporarily, or copy your hex logo to "
+        f"{DEFAULT_LOGO.name} in attached_assets/."
+    )
+
+
+def resolve_logo(logo_path: Path | None, from_github: bool) -> Path:
+    if logo_path and logo_path.exists():
+        return logo_path
+    if from_github or (logo_path is None or logo_path == DEFAULT_LOGO):
+        if DEFAULT_LOGO.exists():
+            return DEFAULT_LOGO
+        try:
+            return fetch_logo_from_github()
+        except FileNotFoundError:
+            if logo_path and logo_path != DEFAULT_LOGO:
+                raise FileNotFoundError(f"Logo file not found: {logo_path}") from None
+            raise
+    raise FileNotFoundError(
+        f"Logo file not found: {logo_path}\n"
+        f"Save your hex logo PNG to {DEFAULT_LOGO} or make {LOGOS_REPO} accessible."
+    )
+
+
 def generate(logo_path: Path) -> None:
-    if not logo_path.exists():
-        raise FileNotFoundError(
-            f"Logo file not found: {logo_path}\n"
-            "Save your hex logo PNG to attached_assets/apex-hex-logo.png and run again."
-        )
 
     logo = remove_light_background(Image.open(logo_path))
     front = create_front(logo)
@@ -250,8 +302,14 @@ def main() -> None:
         default=DEFAULT_LOGO,
         help=f"Path to your logo PNG (default: {DEFAULT_LOGO.name})",
     )
+    parser.add_argument(
+        "--from-github",
+        action="store_true",
+        help=f"Fetch logo from {LOGOS_REPO}",
+    )
     args = parser.parse_args()
-    generate(args.logo)
+    logo = resolve_logo(args.logo, args.from_github)
+    generate(logo)
 
 
 if __name__ == "__main__":
