@@ -193,7 +193,7 @@
         }
       }
 
-      /* Mobile: smaller logo, lighter effects, fewer animated shadows */
+      /* Mobile: keep logo readable, keep bubble field dense + bright */
       @media (max-width: 640px) {
         #app-loading .logo-stage {
           width: min(52vw, 140px);
@@ -203,8 +203,34 @@
           animation-duration: 1.6s;
         }
         #app-loading .loader-bubble {
-          box-shadow: 0 0 6px rgba(255, 26, 216, 0.35);
-          border-width: 0.5px;
+          border-width: 1px;
+          border-color: rgba(255, 255, 255, 0.35);
+          box-shadow:
+            0 0 12px rgba(255, 26, 216, 0.7),
+            0 0 22px rgba(0, 229, 255, 0.35);
+        }
+        #app-loading .loader-bubble.pink {
+          box-shadow: 0 0 14px rgba(255, 26, 216, 0.8), 0 0 26px rgba(255, 26, 216, 0.4);
+        }
+        #app-loading .loader-bubble.cyan {
+          box-shadow: 0 0 14px rgba(0, 229, 255, 0.8), 0 0 26px rgba(0, 229, 255, 0.4);
+        }
+        @keyframes loader-bubble-fly {
+          0% {
+            opacity: 0;
+            transform: translate3d(0, 12px, 0) scale(0.35) rotate(0deg);
+          }
+          8% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.85;
+            transform: translate3d(calc(var(--drift) * 0.55), calc(var(--rise) * 0.5), 0) scale(1) rotate(calc(var(--spin) * 0.5));
+          }
+          100% {
+            opacity: 0;
+            transform: translate3d(var(--drift), var(--rise), 0) scale(1.25) rotate(var(--spin));
+          }
         }
         @keyframes logo-blink {
           0%, 100% {
@@ -258,27 +284,28 @@
         if (!field) return;
 
         var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        var mobile = window.matchMedia("(max-width: 640px)").matches
-          || window.matchMedia("(pointer: coarse)").matches;
-        var count = reduce ? 8 : mobile ? 22 : 56;
+        var mobile = window.matchMedia("(max-width: 640px)").matches;
+        // Phones get a full bubble field too — previous mobile cut was hard to see
+        var count = reduce ? 8 : mobile ? 48 : 56;
 
         var frag = document.createDocumentFragment();
         for (var i = 0; i < count; i++) {
           var el = document.createElement("span");
           var size = mobile
-            ? 6 + Math.random() * 16
+            ? 8 + Math.random() * 24
             : 8 + Math.random() * 28;
-          var fromLogo = Math.random() < (mobile ? 0.35 : 0.45);
+          var fromLogo = Math.random() < (mobile ? 0.4 : 0.45);
           var x = fromLogo
             ? 42 + Math.random() * 16
             : Math.random() * 100;
           var y = fromLogo
             ? 38 + Math.random() * 18
             : -8 - Math.random() * 20;
-          var drift = (Math.random() - 0.5) * (mobile ? 120 : 220);
-          var rise = mobile ? -(70 + Math.random() * 50) : -(85 + Math.random() * 50);
-          var dur = (mobile ? 2.6 : 2.2) + Math.random() * (mobile ? 2.4 : 3.4);
-          var delay = Math.random() * (mobile ? 2.5 : 4.5);
+          var drift = (Math.random() - 0.5) * (mobile ? 160 : 220);
+          var rise = mobile ? -(80 + Math.random() * 55) : -(85 + Math.random() * 50);
+          var dur = (mobile ? 2.2 : 2.2) + Math.random() * (mobile ? 2.8 : 3.4);
+          // Negative delay so bubbles are mid-flight on first paint
+          var delay = -Math.random() * (mobile ? 2.8 : 4.5);
           var tone = Math.random();
           el.className = "loader-bubble" + (tone < 0.34 ? " pink" : tone < 0.68 ? " cyan" : "");
           el.style.setProperty("--size", size.toFixed(1) + "px");
