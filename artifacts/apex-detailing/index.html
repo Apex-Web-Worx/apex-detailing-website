@@ -27,15 +27,19 @@
     <link rel="icon" type="image/png" href="/images/favicon.png" />
     <!-- PWA / iOS "Add to Home Screen" support -->
     <link rel="manifest" href="/manifest.webmanifest" />
-    <link rel="apple-touch-icon" href="/images/logo.png" />
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" sizes="180x180" />
+    <link rel="apple-touch-icon" href="/images/pwa-192.png" sizes="192x192" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Apex Detail" />
+    <meta name="application-name" content="Apex Detail" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <link rel="preload" as="image" href="/images/logo.png" fetchpriority="high" />
     <link rel="preload" as="image" href="/images/hero-2.jpg" fetchpriority="high" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -79,28 +83,217 @@
     }
     </script>
     <style>
-      html, body { background: #0a0a0a; margin: 0; }
+      html, body { background: #050505; margin: 0; }
       #app-loading {
         position: fixed; inset: 0;
         display: flex; align-items: center; justify-content: center;
-        background: #0a0a0a;
+        background:
+          radial-gradient(ellipse 70% 50% at 50% 45%, rgba(255, 26, 216, 0.14), transparent 60%),
+          radial-gradient(ellipse 50% 40% at 80% 80%, rgba(0, 229, 255, 0.06), transparent 55%),
+          #050505;
         font-family: 'Mulish', system-ui, -apple-system, sans-serif;
+        z-index: 9999;
+        overflow: hidden;
+        contain: layout paint;
       }
-      #app-loading .spinner {
-        width: 42px; height: 42px;
-        border: 3px solid rgba(255,255,255,0.08);
-        border-top-color: #3496FF;
-        border-right-color: #A886CD;
+      #app-loading .logo-stage {
+        position: relative;
+        z-index: 3;
+        width: min(46vw, 180px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #app-loading .logo-loader {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: auto;
+        display: block;
+        animation: logo-blink 1.4s ease-in-out infinite;
+        filter: drop-shadow(0 0 12px rgba(255, 26, 216, 0.55))
+                drop-shadow(0 0 28px rgba(0, 229, 255, 0.35));
+        will-change: transform, opacity, filter;
+      }
+      /* Full-page bubble field */
+      #app-loading .loader-field {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      #app-loading .loader-bubble {
+        position: absolute;
+        left: var(--x, 50%);
+        bottom: var(--y, -5%);
+        width: var(--size, 12px);
+        height: var(--size, 12px);
+        margin-left: calc(var(--size, 12px) / -2);
         border-radius: 50%;
-        animation: app-spin 0.8s linear infinite;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background:
+          radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.65), transparent 40%),
+          radial-gradient(circle at 70% 72%, rgba(0, 229, 255, 0.35), transparent 55%),
+          radial-gradient(circle at 50% 50%, rgba(255, 26, 216, 0.28), rgba(157, 0, 255, 0.12) 55%, transparent 78%);
+        box-shadow:
+          0 0 10px rgba(255, 26, 216, 0.45),
+          0 0 18px rgba(0, 229, 255, 0.25);
+        opacity: 0;
+        animation: loader-bubble-fly var(--dur, 4s) var(--ease, ease-out) infinite;
+        animation-delay: var(--delay, 0s);
+        will-change: transform, opacity;
+        contain: strict;
+        --drift: 0px;
+        --rise: -110vh;
+        --spin: 0deg;
       }
-      @keyframes app-spin { to { transform: rotate(360deg); } }
+      #app-loading .loader-bubble.pink {
+        background:
+          radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.7), transparent 40%),
+          radial-gradient(circle at 50% 50%, rgba(255, 26, 216, 0.4), rgba(255, 26, 216, 0.05) 70%, transparent);
+        box-shadow: 0 0 12px rgba(255, 26, 216, 0.65), 0 0 22px rgba(255, 26, 216, 0.3);
+      }
+      #app-loading .loader-bubble.cyan {
+        background:
+          radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.7), transparent 40%),
+          radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.4), rgba(0, 229, 255, 0.05) 70%, transparent);
+        box-shadow: 0 0 12px rgba(0, 229, 255, 0.65), 0 0 22px rgba(0, 229, 255, 0.3);
+      }
+      @keyframes loader-bubble-fly {
+        0% {
+          opacity: 0;
+          transform: translate3d(0, 12px, 0) scale(0.35) rotate(0deg);
+        }
+        8% {
+          opacity: 0.95;
+        }
+        50% {
+          opacity: 0.75;
+          transform: translate3d(calc(var(--drift) * 0.55), calc(var(--rise) * 0.5), 0) scale(1) rotate(calc(var(--spin) * 0.5));
+        }
+        100% {
+          opacity: 0;
+          transform: translate3d(var(--drift), var(--rise), 0) scale(1.25) rotate(var(--spin));
+        }
+      }
+      @keyframes logo-blink {
+        0%, 100% {
+          opacity: 0.4;
+          transform: scale(0.96);
+          filter: drop-shadow(0 0 6px rgba(255, 26, 216, 0.25))
+                  drop-shadow(0 0 10px rgba(0, 229, 255, 0.15));
+        }
+        45%, 55% {
+          opacity: 1;
+          transform: scale(1.04);
+          filter: drop-shadow(0 0 18px rgba(255, 26, 216, 0.85))
+                  drop-shadow(0 0 36px rgba(0, 229, 255, 0.55))
+                  drop-shadow(0 0 56px rgba(157, 0, 255, 0.35));
+        }
+      }
+
+      /* Mobile: smaller logo, lighter effects, fewer animated shadows */
+      @media (max-width: 640px) {
+        #app-loading .logo-stage {
+          width: min(52vw, 140px);
+        }
+        #app-loading .logo-loader {
+          filter: drop-shadow(0 0 10px rgba(255, 26, 216, 0.5));
+          animation-duration: 1.6s;
+        }
+        #app-loading .loader-bubble {
+          box-shadow: 0 0 6px rgba(255, 26, 216, 0.35);
+          border-width: 0.5px;
+        }
+        @keyframes logo-blink {
+          0%, 100% {
+            opacity: 0.45;
+            transform: scale(0.97);
+            filter: drop-shadow(0 0 6px rgba(255, 26, 216, 0.35));
+          }
+          45%, 55% {
+            opacity: 1;
+            transform: scale(1.03);
+            filter: drop-shadow(0 0 14px rgba(255, 26, 216, 0.75))
+                    drop-shadow(0 0 22px rgba(0, 229, 255, 0.4));
+          }
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        #app-loading .logo-loader {
+          animation: none;
+          opacity: 1;
+          filter: drop-shadow(0 0 14px rgba(255, 26, 216, 0.55));
+        }
+        #app-loading .loader-bubble {
+          animation: none !important;
+          opacity: 0.35;
+          transform: none;
+        }
+      }
     </style>
   </head>
   <body>
     <div id="root">
-      <div id="app-loading"><div class="spinner" aria-label="Loading"></div></div>
+      <div id="app-loading">
+        <div class="loader-field" id="loader-field" aria-hidden="true"></div>
+        <div class="logo-stage">
+          <img
+            class="logo-loader"
+            src="/images/logo.png"
+            alt="Apex Detailing"
+            width="180"
+            height="210"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </div>
+      </div>
     </div>
+    <script>
+      (function () {
+        var field = document.getElementById("loader-field");
+        if (!field) return;
+
+        var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var mobile = window.matchMedia("(max-width: 640px)").matches
+          || window.matchMedia("(pointer: coarse)").matches;
+        var count = reduce ? 8 : mobile ? 22 : 56;
+
+        var frag = document.createDocumentFragment();
+        for (var i = 0; i < count; i++) {
+          var el = document.createElement("span");
+          var size = mobile
+            ? 6 + Math.random() * 16
+            : 8 + Math.random() * 28;
+          var fromLogo = Math.random() < (mobile ? 0.35 : 0.45);
+          var x = fromLogo
+            ? 42 + Math.random() * 16
+            : Math.random() * 100;
+          var y = fromLogo
+            ? 38 + Math.random() * 18
+            : -8 - Math.random() * 20;
+          var drift = (Math.random() - 0.5) * (mobile ? 120 : 220);
+          var rise = mobile ? -(70 + Math.random() * 50) : -(85 + Math.random() * 50);
+          var dur = (mobile ? 2.6 : 2.2) + Math.random() * (mobile ? 2.4 : 3.4);
+          var delay = Math.random() * (mobile ? 2.5 : 4.5);
+          var tone = Math.random();
+          el.className = "loader-bubble" + (tone < 0.34 ? " pink" : tone < 0.68 ? " cyan" : "");
+          el.style.setProperty("--size", size.toFixed(1) + "px");
+          el.style.setProperty("--x", x.toFixed(2) + "%");
+          el.style.setProperty("--y", y.toFixed(2) + "%");
+          el.style.setProperty("--drift", drift.toFixed(1) + "px");
+          el.style.setProperty("--rise", rise.toFixed(1) + "vh");
+          el.style.setProperty("--dur", dur.toFixed(2) + "s");
+          el.style.setProperty("--delay", delay.toFixed(2) + "s");
+          el.style.setProperty("--spin", ((Math.random() - 0.5) * 160).toFixed(0) + "deg");
+          frag.appendChild(el);
+        }
+        field.appendChild(frag);
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

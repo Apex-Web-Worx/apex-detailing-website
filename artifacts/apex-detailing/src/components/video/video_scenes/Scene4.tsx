@@ -47,7 +47,7 @@ export function Scene4() {
 
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
         <motion.div
-          className="w-[1px] h-24 bg-gradient-to-b from-transparent via-[#3496FF] to-transparent mb-8"
+          className="w-[1px] h-24 bg-gradient-to-b from-transparent via-[#00E5FF] to-transparent mb-8"
           initial={{ scaleY: 0 }}
           animate={phase >= 1 ? { scaleY: 1 } : { scaleY: 0 }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
@@ -66,7 +66,7 @@ export function Scene4() {
         
         <div className="overflow-hidden mb-6">
           <motion.h2 
-            className="text-6xl md:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#3496FF] to-[#A886CD] tracking-widest"
+            className="text-6xl md:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#00E5FF] to-[#FF1AD8] tracking-widest"
             initial={{ y: "100%" }}
             animate={phase >= 3 ? { y: 0 } : { y: "100%" }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}

@@ -20,7 +20,7 @@ export default function PrivacyPage() {
           </div>
           <a
             href="tel:417-527-6165"
-            className="hidden sm:flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-[#3496FF] transition"
+            className="hidden sm:flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-[#00E5FF] transition"
           >
             <Phone className="w-4 h-4" />
             <span>417-527-6165</span>
@@ -198,12 +198,12 @@ export default function PrivacyPage() {
               or email{" "}
               <a
                 href="mailto:apexdetailing.net@gmail.com"
-                className="text-[#3496FF] hover:underline"
+                className="text-[#00E5FF] hover:underline"
               >
                 apexdetailing.net@gmail.com
               </a>
               . You can also see our{" "}
-              <Link href="/terms" className="text-[#3496FF] hover:underline">
+              <Link href="/terms" className="text-[#00E5FF] hover:underline">
                 Terms &amp; Conditions
               </Link>
               .
@@ -227,7 +227,7 @@ export default function PrivacyPage() {
               className="h-14 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity"
             />
             <p className="text-gray-500 text-xs font-medium uppercase tracking-widest group-hover:text-white transition-colors">
-              Designed and developed by <span className="text-[#3496FF] font-bold">APEX WEB WORX</span>
+              Designed and developed by <span className="text-[#00E5FF] font-bold">APEX WEB WORX</span>
             </p>
           </a>
         </div>

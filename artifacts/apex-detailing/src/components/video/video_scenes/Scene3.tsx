@@ -38,7 +38,7 @@ export function Scene3() {
 
       <div className="absolute inset-y-0 right-12 md:right-24 flex flex-col justify-center items-end text-right max-w-2xl">
         <motion.div
-          className="h-1 w-24 bg-gradient-to-l from-[#A886CD] to-[#3496FF] mb-8"
+          className="h-1 w-24 bg-gradient-to-l from-[#FF1AD8] to-[#00E5FF] mb-8"
           initial={{ scaleX: 0, originX: 1 }}
           animate={phase >= 1 ? { scaleX: 1 } : { scaleX: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -57,7 +57,7 @@ export function Scene3() {
         
         <div className="overflow-hidden mb-6">
           <motion.h2 
-            className="text-5xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-[#A886CD] to-[#3496FF] leading-tight"
+            className="text-5xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-[#FF1AD8] to-[#00E5FF] leading-tight"
             initial={{ y: "100%" }}
             animate={phase >= 2 ? { y: 0 } : { y: "100%" }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
