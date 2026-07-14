@@ -47,10 +47,11 @@
   --card-foreground: 0 0% 98%;
   --popover: 240 7% 6%;
   --popover-foreground: 0 0% 98%;
-  --primary: 270 35% 67%;
+  /* Brand: hex-logo magenta ↔ cyan */
+  --primary: 312 100% 55%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 210 100% 60%;
-  --secondary-foreground: 0 0% 100%;
+  --secondary: 184 100% 50%;
+  --secondary-foreground: 0 0% 4%;
   --muted: 240 4% 16%;
   --muted-foreground: 240 5% 65%;
   --accent: 240 4% 16%;
@@ -58,9 +59,9 @@
   --destructive: 0 63% 31%;
   --destructive-foreground: 0 0% 98%;
   --input: 240 4% 16%;
-  --ring: 270 35% 67%;
-  --chart-1: 220 70% 50%;
-  --chart-2: 160 60% 45%;
+  --ring: 312 100% 55%;
+  --chart-1: 184 100% 50%;
+  --chart-2: 312 100% 55%;
   --chart-3: 30 80% 55%;
   --chart-4: 280 65% 60%;
   --chart-5: 340 75% 55%;
@@ -79,19 +80,19 @@
 
 @keyframes logo-shine {
   0%, 100% {
-    filter: drop-shadow(0 0 1.2rem rgba(168, 134, 205, 0.7)) drop-shadow(0 0 0.5rem rgba(52, 150, 255, 0.4));
+    filter: drop-shadow(0 0 1.2rem rgba(255, 26, 216, 0.7)) drop-shadow(0 0 0.5rem rgba(0, 240, 255, 0.4));
   }
   50% {
-    filter: drop-shadow(0 0 3rem rgba(52, 150, 255, 1)) drop-shadow(0 0 1.8rem rgba(168, 134, 205, 0.8)) drop-shadow(0 0 0.8rem rgba(52, 150, 255, 0.6));
+    filter: drop-shadow(0 0 3rem rgba(0, 240, 255, 1)) drop-shadow(0 0 1.8rem rgba(255, 26, 216, 0.8)) drop-shadow(0 0 0.8rem rgba(0, 240, 255, 0.6));
   }
 }
 
 @keyframes header-shine {
   0%, 100% {
-    text-shadow: 0 0 0.8rem rgba(52, 150, 255, 0.6), 0 0 1.5rem rgba(168, 134, 205, 0.4);
+    text-shadow: 0 0 0.8rem rgba(0, 240, 255, 0.6), 0 0 1.5rem rgba(255, 26, 216, 0.4);
   }
   50% {
-    text-shadow: 0 0 1.5rem rgba(52, 150, 255, 1), 0 0 2.5rem rgba(168, 134, 205, 0.7), 0 0 3rem rgba(52, 150, 255, 0.6);
+    text-shadow: 0 0 1.5rem rgba(0, 240, 255, 1), 0 0 2.5rem rgba(255, 26, 216, 0.7), 0 0 3rem rgba(0, 240, 255, 0.6);
   }
 }
 
@@ -151,11 +152,11 @@
   .bubble {
     position: absolute;
     bottom: 0;
-    border: 2px solid rgba(52, 150, 255, 0.5);
+    border: 2px solid rgba(0, 240, 255, 0.5);
     border-radius: 50%;
     pointer-events: none;
     mix-blend-mode: screen;
-    background: radial-gradient(circle at 30% 30%, rgba(168, 134, 205, 0.2), rgba(52, 150, 255, 0.1));
+    background: radial-gradient(circle at 30% 30%, rgba(255, 26, 216, 0.2), rgba(0, 240, 255, 0.1));
   }
   
   .texture-overlay {
@@ -167,7 +168,7 @@
     pointer-events: none;
     background-image: 
       repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255, 255, 255, 0.02) 2px, rgba(255, 255, 255, 0.02) 4px),
-      repeating-linear-gradient(-45deg, transparent, transparent 2px, rgba(52, 150, 255, 0.01) 2px, rgba(52, 150, 255, 0.01) 4px);
+      repeating-linear-gradient(-45deg, transparent, transparent 2px, rgba(0, 240, 255, 0.01) 2px, rgba(0, 240, 255, 0.01) 4px);
     animation: texture-pulse 6s ease-in-out infinite;
     z-index: 1;
   }
@@ -180,7 +181,7 @@
     min-height: 18px;
     font-size: 18px;
     line-height: 18px;
-    color: #3496FF;
+    color: #00F0FF;
     animation: circle-blink 1.5s ease-in-out infinite;
     animation-delay: 0s;
     margin: 0 8px;
@@ -340,8 +341,8 @@
     position: absolute;
     border-radius: 50%;
     background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.04) 15%, transparent 60%),
-                radial-gradient(circle at 70% 70%, rgba(168, 134, 205, 0.10), transparent 50%),
-                radial-gradient(circle at center, rgba(168, 134, 205, 0.06), rgba(168, 134, 205, 0.04));
+                radial-gradient(circle at 70% 70%, rgba(255, 26, 216, 0.10), transparent 50%),
+                radial-gradient(circle at center, rgba(255, 26, 216, 0.06), rgba(255, 26, 216, 0.04));
     box-shadow: 
       inset -3px -3px 8px rgba(0, 0, 0, 0.05),
       inset 2px 2px 6px rgba(255, 255, 255, 0.12),
@@ -402,8 +403,8 @@
     background: conic-gradient(
       from 180deg at 40% 40%,
       rgba(255, 255, 255, 0.10),
-      rgba(168, 134, 205, 0.07),
-      rgba(168, 134, 205, 0.05),
+      rgba(255, 26, 216, 0.07),
+      rgba(255, 26, 216, 0.05),
       transparent
     );
     animation: bubble-shine 4s ease-in-out infinite;

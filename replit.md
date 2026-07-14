@@ -43,7 +43,7 @@ artifacts-monorepo/
 
 Premium car detailing marketing website for Apex Detailing (Springfield, Nixa & Ozark, Missouri). Static frontend-only React + Vite app.
 
-- **Design**: Bold & Energetic variant — dark theme (#0a0a0a), purple (#A886CD) and blue (#3496FF) gradient accents, Mulish font
+- **Design**: Bold & Energetic variant — dark theme (#0a0a0a), purple (#FF1AD8) and blue (#00F0FF) gradient accents, Mulish font
 - **Sections**: Hero, Services (5 cards), About, Gallery, Testimonials, CTA, Footer
 - **Services**: Ceramic Coating, Paint Correction, Exterior Detailing, Interior Detailing, Headlight Restoration
 - **Gallery**: 5 sections with before/after image pairs + video

@@ -28,12 +28,12 @@ Vehicle owners in Nixa, Ozark, Springfield, and surrounding Greene & Christian C
 ## Design Style
 
 - **Theme**: Dark luxury aesthetic (`#0a0a0a` background)
-- **Brand Colors**:
-  - Primary purple: `#A886CD`
-  - Primary blue: `#3496FF`
-  - Accent gradient: `from-[#A886CD] to-[#3496FF]`
+- **Brand Colors** (from hex logo):
+  - Primary magenta: `#FF1AD8`
+  - Primary cyan: `#00F0FF`
+  - Accent gradient: `from-[#FF1AD8] to-[#00F0FF]`
 - **Typography**: Bold, uppercase tracking, modern sans-serif
-- **Visual Elements**: Glass-morphism cards, gradient accents, subtle blur effects
+- **Visual Elements**: Hex mark logo, neon gradients, glass-morphism cards, subtle glow effects
 - **Mobile-first**: Fully responsive with touch-friendly interactions
 
 ## Languages & Tech Stack

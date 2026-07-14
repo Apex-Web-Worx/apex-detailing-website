@@ -159,7 +159,7 @@ function Login({ onSubmit }: { onSubmit: (t: string) => void }) {
           tabIndex={-1}
           style={{ display: "none" }}
         />
-        <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#A886CD] to-[#3496FF] flex items-center justify-center mx-auto mb-6">
+        <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#FF1AD8] to-[#00F0FF] flex items-center justify-center mx-auto mb-6">
           <Lock className="w-6 h-6 text-white" />
         </div>
         <h1 className="text-2xl font-black text-center mb-2">Admin Access</h1>
@@ -174,7 +174,7 @@ function Login({ onSubmit }: { onSubmit: (t: string) => void }) {
           placeholder="Password"
           autoFocus
           autoComplete="current-password"
-          className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#3496FF] focus:outline-none focus:ring-2 focus:ring-[#3496FF]/20 transition mb-4"
+          className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#00F0FF] focus:outline-none focus:ring-2 focus:ring-[#00F0FF]/20 transition mb-4"
         />
         {error && (
           <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-sm">
@@ -184,7 +184,7 @@ function Login({ onSubmit }: { onSubmit: (t: string) => void }) {
         <button
           type="submit"
           disabled={!value || submitting}
-          className="w-full px-6 py-3 rounded-full bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white font-bold disabled:opacity-50 hover:shadow-lg hover:shadow-[#3496FF]/30 transition flex items-center justify-center gap-2"
+          className="w-full px-6 py-3 rounded-full bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] text-white font-bold disabled:opacity-50 hover:shadow-lg hover:shadow-[#00F0FF]/30 transition flex items-center justify-center gap-2"
         >
           {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
           Sign in
@@ -219,7 +219,7 @@ function DevFooter() {
             className="h-14 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity"
           />
           <p className="text-gray-500 text-xs font-medium uppercase tracking-widest group-hover:text-white transition-colors">
-            Designed and developed by <span className="text-[#3496FF] font-bold">APEX WEB WORX</span>
+            Designed and developed by <span className="text-[#00F0FF] font-bold">APEX WEB WORX</span>
           </p>
         </a>
       </div>
@@ -371,13 +371,13 @@ function Dashboard({
                 type="date"
                 value={filterDate}
                 onChange={(e) => setFilterDate(e.target.value)}
-                className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-[#3496FF]"
+                className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-[#00F0FF]"
                 aria-label="Filter by date"
               />
               <select
                 value={filterService}
                 onChange={(e) => setFilterService(e.target.value)}
-                className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-[#3496FF]"
+                className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-[#00F0FF]"
                 aria-label="Filter by service type"
               >
                 <option value="">All services</option>
@@ -512,7 +512,7 @@ function BlockedDatesPanel({ token }: { token: string }) {
   return (
     <section className="mt-12 pt-8 border-t border-white/10">
       <div className="flex items-center gap-3 mb-2">
-        <CalendarOff className="w-5 h-5 text-[#A886CD]" />
+        <CalendarOff className="w-5 h-5 text-[#FF1AD8]" />
         <h2 className="text-xl font-black">Block off days</h2>
       </div>
       <p className="text-sm text-gray-400 mb-5">
@@ -529,7 +529,7 @@ function BlockedDatesPanel({ token }: { token: string }) {
           onChange={(e) => setDate(e.target.value)}
           min={today}
           required
-          className="px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#3496FF] focus:outline-none focus:ring-2 focus:ring-[#3496FF]/20 transition text-white"
+          className="px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#00F0FF] focus:outline-none focus:ring-2 focus:ring-[#00F0FF]/20 transition text-white"
         />
         <input
           type="text"
@@ -537,12 +537,12 @@ function BlockedDatesPanel({ token }: { token: string }) {
           onChange={(e) => setReason(e.target.value)}
           placeholder="Reason (optional, e.g. Family trip)"
           maxLength={200}
-          className="flex-1 px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#3496FF] focus:outline-none focus:ring-2 focus:ring-[#3496FF]/20 transition text-white placeholder:text-gray-500"
+          className="flex-1 px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#00F0FF] focus:outline-none focus:ring-2 focus:ring-[#00F0FF]/20 transition text-white placeholder:text-gray-500"
         />
         <button
           type="submit"
           disabled={!date || submitting}
-          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white font-bold disabled:opacity-50 hover:shadow-lg hover:shadow-[#3496FF]/30 transition flex items-center justify-center gap-2 whitespace-nowrap"
+          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] text-white font-bold disabled:opacity-50 hover:shadow-lg hover:shadow-[#00F0FF]/30 transition flex items-center justify-center gap-2 whitespace-nowrap"
         >
           {submitting ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -594,7 +594,7 @@ function BlockedDateCard({
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 flex items-start justify-between gap-3">
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2 text-[#A886CD] font-bold text-sm mb-1">
+        <div className="flex items-center gap-2 text-[#FF1AD8] font-bold text-sm mb-1">
           <CalendarOff className="w-4 h-4" />
           {formatDateLong(blocked.date)}
         </div>
@@ -787,7 +787,7 @@ function ServiceRulesPanel({ token }: { token: string }) {
   return (
     <section className="mt-12 pt-8 border-t border-white/10">
       <div className="flex items-center gap-3 mb-2">
-        <Clock className="w-5 h-5 text-[#A886CD]" />
+        <Clock className="w-5 h-5 text-[#FF1AD8]" />
         <h2 className="text-xl font-black">Booking schedule</h2>
       </div>
       <p className="text-sm text-gray-400 mb-5">
@@ -805,7 +805,7 @@ function ServiceRulesPanel({ token }: { token: string }) {
           onChange={(e) =>
             setNewServiceId(e.target.value === "" ? "" : Number(e.target.value))
           }
-          className="px-3 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white focus:border-[#3496FF] focus:outline-none"
+          className="px-3 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white focus:border-[#00F0FF] focus:outline-none"
           required
         >
           <option value="">Pick a service…</option>
@@ -818,7 +818,7 @@ function ServiceRulesPanel({ token }: { token: string }) {
         <select
           value={newDow}
           onChange={(e) => setNewDow(Number(e.target.value))}
-          className="px-3 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white focus:border-[#3496FF] focus:outline-none"
+          className="px-3 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white focus:border-[#00F0FF] focus:outline-none"
         >
           {DOW_LABELS.map((label, i) => (
             <option key={i} value={i} disabled={i === 0}>
@@ -831,7 +831,7 @@ function ServiceRulesPanel({ token }: { token: string }) {
             type="checkbox"
             checked={newWholeDay}
             onChange={(e) => setNewWholeDay(e.target.checked)}
-            className="accent-[#3496FF]"
+            className="accent-[#00F0FF]"
           />
           Whole-day lock
         </label>
@@ -840,12 +840,12 @@ function ServiceRulesPanel({ token }: { token: string }) {
           value={newSlotsCsv}
           onChange={(e) => setNewSlotsCsv(e.target.value)}
           placeholder="Times (HH:MM, comma-separated)"
-          className="px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white placeholder:text-gray-500 focus:border-[#3496FF] focus:outline-none"
+          className="px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white placeholder:text-gray-500 focus:border-[#00F0FF] focus:outline-none"
         />
         <button
           type="submit"
           disabled={newServiceId === "" || adding}
-          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white font-bold disabled:opacity-50 hover:shadow-lg hover:shadow-[#3496FF]/30 transition flex items-center justify-center gap-2 whitespace-nowrap"
+          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] text-white font-bold disabled:opacity-50 hover:shadow-lg hover:shadow-[#00F0FF]/30 transition flex items-center justify-center gap-2 whitespace-nowrap"
         >
           {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
           Add rule
@@ -972,7 +972,7 @@ function RuleRow({
             key={s.id}
             className="inline-flex items-center gap-1 text-xs bg-white/[0.04] border border-white/10 rounded-full px-3 py-1"
           >
-            <Clock className="w-3 h-3 text-[#3496FF]" />
+            <Clock className="w-3 h-3 text-[#00F0FF]" />
             {formatHHMM12h(s.time)}
             <button
               onClick={() => onRemoveSlot(s.id)}
@@ -987,7 +987,7 @@ function RuleRow({
           type="time"
           value={newTime}
           onChange={(e) => setNewTime(e.target.value)}
-          className="bg-white/[0.04] border border-white/10 rounded-full px-3 py-1 text-xs text-white focus:border-[#3496FF] focus:outline-none"
+          className="bg-white/[0.04] border border-white/10 rounded-full px-3 py-1 text-xs text-white focus:border-[#00F0FF] focus:outline-none"
         />
         <button
           onClick={() => {
@@ -1081,7 +1081,7 @@ function BookingCard({
       className={`rounded-2xl border p-5 ${
         muted
           ? "border-white/5 bg-white/[0.01] opacity-70"
-          : "border-white/10 bg-white/[0.03] hover:border-[#3496FF]/30 transition"
+          : "border-white/10 bg-white/[0.03] hover:border-[#00F0FF]/30 transition"
       } ${strikethrough ? "line-through" : ""}`}
     >
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
@@ -1092,7 +1092,7 @@ function BookingCard({
               · {formatDuration(booking.serviceDurationMinutes)}
             </span>
           </div>
-          <div className="flex items-center gap-2 text-[#3496FF] font-bold text-sm mb-3">
+          <div className="flex items-center gap-2 text-[#00F0FF] font-bold text-sm mb-3">
             <Calendar className="w-4 h-4" />
             {formatDateTimeLong(
               typeof booking.scheduledAt === "string"
@@ -1108,14 +1108,14 @@ function BookingCard({
             </div>
             <a
               href={`tel:${booking.phone}`}
-              className="flex items-center gap-2 hover:text-[#3496FF]"
+              className="flex items-center gap-2 hover:text-[#00F0FF]"
             >
               <Phone className="w-4 h-4 text-gray-500" />
               {booking.phone}
             </a>
             <a
               href={`mailto:${booking.email}`}
-              className="flex items-center gap-2 hover:text-[#3496FF]"
+              className="flex items-center gap-2 hover:text-[#00F0FF]"
             >
               <Mail className="w-4 h-4 text-gray-500" />
               {booking.email}
@@ -1133,7 +1133,7 @@ function BookingCard({
             {onEdit && (
               <button
                 onClick={onEdit}
-                className="flex items-center gap-1.5 text-xs text-[#3496FF] hover:text-white hover:bg-[#3496FF]/10 px-3 py-1.5 rounded-lg border border-[#3496FF]/30 transition"
+                className="flex items-center gap-1.5 text-xs text-[#00F0FF] hover:text-white hover:bg-[#00F0FF]/10 px-3 py-1.5 rounded-lg border border-[#00F0FF]/30 transition"
               >
                 <Pencil className="w-3.5 h-3.5" /> Edit
               </button>
@@ -1260,7 +1260,7 @@ function TabButton({
       onClick={onClick}
       className={`px-4 py-2.5 text-sm font-bold border-b-2 -mb-px transition ${
         active
-          ? "text-white border-[#3496FF]"
+          ? "text-white border-[#00F0FF]"
           : "text-gray-400 border-transparent hover:text-white"
       }`}
     >
@@ -1335,7 +1335,7 @@ function DetailsTab({
           value={customerName}
           onChange={(e) => setCustomerName(e.target.value)}
           required
-          className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#3496FF] focus:outline-none focus:ring-2 focus:ring-[#3496FF]/20 transition"
+          className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#00F0FF] focus:outline-none focus:ring-2 focus:ring-[#00F0FF]/20 transition"
         />
       </Field>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1345,7 +1345,7 @@ function DetailsTab({
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             required
-            className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#3496FF] focus:outline-none focus:ring-2 focus:ring-[#3496FF]/20 transition"
+            className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#00F0FF] focus:outline-none focus:ring-2 focus:ring-[#00F0FF]/20 transition"
           />
         </Field>
         <Field label="Email">
@@ -1354,7 +1354,7 @@ function DetailsTab({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#3496FF] focus:outline-none focus:ring-2 focus:ring-[#3496FF]/20 transition"
+            className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#00F0FF] focus:outline-none focus:ring-2 focus:ring-[#00F0FF]/20 transition"
           />
         </Field>
       </div>
@@ -1363,7 +1363,7 @@ function DetailsTab({
           value={vehicle}
           onChange={(e) => setVehicle(e.target.value)}
           required
-          className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#3496FF] focus:outline-none focus:ring-2 focus:ring-[#3496FF]/20 transition"
+          className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#00F0FF] focus:outline-none focus:ring-2 focus:ring-[#00F0FF]/20 transition"
         />
       </Field>
       <Field label="Notes">
@@ -1371,7 +1371,7 @@ function DetailsTab({
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           rows={3}
-          className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#3496FF] focus:outline-none focus:ring-2 focus:ring-[#3496FF]/20 transition resize-none"
+          className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#00F0FF] focus:outline-none focus:ring-2 focus:ring-[#00F0FF]/20 transition resize-none"
         />
       </Field>
 
@@ -1389,7 +1389,7 @@ function DetailsTab({
         <button
           type="submit"
           disabled={!dirty || submitting}
-          className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white font-bold disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-[#3496FF]/30 transition flex items-center justify-center gap-2"
+          className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] text-white font-bold disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-[#00F0FF]/30 transition flex items-center justify-center gap-2"
         >
           {submitting ? (
             <>
@@ -1572,7 +1572,7 @@ function RescheduleTab({
                   disabled={disabled}
                   className={`p-3 rounded-xl text-center transition ${
                     isPicked
-                      ? "bg-gradient-to-br from-[#A886CD] to-[#3496FF] text-white"
+                      ? "bg-gradient-to-br from-[#FF1AD8] to-[#00F0FF] text-white"
                       : disabled
                         ? "bg-white/[0.02] text-gray-600 cursor-not-allowed opacity-50"
                         : "bg-white/[0.04] hover:bg-white/[0.08] text-white"
@@ -1619,7 +1619,7 @@ function RescheduleTab({
                   disabled={!available}
                   className={`py-3 rounded-xl font-bold transition text-sm ${
                     isPicked
-                      ? "bg-gradient-to-br from-[#A886CD] to-[#3496FF] text-white"
+                      ? "bg-gradient-to-br from-[#FF1AD8] to-[#00F0FF] text-white"
                       : available
                         ? "bg-white/[0.04] hover:bg-white/[0.08] text-white border border-white/10"
                         : "bg-white/[0.02] text-gray-600 cursor-not-allowed line-through"
@@ -1654,7 +1654,7 @@ function RescheduleTab({
           disabled={
             !pickedDate || !pickedTime || isCurrentSlot || submitting
           }
-          className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white font-bold disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-[#3496FF]/30 transition flex items-center justify-center gap-2"
+          className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] text-white font-bold disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-[#00F0FF]/30 transition flex items-center justify-center gap-2"
         >
           {submitting ? (
             <>

@@ -40,12 +40,12 @@ const AddonCard = ({ addon }: { addon: { name: string; price: string; descriptio
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <div
-      className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] transition-all cursor-pointer group"
+      className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#00F0FF] transition-all cursor-pointer group"
       onMouseEnter={() => setIsExpanded(true)}
       onMouseLeave={() => setIsExpanded(false)}
     >
-      <h4 className="text-base font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#A886CD] group-hover:to-[#3496FF] transition-all duration-300">{addon.name}</h4>
-      <p className="text-[#3496FF] font-bold text-sm">{addon.price}</p>
+      <h4 className="text-base font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#FF1AD8] group-hover:to-[#00F0FF] transition-all duration-300">{addon.name}</h4>
+      <p className="text-[#00F0FF] font-bold text-sm">{addon.price}</p>
       {addon.description && (
         <div 
           onClick={(e) => {
@@ -69,7 +69,7 @@ const services = [
     title: "Apex Full Detailing",
     description:
       "The ultimate package! Includes interior and exterior detailed cleaning and protection. Get your vehicle looking showroom fresh inside and out. Add-ons available to customize your package.",
-    icon: <Wand2 className="w-10 h-10 text-[#A886CD]" />,
+    icon: <Wand2 className="w-10 h-10 text-[#FF1AD8]" />,
     pricing: "$300",
     pricingDetails: ["Coupe / Sedan: $300-$400", "Truck / Jeep / 2-Row SUV: $350 – $450", "Minivan / 3-Row SUV: $350 – $500"],
     features: [
@@ -85,7 +85,7 @@ const services = [
     title: "Apex Interior Detailing",
     description:
       "Comprehensive interior cleaning that transforms every surface. From carpets to leather to air vents. Add-ons available to customize your package.",
-    icon: <Droplets className="w-10 h-10 text-[#A886CD]" />,
+    icon: <Droplets className="w-10 h-10 text-[#FF1AD8]" />,
     pricing: "$200",
     pricingDetails: ["2-Row: $200 – $300", "3-Row: $250 – $350"],
     features: [
@@ -115,7 +115,7 @@ const services = [
         </span>
       </>
     ),
-    icon: <Droplets className="w-10 h-10 text-[#A886CD]" />,
+    icon: <Droplets className="w-10 h-10 text-[#FF1AD8]" />,
     pricing: "$100",
     pricingDetails: ["2-Row: $100–$150", "3-Row: $150–$200"],
     features: [
@@ -131,7 +131,7 @@ const services = [
     title: "Apex Exterior Detailing",
     description:
       "Comprehensive exterior cleaning and protection to make your car turn heads everywhere you go. Includes detailed hand wash, exterior windows and mirrors cleaning, wheels and tires cleaned, polished, and dressed, door jambs wiped down, and spray sealant for 1-month protection.",
-    icon: <Car className="w-10 h-10 text-[#3496FF]" />,
+    icon: <Car className="w-10 h-10 text-[#00F0FF]" />,
     pricing: "$150",
     pricingDetails: ["Sedan: $150", "SUV: $200–$250"],
     features: [
@@ -147,7 +147,7 @@ const services = [
     title: "Apex Wash, Clay & Wax",
     description:
       "First, the vehicle receives a thorough hand wash to remove dirt, dust, and road grime. Next, a clay bar treatment is used to safely remove embedded contaminants such as tar, brake dust, and industrial fallout that normal washing cannot remove. Finally, a protective wax coating is applied to enhance shine, protect the paint, and help repel water and dirt.",
-    icon: <Sparkles className="w-10 h-10 text-[#A886CD]" />,
+    icon: <Sparkles className="w-10 h-10 text-[#FF1AD8]" />,
     pricing: "$250",
     pricingDetails: ["Sedan: $250", "SUV: $300–$350"],
     features: [
@@ -163,7 +163,7 @@ const services = [
     title: "Apex Headlight Restoration",
     description:
       "Fix foggy, yellowed headlights to improve nighttime visibility and dramatically improve your car's appearance.",
-    icon: <CheckCircle2 className="w-10 h-10 text-[#3496FF]" />,
+    icon: <CheckCircle2 className="w-10 h-10 text-[#00F0FF]" />,
     pricing: "$125",
     features: ["Improves Safety", "Removes Oxidation", "UV Protection Applied"],
   },
@@ -172,7 +172,7 @@ const services = [
     title: "Apex Ceramic Coating",
     description:
       "Ultimate protection and extreme gloss for your vehicle's paint. Lasts for years, making maintenance washes a breeze.",
-    icon: <Shield className="w-10 h-10 text-[#3496FF]" />,
+    icon: <Shield className="w-10 h-10 text-[#00F0FF]" />,
     pricing: "Call for Quote",
     features: ["Up to 5 Years Protection", "Extreme Hydrophobics", "Scratch Resistance"],
   },
@@ -181,7 +181,7 @@ const services = [
     title: "Apex Paint Correction",
     description:
       "Restore your paint to a flawless, mirror-like finish. We offer four levels of correction depending on the condition of your vehicle and the result you're after — from a quick gloss refresh to full show-level restoration.",
-    icon: <Sparkles className="w-10 h-10 text-[#A886CD]" />,
+    icon: <Sparkles className="w-10 h-10 text-[#FF1AD8]" />,
     pricing: "$300+",
     pricingDetails: [
       "Paint Enhancement — starting at $300: Light machine polish for added gloss, minor haze removal, and better shine. Great for vehicles that just need a refresh.",
@@ -194,7 +194,7 @@ const services = [
 ];
 
 const gallery = [
-  { id: 1, title: "Paint Correction", beforeAfter: false, color: "from-blue-900 to-[#3496FF]", thumbnail: `${import.meta.env.BASE_URL}images/paint-correction-thumbnail.jpg`, images: [
+  { id: 1, title: "Paint Correction", beforeAfter: false, color: "from-blue-900 to-[#00F0FF]", thumbnail: `${import.meta.env.BASE_URL}images/paint-correction-thumbnail.jpg`, images: [
     `${import.meta.env.BASE_URL}images/paint-correction-1.jpg`,
     `${import.meta.env.BASE_URL}images/paint-correction-2.jpg`,
     `${import.meta.env.BASE_URL}images/paint-correction-3.jpg`,
@@ -206,7 +206,7 @@ const gallery = [
     `${import.meta.env.BASE_URL}images/gallery/paint-correction/IMG_1969.jpeg`,
     `${import.meta.env.BASE_URL}images/gallery/paint-correction/IMG_1970.jpeg`,
   ], currentImageIndex: 0 },
-  { id: 2, title: "Ceramic Coating", beforeAfter: true, color: "from-[#A886CD] to-purple-900", video: `${import.meta.env.BASE_URL}videos/ceramic-coating-demo.MOV` },
+  { id: 2, title: "Ceramic Coating", beforeAfter: true, color: "from-[#FF1AD8] to-purple-900", video: `${import.meta.env.BASE_URL}videos/ceramic-coating-demo.MOV` },
   { id: 3, title: "Interior Restoration", beforeAfter: true, color: "from-blue-900 to-indigo-900", thumbnail: `${import.meta.env.BASE_URL}images/interior-restoration-video.mp4`, images: [
     { src: img1290, label: "Before" },
     { src: img1303, label: "After" },
@@ -372,7 +372,7 @@ function AddonsSection() {
         {/* Interior Addons */}
         <div>
           <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF]">
               Interior Addons
             </span>
           </h3>
@@ -390,7 +390,7 @@ function AddonsSection() {
         {/* Exterior Addons */}
         <div>
           <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF]">
               Exterior Addons
             </span>
           </h3>
@@ -879,14 +879,14 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white font-['Mulish'] overflow-x-hidden selection:bg-[#A886CD] selection:text-white">
+    <div className="min-h-screen bg-[#0a0a0a] text-white font-['Mulish'] overflow-x-hidden selection:bg-[#FF1AD8] selection:text-white">
       {/* Texture Overlay */}
       <div className="texture-overlay" />
       {/* Navigation */}
       <nav
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
           isScrolled
-            ? "bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/10 py-3 shadow-[0_0_20px_rgba(52,150,255,0.1)]"
+            ? "bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/10 py-3 shadow-[0_0_20px_rgba(0,240,255,0.1)]"
             : "bg-transparent py-5"
         }`}
       >
@@ -907,10 +907,10 @@ export default function Home() {
             <div className="hidden md:flex items-center space-x-8">
               <a
                 href="tel:417-527-6165"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-[#3496FF] transition-colors"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-[#00F0FF] transition-colors"
                 aria-label="Call Apex Detailing"
               >
-                <Phone className="w-4 h-4 text-[#3496FF]" />
+                <Phone className="w-4 h-4 text-[#00F0FF]" />
                 <span>Call</span>
               </a>
               {["Home", "Services", "About", "Gallery", "Testimonials", "FAQ", "Buy Gift Card"].map((item) => {
@@ -934,7 +934,7 @@ export default function Home() {
                     }`}
                   >
                     {item}
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#A886CD] to-[#3496FF] transition-all duration-300 group-hover:w-full" />
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] transition-all duration-300 group-hover:w-full" />
                   </a>
                 );
               })}
@@ -946,7 +946,7 @@ export default function Home() {
                 }}
                 className="relative inline-flex items-center justify-center px-6 py-2.5 overflow-hidden font-bold text-white rounded-md group cursor-pointer"
               >
-                <span className="absolute w-full h-full bg-gradient-to-br from-[#A886CD] via-[#3496FF] to-[#A886CD] group-hover:from-[#3496FF] group-hover:via-[#A886CD] group-hover:to-[#3496FF] transition-all duration-500 bg-[length:200%_200%] bg-[0%_0%] group-hover:bg-[100%_100%]" />
+                <span className="absolute w-full h-full bg-gradient-to-br from-[#FF1AD8] via-[#00F0FF] to-[#FF1AD8] group-hover:from-[#00F0FF] group-hover:via-[#FF1AD8] group-hover:to-[#00F0FF] transition-all duration-500 bg-[length:200%_200%] bg-[0%_0%] group-hover:bg-[100%_100%]" />
                 <span className="absolute inset-1 bg-[#0a0a0a] rounded-[4px] transition-all duration-300 group-hover:bg-opacity-0" />
                 <span className="relative flex items-center gap-2 group-hover:text-white transition-colors duration-300">
                   BOOK NOW <ChevronRight className="w-4 h-4" />
@@ -957,7 +957,7 @@ export default function Home() {
             <div className="md:hidden flex items-center gap-2">
               <a
                 href="tel:417-527-6165"
-                className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10 text-white hover:text-[#3496FF] hover:border-[#3496FF] transition-colors"
+                className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10 text-white hover:text-[#00F0FF] hover:border-[#00F0FF] transition-colors"
                 aria-label="Call Apex Detailing"
               >
                 <Phone className="w-5 h-5" />
@@ -1008,7 +1008,7 @@ export default function Home() {
                 e.preventDefault();
                 goToBooking();
               }}
-              className="mt-4 text-center py-3 bg-gradient-to-r from-[#A886CD] to-[#3496FF] font-bold rounded-md shadow-[0_0_15px_rgba(52,150,255,0.4)] cursor-pointer"
+              className="mt-4 text-center py-3 bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] font-bold rounded-md shadow-[0_0_15px_rgba(0,240,255,0.4)] cursor-pointer"
             >
               BOOK NOW
             </a>
@@ -1043,29 +1043,29 @@ export default function Home() {
         </div>
 
         <div className="absolute inset-0 z-0 opacity-40">
-          <div className="absolute top-[20%] left-[10%] w-96 h-96 bg-[#A886CD] rounded-full mix-blend-screen filter blur-[100px] animate-[pulse_8s_ease-in-out_infinite]" />
-          <div className="absolute bottom-[20%] right-[10%] w-96 h-96 bg-[#3496FF] rounded-full mix-blend-screen filter blur-[100px] animate-[pulse_8s_ease-in-out_infinite_1s]" />
+          <div className="absolute top-[20%] left-[10%] w-96 h-96 bg-[#FF1AD8] rounded-full mix-blend-screen filter blur-[100px] animate-[pulse_8s_ease-in-out_infinite]" />
+          <div className="absolute bottom-[20%] right-[10%] w-96 h-96 bg-[#00F0FF] rounded-full mix-blend-screen filter blur-[100px] animate-[pulse_8s_ease-in-out_infinite_1s]" />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0a0a0a]/80 to-[#0a0a0a]" />
         </div>
 
         <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#A886CD]/10 to-[#3496FF]/10 border border-[#A886CD]/30 backdrop-blur-sm mb-6 sm:mb-8 max-w-full">
-            <span className="flex h-2 w-2 rounded-full bg-[#3496FF] animate-pulse" />
-            <span className="text-[10px] sm:text-sm font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#A886CD] to-[#3496FF] uppercase text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#FF1AD8]/10 to-[#00F0FF]/10 border border-[#FF1AD8]/30 backdrop-blur-sm mb-6 sm:mb-8 max-w-full">
+            <span className="flex h-2 w-2 rounded-full bg-[#00F0FF] animate-pulse" />
+            <span className="text-[10px] sm:text-sm font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] uppercase text-center">
               Nixa Ozark Springfield, MO Premium Detailing
             </span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.92] sm:leading-[0.9] mb-5 sm:mb-6 drop-shadow-2xl uppercase">
             Unleash Your <br />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] via-white to-[#3496FF]">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-white to-[#00F0FF]">
               Car's True Potential
             </span>
           </h1>
 
           <p className="max-w-2xl text-base sm:text-lg md:text-xl text-gray-300 mb-8 sm:mb-10 font-medium px-1">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] via-[#A886CD] to-[#3496FF]">Premium auto detailing, ceramic coating, and paint correction</span> services serving
-            <span className="text-[#3496FF] font-bold"> Nixa Ozark Springfield, MO</span>. We bring the showroom shine to your vehicle.
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#FF1AD8] to-[#00F0FF]">Premium auto detailing, ceramic coating, and paint correction</span> services serving
+            <span className="text-[#00F0FF] font-bold"> Nixa Ozark Springfield, MO</span>. We bring the showroom shine to your vehicle.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full sm:w-auto">
@@ -1077,8 +1077,8 @@ export default function Home() {
                 }}
               className="group relative inline-flex items-center justify-center px-6 sm:px-8 py-4 font-black text-white transition-all duration-300 ease-in-out bg-transparent border-0 rounded-lg cursor-pointer overflow-hidden text-base sm:text-lg w-full sm:w-auto"
             >
-              <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#A886CD] to-[#3496FF] opacity-90 group-hover:opacity-100 transition-opacity duration-300" />
-              <span className="absolute inset-0 w-full h-full rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-[0_0_30px_rgba(52,150,255,0.6)]" />
+              <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] opacity-90 group-hover:opacity-100 transition-opacity duration-300" />
+              <span className="absolute inset-0 w-full h-full rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-[0_0_30px_rgba(0,240,255,0.6)]" />
               <span className="relative flex items-center gap-2">
                 BOOK YOUR DETAIL{" "}
                 <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -1088,7 +1088,7 @@ export default function Home() {
               href={`${import.meta.env.BASE_URL}gift-cards`}
               className="relative inline-flex items-center justify-center px-6 py-2.5 overflow-hidden font-bold text-white rounded-md group"
             >
-              <span className="absolute w-full h-full bg-gradient-to-br from-[#3496FF] via-[#A886CD] to-[#3496FF] group-hover:from-[#A886CD] group-hover:via-[#3496FF] group-hover:to-[#A886CD] transition-all duration-500 bg-[length:200%_200%] bg-[0%_0%] group-hover:bg-[100%_100%]" />
+              <span className="absolute w-full h-full bg-gradient-to-br from-[#00F0FF] via-[#FF1AD8] to-[#00F0FF] group-hover:from-[#FF1AD8] group-hover:via-[#00F0FF] group-hover:to-[#FF1AD8] transition-all duration-500 bg-[length:200%_200%] bg-[0%_0%] group-hover:bg-[100%_100%]" />
               <span className="absolute inset-1 bg-[#0a0a0a] rounded-[4px] transition-all duration-300 group-hover:bg-opacity-0" />
               <span className="relative flex items-center gap-2 group-hover:text-white transition-colors duration-300">
                 BUY GIFT CARD <ChevronRight className="w-4 h-4" />
@@ -1131,15 +1131,15 @@ export default function Home() {
 
           <div className="mt-10 flex flex-wrap justify-center items-center gap-6 sm:gap-8 opacity-80 hover:opacity-100 transition-all duration-500">
             <div className="flex items-center gap-2">
-              <Shield className="w-6 h-6 text-[#A886CD]" />
+              <Shield className="w-6 h-6 text-[#FF1AD8]" />
               <span className="font-bold">Satisfaction Guaranteed</span>
             </div>
             <div className="flex items-center gap-2">
-              <Award className="w-6 h-6 text-[#3496FF]" />
+              <Award className="w-6 h-6 text-[#00F0FF]" />
               <span className="font-bold">5.0★ on Google</span>
             </div>
             <div className="flex items-center gap-2">
-              <MapPin className="w-6 h-6 text-[#A886CD]" />
+              <MapPin className="w-6 h-6 text-[#FF1AD8]" />
               <span className="font-bold">Shop-Based · Nixa, MO</span>
             </div>
           </div>
@@ -1159,12 +1159,12 @@ export default function Home() {
         </div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-sm font-bold tracking-widest text-[#3496FF] uppercase mb-3">
+            <h2 className="text-sm font-bold tracking-widest text-[#00F0FF] uppercase mb-3">
               What We Do
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-6">
               Elite{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF]">
                 Services
               </span>
             </h3>
@@ -1174,9 +1174,9 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mb-12 p-6 rounded-xl bg-white/5 border border-[#A886CD]/30 backdrop-blur-sm max-w-3xl mx-auto">
+          <div className="mb-12 p-6 rounded-xl bg-white/5 border border-[#FF1AD8]/30 backdrop-blur-sm max-w-3xl mx-auto">
             <p className="text-gray-300 text-sm leading-relaxed">
-              <span className="font-black text-[#A886CD]">Pricing Note:</span> The price ranges listed below are standard for the majority of vehicles. The final cost will depend on the condition of your vehicle and any additional services you request. For a more accurate estimate, please contact us directly.
+              <span className="font-black text-[#FF1AD8]">Pricing Note:</span> The price ranges listed below are standard for the majority of vehicles. The final cost will depend on the condition of your vehicle and any additional services you request. For a more accurate estimate, please contact us directly.
             </p>
           </div>
 
@@ -1188,25 +1188,25 @@ export default function Home() {
                   index === services.length - 1 ? "md:col-span-2 lg:col-span-1" : ""
                 }`}
               >
-                <span className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5 group-hover:from-[#A886CD] group-hover:to-[#3496FF] transition-all duration-500 opacity-50 group-hover:opacity-100" />
+                <span className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5 group-hover:from-[#FF1AD8] group-hover:to-[#00F0FF] transition-all duration-500 opacity-50 group-hover:opacity-100" />
                 <div className="relative h-full bg-[#111] p-6 sm:p-8 rounded-2xl flex flex-col z-10 transition-all duration-500">
                   <div className="mb-6 p-4 rounded-xl bg-white/5 inline-flex w-fit group-hover:scale-110 group-hover:bg-white/10 transition-all duration-500">
                     {service.icon}
                   </div>
-                  <h4 className="text-2xl font-black mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#A886CD] group-hover:to-[#3496FF] transition-all duration-300 flex items-center flex-wrap gap-2">
+                  <h4 className="text-2xl font-black mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#FF1AD8] group-hover:to-[#00F0FF] transition-all duration-300 flex items-center flex-wrap gap-2">
                     {service.title}
                     {service.id === "interior-detailing" && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white group-hover:bg-none group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] text-white group-hover:bg-none group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
                         <Star className="w-3 h-3" fill="currentColor" /> Most Booked
                       </span>
                     )}
                     {service.id === "full-detailing" && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#3496FF] text-white group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#00F0FF] text-white group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
                         Best Value
                       </span>
                     )}
                     {service.id === "apex-express-interior-detailing" && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white group-hover:bg-none group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] text-white group-hover:bg-none group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
                         <Zap className="w-3 h-3" /> Express
                       </span>
                     )}
@@ -1217,7 +1217,7 @@ export default function Home() {
                         Starting at
                       </p>
                     )}
-                    <p className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+                    <p className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF]">
                       {service.pricing}
                     </p>
                   </div>
@@ -1232,7 +1232,7 @@ export default function Home() {
                   <ul className="space-y-2 mb-8">
                     {service.features.map((feature, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-gray-300 font-medium">
-                        <CheckCircle2 className="w-4 h-4 text-[#3496FF] mt-0.5 shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-[#00F0FF] mt-0.5 shrink-0" />
                         {feature}
                       </li>
                     ))}
@@ -1242,7 +1242,7 @@ export default function Home() {
                     className="mt-auto inline-flex items-center gap-2 font-bold text-sm tracking-widest text-white uppercase group/btn"
                   >
                     Book Now{" "}
-                    <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 group-hover/btn:text-[#3496FF] transition-all" />
+                    <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 group-hover/btn:text-[#00F0FF] transition-all" />
                   </Link>
                 </div>
               </div>
@@ -1258,24 +1258,24 @@ export default function Home() {
       <section className="py-20 sm:py-24 relative bg-[#0a0a0a] border-t border-white/5 overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-14">
-            <h2 className="text-sm font-bold tracking-widest text-[#A886CD] uppercase mb-3">
+            <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
               How It Works
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight">
               Three Simple{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF]">
                 Steps
               </span>
             </h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {[
-              { step: "01", title: "Book Online", desc: "Pick your service, day, and time in under 2 minutes — right here on our site.", icon: <Clock className="w-7 h-7 text-[#3496FF]" /> },
-              { step: "02", title: "We Detail", desc: "Drop your car off at our shop. We handle every surface with care, from paint to upholstery.", icon: <Sparkles className="w-7 h-7 text-[#A886CD]" /> },
-              { step: "03", title: "Drive Happy", desc: "Step into a like-new vehicle and enjoy long-lasting protection and shine.", icon: <Car className="w-7 h-7 text-[#3496FF]" /> },
+              { step: "01", title: "Book Online", desc: "Pick your service, day, and time in under 2 minutes — right here on our site.", icon: <Clock className="w-7 h-7 text-[#00F0FF]" /> },
+              { step: "02", title: "We Detail", desc: "Drop your car off at our shop. We handle every surface with care, from paint to upholstery.", icon: <Sparkles className="w-7 h-7 text-[#FF1AD8]" /> },
+              { step: "03", title: "Drive Happy", desc: "Step into a like-new vehicle and enjoy long-lasting protection and shine.", icon: <Car className="w-7 h-7 text-[#00F0FF]" /> },
             ].map((s) => (
               <div key={s.step} className="relative p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-white/20 transition-colors">
-                <div className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF] mb-4">{s.step}</div>
+                <div className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] mb-4">{s.step}</div>
                 <div className="mb-4">{s.icon}</div>
                 <h4 className="text-xl font-black uppercase tracking-tight mb-2">{s.title}</h4>
                 <p className="text-gray-400 text-sm leading-relaxed">{s.desc}</p>
@@ -1295,7 +1295,7 @@ export default function Home() {
           <div className="soap-bubble absolute bottom-[15%] right-[5%] w-14 h-14" style={{ animationDuration: '17s', animationDelay: '0.5s' }} />
           <div className="soap-bubble absolute bottom-[3%] left-[40%] w-10 h-10" style={{ animationDuration: '19s', animationDelay: '1.5s' }} />
         </div>
-        <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-[#A886CD]/10 rounded-full mix-blend-screen filter blur-[120px] -translate-y-1/2 -translate-x-1/2" />
+        <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-[#FF1AD8]/10 rounded-full mix-blend-screen filter blur-[120px] -translate-y-1/2 -translate-x-1/2" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
@@ -1314,7 +1314,7 @@ export default function Home() {
                   />
                 ))}
                 <div 
-                  className="absolute inset-0 bg-gradient-to-tr from-[#A886CD]/30 to-[#3496FF]/30 group-hover:from-[#A886CD]/50 group-hover:to-[#3496FF]/50 z-10 transition-all duration-700"
+                  className="absolute inset-0 bg-gradient-to-tr from-[#FF1AD8]/30 to-[#00F0FF]/30 group-hover:from-[#FF1AD8]/50 group-hover:to-[#00F0FF]/50 z-10 transition-all duration-700"
                 />
                 <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black to-transparent z-20">
                   <div className="inline-flex items-center gap-3 bg-black/60 backdrop-blur-md px-6 py-3 rounded-xl border border-white/10">
@@ -1324,7 +1324,7 @@ export default function Home() {
                           key={i}
                           className="w-10 h-10 rounded-full border-2 border-black bg-gray-800 flex items-center justify-center overflow-hidden"
                         >
-                          <Star className="w-5 h-5 text-[#3496FF]" fill="currentColor" />
+                          <Star className="w-5 h-5 text-[#00F0FF]" fill="currentColor" />
                         </div>
                       ))}
                     </div>
@@ -1337,16 +1337,16 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-gradient-to-br from-[#A886CD] to-[#3496FF] rounded-2xl -z-10 blur-xl opacity-50" />
+              <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-gradient-to-br from-[#FF1AD8] to-[#00F0FF] rounded-2xl -z-10 blur-xl opacity-50" />
             </div>
 
             <div className="order-1 lg:order-2">
-              <h2 className="text-sm font-bold tracking-widest text-[#A886CD] uppercase mb-3">
+              <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
                 About Us
               </h2>
               <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight mb-6 sm:mb-8 leading-tight">
                 Welcome to{" "}
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF]">
                   Apex Detailing
                 </span>
               </h3>
@@ -1359,9 +1359,9 @@ export default function Home() {
                   Our dedication to quality and customer satisfaction has helped us become <strong className="text-white">#1 Ranked in Nixa for 2024 and 2025</strong>, a recognition we are truly grateful for.
                 </p>
                 <p className="italic">
-                  Our business is built on <span className="text-[#3496FF] font-semibold">Christian</span> values, with <span className="text-[#3496FF] font-semibold">Christ</span> at the center of everything we do. We believe in working with integrity, serving others with a joyful heart, and honoring <span className="text-[#3496FF] font-semibold">God</span> through the quality of our craft.
+                  Our business is built on <span className="text-[#00F0FF] font-semibold">Christian</span> values, with <span className="text-[#00F0FF] font-semibold">Christ</span> at the center of everything we do. We believe in working with integrity, serving others with a joyful heart, and honoring <span className="text-[#00F0FF] font-semibold">God</span> through the quality of our craft.
                 </p>
-                <p className="italic text-[#A886CD] text-sm mt-4">
+                <p className="italic text-[#FF1AD8] text-sm mt-4">
                   "Whatever you do, work at it with all your heart, as working for the Lord, not for men. Colossians 3:23 (NIV)"
                 </p>
                 <p>
@@ -1375,7 +1375,7 @@ export default function Home() {
                 </p>
                 <div className="mt-8 flex items-center gap-5 p-5 rounded-2xl bg-white/[0.03] border border-white/10">
                   <div className="relative shrink-0">
-                    <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-[#A886CD] to-[#3496FF] blur-md opacity-60" />
+                    <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-[#FF1AD8] to-[#00F0FF] blur-md opacity-60" />
                     <img
                       src={ownerPhoto}
                       alt="Michail Gurov, Founder of Apex Detailing"
@@ -1389,7 +1389,7 @@ export default function Home() {
                     <p className="text-white font-black text-lg sm:text-xl leading-tight">
                       Michail Gurov
                     </p>
-                    <p className="text-[#A886CD] font-bold text-sm">
+                    <p className="text-[#FF1AD8] font-bold text-sm">
                       Founder &amp; Detailing Specialist
                     </p>
                   </div>
@@ -1402,22 +1402,22 @@ export default function Home() {
                   {
                     title: "Premium Products",
                     desc: "Professional-grade chemicals only",
-                    icon: <Shield className="text-[#A886CD]" />,
+                    icon: <Shield className="text-[#FF1AD8]" />,
                   },
                   {
                     title: "Insured & Certified",
                     desc: "Peace of mind for your investment",
-                    icon: <Award className="text-[#3496FF]" />,
+                    icon: <Award className="text-[#00F0FF]" />,
                   },
                   {
                     title: "Flexible Scheduling",
                     desc: "Book easily online anytime",
-                    icon: <Clock className="text-[#A886CD]" />,
+                    icon: <Clock className="text-[#FF1AD8]" />,
                   },
                   {
                     title: "Expert Team",
                     desc: "Certified professionals on staff",
-                    icon: <Sparkles className="text-[#3496FF]" />,
+                    icon: <Sparkles className="text-[#00F0FF]" />,
                   },
                 ].map((item, i) => (
                   <div key={i} className="flex gap-4">
@@ -1441,11 +1441,11 @@ export default function Home() {
       <section className="py-20 sm:py-24 relative bg-[#0a0a0a]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-10 sm:mb-16">
-            <h2 className="text-sm font-bold tracking-widest text-[#A886CD] uppercase mb-3">
+            <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
               See the Difference
             </h2>
             <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight">
-              Before & After <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">Transformations</span>
+              Before & After <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF]">Transformations</span>
             </h3>
           </div>
 
@@ -1500,7 +1500,7 @@ export default function Home() {
 
               {/* Handle */}
               <div
-                className="absolute top-0 bottom-0 w-1 bg-gradient-to-b from-[#A886CD] to-[#3496FF] cursor-col-resize"
+                className="absolute top-0 bottom-0 w-1 bg-gradient-to-b from-[#FF1AD8] to-[#00F0FF] cursor-col-resize"
                 style={{ left: `${sliderPosition}%` }}
               >
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 rounded-full flex items-center justify-center transition-all">
@@ -1525,7 +1525,7 @@ export default function Home() {
               </div>
 
               {/* Title */}
-              <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 text-white font-black uppercase text-center text-xs sm:text-base md:text-lg tracking-wider bg-gradient-to-r from-[#A886CD]/80 to-[#3496FF]/80 px-2 sm:px-4 sm:px-6 py-2 sm:py-3 rounded-lg backdrop-blur-sm">
+              <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 text-white font-black uppercase text-center text-xs sm:text-base md:text-lg tracking-wider bg-gradient-to-r from-[#FF1AD8]/80 to-[#00F0FF]/80 px-2 sm:px-4 sm:px-6 py-2 sm:py-3 rounded-lg backdrop-blur-sm">
                 {beforeAfterPairs[currentSliderIndex].title}
               </div>
             </div>
@@ -1534,13 +1534,13 @@ export default function Home() {
             <div className="flex justify-center gap-4 mt-8">
               <button
                 onClick={() => setCurrentSliderIndex((prev) => (prev - 1 + beforeAfterPairs.length) % beforeAfterPairs.length)}
-                className="px-6 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] hover:text-white transition-all font-bold text-sm"
+                className="px-6 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#00F0FF] hover:text-white transition-all font-bold text-sm"
               >
                 ← Previous
               </button>
               <button
                 onClick={() => setCurrentSliderIndex((prev) => (prev + 1) % beforeAfterPairs.length)}
-                className="px-6 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] hover:text-white transition-all font-bold text-sm"
+                className="px-6 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#00F0FF] hover:text-white transition-all font-bold text-sm"
               >
                 Next →
               </button>
@@ -1554,7 +1554,7 @@ export default function Home() {
                   onClick={() => setCurrentSliderIndex(idx)}
                   className={`w-2 h-2 rounded-full transition-all ${
                     idx === currentSliderIndex
-                      ? "bg-gradient-to-r from-[#A886CD] to-[#3496FF] w-8"
+                      ? "bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] w-8"
                       : "bg-white/30 hover:bg-white/50"
                   }`}
                 />
@@ -1569,12 +1569,12 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-end mb-10 sm:mb-16 gap-6">
             <div className="max-w-2xl">
-              <h2 className="text-sm font-bold tracking-widest text-[#3496FF] uppercase mb-3">
+              <h2 className="text-sm font-bold tracking-widest text-[#00F0FF] uppercase mb-3">
                 Our Work
               </h2>
               <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight">
                 Results That{" "}
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF]">
                   Speak
                 </span>
               </h3>
@@ -1646,21 +1646,21 @@ export default function Home() {
                 )}
                 <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                   {item.beforeAfter ? (
-                    <span className="inline-block px-3 py-1 bg-[#3496FF] text-black font-black text-xs uppercase tracking-widest rounded mb-3 opacity-85">
+                    <span className="inline-block px-3 py-1 bg-[#00F0FF] text-black font-black text-xs uppercase tracking-widest rounded mb-3 opacity-85">
                       Results before and after
                     </span>
                   ) : item.id === 1 && (
-                    <span className="inline-block px-3 py-1 bg-[#3496FF] text-black font-black text-xs uppercase tracking-widest rounded mb-3 opacity-85">
+                    <span className="inline-block px-3 py-1 bg-[#00F0FF] text-black font-black text-xs uppercase tracking-widest rounded mb-3 opacity-85">
                       Finished results
                     </span>
                   )}
-                  <h4 className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF] opacity-85" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.8)) drop-shadow(0 1px 2px rgba(0,0,0,0.6))' }}>{item.title}</h4>
+                  <h4 className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] opacity-85" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.8)) drop-shadow(0 1px 2px rgba(0,0,0,0.6))' }}>{item.title}</h4>
                   {item.images && item.images.length > 1 && (
                     <p className="text-xs text-gray-300 mt-2">
                       {item.images.length} {item.images.length === 1 ? 'result' : 'results'}
                     </p>
                   )}
-                  <div className="w-12 h-1 bg-gradient-to-r from-[#A886CD] to-[#3496FF] mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100" />
+                  <div className="w-12 h-1 bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100" />
                 </div>
               </div>
             ))}
@@ -1672,9 +1672,9 @@ export default function Home() {
               href={INSTAGRAM_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative inline-flex items-center justify-center px-10 py-5 font-black text-white text-lg transition-all duration-300 ease-in-out bg-gradient-to-r from-[#A886CD] to-[#3496FF] rounded-xl overflow-hidden shadow-[0_0_40px_rgba(168,134,205,0.4)] hover:shadow-[0_0_60px_rgba(52,150,255,0.6)] hover:scale-105"
+              className="group relative inline-flex items-center justify-center px-10 py-5 font-black text-white text-lg transition-all duration-300 ease-in-out bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] rounded-xl overflow-hidden shadow-[0_0_40px_rgba(255,26,216,0.4)] hover:shadow-[0_0_60px_rgba(0,240,255,0.6)] hover:scale-105"
             >
-              <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#3496FF] to-[#A886CD] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#00F0FF] to-[#FF1AD8] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <span className="relative flex items-center gap-3">
                 <Instagram className="w-6 h-6" />
                 Follow @apexdetailing_sf
@@ -1692,7 +1692,7 @@ export default function Home() {
         >
           <button
             onClick={() => setSelectedGalleryItem(null)}
-            className="absolute top-4 right-20 md:top-6 md:right-24 text-white hover:text-[#3496FF] transition-colors z-10 p-1"
+            className="absolute top-4 right-20 md:top-6 md:right-24 text-white hover:text-[#00F0FF] transition-colors z-10 p-1"
             aria-label="Close"
           >
             <X className="w-6 h-6 md:w-8 md:h-8" />
@@ -1725,7 +1725,7 @@ export default function Home() {
                 
                 {/* Before/After Label */}
                 {selectedGalleryItem.beforeAfter && typeof selectedGalleryItem.images[currentImageIndex] === 'object' && (
-                  <div className="absolute top-6 left-6 bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg opacity-85">
+                  <div className="absolute top-6 left-6 bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg opacity-85">
                     {selectedGalleryItem.images[currentImageIndex].label}
                   </div>
                 )}
@@ -1737,7 +1737,7 @@ export default function Home() {
                       e.stopPropagation();
                       prevImage();
                     }}
-                    className="absolute left-2 md:left-6 top-1/2 transform -translate-y-1/2 text-white hover:text-[#3496FF] active:text-[#3496FF] transition-colors z-50 bg-black/50 hover:bg-black/70 active:bg-black/80 p-3 md:p-4 rounded-full cursor-pointer min-w-12 h-12 md:min-w-14 md:h-14 flex items-center justify-center"
+                    className="absolute left-2 md:left-6 top-1/2 transform -translate-y-1/2 text-white hover:text-[#00F0FF] active:text-[#00F0FF] transition-colors z-50 bg-black/50 hover:bg-black/70 active:bg-black/80 p-3 md:p-4 rounded-full cursor-pointer min-w-12 h-12 md:min-w-14 md:h-14 flex items-center justify-center"
                     aria-label="Previous image"
                     type="button"
                   >
@@ -1754,7 +1754,7 @@ export default function Home() {
                       e.stopPropagation();
                       nextImage();
                     }}
-                    className="absolute right-2 md:right-6 top-1/2 transform -translate-y-1/2 text-white hover:text-[#3496FF] active:text-[#3496FF] transition-colors z-50 bg-black/50 hover:bg-black/70 active:bg-black/80 p-3 md:p-4 rounded-full cursor-pointer min-w-12 h-12 md:min-w-14 md:h-14 flex items-center justify-center"
+                    className="absolute right-2 md:right-6 top-1/2 transform -translate-y-1/2 text-white hover:text-[#00F0FF] active:text-[#00F0FF] transition-colors z-50 bg-black/50 hover:bg-black/70 active:bg-black/80 p-3 md:p-4 rounded-full cursor-pointer min-w-12 h-12 md:min-w-14 md:h-14 flex items-center justify-center"
                     aria-label="Next image"
                     type="button"
                   >
@@ -1778,16 +1778,16 @@ export default function Home() {
 
       {/* Testimonials */}
       <section id="testimonials" className="py-24 relative overflow-hidden">
-        <div className="absolute right-0 bottom-0 w-[600px] h-[600px] bg-[#3496FF]/10 rounded-full mix-blend-screen filter blur-[150px]" />
+        <div className="absolute right-0 bottom-0 w-[600px] h-[600px] bg-[#00F0FF]/10 rounded-full mix-blend-screen filter blur-[150px]" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-sm font-bold tracking-widest text-[#A886CD] uppercase mb-3">
+            <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
               Testimonials
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight">
               Client{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF]">
                 Reactions
               </span>
             </h3>
@@ -1802,7 +1802,7 @@ export default function Home() {
                 <Star className="absolute top-8 right-8 w-12 h-12 text-white/5" />
                 <div className="flex gap-1 mb-6">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <Star key={star} className="w-5 h-5 text-[#3496FF]" fill="currentColor" />
+                    <Star key={star} className="w-5 h-5 text-[#00F0FF]" fill="currentColor" />
                   ))}
                 </div>
                 <p className="text-gray-300 italic mb-8 relative z-10">"{testimonial.text}"</p>
@@ -1821,16 +1821,16 @@ export default function Home() {
 
       {/* Google Reviews Showcase */}
       <section className="py-24 relative bg-[#0d0d0d] border-y border-white/5 overflow-hidden">
-        <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-[#A886CD]/10 rounded-full mix-blend-screen filter blur-[120px] -translate-y-1/2" />
+        <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-[#FF1AD8]/10 rounded-full mix-blend-screen filter blur-[120px] -translate-y-1/2" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl mx-auto text-center mb-20">
-            <h2 className="text-sm font-bold tracking-widest text-[#3496FF] uppercase mb-3">
+            <h2 className="text-sm font-bold tracking-widest text-[#00F0FF] uppercase mb-3">
               Google Reviews
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-6">
               Trusted by Our{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF]">
                 Happy Customers
               </span>
             </h3>
@@ -1845,7 +1845,7 @@ export default function Home() {
                 { rating: "5h", reviews: "Response", description: "Support Time" },
               ].map((stat, i) => (
                 <div key={i} className="text-center p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:border-white/20 transition-colors">
-                  <p className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF] mb-2">
+                  <p className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] mb-2">
                     {stat.rating}
                   </p>
                   <p className="text-gray-300 font-bold mb-2">{stat.reviews}</p>
@@ -1889,15 +1889,15 @@ export default function Home() {
 
       {/* Service Area */}
       <section className="py-20 sm:py-24 relative bg-[#0a0a0a] border-t border-white/5 overflow-hidden">
-        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#3496FF]/10 rounded-full mix-blend-screen filter blur-[120px]" />
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#00F0FF]/10 rounded-full mix-blend-screen filter blur-[120px]" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-12">
-            <h2 className="text-sm font-bold tracking-widest text-[#3496FF] uppercase mb-3">
+            <h2 className="text-sm font-bold tracking-widest text-[#00F0FF] uppercase mb-3">
               Service Area
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-4">
               Serving the{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF]">
                 Ozarks
               </span>
             </h3>
@@ -1911,9 +1911,9 @@ export default function Home() {
               {serviceCities.map((city) => (
                 <div
                   key={city}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 hover:border-[#3496FF]/50 transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 hover:border-[#00F0FF]/50 transition-colors"
                 >
-                  <MapPin className="w-3.5 h-3.5 text-[#3496FF]" />
+                  <MapPin className="w-3.5 h-3.5 text-[#00F0FF]" />
                   <span className="text-sm font-bold text-gray-200">{city}, MO</span>
                 </div>
               ))}
@@ -1922,9 +1922,9 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <a
                 href="tel:417-527-6165"
-                className="flex items-center gap-3 p-5 rounded-xl bg-white/5 border border-white/10 hover:border-[#A886CD]/50 transition-colors"
+                className="flex items-center gap-3 p-5 rounded-xl bg-white/5 border border-white/10 hover:border-[#FF1AD8]/50 transition-colors"
               >
-                <Phone className="w-5 h-5 text-[#A886CD]" />
+                <Phone className="w-5 h-5 text-[#FF1AD8]" />
                 <div>
                   <p className="text-xs text-gray-500 uppercase tracking-wider font-bold">Call</p>
                   <p className="text-white font-bold">417-527-6165</p>
@@ -1934,16 +1934,16 @@ export default function Home() {
                 href="https://www.google.com/maps/search/1114+E+Lakota+St,+65714+Nixa,+MO"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 p-5 rounded-xl bg-white/5 border border-white/10 hover:border-[#3496FF]/50 transition-colors"
+                className="flex items-center gap-3 p-5 rounded-xl bg-white/5 border border-white/10 hover:border-[#00F0FF]/50 transition-colors"
               >
-                <MapPin className="w-5 h-5 text-[#3496FF]" />
+                <MapPin className="w-5 h-5 text-[#00F0FF]" />
                 <div>
                   <p className="text-xs text-gray-500 uppercase tracking-wider font-bold">Shop</p>
                   <p className="text-white font-bold">1114 E Lakota St, Nixa</p>
                 </div>
               </a>
               <div className="flex items-center gap-3 p-5 rounded-xl bg-white/5 border border-white/10">
-                <Clock className="w-5 h-5 text-[#A886CD]" />
+                <Clock className="w-5 h-5 text-[#FF1AD8]" />
                 <div>
                   <p className="text-xs text-gray-500 uppercase tracking-wider font-bold">Hours</p>
                   <p className="text-white font-bold">Mon–Sat · 7am – 6pm</p>
@@ -1958,12 +1958,12 @@ export default function Home() {
       <section id="faq" className="py-20 sm:py-24 relative bg-[#0d0d0d] border-t border-white/5 overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-12">
-            <h2 className="text-sm font-bold tracking-widest text-[#A886CD] uppercase mb-3">
+            <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
               FAQ
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight">
               Frequently Asked{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF]">
                 Questions
               </span>
             </h3>
@@ -1980,7 +1980,7 @@ export default function Home() {
                 }}
                 className={`px-5 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all duration-300 border ${
                   activeFaqCategory === cat
-                    ? "bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white border-transparent shadow-[0_0_20px_rgba(52,150,255,0.3)]"
+                    ? "bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] text-white border-transparent shadow-[0_0_20px_rgba(0,240,255,0.3)]"
                     : "bg-white/5 text-gray-400 border-white/10 hover:border-white/30 hover:text-white"
                 }`}
               >
@@ -1999,7 +1999,7 @@ export default function Home() {
                   <div
                     key={key}
                     className={`rounded-xl border backdrop-blur-sm transition-colors ${
-                      isOpen ? "bg-white/10 border-[#3496FF]/40" : "bg-white/5 border-white/10 hover:border-white/20"
+                      isOpen ? "bg-white/10 border-[#00F0FF]/40" : "bg-white/5 border-white/10 hover:border-white/20"
                     }`}
                   >
                     <button
@@ -2009,7 +2009,7 @@ export default function Home() {
                     >
                       <span className="font-bold text-white text-base sm:text-lg">{faq.q}</span>
                       <ChevronRight
-                        className={`w-5 h-5 shrink-0 text-[#3496FF] transition-transform duration-300 ${
+                        className={`w-5 h-5 shrink-0 text-[#00F0FF] transition-transform duration-300 ${
                           isOpen ? "rotate-90" : ""
                         }`}
                       />
@@ -2036,7 +2036,7 @@ export default function Home() {
       <section className="py-24 relative z-10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative rounded-3xl overflow-hidden bg-[#111] border border-white/10 p-10 md:p-20 text-center">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-full bg-gradient-to-b from-[#A886CD]/20 to-[#3496FF]/20 blur-3xl" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-full bg-gradient-to-b from-[#FF1AD8]/20 to-[#00F0FF]/20 blur-3xl" />
 
             <div className="relative z-10 max-w-3xl mx-auto">
               <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tight mb-6">
@@ -2046,9 +2046,9 @@ export default function Home() {
               <p className="text-xl text-gray-400 mb-10 font-medium">
                 Book your appointment today.
               </p>
-              <div className="mb-8 p-6 rounded-xl bg-white/5 border border-[#3496FF]/30 backdrop-blur-sm max-w-2xl">
+              <div className="mb-8 p-6 rounded-xl bg-white/5 border border-[#00F0FF]/30 backdrop-blur-sm max-w-2xl">
                 <p className="text-gray-300 text-sm leading-relaxed">
-                  <span className="font-black text-[#3496FF]">Important:</span> All scheduling needs to be done prior to your visit. We appreciate your understanding and encourage you to book ahead to secure your preferred time.
+                  <span className="font-black text-[#00F0FF]">Important:</span> All scheduling needs to be done prior to your visit. We appreciate your understanding and encourage you to book ahead to secure your preferred time.
                 </p>
               </div>
               <a
@@ -2057,9 +2057,9 @@ export default function Home() {
                   e.preventDefault();
                   goToBooking();
                 }}
-                className="group relative inline-flex items-center justify-center px-10 py-5 font-black text-white text-xl transition-all duration-300 ease-in-out bg-gradient-to-r from-[#A886CD] to-[#3496FF] rounded-xl overflow-hidden shadow-[0_0_40px_rgba(168,134,205,0.4)] hover:shadow-[0_0_60px_rgba(52,150,255,0.6)] hover:scale-105 cursor-pointer"
+                className="group relative inline-flex items-center justify-center px-10 py-5 font-black text-white text-xl transition-all duration-300 ease-in-out bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] rounded-xl overflow-hidden shadow-[0_0_40px_rgba(255,26,216,0.4)] hover:shadow-[0_0_60px_rgba(0,240,255,0.6)] hover:scale-105 cursor-pointer"
               >
-                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#3496FF] to-[#A886CD] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#00F0FF] to-[#FF1AD8] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <span className="relative flex items-center gap-3">
                   BOOK APPOINTMENT NOW <ChevronRight className="w-6 h-6" />
                 </span>
@@ -2091,7 +2091,7 @@ export default function Home() {
                   href={INSTAGRAM_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-gradient-to-tr hover:from-[#A886CD] hover:to-[#3496FF] transition-all"
+                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-gradient-to-tr hover:from-[#FF1AD8] hover:to-[#00F0FF] transition-all"
                   aria-label="Instagram"
                 >
                   <Instagram className="w-5 h-5" />
@@ -2100,7 +2100,7 @@ export default function Home() {
                   href={FACEBOOK_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#3496FF] transition-all"
+                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#00F0FF] transition-all"
                   aria-label="Facebook"
                 >
                   <Facebook className="w-5 h-5" />
@@ -2141,7 +2141,7 @@ export default function Home() {
                         }}
                         className="hover:text-white hover:translate-x-1 transition-all flex items-center gap-2"
                       >
-                        <ChevronRight className="w-3 h-3 text-[#3496FF]" /> {item}
+                        <ChevronRight className="w-3 h-3 text-[#00F0FF]" /> {item}
                       </a>
                     </li>
                   );
@@ -2157,7 +2157,7 @@ export default function Home() {
                     key={service.id}
                     className="hover:text-white transition-colors cursor-pointer flex items-center gap-2"
                   >
-                    <ChevronRight className="w-3 h-3 text-[#A886CD]" /> {service.title}
+                    <ChevronRight className="w-3 h-3 text-[#FF1AD8]" /> {service.title}
                   </li>
                 ))}
               </ul>
@@ -2167,28 +2167,28 @@ export default function Home() {
               <h4 className="font-black text-lg uppercase tracking-wider mb-6">Contact</h4>
               <ul className="space-y-4 text-gray-400">
                 <li className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-[#3496FF] shrink-0 mt-0.5" />
+                  <MapPin className="w-5 h-5 text-[#00F0FF] shrink-0 mt-0.5" />
                   <a
                     href="https://www.google.com/maps/search/1114+E+Lakota+St,+65714+Nixa,+MO"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hidden md:block hover:text-[#3496FF] transition-colors cursor-pointer text-left"
+                    className="hidden md:block hover:text-[#00F0FF] transition-colors cursor-pointer text-left"
                   >
                     <span>Located in the Nixa<br />1114 E Lakota St, 65714</span>
                   </a>
                   <button
                     onClick={openMapChooser}
-                    className="md:hidden hover:text-[#3496FF] transition-colors cursor-pointer text-left"
+                    className="md:hidden hover:text-[#00F0FF] transition-colors cursor-pointer text-left"
                   >
                     <span>Located in the Nixa<br />1114 E Lakota St, 65714</span>
                   </button>
                 </li>
                 <li className="flex items-center gap-3 hover:text-white transition-colors cursor-pointer">
-                  <Phone className="w-5 h-5 text-[#A886CD]" />
-                  <a href="tel:417-527-6165" className="hover:text-[#3496FF] transition-colors">417-527-6165</a>
+                  <Phone className="w-5 h-5 text-[#FF1AD8]" />
+                  <a href="tel:417-527-6165" className="hover:text-[#00F0FF] transition-colors">417-527-6165</a>
                 </li>
                 <li className="flex items-start gap-3">
-                  <Clock className="w-5 h-5 text-[#A886CD] shrink-0 mt-0.5" />
+                  <Clock className="w-5 h-5 text-[#FF1AD8] shrink-0 mt-0.5" />
                   <div className="text-sm">
                     <p className="text-white font-bold">Mon – Sat</p>
                     <p className="text-gray-400">7:00 AM – 6:00 PM</p>
@@ -2196,7 +2196,7 @@ export default function Home() {
                   </div>
                 </li>
                 <li className="flex items-start gap-3 group cursor-pointer">
-                  <Mail className="w-5 h-5 text-[#3496FF] shrink-0 mt-0.5" />
+                  <Mail className="w-5 h-5 text-[#00F0FF] shrink-0 mt-0.5" />
                   <div className="flex flex-col">
                     <span className="md:group-hover:hidden block md:block">Contact us via<br />social media</span>
                     <div className="flex md:hidden group-hover:flex gap-3 pt-2">
@@ -2204,7 +2204,7 @@ export default function Home() {
                         href={INSTAGRAM_LINK}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-white/10 hover:bg-gradient-to-r hover:from-[#A886CD] hover:to-[#3496FF] transition-all transform hover:scale-110"
+                        className="p-2 rounded-lg bg-white/10 hover:bg-gradient-to-r hover:from-[#FF1AD8] hover:to-[#00F0FF] transition-all transform hover:scale-110"
                         title="Instagram"
                       >
                         <Instagram className="w-5 h-5 text-white" />
@@ -2213,7 +2213,7 @@ export default function Home() {
                         href={FACEBOOK_LINK}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-white/10 hover:bg-gradient-to-r hover:from-[#A886CD] hover:to-[#3496FF] transition-all transform hover:scale-110"
+                        className="p-2 rounded-lg bg-white/10 hover:bg-gradient-to-r hover:from-[#FF1AD8] hover:to-[#00F0FF] transition-all transform hover:scale-110"
                         title="Facebook"
                       >
                         <Facebook className="w-5 h-5 text-white" />
@@ -2253,7 +2253,7 @@ export default function Home() {
                 className="h-16 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity"
               />
               <p className="text-gray-500 text-xs font-medium uppercase tracking-widest group-hover:text-white transition-colors">
-                Designed and developed by <span className="text-[#3496FF] font-bold">APEX WEB WORX</span>
+                Designed and developed by <span className="text-[#00F0FF] font-bold">APEX WEB WORX</span>
               </p>
             </a>
           </div>
@@ -2287,7 +2287,7 @@ export default function Home() {
           className="flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-white/10 border border-white/15 font-bold text-sm text-white"
           aria-label="Call Apex Detailing"
         >
-          <Phone className="w-4 h-4 text-[#3496FF]" />
+          <Phone className="w-4 h-4 text-[#00F0FF]" />
           CALL NOW
         </a>
         <a
@@ -2296,7 +2296,7 @@ export default function Home() {
             e.preventDefault();
             goToBooking();
           }}
-          className="flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-gradient-to-r from-[#A886CD] to-[#3496FF] font-black text-sm text-white shadow-[0_0_15px_rgba(52,150,255,0.4)]"
+          className="flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] font-black text-sm text-white shadow-[0_0_15px_rgba(0,240,255,0.4)]"
         >
           BOOK NOW
           <ChevronRight className="w-4 h-4" />
@@ -2350,7 +2350,7 @@ export default function Home() {
                 </div>
                 <div>
                   <h4 className="font-black text-white text-base mb-1">Contact</h4>
-                  <p>Questions about your data? Call <a href="tel:417-527-6165" className="text-[#3496FF] underline">417-527-6165</a> or message us on Instagram or Facebook.</p>
+                  <p>Questions about your data? Call <a href="tel:417-527-6165" className="text-[#00F0FF] underline">417-527-6165</a> or message us on Instagram or Facebook.</p>
                 </div>
               </div>
             ) : (
@@ -2383,7 +2383,7 @@ export default function Home() {
 
             <button
               onClick={() => setLegalModal(null)}
-              className="mt-6 w-full py-3 rounded-lg bg-gradient-to-r from-[#A886CD] to-[#3496FF] font-black text-white"
+              className="mt-6 w-full py-3 rounded-lg bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] font-black text-white"
             >
               Close
             </button>
@@ -2399,13 +2399,13 @@ export default function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button
                 onClick={openGoogleMaps}
-                className="px-4 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#3496FF] hover:text-white transition-colors font-bold"
+                className="px-4 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#00F0FF] hover:text-white transition-colors font-bold"
               >
                 Google Maps
               </button>
               <button
                 onClick={openAppleMaps}
-                className="px-4 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#A886CD] hover:text-white transition-colors font-bold"
+                className="px-4 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#FF1AD8] hover:text-white transition-colors font-bold"
               >
                 Apple Maps
               </button>

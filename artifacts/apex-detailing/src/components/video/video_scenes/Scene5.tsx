@@ -52,7 +52,7 @@ export function Scene5() {
         </h2>
         
         <motion.div 
-          className="text-2xl md:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-[#3496FF] to-[#A886CD] font-medium tracking-[0.2em]"
+          className="text-2xl md:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-[#00F0FF] to-[#FF1AD8] font-medium tracking-[0.2em]"
           initial={{ opacity: 0, y: 10 }}
           animate={phase >= 2 ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
           transition={{ duration: 0.8 }}

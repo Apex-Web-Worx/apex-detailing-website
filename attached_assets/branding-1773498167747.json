@@ -15,11 +15,11 @@
     }
   ],
   "colors": {
-    "primary": "#A886CD",
-    "accent": "#3496FF",
+    "primary": "#FF1AD8",
+    "accent": "#00F0FF",
     "background": "#000000",
     "textPrimary": "#FFFFFF",
-    "link": "#3496FF"
+    "link": "#00F0FF"
   },
   "typography": {
     "fontFamilies": {
@@ -49,7 +49,7 @@
   },
   "components": {
     "buttonPrimary": {
-      "background": "#3496FF",
+      "background": "#00F0FF",
       "textColor": "#FFFFFF",
       "borderRadius": "3px",
       "borderRadiusCorners": {
@@ -90,7 +90,7 @@
     "primary": {
       "index": 8,
       "text": "View on Instagram",
-      "reasoning": "Button #0 has a vibrant blue background (#3496FF) and action-oriented text 'View on Instagram', making it a strong candidate for the primary CTA."
+      "reasoning": "Button #0 has a vibrant blue background (#00F0FF) and action-oriented text 'View on Instagram', making it a strong candidate for the primary CTA."
     },
     "secondary": {
       "index": 7,
