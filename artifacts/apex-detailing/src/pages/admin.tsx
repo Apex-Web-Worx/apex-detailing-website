@@ -187,7 +187,7 @@ function Login({ onSubmit }: { onSubmit: (t: string) => void }) {
           className="btn-cyber btn-cyber-block disabled:opacity-50"
         >
           {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-          Sign in
+          <span>Sign in</span>
         </button>
         <Link
           href="/"
@@ -549,7 +549,7 @@ function BlockedDatesPanel({ token }: { token: string }) {
           ) : (
             <Plus className="w-4 h-4" />
           )}
-          Block date
+          <span>Block date</span>
         </button>
       </form>
 
@@ -848,7 +848,7 @@ function ServiceRulesPanel({ token }: { token: string }) {
           className="btn-cyber btn-cyber-sm disabled:opacity-50 whitespace-nowrap"
         >
           {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-          Add rule
+          <span>Add rule</span>
         </button>
       </form>
 
@@ -1393,11 +1393,11 @@ function DetailsTab({
         >
           {submitting ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin" /> Saving…
+              <Loader2 className="w-4 h-4 animate-spin" /> <span>Saving…</span>
             </>
           ) : (
             <>
-              <Check className="w-4 h-4" /> Save changes
+              <Check className="w-4 h-4" /> <span>Save changes</span>
             </>
           )}
         </button>
@@ -1658,11 +1658,11 @@ function RescheduleTab({
         >
           {submitting ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin" /> Updating…
+              <Loader2 className="w-4 h-4 animate-spin" /> <span>Updating…</span>
             </>
           ) : (
             <>
-              {isCurrentSlot ? "Pick a different time" : "Confirm new time"}
+              <span>{isCurrentSlot ? "Pick a different time" : "Confirm new time"}</span>
               <Check className="w-4 h-4" />
             </>
           )}

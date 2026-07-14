@@ -173,7 +173,7 @@ function InvalidLink() {
           href="tel:417-527-6165"
           className="btn-cyber"
         >
-          <Phone className="w-4 h-4" /> Call 417-527-6165
+          <Phone className="w-4 h-4" /> <span>Call 417-527-6165</span>
         </a>
         <Link
           href="/"
@@ -268,7 +268,7 @@ function ManageBody({
               href="/book"
               className="btn-cyber inline-block"
             >
-              Book again
+              <span>Book again</span>
             </Link>
           </div>
         </div>
@@ -278,7 +278,7 @@ function ManageBody({
             onClick={() => setMode("reschedule")}
             className="btn-cyber btn-cyber-lg"
           >
-            <Calendar className="w-4 h-4" /> Reschedule
+            <Calendar className="w-4 h-4" /> <span>Reschedule</span>
           </button>
           <button
             onClick={() => setMode("cancel")}
@@ -394,7 +394,7 @@ function CancelledView({ booking }: { booking: Booking }) {
           href="/book"
           className="btn-cyber"
         >
-          Book another time
+          <span>Book another time</span>
         </Link>
         <Link
           href="/"
@@ -635,11 +635,11 @@ function ReschedulePanel({
         >
           {mutation.isPending ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin" /> Updating…
+              <Loader2 className="w-4 h-4 animate-spin" /> <span>Updating…</span>
             </>
           ) : (
             <>
-              {isCurrentSlot ? "Pick a different time" : "Confirm new time"}
+              <span>{isCurrentSlot ? "Pick a different time" : "Confirm new time"}</span>
               <Check className="w-4 h-4" />
             </>
           )}

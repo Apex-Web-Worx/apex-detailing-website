@@ -364,7 +364,7 @@ export default function GiftCardsPage() {
                 aria-label={`Continue to Square checkout for $${customNumeric} gift card`}
                 className="btn-cyber btn-cyber-sm whitespace-nowrap text-center"
               >
-                Continue to Checkout →
+                <span>Continue to Checkout →</span>
               </a>
             </div>
           </div>
@@ -500,7 +500,7 @@ export default function GiftCardsPage() {
                 rel="noopener noreferrer"
                 className="btn-cyber btn-cyber-lg"
               >
-                Buy a Gift Card <ChevronRight className="w-5 h-5" />
+                <span>Buy a Gift Card</span> <ChevronRight className="w-5 h-5" />
               </a>
             </div>
           </div>

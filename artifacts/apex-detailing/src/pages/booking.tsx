@@ -598,7 +598,7 @@ function DateTimeStep({
           onClick={() => onSelect(pickedDate!, pickedTime!)}
           className="btn-cyber disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          Continue <ArrowRight className="w-4 h-4" />
+          <span>Continue</span> <ArrowRight className="w-4 h-4" />
         </button>
       </div>
     </section>
@@ -726,7 +726,7 @@ function InfoStep({
           onClick={onNext}
           className="btn-cyber disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          Review booking <ArrowRight className="w-4 h-4" />
+          <span>Review booking</span> <ArrowRight className="w-4 h-4" />
         </button>
       </div>
     </section>
@@ -858,11 +858,11 @@ function ConfirmStep({
         >
           {mutation.isPending ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin" /> Booking…
+              <Loader2 className="w-4 h-4 animate-spin" /> <span>Booking…</span>
             </>
           ) : (
             <>
-              Confirm booking <Check className="w-4 h-4" />
+              <span>Confirm booking</span> <Check className="w-4 h-4" />
             </>
           )}
         </button>
@@ -948,7 +948,7 @@ function ConfirmationView({ booking }: { booking: Booking }) {
           href="tel:417-527-6165"
           className="btn-cyber"
         >
-          <Phone className="w-4 h-4" /> Call the shop
+          <Phone className="w-4 h-4" /> <span>Call the shop</span>
         </a>
       </div>
     </section>

@@ -161,52 +161,47 @@
     clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
   }
 
-  /* Cyberpunk CTAs — angular cut, neon glow, scanline sheen */
+  /* Cyberpunk CTAs — dark shell, neon glow, gradient labels (no white) */
   @keyframes cyber-pulse {
     0%, 100% {
       box-shadow:
-        0 0 0 1px rgba(255, 26, 216, 0.9),
-        0 0 18px rgba(255, 26, 216, 0.45),
-        0 0 36px rgba(255, 26, 216, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.28),
-        inset 0 -12px 28px rgba(0, 0, 0, 0.28);
+        0 0 0 1px rgba(255, 26, 216, 0.85),
+        0 0 18px rgba(255, 26, 216, 0.4),
+        0 0 36px rgba(0, 229, 255, 0.12),
+        inset 0 0 24px rgba(255, 26, 216, 0.08);
     }
     50% {
       box-shadow:
         0 0 0 1px rgba(0, 229, 255, 0.55),
-        0 0 28px rgba(255, 26, 216, 0.7),
+        0 0 28px rgba(255, 26, 216, 0.55),
         0 0 52px rgba(0, 229, 255, 0.22),
-        inset 0 1px 0 rgba(255, 255, 255, 0.34),
-        inset 0 -12px 28px rgba(0, 0, 0, 0.28);
+        inset 0 0 28px rgba(0, 229, 255, 0.08);
     }
   }
 
   .btn-cyber {
     --cyber-cut: 12px;
+    --cyber-label: linear-gradient(90deg, #FF1AD8, #9D00FF, #00E5FF);
     position: relative;
+    z-index: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    isolation: isolate;
     padding: 0.85rem 1.75rem;
     border: none;
-    color: #fff;
     font-weight: 800;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     text-decoration: none;
     cursor: pointer;
-    background:
-      repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0, 0, 0, 0.1) 2px,
-        rgba(0, 0, 0, 0.1) 3px
-      ),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, transparent 45%),
-      linear-gradient(135deg, #ff45e0 0%, #FF1AD8 42%, #d10fbf 100%);
+    /* Gradient label on the button’s own text + child text */
+    color: transparent;
+    background-color: transparent;
+    background-image: var(--cyber-label);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     clip-path: polygon(
       0 0,
       calc(100% - var(--cyber-cut)) 0,
@@ -215,42 +210,41 @@
       var(--cyber-cut) 100%,
       0 calc(100% - var(--cyber-cut))
     );
-    box-shadow:
-      0 0 0 1px rgba(255, 26, 216, 0.9),
-      0 0 18px rgba(255, 26, 216, 0.45),
-      0 0 36px rgba(255, 26, 216, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.28),
-      inset 0 -12px 28px rgba(0, 0, 0, 0.28);
-    animation: cyber-pulse 2.8s ease-in-out infinite;
-    transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, filter 0.2s ease;
   }
 
-  .btn-cyber::before,
+  /* Dark cyber shell behind the clipped gradient text */
+  .btn-cyber::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(255, 26, 216, 0.05) 2px,
+        rgba(255, 26, 216, 0.05) 3px
+      ),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 42%),
+      linear-gradient(135deg, #140414 0%, #0a0a0a 55%, #061018 100%);
+    animation: cyber-pulse 2.8s ease-in-out infinite;
+  }
+
+  /* Cyan corner brackets */
   .btn-cyber::after {
     content: "";
     position: absolute;
-    pointer-events: none;
+    inset: 5px;
     z-index: 2;
-  }
-
-  /* Corner bracket accents */
-  .btn-cyber::before {
-    top: 5px;
-    left: 5px;
-    width: 10px;
-    height: 10px;
-    border-top: 2px solid #00E5FF;
-    border-left: 2px solid #00E5FF;
-    opacity: 0.9;
-  }
-
-  .btn-cyber::after {
-    right: 5px;
-    bottom: 5px;
-    width: 10px;
-    height: 10px;
-    border-right: 2px solid #00E5FF;
-    border-bottom: 2px solid #00E5FF;
+    pointer-events: none;
+    background:
+      linear-gradient(#00E5FF, #00E5FF) top left / 10px 2px no-repeat,
+      linear-gradient(#00E5FF, #00E5FF) top left / 2px 10px no-repeat,
+      linear-gradient(#00E5FF, #00E5FF) bottom right / 10px 2px no-repeat,
+      linear-gradient(#00E5FF, #00E5FF) bottom right / 2px 10px no-repeat;
     opacity: 0.9;
   }
 
@@ -259,16 +253,36 @@
     z-index: 3;
   }
 
+  /* Child labels inherit the same gradient treatment */
+  .btn-cyber > span,
+  .btn-cyber > strong {
+    background-image: var(--cyber-label);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Icons: stroke uses shared SVG gradient def */
+  .btn-cyber svg {
+    stroke: url(#btn-cyber-grad);
+    color: #00E5FF;
+    -webkit-text-fill-color: initial;
+    flex-shrink: 0;
+  }
+
   .btn-cyber:hover {
     transform: translateY(-1px) scale(1.015);
     filter: brightness(1.08) saturate(1.05);
+  }
+
+  .btn-cyber:hover::before {
     animation: none;
     box-shadow:
       0 0 0 1px rgba(0, 229, 255, 0.7),
-      0 0 28px rgba(255, 26, 216, 0.75),
+      0 0 28px rgba(255, 26, 216, 0.55),
       0 0 56px rgba(0, 229, 255, 0.28),
-      inset 0 1px 0 rgba(255, 255, 255, 0.35),
-      inset 0 -12px 28px rgba(0, 0, 0, 0.28);
+      inset 0 0 30px rgba(0, 229, 255, 0.1);
   }
 
   .btn-cyber:active {
@@ -280,9 +294,13 @@
   .btn-cyber[aria-disabled="true"] {
     opacity: 0.35;
     cursor: not-allowed;
-    animation: none;
     transform: none;
     filter: none;
+  }
+
+  .btn-cyber:disabled::before,
+  .btn-cyber[aria-disabled="true"]::before {
+    animation: none;
   }
 
   .btn-cyber-sm {
@@ -308,7 +326,7 @@
     width: 100%;
   }
 
-  .btn-cyber-outline {
+  .btn-cyber-outline::before {
     background:
       repeating-linear-gradient(
         0deg,
@@ -319,17 +337,14 @@
       ),
       linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 50%),
       #0a0a0a;
-    color: #fff;
+    animation: none;
     box-shadow:
       0 0 0 1px rgba(255, 26, 216, 0.55),
       0 0 18px rgba(255, 26, 216, 0.18),
       inset 0 0 24px rgba(255, 26, 216, 0.06);
-    animation: none;
   }
 
-  .btn-cyber-outline:hover {
-    color: #fff;
-    filter: brightness(1.05);
+  .btn-cyber-outline:hover::before {
     box-shadow:
       0 0 0 1px rgba(0, 229, 255, 0.65),
       0 0 28px rgba(255, 26, 216, 0.35),
