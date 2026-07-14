@@ -161,42 +161,34 @@
     clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
   }
 
-  /* Cyberpunk CTAs — dark shell, neon glow, gradient labels (no white) */
-  @keyframes cyber-border-shine {
-    0%, 100% {
-      box-shadow:
-        0 0 0 1px rgba(255, 26, 216, 0.75),
-        0 0 10px rgba(255, 26, 216, 0.35),
-        0 0 22px rgba(255, 26, 216, 0.18),
-        inset 0 0 18px rgba(255, 26, 216, 0.06);
+  /* Cyberpunk CTAs — chamfered pink border with visible traveling shine */
+  @keyframes cyber-border-sweep {
+    0% {
+      background-position: 0% 50%;
     }
-    50% {
-      box-shadow:
-        0 0 0 1.5px rgba(255, 106, 232, 1),
-        0 0 16px rgba(255, 26, 216, 0.85),
-        0 0 36px rgba(255, 26, 216, 0.45),
-        0 0 56px rgba(255, 26, 216, 0.22),
-        inset 0 0 22px rgba(255, 26, 216, 0.14);
+    100% {
+      background-position: 200% 50%;
     }
   }
 
-  @keyframes cyber-outer-glow {
+  @keyframes cyber-border-pulse {
     0%, 100% {
       filter:
-        drop-shadow(0 0 2px rgba(255, 26, 216, 0.85))
-        drop-shadow(0 0 8px rgba(255, 26, 216, 0.45))
-        drop-shadow(0 0 16px rgba(255, 26, 216, 0.2));
+        drop-shadow(0 0 3px #FF1AD8)
+        drop-shadow(0 0 10px rgba(255, 26, 216, 0.7))
+        drop-shadow(0 0 18px rgba(255, 26, 216, 0.35));
     }
     50% {
       filter:
-        drop-shadow(0 0 3px rgba(255, 140, 235, 1))
-        drop-shadow(0 0 14px rgba(255, 26, 216, 0.95))
-        drop-shadow(0 0 28px rgba(255, 26, 216, 0.5));
+        drop-shadow(0 0 6px #ff9cf0)
+        drop-shadow(0 0 18px rgba(255, 26, 216, 1))
+        drop-shadow(0 0 32px rgba(255, 26, 216, 0.65));
     }
   }
 
   .btn-cyber {
     --cyber-cut: 12px;
+    --cyber-border: 2.5px;
     --cyber-label: linear-gradient(90deg, #FF1AD8, #9D00FF, #00E5FF);
     position: relative;
     z-index: 0;
@@ -206,18 +198,28 @@
     gap: 0.5rem;
     padding: 0.85rem 1.75rem;
     border: none;
+    overflow: visible;
     font-weight: 800;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     text-decoration: none;
     cursor: pointer;
-    /* Gradient label on the button’s own text + child text */
     color: transparent;
     background-color: transparent;
     background-image: var(--cyber-label);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    transition: transform 0.2s ease;
+  }
+
+  /* Outer pink border chrome (clip lives here so glow isn’t eaten) */
+  .btn-cyber::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
     clip-path: polygon(
       0 0,
       calc(100% - var(--cyber-cut)) 0,
@@ -226,25 +228,41 @@
       var(--cyber-cut) 100%,
       0 calc(100% - var(--cyber-cut))
     );
-    animation: cyber-outer-glow 2.2s ease-in-out infinite;
-    transition: transform 0.2s ease;
+    background: linear-gradient(
+      90deg,
+      #9D00FF 0%,
+      #FF1AD8 18%,
+      #ff8aef 36%,
+      #ffffff 50%,
+      #ff8aef 64%,
+      #FF1AD8 82%,
+      #9D00FF 100%
+    );
+    background-size: 220% 100%;
+    animation:
+      cyber-border-sweep 1.5s linear infinite,
+      cyber-border-pulse 1.5s ease-in-out infinite;
   }
 
-  /* Dark cyber shell + shining pink border */
-  .btn-cyber::before {
+  /* Dark inner fill — inset so pink reads as a border */
+  .btn-cyber::after {
     content: "";
     position: absolute;
-    inset: 0;
+    inset: var(--cyber-border);
     z-index: -1;
     pointer-events: none;
+    --inner-cut: calc(var(--cyber-cut) - 1.5px);
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--inner-cut)) 0,
+      100% var(--inner-cut),
+      100% 100%,
+      var(--inner-cut) 100%,
+      0 calc(100% - var(--inner-cut))
+    );
     background:
       linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 42%),
       linear-gradient(135deg, #140414 0%, #0a0a0a 55%, #0d0610 100%);
-    box-shadow:
-      0 0 0 1px rgba(255, 26, 216, 0.75),
-      0 0 10px rgba(255, 26, 216, 0.35),
-      inset 0 0 18px rgba(255, 26, 216, 0.06);
-    animation: cyber-border-shine 2.2s ease-in-out infinite;
   }
 
   .btn-cyber > * {
@@ -252,7 +270,6 @@
     z-index: 3;
   }
 
-  /* Child labels inherit the same gradient treatment */
   .btn-cyber > span,
   .btn-cyber > strong {
     background-image: var(--cyber-label);
@@ -262,7 +279,6 @@
     -webkit-text-fill-color: transparent;
   }
 
-  /* Icons: stroke uses shared SVG gradient def */
   .btn-cyber svg {
     stroke: url(#btn-cyber-grad);
     color: #00E5FF;
@@ -272,16 +288,12 @@
 
   .btn-cyber:hover {
     transform: translateY(-1px) scale(1.015);
-    animation: cyber-outer-glow 1.1s ease-in-out infinite;
   }
 
   .btn-cyber:hover::before {
-    animation: cyber-border-shine 1.1s ease-in-out infinite;
-    box-shadow:
-      0 0 0 1.5px rgba(255, 140, 235, 1),
-      0 0 20px rgba(255, 26, 216, 0.9),
-      0 0 42px rgba(255, 26, 216, 0.5),
-      inset 0 0 24px rgba(255, 26, 216, 0.16);
+    animation:
+      cyber-border-sweep 0.85s linear infinite,
+      cyber-border-pulse 0.85s ease-in-out infinite;
   }
 
   .btn-cyber:active {
@@ -293,17 +305,18 @@
     opacity: 0.35;
     cursor: not-allowed;
     transform: none;
-    animation: none;
-    filter: none;
   }
 
   .btn-cyber:disabled::before,
   .btn-cyber[aria-disabled="true"]::before {
     animation: none;
+    filter: none;
+    background: #FF1AD8;
   }
 
   .btn-cyber-sm {
     --cyber-cut: 9px;
+    --cyber-border: 2px;
     padding: 0.55rem 1.1rem;
     font-size: 0.8rem;
     letter-spacing: 0.12em;
@@ -311,12 +324,14 @@
 
   .btn-cyber-lg {
     --cyber-cut: 14px;
+    --cyber-border: 2.5px;
     padding: 1.05rem 2.25rem;
     font-size: 1.05rem;
   }
 
   .btn-cyber-xl {
     --cyber-cut: 16px;
+    --cyber-border: 3px;
     padding: 1.2rem 2.5rem;
     font-size: 1.2rem;
   }
@@ -325,15 +340,10 @@
     width: 100%;
   }
 
-  .btn-cyber-outline::before {
+  .btn-cyber-outline::after {
     background:
       linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 50%),
       #0a0a0a;
-    animation: cyber-border-shine 2.2s ease-in-out infinite;
-  }
-
-  .btn-cyber-outline:hover::before {
-    animation: cyber-border-shine 1.1s ease-in-out infinite;
   }
 
   .brand-gradient {
