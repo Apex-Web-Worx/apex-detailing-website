@@ -450,17 +450,19 @@ export default function Home() {
     const mobile =
       window.matchMedia("(max-width: 640px)").matches ||
       window.matchMedia("(pointer: coarse)").matches;
-    const count = mobile ? 16 : 34;
+    const count = mobile ? 22 : 42;
     return Array.from({ length: count }, (_, i) => {
       const tone = Math.random();
       return {
         id: i,
         x: Math.random() * 100,
-        size: mobile ? 6 + Math.random() * 14 : 8 + Math.random() * 22,
-        drift: (Math.random() - 0.5) * (mobile ? 90 : 160),
-        dur: (mobile ? 14 : 12) + Math.random() * (mobile ? 10 : 16),
-        delay: Math.random() * (mobile ? 12 : 18),
-        maxOp: mobile ? 0.35 + Math.random() * 0.2 : 0.4 + Math.random() * 0.25,
+        // Spread starts across the viewport so bubbles are visible immediately
+        start: -5 + Math.random() * 95,
+        size: mobile ? 10 + Math.random() * 22 : 12 + Math.random() * 34,
+        drift: (Math.random() - 0.5) * (mobile ? 110 : 180),
+        dur: (mobile ? 7 : 6) + Math.random() * (mobile ? 6 : 8),
+        // Negative delays = already mid-animation on load
+        delay: -Math.random() * (mobile ? 8 : 12),
         tone: tone < 0.34 ? "pink" : tone < 0.68 ? "cyan" : "",
       };
     });

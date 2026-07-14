@@ -653,73 +653,79 @@
     animation: bubble-shine 4s ease-in-out infinite;
   }
 
-  /* Ambient page-wide neon bubbles */
+  /* Ambient page-wide neon bubbles (over dark sections via screen blend) */
   .page-bubbles {
     position: fixed;
     inset: 0;
-    z-index: 0;
+    z-index: 15;
     pointer-events: none;
     overflow: hidden;
-    contain: layout paint;
+    mix-blend-mode: screen;
   }
 
   .page-bubble {
     position: absolute;
     left: var(--x, 50%);
-    bottom: -8%;
-    width: var(--size, 14px);
-    height: var(--size, 14px);
-    margin-left: calc(var(--size, 14px) / -2);
+    bottom: var(--start, 8%);
+    width: var(--size, 18px);
+    height: var(--size, 18px);
+    margin-left: calc(var(--size, 18px) / -2);
     border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.45);
     opacity: 0;
     will-change: transform, opacity;
-    animation: page-bubble-rise var(--dur, 18s) linear infinite;
+    animation: page-bubble-rise var(--dur, 12s) linear infinite;
     animation-delay: var(--delay, 0s);
     background:
-      radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.45), transparent 42%),
-      radial-gradient(circle at 70% 70%, rgba(0, 229, 255, 0.22), transparent 55%),
-      radial-gradient(circle at 50% 50%, rgba(255, 26, 216, 0.2), rgba(157, 0, 255, 0.08) 60%, transparent 78%);
+      radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.85), transparent 40%),
+      radial-gradient(circle at 70% 70%, rgba(0, 229, 255, 0.55), transparent 55%),
+      radial-gradient(circle at 50% 50%, rgba(255, 26, 216, 0.55), rgba(157, 0, 255, 0.25) 55%, transparent 78%);
     box-shadow:
-      0 0 8px rgba(255, 26, 216, 0.28),
-      0 0 14px rgba(0, 229, 255, 0.16);
+      0 0 12px rgba(255, 26, 216, 0.7),
+      0 0 24px rgba(0, 229, 255, 0.45),
+      0 0 36px rgba(255, 26, 216, 0.25);
   }
 
   .page-bubble.pink {
     background:
-      radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.5), transparent 40%),
-      radial-gradient(circle at 50% 50%, rgba(255, 26, 216, 0.32), transparent 72%);
-    box-shadow: 0 0 10px rgba(255, 26, 216, 0.4);
+      radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.9), transparent 38%),
+      radial-gradient(circle at 50% 50%, rgba(255, 26, 216, 0.75), rgba(255, 26, 216, 0.15) 65%, transparent);
+    box-shadow:
+      0 0 14px rgba(255, 26, 216, 0.9),
+      0 0 28px rgba(255, 26, 216, 0.45);
   }
 
   .page-bubble.cyan {
     background:
-      radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.5), transparent 40%),
-      radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.3), transparent 72%);
-    box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+      radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.9), transparent 38%),
+      radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.7), rgba(0, 229, 255, 0.15) 65%, transparent);
+    box-shadow:
+      0 0 14px rgba(0, 229, 255, 0.9),
+      0 0 28px rgba(0, 229, 255, 0.45);
   }
 
   @keyframes page-bubble-rise {
     0% {
       opacity: 0;
-      transform: translate3d(0, 0, 0) scale(0.55);
+      transform: translate3d(0, 40px, 0) scale(0.45);
     }
-    8% {
-      opacity: var(--max-op, 0.55);
+    10% {
+      opacity: 0.85;
     }
-    75% {
-      opacity: calc(var(--max-op, 0.55) * 0.75);
+    70% {
+      opacity: 0.7;
     }
     100% {
       opacity: 0;
-      transform: translate3d(var(--drift, 40px), -110vh, 0) scale(1.15);
+      transform: translate3d(var(--drift, 40px), -105vh, 0) scale(1.2);
     }
   }
 
   @media (max-width: 640px) {
     .page-bubble {
-      box-shadow: 0 0 6px rgba(255, 26, 216, 0.25);
-      border-width: 0.5px;
+      box-shadow:
+        0 0 8px rgba(255, 26, 216, 0.55),
+        0 0 14px rgba(0, 229, 255, 0.3);
     }
   }
 
