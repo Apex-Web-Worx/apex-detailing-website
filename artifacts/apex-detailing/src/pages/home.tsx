@@ -1168,7 +1168,7 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-24 relative border-t border-white/5 bg-[#050505] overflow-hidden">
+      <section id="services" className="py-24 relative border-t border-white/5 section-pink-wash overflow-hidden">
         {/* Minimal pink-on-black atmosphere */}
         <div className="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
           <div className="absolute -top-24 left-[-10%] w-[42rem] h-[42rem] rounded-full bg-[#FF1AD8]/[0.09] blur-[120px]" />
@@ -1299,7 +1299,7 @@ export default function Home() {
       </section>
 
       {/* How It Works */}
-      <section className="py-20 sm:py-24 relative bg-[#0a0a0a] border-t border-white/5 overflow-hidden">
+      <section className="py-20 sm:py-24 relative section-pink-wash border-t border-white/5 overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-14">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
@@ -1330,7 +1330,7 @@ export default function Home() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-24 relative overflow-hidden">
+      <section id="about" className="py-24 relative section-pink-wash overflow-hidden">
         {/* Soap Bubbles in About Section */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
           <div className="soap-bubble absolute bottom-[5%] left-[5%] w-12 h-12" style={{ animationDuration: '16s', animationDelay: '0s' }} />
@@ -1482,7 +1482,7 @@ export default function Home() {
       </section>
 
       {/* Before/After Slider Section */}
-      <section className="py-20 sm:py-24 relative bg-[#0a0a0a]">
+      <section className="py-20 sm:py-24 relative section-pink-wash overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-10 sm:mb-16">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
@@ -1609,7 +1609,7 @@ export default function Home() {
       </section>
 
       {/* Gallery Section */}
-      <section id="gallery" className="py-24 relative bg-[#070707] border-y border-white/5">
+      <section id="gallery" className="py-24 relative section-pink-wash border-y border-white/5 overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-end mb-10 sm:mb-16 gap-6">
             <div className="max-w-2xl">
@@ -1821,7 +1821,7 @@ export default function Home() {
       )}
 
       {/* Testimonials */}
-      <section id="testimonials" className="py-24 relative overflow-hidden">
+      <section id="testimonials" className="py-24 relative section-pink-wash overflow-hidden">
         <div className="absolute right-0 bottom-0 w-[600px] h-[600px] bg-[#00E5FF]/10 rounded-full mix-blend-screen filter blur-[150px]" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -1864,7 +1864,7 @@ export default function Home() {
       </section>
 
       {/* Google Reviews Showcase */}
-      <section className="py-24 relative bg-[#070707] border-y border-white/5 overflow-hidden">
+      <section className="py-24 relative section-pink-wash border-y border-white/5 overflow-hidden">
         <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-[#FF1AD8]/10 rounded-full mix-blend-screen filter blur-[120px] -translate-y-1/2" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -1932,7 +1932,7 @@ export default function Home() {
       </section>
 
       {/* Service Area */}
-      <section className="py-20 sm:py-24 relative bg-[#0a0a0a] border-t border-white/5 overflow-hidden">
+      <section className="py-20 sm:py-24 relative section-pink-wash border-t border-white/5 overflow-hidden">
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#00E5FF]/10 rounded-full mix-blend-screen filter blur-[120px]" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-12">
@@ -1999,7 +1999,7 @@ export default function Home() {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="py-20 sm:py-24 relative bg-[#070707] border-t border-white/5 overflow-hidden">
+      <section id="faq" className="py-20 sm:py-24 relative section-pink-wash border-t border-white/5 overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
@@ -2077,7 +2077,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 relative z-10">
+      <section className="py-24 relative z-10 section-pink-wash overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative rounded-3xl overflow-hidden bg-[#111] border border-white/10 p-10 md:p-20 text-center">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-full bg-gradient-to-b from-[#FF1AD8]/20 to-[#00E5FF]/20 blur-3xl" />
