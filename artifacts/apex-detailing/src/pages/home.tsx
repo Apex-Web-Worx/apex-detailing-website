@@ -40,19 +40,27 @@ const AddonCard = ({ addon }: { addon: { name: string; price: string; descriptio
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <div
-      className="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#00E5FF] transition-all cursor-pointer group"
+      className="relative overflow-hidden p-4 rounded-lg bg-[#080808] border border-[#FF1AD8]/20 hover:border-[#FF1AD8]/50 hover:shadow-[0_0_24px_rgba(255,26,216,0.12)] transition-all cursor-pointer group"
       onMouseEnter={() => setIsExpanded(true)}
       onMouseLeave={() => setIsExpanded(false)}
     >
-      <h4 className="text-base font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#FF1AD8] group-hover:to-[#00E5FF] transition-all duration-300">{addon.name}</h4>
-      <p className="text-[#00E5FF] font-bold text-sm">{addon.price}</p>
+      <div
+        className="pointer-events-none absolute inset-0"
+        aria-hidden="true"
+        style={{
+          background:
+            "radial-gradient(ellipse 90% 70% at 0% 0%, rgba(255,26,216,0.12), transparent 55%)",
+        }}
+      />
+      <h4 className="relative z-10 text-base font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#FF1AD8] group-hover:to-[#00E5FF] transition-all duration-300">{addon.name}</h4>
+      <p className="relative z-10 text-[#00E5FF] font-bold text-sm">{addon.price}</p>
       {addon.description && (
         <div 
           onClick={(e) => {
             e.stopPropagation();
             setIsExpanded(!isExpanded);
           }}
-          className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-96' : 'max-h-0'}`}
+          className={`relative z-10 overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-96' : 'max-h-0'}`}
         >
           <p className="text-gray-300 text-xs mt-3 leading-relaxed">
             {addon.description}
@@ -879,9 +887,18 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white font-['Mulish'] overflow-x-hidden selection:bg-[#FF1AD8] selection:text-white">
+    <div className="min-h-screen bg-[#050505] text-white font-['Mulish'] overflow-x-hidden selection:bg-[#FF1AD8] selection:text-white">
       {/* Texture Overlay */}
       <div className="texture-overlay" />
+      {/* Soft global pink wash (minimal) */}
+      <div
+        className="pointer-events-none fixed inset-0 z-0 opacity-100"
+        aria-hidden="true"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 50% at 10% -10%, rgba(255,26,216,0.07), transparent 50%), radial-gradient(ellipse 60% 40% at 90% 20%, rgba(157,0,255,0.04), transparent 45%)",
+        }}
+      />
       {/* Navigation */}
       <nav
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
@@ -1184,8 +1201,16 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mb-12 p-6 rounded-xl bg-white/5 border border-[#FF1AD8]/30 backdrop-blur-sm max-w-3xl mx-auto">
-            <p className="text-gray-300 text-sm leading-relaxed">
+          <div className="mb-12 p-6 rounded-xl bg-[#080808] border border-[#FF1AD8]/30 backdrop-blur-sm max-w-3xl mx-auto relative overflow-hidden">
+            <div
+              className="pointer-events-none absolute inset-0"
+              aria-hidden="true"
+              style={{
+                background:
+                  "radial-gradient(ellipse 80% 60% at 0% 50%, rgba(255,26,216,0.10), transparent 60%)",
+              }}
+            />
+            <p className="relative z-10 text-gray-300 text-sm leading-relaxed">
               <span className="font-black text-[#FF1AD8]">Pricing Note:</span> The price ranges listed below are standard for the majority of vehicles. The final cost will depend on the condition of your vehicle and any additional services you request. For a more accurate estimate, please contact us directly.
             </p>
           </div>
@@ -1198,12 +1223,21 @@ export default function Home() {
                   index === services.length - 1 ? "md:col-span-2 lg:col-span-1" : ""
                 }`}
               >
-                <span className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5 group-hover:from-[#FF1AD8] group-hover:to-[#00E5FF] transition-all duration-500 opacity-50 group-hover:opacity-100" />
-                <div className="relative h-full bg-[#111] p-6 sm:p-8 rounded-2xl flex flex-col z-10 transition-all duration-500">
-                  <div className="mb-6 p-4 rounded-xl bg-white/5 inline-flex w-fit group-hover:scale-110 group-hover:bg-white/10 transition-all duration-500">
+                <span className="absolute inset-0 bg-gradient-to-br from-[#FF1AD8]/35 via-[#9D00FF]/15 to-[#00E5FF]/20 opacity-70 group-hover:opacity-100 transition-all duration-500" />
+                <div className="relative h-full bg-[#080808] p-6 sm:p-8 rounded-2xl flex flex-col z-10 transition-all duration-500 overflow-hidden border border-[#FF1AD8]/15 group-hover:border-[#FF1AD8]/35 group-hover:shadow-[0_0_40px_rgba(255,26,216,0.12)]">
+                  {/* Soft pink wash inside card */}
+                  <div
+                    className="pointer-events-none absolute inset-0 z-0"
+                    aria-hidden="true"
+                    style={{
+                      background:
+                        "radial-gradient(ellipse 80% 55% at 0% 0%, rgba(255,26,216,0.14), transparent 55%), radial-gradient(ellipse 60% 45% at 100% 100%, rgba(157,0,255,0.08), transparent 50%)",
+                    }}
+                  />
+                  <div className="relative z-10 mb-6 p-4 rounded-xl bg-[#FF1AD8]/10 border border-[#FF1AD8]/20 inline-flex w-fit group-hover:scale-110 group-hover:bg-[#FF1AD8]/15 transition-all duration-500">
                     {service.icon}
                   </div>
-                  <h4 className="text-2xl font-black mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#FF1AD8] group-hover:to-[#00E5FF] transition-all duration-300 flex items-center flex-wrap gap-2">
+                  <h4 className="relative z-10 text-2xl font-black mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#FF1AD8] group-hover:to-[#00E5FF] transition-all duration-300 flex items-center flex-wrap gap-2">
                     {service.title}
                     {service.id === "interior-detailing" && (
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white group-hover:bg-none group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
@@ -1221,7 +1255,7 @@ export default function Home() {
                       </span>
                     )}
                   </h4>
-                  <div className="mb-4">
+                  <div className="relative z-10 mb-4">
                     {!/call/i.test(service.pricing) && (
                       <p className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-0.5">
                         Starting at
@@ -1232,14 +1266,14 @@ export default function Home() {
                     </p>
                   </div>
                   {service.pricingDetails && (
-                    <div className="mb-4 text-sm text-gray-300 bg-white/5 p-3 rounded-lg">
+                    <div className="relative z-10 mb-4 text-sm text-gray-300 bg-[#FF1AD8]/[0.06] border border-[#FF1AD8]/15 p-3 rounded-lg">
                       {service.pricingDetails.map((detail, i) => (
                         <p key={i} className="text-xs mb-1">{detail}</p>
                       ))}
                     </div>
                   )}
-                  <p className="text-gray-400 mb-6 flex-grow">{service.description}</p>
-                  <ul className="space-y-2 mb-8">
+                  <p className="relative z-10 text-gray-400 mb-6 flex-grow">{service.description}</p>
+                  <ul className="relative z-10 space-y-2 mb-8">
                     {service.features.map((feature, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-gray-300 font-medium">
                         <CheckCircle2 className="w-4 h-4 text-[#00E5FF] mt-0.5 shrink-0" />
@@ -1249,7 +1283,7 @@ export default function Home() {
                   </ul>
                   <Link
                     href={BOOKING_LINK}
-                    className="mt-auto inline-flex items-center gap-2 font-bold text-sm tracking-widest text-white uppercase group/btn"
+                    className="relative z-10 mt-auto inline-flex items-center gap-2 font-bold text-sm tracking-widest text-white uppercase group/btn"
                   >
                     Book Now{" "}
                     <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 group-hover/btn:text-[#00E5FF] transition-all" />
