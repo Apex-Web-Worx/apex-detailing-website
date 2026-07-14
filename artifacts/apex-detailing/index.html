@@ -4,10 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     <script>
-      // Redirect old domain to apexdetailing.net (301-equivalent client-side redirect)
-      if (window.location.hostname === 'apexdetailingsf.com' || window.location.hostname === 'www.apexdetailingsf.com') {
-        window.location.replace('https://www.apexdetailing.net' + window.location.pathname + window.location.search);
-      }
+      // Redirect old domain to www.apexdetailing.net (keep path)
+      (function () {
+        var host = window.location.hostname;
+        if (
+          host === "apexdetailingsf.com" ||
+          host === "www.apexdetailingsf.com" ||
+          host === "apexdetailing.net"
+        ) {
+          window.location.replace(
+            "https://www.apexdetailing.net" +
+              window.location.pathname +
+              window.location.search +
+              window.location.hash
+          );
+        }
+      })();
     </script>
     <title>Apex Detailing - Premium Car Detailing in Springfield, Nixa & Ozark, MO</title>
     <meta name="description" content="Detailing in Nixa, Ozark, Springfield MO. Premium auto detailing with ceramic coating, paint correction, interior detailing, and headlight restoration. 5-star rated service." />
@@ -45,22 +57,28 @@
           window.matchMedia("(display-mode: fullscreen)").matches ||
           window.matchMedia("(display-mode: minimal-ui)").matches ||
           window.navigator.standalone === true;
+
+        function cookieHasAdmin() {
+          return /(?:^|; )apex_pwa_start=admin(?:;|$)/.test(document.cookie);
+        }
+
         var wantAdmin = false;
         try {
           wantAdmin = localStorage.getItem("apex_pwa_start") === "admin";
         } catch (e) {}
-        if (params.get("pwa") === "admin") wantAdmin = true;
+        if (params.get("pwa") === "admin" || cookieHasAdmin()) wantAdmin = true;
 
-        // Remember admin launch preference whenever /admin is opened
         if (path === "/admin" || path === "/go-admin.html" || wantAdmin) {
           try {
             localStorage.setItem("apex_pwa_start", "admin");
           } catch (e) {}
+          document.cookie =
+            "apex_pwa_start=admin; Domain=.apexdetailing.net; Path=/; Max-Age=31536000; SameSite=Lax; Secure";
           wantAdmin = true;
         }
 
-        // iOS often ignores manifest start_url and opens "/". Send standalone
-        // launches that opted into Admin back to /admin immediately.
+        // iOS often ignores manifest start_url and opens "/". If this web app
+        // was enabled for Admin, bounce standalone launches into /admin.
         if (standalone && wantAdmin && path !== "/admin" && path !== "/go-admin.html") {
           window.location.replace("/admin");
           return;

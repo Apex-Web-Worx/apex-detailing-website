@@ -3,7 +3,6 @@
   "name": "Apex Admin",
   "short_name": "Apex Admin",
   "description": "Apex Detailing admin — bookings, schedule, and shop management.",
-  "start_url": "/go-admin.html",
   "scope": "/",
   "display": "standalone",
   "orientation": "any",

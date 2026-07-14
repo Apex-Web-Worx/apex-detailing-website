@@ -14,7 +14,11 @@
     <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" sizes="180x180" />
     <link rel="apple-touch-icon" href="/images/pwa-192.png" sizes="192x192" />
     <link rel="icon" type="image/png" href="/images/favicon.png" />
-    <!-- Only the admin manifest — start_url is this page, then we jump to /admin -->
+    <!--
+      No start_url in the linked admin manifest. If we force start_url to "/",
+      iOS Add-to-Home-Screen always opens the marketing homepage.
+      Omitting start_url makes iOS save THIS page URL (/go-admin.html).
+    -->
     <link rel="manifest" href="/admin.webmanifest" />
     <style>
       html, body {
@@ -53,7 +57,7 @@
         max-width: 28rem;
       }
       ol {
-        margin: 0 0 24px;
+        margin: 0 0 20px;
         padding-left: 1.2rem;
         text-align: left;
         color: #d4d4d4;
@@ -61,13 +65,20 @@
         line-height: 1.55;
         max-width: 22rem;
       }
-      a.btn {
+      .actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: min(100%, 22rem);
+      }
+      a.btn, button.btn {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: 12rem;
+        width: 100%;
         padding: 14px 22px;
         border-radius: 2px;
+        border: 0;
         background: #ff1ad8;
         color: #fff;
         font-weight: 800;
@@ -75,44 +86,101 @@
         letter-spacing: 0.14em;
         text-transform: uppercase;
         text-decoration: none;
+        cursor: pointer;
+        box-sizing: border-box;
       }
-      a.btn:active { opacity: 0.9; }
+      button.btn-secondary {
+        background: transparent;
+        border: 1px solid rgba(0, 229, 255, 0.45);
+        color: #00e5ff;
+      }
+      a.btn:active, button.btn:active { opacity: 0.9; }
       .note {
         margin-top: 20px;
         font-size: 0.75rem;
         color: #737373;
       }
+      .ok {
+        display: none;
+        margin-top: 12px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        background: rgba(0, 229, 255, 0.1);
+        border: 1px solid rgba(0, 229, 255, 0.3);
+        color: #b8f7ff;
+        font-size: 0.85rem;
+      }
+      .ok.show { display: block; }
     </style>
     <script>
       (function () {
-        try {
-          localStorage.setItem("apex_pwa_start", "admin");
-        } catch (e) {}
-
-        var standalone =
-          window.matchMedia("(display-mode: standalone)").matches ||
-          window.matchMedia("(display-mode: fullscreen)").matches ||
-          window.matchMedia("(display-mode: minimal-ui)").matches ||
-          window.navigator.standalone === true;
-
-        // Installed icon launches this real HTML file, then enters the SPA admin route
-        if (standalone) {
-          window.location.replace("/admin");
+        function setAdminPref() {
+          try {
+            localStorage.setItem("apex_pwa_start", "admin");
+          } catch (e) {}
+          // Shared across apexdetailing.net and www.
+          document.cookie =
+            "apex_pwa_start=admin; Domain=.apexdetailing.net; Path=/; Max-Age=31536000; SameSite=Lax; Secure";
         }
+
+        function isStandalone() {
+          return (
+            window.matchMedia("(display-mode: standalone)").matches ||
+            window.matchMedia("(display-mode: fullscreen)").matches ||
+            window.matchMedia("(display-mode: minimal-ui)").matches ||
+            window.navigator.standalone === true
+          );
+        }
+
+        function cookieHasAdmin() {
+          return /(?:^|; )apex_pwa_start=admin(?:;|$)/.test(document.cookie);
+        }
+
+        // Canonical host so storage/cookies match the installed icon
+        if (location.hostname === "apexdetailing.net") {
+          location.replace("https://www.apexdetailing.net/go-admin.html" + location.search);
+          return;
+        }
+
+        setAdminPref();
+
+        // Home Screen icon should open this page, then jump into /admin
+        if (isStandalone() || cookieHasAdmin() && isStandalone()) {
+          location.replace("/admin");
+          return;
+        }
+
+        window.apexEnableAdminHome = function () {
+          setAdminPref();
+          var el = document.getElementById("ok");
+          if (el) el.classList.add("show");
+        };
       })();
     </script>
   </head>
   <body>
     <img src="/images/logo.png" alt="Apex Detailing" width="140" height="160" />
     <h1>Apex Admin</h1>
-    <p>Add <strong>this page</strong> to your Home Screen. The icon will open the admin dashboard.</p>
+    <p>
+      You must add <strong>this exact page</strong> to your Home Screen.
+      Adding the normal website will always open the public homepage.
+    </p>
     <ol>
-      <li>Tap Share in Safari</li>
-      <li>Choose <strong>Add to Home Screen</strong></li>
+      <li>Tap <strong>Enable Admin Home Screen</strong> below</li>
+      <li>Tap Share → <strong>Add to Home Screen</strong></li>
       <li>Name it <strong>Apex Admin</strong></li>
-      <li>Delete any old Apex icon that opened the homepage</li>
+      <li><strong>Delete</strong> any old Apex icon that opens the homepage</li>
+      <li>Open the new icon</li>
     </ol>
-    <a class="btn" href="/admin">Open Admin</a>
-    <p class="note">Bookmark URL: /go-admin.html</p>
+    <div class="actions">
+      <button type="button" class="btn btn-secondary" onclick="apexEnableAdminHome()">
+        Enable Admin Home Screen
+      </button>
+      <a class="btn" href="/admin">Open Admin now</a>
+    </div>
+    <div class="ok" id="ok">
+      Enabled. Now use Share → Add to Home Screen on THIS page, then delete the old homepage icon.
+    </div>
+    <p class="note">Must stay on /go-admin.html while adding. Do not add from the homepage.</p>
   </body>
 </html>
