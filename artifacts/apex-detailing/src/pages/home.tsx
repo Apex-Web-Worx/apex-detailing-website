@@ -52,8 +52,8 @@ const AddonCard = ({ addon }: { addon: { name: string; price: string; descriptio
             "radial-gradient(ellipse 90% 70% at 0% 0%, rgba(255,26,216,0.12), transparent 55%)",
         }}
       />
-      <h4 className="relative z-10 text-base font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#C9B0F5] group-hover:to-[#5ECFFF] transition-all duration-300">{addon.name}</h4>
-      <p className="relative z-10 text-[#5ECFFF] font-bold text-sm">{addon.price}</p>
+      <h4 className="relative z-10 text-base font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#FF1AD8] group-hover:to-[#00E5FF] transition-all duration-300">{addon.name}</h4>
+      <p className="relative z-10 text-[#00E5FF] font-bold text-sm">{addon.price}</p>
       {addon.description && (
         <div 
           onClick={(e) => {
@@ -139,7 +139,7 @@ const services = [
     title: "Apex Exterior Detailing",
     description:
       "Comprehensive exterior cleaning and protection to make your car turn heads everywhere you go. Includes detailed hand wash, exterior windows and mirrors cleaning, wheels and tires cleaned, polished, and dressed, door jambs wiped down, and spray sealant for 1-month protection.",
-    icon: <Car className="w-10 h-10 text-[#5ECFFF]" />,
+    icon: <Car className="w-10 h-10 text-[#00E5FF]" />,
     pricing: "$150",
     pricingDetails: ["Sedan: $150", "SUV: $200–$250"],
     features: [
@@ -171,7 +171,7 @@ const services = [
     title: "Apex Headlight Restoration",
     description:
       "Fix foggy, yellowed headlights to improve nighttime visibility and dramatically improve your car's appearance.",
-    icon: <CheckCircle2 className="w-10 h-10 text-[#5ECFFF]" />,
+    icon: <CheckCircle2 className="w-10 h-10 text-[#00E5FF]" />,
     pricing: "$125",
     features: ["Improves Safety", "Removes Oxidation", "UV Protection Applied"],
   },
@@ -180,7 +180,7 @@ const services = [
     title: "Apex Ceramic Coating",
     description:
       "Ultimate protection and extreme gloss for your vehicle's paint. Lasts for years, making maintenance washes a breeze.",
-    icon: <Shield className="w-10 h-10 text-[#5ECFFF]" />,
+    icon: <Shield className="w-10 h-10 text-[#00E5FF]" />,
     pricing: "Call for Quote",
     features: ["Up to 5 Years Protection", "Extreme Hydrophobics", "Scratch Resistance"],
   },
@@ -202,7 +202,7 @@ const services = [
 ];
 
 const gallery = [
-  { id: 1, title: "Paint Correction", beforeAfter: false, color: "from-blue-900 to-[#5ECFFF]", thumbnail: `${import.meta.env.BASE_URL}images/paint-correction-thumbnail.jpg`, images: [
+  { id: 1, title: "Paint Correction", beforeAfter: false, color: "from-blue-900 to-[#00E5FF]", thumbnail: `${import.meta.env.BASE_URL}images/paint-correction-thumbnail.jpg`, images: [
     `${import.meta.env.BASE_URL}images/paint-correction-1.jpg`,
     `${import.meta.env.BASE_URL}images/paint-correction-2.jpg`,
     `${import.meta.env.BASE_URL}images/paint-correction-3.jpg`,
@@ -380,7 +380,7 @@ function AddonsSection() {
         {/* Interior Addons */}
         <div>
           <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4 font-display">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF]">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
               Interior Addons
             </span>
           </h3>
@@ -398,7 +398,7 @@ function AddonsSection() {
         {/* Exterior Addons */}
         <div>
           <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4 font-display">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF]">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
               Exterior Addons
             </span>
           </h3>
@@ -903,7 +903,7 @@ export default function Home() {
       <nav
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
           isScrolled
-            ? "bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/10 py-3 shadow-[0_0_20px_rgba(94,207,255,0.1)]"
+            ? "bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/10 py-3 shadow-[0_0_20px_rgba(0,229,255,0.1)]"
             : "bg-transparent py-5"
         }`}
       >
@@ -919,7 +919,7 @@ export default function Home() {
                 className="relative z-10 h-16 md:h-24 lg:h-[6.5rem] w-auto max-w-[9rem] md:max-w-[12rem] object-contain opacity-100"
                 style={{
                   filter:
-                    "drop-shadow(0 0 10px rgba(255,26,216,0.55)) drop-shadow(0 0 18px rgba(94,207,255,0.35))",
+                    "drop-shadow(0 0 10px rgba(255,26,216,0.55)) drop-shadow(0 0 18px rgba(0,229,255,0.35))",
                 }}
               />
             </div>
@@ -927,10 +927,10 @@ export default function Home() {
             <div className="hidden md:flex items-center space-x-8">
               <a
                 href="tel:417-527-6165"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-[#5ECFFF] transition-colors"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-[#00E5FF] transition-colors"
                 aria-label="Call Apex Detailing"
               >
-                <Phone className="w-4 h-4 text-[#5ECFFF]" />
+                <Phone className="w-4 h-4 text-[#00E5FF]" />
                 <span>Call</span>
               </a>
               {["Home", "Services", "About", "Gallery", "Testimonials", "FAQ", "Buy Gift Card"].map((item) => {
@@ -954,7 +954,7 @@ export default function Home() {
                     }`}
                   >
                     {item}
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF] transition-all duration-300 group-hover:w-full" />
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] transition-all duration-300 group-hover:w-full" />
                   </a>
                 );
               })}
@@ -973,7 +973,7 @@ export default function Home() {
             <div className="md:hidden flex items-center gap-2">
               <a
                 href="tel:417-527-6165"
-                className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10 text-white hover:text-[#5ECFFF] hover:border-[#5ECFFF] transition-colors"
+                className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10 text-white hover:text-[#00E5FF] hover:border-[#00E5FF] transition-colors"
                 aria-label="Call Apex Detailing"
               >
                 <Phone className="w-5 h-5" />
@@ -1060,7 +1060,7 @@ export default function Home() {
 
         <div className="absolute inset-0 z-0 opacity-40">
           <div className="absolute top-[20%] left-[10%] w-96 h-96 bg-[#FF1AD8] rounded-full mix-blend-screen filter blur-[100px] animate-[pulse_8s_ease-in-out_infinite]" />
-          <div className="absolute bottom-[20%] right-[10%] w-96 h-96 bg-[#5ECFFF] rounded-full mix-blend-screen filter blur-[100px] animate-[pulse_8s_ease-in-out_infinite_1s]" />
+          <div className="absolute bottom-[20%] right-[10%] w-96 h-96 bg-[#00E5FF] rounded-full mix-blend-screen filter blur-[100px] animate-[pulse_8s_ease-in-out_infinite_1s]" />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0a0a0a]/80 to-[#0a0a0a]" />
         </div>
 
@@ -1074,14 +1074,14 @@ export default function Home() {
 
           <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.92] sm:leading-[0.9] mb-5 sm:mb-6 drop-shadow-2xl uppercase font-display">
             Unleash Your <br />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF]">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
               Car's True Potential
             </span>
           </h1>
 
           <p className="max-w-2xl text-base sm:text-lg md:text-xl text-gray-300 mb-8 sm:mb-10 font-medium px-1">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF]">Premium auto detailing, ceramic coating, and paint correction</span> services serving
-            <span className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF]"> Nixa Ozark Springfield, MO</span>. We bring the showroom shine to your vehicle.
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#FF1AD8] to-[#00E5FF]">Premium auto detailing, ceramic coating, and paint correction</span> services serving
+            <span className="text-[#00E5FF] font-bold"> Nixa Ozark Springfield, MO</span>. We bring the showroom shine to your vehicle.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto items-stretch sm:items-center">
@@ -1145,7 +1145,7 @@ export default function Home() {
               <span className="font-bold">Satisfaction Guaranteed</span>
             </div>
             <div className="flex items-center gap-2">
-              <Award className="w-6 h-6 text-[#5ECFFF]" />
+              <Award className="w-6 h-6 text-[#00E5FF]" />
               <span className="font-bold">5.0★ on Google</span>
             </div>
             <div className="flex items-center gap-2">
@@ -1176,12 +1176,12 @@ export default function Home() {
         </div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-sm font-bold tracking-widest text-[#5ECFFF] uppercase mb-3">
+            <h2 className="text-sm font-bold tracking-widest text-[#00E5FF] uppercase mb-3">
               What We Do
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-6 font-display">
               Elite{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF]">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
                 Services
               </span>
             </h3>
@@ -1213,7 +1213,7 @@ export default function Home() {
                   index === services.length - 1 ? "md:col-span-2 lg:col-span-1" : ""
                 }`}
               >
-                <span className="absolute inset-0 bg-gradient-to-br from-[#FF1AD8]/35 via-[#9D00FF]/15 to-[#5ECFFF]/20 opacity-70 group-hover:opacity-100 transition-all duration-500" />
+                <span className="absolute inset-0 bg-gradient-to-br from-[#FF1AD8]/35 via-[#9D00FF]/15 to-[#00E5FF]/20 opacity-70 group-hover:opacity-100 transition-all duration-500" />
                 <div className="relative h-full bg-[#080808] p-6 sm:p-8 rounded-2xl flex flex-col z-10 transition-all duration-500 overflow-hidden border border-[#FF1AD8]/15 group-hover:border-[#FF1AD8]/35 group-hover:shadow-[0_0_40px_rgba(255,26,216,0.12)]">
                   {/* Soft pink wash inside card */}
                   <div
@@ -1227,20 +1227,20 @@ export default function Home() {
                   <div className="relative z-10 mb-6 p-4 rounded-xl bg-[#FF1AD8]/10 border border-[#FF1AD8]/20 inline-flex w-fit group-hover:scale-110 group-hover:bg-[#FF1AD8]/15 transition-all duration-500">
                     {service.icon}
                   </div>
-                  <h4 className="relative z-10 text-2xl font-black mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#C9B0F5] group-hover:to-[#5ECFFF] transition-all duration-300 flex items-center flex-wrap gap-2">
+                  <h4 className="relative z-10 text-2xl font-black mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#FF1AD8] group-hover:to-[#00E5FF] transition-all duration-300 flex items-center flex-wrap gap-2">
                     {service.title}
                     {service.id === "interior-detailing" && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF] text-white group-hover:bg-none group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white group-hover:bg-none group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
                         <Star className="w-3 h-3" fill="currentColor" /> Most Booked
                       </span>
                     )}
                     {service.id === "full-detailing" && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#5ECFFF] text-white group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#00E5FF] text-white group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
                         Best Value
                       </span>
                     )}
                     {service.id === "apex-express-interior-detailing" && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF] text-white group-hover:bg-none group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white group-hover:bg-none group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
                         <Zap className="w-3 h-3" /> Express
                       </span>
                     )}
@@ -1251,7 +1251,7 @@ export default function Home() {
                         Starting at
                       </p>
                     )}
-                    <p className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF]">
+                    <p className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
                       {service.pricing}
                     </p>
                   </div>
@@ -1266,7 +1266,7 @@ export default function Home() {
                   <ul className="relative z-10 space-y-2 mb-8">
                     {service.features.map((feature, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-gray-300 font-medium">
-                        <CheckCircle2 className="w-4 h-4 text-[#5ECFFF] mt-0.5 shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-[#00E5FF] mt-0.5 shrink-0" />
                         {feature}
                       </li>
                     ))}
@@ -1276,7 +1276,7 @@ export default function Home() {
                     className="relative z-10 mt-auto inline-flex items-center gap-2 font-bold text-sm tracking-widest text-white uppercase group/btn"
                   >
                     Book Now{" "}
-                    <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 group-hover/btn:text-[#5ECFFF] transition-all" />
+                    <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 group-hover/btn:text-[#00E5FF] transition-all" />
                   </Link>
                 </div>
               </div>
@@ -1297,19 +1297,19 @@ export default function Home() {
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
               Three Simple{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF]">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
                 Steps
               </span>
             </h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {[
-              { step: "01", title: "Book Online", desc: "Pick your service, day, and time in under 2 minutes — right here on our site.", icon: <Clock className="w-7 h-7 text-[#5ECFFF]" /> },
+              { step: "01", title: "Book Online", desc: "Pick your service, day, and time in under 2 minutes — right here on our site.", icon: <Clock className="w-7 h-7 text-[#00E5FF]" /> },
               { step: "02", title: "We Detail", desc: "Drop your car off at our shop. We handle every surface with care, from paint to upholstery.", icon: <Sparkles className="w-7 h-7 text-[#FF1AD8]" /> },
-              { step: "03", title: "Drive Happy", desc: "Step into a like-new vehicle and enjoy long-lasting protection and shine.", icon: <Car className="w-7 h-7 text-[#5ECFFF]" /> },
+              { step: "03", title: "Drive Happy", desc: "Step into a like-new vehicle and enjoy long-lasting protection and shine.", icon: <Car className="w-7 h-7 text-[#00E5FF]" /> },
             ].map((s) => (
               <div key={s.step} className="relative p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-white/20 transition-colors">
-                <div className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF] mb-4">{s.step}</div>
+                <div className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] mb-4">{s.step}</div>
                 <div className="mb-4">{s.icon}</div>
                 <h4 className="text-xl font-black uppercase tracking-tight mb-2">{s.title}</h4>
                 <p className="text-gray-400 text-sm leading-relaxed">{s.desc}</p>
@@ -1348,7 +1348,7 @@ export default function Home() {
                   />
                 ))}
                 <div 
-                  className="absolute inset-0 bg-gradient-to-tr from-[#C9B0F5]/30 to-[#5ECFFF]/30 group-hover:from-[#FF1AD8]/50 group-hover:to-[#5ECFFF]/50 z-10 transition-all duration-700"
+                  className="absolute inset-0 bg-gradient-to-tr from-[#FF1AD8]/30 to-[#00E5FF]/30 group-hover:from-[#FF1AD8]/50 group-hover:to-[#00E5FF]/50 z-10 transition-all duration-700"
                 />
                 <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black to-transparent z-20">
                   <div className="inline-flex items-center gap-3 bg-black/60 backdrop-blur-md px-6 py-3 rounded-xl border border-white/10">
@@ -1358,7 +1358,7 @@ export default function Home() {
                           key={i}
                           className="w-10 h-10 rounded-full border-2 border-black bg-gray-800 flex items-center justify-center overflow-hidden"
                         >
-                          <Star className="w-5 h-5 text-[#5ECFFF]" fill="currentColor" />
+                          <Star className="w-5 h-5 text-[#00E5FF]" fill="currentColor" />
                         </div>
                       ))}
                     </div>
@@ -1371,7 +1371,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-gradient-to-br from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF] rounded-2xl -z-10 blur-xl opacity-50" />
+              <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-gradient-to-br from-[#FF1AD8] to-[#00E5FF] rounded-2xl -z-10 blur-xl opacity-50" />
             </div>
 
             <div className="order-1 lg:order-2">
@@ -1380,7 +1380,7 @@ export default function Home() {
               </h2>
               <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight mb-6 sm:mb-8 leading-tight font-display">
                 Welcome to{" "}
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF]">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
                   Apex Detailing
                 </span>
               </h3>
@@ -1393,7 +1393,7 @@ export default function Home() {
                   Our dedication to quality and customer satisfaction has helped us become <strong className="text-white">#1 Ranked in Nixa for 2024 and 2025</strong>, a recognition we are truly grateful for.
                 </p>
                 <p className="italic">
-                  Our business is built on <span className="text-[#5ECFFF] font-semibold">Christian</span> values, with <span className="text-[#5ECFFF] font-semibold">Christ</span> at the center of everything we do. We believe in working with integrity, serving others with a joyful heart, and honoring <span className="text-[#5ECFFF] font-semibold">God</span> through the quality of our craft.
+                  Our business is built on <span className="text-[#00E5FF] font-semibold">Christian</span> values, with <span className="text-[#00E5FF] font-semibold">Christ</span> at the center of everything we do. We believe in working with integrity, serving others with a joyful heart, and honoring <span className="text-[#00E5FF] font-semibold">God</span> through the quality of our craft.
                 </p>
                 <p className="italic text-[#FF1AD8] text-sm mt-4">
                   "Whatever you do, work at it with all your heart, as working for the Lord, not for men. Colossians 3:23 (NIV)"
@@ -1409,7 +1409,7 @@ export default function Home() {
                 </p>
                 <div className="mt-8 flex items-center gap-5 p-5 rounded-2xl bg-white/[0.03] border border-white/10">
                   <div className="relative shrink-0">
-                    <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF] blur-md opacity-60" />
+                    <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-[#FF1AD8] to-[#00E5FF] blur-md opacity-60" />
                     <img
                       src={ownerPhoto}
                       alt="Michail Gurov, Founder of Apex Detailing"
@@ -1441,7 +1441,7 @@ export default function Home() {
                   {
                     title: "Insured & Certified",
                     desc: "Peace of mind for your investment",
-                    icon: <Award className="text-[#5ECFFF]" />,
+                    icon: <Award className="text-[#00E5FF]" />,
                   },
                   {
                     title: "Flexible Scheduling",
@@ -1451,7 +1451,7 @@ export default function Home() {
                   {
                     title: "Expert Team",
                     desc: "Certified professionals on staff",
-                    icon: <Sparkles className="text-[#5ECFFF]" />,
+                    icon: <Sparkles className="text-[#00E5FF]" />,
                   },
                 ].map((item, i) => (
                   <div key={i} className="flex gap-4">
@@ -1479,7 +1479,7 @@ export default function Home() {
               See the Difference
             </h2>
             <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
-              Before & After <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF]">Transformations</span>
+              Before & After <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">Transformations</span>
             </h3>
           </div>
 
@@ -1534,7 +1534,7 @@ export default function Home() {
 
               {/* Handle */}
               <div
-                className="absolute top-0 bottom-0 w-1 bg-gradient-to-b from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF] cursor-col-resize"
+                className="absolute top-0 bottom-0 w-1 bg-gradient-to-b from-[#FF1AD8] to-[#00E5FF] cursor-col-resize"
                 style={{ left: `${sliderPosition}%` }}
               >
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 rounded-full flex items-center justify-center transition-all">
@@ -1559,7 +1559,7 @@ export default function Home() {
               </div>
 
               {/* Title */}
-              <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 text-white font-black uppercase text-center text-xs sm:text-base md:text-lg tracking-wider bg-gradient-to-r from-[#C9B0F5]/80 to-[#5ECFFF]/80 px-2 sm:px-4 sm:px-6 py-2 sm:py-3 rounded-lg backdrop-blur-sm">
+              <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 text-white font-black uppercase text-center text-xs sm:text-base md:text-lg tracking-wider bg-gradient-to-r from-[#FF1AD8]/80 to-[#00E5FF]/80 px-2 sm:px-4 sm:px-6 py-2 sm:py-3 rounded-lg backdrop-blur-sm">
                 {beforeAfterPairs[currentSliderIndex].title}
               </div>
             </div>
@@ -1568,13 +1568,13 @@ export default function Home() {
             <div className="flex justify-center gap-4 mt-8">
               <button
                 onClick={() => setCurrentSliderIndex((prev) => (prev - 1 + beforeAfterPairs.length) % beforeAfterPairs.length)}
-                className="px-6 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#5ECFFF] hover:text-white transition-all font-bold text-sm"
+                className="px-6 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#00E5FF] hover:text-white transition-all font-bold text-sm"
               >
                 ← Previous
               </button>
               <button
                 onClick={() => setCurrentSliderIndex((prev) => (prev + 1) % beforeAfterPairs.length)}
-                className="px-6 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#5ECFFF] hover:text-white transition-all font-bold text-sm"
+                className="px-6 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#00E5FF] hover:text-white transition-all font-bold text-sm"
               >
                 Next →
               </button>
@@ -1588,7 +1588,7 @@ export default function Home() {
                   onClick={() => setCurrentSliderIndex(idx)}
                   className={`w-2 h-2 rounded-full transition-all ${
                     idx === currentSliderIndex
-                      ? "bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF] w-8"
+                      ? "bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] w-8"
                       : "bg-white/30 hover:bg-white/50"
                   }`}
                 />
@@ -1603,12 +1603,12 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-end mb-10 sm:mb-16 gap-6">
             <div className="max-w-2xl">
-              <h2 className="text-sm font-bold tracking-widest text-[#5ECFFF] uppercase mb-3">
+              <h2 className="text-sm font-bold tracking-widest text-[#00E5FF] uppercase mb-3">
                 Our Work
               </h2>
               <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
                 Results That{" "}
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF]">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
                   Speak
                 </span>
               </h3>
@@ -1680,21 +1680,21 @@ export default function Home() {
                 )}
                 <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                   {item.beforeAfter ? (
-                    <span className="inline-block px-3 py-1 bg-[#5ECFFF] text-black font-black text-xs uppercase tracking-widest rounded mb-3 opacity-85">
+                    <span className="inline-block px-3 py-1 bg-[#00E5FF] text-black font-black text-xs uppercase tracking-widest rounded mb-3 opacity-85">
                       Results before and after
                     </span>
                   ) : item.id === 1 && (
-                    <span className="inline-block px-3 py-1 bg-[#5ECFFF] text-black font-black text-xs uppercase tracking-widest rounded mb-3 opacity-85">
+                    <span className="inline-block px-3 py-1 bg-[#00E5FF] text-black font-black text-xs uppercase tracking-widest rounded mb-3 opacity-85">
                       Finished results
                     </span>
                   )}
-                  <h4 className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF] opacity-85" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.8)) drop-shadow(0 1px 2px rgba(0,0,0,0.6))' }}>{item.title}</h4>
+                  <h4 className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] opacity-85" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.8)) drop-shadow(0 1px 2px rgba(0,0,0,0.6))' }}>{item.title}</h4>
                   {item.images && item.images.length > 1 && (
                     <p className="text-xs text-gray-300 mt-2">
                       {item.images.length} {item.images.length === 1 ? 'result' : 'results'}
                     </p>
                   )}
-                  <div className="w-12 h-1 bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF] mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100" />
+                  <div className="w-12 h-1 bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100" />
                 </div>
               </div>
             ))}
@@ -1706,9 +1706,9 @@ export default function Home() {
               href={INSTAGRAM_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative inline-flex items-center justify-center px-10 py-5 font-black text-white text-lg transition-all duration-300 ease-in-out bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF] rounded-xl overflow-hidden shadow-[0_0_40px_rgba(255,26,216,0.4)] hover:shadow-[0_0_60px_rgba(94,207,255,0.6)] hover:scale-105"
+              className="group relative inline-flex items-center justify-center px-10 py-5 font-black text-white text-lg transition-all duration-300 ease-in-out bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] rounded-xl overflow-hidden shadow-[0_0_40px_rgba(255,26,216,0.4)] hover:shadow-[0_0_60px_rgba(0,229,255,0.6)] hover:scale-105"
             >
-              <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#5ECFFF] to-[#FF1AD8] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#00E5FF] to-[#FF1AD8] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <span className="relative flex items-center gap-3">
                 <Instagram className="w-6 h-6" />
                 Follow @apexdetailing_sf
@@ -1726,7 +1726,7 @@ export default function Home() {
         >
           <button
             onClick={() => setSelectedGalleryItem(null)}
-            className="absolute top-4 right-20 md:top-6 md:right-24 text-white hover:text-[#5ECFFF] transition-colors z-10 p-1"
+            className="absolute top-4 right-20 md:top-6 md:right-24 text-white hover:text-[#00E5FF] transition-colors z-10 p-1"
             aria-label="Close"
           >
             <X className="w-6 h-6 md:w-8 md:h-8" />
@@ -1759,7 +1759,7 @@ export default function Home() {
                 
                 {/* Before/After Label */}
                 {selectedGalleryItem.beforeAfter && typeof selectedGalleryItem.images[currentImageIndex] === 'object' && (
-                  <div className="absolute top-6 left-6 bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF] text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg opacity-85">
+                  <div className="absolute top-6 left-6 bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg opacity-85">
                     {selectedGalleryItem.images[currentImageIndex].label}
                   </div>
                 )}
@@ -1771,7 +1771,7 @@ export default function Home() {
                       e.stopPropagation();
                       prevImage();
                     }}
-                    className="absolute left-2 md:left-6 top-1/2 transform -translate-y-1/2 text-white hover:text-[#5ECFFF] active:text-[#5ECFFF] transition-colors z-50 bg-black/50 hover:bg-black/70 active:bg-black/80 p-3 md:p-4 rounded-full cursor-pointer min-w-12 h-12 md:min-w-14 md:h-14 flex items-center justify-center"
+                    className="absolute left-2 md:left-6 top-1/2 transform -translate-y-1/2 text-white hover:text-[#00E5FF] active:text-[#00E5FF] transition-colors z-50 bg-black/50 hover:bg-black/70 active:bg-black/80 p-3 md:p-4 rounded-full cursor-pointer min-w-12 h-12 md:min-w-14 md:h-14 flex items-center justify-center"
                     aria-label="Previous image"
                     type="button"
                   >
@@ -1788,7 +1788,7 @@ export default function Home() {
                       e.stopPropagation();
                       nextImage();
                     }}
-                    className="absolute right-2 md:right-6 top-1/2 transform -translate-y-1/2 text-white hover:text-[#5ECFFF] active:text-[#5ECFFF] transition-colors z-50 bg-black/50 hover:bg-black/70 active:bg-black/80 p-3 md:p-4 rounded-full cursor-pointer min-w-12 h-12 md:min-w-14 md:h-14 flex items-center justify-center"
+                    className="absolute right-2 md:right-6 top-1/2 transform -translate-y-1/2 text-white hover:text-[#00E5FF] active:text-[#00E5FF] transition-colors z-50 bg-black/50 hover:bg-black/70 active:bg-black/80 p-3 md:p-4 rounded-full cursor-pointer min-w-12 h-12 md:min-w-14 md:h-14 flex items-center justify-center"
                     aria-label="Next image"
                     type="button"
                   >
@@ -1812,7 +1812,7 @@ export default function Home() {
 
       {/* Testimonials */}
       <section id="testimonials" className="py-24 relative section-pink-wash overflow-hidden">
-        <div className="absolute right-0 bottom-0 w-[600px] h-[600px] bg-[#5ECFFF]/10 rounded-full mix-blend-screen filter blur-[150px]" />
+        <div className="absolute right-0 bottom-0 w-[600px] h-[600px] bg-[#00E5FF]/10 rounded-full mix-blend-screen filter blur-[150px]" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
@@ -1821,7 +1821,7 @@ export default function Home() {
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
               Client{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF]">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
                 Reactions
               </span>
             </h3>
@@ -1836,7 +1836,7 @@ export default function Home() {
                 <Star className="absolute top-8 right-8 w-12 h-12 text-white/5" />
                 <div className="flex gap-1 mb-6">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <Star key={star} className="w-5 h-5 text-[#5ECFFF]" fill="currentColor" />
+                    <Star key={star} className="w-5 h-5 text-[#00E5FF]" fill="currentColor" />
                   ))}
                 </div>
                 <p className="text-gray-300 italic mb-8 relative z-10">"{testimonial.text}"</p>
@@ -1859,12 +1859,12 @@ export default function Home() {
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl mx-auto text-center mb-20">
-            <h2 className="text-sm font-bold tracking-widest text-[#5ECFFF] uppercase mb-3">
+            <h2 className="text-sm font-bold tracking-widest text-[#00E5FF] uppercase mb-3">
               Google Reviews
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-6 font-display">
               Trusted by Our{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF]">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
                 Happy Customers
               </span>
             </h3>
@@ -1879,7 +1879,7 @@ export default function Home() {
                 { rating: "5h", reviews: "Response", description: "Support Time" },
               ].map((stat, i) => (
                 <div key={i} className="text-center p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:border-white/20 transition-colors">
-                  <p className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF] mb-2">
+                  <p className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] mb-2">
                     {stat.rating}
                   </p>
                   <p className="text-gray-300 font-bold mb-2">{stat.reviews}</p>
@@ -1923,15 +1923,15 @@ export default function Home() {
 
       {/* Service Area */}
       <section className="py-20 sm:py-24 relative section-pink-wash border-t border-white/5 overflow-hidden">
-        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#5ECFFF]/10 rounded-full mix-blend-screen filter blur-[120px]" />
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#00E5FF]/10 rounded-full mix-blend-screen filter blur-[120px]" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-12">
-            <h2 className="text-sm font-bold tracking-widest text-[#5ECFFF] uppercase mb-3">
+            <h2 className="text-sm font-bold tracking-widest text-[#00E5FF] uppercase mb-3">
               Service Area
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-4 font-display">
               Serving the{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF]">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
                 Ozarks
               </span>
             </h3>
@@ -1945,9 +1945,9 @@ export default function Home() {
               {serviceCities.map((city) => (
                 <div
                   key={city}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 hover:border-[#5ECFFF]/50 transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 hover:border-[#00E5FF]/50 transition-colors"
                 >
-                  <MapPin className="w-3.5 h-3.5 text-[#5ECFFF]" />
+                  <MapPin className="w-3.5 h-3.5 text-[#00E5FF]" />
                   <span className="text-sm font-bold text-gray-200">{city}, MO</span>
                 </div>
               ))}
@@ -1968,9 +1968,9 @@ export default function Home() {
                 href="https://www.google.com/maps/search/1114+E+Lakota+St,+65714+Nixa,+MO"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 p-5 rounded-xl bg-white/5 border border-white/10 hover:border-[#5ECFFF]/50 transition-colors"
+                className="flex items-center gap-3 p-5 rounded-xl bg-white/5 border border-white/10 hover:border-[#00E5FF]/50 transition-colors"
               >
-                <MapPin className="w-5 h-5 text-[#5ECFFF]" />
+                <MapPin className="w-5 h-5 text-[#00E5FF]" />
                 <div>
                   <p className="text-xs text-gray-500 uppercase tracking-wider font-bold">Shop</p>
                   <p className="text-white font-bold">1114 E Lakota St, Nixa</p>
@@ -1997,7 +1997,7 @@ export default function Home() {
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
               Frequently Asked{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF]">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
                 Questions
               </span>
             </h3>
@@ -2014,7 +2014,7 @@ export default function Home() {
                 }}
                 className={`px-5 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all duration-300 border ${
                   activeFaqCategory === cat
-                    ? "bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF] text-white border-transparent shadow-[0_0_20px_rgba(94,207,255,0.3)]"
+                    ? "bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white border-transparent shadow-[0_0_20px_rgba(0,229,255,0.3)]"
                     : "bg-white/5 text-gray-400 border-white/10 hover:border-white/30 hover:text-white"
                 }`}
               >
@@ -2033,7 +2033,7 @@ export default function Home() {
                   <div
                     key={key}
                     className={`rounded-xl border backdrop-blur-sm transition-colors ${
-                      isOpen ? "bg-white/10 border-[#5ECFFF]/40" : "bg-white/5 border-white/10 hover:border-white/20"
+                      isOpen ? "bg-white/10 border-[#00E5FF]/40" : "bg-white/5 border-white/10 hover:border-white/20"
                     }`}
                   >
                     <button
@@ -2043,7 +2043,7 @@ export default function Home() {
                     >
                       <span className="font-bold text-white text-base sm:text-lg">{faq.q}</span>
                       <ChevronRight
-                        className={`w-5 h-5 shrink-0 text-[#5ECFFF] transition-transform duration-300 ${
+                        className={`w-5 h-5 shrink-0 text-[#00E5FF] transition-transform duration-300 ${
                           isOpen ? "rotate-90" : ""
                         }`}
                       />
@@ -2070,7 +2070,7 @@ export default function Home() {
       <section className="py-24 relative z-10 section-pink-wash overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative rounded-3xl overflow-hidden bg-[#111] border border-white/10 p-10 md:p-20 text-center">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-full bg-gradient-to-b from-[#C9B0F5]/20 to-[#5ECFFF]/20 blur-3xl" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-full bg-gradient-to-b from-[#FF1AD8]/20 to-[#00E5FF]/20 blur-3xl" />
 
             <div className="relative z-10 max-w-3xl mx-auto">
               <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tight mb-6 font-display">
@@ -2080,9 +2080,9 @@ export default function Home() {
               <p className="text-xl text-gray-400 mb-10 font-medium">
                 Book your appointment today.
               </p>
-              <div className="mb-8 p-6 rounded-xl bg-white/5 border border-[#5ECFFF]/30 backdrop-blur-sm max-w-2xl">
+              <div className="mb-8 p-6 rounded-xl bg-white/5 border border-[#00E5FF]/30 backdrop-blur-sm max-w-2xl">
                 <p className="text-gray-300 text-sm leading-relaxed">
-                  <span className="font-black text-[#5ECFFF]">Important:</span> All scheduling needs to be done prior to your visit. We appreciate your understanding and encourage you to book ahead to secure your preferred time.
+                  <span className="font-black text-[#00E5FF]">Important:</span> All scheduling needs to be done prior to your visit. We appreciate your understanding and encourage you to book ahead to secure your preferred time.
                 </p>
               </div>
               <a
@@ -2091,9 +2091,9 @@ export default function Home() {
                   e.preventDefault();
                   goToBooking();
                 }}
-                className="group relative inline-flex items-center justify-center px-10 py-5 font-black text-white text-xl transition-all duration-300 ease-in-out bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF] rounded-xl overflow-hidden shadow-[0_0_40px_rgba(255,26,216,0.4)] hover:shadow-[0_0_60px_rgba(94,207,255,0.6)] hover:scale-105 cursor-pointer"
+                className="group relative inline-flex items-center justify-center px-10 py-5 font-black text-white text-xl transition-all duration-300 ease-in-out bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] rounded-xl overflow-hidden shadow-[0_0_40px_rgba(255,26,216,0.4)] hover:shadow-[0_0_60px_rgba(0,229,255,0.6)] hover:scale-105 cursor-pointer"
               >
-                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#5ECFFF] to-[#FF1AD8] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#00E5FF] to-[#FF1AD8] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <span className="relative flex items-center gap-3">
                   BOOK APPOINTMENT NOW <ChevronRight className="w-6 h-6" />
                 </span>
@@ -2115,7 +2115,7 @@ export default function Home() {
                   className="relative z-10 h-20 w-auto max-w-[10rem] object-contain opacity-100"
                   style={{
                     filter:
-                      "drop-shadow(0 0 10px rgba(255,26,216,0.55)) drop-shadow(0 0 18px rgba(94,207,255,0.35))",
+                      "drop-shadow(0 0 10px rgba(255,26,216,0.55)) drop-shadow(0 0 18px rgba(0,229,255,0.35))",
                   }}
                 />
               </div>
@@ -2128,7 +2128,7 @@ export default function Home() {
                   href={INSTAGRAM_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-gradient-to-tr hover:from-[#FF1AD8] hover:to-[#5ECFFF] transition-all"
+                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-gradient-to-tr hover:from-[#FF1AD8] hover:to-[#00E5FF] transition-all"
                   aria-label="Instagram"
                 >
                   <Instagram className="w-5 h-5" />
@@ -2137,7 +2137,7 @@ export default function Home() {
                   href={FACEBOOK_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#5ECFFF] transition-all"
+                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#00E5FF] transition-all"
                   aria-label="Facebook"
                 >
                   <Facebook className="w-5 h-5" />
@@ -2178,7 +2178,7 @@ export default function Home() {
                         }}
                         className="hover:text-white hover:translate-x-1 transition-all flex items-center gap-2"
                       >
-                        <ChevronRight className="w-3 h-3 text-[#5ECFFF]" /> {item}
+                        <ChevronRight className="w-3 h-3 text-[#00E5FF]" /> {item}
                       </a>
                     </li>
                   );
@@ -2204,25 +2204,25 @@ export default function Home() {
               <h4 className="font-black text-lg uppercase tracking-wider mb-6">Contact</h4>
               <ul className="space-y-4 text-gray-400">
                 <li className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-[#5ECFFF] shrink-0 mt-0.5" />
+                  <MapPin className="w-5 h-5 text-[#00E5FF] shrink-0 mt-0.5" />
                   <a
                     href="https://www.google.com/maps/search/1114+E+Lakota+St,+65714+Nixa,+MO"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hidden md:block hover:text-[#5ECFFF] transition-colors cursor-pointer text-left"
+                    className="hidden md:block hover:text-[#00E5FF] transition-colors cursor-pointer text-left"
                   >
                     <span>Located in the Nixa<br />1114 E Lakota St, 65714</span>
                   </a>
                   <button
                     onClick={openMapChooser}
-                    className="md:hidden hover:text-[#5ECFFF] transition-colors cursor-pointer text-left"
+                    className="md:hidden hover:text-[#00E5FF] transition-colors cursor-pointer text-left"
                   >
                     <span>Located in the Nixa<br />1114 E Lakota St, 65714</span>
                   </button>
                 </li>
                 <li className="flex items-center gap-3 hover:text-white transition-colors cursor-pointer">
                   <Phone className="w-5 h-5 text-[#FF1AD8]" />
-                  <a href="tel:417-527-6165" className="hover:text-[#5ECFFF] transition-colors">417-527-6165</a>
+                  <a href="tel:417-527-6165" className="hover:text-[#00E5FF] transition-colors">417-527-6165</a>
                 </li>
                 <li className="flex items-start gap-3">
                   <Clock className="w-5 h-5 text-[#FF1AD8] shrink-0 mt-0.5" />
@@ -2233,7 +2233,7 @@ export default function Home() {
                   </div>
                 </li>
                 <li className="flex items-start gap-3 group cursor-pointer">
-                  <Mail className="w-5 h-5 text-[#5ECFFF] shrink-0 mt-0.5" />
+                  <Mail className="w-5 h-5 text-[#00E5FF] shrink-0 mt-0.5" />
                   <div className="flex flex-col">
                     <span className="md:group-hover:hidden block md:block">Contact us via<br />social media</span>
                     <div className="flex md:hidden group-hover:flex gap-3 pt-2">
@@ -2241,7 +2241,7 @@ export default function Home() {
                         href={INSTAGRAM_LINK}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-white/10 hover:bg-gradient-to-r hover:from-[#FF1AD8] hover:to-[#5ECFFF] transition-all transform hover:scale-110"
+                        className="p-2 rounded-lg bg-white/10 hover:bg-gradient-to-r hover:from-[#FF1AD8] hover:to-[#00E5FF] transition-all transform hover:scale-110"
                         title="Instagram"
                       >
                         <Instagram className="w-5 h-5 text-white" />
@@ -2250,7 +2250,7 @@ export default function Home() {
                         href={FACEBOOK_LINK}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-white/10 hover:bg-gradient-to-r hover:from-[#FF1AD8] hover:to-[#5ECFFF] transition-all transform hover:scale-110"
+                        className="p-2 rounded-lg bg-white/10 hover:bg-gradient-to-r hover:from-[#FF1AD8] hover:to-[#00E5FF] transition-all transform hover:scale-110"
                         title="Facebook"
                       >
                         <Facebook className="w-5 h-5 text-white" />
@@ -2290,7 +2290,7 @@ export default function Home() {
                 className="h-16 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity"
               />
               <p className="text-gray-500 text-xs font-medium uppercase tracking-widest group-hover:text-white transition-colors">
-                Designed and developed by <span className="text-[#5ECFFF] font-bold">APEX WEB WORX</span>
+                Designed and developed by <span className="text-[#00E5FF] font-bold">APEX WEB WORX</span>
               </p>
             </a>
           </div>
@@ -2324,7 +2324,7 @@ export default function Home() {
           className="flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-white/10 border border-white/15 font-bold text-sm text-white"
           aria-label="Call Apex Detailing"
         >
-          <Phone className="w-4 h-4 text-[#5ECFFF]" />
+          <Phone className="w-4 h-4 text-[#00E5FF]" />
           CALL NOW
         </a>
         <a
@@ -2333,9 +2333,9 @@ export default function Home() {
             e.preventDefault();
             goToBooking();
           }}
-          className="flex items-center justify-center gap-2 px-3 py-3 rounded-sm bg-[#FF1AD8] font-bold text-sm tracking-wider uppercase text-white hover:bg-[#ff45e0] transition-colors"
+          className="flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] font-black text-sm text-white shadow-[0_0_15px_rgba(0,229,255,0.4)]"
         >
-          Book now
+          BOOK NOW
           <ChevronRight className="w-4 h-4" />
         </a>
       </div>
@@ -2387,7 +2387,7 @@ export default function Home() {
                 </div>
                 <div>
                   <h4 className="font-black text-white text-base mb-1">Contact</h4>
-                  <p>Questions about your data? Call <a href="tel:417-527-6165" className="text-[#5ECFFF] underline">417-527-6165</a> or message us on Instagram or Facebook.</p>
+                  <p>Questions about your data? Call <a href="tel:417-527-6165" className="text-[#00E5FF] underline">417-527-6165</a> or message us on Instagram or Facebook.</p>
                 </div>
               </div>
             ) : (
@@ -2420,7 +2420,7 @@ export default function Home() {
 
             <button
               onClick={() => setLegalModal(null)}
-              className="mt-6 w-full py-3 rounded-lg bg-gradient-to-r from-[#C9B0F5] via-[#A8B8FF] to-[#5ECFFF] font-black text-white"
+              className="mt-6 w-full py-3 rounded-lg bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] font-black text-white"
             >
               Close
             </button>
@@ -2436,7 +2436,7 @@ export default function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button
                 onClick={openGoogleMaps}
-                className="px-4 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#5ECFFF] hover:text-white transition-colors font-bold"
+                className="px-4 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#00E5FF] hover:text-white transition-colors font-bold"
               >
                 Google Maps
               </button>

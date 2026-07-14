@@ -14,7 +14,7 @@ const SCENE_DURATIONS = {
   close: 6000,
 };
 
-// Colors: #5ECFFF (Blue), #FF1AD8 (Purple)
+// Colors: #00E5FF (Blue), #FF1AD8 (Purple)
 
 export default function VideoTemplate() {
   const { currentScene } = useVideoPlayer({ durations: SCENE_DURATIONS });
@@ -29,7 +29,7 @@ export default function VideoTemplate() {
         {/* Animated gradients */}
         <motion.div 
           className="absolute w-[800px] h-[800px] rounded-full blur-[120px] opacity-30 mix-blend-screen"
-          style={{ background: 'radial-gradient(circle, #5ECFFF, transparent 70%)' }}
+          style={{ background: 'radial-gradient(circle, #00E5FF, transparent 70%)' }}
           animate={{ 
             x: ['-20%', '30%', '-10%', '-20%'], 
             y: ['-20%', '10%', '40%', '-20%'],

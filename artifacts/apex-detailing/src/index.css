@@ -70,9 +70,7 @@
   --spacing: 0.25rem;
   --brand-magenta: #FF1AD8;
   --brand-purple: #9D00FF;
-  --brand-lavender: #C9B0F5;
-  --brand-periwinkle: #A8B8FF;
-  --brand-cyan: #5ECFFF;
+  --brand-cyan: #00E5FF;
 }
 
 @layer base {
@@ -86,19 +84,19 @@
 
 @keyframes logo-shine {
   0%, 100% {
-    filter: drop-shadow(0 0 1.2rem rgba(255, 26, 216, 0.7)) drop-shadow(0 0 0.5rem rgba(94, 207, 255, 0.4));
+    filter: drop-shadow(0 0 1.2rem rgba(255, 26, 216, 0.7)) drop-shadow(0 0 0.5rem rgba(0, 229, 255, 0.4));
   }
   50% {
-    filter: drop-shadow(0 0 3rem rgba(94, 207, 255, 1)) drop-shadow(0 0 1.8rem rgba(255, 26, 216, 0.8)) drop-shadow(0 0 0.8rem rgba(94, 207, 255, 0.6));
+    filter: drop-shadow(0 0 3rem rgba(0, 229, 255, 1)) drop-shadow(0 0 1.8rem rgba(255, 26, 216, 0.8)) drop-shadow(0 0 0.8rem rgba(0, 229, 255, 0.6));
   }
 }
 
 @keyframes header-shine {
   0%, 100% {
-    text-shadow: 0 0 0.8rem rgba(94, 207, 255, 0.6), 0 0 1.5rem rgba(255, 26, 216, 0.4);
+    text-shadow: 0 0 0.8rem rgba(0, 229, 255, 0.6), 0 0 1.5rem rgba(255, 26, 216, 0.4);
   }
   50% {
-    text-shadow: 0 0 1.5rem rgba(94, 207, 255, 1), 0 0 2.5rem rgba(255, 26, 216, 0.7), 0 0 3rem rgba(94, 207, 255, 0.6);
+    text-shadow: 0 0 1.5rem rgba(0, 229, 255, 1), 0 0 2.5rem rgba(255, 26, 216, 0.7), 0 0 3rem rgba(0, 229, 255, 0.6);
   }
 }
 
@@ -200,11 +198,11 @@
   .bubble {
     position: absolute;
     bottom: 0;
-    border: 2px solid rgba(94, 207, 255, 0.5);
+    border: 2px solid rgba(0, 229, 255, 0.5);
     border-radius: 50%;
     pointer-events: none;
     mix-blend-mode: screen;
-    background: radial-gradient(circle at 30% 30%, rgba(255, 26, 216, 0.2), rgba(94, 207, 255, 0.1));
+    background: radial-gradient(circle at 30% 30%, rgba(255, 26, 216, 0.2), rgba(0, 229, 255, 0.1));
   }
   
   .texture-overlay {
@@ -216,7 +214,7 @@
     pointer-events: none;
     background-image: 
       repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255, 255, 255, 0.02) 2px, rgba(255, 255, 255, 0.02) 4px),
-      repeating-linear-gradient(-45deg, transparent, transparent 2px, rgba(94, 207, 255, 0.01) 2px, rgba(94, 207, 255, 0.01) 4px);
+      repeating-linear-gradient(-45deg, transparent, transparent 2px, rgba(0, 229, 255, 0.01) 2px, rgba(0, 229, 255, 0.01) 4px);
     animation: texture-pulse 6s ease-in-out infinite;
     z-index: 1;
   }
@@ -229,7 +227,7 @@
     min-height: 18px;
     font-size: 18px;
     line-height: 18px;
-    color: #5ECFFF;
+    color: #00E5FF;
     animation: circle-blink 1.5s ease-in-out infinite;
     animation-delay: 0s;
     margin: 0 8px;
