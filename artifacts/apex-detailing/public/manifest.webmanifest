@@ -1,25 +1,37 @@
 {
-  "name": "Apex Detailing Admin",
-  "short_name": "Apex Admin",
-  "description": "Apex Detailing booking dashboard.",
-  "start_url": "/admin",
+  "name": "Apex Detailing",
+  "short_name": "Apex Detail",
+  "description": "Apex Detailing — premium auto detailing in Nixa, Ozark & Springfield, MO.",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "any",
   "background_color": "#0a0a0a",
   "theme_color": "#0a0a0a",
   "icons": [
     {
-      "src": "/images/logo.png",
+      "src": "/images/pwa-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/pwa-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/images/favicon.png",
+      "src": "/images/pwa-192-maskable.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable"
+    },
+    {
+      "src": "/images/pwa-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
