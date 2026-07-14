@@ -964,13 +964,9 @@ export default function Home() {
                   e.preventDefault();
                   goToBooking();
                 }}
-                className="relative inline-flex items-center justify-center px-6 py-2.5 overflow-hidden font-bold text-white rounded-md group cursor-pointer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm bg-[#FF1AD8] text-white text-sm font-bold tracking-[0.12em] uppercase cursor-pointer transition-all duration-300 hover:bg-[#ff45e0] hover:shadow-[0_0_20px_rgba(255,26,216,0.3)]"
               >
-                <span className="absolute w-full h-full bg-gradient-to-br from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] group-hover:from-[#00E5FF] group-hover:via-[#9D00FF] group-hover:to-[#FF1AD8] transition-all duration-500 bg-[length:200%_200%] bg-[0%_0%] group-hover:bg-[100%_100%]" />
-                <span className="absolute inset-1 bg-[#0a0a0a] rounded-[4px] transition-all duration-300 group-hover:bg-opacity-0" />
-                <span className="relative flex items-center gap-2 group-hover:text-white transition-colors duration-300">
-                  BOOK NOW <ChevronRight className="w-4 h-4" />
-                </span>
+                Book now <ChevronRight className="w-4 h-4" />
               </a>
             </div>
 
@@ -1028,9 +1024,9 @@ export default function Home() {
                 e.preventDefault();
                 goToBooking();
               }}
-              className="mt-4 text-center py-3 bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] font-bold rounded-md shadow-[0_0_15px_rgba(0,229,255,0.4)] cursor-pointer"
+              className="mt-4 text-center py-3 rounded-sm bg-[#FF1AD8] font-bold tracking-[0.12em] uppercase text-white hover:bg-[#ff45e0] cursor-pointer transition-colors"
             >
-              BOOK NOW
+              Book now
             </a>
           </div>
         </div>
@@ -1069,9 +1065,9 @@ export default function Home() {
         </div>
 
         <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 clip-chamfer bg-gradient-to-r from-[#FF1AD8]/10 via-[#9D00FF]/10 to-[#00E5FF]/10 neon-border backdrop-blur-sm mb-6 sm:mb-8 max-w-full">
-            <span className="flex h-2 w-2 rounded-full bg-[#00E5FF] animate-pulse" />
-            <span className="text-[10px] sm:text-sm font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] uppercase text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-sm bg-white/[0.03] border border-white/10 backdrop-blur-sm mb-6 sm:mb-8 max-w-full">
+            <span className="flex h-2 w-2 rounded-full bg-[#FF1AD8] animate-pulse" />
+            <span className="text-[10px] sm:text-sm font-bold tracking-widest text-gray-300 uppercase text-center">
               Nixa Ozark Springfield, MO Premium Detailing
             </span>
           </div>
@@ -1088,31 +1084,24 @@ export default function Home() {
             <span className="text-[#00E5FF] font-bold"> Nixa Ozark Springfield, MO</span>. We bring the showroom shine to your vehicle.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto items-stretch sm:items-center">
               <a
                 href={BOOKING_LINK}
                 onClick={(e) => {
                   e.preventDefault();
                   goToBooking();
                 }}
-              className="group relative inline-flex items-center justify-center px-6 sm:px-8 py-4 font-black text-white transition-all duration-300 ease-in-out bg-transparent border-0 clip-chamfer cursor-pointer overflow-hidden text-base sm:text-lg w-full sm:w-auto tracking-[0.08em] uppercase"
+              className="group inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-sm bg-[#FF1AD8] text-white font-bold text-sm sm:text-base tracking-[0.14em] uppercase cursor-pointer transition-all duration-300 hover:bg-[#ff45e0] hover:shadow-[0_0_28px_rgba(255,26,216,0.35)] w-full sm:w-auto"
             >
-              <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] opacity-95 group-hover:opacity-100 transition-opacity duration-300" />
-              <span className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-[0_0_30px_rgba(0,229,255,0.65),0_0_18px_rgba(255,26,216,0.45)]" />
-              <span className="relative flex items-center gap-2">
-                BOOK YOUR DETAIL{" "}
-                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </span>
+                Book your detail
+                <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
             </a>
             <a
               href={`${import.meta.env.BASE_URL}gift-cards`}
-              className="relative inline-flex items-center justify-center px-6 py-2.5 overflow-hidden font-bold text-white rounded-md group"
+              className="group inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-sm border border-white/20 bg-transparent text-white font-semibold text-sm sm:text-base tracking-[0.14em] uppercase transition-all duration-300 hover:border-[#FF1AD8]/60 hover:text-[#FF1AD8] w-full sm:w-auto"
             >
-              <span className="absolute w-full h-full bg-gradient-to-br from-[#00E5FF] via-[#FF1AD8] to-[#00E5FF] group-hover:from-[#FF1AD8] group-hover:via-[#00E5FF] group-hover:to-[#FF1AD8] transition-all duration-500 bg-[length:200%_200%] bg-[0%_0%] group-hover:bg-[100%_100%]" />
-              <span className="absolute inset-1 bg-[#0a0a0a] rounded-[4px] transition-all duration-300 group-hover:bg-opacity-0" />
-              <span className="relative flex items-center gap-2 group-hover:text-white transition-colors duration-300">
-                BUY GIFT CARD <ChevronRight className="w-4 h-4" />
-              </span>
+              Buy gift card
+              <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
             </a>
             <a
               href={`${import.meta.env.BASE_URL}#services`}
@@ -1120,9 +1109,10 @@ export default function Home() {
                 e.preventDefault();
                 scrollToSection("services");
               }}
-              className="inline-flex items-center justify-center px-6 sm:px-8 py-4 font-bold text-white transition-all duration-300 ease-in-out bg-white/5 neon-border clip-chamfer hover:bg-white/10 backdrop-blur-sm text-base sm:text-lg w-full sm:w-auto tracking-[0.08em] uppercase"
+              className="group inline-flex items-center justify-center gap-2 px-6 py-3.5 text-gray-300 font-semibold text-sm sm:text-base tracking-[0.12em] uppercase transition-colors duration-300 hover:text-white w-full sm:w-auto"
             >
-              EXPLORE SERVICES
+              Explore services
+              <ChevronRight className="w-4 h-4 opacity-60 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100" />
             </a>
           </div>
 
