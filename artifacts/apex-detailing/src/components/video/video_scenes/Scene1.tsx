@@ -47,7 +47,7 @@ export function Scene1() {
       
       <div className="overflow-hidden mt-6">
         <motion.div
-          className="text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-[#3496FF] to-[#A886CD] tracking-widest font-medium"
+          className="text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-[#00E5FF] to-[#FF1AD8] tracking-widest font-medium"
           initial={{ y: "100%" }}
           animate={phase >= 3 ? { y: 0 } : { y: "100%" }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
