@@ -206,7 +206,7 @@ export default function GiftCardsPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Star
-                    className="w-4 h-4 text-[#FFD700]"
+                    className="w-4 h-4 text-[#E8C547]"
                     fill="currentColor"
                   />
                   <span>5.0★ on Google</span>
@@ -257,7 +257,7 @@ export default function GiftCardsPage() {
                   }`}
                 >
                   {pkg.badge && (
-                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white whitespace-nowrap">
+                    <span className="badge-gold absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider whitespace-nowrap">
                       <Star
                         className="w-3 h-3 inline mr-1 -mt-0.5"
                         fill="currentColor"

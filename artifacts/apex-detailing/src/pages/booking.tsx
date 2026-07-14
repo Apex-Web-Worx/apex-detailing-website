@@ -349,14 +349,14 @@ function ServiceStep({
                   {s.name}
                   {badge && (
                     <span
-                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider text-white ${
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
                         badge.tone === "popular"
-                          ? "bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]"
+                          ? "badge-gold"
                           : badge.tone === "value"
-                            ? "bg-[#00E5FF]"
+                            ? "badge-gold"
                             : badge.tone === "notice"
-                              ? "bg-amber-500"
-                              : "bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]"
+                              ? "bg-amber-500 text-white"
+                              : "badge-gold"
                       }`}
                     >
                       {badge.tone === "express" && <Zap className="w-3 h-3" />}

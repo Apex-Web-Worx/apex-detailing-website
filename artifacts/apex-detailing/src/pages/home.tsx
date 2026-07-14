@@ -1162,7 +1162,7 @@ export default function Home() {
             href={GOOGLE_REVIEWS_LINK}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-8 inline-flex items-center gap-3 px-5 py-3 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:border-[#FFA500]/60 transition-colors"
+            className="mt-8 inline-flex items-center gap-3 px-5 py-3 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:border-[#D4AF37]/60 transition-colors"
             aria-label="See our Google reviews"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -1174,7 +1174,7 @@ export default function Home() {
             <span className="font-bold text-white text-sm sm:text-base">5.0</span>
             <div className="flex gap-0.5">
               {[1,2,3,4,5].map((s) => (
-                <Star key={s} className="w-3.5 h-3.5 text-[#FFA500]" fill="currentColor" />
+                <Star key={s} className="w-3.5 h-3.5 text-[#E8C547]" fill="currentColor" />
               ))}
             </div>
             <span className="text-gray-300 text-xs sm:text-sm font-medium">on Google</span>
@@ -1186,8 +1186,8 @@ export default function Home() {
               <span className="font-bold">Satisfaction Guaranteed</span>
             </div>
             <div className="flex items-center gap-2">
-              <Award className="w-6 h-6 text-[#00E5FF]" />
-              <span className="font-bold">5.0★ on Google</span>
+              <Award className="w-6 h-6 text-[#E8C547]" />
+              <span className="font-bold text-gold">5.0★ on Google</span>
             </div>
             <div className="flex items-center gap-2">
               <MapPin className="w-6 h-6 text-[#FF1AD8]" />
@@ -1271,12 +1271,12 @@ export default function Home() {
                   <h4 className="relative z-10 text-2xl font-black mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#FF1AD8] group-hover:via-[#9D00FF] group-hover:to-[#00E5FF] transition-all duration-300 flex items-center flex-wrap gap-2">
                     {service.title}
                     {service.id === "interior-detailing" && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] text-white group-hover:bg-none group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
+                      <span className="badge-gold inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider">
                         <Star className="w-3 h-3" fill="currentColor" /> Most Booked
                       </span>
                     )}
                     {service.id === "full-detailing" && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#00E5FF] text-white group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
+                      <span className="badge-gold inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider">
                         Best Value
                       </span>
                     )}
@@ -1392,14 +1392,14 @@ export default function Home() {
                   className="absolute inset-0 bg-gradient-to-tr from-[#FF1AD8]/30 to-[#00E5FF]/30 group-hover:from-[#FF1AD8]/50 group-hover:to-[#00E5FF]/50 z-10 transition-all duration-700"
                 />
                 <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black to-transparent z-20">
-                  <div className="inline-flex items-center gap-3 bg-black/60 backdrop-blur-md px-6 py-3 rounded-xl border border-white/10">
+                  <div className="inline-flex items-center gap-3 bg-black/60 backdrop-blur-md px-6 py-3 rounded-xl border border-[#D4AF37]/30">
                     <div className="flex -space-x-3">
                       {[1, 2, 3, 4].map((i) => (
                         <div
                           key={i}
                           className="w-10 h-10 rounded-full border-2 border-black bg-gray-800 flex items-center justify-center overflow-hidden"
                         >
-                          <Star className="w-5 h-5 text-[#FFD700]" fill="currentColor" />
+                          <Star className="w-5 h-5 text-[#E8C547]" fill="currentColor" />
                         </div>
                       ))}
                     </div>
@@ -1431,7 +1431,7 @@ export default function Home() {
                   Where passion, precision, and purpose come together to serve you with excellence. Serving the Nixa Ozark Springfield, MO areas, we specialize in high-quality car detailing that restores beauty, protects value, and reflects the pride you have in your vehicle.
                 </p>
                 <p>
-                  Our dedication to quality and customer satisfaction has helped us become <strong className="text-white">#1 Ranked in Nixa for 2024 and 2025</strong>, a recognition we are truly grateful for.
+                  Our dedication to quality and customer satisfaction has helped us become <strong className="text-gold">#1 Ranked in Nixa for 2024 and 2025</strong>, a recognition we are truly grateful for.
                 </p>
                 <p className="italic">
                   Our business is built on <span className="text-potential font-semibold">Christian</span> values, with <span className="text-potential font-semibold">Christ</span> at the center of everything we do. We believe in working with integrity, serving others with a joyful heart, and honoring <span className="text-potential font-semibold">God</span> through the quality of our craft.
@@ -1482,7 +1482,7 @@ export default function Home() {
                   {
                     title: "Insured & Certified",
                     desc: "Peace of mind for your investment",
-                    icon: <Award className="text-[#00E5FF]" />,
+                    icon: <Award className="text-[#E8C547]" />,
                   },
                   {
                     title: "Flexible Scheduling",
@@ -1874,7 +1874,7 @@ export default function Home() {
                 <Star className="absolute top-8 right-8 w-12 h-12 text-white/5" />
                 <div className="flex gap-1 mb-6">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <Star key={star} className="w-5 h-5 text-[#FFD700]" fill="currentColor" />
+                    <Star key={star} className="w-5 h-5 text-[#E8C547]" fill="currentColor" />
                   ))}
                 </div>
                 <p className="text-gray-300 italic mb-8 relative z-10">"{testimonial.text}"</p>
@@ -1946,7 +1946,7 @@ export default function Home() {
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Star
                       key={star}
-                      className={`w-4 h-4 ${star <= review.rating ? "text-[#FFA500]" : "text-gray-600"}`}
+                      className={`w-4 h-4 ${star <= review.rating ? "text-[#E8C547]" : "text-gray-600"}`}
                       fill={star <= review.rating ? "currentColor" : "none"}
                     />
                   ))}

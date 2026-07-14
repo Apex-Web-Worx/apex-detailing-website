@@ -71,6 +71,8 @@
   --brand-magenta: #FF1AD8;
   --brand-purple: #9D00FF;
   --brand-cyan: #00E5FF;
+  --brand-gold: #D4AF37;
+  --brand-gold-bright: #E8C547;
 }
 
 @layer base {
@@ -726,9 +728,19 @@
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .page-bubbles {
-      display: none;
-    }
+  /* Light luxury gold — trust / premium accents only */
+  .text-gold {
+    color: var(--brand-gold-bright);
+  }
+
+  .badge-gold {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.22), rgba(232, 197, 71, 0.1));
+    border: 1px solid rgba(212, 175, 55, 0.45);
+    color: #F0D278;
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.15);
+  }
+
+  .ring-gold {
+    border-color: rgba(212, 175, 55, 0.35);
   }
 }
