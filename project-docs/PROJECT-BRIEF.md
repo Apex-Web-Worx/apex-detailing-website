@@ -33,7 +33,7 @@ Vehicle owners in Nixa, Ozark, Springfield, and surrounding Greene & Christian C
   - Purple: `#9D00FF`
   - Cyan: `#00E5FF`
   - Accent gradient: `from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]`
-- **Typography**: Orbitron for display headings, Mulish for body
+- **Typography**: Michroma for display headings, Mulish for body
 - **Visual Elements**: Hex AD mark logo, chamfer/neon plates, magenta→cyan gradients
 - **Mobile-first**: Fully responsive with touch-friendly interactions
 
