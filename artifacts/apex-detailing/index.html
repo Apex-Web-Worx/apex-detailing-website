@@ -26,7 +26,21 @@
     <link rel="canonical" href="https://www.apexdetailing.net" />
     <link rel="icon" type="image/png" href="/images/favicon.png" />
     <!-- PWA / iOS "Add to Home Screen" support -->
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="manifest" id="pwa-manifest" href="/manifest.webmanifest" />
+    <script>
+      // Use admin install target when opening /admin (before React boots)
+      (function () {
+        var path = window.location.pathname.replace(/\/$/, "") || "/";
+        if (path === "/admin") {
+          var link = document.getElementById("pwa-manifest");
+          if (link) link.setAttribute("href", "/admin.webmanifest");
+          var apple = document.querySelector('meta[name="apple-mobile-web-app-title"]');
+          if (apple) apple.setAttribute("content", "Apex Admin");
+          var app = document.querySelector('meta[name="application-name"]');
+          if (app) app.setAttribute("content", "Apex Admin");
+        }
+      })();
+    </script>
     <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" sizes="180x180" />
     <link rel="apple-touch-icon" href="/images/pwa-192.png" sizes="192x192" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
