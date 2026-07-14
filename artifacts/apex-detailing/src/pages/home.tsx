@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
 import {
   Menu,
@@ -442,6 +442,29 @@ export default function Home() {
   const [openFaq, setOpenFaq] = useState<string | null>(null);
   const [activeFaqCategory, setActiveFaqCategory] = useState<"General" | "Paint Correction">("General");
   const [legalModal, setLegalModal] = useState<"privacy" | "terms" | null>(null);
+
+  const pageBubbles = useMemo(() => {
+    if (typeof window === "undefined") return [];
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return [];
+    const mobile =
+      window.matchMedia("(max-width: 640px)").matches ||
+      window.matchMedia("(pointer: coarse)").matches;
+    const count = mobile ? 16 : 34;
+    return Array.from({ length: count }, (_, i) => {
+      const tone = Math.random();
+      return {
+        id: i,
+        x: Math.random() * 100,
+        size: mobile ? 6 + Math.random() * 14 : 8 + Math.random() * 22,
+        drift: (Math.random() - 0.5) * (mobile ? 90 : 160),
+        dur: (mobile ? 14 : 12) + Math.random() * (mobile ? 10 : 16),
+        delay: Math.random() * (mobile ? 12 : 18),
+        maxOp: mobile ? 0.35 + Math.random() * 0.2 : 0.4 + Math.random() * 0.25,
+        tone: tone < 0.34 ? "pink" : tone < 0.68 ? "cyan" : "",
+      };
+    });
+  }, []);
 
   const faqs: Array<{ q: string; a: string; category: string }> = [
     {
@@ -897,6 +920,24 @@ export default function Home() {
             "radial-gradient(ellipse 85% 55% at 8% -8%, rgba(255,26,216,0.14), transparent 52%), radial-gradient(ellipse 65% 45% at 92% 18%, rgba(157,0,255,0.08), transparent 48%), radial-gradient(ellipse 50% 40% at 50% 80%, rgba(255,26,216,0.05), transparent 55%)",
         }}
       />
+      {/* Ambient neon bubbles across the page */}
+      <div className="page-bubbles" aria-hidden="true">
+        {pageBubbles.map((b) => (
+          <span
+            key={b.id}
+            className={`page-bubble ${b.tone}`.trim()}
+            style={{
+              ["--x" as string]: `${b.x}%`,
+              ["--size" as string]: `${b.size}px`,
+              ["--drift" as string]: `${b.drift}px`,
+              ["--dur" as string]: `${b.dur}s`,
+              ["--delay" as string]: `${b.delay}s`,
+              ["--max-op" as string]: String(b.maxOp),
+            }}
+          />
+        ))}
+      </div>
+      <div className="relative z-10">
       {/* Navigation */}
       <nav
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
@@ -2452,6 +2493,7 @@ export default function Home() {
         </div>
       )}
 
+      </div>
     </div>
   );
 }
