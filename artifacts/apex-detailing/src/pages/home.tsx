@@ -1358,7 +1358,7 @@ export default function Home() {
                           key={i}
                           className="w-10 h-10 rounded-full border-2 border-black bg-gray-800 flex items-center justify-center overflow-hidden"
                         >
-                          <Star className="w-5 h-5 text-[#00E5FF]" fill="currentColor" />
+                          <Star className="w-5 h-5 text-[#FFD700]" fill="currentColor" />
                         </div>
                       ))}
                     </div>
@@ -1833,7 +1833,7 @@ export default function Home() {
                 <Star className="absolute top-8 right-8 w-12 h-12 text-white/5" />
                 <div className="flex gap-1 mb-6">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <Star key={star} className="w-5 h-5 text-[#00E5FF]" fill="currentColor" />
+                    <Star key={star} className="w-5 h-5 text-[#FFD700]" fill="currentColor" />
                   ))}
                 </div>
                 <p className="text-gray-300 italic mb-8 relative z-10">"{testimonial.text}"</p>
