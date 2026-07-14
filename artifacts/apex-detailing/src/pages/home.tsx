@@ -371,7 +371,7 @@ function AddonsSection() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Interior Addons */}
         <div>
-          <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4">
+          <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4 font-display">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
               Interior Addons
             </span>
@@ -389,7 +389,7 @@ function AddonsSection() {
 
         {/* Exterior Addons */}
         <div>
-          <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4">
+          <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4 font-display">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
               Exterior Addons
             </span>
@@ -1059,7 +1059,7 @@ export default function Home() {
             </span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.92] sm:leading-[0.9] mb-5 sm:mb-6 drop-shadow-2xl uppercase font-['Orbitron',sans-serif]">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.92] sm:leading-[0.9] mb-5 sm:mb-6 drop-shadow-2xl uppercase font-display">
             Unleash Your <br />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
               Car's True Potential
@@ -1165,7 +1165,7 @@ export default function Home() {
             <h2 className="text-sm font-bold tracking-widest text-[#00E5FF] uppercase mb-3">
               What We Do
             </h2>
-            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-6">
+            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-6 font-display">
               Elite{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
                 Services
@@ -1264,7 +1264,7 @@ export default function Home() {
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
               How It Works
             </h2>
-            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight">
+            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
               Three Simple{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
                 Steps
@@ -1347,7 +1347,7 @@ export default function Home() {
               <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
                 About Us
               </h2>
-              <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight mb-6 sm:mb-8 leading-tight">
+              <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight mb-6 sm:mb-8 leading-tight font-display">
                 Welcome to{" "}
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
                   Apex Detailing
@@ -1447,7 +1447,7 @@ export default function Home() {
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
               See the Difference
             </h2>
-            <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight">
+            <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
               Before & After <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">Transformations</span>
             </h3>
           </div>
@@ -1575,7 +1575,7 @@ export default function Home() {
               <h2 className="text-sm font-bold tracking-widest text-[#00E5FF] uppercase mb-3">
                 Our Work
               </h2>
-              <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight">
+              <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
                 Results That{" "}
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
                   Speak
@@ -1788,7 +1788,7 @@ export default function Home() {
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
               Testimonials
             </h2>
-            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight">
+            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
               Client{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
                 Reactions
@@ -1831,7 +1831,7 @@ export default function Home() {
             <h2 className="text-sm font-bold tracking-widest text-[#00E5FF] uppercase mb-3">
               Google Reviews
             </h2>
-            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-6">
+            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-6 font-display">
               Trusted by Our{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
                 Happy Customers
@@ -1898,7 +1898,7 @@ export default function Home() {
             <h2 className="text-sm font-bold tracking-widest text-[#00E5FF] uppercase mb-3">
               Service Area
             </h2>
-            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-4">
+            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-4 font-display">
               Serving the{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
                 Ozarks
@@ -1964,7 +1964,7 @@ export default function Home() {
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
               FAQ
             </h2>
-            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight">
+            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
               Frequently Asked{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
                 Questions
@@ -2042,7 +2042,7 @@ export default function Home() {
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-full bg-gradient-to-b from-[#FF1AD8]/20 to-[#00E5FF]/20 blur-3xl" />
 
             <div className="relative z-10 max-w-3xl mx-auto">
-              <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tight mb-6">
+              <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tight mb-6 font-display">
                 Ready to Experience <br />
                 The Apex Difference?
               </h2>
@@ -2322,7 +2322,7 @@ export default function Home() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start justify-between gap-4 mb-4">
-              <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-tight">
+              <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-tight font-display">
                 {legalModal === "privacy" ? "Privacy Policy" : "Terms of Service"}
               </h3>
               <button

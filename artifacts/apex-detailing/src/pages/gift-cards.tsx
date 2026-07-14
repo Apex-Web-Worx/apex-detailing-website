@@ -96,7 +96,7 @@ function GiftCardVisual({ amount }: { amount: number | string }) {
           <p className="text-[10px] uppercase tracking-widest font-bold opacity-70 mb-1">
             Value
           </p>
-          <p className="text-4xl sm:text-5xl font-black tracking-tight">
+          <p className="text-4xl sm:text-5xl font-black tracking-tight font-display">
             ${amount}
           </p>
         </div>
@@ -184,7 +184,7 @@ export default function GiftCardsPage() {
                   Gift Cards
                 </span>
               </div>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-[0.95] mb-6">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-[0.95] mb-6 font-display">
                 Give the Gift of a{" "}
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
                   Showroom Shine
@@ -228,7 +228,7 @@ export default function GiftCardsPage() {
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
               Pick a Package
             </h2>
-            <h3 className="text-3xl sm:text-4xl font-black uppercase tracking-tight">
+            <h3 className="text-3xl sm:text-4xl font-black uppercase tracking-tight font-display">
               Choose the{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
                 Perfect Amount
@@ -287,7 +287,7 @@ export default function GiftCardsPage() {
                   <p className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-0.5">
                     Starting at
                   </p>
-                  <p className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] mb-1 leading-none">
+                  <p className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] mb-1 leading-none font-display">
                     ${pkg.amount}
                   </p>
                   <p className="text-sm text-gray-500 mb-5">{pkg.bestFor}</p>
@@ -378,7 +378,7 @@ export default function GiftCardsPage() {
             <h2 className="text-sm font-bold tracking-widest text-[#00E5FF] uppercase mb-3">
               How It Works
             </h2>
-            <h3 className="text-3xl sm:text-4xl font-black uppercase tracking-tight">
+            <h3 className="text-3xl sm:text-4xl font-black uppercase tracking-tight font-display">
               Three Easy Steps
             </h3>
           </div>
@@ -431,7 +431,7 @@ export default function GiftCardsPage() {
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
               FAQ
             </h2>
-            <h3 className="text-3xl sm:text-4xl font-black uppercase tracking-tight">
+            <h3 className="text-3xl sm:text-4xl font-black uppercase tracking-tight font-display">
               Common Questions
             </h3>
           </div>
@@ -487,7 +487,7 @@ export default function GiftCardsPage() {
           <div className="relative max-w-4xl mx-auto rounded-3xl overflow-hidden border border-white/10 bg-[#111] p-10 sm:p-16 text-center">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-full bg-gradient-to-b from-[#FF1AD8]/20 to-[#00E5FF]/20 blur-3xl pointer-events-none" />
             <div className="relative">
-              <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight mb-4">
+              <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight mb-4 font-display">
                 Ready to Make Their Day?
               </h3>
               <p className="text-gray-300 text-lg max-w-xl mx-auto mb-8">

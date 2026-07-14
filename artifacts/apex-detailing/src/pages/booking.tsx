@@ -312,7 +312,7 @@ function ServiceStep({
 
   return (
     <section>
-      <h1 className="text-3xl sm:text-4xl font-black mb-2">Choose your service</h1>
+      <h1 className="text-3xl sm:text-4xl font-black mb-2 font-display">Choose your service</h1>
       <p className="text-gray-400 mb-8">
         Pick the package that fits your vehicle. You can always upgrade in person.
       </p>
@@ -371,7 +371,7 @@ function ServiceStep({
                     <span className="text-xs uppercase tracking-wider text-gray-500 font-semibold">
                       Starting at
                     </span>
-                    <span className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
+                    <span className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] font-display">
                       {formatPrice(s.priceCents)}
                     </span>
                   </>
@@ -474,7 +474,7 @@ function DateTimeStep({
       >
         <ChevronLeft className="w-4 h-4" /> Change service
       </button>
-      <h1 className="text-3xl sm:text-4xl font-black mb-2">Pick a date & time</h1>
+      <h1 className="text-3xl sm:text-4xl font-black mb-2 font-display">Pick a date & time</h1>
       <p className="text-gray-400 mb-8">
         Booking <span className="text-white font-semibold">{service.name}</span>
       </p>
@@ -631,7 +631,7 @@ function InfoStep({
       >
         <ChevronLeft className="w-4 h-4" /> Change time
       </button>
-      <h1 className="text-3xl sm:text-4xl font-black mb-2">Your details</h1>
+      <h1 className="text-3xl sm:text-4xl font-black mb-2 font-display">Your details</h1>
       <p className="text-gray-400 mb-8">
         We'll send a confirmation and reminder to the contact info you provide.
       </p>
@@ -815,7 +815,7 @@ function ConfirmStep({
       >
         <ChevronLeft className="w-4 h-4" /> Edit details
       </button>
-      <h1 className="text-3xl sm:text-4xl font-black mb-2">Review & confirm</h1>
+      <h1 className="text-3xl sm:text-4xl font-black mb-2 font-display">Review & confirm</h1>
       <p className="text-gray-400 mb-8">
         Double-check everything below, then confirm your booking.
       </p>
@@ -903,7 +903,7 @@ function ConfirmationView({ booking }: { booking: Booking }) {
       <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-[#FF1AD8] to-[#00E5FF] flex items-center justify-center mb-6 shadow-2xl shadow-[#00E5FF]/30">
         <Check className="w-10 h-10 text-white" />
       </div>
-      <h1 className="text-4xl sm:text-5xl font-black mb-3">You're booked!</h1>
+      <h1 className="text-4xl sm:text-5xl font-black mb-3 font-display">You're booked!</h1>
       <p className="text-gray-400 text-lg mb-8">
         We've got your appointment locked in. See you soon, {booking.customerName.split(" ")[0]}.
       </p>
