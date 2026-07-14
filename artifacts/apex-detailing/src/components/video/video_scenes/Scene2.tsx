@@ -37,7 +37,7 @@ export function Scene2() {
 
       <div className="absolute inset-y-0 left-12 md:left-24 flex flex-col justify-center max-w-2xl">
         <motion.div
-          className="h-1 w-24 bg-gradient-to-r from-[#00E5FF] to-[#FF1AD8] mb-8"
+          className="h-1 w-24 bg-gradient-to-r from-[#5ECFFF] to-[#FF1AD8] mb-8"
           initial={{ scaleX: 0, originX: 0 }}
           animate={phase >= 1 ? { scaleX: 1 } : { scaleX: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}

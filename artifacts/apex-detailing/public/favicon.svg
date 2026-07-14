@@ -3,7 +3,7 @@
     <linearGradient id="brand" x1="0" y1="90" x2="180" y2="90" gradientUnits="userSpaceOnUse">
       <stop stop-color="#FF1AD8"/>
       <stop offset="0.5" stop-color="#9D00FF"/>
-      <stop offset="1" stop-color="#00E5FF"/>
+      <stop offset="1" stop-color="#5ECFFF"/>
     </linearGradient>
   </defs>
   <rect width="180" height="180" rx="28" fill="#0a0a0a"/>

@@ -7,7 +7,7 @@ export default function NotFound() {
       <Card className="w-full max-w-md mx-4 bg-[#0a0a0a] border-white/10 text-white">
         <CardContent className="pt-6">
           <div className="flex mb-4 gap-2">
-            <AlertCircle className="h-8 w-8 text-[#00E5FF]" />
+            <AlertCircle className="h-8 w-8 text-[#5ECFFF]" />
             <h1 className="text-2xl font-bold text-white">404 Page Not Found</h1>
           </div>
 
@@ -32,7 +32,7 @@ export default function NotFound() {
               className="h-14 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity"
             />
             <p className="text-gray-500 text-xs font-medium uppercase tracking-widest group-hover:text-white transition-colors">
-              Designed and developed by <span className="text-[#00E5FF] font-bold">APEX WEB WORX</span>
+              Designed and developed by <span className="text-[#5ECFFF] font-bold">APEX WEB WORX</span>
             </p>
           </a>
         </div>

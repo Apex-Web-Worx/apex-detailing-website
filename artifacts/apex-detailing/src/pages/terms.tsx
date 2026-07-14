@@ -20,7 +20,7 @@ export default function TermsPage() {
           </div>
           <a
             href="tel:417-527-6165"
-            className="hidden sm:flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-[#00E5FF] transition"
+            className="hidden sm:flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-[#5ECFFF] transition"
           >
             <Phone className="w-4 h-4" />
             <span>417-527-6165</span>
@@ -142,7 +142,7 @@ export default function TermsPage() {
               are tied to a specific appointment you booked. See our{" "}
               <Link
                 href="/privacy"
-                className="text-[#00E5FF] hover:underline"
+                className="text-[#5ECFFF] hover:underline"
               >
                 Privacy Policy
               </Link>{" "}
@@ -193,7 +193,7 @@ export default function TermsPage() {
               Questions? Call (417) 527-6165 or email{" "}
               <a
                 href="mailto:apexdetailing.net@gmail.com"
-                className="text-[#00E5FF] hover:underline"
+                className="text-[#5ECFFF] hover:underline"
               >
                 apexdetailing.net@gmail.com
               </a>
@@ -218,7 +218,7 @@ export default function TermsPage() {
               className="h-14 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity"
             />
             <p className="text-gray-500 text-xs font-medium uppercase tracking-widest group-hover:text-white transition-colors">
-              Designed and developed by <span className="text-[#00E5FF] font-bold">APEX WEB WORX</span>
+              Designed and developed by <span className="text-[#5ECFFF] font-bold">APEX WEB WORX</span>
             </p>
           </a>
         </div>
