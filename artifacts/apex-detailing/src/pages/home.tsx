@@ -900,7 +900,6 @@ export default function Home() {
                 src={`${import.meta.env.BASE_URL}images/logo.png`}
                 alt="Apex Detailing Logo"
                 className="h-[4.75rem] md:h-28 lg:h-32 w-auto object-contain logo-shine"
-                style={{ mixBlendMode: "screen" }}
               />
             </div>
 
@@ -2079,7 +2078,6 @@ export default function Home() {
                   src={`${import.meta.env.BASE_URL}images/logo.png`}
                   alt="Apex Detailing Logo"
                   className="h-16 w-auto object-contain logo-shine"
-                  style={{ mixBlendMode: "screen" }}
                 />
               </div>
               <p className="text-gray-400 mb-6 font-medium">
