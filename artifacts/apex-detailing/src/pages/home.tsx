@@ -1082,32 +1082,34 @@ export default function Home() {
             <span className="text-potential font-bold"> Nixa Ozark Springfield, MO</span>. We bring the showroom shine to your vehicle.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto items-stretch sm:items-center">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 w-full sm:w-auto items-stretch sm:items-center justify-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full sm:w-auto">
               <a
                 href={BOOKING_LINK}
                 onClick={(e) => {
                   e.preventDefault();
                   goToBooking();
                 }}
-              className="btn-cyber btn-cyber-lg group w-full sm:w-auto"
-            >
+                className="btn-cyber btn-cyber-lg group w-full min-w-[15.5rem] h-[3.5rem]"
+              >
                 <span>Book your detail</span>
                 <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-            </a>
-            <a
-              href={`${import.meta.env.BASE_URL}gift-cards`}
-              className="btn-cyber btn-cyber-outline btn-cyber-lg group w-full sm:w-auto"
-            >
-              <span>Buy gift card</span>
-              <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-            </a>
+              </a>
+              <a
+                href={`${import.meta.env.BASE_URL}gift-cards`}
+                className="btn-cyber btn-cyber-outline btn-cyber-lg group w-full min-w-[15.5rem] h-[3.5rem]"
+              >
+                <span>Buy gift card</span>
+                <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+              </a>
+            </div>
             <a
               href={`${import.meta.env.BASE_URL}#services`}
               onClick={(e) => {
                 e.preventDefault();
                 scrollToSection("services");
               }}
-              className="group inline-flex items-center justify-center gap-2 px-6 py-3.5 text-gray-300 font-semibold text-sm sm:text-base tracking-[0.12em] uppercase transition-colors duration-300 hover:text-white w-full sm:w-auto"
+              className="group inline-flex items-center justify-center gap-2 px-6 h-[3.5rem] text-gray-300 font-semibold text-sm sm:text-base tracking-[0.12em] uppercase transition-colors duration-300 hover:text-white w-full sm:w-auto"
             >
               Explore services
               <ChevronRight className="w-4 h-4 opacity-60 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100" />
