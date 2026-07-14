@@ -162,15 +162,23 @@ export default function BookingPage() {
                 <div key={s.label} className="flex-1 flex items-center gap-2">
                   <div className="flex flex-col items-center gap-2 flex-shrink-0">
                     <div
-                      className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold border-2 transition ${
+                      className={`relative w-9 h-9 shrink-0 rounded-full flex items-center justify-center text-sm font-bold transition overflow-hidden ${
                         active
-                          ? "bg-gradient-to-br from-[#FF1AD8] to-[#00E5FF] border-transparent text-white"
+                          ? "text-white border-0 shadow-[0_0_16px_rgba(255,26,216,0.4)]"
                           : done
-                            ? "bg-[#00E5FF]/20 border-[#00E5FF] text-[#00E5FF]"
-                            : "border-white/20 text-gray-500"
+                            ? "bg-[#00E5FF]/15 border-2 border-[#00E5FF] text-[#00E5FF]"
+                            : "border-2 border-white/20 text-gray-500 bg-[#0a0a0a]"
                       }`}
                     >
-                      {done ? <Check className="w-4 h-4" /> : i + 1}
+                      {active && (
+                        <span
+                          aria-hidden="true"
+                          className="absolute inset-0 rounded-full bg-gradient-to-br from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]"
+                        />
+                      )}
+                      <span className="relative z-[1]">
+                        {done ? <Check className="w-4 h-4" /> : i + 1}
+                      </span>
                     </div>
                     <span
                       className={`text-[10px] sm:text-xs font-bold uppercase tracking-wide ${
