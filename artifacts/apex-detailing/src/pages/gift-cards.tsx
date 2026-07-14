@@ -206,7 +206,7 @@ export default function GiftCardsPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Star
-                    className="w-4 h-4 text-[#00E5FF]"
+                    className="w-4 h-4 text-[#FFD700]"
                     fill="currentColor"
                   />
                   <span>5.0★ on Google</span>
