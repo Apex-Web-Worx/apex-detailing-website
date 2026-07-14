@@ -655,15 +655,30 @@
     animation: bubble-shine 4s ease-in-out infinite;
   }
 
+  @media (max-width: 640px) {
+    .soap-bubble {
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.08) 15%, transparent 60%),
+                  radial-gradient(circle at 70% 70%, rgba(255, 26, 216, 0.22), transparent 50%),
+                  radial-gradient(circle at center, rgba(255, 26, 216, 0.14), rgba(0, 229, 255, 0.08));
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow:
+        inset -3px -3px 8px rgba(0, 0, 0, 0.05),
+        inset 2px 2px 6px rgba(255, 255, 255, 0.18),
+        0 0 12px rgba(255, 26, 216, 0.25);
+      backdrop-filter: none;
+    }
+  }
+
   /* Ambient page-wide neon bubbles — soft background layer */
   .page-bubbles {
     position: fixed;
     inset: 0;
-    z-index: 1;
+    /* Above section backgrounds, below nav (z-50) and dialogs */
+    z-index: 15;
     pointer-events: none;
     overflow: hidden;
     mix-blend-mode: screen;
-    opacity: 0.45;
+    opacity: 0.55;
   }
 
   .page-bubble {
@@ -674,7 +689,7 @@
     height: var(--size, 14px);
     margin-left: calc(var(--size, 14px) / -2);
     border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.22);
     opacity: 0;
     will-change: transform, opacity;
     animation: page-bubble-rise var(--dur, 14s) linear infinite;
@@ -708,10 +723,10 @@
       transform: translate3d(0, 40px, 0) scale(0.45);
     }
     12% {
-      opacity: 0.28;
+      opacity: 0.4;
     }
     70% {
-      opacity: 0.2;
+      opacity: 0.28;
     }
     100% {
       opacity: 0;
@@ -719,12 +734,45 @@
     }
   }
 
+  /* Phones: skip mix-blend (often washes out on OLED) + stronger presence */
   @media (max-width: 640px) {
     .page-bubbles {
-      opacity: 0.35;
+      mix-blend-mode: normal;
+      opacity: 0.85;
     }
     .page-bubble {
-      box-shadow: 0 0 4px rgba(255, 26, 216, 0.2);
+      border-color: rgba(255, 255, 255, 0.28);
+      box-shadow:
+        0 0 8px rgba(255, 26, 216, 0.45),
+        0 0 14px rgba(0, 229, 255, 0.25);
+    }
+    .page-bubble.pink {
+      background:
+        radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.55), transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(255, 26, 216, 0.45), transparent 72%);
+      box-shadow: 0 0 10px rgba(255, 26, 216, 0.55);
+    }
+    .page-bubble.cyan {
+      background:
+        radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.55), transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.42), transparent 72%);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+    }
+    @keyframes page-bubble-rise {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, 40px, 0) scale(0.45);
+      }
+      12% {
+        opacity: 0.7;
+      }
+      70% {
+        opacity: 0.45;
+      }
+      100% {
+        opacity: 0;
+        transform: translate3d(var(--drift, 40px), -105vh, 0) scale(1.1);
+      }
     }
   }
 

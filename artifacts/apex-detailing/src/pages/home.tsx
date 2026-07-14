@@ -447,20 +447,19 @@ export default function Home() {
     if (typeof window === "undefined") return [];
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) return [];
-    const mobile =
-      window.matchMedia("(max-width: 640px)").matches ||
-      window.matchMedia("(pointer: coarse)").matches;
-    const count = mobile ? 8 : 14;
+    const mobile = window.matchMedia("(max-width: 640px)").matches;
+    // Keep enough density on phones — prior 8×tiny bubbles were nearly invisible
+    const count = mobile ? 22 : 14;
     return Array.from({ length: count }, (_, i) => {
       const tone = Math.random();
       return {
         id: i,
         x: Math.random() * 100,
         start: -5 + Math.random() * 95,
-        size: mobile ? 6 + Math.random() * 10 : 8 + Math.random() * 14,
-        drift: (Math.random() - 0.5) * (mobile ? 70 : 110),
-        dur: (mobile ? 12 : 11) + Math.random() * (mobile ? 8 : 12),
-        delay: -Math.random() * (mobile ? 10 : 14),
+        size: mobile ? 10 + Math.random() * 18 : 8 + Math.random() * 14,
+        drift: (Math.random() - 0.5) * (mobile ? 90 : 110),
+        dur: (mobile ? 10 : 11) + Math.random() * (mobile ? 10 : 12),
+        delay: -Math.random() * (mobile ? 12 : 14),
         tone: tone < 0.34 ? "pink" : tone < 0.68 ? "cyan" : "",
       };
     });
@@ -910,7 +909,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-['Mulish'] overflow-x-hidden selection:bg-[#FF1AD8] selection:text-white">
+    <div className="min-h-screen bg-[#050505] text-white font-['Mulish'] selection:bg-[#FF1AD8] selection:text-white">
       {/* Soft global pink wash over black */}
       <div
         className="pointer-events-none fixed inset-0 z-0"
@@ -920,7 +919,8 @@ export default function Home() {
             "radial-gradient(ellipse 85% 55% at 8% -8%, rgba(255,26,216,0.14), transparent 52%), radial-gradient(ellipse 65% 45% at 92% 18%, rgba(157,0,255,0.08), transparent 48%), radial-gradient(ellipse 50% 40% at 50% 80%, rgba(255,26,216,0.05), transparent 55%)",
         }}
       />
-      {/* Ambient neon bubbles across the page */}
+      <div className="relative z-10 overflow-x-hidden">
+      {/* Ambient neon bubbles — inside content stack so they stay above section BGs */}
       <div className="page-bubbles" aria-hidden="true">
         {pageBubbles.map((b) => (
           <span
@@ -937,7 +937,6 @@ export default function Home() {
           />
         ))}
       </div>
-      <div className="relative z-10">
       {/* Navigation */}
       <nav
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${

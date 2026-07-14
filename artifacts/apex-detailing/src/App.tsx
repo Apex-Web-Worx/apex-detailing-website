@@ -8,12 +8,14 @@ import PrivacyPage from "@/pages/privacy";
 import TermsPage from "@/pages/terms";
 import NotFound from "@/pages/not-found";
 import VideoTemplate from "@/components/video/VideoTemplate";
+import PwaManifestSwitch from "@/components/PwaManifestSwitch";
 
 function App() {
   const base = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
 
   return (
     <Router base={base}>
+      <PwaManifestSwitch />
       {/* Shared stroke gradient for cyber button icons */}
       <svg width="0" height="0" aria-hidden="true" className="absolute">
         <defs>
