@@ -171,7 +171,7 @@ function InvalidLink() {
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <a
           href="tel:417-527-6165"
-          className="px-6 py-3 rounded-full bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white font-bold flex items-center justify-center gap-2"
+          className="btn-cyber"
         >
           <Phone className="w-4 h-4" /> Call 417-527-6165
         </a>
@@ -266,7 +266,7 @@ function ManageBody({
           <div className="mt-4">
             <Link
               href="/book"
-              className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white font-bold hover:shadow-lg hover:shadow-[#00E5FF]/30 transition"
+              className="btn-cyber inline-block"
             >
               Book again
             </Link>
@@ -276,7 +276,7 @@ function ManageBody({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             onClick={() => setMode("reschedule")}
-            className="px-6 py-4 rounded-xl bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white font-bold hover:shadow-lg hover:shadow-[#00E5FF]/30 transition flex items-center justify-center gap-2"
+            className="btn-cyber btn-cyber-lg"
           >
             <Calendar className="w-4 h-4" /> Reschedule
           </button>
@@ -392,7 +392,7 @@ function CancelledView({ booking }: { booking: Booking }) {
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <Link
           href="/book"
-          className="px-6 py-3 rounded-full bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white font-bold hover:shadow-lg hover:shadow-[#00E5FF]/30 transition"
+          className="btn-cyber"
         >
           Book another time
         </Link>
@@ -631,7 +631,7 @@ function ReschedulePanel({
           disabled={
             !pickedDate || !pickedTime || isCurrentSlot || mutation.isPending
           }
-          className="px-6 py-3 rounded-full bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white font-bold disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-[#00E5FF]/30 transition flex items-center justify-center gap-2"
+          className="btn-cyber disabled:opacity-30 disabled:cursor-not-allowed"
         >
           {mutation.isPending ? (
             <>

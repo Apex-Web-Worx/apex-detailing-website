@@ -184,7 +184,7 @@ function Login({ onSubmit }: { onSubmit: (t: string) => void }) {
         <button
           type="submit"
           disabled={!value || submitting}
-          className="w-full px-6 py-3 rounded-full bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white font-bold disabled:opacity-50 hover:shadow-lg hover:shadow-[#00E5FF]/30 transition flex items-center justify-center gap-2"
+          className="btn-cyber btn-cyber-block disabled:opacity-50"
         >
           {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
           Sign in
@@ -542,7 +542,7 @@ function BlockedDatesPanel({ token }: { token: string }) {
         <button
           type="submit"
           disabled={!date || submitting}
-          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white font-bold disabled:opacity-50 hover:shadow-lg hover:shadow-[#00E5FF]/30 transition flex items-center justify-center gap-2 whitespace-nowrap"
+          className="btn-cyber btn-cyber-sm disabled:opacity-50 whitespace-nowrap"
         >
           {submitting ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -845,7 +845,7 @@ function ServiceRulesPanel({ token }: { token: string }) {
         <button
           type="submit"
           disabled={newServiceId === "" || adding}
-          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white font-bold disabled:opacity-50 hover:shadow-lg hover:shadow-[#00E5FF]/30 transition flex items-center justify-center gap-2 whitespace-nowrap"
+          className="btn-cyber btn-cyber-sm disabled:opacity-50 whitespace-nowrap"
         >
           {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
           Add rule
@@ -1389,7 +1389,7 @@ function DetailsTab({
         <button
           type="submit"
           disabled={!dirty || submitting}
-          className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white font-bold disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-[#00E5FF]/30 transition flex items-center justify-center gap-2"
+          className="btn-cyber btn-cyber-sm disabled:opacity-30 disabled:cursor-not-allowed"
         >
           {submitting ? (
             <>
@@ -1654,7 +1654,7 @@ function RescheduleTab({
           disabled={
             !pickedDate || !pickedTime || isCurrentSlot || submitting
           }
-          className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white font-bold disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-[#00E5FF]/30 transition flex items-center justify-center gap-2"
+          className="btn-cyber btn-cyber-sm disabled:opacity-30 disabled:cursor-not-allowed"
         >
           {submitting ? (
             <>

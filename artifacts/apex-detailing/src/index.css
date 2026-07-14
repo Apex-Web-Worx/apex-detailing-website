@@ -161,6 +161,182 @@
     clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
   }
 
+  /* Cyberpunk CTAs — angular cut, neon glow, scanline sheen */
+  @keyframes cyber-pulse {
+    0%, 100% {
+      box-shadow:
+        0 0 0 1px rgba(255, 26, 216, 0.9),
+        0 0 18px rgba(255, 26, 216, 0.45),
+        0 0 36px rgba(255, 26, 216, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.28),
+        inset 0 -12px 28px rgba(0, 0, 0, 0.28);
+    }
+    50% {
+      box-shadow:
+        0 0 0 1px rgba(0, 229, 255, 0.55),
+        0 0 28px rgba(255, 26, 216, 0.7),
+        0 0 52px rgba(0, 229, 255, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.34),
+        inset 0 -12px 28px rgba(0, 0, 0, 0.28);
+    }
+  }
+
+  .btn-cyber {
+    --cyber-cut: 12px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    isolation: isolate;
+    padding: 0.85rem 1.75rem;
+    border: none;
+    color: #fff;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.1) 2px,
+        rgba(0, 0, 0, 0.1) 3px
+      ),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, transparent 45%),
+      linear-gradient(135deg, #ff45e0 0%, #FF1AD8 42%, #d10fbf 100%);
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--cyber-cut)) 0,
+      100% var(--cyber-cut),
+      100% 100%,
+      var(--cyber-cut) 100%,
+      0 calc(100% - var(--cyber-cut))
+    );
+    box-shadow:
+      0 0 0 1px rgba(255, 26, 216, 0.9),
+      0 0 18px rgba(255, 26, 216, 0.45),
+      0 0 36px rgba(255, 26, 216, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.28),
+      inset 0 -12px 28px rgba(0, 0, 0, 0.28);
+    animation: cyber-pulse 2.8s ease-in-out infinite;
+    transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .btn-cyber::before,
+  .btn-cyber::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Corner bracket accents */
+  .btn-cyber::before {
+    top: 5px;
+    left: 5px;
+    width: 10px;
+    height: 10px;
+    border-top: 2px solid #00E5FF;
+    border-left: 2px solid #00E5FF;
+    opacity: 0.9;
+  }
+
+  .btn-cyber::after {
+    right: 5px;
+    bottom: 5px;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid #00E5FF;
+    border-bottom: 2px solid #00E5FF;
+    opacity: 0.9;
+  }
+
+  .btn-cyber > * {
+    position: relative;
+    z-index: 3;
+  }
+
+  .btn-cyber:hover {
+    transform: translateY(-1px) scale(1.015);
+    filter: brightness(1.08) saturate(1.05);
+    animation: none;
+    box-shadow:
+      0 0 0 1px rgba(0, 229, 255, 0.7),
+      0 0 28px rgba(255, 26, 216, 0.75),
+      0 0 56px rgba(0, 229, 255, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      inset 0 -12px 28px rgba(0, 0, 0, 0.28);
+  }
+
+  .btn-cyber:active {
+    transform: translateY(0) scale(0.99);
+    filter: brightness(0.98);
+  }
+
+  .btn-cyber:disabled,
+  .btn-cyber[aria-disabled="true"] {
+    opacity: 0.35;
+    cursor: not-allowed;
+    animation: none;
+    transform: none;
+    filter: none;
+  }
+
+  .btn-cyber-sm {
+    --cyber-cut: 9px;
+    padding: 0.55rem 1.1rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+  }
+
+  .btn-cyber-lg {
+    --cyber-cut: 14px;
+    padding: 1.05rem 2.25rem;
+    font-size: 1.05rem;
+  }
+
+  .btn-cyber-xl {
+    --cyber-cut: 16px;
+    padding: 1.2rem 2.5rem;
+    font-size: 1.2rem;
+  }
+
+  .btn-cyber-block {
+    width: 100%;
+  }
+
+  .btn-cyber-outline {
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(255, 26, 216, 0.04) 2px,
+        rgba(255, 26, 216, 0.04) 3px
+      ),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 50%),
+      #0a0a0a;
+    color: #fff;
+    box-shadow:
+      0 0 0 1px rgba(255, 26, 216, 0.55),
+      0 0 18px rgba(255, 26, 216, 0.18),
+      inset 0 0 24px rgba(255, 26, 216, 0.06);
+    animation: none;
+  }
+
+  .btn-cyber-outline:hover {
+    color: #fff;
+    filter: brightness(1.05);
+    box-shadow:
+      0 0 0 1px rgba(0, 229, 255, 0.65),
+      0 0 28px rgba(255, 26, 216, 0.35),
+      0 0 40px rgba(0, 229, 255, 0.15),
+      inset 0 0 28px rgba(255, 26, 216, 0.1);
+  }
+
   .brand-gradient {
     background-image: linear-gradient(90deg, var(--brand-magenta), var(--brand-purple), var(--brand-cyan));
   }

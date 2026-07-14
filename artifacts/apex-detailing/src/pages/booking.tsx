@@ -596,7 +596,7 @@ function DateTimeStep({
         <button
           disabled={!pickedDate || !pickedTime || !pickedSlotStillValid}
           onClick={() => onSelect(pickedDate!, pickedTime!)}
-          className="px-8 py-3 clip-chamfer bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] text-white font-bold tracking-[0.08em] uppercase disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-[#00E5FF]/30 transition flex items-center gap-2"
+          className="btn-cyber disabled:opacity-30 disabled:cursor-not-allowed"
         >
           Continue <ArrowRight className="w-4 h-4" />
         </button>
@@ -724,7 +724,7 @@ function InfoStep({
         <button
           disabled={!valid}
           onClick={onNext}
-          className="px-8 py-3 clip-chamfer bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] text-white font-bold tracking-[0.08em] uppercase disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-[#00E5FF]/30 transition flex items-center gap-2"
+          className="btn-cyber disabled:opacity-30 disabled:cursor-not-allowed"
         >
           Review booking <ArrowRight className="w-4 h-4" />
         </button>
@@ -854,7 +854,7 @@ function ConfirmStep({
         <button
           disabled={mutation.isPending}
           onClick={submit}
-          className="px-8 py-3 clip-chamfer bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] text-white font-bold tracking-[0.08em] uppercase disabled:opacity-50 hover:shadow-lg hover:shadow-[#00E5FF]/30 transition flex items-center justify-center gap-2"
+          className="btn-cyber disabled:opacity-50"
         >
           {mutation.isPending ? (
             <>
@@ -946,7 +946,7 @@ function ConfirmationView({ booking }: { booking: Booking }) {
         </Link>
         <a
           href="tel:417-527-6165"
-          className="px-6 py-3 clip-chamfer bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] text-white font-bold tracking-[0.08em] uppercase hover:shadow-lg hover:shadow-[#00E5FF]/30 transition flex items-center justify-center gap-2"
+          className="btn-cyber"
         >
           <Phone className="w-4 h-4" /> Call the shop
         </a>

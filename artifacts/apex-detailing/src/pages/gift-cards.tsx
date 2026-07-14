@@ -362,7 +362,7 @@ export default function GiftCardsPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Continue to Square checkout for $${customNumeric} gift card`}
-                className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white font-black uppercase tracking-wider text-sm text-center hover:shadow-lg hover:shadow-[#00E5FF]/30 transition whitespace-nowrap"
+                className="btn-cyber btn-cyber-sm whitespace-nowrap text-center"
               >
                 Continue to Checkout →
               </a>
@@ -498,7 +498,7 @@ export default function GiftCardsPage() {
                 href={SQUARE_GIFT_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white font-black uppercase tracking-wider hover:shadow-2xl hover:shadow-[#00E5FF]/30 transition"
+                className="btn-cyber btn-cyber-lg"
               >
                 Buy a Gift Card <ChevronRight className="w-5 h-5" />
               </a>

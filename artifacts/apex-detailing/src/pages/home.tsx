@@ -964,9 +964,9 @@ export default function Home() {
                   e.preventDefault();
                   goToBooking();
                 }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm bg-[#FF1AD8] text-white text-sm font-bold tracking-[0.12em] uppercase cursor-pointer transition-all duration-300 hover:bg-[#ff45e0] hover:shadow-[0_0_20px_rgba(255,26,216,0.3)]"
+                className="btn-cyber btn-cyber-sm"
               >
-                Book now <ChevronRight className="w-4 h-4" />
+                <span>Book now</span> <ChevronRight className="w-4 h-4" />
               </a>
             </div>
 
@@ -1024,9 +1024,9 @@ export default function Home() {
                 e.preventDefault();
                 goToBooking();
               }}
-              className="mt-4 text-center py-3 rounded-sm bg-[#FF1AD8] font-bold tracking-[0.12em] uppercase text-white hover:bg-[#ff45e0] cursor-pointer transition-colors"
+              className="btn-cyber btn-cyber-block mt-4"
             >
-              Book now
+              <span>Book now</span>
             </a>
           </div>
         </div>
@@ -1091,16 +1091,16 @@ export default function Home() {
                   e.preventDefault();
                   goToBooking();
                 }}
-              className="group inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-sm bg-[#FF1AD8] text-white font-bold text-sm sm:text-base tracking-[0.14em] uppercase cursor-pointer transition-all duration-300 hover:bg-[#ff45e0] hover:shadow-[0_0_28px_rgba(255,26,216,0.35)] w-full sm:w-auto"
+              className="btn-cyber btn-cyber-lg group w-full sm:w-auto"
             >
-                Book your detail
+                <span>Book your detail</span>
                 <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
             </a>
             <a
               href={`${import.meta.env.BASE_URL}gift-cards`}
-              className="group inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-sm border border-white/20 bg-transparent text-white font-semibold text-sm sm:text-base tracking-[0.14em] uppercase transition-all duration-300 hover:border-[#FF1AD8]/60 hover:text-[#FF1AD8] w-full sm:w-auto"
+              className="btn-cyber btn-cyber-outline btn-cyber-lg group w-full sm:w-auto"
             >
-              Buy gift card
+              <span>Buy gift card</span>
               <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
             </a>
             <a
@@ -1273,10 +1273,10 @@ export default function Home() {
                   </ul>
                   <Link
                     href={BOOKING_LINK}
-                    className="relative z-10 mt-auto inline-flex items-center gap-2 font-bold text-sm tracking-widest text-white uppercase group/btn"
+                    className="btn-cyber btn-cyber-sm relative z-10 mt-auto self-start"
                   >
-                    Book Now{" "}
-                    <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 group-hover/btn:text-[#00E5FF] transition-all" />
+                    <span>Book Now</span>
+                    <ChevronRight className="w-4 h-4" />
                   </Link>
                 </div>
               </div>
@@ -1706,13 +1706,10 @@ export default function Home() {
               href={INSTAGRAM_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative inline-flex items-center justify-center px-10 py-5 font-black text-white text-lg transition-all duration-300 ease-in-out bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] rounded-xl overflow-hidden shadow-[0_0_40px_rgba(255,26,216,0.4)] hover:shadow-[0_0_60px_rgba(0,229,255,0.6)] hover:scale-105"
+              className="btn-cyber btn-cyber-lg group"
             >
-              <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#00E5FF] to-[#FF1AD8] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <span className="relative flex items-center gap-3">
-                <Instagram className="w-6 h-6" />
-                Follow @apexdetailing_sf
-              </span>
+              <Instagram className="w-6 h-6" />
+              <span>Follow @apexdetailing_sf</span>
             </a>
           </div>
         </div>
@@ -2091,12 +2088,10 @@ export default function Home() {
                   e.preventDefault();
                   goToBooking();
                 }}
-                className="group relative inline-flex items-center justify-center px-10 py-5 font-black text-white text-xl transition-all duration-300 ease-in-out bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] rounded-xl overflow-hidden shadow-[0_0_40px_rgba(255,26,216,0.4)] hover:shadow-[0_0_60px_rgba(0,229,255,0.6)] hover:scale-105 cursor-pointer"
+                className="btn-cyber btn-cyber-xl group"
               >
-                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#00E5FF] to-[#FF1AD8] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <span className="relative flex items-center gap-3">
-                  BOOK APPOINTMENT NOW <ChevronRight className="w-6 h-6" />
-                </span>
+                <span>BOOK APPOINTMENT NOW</span>
+                <ChevronRight className="w-6 h-6" />
               </a>
             </div>
           </div>
@@ -2333,9 +2328,9 @@ export default function Home() {
             e.preventDefault();
             goToBooking();
           }}
-          className="flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] font-black text-sm text-white shadow-[0_0_15px_rgba(0,229,255,0.4)]"
+          className="btn-cyber btn-cyber-sm btn-cyber-block"
         >
-          BOOK NOW
+          <span>BOOK NOW</span>
           <ChevronRight className="w-4 h-4" />
         </a>
       </div>
@@ -2420,9 +2415,9 @@ export default function Home() {
 
             <button
               onClick={() => setLegalModal(null)}
-              className="mt-6 w-full py-3 rounded-lg bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] font-black text-white"
+              className="btn-cyber btn-cyber-block mt-6"
             >
-              Close
+              <span>Close</span>
             </button>
           </div>
         </div>
