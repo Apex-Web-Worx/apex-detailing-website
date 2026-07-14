@@ -54,10 +54,10 @@ const SERVICE_ICONS: Record<string, { icon: typeof Wand2; color: string }> = {
   "apex-full-detailing": { icon: Wand2, color: "text-[#FF1AD8]" },
   "apex-interior-detailing": { icon: Droplets, color: "text-[#FF1AD8]" },
   "apex-express-interior-detailing": { icon: Droplets, color: "text-[#FF1AD8]" },
-  "apex-exterior-detailing": { icon: Car, color: "text-[#FF1AD8]" },
+  "apex-exterior-detailing": { icon: Car, color: "text-[#00E5FF]" },
   "apex-wash-clay-wax": { icon: Sparkles, color: "text-[#FF1AD8]" },
-  "apex-headlight-restoration": { icon: CheckCircle2, color: "text-[#FF1AD8]" },
-  "apex-ceramic-coating": { icon: Shield, color: "text-[#FF1AD8]" },
+  "apex-headlight-restoration": { icon: CheckCircle2, color: "text-[#00E5FF]" },
+  "apex-ceramic-coating": { icon: Shield, color: "text-[#00E5FF]" },
   "apex-paint-correction": { icon: Sparkles, color: "text-[#FF1AD8]" },
 };
 
@@ -338,15 +338,15 @@ function ServiceStep({
             <button
               key={s.id}
               onClick={() => onSelect(s)}
-              className={`relative flex h-full min-h-[17.5rem] flex-col text-left p-6 rounded-2xl border transition group hover:-translate-y-0.5 hover:shadow-[0_0_28px_rgba(255,26,216,0.18)] ${
+              className={`relative flex h-full min-h-[17.5rem] flex-col text-left p-6 rounded-2xl border transition group hover:-translate-y-0.5 hover:shadow-2xl ${
                 isSelected
-                  ? "border-[#FF1AD8] bg-gradient-to-br from-[#FF1AD8]/20 via-[#FF1AD8]/10 to-[#9D00FF]/10 shadow-[0_0_24px_rgba(255,26,216,0.2)]"
-                  : "border-[#FF1AD8]/35 bg-gradient-to-br from-[#FF1AD8]/[0.12] via-[#FF1AD8]/[0.06] to-[#9D00FF]/[0.05] hover:border-[#FF1AD8]/70"
+                  ? "border-[#00E5FF] bg-gradient-to-br from-[#00E5FF]/10 to-[#FF1AD8]/5"
+                  : "border-white/10 bg-white/[0.02] hover:border-[#00E5FF]/40"
               }`}
             >
               <div className="flex items-start gap-3 mb-3">
                 {Icon && (
-                  <span className="shrink-0 p-2 rounded-lg bg-[#FF1AD8]/10 border border-[#FF1AD8]/20 inline-flex items-center justify-center">
+                  <span className="shrink-0 p-2 rounded-lg bg-white/5 inline-flex items-center justify-center">
                     <Icon className={`w-5 h-5 ${iconMeta.color}`} />
                   </span>
                 )}
@@ -395,7 +395,7 @@ function ServiceStep({
               </p>
 
               <div className="mt-auto flex items-center justify-end pt-1">
-                <span className="text-[#FF1AD8] font-bold text-xs flex items-center gap-1 opacity-70 group-hover:opacity-100 transition">
+                <span className="text-[#00E5FF] font-bold text-xs flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
                   Select <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </div>
