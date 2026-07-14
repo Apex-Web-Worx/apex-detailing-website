@@ -89,14 +89,79 @@
           #050505;
         font-family: 'Mulish', system-ui, -apple-system, sans-serif;
         z-index: 9999;
+        overflow: hidden;
+      }
+      #app-loading .logo-stage {
+        position: relative;
+        width: min(42vw, 180px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       #app-loading .logo-loader {
-        width: min(42vw, 180px);
+        position: relative;
+        z-index: 2;
+        width: 100%;
         height: auto;
         display: block;
         animation: logo-blink 1.4s ease-in-out infinite;
         filter: drop-shadow(0 0 12px rgba(255, 26, 216, 0.55))
                 drop-shadow(0 0 28px rgba(0, 229, 255, 0.35));
+      }
+      #app-loading .loader-bubbles {
+        position: absolute;
+        inset: -20% -30% -5%;
+        z-index: 1;
+        pointer-events: none;
+        overflow: visible;
+      }
+      #app-loading .loader-bubble {
+        position: absolute;
+        bottom: 18%;
+        left: 50%;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        background:
+          radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.55), transparent 42%),
+          radial-gradient(circle at 70% 70%, rgba(0, 229, 255, 0.25), transparent 55%),
+          radial-gradient(circle at 50% 50%, rgba(255, 26, 216, 0.18), rgba(157, 0, 255, 0.08) 60%, transparent 75%);
+        box-shadow:
+          0 0 8px rgba(255, 26, 216, 0.35),
+          0 0 14px rgba(0, 229, 255, 0.2),
+          inset 0 0 6px rgba(255, 255, 255, 0.25);
+        opacity: 0;
+        animation: loader-bubble-rise var(--dur, 3.2s) ease-out infinite;
+        animation-delay: var(--delay, 0s);
+        width: var(--size, 12px);
+        height: var(--size, 12px);
+        margin-left: calc(var(--size, 12px) / -2);
+        --drift: 0px;
+      }
+      #app-loading .loader-bubble::before {
+        content: "";
+        position: absolute;
+        top: 16%;
+        left: 18%;
+        width: 38%;
+        height: 38%;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.7), transparent 70%);
+      }
+      @keyframes loader-bubble-rise {
+        0% {
+          opacity: 0;
+          transform: translate(0, 10px) scale(0.4);
+        }
+        12% {
+          opacity: 0.9;
+        }
+        70% {
+          opacity: 0.65;
+        }
+        100% {
+          opacity: 0;
+          transform: translate(var(--drift), -220px) scale(1.15);
+        }
       }
       @keyframes logo-blink {
         0%, 100% {
@@ -124,13 +189,29 @@
   <body>
     <div id="root">
       <div id="app-loading">
-        <img
-          class="logo-loader"
-          src="/images/logo.png"
-          alt="Apex Detailing"
-          width="180"
-          height="210"
-        />
+        <div class="logo-stage">
+          <div class="loader-bubbles" aria-hidden="true">
+            <span class="loader-bubble" style="--size:10px; --drift:-36px; --dur:2.8s; --delay:0s; left:42%;"></span>
+            <span class="loader-bubble" style="--size:14px; --drift:28px; --dur:3.4s; --delay:0.35s; left:55%;"></span>
+            <span class="loader-bubble" style="--size:8px; --drift:-18px; --dur:2.6s; --delay:0.7s; left:48%;"></span>
+            <span class="loader-bubble" style="--size:16px; --drift:42px; --dur:3.8s; --delay:1.1s; left:58%;"></span>
+            <span class="loader-bubble" style="--size:11px; --drift:-48px; --dur:3.1s; --delay:1.45s; left:38%;"></span>
+            <span class="loader-bubble" style="--size:9px; --drift:16px; --dur:2.9s; --delay:0.2s; left:50%;"></span>
+            <span class="loader-bubble" style="--size:13px; --drift:-22px; --dur:3.5s; --delay:1.8s; left:45%;"></span>
+            <span class="loader-bubble" style="--size:7px; --drift:34px; --dur:2.5s; --delay:0.9s; left:62%;"></span>
+            <span class="loader-bubble" style="--size:12px; --drift:-40px; --dur:3.2s; --delay:2.1s; left:35%;"></span>
+            <span class="loader-bubble" style="--size:15px; --drift:10px; --dur:3.6s; --delay:0.55s; left:52%;"></span>
+            <span class="loader-bubble" style="--size:8px; --drift:50px; --dur:2.7s; --delay:1.6s; left:60%;"></span>
+            <span class="loader-bubble" style="--size:10px; --drift:-12px; --dur:3s; --delay:2.4s; left:47%;"></span>
+          </div>
+          <img
+            class="logo-loader"
+            src="/images/logo.png"
+            alt="Apex Detailing"
+            width="180"
+            height="210"
+          />
+        </div>
       </div>
     </div>
     <script type="module" src="/src/main.tsx"></script>
