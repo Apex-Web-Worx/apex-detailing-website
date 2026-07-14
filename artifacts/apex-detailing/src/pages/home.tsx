@@ -930,11 +930,11 @@ export default function Home() {
             className={`page-bubble ${b.tone}`.trim()}
             style={{
               ["--x" as string]: `${b.x}%`,
+              ["--start" as string]: `${b.start}%`,
               ["--size" as string]: `${b.size}px`,
               ["--drift" as string]: `${b.drift}px`,
               ["--dur" as string]: `${b.dur}s`,
               ["--delay" as string]: `${b.delay}s`,
-              ["--max-op" as string]: String(b.maxOp),
             }}
           />
         ))}
