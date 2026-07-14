@@ -348,6 +348,14 @@
     color: transparent;
   }
 
+  /* Alias for accent copy (prices, location, labels) — same as hero POTENTIAL */
+  .text-potential {
+    background-image: linear-gradient(90deg, #FF1AD8, #9D00FF, #00E5FF);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
   .neon-border {
     border: 1px solid transparent;
     background:

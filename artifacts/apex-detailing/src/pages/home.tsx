@@ -52,8 +52,8 @@ const AddonCard = ({ addon }: { addon: { name: string; price: string; descriptio
             "radial-gradient(ellipse 90% 70% at 0% 0%, rgba(255,26,216,0.12), transparent 55%)",
         }}
       />
-      <h4 className="relative z-10 text-base font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#FF1AD8] group-hover:to-[#00E5FF] transition-all duration-300">{addon.name}</h4>
-      <p className="relative z-10 text-[#00E5FF] font-bold text-sm">{addon.price}</p>
+      <h4 className="relative z-10 text-base font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#FF1AD8] group-hover:via-[#9D00FF] group-hover:to-[#00E5FF] transition-all duration-300">{addon.name}</h4>
+      <p className="relative z-10 text-potential font-bold text-sm">{addon.price}</p>
       {addon.description && (
         <div 
           onClick={(e) => {
@@ -380,7 +380,7 @@ function AddonsSection() {
         {/* Interior Addons */}
         <div>
           <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4 font-display">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
               Interior Addons
             </span>
           </h3>
@@ -398,7 +398,7 @@ function AddonsSection() {
         {/* Exterior Addons */}
         <div>
           <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4 font-display">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
               Exterior Addons
             </span>
           </h3>
@@ -954,7 +954,7 @@ export default function Home() {
                     }`}
                   >
                     {item}
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] transition-all duration-300 group-hover:w-full" />
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] transition-all duration-300 group-hover:w-full" />
                   </a>
                 );
               })}
@@ -1081,7 +1081,7 @@ export default function Home() {
 
           <p className="max-w-2xl text-base sm:text-lg md:text-xl text-gray-300 mb-8 sm:mb-10 font-medium px-1">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#FF1AD8] to-[#00E5FF]">Premium auto detailing, ceramic coating, and paint correction</span> services serving
-            <span className="text-[#00E5FF] font-bold"> Nixa Ozark Springfield, MO</span>. We bring the showroom shine to your vehicle.
+            <span className="text-potential font-bold"> Nixa Ozark Springfield, MO</span>. We bring the showroom shine to your vehicle.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto items-stretch sm:items-center">
@@ -1176,12 +1176,12 @@ export default function Home() {
         </div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-sm font-bold tracking-widest text-[#00E5FF] uppercase mb-3">
+            <h2 className="text-sm font-bold tracking-widest text-potential uppercase mb-3">
               What We Do
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-6 font-display">
               Elite{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
                 Services
               </span>
             </h3>
@@ -1227,10 +1227,10 @@ export default function Home() {
                   <div className="relative z-10 mb-6 p-4 rounded-xl bg-[#FF1AD8]/10 border border-[#FF1AD8]/20 inline-flex w-fit group-hover:scale-110 group-hover:bg-[#FF1AD8]/15 transition-all duration-500">
                     {service.icon}
                   </div>
-                  <h4 className="relative z-10 text-2xl font-black mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#FF1AD8] group-hover:to-[#00E5FF] transition-all duration-300 flex items-center flex-wrap gap-2">
+                  <h4 className="relative z-10 text-2xl font-black mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#FF1AD8] group-hover:via-[#9D00FF] group-hover:to-[#00E5FF] transition-all duration-300 flex items-center flex-wrap gap-2">
                     {service.title}
                     {service.id === "interior-detailing" && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white group-hover:bg-none group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] text-white group-hover:bg-none group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
                         <Star className="w-3 h-3" fill="currentColor" /> Most Booked
                       </span>
                     )}
@@ -1240,7 +1240,7 @@ export default function Home() {
                       </span>
                     )}
                     {service.id === "apex-express-interior-detailing" && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white group-hover:bg-none group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] text-white group-hover:bg-none group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
                         <Zap className="w-3 h-3" /> Express
                       </span>
                     )}
@@ -1251,7 +1251,7 @@ export default function Home() {
                         Starting at
                       </p>
                     )}
-                    <p className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
+                    <p className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
                       {service.pricing}
                     </p>
                   </div>
@@ -1297,7 +1297,7 @@ export default function Home() {
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
               Three Simple{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
                 Steps
               </span>
             </h3>
@@ -1309,7 +1309,7 @@ export default function Home() {
               { step: "03", title: "Drive Happy", desc: "Step into a like-new vehicle and enjoy long-lasting protection and shine.", icon: <Car className="w-7 h-7 text-[#00E5FF]" /> },
             ].map((s) => (
               <div key={s.step} className="relative p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-white/20 transition-colors">
-                <div className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] mb-4">{s.step}</div>
+                <div className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] mb-4">{s.step}</div>
                 <div className="mb-4">{s.icon}</div>
                 <h4 className="text-xl font-black uppercase tracking-tight mb-2">{s.title}</h4>
                 <p className="text-gray-400 text-sm leading-relaxed">{s.desc}</p>
@@ -1380,7 +1380,7 @@ export default function Home() {
               </h2>
               <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight mb-6 sm:mb-8 leading-tight font-display">
                 Welcome to{" "}
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
                   Apex Detailing
                 </span>
               </h3>
@@ -1393,7 +1393,7 @@ export default function Home() {
                   Our dedication to quality and customer satisfaction has helped us become <strong className="text-white">#1 Ranked in Nixa for 2024 and 2025</strong>, a recognition we are truly grateful for.
                 </p>
                 <p className="italic">
-                  Our business is built on <span className="text-[#00E5FF] font-semibold">Christian</span> values, with <span className="text-[#00E5FF] font-semibold">Christ</span> at the center of everything we do. We believe in working with integrity, serving others with a joyful heart, and honoring <span className="text-[#00E5FF] font-semibold">God</span> through the quality of our craft.
+                  Our business is built on <span className="text-potential font-semibold">Christian</span> values, with <span className="text-potential font-semibold">Christ</span> at the center of everything we do. We believe in working with integrity, serving others with a joyful heart, and honoring <span className="text-potential font-semibold">God</span> through the quality of our craft.
                 </p>
                 <p className="italic text-[#FF1AD8] text-sm mt-4">
                   "Whatever you do, work at it with all your heart, as working for the Lord, not for men. Colossians 3:23 (NIV)"
@@ -1479,7 +1479,7 @@ export default function Home() {
               See the Difference
             </h2>
             <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
-              Before & After <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">Transformations</span>
+              Before & After <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">Transformations</span>
             </h3>
           </div>
 
@@ -1588,7 +1588,7 @@ export default function Home() {
                   onClick={() => setCurrentSliderIndex(idx)}
                   className={`w-2 h-2 rounded-full transition-all ${
                     idx === currentSliderIndex
-                      ? "bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] w-8"
+                      ? "bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] w-8"
                       : "bg-white/30 hover:bg-white/50"
                   }`}
                 />
@@ -1603,12 +1603,12 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-end mb-10 sm:mb-16 gap-6">
             <div className="max-w-2xl">
-              <h2 className="text-sm font-bold tracking-widest text-[#00E5FF] uppercase mb-3">
+              <h2 className="text-sm font-bold tracking-widest text-potential uppercase mb-3">
                 Our Work
               </h2>
               <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
                 Results That{" "}
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
                   Speak
                 </span>
               </h3>
@@ -1688,13 +1688,13 @@ export default function Home() {
                       Finished results
                     </span>
                   )}
-                  <h4 className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] opacity-85" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.8)) drop-shadow(0 1px 2px rgba(0,0,0,0.6))' }}>{item.title}</h4>
+                  <h4 className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] opacity-85" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.8)) drop-shadow(0 1px 2px rgba(0,0,0,0.6))' }}>{item.title}</h4>
                   {item.images && item.images.length > 1 && (
                     <p className="text-xs text-gray-300 mt-2">
                       {item.images.length} {item.images.length === 1 ? 'result' : 'results'}
                     </p>
                   )}
-                  <div className="w-12 h-1 bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100" />
+                  <div className="w-12 h-1 bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100" />
                 </div>
               </div>
             ))}
@@ -1756,7 +1756,7 @@ export default function Home() {
                 
                 {/* Before/After Label */}
                 {selectedGalleryItem.beforeAfter && typeof selectedGalleryItem.images[currentImageIndex] === 'object' && (
-                  <div className="absolute top-6 left-6 bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg opacity-85">
+                  <div className="absolute top-6 left-6 bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg opacity-85">
                     {selectedGalleryItem.images[currentImageIndex].label}
                   </div>
                 )}
@@ -1818,7 +1818,7 @@ export default function Home() {
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
               Client{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
                 Reactions
               </span>
             </h3>
@@ -1856,12 +1856,12 @@ export default function Home() {
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl mx-auto text-center mb-20">
-            <h2 className="text-sm font-bold tracking-widest text-[#00E5FF] uppercase mb-3">
+            <h2 className="text-sm font-bold tracking-widest text-potential uppercase mb-3">
               Google Reviews
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-6 font-display">
               Trusted by Our{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
                 Happy Customers
               </span>
             </h3>
@@ -1876,7 +1876,7 @@ export default function Home() {
                 { rating: "5h", reviews: "Response", description: "Support Time" },
               ].map((stat, i) => (
                 <div key={i} className="text-center p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:border-white/20 transition-colors">
-                  <p className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] mb-2">
+                  <p className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] mb-2">
                     {stat.rating}
                   </p>
                   <p className="text-gray-300 font-bold mb-2">{stat.reviews}</p>
@@ -1923,12 +1923,12 @@ export default function Home() {
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#00E5FF]/10 rounded-full mix-blend-screen filter blur-[120px]" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-12">
-            <h2 className="text-sm font-bold tracking-widest text-[#00E5FF] uppercase mb-3">
+            <h2 className="text-sm font-bold tracking-widest text-potential uppercase mb-3">
               Service Area
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-4 font-display">
               Serving the{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
                 Ozarks
               </span>
             </h3>
@@ -1994,7 +1994,7 @@ export default function Home() {
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
               Frequently Asked{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
                 Questions
               </span>
             </h3>
@@ -2011,7 +2011,7 @@ export default function Home() {
                 }}
                 className={`px-5 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all duration-300 border ${
                   activeFaqCategory === cat
-                    ? "bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white border-transparent shadow-[0_0_20px_rgba(0,229,255,0.3)]"
+                    ? "bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] text-white border-transparent shadow-[0_0_20px_rgba(0,229,255,0.3)]"
                     : "bg-white/5 text-gray-400 border-white/10 hover:border-white/30 hover:text-white"
                 }`}
               >
@@ -2079,7 +2079,7 @@ export default function Home() {
               </p>
               <div className="mb-8 p-6 rounded-xl bg-white/5 border border-[#00E5FF]/30 backdrop-blur-sm max-w-2xl">
                 <p className="text-gray-300 text-sm leading-relaxed">
-                  <span className="font-black text-[#00E5FF]">Important:</span> All scheduling needs to be done prior to your visit. We appreciate your understanding and encourage you to book ahead to secure your preferred time.
+                  <span className="font-black text-potential">Important:</span> All scheduling needs to be done prior to your visit. We appreciate your understanding and encourage you to book ahead to secure your preferred time.
                 </p>
               </div>
               <a
@@ -2285,7 +2285,7 @@ export default function Home() {
                 className="h-16 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity"
               />
               <p className="text-gray-500 text-xs font-medium uppercase tracking-widest group-hover:text-white transition-colors">
-                Designed and developed by <span className="text-[#00E5FF] font-bold">APEX WEB WORX</span>
+                Designed and developed by <span className="text-potential font-bold">APEX WEB WORX</span>
               </p>
             </a>
           </div>
