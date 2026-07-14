@@ -54,10 +54,10 @@ const SERVICE_ICONS: Record<string, { icon: typeof Wand2; color: string }> = {
   "apex-full-detailing": { icon: Wand2, color: "text-[#FF1AD8]" },
   "apex-interior-detailing": { icon: Droplets, color: "text-[#FF1AD8]" },
   "apex-express-interior-detailing": { icon: Droplets, color: "text-[#FF1AD8]" },
-  "apex-exterior-detailing": { icon: Car, color: "text-[#00E5FF]" },
+  "apex-exterior-detailing": { icon: Car, color: "text-[#FF1AD8]" },
   "apex-wash-clay-wax": { icon: Sparkles, color: "text-[#FF1AD8]" },
-  "apex-headlight-restoration": { icon: CheckCircle2, color: "text-[#00E5FF]" },
-  "apex-ceramic-coating": { icon: Shield, color: "text-[#00E5FF]" },
+  "apex-headlight-restoration": { icon: CheckCircle2, color: "text-[#FF1AD8]" },
+  "apex-ceramic-coating": { icon: Shield, color: "text-[#FF1AD8]" },
   "apex-paint-correction": { icon: Sparkles, color: "text-[#FF1AD8]" },
 };
 
@@ -328,51 +328,47 @@ function ServiceStep({
       {isLoading && <Loading label="Loading services…" />}
       {error && <ErrorMessage>Couldn't load services. Try again.</ErrorMessage>}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
         {data?.map((s) => {
           const isSelected = selected?.id === s.id;
           const iconMeta = SERVICE_ICONS[s.slug];
           const Icon = iconMeta?.icon;
           const badge = SERVICE_BADGES[s.slug];
-          const isPopular = badge?.tone === "popular";
           return (
             <button
               key={s.id}
               onClick={() => onSelect(s)}
-              className={`relative text-left p-6 rounded-2xl border transition group hover:-translate-y-0.5 hover:shadow-2xl ${
+              className={`relative flex h-full min-h-[17.5rem] flex-col text-left p-6 rounded-2xl border transition group hover:-translate-y-0.5 hover:shadow-[0_0_28px_rgba(255,26,216,0.18)] ${
                 isSelected
-                  ? "border-[#00E5FF] bg-gradient-to-br from-[#00E5FF]/10 to-[#FF1AD8]/5"
-                  : isPopular
-                    ? "border-[#FF1AD8]/50 bg-gradient-to-br from-[#FF1AD8]/[0.06] to-transparent hover:border-[#FF1AD8]"
-                    : "border-white/10 bg-white/[0.02] hover:border-[#00E5FF]/40"
+                  ? "border-[#FF1AD8] bg-gradient-to-br from-[#FF1AD8]/20 via-[#FF1AD8]/10 to-[#9D00FF]/10 shadow-[0_0_24px_rgba(255,26,216,0.2)]"
+                  : "border-[#FF1AD8]/35 bg-gradient-to-br from-[#FF1AD8]/[0.12] via-[#FF1AD8]/[0.06] to-[#9D00FF]/[0.05] hover:border-[#FF1AD8]/70"
               }`}
             >
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <h3 className="text-lg font-bold text-white flex items-center flex-wrap gap-2">
-                  {Icon && (
-                    <span className="p-2 rounded-lg bg-white/5 inline-flex items-center justify-center">
-                      <Icon className={`w-5 h-5 ${iconMeta.color}`} />
-                    </span>
-                  )}
-                  {s.name}
+              <div className="flex items-start gap-3 mb-3">
+                {Icon && (
+                  <span className="shrink-0 p-2 rounded-lg bg-[#FF1AD8]/10 border border-[#FF1AD8]/20 inline-flex items-center justify-center">
+                    <Icon className={`w-5 h-5 ${iconMeta.color}`} />
+                  </span>
+                )}
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-lg font-bold text-white leading-snug">
+                    {s.name}
+                  </h3>
                   {badge && (
                     <span
-                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                        badge.tone === "popular"
-                          ? "badge-gold"
-                          : badge.tone === "value"
-                            ? "badge-gold"
-                            : badge.tone === "notice"
-                              ? "bg-amber-500 text-white"
-                              : "badge-gold"
+                      className={`mt-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                        badge.tone === "notice"
+                          ? "bg-amber-500/90 text-white"
+                          : "badge-gold"
                       }`}
                     >
                       {badge.tone === "express" && <Zap className="w-3 h-3" />}
                       {badge.label}
                     </span>
                   )}
-                </h3>
+                </div>
               </div>
+
               <div className="flex items-baseline gap-2 mb-3 flex-wrap">
                 {s.priceCents > 0 ? (
                   <>
@@ -393,11 +389,13 @@ function ServiceStep({
                   {formatDuration(s.durationMinutes)}
                 </span>
               </div>
-              <p className="text-sm text-gray-400 mb-4 leading-relaxed">
+
+              <p className="text-sm text-gray-400 mb-4 leading-relaxed flex-1">
                 {s.description}
               </p>
-              <div className="flex items-center gap-3 text-xs text-gray-500">
-                <span className="text-[#00E5FF] font-bold flex items-center gap-1 ml-auto opacity-0 group-hover:opacity-100 transition">
+
+              <div className="mt-auto flex items-center justify-end pt-1">
+                <span className="text-[#FF1AD8] font-bold text-xs flex items-center gap-1 opacity-70 group-hover:opacity-100 transition">
                   Select <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </div>
