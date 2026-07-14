@@ -3,7 +3,6 @@
   "name": "Apex Detailing",
   "short_name": "Apex Detail",
   "description": "Apex Detailing — premium auto detailing in Nixa, Ozark & Springfield, MO.",
-  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "any",

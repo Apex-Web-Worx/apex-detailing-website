@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useLocation } from "wouter";
 
 const ADMIN_MANIFEST = "/admin.webmanifest";
@@ -31,9 +31,7 @@ function setAppTitles(title: string) {
 }
 
 /**
- * Swap the installable PWA manifest so /admin installs as "Apex Admin"
- * and remember that preference so iOS standalone launches that ignore
- * start_url still redirect into /admin.
+ * Swap the installable PWA manifest so /admin uses the admin manifest.
  */
 export default function PwaManifestSwitch() {
   const [location] = useLocation();
@@ -49,6 +47,8 @@ export default function PwaManifestSwitch() {
       } catch {
         // ignore
       }
+      document.cookie =
+        "apex_pwa_start=admin; Domain=.apexdetailing.net; Path=/; Max-Age=31536000; SameSite=Lax; Secure";
       document.title = "Apex Admin — Apex Detailing";
     }
   }, [location]);
@@ -56,47 +56,14 @@ export default function PwaManifestSwitch() {
   return null;
 }
 
-/** Shown on admin login — install path that iOS actually honors. */
+/** Shown on admin login — points to the real HTML install page. */
 export function AdminPwaInstallHint() {
-  const [iosHint, setIosHint] = useState(false);
-  const installUrl = `${window.location.origin}/go-admin.html`;
-
-  useEffect(() => {
-    try {
-      localStorage.setItem("apex_pwa_start", "admin");
-    } catch {
-      // ignore
-    }
-    setManifestHref(ADMIN_MANIFEST);
-    setAppTitles("Apex Admin");
-  }, []);
-
-  const onInstall = async () => {
-    try {
-      localStorage.setItem("apex_pwa_start", "admin");
-    } catch {
-      // ignore
-    }
-    setManifestHref(ADMIN_MANIFEST);
-    setAppTitles("Apex Admin");
-
-    const deferred = (window as unknown as { deferredApexInstall?: BeforeInstallPromptEvent })
-      .deferredApexInstall;
-    if (deferred) {
-      // Prefer the static launch page so start_url is a real HTML file
-      window.location.assign(installUrl);
-      return;
-    }
-
-    setIosHint(true);
-  };
-
   return (
     <div className="mt-5 rounded-xl border border-white/10 bg-white/[0.03] p-4 text-left">
       <p className="text-sm font-semibold text-white mb-1">Add Admin to Home Screen</p>
       <p className="text-xs text-gray-400 mb-3 leading-relaxed">
-        Open the install page first — iOS ignores SPA routes and needs this real page so the
-        icon opens Admin.
+        Do not add the homepage. Open the install page, tap Enable, then Share → Add to Home
+        Screen, and delete any old Apex icon.
       </p>
       <a
         href="/go-admin.html"
@@ -104,27 +71,6 @@ export function AdminPwaInstallHint() {
       >
         Open install page
       </a>
-      <button
-        type="button"
-        onClick={onInstall}
-        className="mt-2 w-full py-2.5 rounded-sm border border-white/15 text-gray-300 text-xs font-bold uppercase tracking-[0.12em] hover:border-white/30 transition"
-      >
-        Show iPhone steps
-      </button>
-      {iosHint && (
-        <ol className="mt-3 space-y-1.5 text-xs text-gray-300 list-decimal list-inside leading-relaxed">
-          <li>
-            Open <span className="text-white font-semibold">/go-admin.html</span>
-          </li>
-          <li>Tap Share → <span className="text-white font-semibold">Add to Home Screen</span></li>
-          <li>Name it <span className="text-white font-semibold">Apex Admin</span></li>
-          <li>Delete any old Apex icon that opened the homepage</li>
-        </ol>
-      )}
     </div>
   );
-}
-
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>;
 }
