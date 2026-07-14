@@ -888,15 +888,13 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-['Mulish'] overflow-x-hidden selection:bg-[#FF1AD8] selection:text-white">
-      {/* Texture Overlay */}
-      <div className="texture-overlay" />
-      {/* Soft global pink wash (minimal) */}
+      {/* Soft global pink wash over black */}
       <div
-        className="pointer-events-none fixed inset-0 z-0 opacity-100"
+        className="pointer-events-none fixed inset-0 z-0"
         aria-hidden="true"
         style={{
           background:
-            "radial-gradient(ellipse 80% 50% at 10% -10%, rgba(255,26,216,0.07), transparent 50%), radial-gradient(ellipse 60% 40% at 90% 20%, rgba(157,0,255,0.04), transparent 45%)",
+            "radial-gradient(ellipse 85% 55% at 8% -8%, rgba(255,26,216,0.14), transparent 52%), radial-gradient(ellipse 65% 45% at 92% 18%, rgba(157,0,255,0.08), transparent 48%), radial-gradient(ellipse 50% 40% at 50% 80%, rgba(255,26,216,0.05), transparent 55%)",
         }}
       />
       {/* Navigation */}
@@ -1033,7 +1031,7 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+      <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden section-pink-wash">
         {/* Hero Background Image */}
         <div className="absolute inset-0 z-0">
           <img
