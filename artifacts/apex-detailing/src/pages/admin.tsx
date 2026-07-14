@@ -58,6 +58,7 @@ import {
   todayDateString,
   addDaysToDateString,
 } from "@/lib/format";
+import { AdminPwaInstallHint } from "@/components/PwaManifestSwitch";
 
 function scheduledAtToShopDate(iso: string): string {
   const d = new Date(iso);
@@ -194,6 +195,7 @@ function Login({ onSubmit }: { onSubmit: (t: string) => void }) {
             {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
             <span>Sign in</span>
           </button>
+          <AdminPwaInstallHint />
           <Link
             href="/"
             className="block text-center mt-4 text-sm text-gray-400 hover:text-white"
