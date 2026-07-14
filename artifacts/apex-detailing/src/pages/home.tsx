@@ -893,13 +893,17 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             <div
-              className="flex items-center cursor-pointer"
+              className="relative z-10 flex items-center cursor-pointer shrink-0 min-w-[4rem]"
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             >
               <img
                 src={`${import.meta.env.BASE_URL}images/logo.png`}
                 alt="Apex Detailing Logo"
-                className="h-[4.75rem] md:h-28 lg:h-32 w-auto object-contain logo-shine"
+                className="relative z-10 h-16 md:h-24 lg:h-[6.5rem] w-auto max-w-[9rem] md:max-w-[12rem] object-contain opacity-100"
+                style={{
+                  filter:
+                    "drop-shadow(0 0 10px rgba(255,26,216,0.55)) drop-shadow(0 0 18px rgba(0,229,255,0.35))",
+                }}
               />
             </div>
 
@@ -2077,7 +2081,11 @@ export default function Home() {
                 <img
                   src={`${import.meta.env.BASE_URL}images/logo.png`}
                   alt="Apex Detailing Logo"
-                  className="h-16 w-auto object-contain logo-shine"
+                  className="relative z-10 h-20 w-auto max-w-[10rem] object-contain opacity-100"
+                  style={{
+                    filter:
+                      "drop-shadow(0 0 10px rgba(255,26,216,0.55)) drop-shadow(0 0 18px rgba(0,229,255,0.35))",
+                  }}
                 />
               </div>
               <p className="text-gray-400 mb-6 font-medium">
