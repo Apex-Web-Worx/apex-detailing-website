@@ -51,14 +51,14 @@ import {
 } from "lucide-react";
 
 const SERVICE_ICONS: Record<string, { icon: typeof Wand2; color: string }> = {
-  "apex-full-detailing": { icon: Wand2, color: "text-[#FF1AD8]" },
-  "apex-interior-detailing": { icon: Droplets, color: "text-[#FF1AD8]" },
-  "apex-express-interior-detailing": { icon: Droplets, color: "text-[#FF1AD8]" },
-  "apex-exterior-detailing": { icon: Car, color: "text-[#00F0FF]" },
-  "apex-wash-clay-wax": { icon: Sparkles, color: "text-[#FF1AD8]" },
-  "apex-headlight-restoration": { icon: CheckCircle2, color: "text-[#00F0FF]" },
-  "apex-ceramic-coating": { icon: Shield, color: "text-[#00F0FF]" },
-  "apex-paint-correction": { icon: Sparkles, color: "text-[#FF1AD8]" },
+  "apex-full-detailing": { icon: Wand2, color: "text-[#A886CD]" },
+  "apex-interior-detailing": { icon: Droplets, color: "text-[#A886CD]" },
+  "apex-express-interior-detailing": { icon: Droplets, color: "text-[#A886CD]" },
+  "apex-exterior-detailing": { icon: Car, color: "text-[#3496FF]" },
+  "apex-wash-clay-wax": { icon: Sparkles, color: "text-[#A886CD]" },
+  "apex-headlight-restoration": { icon: CheckCircle2, color: "text-[#3496FF]" },
+  "apex-ceramic-coating": { icon: Shield, color: "text-[#3496FF]" },
+  "apex-paint-correction": { icon: Sparkles, color: "text-[#A886CD]" },
 };
 
 type Step = "service" | "datetime" | "info" | "confirm";
@@ -138,7 +138,7 @@ export default function BookingPage() {
           </div>
           <a
             href="tel:417-527-6165"
-            className="hidden sm:flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-[#00F0FF] transition"
+            className="hidden sm:flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-[#3496FF] transition"
           >
             <Phone className="w-4 h-4" />
             417-527-6165
@@ -164,9 +164,9 @@ export default function BookingPage() {
                     <div
                       className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold border-2 transition ${
                         active
-                          ? "bg-gradient-to-br from-[#FF1AD8] to-[#00F0FF] border-transparent text-white"
+                          ? "bg-gradient-to-br from-[#A886CD] to-[#3496FF] border-transparent text-white"
                           : done
-                            ? "bg-[#00F0FF]/20 border-[#00F0FF] text-[#00F0FF]"
+                            ? "bg-[#3496FF]/20 border-[#3496FF] text-[#3496FF]"
                             : "border-white/20 text-gray-500"
                       }`}
                     >
@@ -174,7 +174,7 @@ export default function BookingPage() {
                     </div>
                     <span
                       className={`text-[10px] sm:text-xs font-bold uppercase tracking-wide ${
-                        active ? "text-white" : done ? "text-[#00F0FF]" : "text-gray-500"
+                        active ? "text-white" : done ? "text-[#3496FF]" : "text-gray-500"
                       }`}
                     >
                       {s.label}
@@ -183,7 +183,7 @@ export default function BookingPage() {
                   {i < 3 && (
                     <div
                       className={`flex-1 h-0.5 mb-6 ${
-                        done ? "bg-[#00F0FF]" : "bg-white/10"
+                        done ? "bg-[#3496FF]" : "bg-white/10"
                       }`}
                     />
                   )}
@@ -249,7 +249,7 @@ export default function BookingPage() {
             <span>Questions? Call</span>
             <a
               href="tel:417-527-6165"
-              className="text-[#00F0FF] font-semibold hover:underline"
+              className="text-[#3496FF] font-semibold hover:underline"
             >
               417-527-6165
             </a>
@@ -291,7 +291,7 @@ export default function BookingPage() {
               className="h-14 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity"
             />
             <p className="text-gray-500 text-xs font-medium uppercase tracking-widest group-hover:text-white transition-colors">
-              Designed and developed by <span className="text-[#00F0FF] font-bold">APEX WEB WORX</span>
+              Designed and developed by <span className="text-[#3496FF] font-bold">APEX WEB WORX</span>
             </p>
           </a>
         </div>
@@ -333,10 +333,10 @@ function ServiceStep({
               onClick={() => onSelect(s)}
               className={`relative text-left p-6 rounded-2xl border transition group hover:-translate-y-0.5 hover:shadow-2xl ${
                 isSelected
-                  ? "border-[#00F0FF] bg-gradient-to-br from-[#00F0FF]/10 to-[#FF1AD8]/5"
+                  ? "border-[#3496FF] bg-gradient-to-br from-[#3496FF]/10 to-[#A886CD]/5"
                   : isPopular
-                    ? "border-[#FF1AD8]/50 bg-gradient-to-br from-[#FF1AD8]/[0.06] to-transparent hover:border-[#FF1AD8]"
-                    : "border-white/10 bg-white/[0.02] hover:border-[#00F0FF]/40"
+                    ? "border-[#A886CD]/50 bg-gradient-to-br from-[#A886CD]/[0.06] to-transparent hover:border-[#A886CD]"
+                    : "border-white/10 bg-white/[0.02] hover:border-[#3496FF]/40"
               }`}
             >
               <div className="flex items-start justify-between gap-3 mb-3">
@@ -351,12 +351,12 @@ function ServiceStep({
                     <span
                       className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider text-white ${
                         badge.tone === "popular"
-                          ? "bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF]"
+                          ? "bg-gradient-to-r from-[#A886CD] to-[#3496FF]"
                           : badge.tone === "value"
-                            ? "bg-[#00F0FF]"
+                            ? "bg-[#3496FF]"
                             : badge.tone === "notice"
                               ? "bg-amber-500"
-                              : "bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF]"
+                              : "bg-gradient-to-r from-[#A886CD] to-[#3496FF]"
                       }`}
                     >
                       {badge.tone === "express" && <Zap className="w-3 h-3" />}
@@ -371,12 +371,12 @@ function ServiceStep({
                     <span className="text-xs uppercase tracking-wider text-gray-500 font-semibold">
                       Starting at
                     </span>
-                    <span className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF]">
+                    <span className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
                       {formatPrice(s.priceCents)}
                     </span>
                   </>
                 ) : (
-                  <span className="text-base font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF]">
+                  <span className="text-base font-black bg-clip-text text-transparent bg-gradient-to-r from-[#A886CD] to-[#3496FF]">
                     Call for quote
                   </span>
                 )}
@@ -389,7 +389,7 @@ function ServiceStep({
                 {s.description}
               </p>
               <div className="flex items-center gap-3 text-xs text-gray-500">
-                <span className="text-[#00F0FF] font-bold flex items-center gap-1 ml-auto opacity-0 group-hover:opacity-100 transition">
+                <span className="text-[#3496FF] font-bold flex items-center gap-1 ml-auto opacity-0 group-hover:opacity-100 transition">
                   Select <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </div>
@@ -524,7 +524,7 @@ function DateTimeStep({
                   disabled={disabled}
                   className={`p-3 rounded-xl text-center transition ${
                     isPicked
-                      ? "bg-gradient-to-br from-[#FF1AD8] to-[#00F0FF] text-white"
+                      ? "bg-gradient-to-br from-[#A886CD] to-[#3496FF] text-white"
                       : disabled
                         ? "bg-white/[0.02] text-gray-600 cursor-not-allowed opacity-50"
                         : "bg-white/[0.04] hover:bg-white/[0.08] text-white"
@@ -569,7 +569,7 @@ function DateTimeStep({
                   disabled={!slot.available}
                   className={`py-4 rounded-xl font-bold transition ${
                     isPicked
-                      ? "bg-gradient-to-br from-[#FF1AD8] to-[#00F0FF] text-white"
+                      ? "bg-gradient-to-br from-[#A886CD] to-[#3496FF] text-white"
                       : slot.available
                         ? "bg-white/[0.04] hover:bg-white/[0.08] text-white border border-white/10"
                         : "bg-white/[0.02] text-gray-600 cursor-not-allowed line-through"
@@ -583,7 +583,7 @@ function DateTimeStep({
           {selectedDay.slots.every((s) => !s.available) && (
             <p className="text-sm text-gray-400 mt-4">
               All slots booked for this day. Pick another date or call us at{" "}
-              <a href="tel:417-527-6165" className="text-[#00F0FF] underline">
+              <a href="tel:417-527-6165" className="text-[#3496FF] underline">
                 417-527-6165
               </a>
               .
@@ -596,7 +596,7 @@ function DateTimeStep({
         <button
           disabled={!pickedDate || !pickedTime || !pickedSlotStillValid}
           onClick={() => onSelect(pickedDate!, pickedTime!)}
-          className="px-8 py-3 rounded-full bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] text-white font-bold disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-[#00F0FF]/30 transition flex items-center gap-2"
+          className="px-8 py-3 rounded-full bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white font-bold disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-[#3496FF]/30 transition flex items-center gap-2"
         >
           Continue <ArrowRight className="w-4 h-4" />
         </button>
@@ -676,7 +676,7 @@ function InfoStep({
             onChange={(e) => onChange({ ...form, notes: e.target.value })}
             placeholder="Anything we should know? Pet hair, problem stains, etc."
             rows={4}
-            className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#00F0FF] focus:outline-none focus:ring-2 focus:ring-[#00F0FF]/20 transition resize-none"
+            className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#3496FF] focus:outline-none focus:ring-2 focus:ring-[#3496FF]/20 transition resize-none"
           />
         </div>
       </div>
@@ -692,7 +692,7 @@ function InfoStep({
           onChange={(e) =>
             onChange({ ...form, smsConsent: e.target.checked })
           }
-          className="mt-1 w-5 h-5 accent-[#00F0FF] flex-shrink-0 cursor-pointer"
+          className="mt-1 w-5 h-5 accent-[#3496FF] flex-shrink-0 cursor-pointer"
         />
         <span className="text-xs text-gray-400 leading-relaxed">
           <span className="text-white font-semibold">SMS notifications:</span>{" "}
@@ -709,11 +709,11 @@ function InfoStep({
           leave this unchecked and we'll contact you by email and phone only.
           Your phone number and consent will not be sold or shared with third
           parties for marketing. See our{" "}
-          <Link href="/privacy" className="text-[#00F0FF] hover:underline">
+          <Link href="/privacy" className="text-[#3496FF] hover:underline">
             Privacy Policy
           </Link>{" "}
           and{" "}
-          <Link href="/terms" className="text-[#00F0FF] hover:underline">
+          <Link href="/terms" className="text-[#3496FF] hover:underline">
             Terms &amp; Conditions
           </Link>
           .
@@ -724,7 +724,7 @@ function InfoStep({
         <button
           disabled={!valid}
           onClick={onNext}
-          className="px-8 py-3 rounded-full bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] text-white font-bold disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-[#00F0FF]/30 transition flex items-center gap-2"
+          className="px-8 py-3 rounded-full bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white font-bold disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-[#3496FF]/30 transition flex items-center gap-2"
         >
           Review booking <ArrowRight className="w-4 h-4" />
         </button>
@@ -752,14 +752,14 @@ function Field({
     <div>
       <label className="block text-sm font-bold text-gray-300 mb-2">
         {label}
-        {required && <span className="text-[#00F0FF] ml-1">*</span>}
+        {required && <span className="text-[#3496FF] ml-1">*</span>}
       </label>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#00F0FF] focus:outline-none focus:ring-2 focus:ring-[#00F0FF]/20 transition"
+        className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#3496FF] focus:outline-none focus:ring-2 focus:ring-[#3496FF]/20 transition"
       />
     </div>
   );
@@ -834,8 +834,8 @@ function ConfirmStep({
         {form.notes && <SummaryRow label="Notes" value={form.notes} />}
       </div>
 
-      <div className="mt-6 p-4 rounded-xl bg-[#00F0FF]/5 border border-[#00F0FF]/20 text-sm text-gray-300 flex gap-3">
-        <MapPin className="w-5 h-5 text-[#00F0FF] flex-shrink-0 mt-0.5" />
+      <div className="mt-6 p-4 rounded-xl bg-[#3496FF]/5 border border-[#3496FF]/20 text-sm text-gray-300 flex gap-3">
+        <MapPin className="w-5 h-5 text-[#3496FF] flex-shrink-0 mt-0.5" />
         <div>
           <p className="font-bold text-white mb-1">Drop off at our shop</p>
           <p>1114 E Lakota St, Nixa, MO 65714. We're open Mon–Sat 7 AM – 6 PM.</p>
@@ -854,7 +854,7 @@ function ConfirmStep({
         <button
           disabled={mutation.isPending}
           onClick={submit}
-          className="px-8 py-3 rounded-full bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] text-white font-bold disabled:opacity-50 hover:shadow-lg hover:shadow-[#00F0FF]/30 transition flex items-center justify-center gap-2"
+          className="px-8 py-3 rounded-full bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white font-bold disabled:opacity-50 hover:shadow-lg hover:shadow-[#3496FF]/30 transition flex items-center justify-center gap-2"
         >
           {mutation.isPending ? (
             <>
@@ -886,7 +886,7 @@ function SummaryRow({
       <span
         className={`text-right font-semibold ${
           highlight
-            ? "text-xl bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] bg-clip-text text-transparent"
+            ? "text-xl bg-gradient-to-r from-[#A886CD] to-[#3496FF] bg-clip-text text-transparent"
             : "text-white"
         }`}
       >
@@ -900,7 +900,7 @@ function SummaryRow({
 function ConfirmationView({ booking }: { booking: Booking }) {
   return (
     <section className="text-center max-w-2xl mx-auto pt-12">
-      <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-[#FF1AD8] to-[#00F0FF] flex items-center justify-center mb-6 shadow-2xl shadow-[#00F0FF]/30">
+      <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-[#A886CD] to-[#3496FF] flex items-center justify-center mb-6 shadow-2xl shadow-[#3496FF]/30">
         <Check className="w-10 h-10 text-white" />
       </div>
       <h1 className="text-4xl sm:text-5xl font-black mb-3">You're booked!</h1>
@@ -929,8 +929,8 @@ function ConfirmationView({ booking }: { booking: Booking }) {
         <SummaryRow label="Vehicle" value={booking.vehicle} />
       </div>
 
-      <div className="p-4 rounded-xl bg-[#00F0FF]/5 border border-[#00F0FF]/20 text-sm text-gray-300 flex gap-3 text-left mb-8">
-        <MapPin className="w-5 h-5 text-[#00F0FF] flex-shrink-0 mt-0.5" />
+      <div className="p-4 rounded-xl bg-[#3496FF]/5 border border-[#3496FF]/20 text-sm text-gray-300 flex gap-3 text-left mb-8">
+        <MapPin className="w-5 h-5 text-[#3496FF] flex-shrink-0 mt-0.5" />
         <div>
           <p className="font-bold text-white mb-1">Drop-off address</p>
           <p>1114 E Lakota St, Nixa, MO 65714 — call 417-527-6165 if you need anything.</p>
@@ -946,7 +946,7 @@ function ConfirmationView({ booking }: { booking: Booking }) {
         </Link>
         <a
           href="tel:417-527-6165"
-          className="px-6 py-3 rounded-full bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] text-white font-bold hover:shadow-lg hover:shadow-[#00F0FF]/30 transition flex items-center justify-center gap-2"
+          className="px-6 py-3 rounded-full bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white font-bold hover:shadow-lg hover:shadow-[#3496FF]/30 transition flex items-center justify-center gap-2"
         >
           <Phone className="w-4 h-4" /> Call the shop
         </a>

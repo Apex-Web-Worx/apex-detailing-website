@@ -95,8 +95,8 @@ This project is designed as a **reusable booking platform template** that can be
 
 **Current brand colors:**
 ```css
-Primary Magenta: #FF1AD8
-Primary Cyan: #00F0FF
+Primary Purple: #A886CD
+Primary Blue: #3496FF
 Background: #0a0a0a
 Card bg: white/[0.02] or white/[0.04]
 ```

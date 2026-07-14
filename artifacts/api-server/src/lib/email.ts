@@ -202,7 +202,7 @@ function emailShell(args: {
         </td></tr>
         <tr><td style="padding:28px 32px;">${args.bodyHtml}</td></tr>
         <tr><td style="background:#0a0a0a;padding:18px 32px;text-align:center;border-top:1px solid rgba(255,255,255,0.08);">
-          <a href="${SHOP_WEBSITE}" style="color:#00F0FF;text-decoration:none;font-size:13px;">apexdetailing.net</a>
+          <a href="${SHOP_WEBSITE}" style="color:#3496FF;text-decoration:none;font-size:13px;">apexdetailing.net</a>
           <div style="color:#666666;font-size:12px;margin-top:6px;">${escapeHtml(SHOP_ADDRESS)} &middot; ${SHOP_PHONE}</div>
         </td></tr>
       </table>
@@ -215,12 +215,12 @@ function detailsTable(rows: { label: string; value: string; highlight?: boolean 
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px;margin-bottom:20px;">${rows
     .map(
       (r) =>
-        `<tr><td style="padding:8px 0;color:#999999;font-size:13px;">${escapeHtml(r.label)}</td><td style="padding:8px 0;color:${r.highlight ? "#00F0FF" : "#ffffff"};font-size:${r.highlight ? "16px" : "14px"};font-weight:${r.highlight ? "700" : "600"};text-align:right;">${escapeHtml(r.value)}</td></tr>`,
+        `<tr><td style="padding:8px 0;color:#999999;font-size:13px;">${escapeHtml(r.label)}</td><td style="padding:8px 0;color:${r.highlight ? "#3496FF" : "#ffffff"};font-size:${r.highlight ? "16px" : "14px"};font-weight:${r.highlight ? "700" : "600"};text-align:right;">${escapeHtml(r.value)}</td></tr>`,
     )
     .join("")}</table>`;
 }
 
-function ctaButton(href: string, label: string, gradient = "linear-gradient(90deg,#FF1AD8,#00F0FF)"): string {
+function ctaButton(href: string, label: string, gradient = "linear-gradient(90deg,#A886CD,#3496FF)"): string {
   return `<a href="${href}" style="display:inline-block;padding:12px 24px;border-radius:9999px;background:${gradient};color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;">${escapeHtml(label)}</a>`;
 }
 
@@ -268,21 +268,21 @@ export function customerHtml(b: BookingEmailData): string {
     <p style="margin:0 0 16px 0;font-size:16px;color:#ffffff;">Hi ${escapeHtml(b.customerName)},</p>
     <p style="margin:0 0 24px 0;font-size:15px;line-height:1.6;color:#cccccc;">Thanks for booking with Apex Detailing! Your appointment is confirmed.</p>
     ${detailsTable(detailRows(b))}
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:rgba(0,240,255,0.08);border:1px solid rgba(0,240,255,0.25);border-radius:12px;padding:18px;margin-bottom:24px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:rgba(52,150,255,0.08);border:1px solid rgba(52,150,255,0.25);border-radius:12px;padding:18px;margin-bottom:24px;">
       <tr><td>
-        <div style="color:#00F0FF;font-weight:700;font-size:14px;margin-bottom:6px;">Drop-Off Location</div>
+        <div style="color:#3496FF;font-weight:700;font-size:14px;margin-bottom:6px;">Drop-Off Location</div>
         <a href="https://maps.apple.com/?address=1114%20E%20Lakota%20St,%20Nixa,%20MO%2065714" style="color:#ffffff;font-size:14px;line-height:1.5;text-decoration:none;font-weight:700;">${escapeHtml(SHOP_ADDRESS)}</a>
         <div style="color:#cccccc;font-size:13px;margin-top:8px;">Tap the address to open your maps app.</div>
       </td></tr>
     </table>
     ${manageBlock}
-    <p style="margin:0 0 8px 0;color:#cccccc;font-size:14px;line-height:1.6;">Prefer to talk to a human? Reply to this email or call us at <a href="tel:+14175276165" style="color:#00F0FF;text-decoration:none;font-weight:600;">${SHOP_PHONE}</a>.</p>
+    <p style="margin:0 0 8px 0;color:#cccccc;font-size:14px;line-height:1.6;">Prefer to talk to a human? Reply to this email or call us at <a href="tel:+14175276165" style="color:#3496FF;text-decoration:none;font-weight:600;">${SHOP_PHONE}</a>.</p>
     <p style="margin:24px 0 0 0;color:#999999;font-size:13px;">See you soon,<br/><strong style="color:#ffffff;">The Apex Detailing Team</strong></p>
   `;
 
   return emailShell({
     preheader: `Your ${b.serviceName} appointment is confirmed for ${formatDateLong(b.date)} at ${formatTime12h(b.time)}.`,
-    headerGradient: "linear-gradient(135deg,#FF1AD8 0%,#00F0FF 100%)",
+    headerGradient: "linear-gradient(135deg,#A886CD 0%,#3496FF 100%)",
     eyebrow: "BOOKING CONFIRMED",
     headline: "APEX DETAILING",
     bodyHtml: body,
@@ -333,7 +333,7 @@ export function ownerHtml(b: BookingEmailData): string {
 
   return emailShell({
     preheader: `New ${b.serviceName} booking — ${dateLong} ${time12}`,
-    headerGradient: "linear-gradient(135deg,#00F0FF 0%,#FF1AD8 100%)",
+    headerGradient: "linear-gradient(135deg,#3496FF 0%,#A886CD 100%)",
     eyebrow: "NEW BOOKING",
     headline: b.serviceName,
     subhead: `${dateLong} · ${time12}`,
@@ -404,7 +404,7 @@ function customerCancelHtml(b: BookingEmailData, by: CancelledBy): string {
     <div style="text-align:center;margin-bottom:8px;">
       ${ctaButton(`${SHOP_WEBSITE}/book`, "Book Again")}
     </div>
-    <p style="margin:18px 0 0 0;color:#cccccc;font-size:14px;line-height:1.6;text-align:center;">Questions? Reply here or call <a href="tel:+14175276165" style="color:#00F0FF;text-decoration:none;font-weight:600;">${SHOP_PHONE}</a>.</p>
+    <p style="margin:18px 0 0 0;color:#cccccc;font-size:14px;line-height:1.6;text-align:center;">Questions? Reply here or call <a href="tel:+14175276165" style="color:#3496FF;text-decoration:none;font-weight:600;">${SHOP_PHONE}</a>.</p>
   `;
   return emailShell({
     preheader: `Your ${b.serviceName} on ${formatDateLong(b.date)} has been cancelled.`,
@@ -523,16 +523,16 @@ function customerRescheduleHtml(d: RescheduleEmailData): string {
     <p style="margin:0 0 16px 0;font-size:16px;color:#ffffff;">Hi ${escapeHtml(b.customerName)},</p>
     <p style="margin:0 0 20px 0;font-size:15px;line-height:1.6;color:#cccccc;">Your appointment has been rescheduled. Here are your new details:</p>
     ${detailsTable(detailRows(b))}
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:rgba(255,26,216,0.08);border:1px solid rgba(255,26,216,0.25);border-radius:12px;padding:14px;margin-bottom:20px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:rgba(168,134,205,0.08);border:1px solid rgba(168,134,205,0.25);border-radius:12px;padding:14px;margin-bottom:20px;">
       <tr><td style="color:#cccccc;font-size:13px;">Previously: <span style="color:#ffffff;font-weight:600;">${escapeHtml(oldStr)}</span></td></tr>
     </table>
     ${manageBlock}
-    <p style="margin:18px 0 0 0;color:#cccccc;font-size:14px;line-height:1.6;text-align:center;">See you on ${escapeHtml(newStr)}!<br/>Questions? Reply here or call <a href="tel:+14175276165" style="color:#00F0FF;text-decoration:none;font-weight:600;">${SHOP_PHONE}</a>.</p>
+    <p style="margin:18px 0 0 0;color:#cccccc;font-size:14px;line-height:1.6;text-align:center;">See you on ${escapeHtml(newStr)}!<br/>Questions? Reply here or call <a href="tel:+14175276165" style="color:#3496FF;text-decoration:none;font-weight:600;">${SHOP_PHONE}</a>.</p>
   `;
 
   return emailShell({
     preheader: `New appointment time: ${newStr}`,
-    headerGradient: "linear-gradient(135deg,#FF1AD8 0%,#00F0FF 100%)",
+    headerGradient: "linear-gradient(135deg,#A886CD 0%,#3496FF 100%)",
     eyebrow: "BOOKING RESCHEDULED",
     headline: "Updated appointment",
     subhead: newStr,
@@ -580,7 +580,7 @@ function ownerRescheduleHtml(d: RescheduleEmailData): string {
   `;
   return emailShell({
     preheader: `${b.customerName} moved to ${formatDateLong(b.date)} ${formatTime12h(b.time)}`,
-    headerGradient: "linear-gradient(135deg,#00F0FF 0%,#FF1AD8 100%)",
+    headerGradient: "linear-gradient(135deg,#3496FF 0%,#A886CD 100%)",
     eyebrow: "BOOKING RESCHEDULED",
     headline: `${b.serviceName} moved`,
     subhead: `${formatDateLong(b.date)} · ${formatTime12h(b.time)}`,

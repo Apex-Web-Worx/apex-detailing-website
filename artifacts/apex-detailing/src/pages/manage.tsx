@@ -124,7 +124,7 @@ function ManageShell({ children }: { children: React.ReactNode }) {
           </div>
           <a
             href="tel:417-527-6165"
-            className="hidden sm:flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-[#00F0FF] transition"
+            className="hidden sm:flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-[#3496FF] transition"
           >
             <Phone className="w-4 h-4" />
             417-527-6165
@@ -148,7 +148,7 @@ function ManageShell({ children }: { children: React.ReactNode }) {
               className="h-14 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity"
             />
             <p className="text-gray-500 text-xs font-medium uppercase tracking-widest group-hover:text-white transition-colors">
-              Designed and developed by <span className="text-[#00F0FF] font-bold">APEX WEB WORX</span>
+              Designed and developed by <span className="text-[#3496FF] font-bold">APEX WEB WORX</span>
             </p>
           </a>
         </div>
@@ -171,7 +171,7 @@ function InvalidLink() {
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <a
           href="tel:417-527-6165"
-          className="px-6 py-3 rounded-full bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] text-white font-bold flex items-center justify-center gap-2"
+          className="px-6 py-3 rounded-full bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white font-bold flex items-center justify-center gap-2"
         >
           <Phone className="w-4 h-4" /> Call 417-527-6165
         </a>
@@ -218,7 +218,7 @@ function ManageBody({
   return (
     <section>
       <div className="text-center mb-8">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00F0FF]/10 border border-[#00F0FF]/30 text-[#00F0FF] text-xs font-bold uppercase tracking-wider mb-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#3496FF]/10 border border-[#3496FF]/30 text-[#3496FF] text-xs font-bold uppercase tracking-wider mb-4">
           {isCancelled ? (
             <>
               <X className="w-3 h-3" /> Cancelled
@@ -250,8 +250,8 @@ function ManageBody({
         <Row label="Vehicle" value={booking.vehicle} />
       </div>
 
-      <div className="p-4 rounded-xl bg-[#00F0FF]/5 border border-[#00F0FF]/20 text-sm text-gray-300 flex gap-3 mb-8">
-        <MapPin className="w-5 h-5 text-[#00F0FF] flex-shrink-0 mt-0.5" />
+      <div className="p-4 rounded-xl bg-[#3496FF]/5 border border-[#3496FF]/20 text-sm text-gray-300 flex gap-3 mb-8">
+        <MapPin className="w-5 h-5 text-[#3496FF] flex-shrink-0 mt-0.5" />
         <div>
           <p className="font-bold text-white mb-1">Drop-off address</p>
           <p>1114 E Lakota St, Nixa, MO 65714</p>
@@ -266,7 +266,7 @@ function ManageBody({
           <div className="mt-4">
             <Link
               href="/book"
-              className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] text-white font-bold hover:shadow-lg hover:shadow-[#00F0FF]/30 transition"
+              className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white font-bold hover:shadow-lg hover:shadow-[#3496FF]/30 transition"
             >
               Book again
             </Link>
@@ -276,7 +276,7 @@ function ManageBody({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             onClick={() => setMode("reschedule")}
-            className="px-6 py-4 rounded-xl bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] text-white font-bold hover:shadow-lg hover:shadow-[#00F0FF]/30 transition flex items-center justify-center gap-2"
+            className="px-6 py-4 rounded-xl bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white font-bold hover:shadow-lg hover:shadow-[#3496FF]/30 transition flex items-center justify-center gap-2"
           >
             <Calendar className="w-4 h-4" /> Reschedule
           </button>
@@ -392,7 +392,7 @@ function CancelledView({ booking }: { booking: Booking }) {
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <Link
           href="/book"
-          className="px-6 py-3 rounded-full bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] text-white font-bold hover:shadow-lg hover:shadow-[#00F0FF]/30 transition"
+          className="px-6 py-3 rounded-full bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white font-bold hover:shadow-lg hover:shadow-[#3496FF]/30 transition"
         >
           Book another time
         </Link>
@@ -543,7 +543,7 @@ function ReschedulePanel({
                   disabled={disabled}
                   className={`p-3 rounded-xl text-center transition ${
                     isPicked
-                      ? "bg-gradient-to-br from-[#FF1AD8] to-[#00F0FF] text-white"
+                      ? "bg-gradient-to-br from-[#A886CD] to-[#3496FF] text-white"
                       : disabled
                         ? "bg-white/[0.02] text-gray-600 cursor-not-allowed opacity-50"
                         : "bg-white/[0.04] hover:bg-white/[0.08] text-white"
@@ -593,7 +593,7 @@ function ReschedulePanel({
                   disabled={!available}
                   className={`py-3 rounded-xl font-bold transition text-sm ${
                     isPicked
-                      ? "bg-gradient-to-br from-[#FF1AD8] to-[#00F0FF] text-white"
+                      ? "bg-gradient-to-br from-[#A886CD] to-[#3496FF] text-white"
                       : available
                         ? "bg-white/[0.04] hover:bg-white/[0.08] text-white border border-white/10"
                         : "bg-white/[0.02] text-gray-600 cursor-not-allowed line-through"
@@ -631,7 +631,7 @@ function ReschedulePanel({
           disabled={
             !pickedDate || !pickedTime || isCurrentSlot || mutation.isPending
           }
-          className="px-6 py-3 rounded-full bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] text-white font-bold disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-[#00F0FF]/30 transition flex items-center justify-center gap-2"
+          className="px-6 py-3 rounded-full bg-gradient-to-r from-[#A886CD] to-[#3496FF] text-white font-bold disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-[#3496FF]/30 transition flex items-center justify-center gap-2"
         >
           {mutation.isPending ? (
             <>
@@ -656,7 +656,7 @@ function RescheduledView({ booking }: { booking: Booking }) {
       : new Date(booking.scheduledAt as unknown as string).toISOString();
   return (
     <section className="text-center max-w-xl mx-auto pt-8">
-      <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-[#FF1AD8] to-[#00F0FF] flex items-center justify-center mb-6 shadow-2xl shadow-[#00F0FF]/30">
+      <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-[#A886CD] to-[#3496FF] flex items-center justify-center mb-6 shadow-2xl shadow-[#3496FF]/30">
         <Check className="w-8 h-8 text-white" />
       </div>
       <h1 className="text-3xl font-black mb-3">You're rescheduled!</h1>
@@ -697,7 +697,7 @@ function Row({
       <span
         className={`text-right font-semibold ${
           highlight
-            ? "text-lg bg-gradient-to-r from-[#FF1AD8] to-[#00F0FF] bg-clip-text text-transparent"
+            ? "text-lg bg-gradient-to-r from-[#A886CD] to-[#3496FF] bg-clip-text text-transparent"
             : "text-white"
         }`}
       >
