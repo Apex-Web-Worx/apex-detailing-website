@@ -56,9 +56,10 @@ export default function PwaManifestSwitch() {
   return null;
 }
 
-/** Shown on admin login — prepares Home Screen install for /admin. */
+/** Shown on admin login — install path that iOS actually honors. */
 export function AdminPwaInstallHint() {
   const [iosHint, setIosHint] = useState(false);
+  const installUrl = `${window.location.origin}/go-admin.html`;
 
   useEffect(() => {
     try {
@@ -82,11 +83,11 @@ export function AdminPwaInstallHint() {
     const deferred = (window as unknown as { deferredApexInstall?: BeforeInstallPromptEvent })
       .deferredApexInstall;
     if (deferred) {
-      deferred.prompt();
+      // Prefer the static launch page so start_url is a real HTML file
+      window.location.assign(installUrl);
       return;
     }
 
-    // iOS Safari has no install API — show Share → Add to Home Screen steps
     setIosHint(true);
   };
 
@@ -94,22 +95,30 @@ export function AdminPwaInstallHint() {
     <div className="mt-5 rounded-xl border border-white/10 bg-white/[0.03] p-4 text-left">
       <p className="text-sm font-semibold text-white mb-1">Add Admin to Home Screen</p>
       <p className="text-xs text-gray-400 mb-3 leading-relaxed">
-        Install from this page so the icon opens <span className="text-white">/admin</span>, not
-        the public site.
+        Open the install page first — iOS ignores SPA routes and needs this real page so the
+        icon opens Admin.
       </p>
+      <a
+        href="/go-admin.html"
+        className="block w-full py-2.5 rounded-sm border border-[#00E5FF]/40 text-[#00E5FF] text-xs font-black uppercase tracking-[0.14em] hover:bg-[#00E5FF]/10 transition text-center"
+      >
+        Open install page
+      </a>
       <button
         type="button"
         onClick={onInstall}
-        className="w-full py-2.5 rounded-sm border border-[#00E5FF]/40 text-[#00E5FF] text-xs font-black uppercase tracking-[0.14em] hover:bg-[#00E5FF]/10 transition"
+        className="mt-2 w-full py-2.5 rounded-sm border border-white/15 text-gray-300 text-xs font-bold uppercase tracking-[0.12em] hover:border-white/30 transition"
       >
-        Prepare Admin install
+        Show iPhone steps
       </button>
       {iosHint && (
         <ol className="mt-3 space-y-1.5 text-xs text-gray-300 list-decimal list-inside leading-relaxed">
-          <li>Tap the Share button in Safari</li>
-          <li>Choose <span className="text-white font-semibold">Add to Home Screen</span></li>
-          <li>Keep the name <span className="text-white font-semibold">Apex Admin</span></li>
-          <li>Delete any old Apex icon that still opened the homepage</li>
+          <li>
+            Open <span className="text-white font-semibold">/go-admin.html</span>
+          </li>
+          <li>Tap Share → <span className="text-white font-semibold">Add to Home Screen</span></li>
+          <li>Name it <span className="text-white font-semibold">Apex Admin</span></li>
+          <li>Delete any old Apex icon that opened the homepage</li>
         </ol>
       )}
     </div>

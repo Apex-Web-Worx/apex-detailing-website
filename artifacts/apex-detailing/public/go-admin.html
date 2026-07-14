@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Apex Admin</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Apex Admin" />
+    <meta name="application-name" content="Apex Admin" />
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" sizes="180x180" />
+    <link rel="apple-touch-icon" href="/images/pwa-192.png" sizes="192x192" />
+    <link rel="icon" type="image/png" href="/images/favicon.png" />
+    <!-- Only the admin manifest — start_url is this page, then we jump to /admin -->
+    <link rel="manifest" href="/admin.webmanifest" />
+    <style>
+      html, body {
+        margin: 0;
+        min-height: 100%;
+        background: #0a0a0a;
+        color: #fff;
+        font-family: Mulish, system-ui, sans-serif;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 32px 20px;
+        text-align: center;
+        box-sizing: border-box;
+      }
+      img {
+        width: min(42vw, 140px);
+        height: auto;
+        margin-bottom: 24px;
+        filter: drop-shadow(0 0 16px rgba(255, 26, 216, 0.55));
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: 1.35rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      p {
+        margin: 0 0 12px;
+        color: #a3a3a3;
+        font-size: 0.95rem;
+        line-height: 1.45;
+        max-width: 28rem;
+      }
+      ol {
+        margin: 0 0 24px;
+        padding-left: 1.2rem;
+        text-align: left;
+        color: #d4d4d4;
+        font-size: 0.9rem;
+        line-height: 1.55;
+        max-width: 22rem;
+      }
+      a.btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 12rem;
+        padding: 14px 22px;
+        border-radius: 2px;
+        background: #ff1ad8;
+        color: #fff;
+        font-weight: 800;
+        font-size: 0.8rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        text-decoration: none;
+      }
+      a.btn:active { opacity: 0.9; }
+      .note {
+        margin-top: 20px;
+        font-size: 0.75rem;
+        color: #737373;
+      }
+    </style>
+    <script>
+      (function () {
+        try {
+          localStorage.setItem("apex_pwa_start", "admin");
+        } catch (e) {}
+
+        var standalone =
+          window.matchMedia("(display-mode: standalone)").matches ||
+          window.matchMedia("(display-mode: fullscreen)").matches ||
+          window.matchMedia("(display-mode: minimal-ui)").matches ||
+          window.navigator.standalone === true;
+
+        // Installed icon launches this real HTML file, then enters the SPA admin route
+        if (standalone) {
+          window.location.replace("/admin");
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <img src="/images/logo.png" alt="Apex Detailing" width="140" height="160" />
+    <h1>Apex Admin</h1>
+    <p>Add <strong>this page</strong> to your Home Screen. The icon will open the admin dashboard.</p>
+    <ol>
+      <li>Tap Share in Safari</li>
+      <li>Choose <strong>Add to Home Screen</strong></li>
+      <li>Name it <strong>Apex Admin</strong></li>
+      <li>Delete any old Apex icon that opened the homepage</li>
+    </ol>
+    <a class="btn" href="/admin">Open Admin</a>
+    <p class="note">Bookmark URL: /go-admin.html</p>
+  </body>
+</html>

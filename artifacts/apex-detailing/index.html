@@ -42,6 +42,8 @@
         var params = new URLSearchParams(window.location.search || "");
         var standalone =
           window.matchMedia("(display-mode: standalone)").matches ||
+          window.matchMedia("(display-mode: fullscreen)").matches ||
+          window.matchMedia("(display-mode: minimal-ui)").matches ||
           window.navigator.standalone === true;
         var wantAdmin = false;
         try {
@@ -50,7 +52,7 @@
         if (params.get("pwa") === "admin") wantAdmin = true;
 
         // Remember admin launch preference whenever /admin is opened
-        if (path === "/admin" || wantAdmin) {
+        if (path === "/admin" || path === "/go-admin.html" || wantAdmin) {
           try {
             localStorage.setItem("apex_pwa_start", "admin");
           } catch (e) {}
@@ -59,7 +61,7 @@
 
         // iOS often ignores manifest start_url and opens "/". Send standalone
         // launches that opted into Admin back to /admin immediately.
-        if (standalone && wantAdmin && path !== "/admin") {
+        if (standalone && wantAdmin && path !== "/admin" && path !== "/go-admin.html") {
           window.location.replace("/admin");
           return;
         }

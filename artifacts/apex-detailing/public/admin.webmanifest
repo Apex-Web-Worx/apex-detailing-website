@@ -1,9 +1,9 @@
 {
-  "id": "/admin",
+  "id": "/go-admin.html",
   "name": "Apex Admin",
   "short_name": "Apex Admin",
   "description": "Apex Detailing admin — bookings, schedule, and shop management.",
-  "start_url": "/admin?pwa=admin",
+  "start_url": "/go-admin.html",
   "scope": "/",
   "display": "standalone",
   "orientation": "any",
