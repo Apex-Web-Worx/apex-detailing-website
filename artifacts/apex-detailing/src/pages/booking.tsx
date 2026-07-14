@@ -54,10 +54,10 @@ const SERVICE_ICONS: Record<string, { icon: typeof Wand2; color: string }> = {
   "apex-full-detailing": { icon: Wand2, color: "text-[#FF1AD8]" },
   "apex-interior-detailing": { icon: Droplets, color: "text-[#FF1AD8]" },
   "apex-express-interior-detailing": { icon: Droplets, color: "text-[#FF1AD8]" },
-  "apex-exterior-detailing": { icon: Car, color: "text-[#FF1AD8]" },
+  "apex-exterior-detailing": { icon: Car, color: "text-[#00E5FF]" },
   "apex-wash-clay-wax": { icon: Sparkles, color: "text-[#FF1AD8]" },
-  "apex-headlight-restoration": { icon: CheckCircle2, color: "text-[#FF1AD8]" },
-  "apex-ceramic-coating": { icon: Shield, color: "text-[#FF1AD8]" },
+  "apex-headlight-restoration": { icon: CheckCircle2, color: "text-[#00E5FF]" },
+  "apex-ceramic-coating": { icon: Shield, color: "text-[#00E5FF]" },
   "apex-paint-correction": { icon: Sparkles, color: "text-[#FF1AD8]" },
 };
 
