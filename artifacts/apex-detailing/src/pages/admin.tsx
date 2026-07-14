@@ -142,60 +142,66 @@ function Login({ onSubmit }: { onSubmit: (t: string) => void }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center p-4">
-      <form
-        onSubmit={handle}
-        method="post"
-        action="#"
-        className="w-full max-w-md rounded-2xl border border-white/10 bg-white/[0.02] p-8"
-      >
-        <input
-          type="text"
-          name="username"
-          value="apex-admin"
-          autoComplete="username"
-          readOnly
-          aria-hidden="true"
-          tabIndex={-1}
-          style={{ display: "none" }}
-        />
-        <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#FF1AD8] to-[#00E5FF] flex items-center justify-center mx-auto mb-6">
-          <Lock className="w-6 h-6 text-white" />
-        </div>
-        <h1 className="text-2xl font-black text-center mb-2">Admin Access</h1>
-        <p className="text-sm text-gray-400 text-center mb-6">
-          Enter your admin password to view bookings.
-        </p>
-        <input
-          type="password"
-          name="password"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="Password"
-          autoFocus
-          autoComplete="current-password"
-          className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#00E5FF] focus:outline-none focus:ring-2 focus:ring-[#00E5FF]/20 transition mb-4"
-        />
-        {error && (
-          <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-sm">
-            {error}
+    <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col">
+      <div className="flex-1 flex items-center justify-center p-4">
+        <form
+          onSubmit={handle}
+          method="post"
+          action="#"
+          className="w-full max-w-md rounded-2xl border border-white/10 bg-white/[0.03] p-8 shadow-[0_0_40px_rgba(255,26,216,0.08)]"
+        >
+          <input
+            type="text"
+            name="username"
+            value="apex-admin"
+            autoComplete="username"
+            readOnly
+            aria-hidden="true"
+            tabIndex={-1}
+            style={{ display: "none" }}
+          />
+          <div className="relative w-14 h-14 rounded-full overflow-hidden flex items-center justify-center mx-auto mb-6 shadow-[0_0_18px_rgba(255,26,216,0.35)]">
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 rounded-full bg-gradient-to-br from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]"
+            />
+            <Lock className="relative z-[1] w-6 h-6 text-white" />
           </div>
-        )}
-        <button
-          type="submit"
-          disabled={!value || submitting}
-          className="btn-cyber btn-cyber-block disabled:opacity-50"
-        >
-          {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-          <span>Sign in</span>
-        </button>
-        <Link
-          href="/"
-          className="block text-center mt-4 text-sm text-gray-400 hover:text-white"
-        >
-          ← Back to site
-        </Link>
-      </form>
+          <h1 className="text-2xl font-black text-center mb-2">Admin Access</h1>
+          <p className="text-sm text-gray-400 text-center mb-6">
+            Enter your admin password to view bookings.
+          </p>
+          <input
+            type="password"
+            name="password"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder="Password"
+            autoFocus
+            autoComplete="current-password"
+            className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#00E5FF] focus:outline-none focus:ring-2 focus:ring-[#00E5FF]/20 transition mb-4 text-white placeholder:text-gray-500"
+          />
+          {error && (
+            <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-sm">
+              {error}
+            </div>
+          )}
+          <button
+            type="submit"
+            disabled={!value || submitting}
+            className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-sm bg-[#FF1AD8] text-white font-black uppercase tracking-[0.14em] transition hover:bg-[#ff45e0] hover:shadow-[0_0_24px_rgba(255,26,216,0.45)] disabled:bg-[#FF1AD8]/35 disabled:text-white/80 disabled:cursor-not-allowed disabled:shadow-none"
+          >
+            {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+            <span>Sign in</span>
+          </button>
+          <Link
+            href="/"
+            className="block text-center mt-4 text-sm text-gray-400 hover:text-white"
+          >
+            ← Back to site
+          </Link>
+        </form>
+      </div>
       <DevFooter />
     </div>
   );
