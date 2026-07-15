@@ -177,8 +177,7 @@
         display: block;
         opacity: 0;
         animation: none;
-        filter: drop-shadow(0 0 12px rgba(255, 26, 216, 0.55))
-                drop-shadow(0 0 28px rgba(0, 229, 255, 0.35));
+        filter: drop-shadow(0 0 14px rgba(255, 26, 216, 0.5));
         will-change: transform, opacity, filter;
       }
       #app-loading .logo-loader.is-ready {
@@ -206,9 +205,7 @@
           radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.65), transparent 40%),
           radial-gradient(circle at 70% 72%, rgba(0, 229, 255, 0.35), transparent 55%),
           radial-gradient(circle at 50% 50%, rgba(255, 26, 216, 0.28), rgba(157, 0, 255, 0.12) 55%, transparent 78%);
-        box-shadow:
-          0 0 10px rgba(255, 26, 216, 0.45),
-          0 0 18px rgba(0, 229, 255, 0.25);
+        box-shadow: 0 0 12px rgba(255, 26, 216, 0.4);
         opacity: 0;
         animation: loader-bubble-fly var(--dur, 4s) var(--ease, ease-out) infinite;
         animation-delay: var(--delay, 0s);
@@ -222,13 +219,13 @@
         background:
           radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.7), transparent 40%),
           radial-gradient(circle at 50% 50%, rgba(255, 26, 216, 0.4), rgba(255, 26, 216, 0.05) 70%, transparent);
-        box-shadow: 0 0 12px rgba(255, 26, 216, 0.65), 0 0 22px rgba(255, 26, 216, 0.3);
+        box-shadow: 0 0 12px rgba(255, 26, 216, 0.5);
       }
       #app-loading .loader-bubble.cyan {
         background:
           radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.7), transparent 40%),
           radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.4), rgba(0, 229, 255, 0.05) 70%, transparent);
-        box-shadow: 0 0 12px rgba(0, 229, 255, 0.65), 0 0 22px rgba(0, 229, 255, 0.3);
+        box-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
       }
       @keyframes loader-bubble-fly {
         0% {
@@ -251,15 +248,12 @@
         0%, 100% {
           opacity: 0.85;
           transform: scale(0.98);
-          filter: drop-shadow(0 0 8px rgba(255, 26, 216, 0.4))
-                  drop-shadow(0 0 14px rgba(0, 229, 255, 0.25));
+          filter: drop-shadow(0 0 10px rgba(255, 26, 216, 0.4));
         }
         45%, 55% {
           opacity: 1;
           transform: scale(1.04);
-          filter: drop-shadow(0 0 18px rgba(255, 26, 216, 0.85))
-                  drop-shadow(0 0 36px rgba(0, 229, 255, 0.55))
-                  drop-shadow(0 0 56px rgba(157, 0, 255, 0.35));
+          filter: drop-shadow(0 0 18px rgba(255, 26, 216, 0.7));
         }
       }
 
@@ -275,15 +269,13 @@
         #app-loading .loader-bubble {
           border-width: 1px;
           border-color: rgba(255, 255, 255, 0.35);
-          box-shadow:
-            0 0 12px rgba(255, 26, 216, 0.7),
-            0 0 22px rgba(0, 229, 255, 0.35);
+          box-shadow: 0 0 12px rgba(255, 26, 216, 0.45);
         }
         #app-loading .loader-bubble.pink {
-          box-shadow: 0 0 14px rgba(255, 26, 216, 0.8), 0 0 26px rgba(255, 26, 216, 0.4);
+          box-shadow: 0 0 12px rgba(255, 26, 216, 0.5);
         }
         #app-loading .loader-bubble.cyan {
-          box-shadow: 0 0 14px rgba(0, 229, 255, 0.8), 0 0 26px rgba(0, 229, 255, 0.4);
+          box-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
         }
         @keyframes loader-bubble-fly {
           0% {
@@ -306,13 +298,12 @@
           0%, 100% {
             opacity: 0.88;
             transform: scale(0.98);
-            filter: drop-shadow(0 0 8px rgba(255, 26, 216, 0.45));
+            filter: drop-shadow(0 0 8px rgba(255, 26, 216, 0.4));
           }
           45%, 55% {
             opacity: 1;
             transform: scale(1.03);
-            filter: drop-shadow(0 0 14px rgba(255, 26, 216, 0.75))
-                    drop-shadow(0 0 22px rgba(0, 229, 255, 0.4));
+            filter: drop-shadow(0 0 14px rgba(255, 26, 216, 0.65));
           }
         }
       }
@@ -321,7 +312,7 @@
         #app-loading .logo-loader.is-ready {
           animation: none;
           opacity: 1;
-          filter: drop-shadow(0 0 14px rgba(255, 26, 216, 0.55));
+          filter: drop-shadow(0 0 12px rgba(255, 26, 216, 0.5));
         }
         #app-loading .loader-bubble {
           animation: none !important;

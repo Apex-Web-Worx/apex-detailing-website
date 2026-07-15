@@ -190,7 +190,7 @@ function Login({ onSubmit }: { onSubmit: (t: string) => void }) {
           <button
             type="submit"
             disabled={!value || submitting}
-            className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-sm bg-[#FF1AD8] text-white font-black uppercase tracking-[0.14em] transition hover:bg-[#ff45e0] hover:shadow-[0_0_24px_rgba(255,26,216,0.45)] disabled:bg-[#FF1AD8]/35 disabled:text-white/80 disabled:cursor-not-allowed disabled:shadow-none"
+            className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-sm bg-[#FF1AD8] text-white font-black uppercase tracking-[0.14em] transition hover:bg-[#ff45e0] hover:shadow-[0_0_16px_rgba(255,26,216,0.35)] disabled:bg-[#FF1AD8]/35 disabled:text-white/80 disabled:cursor-not-allowed disabled:shadow-none"
           >
             {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
             <span>Sign in</span>

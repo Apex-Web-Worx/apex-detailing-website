@@ -656,7 +656,7 @@ function RescheduledView({ booking }: { booking: Booking }) {
       : new Date(booking.scheduledAt as unknown as string).toISOString();
   return (
     <section className="text-center max-w-xl mx-auto pt-8">
-      <div className="w-16 h-16 mx-auto rounded-full bg-[#FF1AD8] flex items-center justify-center mb-6 shadow-2xl shadow-[#FF1AD8]/25">
+      <div className="w-16 h-16 mx-auto rounded-full bg-[#FF1AD8] flex items-center justify-center mb-6 shadow-[0_0_18px_rgba(255,26,216,0.3)]">
         <Check className="w-8 h-8 text-white" />
       </div>
       <h1 className="text-3xl font-black mb-3">You're rescheduled!</h1>

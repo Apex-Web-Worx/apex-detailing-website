@@ -97,19 +97,19 @@
 
 @keyframes logo-shine {
   0%, 100% {
-    filter: drop-shadow(0 0 1.2rem rgba(255, 26, 216, 0.7)) drop-shadow(0 0 0.5rem rgba(0, 229, 255, 0.4));
+    filter: drop-shadow(0 0 0.75rem rgba(255, 26, 216, 0.45));
   }
   50% {
-    filter: drop-shadow(0 0 3rem rgba(0, 229, 255, 1)) drop-shadow(0 0 1.8rem rgba(255, 26, 216, 0.8)) drop-shadow(0 0 0.8rem rgba(0, 229, 255, 0.6));
+    filter: drop-shadow(0 0 1.4rem rgba(255, 26, 216, 0.7));
   }
 }
 
 @keyframes header-shine {
   0%, 100% {
-    text-shadow: 0 0 0.8rem rgba(0, 229, 255, 0.6), 0 0 1.5rem rgba(255, 26, 216, 0.4);
+    text-shadow: 0 0 0.6rem rgba(0, 229, 255, 0.35);
   }
   50% {
-    text-shadow: 0 0 1.5rem rgba(0, 229, 255, 1), 0 0 2.5rem rgba(255, 26, 216, 0.7), 0 0 3rem rgba(0, 229, 255, 0.6);
+    text-shadow: 0 0 1.1rem rgba(0, 229, 255, 0.55);
   }
 }
 
@@ -186,16 +186,10 @@
 
   @keyframes cyber-border-pulse {
     0%, 100% {
-      filter:
-        drop-shadow(0 0 3px #FF1AD8)
-        drop-shadow(0 0 10px rgba(255, 26, 216, 0.7))
-        drop-shadow(0 0 18px rgba(255, 26, 216, 0.35));
+      filter: drop-shadow(0 0 6px rgba(255, 26, 216, 0.45));
     }
     50% {
-      filter:
-        drop-shadow(0 0 6px #ff9cf0)
-        drop-shadow(0 0 18px rgba(255, 26, 216, 1))
-        drop-shadow(0 0 32px rgba(255, 26, 216, 0.65));
+      filter: drop-shadow(0 0 12px rgba(255, 26, 216, 0.7));
     }
   }
 
@@ -729,25 +723,22 @@
     animation-delay: var(--delay, 0s);
     background:
       radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.4), transparent 42%),
-      radial-gradient(circle at 70% 70%, rgba(0, 229, 255, 0.2), transparent 55%),
       radial-gradient(circle at 50% 50%, rgba(255, 26, 216, 0.22), rgba(157, 0, 255, 0.08) 55%, transparent 78%);
-    box-shadow:
-      0 0 6px rgba(255, 26, 216, 0.25),
-      0 0 10px rgba(0, 229, 255, 0.15);
+    box-shadow: 0 0 8px rgba(255, 26, 216, 0.28);
   }
 
   .page-bubble.pink {
     background:
       radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.45), transparent 40%),
       radial-gradient(circle at 50% 50%, rgba(255, 26, 216, 0.28), transparent 70%);
-    box-shadow: 0 0 6px rgba(255, 26, 216, 0.3);
+    box-shadow: 0 0 8px rgba(255, 26, 216, 0.3);
   }
 
   .page-bubble.cyan {
     background:
       radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.45), transparent 40%),
       radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.26), transparent 70%);
-    box-shadow: 0 0 6px rgba(0, 229, 255, 0.3);
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
   }
 
   @keyframes page-bubble-rise {
@@ -775,21 +766,19 @@
     }
     .page-bubble {
       border-color: rgba(255, 255, 255, 0.28);
-      box-shadow:
-        0 0 8px rgba(255, 26, 216, 0.45),
-        0 0 14px rgba(0, 229, 255, 0.25);
+      box-shadow: 0 0 10px rgba(255, 26, 216, 0.4);
     }
     .page-bubble.pink {
       background:
         radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.55), transparent 40%),
         radial-gradient(circle at 50% 50%, rgba(255, 26, 216, 0.45), transparent 72%);
-      box-shadow: 0 0 10px rgba(255, 26, 216, 0.55);
+      box-shadow: 0 0 10px rgba(255, 26, 216, 0.45);
     }
     .page-bubble.cyan {
       background:
         radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.55), transparent 40%),
         radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.42), transparent 72%);
-      box-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
     }
     @keyframes page-bubble-rise {
       0% {
@@ -818,7 +807,7 @@
     background: linear-gradient(135deg, rgba(212, 175, 55, 0.22), rgba(232, 197, 71, 0.1));
     border: 1px solid rgba(212, 175, 55, 0.45);
     color: #F0D278;
-    box-shadow: 0 0 12px rgba(212, 175, 55, 0.15);
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.12);
   }
 
   .ring-gold {
