@@ -450,7 +450,7 @@ export default function Home() {
     preferReducedMotionRef.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }, []);
 
-  const handleLogoPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+  const handleLogoPointerMove = (e: ReactPointerEvent<HTMLDivElement>) => {
     if (preferReducedMotionRef.current) return;
     const el = logoTiltRef.current;
     if (!el) return;
