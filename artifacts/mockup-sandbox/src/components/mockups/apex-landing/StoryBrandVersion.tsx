@@ -117,7 +117,7 @@ export function StoryBrandVersion() {
             { title: "Interior Detailing", desc: "Deep cleaning & restoration", price: "$200-$350", icon: "🧹" },
             { title: "Ceramic Coating", desc: "Years of protection", price: "Call Quote", icon: "🛡️" },
             { title: "Paint Correction", desc: "Remove scratches & swirls", price: "$300-$600", icon: "🎨" },
-            { title: "Headlight Restoration", desc: "Clarity & safety", price: "$100+", icon: "💡" },
+            { title: "Headlight Restoration", desc: "Clarity & safety", price: "$125", icon: "💡" },
             { title: "Wash, Clay & Wax", desc: "Foundation protection", price: "$250-$350", icon: "💧" },
           ].map((service, i) => (
             <div key={i} className="p-6 bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-xl hover:border-[#3496FF] transition">
