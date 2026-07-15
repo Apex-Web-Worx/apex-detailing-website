@@ -126,11 +126,15 @@
 @keyframes brand-logo-idle {
   0%, 100% {
     transform: translateY(0) scale(1);
-    filter: drop-shadow(0 0 0.65rem rgba(255, 26, 216, 0.38));
+    filter:
+      drop-shadow(0 0 0.7rem rgba(255, 26, 216, 0.42))
+      drop-shadow(0 0 1.35rem rgba(255, 26, 216, 0.18));
   }
   50% {
     transform: translateY(-2px) scale(1.025);
-    filter: drop-shadow(0 0 1.45rem rgba(255, 26, 216, 0.72));
+    filter:
+      drop-shadow(0 0 1.7rem rgba(255, 26, 216, 0.82))
+      drop-shadow(0 0 2.4rem rgba(255, 26, 216, 0.35));
   }
 }
 
