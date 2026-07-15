@@ -957,7 +957,7 @@ export default function Home() {
                 className="relative z-10 h-16 md:h-24 lg:h-[6.5rem] w-auto max-w-[9rem] md:max-w-[12rem] object-contain opacity-100"
                 style={{
                   filter:
-                    "drop-shadow(0 0 10px rgba(255,26,216,0.55)) drop-shadow(0 0 18px rgba(0,229,255,0.35))",
+                    "drop-shadow(0 0 12px rgba(255,26,216,0.45))",
                 }}
               />
             </div>
@@ -2050,7 +2050,7 @@ export default function Home() {
                 }}
                 className={`px-5 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all duration-300 border ${
                   activeFaqCategory === cat
-                    ? "bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] text-white border-transparent shadow-[0_0_20px_rgba(0,229,255,0.3)]"
+                    ? "bg-[#FF1AD8] text-white border-transparent shadow-[0_0_14px_rgba(255,26,216,0.35)]"
                     : "bg-white/5 text-gray-400 border-white/10 hover:border-white/30 hover:text-white"
                 }`}
               >
@@ -2149,7 +2149,7 @@ export default function Home() {
                   className="relative z-10 h-20 w-auto max-w-[10rem] object-contain opacity-100"
                   style={{
                     filter:
-                      "drop-shadow(0 0 10px rgba(255,26,216,0.55)) drop-shadow(0 0 18px rgba(0,229,255,0.35))",
+                      "drop-shadow(0 0 12px rgba(255,26,216,0.45))",
                   }}
                 />
               </div>

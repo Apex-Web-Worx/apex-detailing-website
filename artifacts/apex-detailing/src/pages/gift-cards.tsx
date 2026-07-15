@@ -407,7 +407,7 @@ export default function GiftCardsPage() {
                   key={item.step}
                   className="relative p-6 sm:p-8 rounded-2xl border border-white/10 bg-white/[0.02]"
                 >
-                  <div className="absolute -top-4 -left-4 w-10 h-10 rounded-full overflow-hidden flex items-center justify-center font-black text-white shadow-[0_0_14px_rgba(255,26,216,0.35)]">
+                  <div className="absolute -top-4 -left-4 w-10 h-10 rounded-full overflow-hidden flex items-center justify-center font-black text-white shadow-[0_0_10px_rgba(255,26,216,0.3)]">
                     <span
                       aria-hidden="true"
                       className="absolute inset-0 rounded-full bg-gradient-to-br from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]"

@@ -164,7 +164,7 @@ export default function BookingPage() {
                     <div
                       className={`relative w-9 h-9 shrink-0 rounded-full flex items-center justify-center text-sm font-bold transition overflow-hidden ${
                         active
-                          ? "text-white border-0 shadow-[0_0_16px_rgba(255,26,216,0.4)]"
+                          ? "text-white border-0 shadow-[0_0_12px_rgba(255,26,216,0.3)]"
                           : done
                             ? "bg-[#00E5FF]/15 border-2 border-[#00E5FF] text-[#00E5FF]"
                             : "border-2 border-white/20 text-gray-500 bg-[#0a0a0a]"
@@ -906,7 +906,7 @@ function SummaryRow({
 function ConfirmationView({ booking }: { booking: Booking }) {
   return (
     <section className="text-center max-w-2xl mx-auto pt-12">
-      <div className="w-20 h-20 mx-auto rounded-full bg-[#FF1AD8] flex items-center justify-center mb-6 shadow-2xl shadow-[#FF1AD8]/25">
+      <div className="w-20 h-20 mx-auto rounded-full bg-[#FF1AD8] flex items-center justify-center mb-6 shadow-[0_0_18px_rgba(255,26,216,0.3)]">
         <Check className="w-10 h-10 text-white" />
       </div>
       <h1 className="text-4xl sm:text-5xl font-black mb-3 font-display">You're booked!</h1>
