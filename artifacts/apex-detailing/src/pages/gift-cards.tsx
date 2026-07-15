@@ -77,7 +77,7 @@ const PACKAGES: Package[] = [
 function GiftCardVisual({ amount }: { amount: number | string }) {
   return (
     <div className="relative w-full max-w-sm mx-auto aspect-[1.6/1] rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#FF1AD8] via-[#6b5aa8] to-[#00E5FF]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.25),transparent_50%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,rgba(0,0,0,0.4),transparent_60%)]" />
       <div className="relative h-full p-5 sm:p-6 flex flex-col justify-between text-white">
@@ -174,13 +174,13 @@ export default function GiftCardsPage() {
 
       {/* Hero */}
       <section className="relative overflow-hidden py-16 sm:py-24">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[500px] bg-gradient-to-b from-[#FF1AD8]/20 to-[#00E5FF]/10 blur-3xl pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[500px] bg-gradient-to-b from-[#FF1AD8]/10 to-[#00E5FF]/05 blur-3xl pointer-events-none" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FF1AD8]/10 border border-[#FF1AD8]/30 mb-5">
-                <Gift className="w-4 h-4 text-[#FF1AD8]" />
-                <span className="text-xs font-bold tracking-widest uppercase text-[#FF1AD8]">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/10 mb-5">
+                <Gift className="w-4 h-4 text-[#00E5FF]" />
+                <span className="text-xs font-bold tracking-widest uppercase text-gray-300">
                   Gift Cards
                 </span>
               </div>
@@ -201,7 +201,7 @@ export default function GiftCardsPage() {
                   <span>Delivered instantly</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-[#FF1AD8]" />
+                  <Calendar className="w-4 h-4 text-[#00E5FF]" />
                   <span>Never expires</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -215,7 +215,7 @@ export default function GiftCardsPage() {
             </div>
             <div className="relative">
               <GiftCardVisual amount={300} />
-              <div className="absolute -z-10 inset-0 blur-3xl bg-gradient-to-br from-[#FF1AD8]/30 to-[#00E5FF]/30" />
+              <div className="absolute -z-10 inset-0 blur-3xl bg-gradient-to-br from-[#FF1AD8]/15 to-[#00E5FF]/15" />
             </div>
           </div>
         </div>
@@ -234,7 +234,7 @@ export default function GiftCardsPage() {
                 Perfect Amount
               </span>
             </h3>
-            <p className="text-gray-400 mt-4">
+            <p className="text-gray-300 mt-4">
               Each package suggests a service it covers — the recipient can use
               the value toward anything we offer.
             </p>
@@ -250,10 +250,8 @@ export default function GiftCardsPage() {
                   href={buildSquareUrl(pkg.amount)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`group relative flex flex-col p-6 sm:p-7 rounded-2xl border transition hover:-translate-y-1 hover:shadow-2xl ${
-                    isPopular
-                      ? "border-[#00E5FF]/50 bg-gradient-to-br from-[#00E5FF]/[0.08] via-transparent to-[#FF1AD8]/[0.06]"
-                      : "border-white/10 bg-white/[0.02] hover:border-[#00E5FF]/40"
+                  className={`group relative flex flex-col p-6 sm:p-7 rounded-2xl border transition hover:-translate-y-1 hover:shadow-2xl border-white/10 bg-white/[0.02] hover:border-[#00E5FF]/40 ${
+                    isPopular ? "ring-1 ring-[#E8C547]/35" : ""
                   }`}
                 >
                   {pkg.badge && (
@@ -287,10 +285,10 @@ export default function GiftCardsPage() {
                   <p className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-0.5">
                     Starting at
                   </p>
-                  <p className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] mb-1 leading-none font-display">
+                  <p className="text-5xl font-black text-white mb-1 leading-none font-display">
                     ${pkg.amount}
                   </p>
-                  <p className="text-sm text-gray-500 mb-5">{pkg.bestFor}</p>
+                  <p className="text-sm text-gray-300 mb-5">{pkg.bestFor}</p>
 
                   <ul className="space-y-2 mb-6 flex-1">
                     {pkg.includes.map((line, i) => (
@@ -307,8 +305,8 @@ export default function GiftCardsPage() {
                   <div
                     className={`w-full text-center py-3 rounded-xl font-black text-sm uppercase tracking-wider transition ${
                       isPopular
-                        ? "bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] text-white"
-                        : "bg-white/5 text-white border border-white/10 group-hover:border-[#00E5FF] group-hover:bg-[#00E5FF]/10"
+                        ? "bg-[#FF1AD8] text-white group-hover:bg-[#ff45e0]"
+                        : "bg-[#FF1AD8]/90 text-white group-hover:bg-[#FF1AD8]"
                     }`}
                   >
                     Continue to Checkout →
@@ -324,7 +322,7 @@ export default function GiftCardsPage() {
           {/* Custom amount */}
           <div className="max-w-2xl mx-auto mt-10 p-6 sm:p-8 rounded-2xl border border-white/10 bg-white/[0.02]">
             <div className="flex items-center gap-3 mb-4">
-              <CreditCard className="w-5 h-5 text-[#FF1AD8]" />
+              <CreditCard className="w-5 h-5 text-[#00E5FF]" />
               <h4 className="text-lg font-black uppercase tracking-tight">
                 Or choose a custom amount
               </h4>
@@ -416,7 +414,7 @@ export default function GiftCardsPage() {
                     />
                     <span className="relative z-[1]">{item.step}</span>
                   </div>
-                  <Icon className="w-8 h-8 text-[#FF1AD8] mb-4" />
+                  <Icon className="w-8 h-8 text-[#00E5FF] mb-4" />
                   <h4 className="font-black text-lg mb-2">{item.title}</h4>
                   <p className="text-sm text-gray-400 leading-relaxed">
                     {item.desc}
@@ -489,7 +487,7 @@ export default function GiftCardsPage() {
       <section className="py-16 sm:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative max-w-4xl mx-auto rounded-3xl overflow-hidden border border-white/10 bg-[#111] p-10 sm:p-16 text-center">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-full bg-gradient-to-b from-[#FF1AD8]/20 to-[#00E5FF]/20 blur-3xl pointer-events-none" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-full bg-gradient-to-b from-[#FF1AD8]/10 to-[#00E5FF]/10 blur-3xl pointer-events-none" />
             <div className="relative">
               <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight mb-4 font-display">
                 Ready to Make Their Day?

@@ -68,11 +68,22 @@
   --chart-5: 340 75% 55%;
   --radius: 0.35rem;
   --spacing: 0.25rem;
+  /* Brand roles:
+     magenta = primary CTA / focus
+     cyan    = links / secondary actions
+     purple  = gradient bridge only
+     gold    = trust badges only (scarce) */
   --brand-magenta: #FF1AD8;
   --brand-purple: #9D00FF;
   --brand-cyan: #00E5FF;
   --brand-gold: #D4AF37;
   --brand-gold-bright: #E8C547;
+  --surface-page: #050505;
+  --surface-section: #0a0a0a;
+  --surface-card: #080808;
+  --surface-elevated: #0f0f0f;
+  --text-body: #c4c4c4;
+  --text-muted: #8a8a8a;
 }
 
 @layer base {
@@ -378,9 +389,9 @@
       linear-gradient(90deg, var(--brand-magenta), var(--brand-purple), var(--brand-cyan)) border-box;
   }
 
-  /* Magenta wash for black section backgrounds */
+  /* Soft magenta atmosphere — keep quiet so accent colors can speak */
   .section-pink-wash {
-    background-color: #050505;
+    background-color: var(--surface-page);
   }
   .section-pink-wash::before {
     content: "";
@@ -389,9 +400,31 @@
     pointer-events: none;
     z-index: 0;
     background:
-      radial-gradient(ellipse 80% 60% at 8% -8%, rgba(255, 26, 216, 0.16), transparent 55%),
-      radial-gradient(ellipse 55% 45% at 95% 105%, rgba(157, 0, 255, 0.1), transparent 50%),
-      radial-gradient(ellipse 50% 40% at 55% 40%, rgba(255, 26, 216, 0.06), transparent 60%);
+      radial-gradient(ellipse 80% 60% at 8% -8%, rgba(255, 26, 216, 0.08), transparent 55%),
+      radial-gradient(ellipse 55% 45% at 95% 105%, rgba(157, 0, 255, 0.05), transparent 50%),
+      radial-gradient(ellipse 50% 40% at 55% 40%, rgba(255, 26, 216, 0.03), transparent 60%);
+  }
+
+  .surface-card {
+    background: var(--surface-card);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .surface-card:hover {
+    border-color: rgba(0, 229, 255, 0.35);
+  }
+
+  .text-body {
+    color: var(--text-body);
+  }
+  .text-muted-brand {
+    color: var(--text-muted);
+  }
+
+  .accent-primary {
+    color: var(--brand-magenta);
+  }
+  .accent-secondary {
+    color: var(--brand-cyan);
   }
   
   .bubble {
@@ -678,7 +711,7 @@
     pointer-events: none;
     overflow: hidden;
     mix-blend-mode: screen;
-    opacity: 0.55;
+    opacity: 0.35;
   }
 
   .page-bubble {

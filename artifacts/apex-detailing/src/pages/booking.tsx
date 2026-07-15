@@ -321,7 +321,7 @@ function ServiceStep({
   return (
     <section>
       <h1 className="text-3xl sm:text-4xl font-black mb-2 font-display">Choose your service</h1>
-      <p className="text-gray-400 mb-8">
+      <p className="text-gray-300 mb-8">
         Pick the package that fits your vehicle. You can always upgrade in person.
       </p>
 
@@ -340,7 +340,7 @@ function ServiceStep({
               onClick={() => onSelect(s)}
               className={`relative flex h-full min-h-[17.5rem] flex-col text-left p-6 rounded-2xl border transition group hover:-translate-y-0.5 hover:shadow-2xl ${
                 isSelected
-                  ? "border-[#00E5FF] bg-gradient-to-br from-[#00E5FF]/10 to-[#FF1AD8]/5"
+                  ? "border-[#00E5FF] bg-[#00E5FF]/10"
                   : "border-white/10 bg-white/[0.02] hover:border-[#00E5FF]/40"
               }`}
             >
@@ -375,12 +375,12 @@ function ServiceStep({
                     <span className="text-xs uppercase tracking-wider text-gray-500 font-semibold">
                       Starting at
                     </span>
-                    <span className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] font-display">
+                    <span className="text-2xl font-black text-white font-display">
                       {formatPrice(s.priceCents)}
                     </span>
                   </>
                 ) : (
-                  <span className="text-base font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
+                  <span className="text-base font-black text-[#00E5FF]">
                     Call for quote
                   </span>
                 )}
@@ -390,7 +390,7 @@ function ServiceStep({
                 </span>
               </div>
 
-              <p className="text-sm text-gray-400 mb-4 leading-relaxed flex-1">
+              <p className="text-sm text-gray-300 mb-4 leading-relaxed flex-1">
                 {s.description}
               </p>
 
@@ -530,7 +530,7 @@ function DateTimeStep({
                   disabled={disabled}
                   className={`p-3 rounded-xl text-center transition ${
                     isPicked
-                      ? "bg-gradient-to-br from-[#FF1AD8] to-[#00E5FF] text-white"
+                      ? "bg-[#FF1AD8] text-white"
                       : disabled
                         ? "bg-white/[0.02] text-gray-600 cursor-not-allowed opacity-50"
                         : "bg-white/[0.04] hover:bg-white/[0.08] text-white"
@@ -575,7 +575,7 @@ function DateTimeStep({
                   disabled={!slot.available}
                   className={`py-4 rounded-xl font-bold transition ${
                     isPicked
-                      ? "bg-gradient-to-br from-[#FF1AD8] to-[#00E5FF] text-white"
+                      ? "bg-[#FF1AD8] text-white"
                       : slot.available
                         ? "bg-white/[0.04] hover:bg-white/[0.08] text-white border border-white/10"
                         : "bg-white/[0.02] text-gray-600 cursor-not-allowed line-through"
@@ -892,7 +892,7 @@ function SummaryRow({
       <span
         className={`text-right font-semibold ${
           highlight
-            ? "text-xl bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] bg-clip-text text-transparent"
+            ? "text-xl text-white"
             : "text-white"
         }`}
       >
@@ -906,7 +906,7 @@ function SummaryRow({
 function ConfirmationView({ booking }: { booking: Booking }) {
   return (
     <section className="text-center max-w-2xl mx-auto pt-12">
-      <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-[#FF1AD8] to-[#00E5FF] flex items-center justify-center mb-6 shadow-2xl shadow-[#00E5FF]/30">
+      <div className="w-20 h-20 mx-auto rounded-full bg-[#FF1AD8] flex items-center justify-center mb-6 shadow-2xl shadow-[#FF1AD8]/25">
         <Check className="w-10 h-10 text-white" />
       </div>
       <h1 className="text-4xl sm:text-5xl font-black mb-3 font-display">You're booked!</h1>
