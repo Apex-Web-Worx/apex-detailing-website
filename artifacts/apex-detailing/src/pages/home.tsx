@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef, type PointerEvent as ReactPointerEvent } from "react";
 import { Link, useLocation } from "wouter";
 import {
   Menu,
@@ -443,6 +443,32 @@ export default function Home() {
   const [openFaq, setOpenFaq] = useState<string | null>(null);
   const [activeFaqCategory, setActiveFaqCategory] = useState<"General" | "Paint Correction">("General");
   const [legalModal, setLegalModal] = useState<"privacy" | "terms" | null>(null);
+  const logoTiltRef = useRef<HTMLDivElement>(null);
+  const preferReducedMotionRef = useRef(false);
+
+  useEffect(() => {
+    preferReducedMotionRef.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }, []);
+
+  const handleLogoPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (preferReducedMotionRef.current) return;
+    const el = logoTiltRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    const maxTilt = 14;
+    el.style.setProperty("--tilt-x", `${(-py * maxTilt).toFixed(2)}deg`);
+    el.style.setProperty("--tilt-y", `${(px * maxTilt).toFixed(2)}deg`);
+  };
+
+  const resetLogoTilt = () => {
+    const el = logoTiltRef.current;
+    if (!el) return;
+    el.style.setProperty("--tilt-x", "0deg");
+    el.style.setProperty("--tilt-y", "0deg");
+  };
 
   const pageBubbles = useMemo(() => {
     if (typeof window === "undefined") return [];
@@ -949,8 +975,12 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             <div
+              ref={logoTiltRef}
               className="brand-logo-nav relative z-10 flex items-center cursor-pointer shrink-0 min-w-[4rem]"
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              onPointerMove={handleLogoPointerMove}
+              onPointerLeave={resetLogoTilt}
+              onPointerCancel={resetLogoTilt}
               aria-label="Back to top"
             >
               <BrandLogo
@@ -958,7 +988,6 @@ export default function Home() {
                 priority
                 className="brand-logo-nav__mark relative z-10 h-16 md:h-24 lg:h-[6.5rem] w-auto max-w-[9rem] md:max-w-[12rem] object-contain opacity-100"
               />
-              <span className="brand-logo-nav__chrome" aria-hidden="true" />
             </div>
 
             <div className="hidden md:flex items-center space-x-8">
