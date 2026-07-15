@@ -154,6 +154,12 @@
         z-index: 9999;
         overflow: hidden;
         contain: layout paint;
+        opacity: 1;
+        transition: opacity 0.4s ease;
+      }
+      #app-loading.is-done {
+        opacity: 0;
+        pointer-events: none;
       }
       #app-loading .logo-stage {
         position: relative;
@@ -169,10 +175,15 @@
         width: 100%;
         height: auto;
         display: block;
-        animation: logo-blink 1.4s ease-in-out infinite;
+        opacity: 0;
+        animation: none;
         filter: drop-shadow(0 0 12px rgba(255, 26, 216, 0.55))
                 drop-shadow(0 0 28px rgba(0, 229, 255, 0.35));
         will-change: transform, opacity, filter;
+      }
+      #app-loading .logo-loader.is-ready {
+        opacity: 1;
+        animation: logo-blink 1.4s ease-in-out infinite;
       }
       /* Full-page bubble field */
       #app-loading .loader-field {
@@ -238,10 +249,10 @@
       }
       @keyframes logo-blink {
         0%, 100% {
-          opacity: 0.4;
-          transform: scale(0.96);
-          filter: drop-shadow(0 0 6px rgba(255, 26, 216, 0.25))
-                  drop-shadow(0 0 10px rgba(0, 229, 255, 0.15));
+          opacity: 0.85;
+          transform: scale(0.98);
+          filter: drop-shadow(0 0 8px rgba(255, 26, 216, 0.4))
+                  drop-shadow(0 0 14px rgba(0, 229, 255, 0.25));
         }
         45%, 55% {
           opacity: 1;
@@ -257,7 +268,7 @@
         #app-loading .logo-stage {
           width: min(52vw, 140px);
         }
-        #app-loading .logo-loader {
+        #app-loading .logo-loader.is-ready {
           filter: drop-shadow(0 0 10px rgba(255, 26, 216, 0.5));
           animation-duration: 1.6s;
         }
@@ -293,9 +304,9 @@
         }
         @keyframes logo-blink {
           0%, 100% {
-            opacity: 0.45;
-            transform: scale(0.97);
-            filter: drop-shadow(0 0 6px rgba(255, 26, 216, 0.35));
+            opacity: 0.88;
+            transform: scale(0.98);
+            filter: drop-shadow(0 0 8px rgba(255, 26, 216, 0.45));
           }
           45%, 55% {
             opacity: 1;
@@ -307,7 +318,7 @@
       }
 
       @media (prefers-reduced-motion: reduce) {
-        #app-loading .logo-loader {
+        #app-loading .logo-loader.is-ready {
           animation: none;
           opacity: 1;
           filter: drop-shadow(0 0 14px rgba(255, 26, 216, 0.55));
@@ -321,63 +332,116 @@
     </style>
   </head>
   <body>
-    <div id="root">
-      <div id="app-loading">
-        <div class="loader-field" id="loader-field" aria-hidden="true"></div>
-        <div class="logo-stage">
-          <img
-            class="logo-loader"
-            src="/images/logo.png"
-            alt="Apex Detailing"
-            width="180"
-            height="210"
-            decoding="async"
-            fetchpriority="high"
-          />
-        </div>
+    <!-- Outside #root so React mount does not tear down the splash mid-load -->
+    <div id="app-loading" aria-busy="true" aria-live="polite">
+      <div class="loader-field" id="loader-field" aria-hidden="true"></div>
+      <div class="logo-stage">
+        <img
+          class="logo-loader"
+          id="splash-logo"
+          src="/images/logo.png"
+          alt="Apex Detailing"
+          width="180"
+          height="210"
+          decoding="sync"
+          fetchpriority="high"
+        />
       </div>
     </div>
+    <div id="root"></div>
     <script>
       (function () {
         var field = document.getElementById("loader-field");
-        if (!field) return;
-
-        var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        var mobile = window.matchMedia("(max-width: 640px)").matches;
-        // Phones get a full bubble field too — previous mobile cut was hard to see
-        var count = reduce ? 8 : mobile ? 48 : 56;
-
-        var frag = document.createDocumentFragment();
-        for (var i = 0; i < count; i++) {
-          var el = document.createElement("span");
-          var size = mobile
-            ? 8 + Math.random() * 24
-            : 8 + Math.random() * 28;
-          var fromLogo = Math.random() < (mobile ? 0.4 : 0.45);
-          var x = fromLogo
-            ? 42 + Math.random() * 16
-            : Math.random() * 100;
-          var y = fromLogo
-            ? 38 + Math.random() * 18
-            : -8 - Math.random() * 20;
-          var drift = (Math.random() - 0.5) * (mobile ? 160 : 220);
-          var rise = mobile ? -(80 + Math.random() * 55) : -(85 + Math.random() * 50);
-          var dur = (mobile ? 2.2 : 2.2) + Math.random() * (mobile ? 2.8 : 3.4);
-          // Negative delay so bubbles are mid-flight on first paint
-          var delay = -Math.random() * (mobile ? 2.8 : 4.5);
-          var tone = Math.random();
-          el.className = "loader-bubble" + (tone < 0.34 ? " pink" : tone < 0.68 ? " cyan" : "");
-          el.style.setProperty("--size", size.toFixed(1) + "px");
-          el.style.setProperty("--x", x.toFixed(2) + "%");
-          el.style.setProperty("--y", y.toFixed(2) + "%");
-          el.style.setProperty("--drift", drift.toFixed(1) + "px");
-          el.style.setProperty("--rise", rise.toFixed(1) + "vh");
-          el.style.setProperty("--dur", dur.toFixed(2) + "s");
-          el.style.setProperty("--delay", delay.toFixed(2) + "s");
-          el.style.setProperty("--spin", ((Math.random() - 0.5) * 160).toFixed(0) + "deg");
-          frag.appendChild(el);
+        if (field) {
+          var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          var mobile = window.matchMedia("(max-width: 640px)").matches;
+          var count = reduce ? 8 : mobile ? 48 : 56;
+          var frag = document.createDocumentFragment();
+          for (var i = 0; i < count; i++) {
+            var el = document.createElement("span");
+            var size = mobile
+              ? 8 + Math.random() * 24
+              : 8 + Math.random() * 28;
+            var fromLogo = Math.random() < (mobile ? 0.4 : 0.45);
+            var x = fromLogo
+              ? 42 + Math.random() * 16
+              : Math.random() * 100;
+            var y = fromLogo
+              ? 38 + Math.random() * 18
+              : -8 - Math.random() * 20;
+            var drift = (Math.random() - 0.5) * (mobile ? 160 : 220);
+            var rise = mobile ? -(80 + Math.random() * 55) : -(85 + Math.random() * 50);
+            var dur = 2.2 + Math.random() * (mobile ? 2.8 : 3.4);
+            var delay = -Math.random() * (mobile ? 2.8 : 4.5);
+            var tone = Math.random();
+            el.className = "loader-bubble" + (tone < 0.34 ? " pink" : tone < 0.68 ? " cyan" : "");
+            el.style.setProperty("--size", size.toFixed(1) + "px");
+            el.style.setProperty("--x", x.toFixed(2) + "%");
+            el.style.setProperty("--y", y.toFixed(2) + "%");
+            el.style.setProperty("--drift", drift.toFixed(1) + "px");
+            el.style.setProperty("--rise", rise.toFixed(1) + "vh");
+            el.style.setProperty("--dur", dur.toFixed(2) + "s");
+            el.style.setProperty("--delay", delay.toFixed(2) + "s");
+            el.style.setProperty("--spin", ((Math.random() - 0.5) * 160).toFixed(0) + "deg");
+            frag.appendChild(el);
+          }
+          field.appendChild(frag);
         }
-        field.appendChild(frag);
+
+        // Keep splash until: logo decoded + app mounted + short minimum time
+        var splash = document.getElementById("app-loading");
+        var logo = document.getElementById("splash-logo");
+        var logoReady = false;
+        var appReady = false;
+        var minTimeDone = false;
+        var dismissed = false;
+
+        function dismiss() {
+          if (dismissed || !splash) return;
+          if (!logoReady || !appReady || !minTimeDone) return;
+          dismissed = true;
+          splash.classList.add("is-done");
+          splash.setAttribute("aria-busy", "false");
+          window.setTimeout(function () {
+            if (splash && splash.parentNode) splash.parentNode.removeChild(splash);
+          }, 420);
+        }
+
+        function markLogoReady() {
+          logoReady = true;
+          if (logo) logo.classList.add("is-ready");
+          dismiss();
+        }
+
+        if (logo) {
+          if (logo.complete && logo.naturalWidth > 0) {
+            markLogoReady();
+          } else {
+            logo.addEventListener("load", markLogoReady, { once: true });
+            logo.addEventListener("error", markLogoReady, { once: true });
+          }
+        } else {
+          logoReady = true;
+        }
+
+        window.setTimeout(function () {
+          minTimeDone = true;
+          dismiss();
+        }, 700);
+
+        // Hard cap so a hung asset never blocks the site
+        window.setTimeout(function () {
+          logoReady = true;
+          appReady = true;
+          minTimeDone = true;
+          if (logo) logo.classList.add("is-ready");
+          dismiss();
+        }, 4500);
+
+        window.__APEX_MARK_APP_READY__ = function () {
+          appReady = true;
+          dismiss();
+        };
       })();
     </script>
     <script type="module" src="/src/main.tsx"></script>

@@ -18,3 +18,12 @@ createRoot(document.getElementById("root")!).render(
     <App />
   </QueryClientProvider>,
 );
+
+// Tell the HTML splash it can dismiss after React has painted (logo wait is separate).
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    (
+      window as Window & { __APEX_MARK_APP_READY__?: () => void }
+    ).__APEX_MARK_APP_READY__?.();
+  });
+});
