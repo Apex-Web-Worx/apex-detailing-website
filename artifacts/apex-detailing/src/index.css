@@ -126,27 +126,11 @@
 @keyframes brand-logo-idle {
   0%, 100% {
     transform: translateY(0) scale(1);
-    filter:
-      drop-shadow(0 0 0.55rem rgba(255, 26, 216, 0.35))
-      drop-shadow(0 0 1.1rem rgba(255, 26, 216, 0.18));
+    filter: drop-shadow(0 0 0.65rem rgba(255, 26, 216, 0.38));
   }
-  40% {
-    transform: translateY(-3px) scale(1.045);
-    filter:
-      drop-shadow(0 0 1.15rem rgba(255, 26, 216, 0.85))
-      drop-shadow(0 0 2.1rem rgba(255, 26, 216, 0.55));
-  }
-  55% {
-    transform: translateY(-1px) scale(1.02);
-    filter:
-      drop-shadow(0 0 0.85rem rgba(255, 26, 216, 0.55))
-      drop-shadow(0 0 1.4rem rgba(255, 26, 216, 0.28));
-  }
-  72% {
-    transform: translateY(-4px) scale(1.055);
-    filter:
-      drop-shadow(0 0 1.45rem rgba(255, 26, 216, 0.95))
-      drop-shadow(0 0 2.6rem rgba(157, 0, 255, 0.45));
+  50% {
+    transform: translateY(-2px) scale(1.025);
+    filter: drop-shadow(0 0 1.45rem rgba(255, 26, 216, 0.72));
   }
 }
 
@@ -250,7 +234,7 @@
     will-change: transform, filter;
     animation:
       brand-logo-enter 1.05s cubic-bezier(0.16, 1, 0.3, 1) both,
-      brand-logo-idle 2.35s ease-in-out 1.05s infinite;
+      brand-logo-idle 2.9s ease-in-out 1.05s infinite;
   }
 
   .brand-logo-nav:hover .brand-logo-nav__mark,
