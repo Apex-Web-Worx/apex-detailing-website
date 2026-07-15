@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import BrandLogo from '@/components/BrandLogo';
 
 export function Scene5() {
   const [phase, setPhase] = useState(0);
@@ -31,6 +32,8 @@ export function Scene5() {
           src={`${import.meta.env.BASE_URL}images/hero-1.jpg`} 
           alt="Hero" 
           className="w-full h-full object-cover filter blur-sm"
+          loading="lazy"
+          decoding="async"
         />
         <div className="absolute inset-0 bg-zinc-950/80" />
       </motion.div>
@@ -41,9 +44,8 @@ export function Scene5() {
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         className="relative z-10 text-center flex flex-col items-center"
       >
-        <img 
-          src={`${import.meta.env.BASE_URL}images/logo.png`} 
-          alt="Apex Detailing" 
+        <BrandLogo
+          variant="nav"
           className="h-20 md:h-28 w-auto object-contain brightness-0 invert mb-12"
         />
         

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import BrandLogo from '@/components/BrandLogo';
 
 export function Scene1() {
   const [phase, setPhase] = useState(0);
@@ -27,9 +28,8 @@ export function Scene1() {
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         className="mb-8"
       >
-        <img 
-          src={`${import.meta.env.BASE_URL}images/logo.png`} 
-          alt="Apex Detailing" 
+        <BrandLogo
+          variant="nav"
           className="h-24 md:h-32 w-auto object-contain brightness-0 invert"
         />
       </motion.div>
