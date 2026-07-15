@@ -104,39 +104,7 @@
   }
 }
 
-/* Nav brand mark: occasional liquid chrome wipe */
-@keyframes brand-logo-chrome {
-  0%,
-  70% {
-    background-position: 140% 0;
-    opacity: 0;
-  }
-  76% {
-    opacity: 1;
-  }
-  92% {
-    background-position: -140% 0;
-    opacity: 1;
-  }
-  100% {
-    background-position: -140% 0;
-    opacity: 0;
-  }
-}
-
-@keyframes brand-logo-chrome-once {
-  0% {
-    background-position: 140% 0;
-    opacity: 0;
-  }
-  12% {
-    opacity: 1;
-  }
-  100% {
-    background-position: -140% 0;
-    opacity: 0;
-  }
-}
+/* Nav brand mark: soft 3D depth tilt toward pointer */
 
 @keyframes header-shine {
   0%, 100% {
@@ -201,63 +169,37 @@
   }
 
   .brand-logo-nav {
+    --tilt-x: 0deg;
+    --tilt-y: 0deg;
     position: relative;
     isolation: isolate;
+    perspective: 520px;
+    transform-style: preserve-3d;
   }
 
   .brand-logo-nav__mark {
     position: relative;
     z-index: 1;
+    transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateZ(0);
+    transform-style: preserve-3d;
+    will-change: transform;
     filter: drop-shadow(0 0 0.75rem rgba(255, 26, 216, 0.45));
-    transition: filter 0.35s ease;
-  }
-
-  .brand-logo-nav__chrome {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    pointer-events: none;
-    background: linear-gradient(
-      115deg,
-      transparent 28%,
-      rgba(255, 255, 255, 0.05) 40%,
-      rgba(255, 255, 255, 0.55) 48%,
-      rgba(0, 229, 255, 0.35) 52%,
-      rgba(255, 26, 216, 0.22) 56%,
-      transparent 70%
-    );
-    background-size: 240% 100%;
-    background-repeat: no-repeat;
-    background-position: 140% 0;
-    mix-blend-mode: screen;
-    -webkit-mask-image: url("/images/logo-nav.png");
-    mask-image: url("/images/logo-nav.png");
-    -webkit-mask-size: contain;
-    mask-size: contain;
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-    mask-position: center;
-    animation: brand-logo-chrome 8.5s ease-in-out infinite;
+    transition:
+      transform 0.16s ease-out,
+      filter 0.35s ease;
   }
 
   .brand-logo-nav:hover .brand-logo-nav__mark,
   .brand-logo-nav:focus-within .brand-logo-nav__mark {
-    filter: drop-shadow(0 0 1rem rgba(255, 26, 216, 0.62));
-  }
-
-  .brand-logo-nav:hover .brand-logo-nav__chrome,
-  .brand-logo-nav:focus-within .brand-logo-nav__chrome {
-    animation: brand-logo-chrome-once 1.15s ease-in-out;
+    filter:
+      drop-shadow(0 0 1rem rgba(255, 26, 216, 0.62))
+      drop-shadow(0 0.35rem 0.85rem rgba(0, 0, 0, 0.35));
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .brand-logo-nav__chrome {
-      animation: none !important;
-      opacity: 0 !important;
-    }
-
     .brand-logo-nav__mark {
+      transform: none !important;
+      transition: none !important;
       filter: drop-shadow(0 0 0.75rem rgba(255, 26, 216, 0.45));
     }
   }
