@@ -958,9 +958,7 @@ export default function Home() {
                 priority
                 className="brand-logo-nav__mark relative z-10 h-16 md:h-24 lg:h-[6.5rem] w-auto max-w-[9rem] md:max-w-[12rem] object-contain opacity-100"
               />
-              <span className="brand-logo-nav__orbit" aria-hidden="true">
-                <span className="brand-logo-nav__spark" />
-              </span>
+              <span className="brand-logo-nav__chrome" aria-hidden="true" />
             </div>
 
             <div className="hidden md:flex items-center space-x-8">

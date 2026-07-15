@@ -104,42 +104,37 @@
   }
 }
 
-/* Nav brand mark: slow orbit spark around a solid logo */
-@keyframes brand-logo-orbit {
-  from {
-    transform: rotate(0deg);
+/* Nav brand mark: occasional liquid chrome wipe */
+@keyframes brand-logo-chrome {
+  0%,
+  70% {
+    background-position: 140% 0;
+    opacity: 0;
   }
-  to {
-    transform: rotate(360deg);
+  76% {
+    opacity: 1;
+  }
+  92% {
+    background-position: -140% 0;
+    opacity: 1;
+  }
+  100% {
+    background-position: -140% 0;
+    opacity: 0;
   }
 }
 
-@keyframes brand-logo-spark {
-  0%, 100% {
-    background: radial-gradient(
-      circle,
-      #ffffff 0%,
-      #00e5ff 38%,
-      #ff1ad8 72%,
-      transparent 100%
-    );
-    box-shadow:
-      0 0 0.35rem rgba(255, 255, 255, 0.95),
-      0 0 0.7rem rgba(0, 229, 255, 0.95),
-      0 0 1.25rem rgba(255, 26, 216, 0.7);
+@keyframes brand-logo-chrome-once {
+  0% {
+    background-position: 140% 0;
+    opacity: 0;
   }
-  50% {
-    background: radial-gradient(
-      circle,
-      #ffffff 0%,
-      #ff1ad8 38%,
-      #00e5ff 72%,
-      transparent 100%
-    );
-    box-shadow:
-      0 0 0.35rem rgba(255, 255, 255, 0.95),
-      0 0 0.7rem rgba(255, 26, 216, 0.95),
-      0 0 1.25rem rgba(0, 229, 255, 0.7);
+  12% {
+    opacity: 1;
+  }
+  100% {
+    background-position: -140% 0;
+    opacity: 0;
   }
 }
 
@@ -214,58 +209,52 @@
     position: relative;
     z-index: 1;
     filter: drop-shadow(0 0 0.75rem rgba(255, 26, 216, 0.45));
+    transition: filter 0.35s ease;
   }
 
-  .brand-logo-nav__orbit {
+  .brand-logo-nav__chrome {
     position: absolute;
-    inset: -10% -14%;
+    inset: 0;
     z-index: 2;
     pointer-events: none;
-    animation: brand-logo-orbit 8.5s linear infinite;
-  }
-
-  .brand-logo-nav__spark {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 0.45rem;
-    height: 0.45rem;
-    margin-left: -0.225rem;
-    border-radius: 9999px;
-    animation: brand-logo-spark 2.8s ease-in-out infinite;
-  }
-
-  .brand-logo-nav:hover .brand-logo-nav__orbit,
-  .brand-logo-nav:focus-within .brand-logo-nav__orbit {
-    animation-duration: 4.5s;
+    background: linear-gradient(
+      115deg,
+      transparent 28%,
+      rgba(255, 255, 255, 0.05) 40%,
+      rgba(255, 255, 255, 0.55) 48%,
+      rgba(0, 229, 255, 0.35) 52%,
+      rgba(255, 26, 216, 0.22) 56%,
+      transparent 70%
+    );
+    background-size: 240% 100%;
+    background-repeat: no-repeat;
+    background-position: 140% 0;
+    mix-blend-mode: screen;
+    -webkit-mask-image: url("/images/logo-nav.png");
+    mask-image: url("/images/logo-nav.png");
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    animation: brand-logo-chrome 8.5s ease-in-out infinite;
   }
 
   .brand-logo-nav:hover .brand-logo-nav__mark,
   .brand-logo-nav:focus-within .brand-logo-nav__mark {
-    filter: drop-shadow(0 0 1rem rgba(255, 26, 216, 0.6));
+    filter: drop-shadow(0 0 1rem rgba(255, 26, 216, 0.62));
   }
 
-  @media (max-width: 640px) {
-    .brand-logo-nav__orbit {
-      inset: -12% -16%;
-      animation-duration: 9.5s;
-    }
-
-    .brand-logo-nav__spark {
-      width: 0.38rem;
-      height: 0.38rem;
-      margin-left: -0.19rem;
-    }
+  .brand-logo-nav:hover .brand-logo-nav__chrome,
+  .brand-logo-nav:focus-within .brand-logo-nav__chrome {
+    animation: brand-logo-chrome-once 1.15s ease-in-out;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .brand-logo-nav__orbit,
-    .brand-logo-nav__spark {
+    .brand-logo-nav__chrome {
       animation: none !important;
-    }
-
-    .brand-logo-nav__orbit {
-      display: none;
+      opacity: 0 !important;
     }
 
     .brand-logo-nav__mark {
