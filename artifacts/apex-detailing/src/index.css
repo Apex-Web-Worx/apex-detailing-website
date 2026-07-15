@@ -234,7 +234,7 @@
     will-change: transform, filter;
     animation:
       brand-logo-enter 1.05s cubic-bezier(0.16, 1, 0.3, 1) both,
-      brand-logo-idle 2.35s ease-in-out 1.05s infinite;
+      brand-logo-idle 2.9s ease-in-out 1.05s infinite;
   }
 
   .brand-logo-nav:hover .brand-logo-nav__mark,
