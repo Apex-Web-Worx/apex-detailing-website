@@ -30,6 +30,7 @@ import img1294 from "@assets/IMG_1294_1775780654765.jpeg";
 import img1306 from "@assets/IMG_1306_1775780654765.jpeg";
 import paintCorrectionBefore from "@assets/IMG_1662_1779061738951.jpeg";
 import paintCorrectionAfter from "@assets/IMG_1668_1779061738951.jpeg";
+import BrandLogo from "@/components/BrandLogo";
 
 const BOOKING_LINK = "/book";
 const INSTAGRAM_LINK = "https://www.instagram.com/apexdetailing_sf";
@@ -951,13 +952,12 @@ export default function Home() {
               className="relative z-10 flex items-center cursor-pointer shrink-0 min-w-[4rem]"
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             >
-              <img
-                src={`${import.meta.env.BASE_URL}images/logo.png`}
-                alt="Apex Detailing Logo"
+              <BrandLogo
+                variant="nav"
+                priority
                 className="relative z-10 h-16 md:h-24 lg:h-[6.5rem] w-auto max-w-[9rem] md:max-w-[12rem] object-contain opacity-100"
                 style={{
-                  filter:
-                    "drop-shadow(0 0 12px rgba(255,26,216,0.45))",
+                  filter: "drop-shadow(0 0 12px rgba(255,26,216,0.45))",
                 }}
               />
             </div>
@@ -1384,6 +1384,8 @@ export default function Home() {
                     style={{
                       opacity: idx === aboutImageIdx ? 1 : 0,
                     }}
+                    loading="lazy"
+                    decoding="async"
                   />
                 ))}
                 <div 
@@ -1453,6 +1455,8 @@ export default function Home() {
                       src={ownerPhoto}
                       alt="Michail Gurov, Founder of Apex Detailing"
                       className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-2 border-white/20"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </div>
                   <div>
@@ -1556,6 +1560,8 @@ export default function Home() {
                 alt="After"
                 className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
                 style={{ opacity: sliderFading ? 0 : 1 }}
+                loading="lazy"
+                decoding="async"
               />
 
               {/* Before Image (Overlay) */}
@@ -1568,6 +1574,8 @@ export default function Home() {
                   alt="Before"
                   className="w-screen h-full object-cover"
                   style={{ width: `${100 / (sliderPosition / 100)}%` }}
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
 
@@ -1670,6 +1678,7 @@ export default function Home() {
                       autoPlay
                       loop
                       playsInline
+                      preload="metadata"
                       controls={false}
                       onError={() => setFailedVideos(prev => new Set(prev).add(item.id))}
                     />
@@ -1685,6 +1694,7 @@ export default function Home() {
                         autoPlay
                         loop
                         playsInline
+                        preload="metadata"
                         controls={false}
                       />
                     ) : item.id === 1 ? (
@@ -1696,6 +1706,8 @@ export default function Home() {
                             alt="Paint Correction"
                             className={`absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-opacity duration-700 ${paintCorrectionPreviewIndex === idx ? 'opacity-100' : 'opacity-0'}`}
                             style={{ filter: 'brightness(1.1) contrast(1.1)' }}
+                            loading="lazy"
+                            decoding="async"
                           />
                         ))}
                       </div>
@@ -1705,6 +1717,8 @@ export default function Home() {
                         alt={item.title}
                         className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                         style={{ filter: 'brightness(1.15) contrast(1.15)' }}
+                        loading="lazy"
+                        decoding="async"
                       />
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
@@ -1791,6 +1805,8 @@ export default function Home() {
                   alt={`${selectedGalleryItem.title} - Image ${currentImageIndex + 1}`}
                   className={`${isFullscreen ? 'w-full h-full' : 'w-full h-full'} object-contain ${!isFullscreen && 'rounded-xl'} transition-opacity duration-200`}
                   style={{ filter: 'brightness(0.95) contrast(1.05)', opacity: isImageTransitioning ? 0 : 1 }}
+                  loading="eager"
+                  decoding="async"
                 />
                 
                 {/* Before/After Label */}
@@ -2143,13 +2159,11 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12 sm:mb-16">
             <div className="col-span-1 md:col-span-2 lg:col-span-1">
               <div className="flex items-center mb-6">
-                <img
-                  src={`${import.meta.env.BASE_URL}images/logo.png`}
-                  alt="Apex Detailing Logo"
+                <BrandLogo
+                  variant="footer"
                   className="relative z-10 h-20 w-auto max-w-[10rem] object-contain opacity-100"
                   style={{
-                    filter:
-                      "drop-shadow(0 0 12px rgba(255,26,216,0.45))",
+                    filter: "drop-shadow(0 0 12px rgba(255,26,216,0.45))",
                   }}
                 />
               </div>
@@ -2320,6 +2334,8 @@ export default function Home() {
             >
               <img
                 src={`${import.meta.env.BASE_URL}images/apex-webworx-logo.png`}
+                loading="lazy"
+                decoding="async"
                 alt="APEX WEB WORX"
                 className="h-16 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity"
               />

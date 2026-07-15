@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useVideoPlayer } from '@/lib/video/hooks';
+import BrandLogo from '@/components/BrandLogo';
 import { Scene1 } from './video_scenes/Scene1';
 import { Scene2 } from './video_scenes/Scene2';
 import { Scene3 } from './video_scenes/Scene3';
@@ -59,7 +60,7 @@ export default function VideoTemplate() {
         animate={{ opacity: currentScene === 0 ? 0 : 1, y: currentScene === 0 ? -20 : 0 }}
         transition={{ duration: 0.8 }}
       >
-        <img src={`${import.meta.env.BASE_URL}images/logo.png`} alt="Apex Detailing" className="h-8 w-auto object-contain brightness-0 invert" />
+        <BrandLogo variant="nav" className="h-8 w-auto object-contain brightness-0 invert" />
       </motion.div>
 
       {/* Scene Render */}

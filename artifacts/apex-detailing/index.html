@@ -94,7 +94,7 @@
         }
       })();
     </script>
-    <link rel="preload" as="image" href="/images/logo.png" fetchpriority="high" />
+    <link rel="preload" as="image" href="/images/logo-splash.webp" type="image/webp" fetchpriority="high" />
     <link rel="preload" as="image" href="/images/hero-2.jpg" fetchpriority="high" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -326,18 +326,21 @@
     <!-- Outside #root so React mount does not tear down the splash mid-load -->
     <div id="app-loading" aria-busy="true" aria-live="polite">
       <div class="loader-field" id="loader-field" aria-hidden="true"></div>
-      <div class="logo-stage">
-        <img
-          class="logo-loader"
-          id="splash-logo"
-          src="/images/logo.png"
-          alt="Apex Detailing"
-          width="180"
-          height="210"
-          decoding="sync"
-          fetchpriority="high"
-        />
-      </div>
+        <div class="logo-stage">
+          <picture>
+            <source srcset="/images/logo-splash.webp" type="image/webp" />
+            <img
+              class="logo-loader"
+              id="splash-logo"
+              src="/images/logo-splash.png"
+              alt="Apex Detailing"
+              width="180"
+              height="210"
+              decoding="sync"
+              fetchpriority="high"
+            />
+          </picture>
+        </div>
     </div>
     <div id="root"></div>
     <script>
