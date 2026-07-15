@@ -686,7 +686,7 @@
     .soap-bubble {
       background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.08) 15%, transparent 60%),
                   radial-gradient(circle at 70% 70%, rgba(255, 26, 216, 0.22), transparent 50%),
-                  radial-gradient(circle at center, rgba(255, 26, 216, 0.14), rgba(0, 229, 255, 0.08));
+                  radial-gradient(circle at center, rgba(255, 26, 216, 0.14), rgba(255, 26, 216, 0.04));
       border-color: rgba(255, 255, 255, 0.2);
       box-shadow:
         inset -3px -3px 8px rgba(0, 0, 0, 0.05),
