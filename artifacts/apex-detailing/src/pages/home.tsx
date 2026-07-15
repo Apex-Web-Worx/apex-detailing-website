@@ -940,7 +940,7 @@ export default function Home() {
       </div>
       {/* Navigation */}
       <nav
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        className={`fixed top-0 w-full z-50 overflow-visible transition-all duration-300 ${
           isScrolled
             ? "bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/10 py-3"
             : "bg-transparent py-5"

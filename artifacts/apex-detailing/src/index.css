@@ -167,6 +167,33 @@
   }
 }
 
+/* Mobile: single-shadow idle + occasional sheen (no hover rely) */
+@keyframes brand-logo-idle-mobile {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    filter: drop-shadow(0 0 0.55rem rgba(255, 26, 216, 0.48));
+  }
+  50% {
+    transform: translateY(-1px) scale(1.035);
+    filter: drop-shadow(0 0 1.35rem rgba(255, 26, 216, 0.92));
+  }
+}
+
+@keyframes brand-logo-sheen-mobile {
+  0%,
+  72% {
+    transform: translateX(-130%) skewX(-16deg);
+    opacity: 0;
+  }
+  78% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(220%) skewX(-16deg);
+    opacity: 0;
+  }
+}
+
 @keyframes header-shine {
   0%, 100% {
     text-shadow: 0 0 0.6rem rgba(0, 229, 255, 0.35);
@@ -232,6 +259,7 @@
   .brand-logo-nav {
     position: relative;
     isolation: isolate;
+    overflow: visible;
   }
 
   .brand-logo-nav__mark {
@@ -239,11 +267,6 @@
     animation:
       brand-logo-enter 1.05s cubic-bezier(0.16, 1, 0.3, 1) both,
       brand-logo-idle 2.9s ease-in-out 1.05s infinite;
-  }
-
-  .brand-logo-nav:hover .brand-logo-nav__mark,
-  .brand-logo-nav:focus-within .brand-logo-nav__mark {
-    animation: brand-logo-spectrum 1.35s ease-in-out infinite;
   }
 
   .brand-logo-nav__sheen {
@@ -264,9 +287,57 @@
     transform: translateX(-130%) skewX(-16deg);
   }
 
-  .brand-logo-nav:hover .brand-logo-nav__sheen,
-  .brand-logo-nav:focus-within .brand-logo-nav__sheen {
-    animation: brand-logo-sheen 1.1s ease-in-out;
+  /* Desktop / fine pointer: hover spectrum + sheen */
+  @media (hover: hover) and (pointer: fine) {
+    .brand-logo-nav:hover .brand-logo-nav__mark,
+    .brand-logo-nav:focus-within .brand-logo-nav__mark {
+      animation: brand-logo-spectrum 1.35s ease-in-out infinite;
+    }
+
+    .brand-logo-nav:hover .brand-logo-nav__sheen,
+    .brand-logo-nav:focus-within .brand-logo-nav__sheen {
+      animation: brand-logo-sheen 1.1s ease-in-out;
+    }
+  }
+
+  /* Touch / coarse pointer: brief spectrum on press */
+  @media (hover: none), (pointer: coarse) {
+    .brand-logo-nav:active .brand-logo-nav__mark {
+      animation: brand-logo-spectrum 0.9s ease-in-out;
+    }
+
+    .brand-logo-nav:active .brand-logo-nav__sheen {
+      animation: brand-logo-sheen 0.95s ease-in-out;
+    }
+  }
+
+  /* Phones: cheaper glow + auto sheen so the shine still reads without hover */
+  @media (max-width: 640px) {
+    .brand-logo-nav {
+      /* Keep glow from clipping against tight nav row */
+      margin-inline: -0.15rem;
+      padding-inline: 0.15rem;
+    }
+
+    .brand-logo-nav__mark {
+      will-change: auto;
+      animation:
+        brand-logo-enter 0.9s cubic-bezier(0.16, 1, 0.3, 1) both,
+        brand-logo-idle-mobile 3.1s ease-in-out 0.9s infinite;
+    }
+
+    .brand-logo-nav__sheen {
+      inset: -12% -28%;
+      animation: brand-logo-sheen-mobile 7.5s ease-in-out 2.2s infinite;
+      background: linear-gradient(
+        105deg,
+        transparent 24%,
+        rgba(255, 26, 216, 0.4) 40%,
+        rgba(157, 0, 255, 0.55) 50%,
+        rgba(0, 229, 255, 0.48) 60%,
+        transparent 76%
+      );
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -279,7 +350,8 @@
 
     .brand-logo-nav__sheen,
     .brand-logo-nav:hover .brand-logo-nav__sheen,
-    .brand-logo-nav:focus-within .brand-logo-nav__sheen {
+    .brand-logo-nav:focus-within .brand-logo-nav__sheen,
+    .brand-logo-nav:active .brand-logo-nav__sheen {
       animation: none !important;
       opacity: 0 !important;
     }
