@@ -949,17 +949,16 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             <div
-              className="relative z-10 flex items-center cursor-pointer shrink-0 min-w-[4rem]"
+              className="brand-logo-nav relative z-10 flex items-center cursor-pointer shrink-0 min-w-[4rem]"
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              aria-label="Back to top"
             >
               <BrandLogo
                 variant="nav"
                 priority
-                className="relative z-10 h-16 md:h-24 lg:h-[6.5rem] w-auto max-w-[9rem] md:max-w-[12rem] object-contain opacity-100"
-                style={{
-                  filter: "drop-shadow(0 0 12px rgba(255,26,216,0.45))",
-                }}
+                className="brand-logo-nav__mark relative z-10 h-16 md:h-24 lg:h-[6.5rem] w-auto max-w-[9rem] md:max-w-[12rem] object-contain opacity-100"
               />
+              <span className="brand-logo-nav__sheen" aria-hidden="true" />
             </div>
 
             <div className="hidden md:flex items-center space-x-8">
