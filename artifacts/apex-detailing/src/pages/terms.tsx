@@ -30,7 +30,7 @@ export default function TermsPage() {
 
       <main className="max-w-3xl mx-auto px-4 py-12">
         <h1 className="text-4xl font-extrabold mb-2">Terms &amp; Conditions</h1>
-        <p className="text-sm text-gray-500 mb-10">
+        <p className="text-sm text-gray-400 mb-10">
           Effective {EFFECTIVE} &middot; Apex Detailing &middot; Nixa, Missouri
         </p>
 

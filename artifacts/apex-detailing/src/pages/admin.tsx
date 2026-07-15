@@ -149,7 +149,7 @@ function Login({ onSubmit }: { onSubmit: (t: string) => void }) {
           onSubmit={handle}
           method="post"
           action="#"
-          className="w-full max-w-md rounded-2xl border border-white/10 bg-white/[0.03] p-8 shadow-[0_0_40px_rgba(255,26,216,0.08)]"
+          className="w-full max-w-md rounded-2xl border border-white/10 bg-white/[0.03] p-8"
         >
           <input
             type="text"
@@ -161,7 +161,7 @@ function Login({ onSubmit }: { onSubmit: (t: string) => void }) {
             tabIndex={-1}
             style={{ display: "none" }}
           />
-          <div className="relative w-14 h-14 rounded-full overflow-hidden flex items-center justify-center mx-auto mb-6 shadow-[0_0_18px_rgba(255,26,216,0.35)]">
+          <div className="relative w-14 h-14 rounded-full overflow-hidden flex items-center justify-center mx-auto mb-6 border border-white/10">
             <span
               aria-hidden="true"
               className="absolute inset-0 rounded-full bg-gradient-to-br from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]"
@@ -520,7 +520,7 @@ function BlockedDatesPanel({ token }: { token: string }) {
   return (
     <section className="mt-12 pt-8 border-t border-white/10">
       <div className="flex items-center gap-3 mb-2">
-        <CalendarOff className="w-5 h-5 text-[#FF1AD8]" />
+        <CalendarOff className="w-5 h-5 text-[#00E5FF]" />
         <h2 className="text-xl font-black">Block off days</h2>
       </div>
       <p className="text-sm text-gray-400 mb-5">
@@ -602,7 +602,7 @@ function BlockedDateCard({
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 flex items-start justify-between gap-3">
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2 text-[#FF1AD8] font-bold text-sm mb-1">
+        <div className="flex items-center gap-2 text-[#00E5FF] font-bold text-sm mb-1">
           <CalendarOff className="w-4 h-4" />
           {formatDateLong(blocked.date)}
         </div>
@@ -795,7 +795,7 @@ function ServiceRulesPanel({ token }: { token: string }) {
   return (
     <section className="mt-12 pt-8 border-t border-white/10">
       <div className="flex items-center gap-3 mb-2">
-        <Clock className="w-5 h-5 text-[#FF1AD8]" />
+        <Clock className="w-5 h-5 text-[#00E5FF]" />
         <h2 className="text-xl font-black">Booking schedule</h2>
       </div>
       <p className="text-sm text-gray-400 mb-5">
@@ -1580,7 +1580,7 @@ function RescheduleTab({
                   disabled={disabled}
                   className={`p-3 rounded-xl text-center transition ${
                     isPicked
-                      ? "bg-gradient-to-br from-[#FF1AD8] to-[#00E5FF] text-white"
+                      ? "bg-[#FF1AD8] text-white"
                       : disabled
                         ? "bg-white/[0.02] text-gray-600 cursor-not-allowed opacity-50"
                         : "bg-white/[0.04] hover:bg-white/[0.08] text-white"
@@ -1627,7 +1627,7 @@ function RescheduleTab({
                   disabled={!available}
                   className={`py-3 rounded-xl font-bold transition text-sm ${
                     isPicked
-                      ? "bg-gradient-to-br from-[#FF1AD8] to-[#00E5FF] text-white"
+                      ? "bg-[#FF1AD8] text-white"
                       : available
                         ? "bg-white/[0.04] hover:bg-white/[0.08] text-white border border-white/10"
                         : "bg-white/[0.02] text-gray-600 cursor-not-allowed line-through"

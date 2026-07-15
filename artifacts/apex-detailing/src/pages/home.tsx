@@ -40,7 +40,7 @@ const AddonCard = ({ addon }: { addon: { name: string; price: string; descriptio
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <div
-      className="relative overflow-hidden p-4 rounded-lg bg-[#080808] border border-[#FF1AD8]/20 hover:border-[#FF1AD8]/50 hover:shadow-[0_0_24px_rgba(255,26,216,0.12)] transition-all cursor-pointer group"
+      className="relative overflow-hidden p-4 rounded-lg bg-[#080808] border border-white/10 hover:border-[#00E5FF]/40 transition-all cursor-pointer group"
       onMouseEnter={() => setIsExpanded(true)}
       onMouseLeave={() => setIsExpanded(false)}
     >
@@ -49,10 +49,10 @@ const AddonCard = ({ addon }: { addon: { name: string; price: string; descriptio
         aria-hidden="true"
         style={{
           background:
-            "radial-gradient(ellipse 90% 70% at 0% 0%, rgba(255,26,216,0.12), transparent 55%)",
+            "radial-gradient(ellipse 90% 70% at 0% 0%, rgba(255,255,255,0.04), transparent 55%)",
         }}
       />
-      <h4 className="relative z-10 text-base font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#FF1AD8] group-hover:via-[#9D00FF] group-hover:to-[#00E5FF] transition-all duration-300">{addon.name}</h4>
+      <h4 className="relative z-10 text-base font-bold text-white mb-1 group-hover:text-[#00E5FF] transition-colors duration-300">{addon.name}</h4>
       <p className="relative z-10 text-potential font-bold text-sm">{addon.price}</p>
       {addon.description && (
         <div 
@@ -916,7 +916,7 @@ export default function Home() {
         aria-hidden="true"
         style={{
           background:
-            "radial-gradient(ellipse 85% 55% at 8% -8%, rgba(255,26,216,0.14), transparent 52%), radial-gradient(ellipse 65% 45% at 92% 18%, rgba(157,0,255,0.08), transparent 48%), radial-gradient(ellipse 50% 40% at 50% 80%, rgba(255,26,216,0.05), transparent 55%)",
+            "radial-gradient(ellipse 85% 55% at 8% -8%, rgba(255,26,216,0.08), transparent 52%), radial-gradient(ellipse 65% 45% at 92% 18%, rgba(157,0,255,0.04), transparent 48%), radial-gradient(ellipse 50% 40% at 50% 80%, rgba(255,26,216,0.03), transparent 55%)",
         }}
       />
       <div className="relative z-10 overflow-x-hidden">
@@ -941,7 +941,7 @@ export default function Home() {
       <nav
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
           isScrolled
-            ? "bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/10 py-3 shadow-[0_0_20px_rgba(0,229,255,0.1)]"
+            ? "bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/10 py-3"
             : "bg-transparent py-5"
         }`}
       >
@@ -1097,8 +1097,8 @@ export default function Home() {
         </div>
 
         <div className="absolute inset-0 z-0 opacity-40">
-          <div className="absolute top-[20%] left-[10%] w-96 h-96 bg-[#FF1AD8] rounded-full mix-blend-screen filter blur-[100px] animate-[pulse_8s_ease-in-out_infinite]" />
-          <div className="absolute bottom-[20%] right-[10%] w-96 h-96 bg-[#00E5FF] rounded-full mix-blend-screen filter blur-[100px] animate-[pulse_8s_ease-in-out_infinite_1s]" />
+          <div className="absolute top-[20%] left-[10%] w-96 h-96 bg-[#FF1AD8] rounded-full mix-blend-screen filter blur-[100px] opacity-40 animate-[pulse_8s_ease-in-out_infinite]" />
+          <div className="absolute bottom-[20%] right-[10%] w-96 h-96 bg-[#00E5FF] rounded-full mix-blend-screen filter blur-[100px] opacity-35 animate-[pulse_8s_ease-in-out_infinite_1s]" />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0a0a0a]/80 to-[#0a0a0a]" />
         </div>
 
@@ -1201,8 +1201,8 @@ export default function Home() {
       <section id="services" className="py-24 relative border-t border-white/5 section-pink-wash overflow-hidden">
         {/* Minimal pink-on-black atmosphere */}
         <div className="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
-          <div className="absolute -top-24 left-[-10%] w-[42rem] h-[42rem] rounded-full bg-[#FF1AD8]/[0.09] blur-[120px]" />
-          <div className="absolute top-[40%] right-[-15%] w-[36rem] h-[36rem] rounded-full bg-[#FF1AD8]/[0.06] blur-[140px]" />
+          <div className="absolute -top-24 left-[-10%] w-[42rem] h-[42rem] rounded-full bg-[#FF1AD8]/[0.05] blur-[120px]" />
+          <div className="absolute top-[40%] right-[-15%] w-[36rem] h-[36rem] rounded-full bg-[#00E5FF]/[0.04] blur-[140px]" />
           <div className="absolute bottom-[-10%] left-[30%] w-[28rem] h-[28rem] rounded-full bg-[#9D00FF]/[0.05] blur-[110px]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,26,216,0.06),transparent_55%)]" />
         </div>
@@ -1231,7 +1231,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mb-12 p-6 rounded-xl bg-[#080808] border border-[#FF1AD8]/30 backdrop-blur-sm max-w-3xl mx-auto relative overflow-hidden">
+          <div className="mb-12 p-6 rounded-xl bg-[#080808] border border-white/10 backdrop-blur-sm max-w-3xl mx-auto relative overflow-hidden">
             <div
               className="pointer-events-none absolute inset-0"
               aria-hidden="true"
@@ -1253,21 +1253,20 @@ export default function Home() {
                   index === services.length - 1 ? "md:col-span-2 lg:col-span-1" : ""
                 }`}
               >
-                <span className="absolute inset-0 bg-gradient-to-br from-[#FF1AD8]/35 via-[#9D00FF]/15 to-[#00E5FF]/20 opacity-70 group-hover:opacity-100 transition-all duration-500" />
-                <div className="relative h-full bg-[#080808] p-6 sm:p-8 rounded-2xl flex flex-col z-10 transition-all duration-500 overflow-hidden border border-[#FF1AD8]/15 group-hover:border-[#FF1AD8]/35 group-hover:shadow-[0_0_40px_rgba(255,26,216,0.12)]">
-                  {/* Soft pink wash inside card */}
+                <span className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-[#00E5FF]/10 opacity-60 group-hover:opacity-100 transition-all duration-500" />
+                <div className="relative h-full bg-[#080808] p-6 sm:p-8 rounded-2xl flex flex-col z-10 transition-all duration-500 overflow-hidden border border-white/10 group-hover:border-[#00E5FF]/35">
                   <div
                     className="pointer-events-none absolute inset-0 z-0"
                     aria-hidden="true"
                     style={{
                       background:
-                        "radial-gradient(ellipse 80% 55% at 0% 0%, rgba(255,26,216,0.14), transparent 55%), radial-gradient(ellipse 60% 45% at 100% 100%, rgba(157,0,255,0.08), transparent 50%)",
+                        "radial-gradient(ellipse 80% 55% at 0% 0%, rgba(255,255,255,0.04), transparent 55%)",
                     }}
                   />
-                  <div className="relative z-10 mb-6 p-4 rounded-xl bg-[#FF1AD8]/10 border border-[#FF1AD8]/20 inline-flex w-fit group-hover:scale-110 group-hover:bg-[#FF1AD8]/15 transition-all duration-500">
+                  <div className="relative z-10 mb-6 p-4 rounded-xl bg-white/5 border border-white/10 inline-flex w-fit group-hover:scale-110 group-hover:border-[#00E5FF]/30 transition-all duration-500">
                     {service.icon}
                   </div>
-                  <h4 className="relative z-10 text-2xl font-black mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#FF1AD8] group-hover:via-[#9D00FF] group-hover:to-[#00E5FF] transition-all duration-300 flex items-center flex-wrap gap-2">
+                  <h4 className="relative z-10 text-2xl font-black mb-2 text-white group-hover:text-[#00E5FF] transition-colors duration-300 flex items-center flex-wrap gap-2">
                     {service.title}
                     {service.id === "interior-detailing" && (
                       <span className="badge-gold inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider">
@@ -1280,7 +1279,7 @@ export default function Home() {
                       </span>
                     )}
                     {service.id === "apex-express-interior-detailing" && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] text-white group-hover:bg-none group-hover:bg-white group-hover:text-[#0a0a0a] transition-colors">
+                      <span className="badge-gold inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider">
                         <Zap className="w-3 h-3" /> Express
                       </span>
                     )}
@@ -1296,7 +1295,7 @@ export default function Home() {
                     </p>
                   </div>
                   {service.pricingDetails && (
-                    <div className="relative z-10 mb-4 text-sm text-gray-300 bg-[#FF1AD8]/[0.06] border border-[#FF1AD8]/15 p-3 rounded-lg">
+                    <div className="relative z-10 mb-4 text-sm text-gray-300 bg-white/[0.03] border border-white/10 p-3 rounded-lg">
                       {service.pricingDetails.map((detail, i) => (
                         <p key={i} className="text-xs mb-1">{detail}</p>
                       ))}

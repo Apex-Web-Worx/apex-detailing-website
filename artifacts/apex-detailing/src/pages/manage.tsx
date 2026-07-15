@@ -543,7 +543,7 @@ function ReschedulePanel({
                   disabled={disabled}
                   className={`p-3 rounded-xl text-center transition ${
                     isPicked
-                      ? "bg-gradient-to-br from-[#FF1AD8] to-[#00E5FF] text-white"
+                      ? "bg-[#FF1AD8] text-white"
                       : disabled
                         ? "bg-white/[0.02] text-gray-600 cursor-not-allowed opacity-50"
                         : "bg-white/[0.04] hover:bg-white/[0.08] text-white"
@@ -593,7 +593,7 @@ function ReschedulePanel({
                   disabled={!available}
                   className={`py-3 rounded-xl font-bold transition text-sm ${
                     isPicked
-                      ? "bg-gradient-to-br from-[#FF1AD8] to-[#00E5FF] text-white"
+                      ? "bg-[#FF1AD8] text-white"
                       : available
                         ? "bg-white/[0.04] hover:bg-white/[0.08] text-white border border-white/10"
                         : "bg-white/[0.02] text-gray-600 cursor-not-allowed line-through"
@@ -656,7 +656,7 @@ function RescheduledView({ booking }: { booking: Booking }) {
       : new Date(booking.scheduledAt as unknown as string).toISOString();
   return (
     <section className="text-center max-w-xl mx-auto pt-8">
-      <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-[#FF1AD8] to-[#00E5FF] flex items-center justify-center mb-6 shadow-2xl shadow-[#00E5FF]/30">
+      <div className="w-16 h-16 mx-auto rounded-full bg-[#FF1AD8] flex items-center justify-center mb-6 shadow-2xl shadow-[#FF1AD8]/25">
         <Check className="w-8 h-8 text-white" />
       </div>
       <h1 className="text-3xl font-black mb-3">You're rescheduled!</h1>
@@ -697,7 +697,7 @@ function Row({
       <span
         className={`text-right font-semibold ${
           highlight
-            ? "text-lg bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF] bg-clip-text text-transparent"
+            ? "text-lg text-white"
             : "text-white"
         }`}
       >
