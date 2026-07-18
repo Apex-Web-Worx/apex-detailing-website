@@ -167,7 +167,7 @@
   }
 }
 
-/* Mobile: single-shadow idle + occasional sheen (no hover rely) */
+/* Occasional sheen loop (all viewports) + cheaper mobile idle */
 @keyframes brand-logo-idle-mobile {
   0%, 100% {
     transform: translateY(0) scale(1);
