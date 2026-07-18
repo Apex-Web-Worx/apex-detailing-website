@@ -30,7 +30,7 @@ export default function BrandLogo({
       : `${base}images/logo-nav.png`;
 
   return (
-    <picture>
+    <picture className="contents">
       <source srcSet={webp} type="image/webp" />
       <img
         src={png}

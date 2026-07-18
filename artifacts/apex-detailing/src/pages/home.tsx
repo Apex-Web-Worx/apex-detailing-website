@@ -956,7 +956,7 @@ export default function Home() {
               <BrandLogo
                 variant="nav"
                 priority
-                className="brand-logo-nav__mark relative z-10 h-16 md:h-24 lg:h-[6.5rem] w-auto max-w-[9rem] md:max-w-[12rem] object-contain opacity-100"
+                className="brand-logo-nav__mark h-16 md:h-24 lg:h-[6.5rem] w-auto max-w-[9rem] md:max-w-[12rem] object-contain opacity-100"
               />
               <span className="brand-logo-nav__sheen" aria-hidden="true" />
             </div>
