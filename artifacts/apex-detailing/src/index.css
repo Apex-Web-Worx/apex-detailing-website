@@ -198,6 +198,25 @@
   }
 }
 
+/* Magenta / purple / cyan color lines sweeping left → right */
+@keyframes brand-logo-color-streaks {
+  0%,
+  52% {
+    transform: translateX(-140%) skewX(-18deg);
+    opacity: 0;
+  }
+  58% {
+    opacity: 1;
+  }
+  86% {
+    opacity: 0.95;
+  }
+  100% {
+    transform: translateX(160%) skewX(-18deg);
+    opacity: 0;
+  }
+}
+
 @keyframes header-shine {
   0%, 100% {
     text-shadow: 0 0 0.6rem rgba(0, 229, 255, 0.35);
@@ -309,7 +328,58 @@
     animation: brand-logo-sheen-loop 5.2s ease-in-out 1.2s infinite;
   }
 
-  /* Desktop / fine pointer: hover spectrum + quick sheen */
+  /* Color lines (magenta → purple → cyan) traveling right from the logo */
+  .brand-logo-nav__streaks {
+    position: absolute;
+    inset: -25% -70%;
+    z-index: 4;
+    pointer-events: none;
+    overflow: visible;
+    transform: translateX(-140%) skewX(-18deg);
+    opacity: 0;
+    animation: brand-logo-color-streaks 6.4s ease-in-out 2s infinite;
+    will-change: transform, opacity;
+  }
+
+  .brand-logo-nav__streaks::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        105deg,
+        transparent 36%,
+        rgba(255, 26, 216, 0.15) 38%,
+        #ff1ad8 39.2%,
+        #ff1ad8 40.6%,
+        rgba(255, 26, 216, 0.15) 42%,
+        transparent 44%
+      ),
+      linear-gradient(
+        105deg,
+        transparent 44%,
+        rgba(157, 0, 255, 0.15) 46%,
+        #9d00ff 47.2%,
+        #9d00ff 48.6%,
+        rgba(157, 0, 255, 0.15) 50%,
+        transparent 52%
+      ),
+      linear-gradient(
+        105deg,
+        transparent 52%,
+        rgba(0, 229, 255, 0.15) 54%,
+        #00e5ff 55.2%,
+        #00e5ff 56.6%,
+        rgba(0, 229, 255, 0.15) 58%,
+        transparent 60%
+      );
+    filter:
+      drop-shadow(0 0 0.35rem rgba(255, 26, 216, 0.85))
+      drop-shadow(0 0 0.55rem rgba(0, 229, 255, 0.65));
+    mix-blend-mode: screen;
+  }
+
+  /* Desktop / fine pointer: hover spectrum + quick sheen / streaks */
   @media (hover: hover) and (pointer: fine) {
     .brand-logo-nav:hover .brand-logo-nav__mark,
     .brand-logo-nav:focus-within .brand-logo-nav__mark {
@@ -319,6 +389,11 @@
     .brand-logo-nav:hover .brand-logo-nav__sheen,
     .brand-logo-nav:focus-within .brand-logo-nav__sheen {
       animation: brand-logo-sheen 1.05s ease-in-out;
+    }
+
+    .brand-logo-nav:hover .brand-logo-nav__streaks,
+    .brand-logo-nav:focus-within .brand-logo-nav__streaks {
+      animation: brand-logo-color-streaks 1.35s ease-in-out;
     }
   }
 
@@ -331,9 +406,13 @@
     .brand-logo-nav:active .brand-logo-nav__sheen {
       animation: brand-logo-sheen 0.95s ease-in-out;
     }
+
+    .brand-logo-nav:active .brand-logo-nav__streaks {
+      animation: brand-logo-color-streaks 1.2s ease-in-out;
+    }
   }
 
-  /* Phones: cheaper idle glow */
+  /* Phones: cheaper idle glow; slightly snappier color lines */
   @media (max-width: 640px) {
     .brand-logo-nav {
       margin-inline: -0.15rem;
@@ -350,6 +429,12 @@
     .brand-logo-nav__sheen {
       animation-duration: 5.8s;
     }
+
+    .brand-logo-nav__streaks {
+      inset: -30% -85%;
+      animation-duration: 5.8s;
+      animation-delay: 1.4s;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -363,7 +448,11 @@
     .brand-logo-nav__sheen,
     .brand-logo-nav:hover .brand-logo-nav__sheen,
     .brand-logo-nav:focus-within .brand-logo-nav__sheen,
-    .brand-logo-nav:active .brand-logo-nav__sheen {
+    .brand-logo-nav:active .brand-logo-nav__sheen,
+    .brand-logo-nav__streaks,
+    .brand-logo-nav:hover .brand-logo-nav__streaks,
+    .brand-logo-nav:focus-within .brand-logo-nav__streaks,
+    .brand-logo-nav:active .brand-logo-nav__streaks {
       animation: none !important;
       opacity: 0 !important;
     }
