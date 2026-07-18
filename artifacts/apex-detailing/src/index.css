@@ -285,9 +285,11 @@
     mix-blend-mode: screen;
     opacity: 0;
     transform: translateX(-130%) skewX(-16deg);
+    /* Auto shine on all viewports — was mobile-only, so desktop looked “dead” */
+    animation: brand-logo-sheen-mobile 7.5s ease-in-out 2.2s infinite;
   }
 
-  /* Desktop / fine pointer: hover spectrum + sheen */
+  /* Desktop / fine pointer: hover spectrum + quick sheen */
   @media (hover: hover) and (pointer: fine) {
     .brand-logo-nav:hover .brand-logo-nav__mark,
     .brand-logo-nav:focus-within .brand-logo-nav__mark {
@@ -311,7 +313,7 @@
     }
   }
 
-  /* Phones: cheaper glow + auto sheen so the shine still reads without hover */
+  /* Phones: cheaper idle glow; keep auto sheen with a bit more presence */
   @media (max-width: 640px) {
     .brand-logo-nav {
       /* Keep glow from clipping against tight nav row */
@@ -328,7 +330,6 @@
 
     .brand-logo-nav__sheen {
       inset: -12% -28%;
-      animation: brand-logo-sheen-mobile 7.5s ease-in-out 2.2s infinite;
       background: linear-gradient(
         105deg,
         transparent 24%,
