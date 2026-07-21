@@ -556,12 +556,11 @@ function BlockedDatesPanel({ token }: { token: string }) {
       </div>
       <p className="text-sm text-gray-400 mb-5">
         Mark a date as closed (vacation, personal day, etc.) so customers can't book it. Sundays are already closed automatically.
-        Name, surname, and phone are optional — use them when the day is held for someone specific.
       </p>
 
       <form
         onSubmit={add}
-        className="mb-5 p-4 rounded-2xl border border-white/10 bg-white/[0.02] space-y-3"
+        className="mb-5 p-4 rounded-2xl border border-white/10 bg-white/[0.02] space-y-4"
       >
         <div className="flex flex-col sm:flex-row gap-3">
           <input
@@ -581,36 +580,48 @@ function BlockedDatesPanel({ token }: { token: string }) {
             className={`flex-1 ${fieldClass}`}
           />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Name (optional)"
-            maxLength={100}
-            autoComplete="given-name"
-            className={fieldClass}
-          />
-          <input
-            type="text"
-            value={surname}
-            onChange={(e) => setSurname(e.target.value)}
-            placeholder="Surname (optional)"
-            maxLength={100}
-            autoComplete="family-name"
-            className={fieldClass}
-          />
-          <input
-            type="tel"
-            value={phone}
-            onChange={(e) => setPhone(formatPhone(e.target.value))}
-            placeholder="Phone (optional)"
-            maxLength={14}
-            autoComplete="tel"
-            inputMode="tel"
-            className={fieldClass}
-          />
+
+        <div className="rounded-xl border border-[#00E5FF]/25 bg-[#00E5FF]/[0.04] p-3 space-y-3">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider text-[#00E5FF]">
+              Contact for this day (optional)
+            </p>
+            <p className="text-xs text-gray-400 mt-1">
+              If you add a phone number, we send them an appointment confirmation text.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Name"
+              maxLength={100}
+              autoComplete="given-name"
+              className={fieldClass}
+            />
+            <input
+              type="text"
+              value={surname}
+              onChange={(e) => setSurname(e.target.value)}
+              placeholder="Surname"
+              maxLength={100}
+              autoComplete="family-name"
+              className={fieldClass}
+            />
+            <input
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(formatPhone(e.target.value))}
+              placeholder="Phone"
+              maxLength={14}
+              autoComplete="tel"
+              inputMode="tel"
+              className={fieldClass}
+            />
+          </div>
         </div>
+
         <div className="flex justify-end">
           <button
             type="submit"

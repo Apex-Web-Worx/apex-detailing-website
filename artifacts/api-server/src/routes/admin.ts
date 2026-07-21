@@ -24,13 +24,14 @@ import {
   isDayWholeDayLocked,
   hasOtherConfirmedBookingOnDate,
 } from "../lib/availability-rules";
-import { type BookingEmailData } from "../lib/email";
+import { type BookingEmailData, formatDateLong } from "../lib/email";
 import {
   syncBookingCalendar,
   createBlockedDateEvent,
   deleteBlockedDateEvent,
 } from "../lib/calendar";
 import { notifyBookingCancelled, notifyBookingRescheduled } from "../lib/notify";
+import { sendSms, smsBlockedDateConfirm } from "../lib/sms";
 
 const router: IRouter = Router();
 
@@ -465,6 +466,21 @@ router.post("/admin/blocked-dates", requireAdmin, async (req, res) => {
           .where(eq(blockedDatesTable.id, created.id));
       }
     });
+
+    // If admin entered a phone, send an appointment confirmation SMS to that number.
+    if (phoneStr) {
+      const customerName = [nameStr, surnameStr].filter(Boolean).join(" ").trim();
+      void sendSms({
+        to: phoneStr,
+        body: smsBlockedDateConfirm({
+          customerName,
+          dateLong: formatDateLong(date),
+          reason: reasonStr || undefined,
+        }),
+        context: `blocked-date-confirm ${date}`,
+      });
+    }
+
     res.status(201).json(created);
   } catch (err) {
     let cur: unknown = err;
