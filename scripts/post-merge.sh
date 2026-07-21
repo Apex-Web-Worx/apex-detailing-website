@@ -1,4 +1,5 @@
 #!/bin/bash
 set -e
 pnpm install --frozen-lockfile
-pnpm --filter db push
+# Package name is @workspace/db (not "db") — wrong filter silently skipped schema pushes.
+pnpm --filter @workspace/db push
