@@ -34,11 +34,16 @@ export default function NotFound() {
             className="group flex flex-col items-center gap-3 hover:opacity-100 transition-all"
             aria-label="APEX WEB WORX"
           >
-            <img
-              src={`${import.meta.env.BASE_URL}images/apex-webworx-logo.png`}
-              alt="APEX WEB WORX"
-              className="h-14 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity"
-            />
+            <picture>
+              <source srcSet={`${import.meta.env.BASE_URL}images/apex-webworx-logo.webp`} type="image/webp" />
+              <img
+                src={`${import.meta.env.BASE_URL}images/apex-webworx-logo.png`}
+                alt="APEX WEB WORX"
+                className="h-14 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
             <p className="text-gray-500 text-xs font-medium uppercase tracking-widest group-hover:text-white transition-colors">
               Designed and developed by <span className="text-[#00E5FF] font-bold">APEX WEB WORX</span>
             </p>
