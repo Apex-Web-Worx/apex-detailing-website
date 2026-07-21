@@ -465,6 +465,9 @@ function BlockedDatesPanel({ token }: { token: string }) {
   });
   const [date, setDate] = useState("");
   const [reason, setReason] = useState("");
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [phone, setPhone] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -477,18 +480,43 @@ function BlockedDatesPanel({ token }: { token: string }) {
       queryKey: getAdminListBlockedDatesQueryKey(),
     });
 
+  const formatPhone = (raw: string) => {
+    const digits = raw.replace(/\D/g, "").slice(0, 10);
+    if (digits.length <= 3) return digits;
+    if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+  };
+
   const add = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!date) return;
     setSubmitting(true);
     setError(null);
     try {
-      await adminAddBlockedDate(
-        { date, reason: reason.trim() },
-        { headers: { "x-admin-token": token } },
-      );
+      const payload: {
+        date: string;
+        reason?: string;
+        name?: string;
+        surname?: string;
+        phone?: string;
+      } = { date };
+      const reasonTrim = reason.trim();
+      const nameTrim = name.trim();
+      const surnameTrim = surname.trim();
+      const phoneTrim = phone.trim();
+      if (reasonTrim) payload.reason = reasonTrim;
+      if (nameTrim) payload.name = nameTrim;
+      if (surnameTrim) payload.surname = surnameTrim;
+      if (phoneTrim) payload.phone = phoneTrim;
+
+      await adminAddBlockedDate(payload, {
+        headers: { "x-admin-token": token },
+      });
       setDate("");
       setReason("");
+      setName("");
+      setSurname("");
+      setPhone("");
       refresh();
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Could not block date";
@@ -517,6 +545,9 @@ function BlockedDatesPanel({ token }: { token: string }) {
     }
   };
 
+  const fieldClass =
+    "px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#00E5FF] focus:outline-none focus:ring-2 focus:ring-[#00E5FF]/20 transition text-white placeholder:text-gray-500";
+
   return (
     <section className="mt-12 pt-8 border-t border-white/10">
       <div className="flex items-center gap-3 mb-2">
@@ -525,40 +556,75 @@ function BlockedDatesPanel({ token }: { token: string }) {
       </div>
       <p className="text-sm text-gray-400 mb-5">
         Mark a date as closed (vacation, personal day, etc.) so customers can't book it. Sundays are already closed automatically.
+        Name, surname, and phone are optional — use them when the day is held for someone specific.
       </p>
 
       <form
         onSubmit={add}
-        className="flex flex-col sm:flex-row gap-3 mb-5 p-4 rounded-2xl border border-white/10 bg-white/[0.02]"
+        className="mb-5 p-4 rounded-2xl border border-white/10 bg-white/[0.02] space-y-3"
       >
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          min={today}
-          required
-          className="px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#00E5FF] focus:outline-none focus:ring-2 focus:ring-[#00E5FF]/20 transition text-white"
-        />
-        <input
-          type="text"
-          value={reason}
-          onChange={(e) => setReason(e.target.value)}
-          placeholder="Reason (optional, e.g. Family trip)"
-          maxLength={200}
-          className="flex-1 px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#00E5FF] focus:outline-none focus:ring-2 focus:ring-[#00E5FF]/20 transition text-white placeholder:text-gray-500"
-        />
-        <button
-          type="submit"
-          disabled={!date || submitting}
-          className="btn-cyber btn-cyber-sm disabled:opacity-50 whitespace-nowrap"
-        >
-          {submitting ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            <Plus className="w-4 h-4" />
-          )}
-          <span>Block date</span>
-        </button>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            min={today}
+            required
+            className={fieldClass}
+          />
+          <input
+            type="text"
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            placeholder="Reason (optional, e.g. Family trip)"
+            maxLength={200}
+            className={`flex-1 ${fieldClass}`}
+          />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Name (optional)"
+            maxLength={100}
+            autoComplete="given-name"
+            className={fieldClass}
+          />
+          <input
+            type="text"
+            value={surname}
+            onChange={(e) => setSurname(e.target.value)}
+            placeholder="Surname (optional)"
+            maxLength={100}
+            autoComplete="family-name"
+            className={fieldClass}
+          />
+          <input
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(formatPhone(e.target.value))}
+            placeholder="Phone (optional)"
+            maxLength={14}
+            autoComplete="tel"
+            inputMode="tel"
+            className={fieldClass}
+          />
+        </div>
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            disabled={!date || submitting}
+            className="btn-cyber btn-cyber-sm disabled:opacity-50 whitespace-nowrap"
+          >
+            {submitting ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Plus className="w-4 h-4" />
+            )}
+            <span>Block date</span>
+          </button>
+        </div>
       </form>
 
       {error && (
@@ -599,6 +665,7 @@ function BlockedDateCard({
   blocked: BlockedDate;
   onRemove: () => void;
 }) {
+  const contactName = [blocked.name, blocked.surname].filter(Boolean).join(" ");
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 flex items-start justify-between gap-3">
       <div className="min-w-0 flex-1">
@@ -608,6 +675,13 @@ function BlockedDateCard({
         </div>
         {blocked.reason && (
           <p className="text-sm text-gray-400 truncate">{blocked.reason}</p>
+        )}
+        {(contactName || blocked.phone) && (
+          <p className="text-xs text-gray-500 mt-1 truncate">
+            {contactName}
+            {contactName && blocked.phone ? " · " : ""}
+            {blocked.phone}
+          </p>
         )}
       </div>
       <button

@@ -422,15 +422,29 @@ function addOneDay(yyyyMmDd: string): string {
 export async function createBlockedDateEvent(
   date: string,
   reason: string,
+  contact?: {
+    name?: string | null;
+    surname?: string | null;
+    phone?: string | null;
+  },
 ): Promise<string | null> {
   await ensureCalendarShared();
   const summary = reason.trim().length > 0
     ? `Shop Closed — ${reason.trim()}`
     : "Shop Closed";
+  const contactParts: string[] = [];
+  const fullName = [contact?.name?.trim(), contact?.surname?.trim()]
+    .filter(Boolean)
+    .join(" ");
+  if (fullName) contactParts.push(`Contact: ${fullName}`);
+  if (contact?.phone?.trim()) contactParts.push(`Phone: ${contact.phone.trim()}`);
+  const description = [
+    "Day blocked in the Apex Detailing admin — no bookings will be accepted.",
+    ...contactParts,
+  ].join("\n");
   const body = {
     summary,
-    description:
-      "Day blocked in the Apex Detailing admin — no bookings will be accepted.",
+    description,
     start: { date },
     end: { date: addOneDay(date) },
     transparency: "opaque",
