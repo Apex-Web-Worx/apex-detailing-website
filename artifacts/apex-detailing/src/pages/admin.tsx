@@ -470,6 +470,7 @@ function BlockedDatesPanel({ token }: { token: string }) {
   const [phone, setPhone] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successNote, setSuccessNote] = useState<string | null>(null);
 
   const blocked = data ?? [];
   const today = todayDateString();
@@ -492,6 +493,7 @@ function BlockedDatesPanel({ token }: { token: string }) {
     if (!date) return;
     setSubmitting(true);
     setError(null);
+    setSuccessNote(null);
     try {
       const payload: {
         date: string;
@@ -517,6 +519,11 @@ function BlockedDatesPanel({ token }: { token: string }) {
       setName("");
       setSurname("");
       setPhone("");
+      setSuccessNote(
+        phoneTrim
+          ? `Date blocked. Confirmation text sent to ${phoneTrim}.`
+          : "Date blocked.",
+      );
       refresh();
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Could not block date";
