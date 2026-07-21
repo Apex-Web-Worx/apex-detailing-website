@@ -11,5 +11,11 @@ export interface BlockedDate {
   /** YYYY-MM-DD */
   date: string;
   reason: string;
+  /** Optional first name for who the day is held for */
+  name?: string | null;
+  /** Optional surname for who the day is held for */
+  surname?: string | null;
+  /** Optional phone number for who the day is held for */
+  phone?: string | null;
   createdAt: Date;
 }

@@ -6,6 +6,10 @@ export const blockedDatesTable = pgTable("blocked_dates", {
   id: serial("id").primaryKey(),
   date: text("date").notNull().unique(),
   reason: text("reason").notNull().default(""),
+  /** Optional contact — who the day is reserved/held for (not required). */
+  name: text("name"),
+  surname: text("surname"),
+  phone: text("phone"),
   googleEventId: text("google_event_id"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()

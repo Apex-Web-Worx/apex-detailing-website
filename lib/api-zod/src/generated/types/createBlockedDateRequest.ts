@@ -10,4 +10,10 @@ export interface CreateBlockedDateRequest {
   /** YYYY-MM-DD */
   date: string;
   reason?: string;
+  /** Optional first name (not required) */
+  name?: string;
+  /** Optional surname (not required) */
+  surname?: string;
+  /** Optional phone number (not required) */
+  phone?: string;
 }

@@ -24,13 +24,14 @@ import {
   isDayWholeDayLocked,
   hasOtherConfirmedBookingOnDate,
 } from "../lib/availability-rules";
-import { type BookingEmailData } from "../lib/email";
+import { type BookingEmailData, formatDateLong } from "../lib/email";
 import {
   syncBookingCalendar,
   createBlockedDateEvent,
   deleteBlockedDateEvent,
 } from "../lib/calendar";
 import { notifyBookingCancelled, notifyBookingRescheduled } from "../lib/notify";
+import { sendSms, smsBlockedDateConfirm } from "../lib/sms";
 
 const router: IRouter = Router();
 
@@ -416,9 +417,12 @@ router.get("/admin/blocked-dates", requireAdmin, async (_req, res) => {
 });
 
 router.post("/admin/blocked-dates", requireAdmin, async (req, res) => {
-  const { date, reason } = (req.body ?? {}) as {
+  const { date, reason, name, surname, phone } = (req.body ?? {}) as {
     date?: unknown;
     reason?: unknown;
+    name?: unknown;
+    surname?: unknown;
+    phone?: unknown;
   };
   if (typeof date !== "string" || !parseDateString(date)) {
     res.status(400).json({ message: "Invalid date. Use YYYY-MM-DD." });
@@ -429,16 +433,32 @@ router.post("/admin/blocked-dates", requireAdmin, async (req, res) => {
     return;
   }
   const reasonStr =
-    typeof reason === "string" ? reason.slice(0, 200) : "";
+    typeof reason === "string" ? reason.trim().slice(0, 200) : "";
+  const nameStr =
+    typeof name === "string" ? name.trim().slice(0, 100) : "";
+  const surnameStr =
+    typeof surname === "string" ? surname.trim().slice(0, 100) : "";
+  const phoneStr =
+    typeof phone === "string" ? phone.trim().slice(0, 40) : "";
   try {
     const [created] = await db
       .insert(blockedDatesTable)
-      .values({ date, reason: reasonStr })
+      .values({
+        date,
+        reason: reasonStr,
+        name: nameStr || null,
+        surname: surnameStr || null,
+        phone: phoneStr || null,
+      })
       .returning();
     // Fire-and-forget calendar sync so admin response stays fast even if
     // Google is slow. On success we persist the event id back to the row
     // so the matching DELETE can clean it up later.
-    void createBlockedDateEvent(date, reasonStr).then(async (eventId) => {
+    void createBlockedDateEvent(date, reasonStr, {
+      name: nameStr || null,
+      surname: surnameStr || null,
+      phone: phoneStr || null,
+    }).then(async (eventId) => {
       if (eventId) {
         await db
           .update(blockedDatesTable)
@@ -446,6 +466,21 @@ router.post("/admin/blocked-dates", requireAdmin, async (req, res) => {
           .where(eq(blockedDatesTable.id, created.id));
       }
     });
+
+    // If admin entered a phone, send an appointment confirmation SMS to that number.
+    if (phoneStr) {
+      const customerName = [nameStr, surnameStr].filter(Boolean).join(" ").trim();
+      void sendSms({
+        to: phoneStr,
+        body: smsBlockedDateConfirm({
+          customerName,
+          dateLong: formatDateLong(date),
+          reason: reasonStr || undefined,
+        }),
+        context: `blocked-date-confirm ${date}`,
+      });
+    }
+
     res.status(201).json(created);
   } catch (err) {
     let cur: unknown = err;

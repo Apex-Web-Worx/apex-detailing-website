@@ -293,6 +293,18 @@ export const AdminListBlockedDatesResponseItem = zod.object({
   id: zod.number(),
   date: zod.string().describe("YYYY-MM-DD"),
   reason: zod.string(),
+  name: zod
+    .string()
+    .nullish()
+    .describe("Optional first name for who the day is held for"),
+  surname: zod
+    .string()
+    .nullish()
+    .describe("Optional surname for who the day is held for"),
+  phone: zod
+    .string()
+    .nullish()
+    .describe("Optional phone number for who the day is held for"),
   createdAt: zod.date(),
 });
 export const AdminListBlockedDatesResponse = zod.array(
@@ -309,6 +321,12 @@ export const AdminAddBlockedDateHeader = zod.object({
 export const AdminAddBlockedDateBody = zod.object({
   date: zod.string().describe("YYYY-MM-DD"),
   reason: zod.string().optional(),
+  name: zod.string().optional().describe("Optional first name (not required)"),
+  surname: zod.string().optional().describe("Optional surname (not required)"),
+  phone: zod
+    .string()
+    .optional()
+    .describe("Optional phone number (not required)"),
 });
 
 /**

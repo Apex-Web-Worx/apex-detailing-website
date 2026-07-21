@@ -751,6 +751,18 @@ components:
           description: YYYY-MM-DD
         reason:
           type: string
+        name:
+          type: string
+          description: Optional first name for who the day is held for
+          nullable: true
+        surname:
+          type: string
+          description: Optional surname for who the day is held for
+          nullable: true
+        phone:
+          type: string
+          description: Optional phone number for who the day is held for
+          nullable: true
         createdAt:
           type: string
           format: date-time
@@ -767,6 +779,15 @@ components:
           description: YYYY-MM-DD
         reason:
           type: string
+        name:
+          type: string
+          description: Optional first name (not required)
+        surname:
+          type: string
+          description: Optional surname (not required)
+        phone:
+          type: string
+          description: Optional phone number (not required)
       required:
         - date
     UpdateBookingRequest:

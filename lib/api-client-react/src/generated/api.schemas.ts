@@ -60,6 +60,12 @@ export interface BlockedDate {
   /** YYYY-MM-DD */
   date: string;
   reason: string;
+  /** Optional first name for who the day is held for */
+  name?: string | null;
+  /** Optional surname for who the day is held for */
+  surname?: string | null;
+  /** Optional phone number for who the day is held for */
+  phone?: string | null;
   createdAt: string;
 }
 
@@ -67,6 +73,12 @@ export interface CreateBlockedDateRequest {
   /** YYYY-MM-DD */
   date: string;
   reason?: string;
+  /** Optional first name (not required) */
+  name?: string;
+  /** Optional surname (not required) */
+  surname?: string;
+  /** Optional phone number (not required) */
+  phone?: string;
 }
 
 /**

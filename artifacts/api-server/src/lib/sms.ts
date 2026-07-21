@@ -204,6 +204,19 @@ export function smsCustomerCancel(b: TemplateBooking, by: "customer" | "owner"):
   return `Apex Detailing: Your appointment for ${b.dateLong} at ${b.time12} has been cancelled. ${tail} ${STOP}`;
 }
 
+/** Admin held/blocked a day for someone — confirmation SMS when a phone is provided. */
+export function smsBlockedDateConfirm(args: {
+  customerName: string;
+  dateLong: string;
+  reason?: string;
+}): string {
+  const who = args.customerName.trim() || "there";
+  const reasonBit = args.reason?.trim()
+    ? ` (${args.reason.trim()})`
+    : "";
+  return `Apex Detailing: Hi ${who}, your appointment is confirmed for ${args.dateLong}${reasonBit}. Drop-off: ${SHOP_ADDRESS}. Questions? Call (417) 527-6165. ${STOP}`;
+}
+
 interface OwnerTemplateBooking extends TemplateBooking {
   customerPhone: string;
   vehicle: string;
