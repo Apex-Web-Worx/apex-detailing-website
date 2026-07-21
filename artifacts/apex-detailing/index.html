@@ -143,6 +143,10 @@
     </script>
     <style>
       html, body { background: #050505; margin: 0; }
+      /* Hide React tree until splash dismisses so users never see a half-built page */
+      html.is-booting #root {
+        visibility: hidden;
+      }
       #app-loading {
         position: fixed; inset: 0;
         display: flex; align-items: center; justify-content: center;
@@ -155,7 +159,7 @@
         overflow: hidden;
         contain: layout paint;
         opacity: 1;
-        transition: opacity 0.4s ease;
+        transition: opacity 0.45s ease;
       }
       #app-loading.is-done {
         opacity: 0;
@@ -382,23 +386,29 @@
           field.appendChild(frag);
         }
 
-        // Keep splash until: logo decoded + app mounted + short minimum time
+        // Keep splash until first viewport is ready:
+        // logo decoded + React painted + fonts + critical content (hero on home) + min time
         var splash = document.getElementById("app-loading");
         var logo = document.getElementById("splash-logo");
         var logoReady = false;
         var appReady = false;
+        var fontsReady = false;
+        var contentReady = false;
         var minTimeDone = false;
         var dismissed = false;
 
+        document.documentElement.classList.add("is-booting");
+
         function dismiss() {
           if (dismissed || !splash) return;
-          if (!logoReady || !appReady || !minTimeDone) return;
+          if (!logoReady || !appReady || !fontsReady || !contentReady || !minTimeDone) return;
           dismissed = true;
+          document.documentElement.classList.remove("is-booting");
           splash.classList.add("is-done");
           splash.setAttribute("aria-busy", "false");
           window.setTimeout(function () {
             if (splash && splash.parentNode) splash.parentNode.removeChild(splash);
-          }, 420);
+          }, 480);
         }
 
         function markLogoReady() {
@@ -418,22 +428,42 @@
           logoReady = true;
         }
 
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(function () {
+            fontsReady = true;
+            dismiss();
+          }).catch(function () {
+            fontsReady = true;
+            dismiss();
+          });
+        } else {
+          fontsReady = true;
+        }
+
         window.setTimeout(function () {
           minTimeDone = true;
           dismiss();
-        }, 700);
+        }, 900);
 
-        // Hard cap so a hung asset never blocks the site
+        // Hard cap so a hung asset never blocks the site forever
         window.setTimeout(function () {
           logoReady = true;
           appReady = true;
+          fontsReady = true;
+          contentReady = true;
           minTimeDone = true;
           if (logo) logo.classList.add("is-ready");
           dismiss();
-        }, 4500);
+        }, 10000);
 
         window.__APEX_MARK_APP_READY__ = function () {
           appReady = true;
+          dismiss();
+        };
+
+        // Critical first-viewport media (hero on home) — set by React once decoded
+        window.__APEX_MARK_CONTENT_READY__ = function () {
+          contentReady = true;
           dismiss();
         };
       })();

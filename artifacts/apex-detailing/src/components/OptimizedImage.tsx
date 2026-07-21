@@ -1,4 +1,4 @@
-import type { CSSProperties, ImgHTMLAttributes } from "react";
+import { forwardRef, type CSSProperties, type ImgHTMLAttributes } from "react";
 
 type OptimizedImageProps = Omit<
   ImgHTMLAttributes<HTMLImageElement>,
@@ -38,56 +38,60 @@ function toWebpPath(src: string): string | null {
  * Serves WebP when available with the original format as fallback.
  * Prefer paths under `public/images/` that have a matching `.webp` sibling.
  */
-export default function OptimizedImage({
-  src,
-  webpSrc,
-  alt,
-  className,
-  style,
-  sizes,
-  loading = "lazy",
-  decoding = "async",
-  ...rest
-}: OptimizedImageProps) {
-  const resolved = withBase(src);
-  const webp = webpSrc
-    ? withBase(webpSrc)
-    : (() => {
-        const derived = toWebpPath(resolved);
-        return derived;
-      })();
+const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(
+  function OptimizedImage(
+    {
+      src,
+      webpSrc,
+      alt,
+      className,
+      style,
+      sizes,
+      loading = "lazy",
+      decoding = "async",
+      ...rest
+    },
+    ref,
+  ) {
+    const resolved = withBase(src);
+    const webp = webpSrc ? withBase(webpSrc) : toWebpPath(resolved);
 
-  if (!webp) {
+    if (!webp) {
+      return (
+        <img
+          ref={ref}
+          src={resolved}
+          alt={alt ?? ""}
+          className={className}
+          style={style}
+          loading={loading}
+          decoding={decoding}
+          sizes={sizes}
+          {...rest}
+        />
+      );
+    }
+
     return (
-      <img
-        src={resolved}
-        alt={alt ?? ""}
-        className={className}
-        style={style}
-        loading={loading}
-        decoding={decoding}
-        sizes={sizes}
-        {...rest}
-      />
+      <picture>
+        <source srcSet={webp} type="image/webp" sizes={sizes} />
+        <img
+          ref={ref}
+          src={resolved}
+          alt={alt ?? ""}
+          className={className}
+          style={style}
+          loading={loading}
+          decoding={decoding}
+          sizes={sizes}
+          {...rest}
+        />
+      </picture>
     );
-  }
+  },
+);
 
-  return (
-    <picture>
-      <source srcSet={webp} type="image/webp" sizes={sizes} />
-      <img
-        src={resolved}
-        alt={alt ?? ""}
-        className={className}
-        style={style}
-        loading={loading}
-        decoding={decoding}
-        sizes={sizes}
-        {...rest}
-      />
-    </picture>
-  );
-}
+export default OptimizedImage;
 
 /** Build a public image URL under BASE_URL. */
 export function imageUrl(path: string): string {
