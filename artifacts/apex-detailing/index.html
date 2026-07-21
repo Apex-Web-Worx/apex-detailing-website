@@ -95,7 +95,8 @@
       })();
     </script>
     <link rel="preload" as="image" href="/images/logo-splash.webp" type="image/webp" fetchpriority="high" />
-    <link rel="preload" as="image" href="/images/hero-2.webp" type="image/webp" fetchpriority="high" />
+    <link rel="preload" as="image" href="/images/hero-2.sm.webp" type="image/webp" fetchpriority="high" />
+    <link rel="preload" as="image" href="/images/hero-2.lqip.webp" type="image/webp" fetchpriority="high" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
@@ -386,14 +387,13 @@
           field.appendChild(frag);
         }
 
-        // Keep splash until first viewport is ready:
-        // logo decoded + React painted + fonts + critical content (hero on home) + min time
+        // Keep splash until shell is ready (logo + fonts + React) — do NOT wait on photos.
+        // Photos use LQIP blur-up + mobile .sm.webp so they appear instantly without blocking entry.
         var splash = document.getElementById("app-loading");
         var logo = document.getElementById("splash-logo");
         var logoReady = false;
         var appReady = false;
         var fontsReady = false;
-        var contentReady = false;
         var minTimeDone = false;
         var dismissed = false;
 
@@ -401,7 +401,7 @@
 
         function dismiss() {
           if (dismissed || !splash) return;
-          if (!logoReady || !appReady || !fontsReady || !contentReady || !minTimeDone) return;
+          if (!logoReady || !appReady || !fontsReady || !minTimeDone) return;
           dismissed = true;
           document.documentElement.classList.remove("is-booting");
           splash.classList.add("is-done");
@@ -443,29 +443,25 @@
         window.setTimeout(function () {
           minTimeDone = true;
           dismiss();
-        }, 900);
+        }, 700);
 
         // Hard cap so a hung asset never blocks the site forever
         window.setTimeout(function () {
           logoReady = true;
           appReady = true;
           fontsReady = true;
-          contentReady = true;
           minTimeDone = true;
           if (logo) logo.classList.add("is-ready");
           dismiss();
-        }, 10000);
+        }, 5000);
 
         window.__APEX_MARK_APP_READY__ = function () {
           appReady = true;
           dismiss();
         };
 
-        // Critical first-viewport media (hero on home) — set by React once decoded
-        window.__APEX_MARK_CONTENT_READY__ = function () {
-          contentReady = true;
-          dismiss();
-        };
+        // Kept for compatibility — photos no longer gate the splash
+        window.__APEX_MARK_CONTENT_READY__ = function () {};
       })();
     </script>
     <script type="module" src="/src/main.tsx"></script>

@@ -1,3 +1,7 @@
+/**
+ * Critical first-viewport media used to gate the splash.
+ * Photos no longer block entry — kept as a no-op-compatible API.
+ */
 type ApexBootApi = {
   __APEX_MARK_APP_READY__?: () => void;
   __APEX_MARK_CONTENT_READY__?: () => void;
@@ -12,10 +16,7 @@ export function markAppReady() {
   bootApi().__APEX_MARK_APP_READY__?.();
 }
 
-/**
- * First viewport content is decoded (hero on home, or route shell elsewhere).
- * Splash stays up until this fires so visitors never see a half-loaded page.
- */
+/** @deprecated Photos use LQIP and no longer gate the splash. */
 export function markContentReady() {
   bootApi().__APEX_MARK_CONTENT_READY__?.();
 }

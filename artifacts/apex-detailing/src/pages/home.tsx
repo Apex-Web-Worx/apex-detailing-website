@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
 import {
   Menu,
@@ -23,7 +23,6 @@ import {
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
-import { markContentReady } from "@/lib/bootSplash";
 
 const BOOKING_LINK = "/book";
 const INSTAGRAM_LINK = "https://www.instagram.com/apexdetailing_sf";
@@ -489,26 +488,6 @@ export default function Home() {
   const [openFaq, setOpenFaq] = useState<string | null>(null);
   const [activeFaqCategory, setActiveFaqCategory] = useState<"General" | "Paint Correction">("General");
   const [legalModal, setLegalModal] = useState<"privacy" | "terms" | null>(null);
-  const heroImgRef = useRef<HTMLImageElement | null>(null);
-  const contentReadySent = useRef(false);
-
-  const signalHomeContentReady = () => {
-    if (contentReadySent.current) return;
-    contentReadySent.current = true;
-    markContentReady();
-  };
-
-  // If hero was cached, onLoad may have already fired before React attached — catch that.
-  useEffect(() => {
-    const img = heroImgRef.current;
-    if (img && img.complete && img.naturalWidth > 0) {
-      signalHomeContentReady();
-      return;
-    }
-    // Soft fallback: never leave splash waiting forever if decode events are missed
-    const fallback = window.setTimeout(() => signalHomeContentReady(), 6000);
-    return () => window.clearTimeout(fallback);
-  }, []);
 
   const pageBubbles = useMemo(() => {
     if (typeof window === "undefined") return [];
@@ -1144,9 +1123,6 @@ export default function Home() {
             loading="eager"
             fetchPriority="high"
             decoding="async"
-            ref={heroImgRef}
-            onLoad={() => signalHomeContentReady()}
-            onError={() => signalHomeContentReady()}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/60 via-[#0a0a0a]/80 to-[#0a0a0a]" />
         </div>
