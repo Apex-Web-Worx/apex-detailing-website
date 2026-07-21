@@ -650,6 +650,11 @@ function BlockedDatesPanel({ token }: { token: string }) {
           {error}
         </div>
       )}
+      {successNote && (
+        <div className="mb-4 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-sm">
+          {successNote}
+        </div>
+      )}
 
       {isLoading ? (
         <div className="flex items-center gap-3 text-gray-400 py-6 justify-center">
