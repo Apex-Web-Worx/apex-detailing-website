@@ -1,5 +1,6 @@
 import app from "./app";
 import { startReminderCron } from "./lib/reminders";
+import { ensureBlockedDatesContactColumns } from "./lib/ensure-schema";
 import { runSeed } from "./seed";
 
 const rawPort = process.env["PORT"];
@@ -15,6 +16,12 @@ const port = Number(rawPort);
 if (Number.isNaN(port) || port <= 0) {
   throw new Error(`Invalid PORT value: "${rawPort}"`);
 }
+
+// Bring schema up to date before serving traffic. Missing columns on
+// blocked_dates caused HTTP 500 when admin tried to save contact fields.
+ensureBlockedDatesContactColumns()
+  .then(() => console.log("[schema] blocked_dates contact columns ready"))
+  .catch((err) => console.error("[schema] ensure failed (continuing):", err));
 
 // Auto-seed on startup. The seed is idempotent (upsert by slug + deactivate
 // missing), so re-running on every boot costs ~14 small queries and ensures

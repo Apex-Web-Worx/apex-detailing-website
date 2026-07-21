@@ -499,7 +499,17 @@ router.post("/admin/blocked-dates", requireAdmin, async (req, res) => {
       res.status(409).json({ message: "That date is already blocked." });
       return;
     }
-    throw err;
+    // Postgres undefined_column — schema push hasn't run yet.
+    if (pgCode === "42703") {
+      console.error("[admin] blocked-dates insert missing column:", err);
+      res.status(500).json({
+        message:
+          "Database is missing contact columns. Redeploy the API (or run: pnpm --filter @workspace/db push).",
+      });
+      return;
+    }
+    console.error("[admin] blocked-dates insert failed:", err);
+    res.status(500).json({ message: "Could not block that date." });
   }
 });
 
