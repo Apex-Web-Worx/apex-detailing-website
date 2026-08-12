@@ -3,6 +3,7 @@ import type { Booking, BlockedDate } from "@workspace/api-client-react";
 import { todayDateString } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { addMonths, bookingShopDate, daysInMonth, displayStatus, monthLabel } from "../utils";
+import type { VisualCalendarEvent } from "../useOwnerCalendarEvents";
 import { GhostButton, PrimaryButton } from "./ui";
 
 const DOW = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
@@ -12,6 +13,7 @@ export default function MonthCalendar({
   onMonthChange,
   bookings,
   blockedDates,
+  personalEvents = [],
   selectedDate,
   onSelectDate,
   onBlockDate,
@@ -20,6 +22,7 @@ export default function MonthCalendar({
   onMonthChange: (next: string) => void;
   bookings: Booking[];
   blockedDates: BlockedDate[];
+  personalEvents?: VisualCalendarEvent[];
   selectedDate?: string;
   onSelectDate?: (date: string) => void;
   onBlockDate?: () => void;
@@ -73,6 +76,7 @@ export default function MonthCalendar({
         {cells.map((date, i) => {
           if (!date) return <div key={`e-${i}`} className="min-h-14" />;
           const dayBookings = bookings.filter((b) => bookingShopDate(b) === date);
+          const dayPersonal = personalEvents.filter((e) => e.dates.includes(date));
           const isToday = date === today;
           const isSelected = date === selectedDate;
           const blocked = blockedSet.has(date);
@@ -108,6 +112,9 @@ export default function MonthCalendar({
                         : "bg-[#FF2AD4]";
                   return <span key={b.id} className={cn("w-1.5 h-1.5 rounded-full", color)} />;
                 })}
+                {dayPersonal.slice(0, 2).map((e) => (
+                  <span key={e.id} className="w-1.5 h-1.5 rounded-full bg-[#23B9FF]" />
+                ))}
                 {blocked && <span className="w-1.5 h-1.5 rounded-full bg-[#8A52FF]" />}
               </div>
             </button>
@@ -117,8 +124,8 @@ export default function MonthCalendar({
 
       <div className="flex flex-wrap items-center gap-3 mt-4 text-[11px] text-[#9CA3AF]">
         <Legend color="bg-[#FF2AD4]" label="Confirmed" />
-        <Legend color="bg-[#23B9FF]" label="In Progress" />
-        <Legend color="bg-[#8A52FF]" label="Pending / blocked" />
+        <Legend color="bg-[#23B9FF]" label="Personal" />
+        <Legend color="bg-[#8A52FF]" label="Blocked" />
         <Legend color="bg-gray-500" label="Completed" />
         {onBlockDate && (
           <PrimaryButton type="button" className="ml-auto h-8 px-3 text-xs" onClick={onBlockDate}>
@@ -127,7 +134,7 @@ export default function MonthCalendar({
         )}
       </div>
       <p className="text-[11px] text-[#9CA3AF] mt-2">
-        In Progress is reserved for a future status. Bookings are confirmed, completed, or cancelled.
+        Personal events are from your Gmail calendar. They are visual only and do not change customer booking availability.
       </p>
     </div>
   );

@@ -487,6 +487,164 @@ export async function deleteBlockedDateEvent(
 }
 
 /**
+ * Admin-only visual overlay. Lists events from the owner's Gmail calendar
+ * so they can see personal items next to bookings. This is NEVER consulted
+ * by availability, booking, or customer-facing flows.
+ */
+export type VisualCalendarEvent = {
+  id: string;
+  title: string;
+  allDay: boolean;
+  /** HH:MM shop-local, empty when all-day */
+  startTime: string;
+  dates: string[];
+};
+
+type GoogleEvent = {
+  id?: string;
+  status?: string;
+  summary?: string;
+  start?: { date?: string; dateTime?: string };
+  end?: { date?: string; dateTime?: string };
+  source?: { title?: string };
+  extendedProperties?: { private?: Record<string, string> };
+};
+
+const VISUAL_CALENDAR_IDS = [
+  process.env["OWNER_VISUAL_CALENDAR_ID"]?.trim() || "mgurovas@gmail.com",
+  CALENDAR_ID,
+];
+
+export async function listVisualCalendarEvents(
+  startDate: string,
+  endDate: string,
+): Promise<VisualCalendarEvent[]> {
+  const seen = new Set<string>();
+  const out: VisualCalendarEvent[] = [];
+  for (const calendarId of VISUAL_CALENDAR_IDS) {
+    if (seen.has(`cal:${calendarId}`)) continue;
+    seen.add(`cal:${calendarId}`);
+    const items = await listEventsOnCalendar(calendarId, startDate, endDate);
+    for (const item of items) {
+      if (!item.id || item.status === "cancelled") continue;
+      if (isApexManagedEvent(item)) continue;
+      const mapped = toVisualEvent(item);
+      if (!mapped || seen.has(mapped.id)) continue;
+      seen.add(mapped.id);
+      out.push(mapped);
+    }
+  }
+  return out;
+}
+
+function isApexManagedEvent(event: GoogleEvent): boolean {
+  if (event.extendedProperties?.private?.[BOOKING_ID_TAG]) return true;
+  const source = event.source?.title ?? "";
+  if (source.startsWith("Apex Detailing")) return true;
+  const summary = event.summary ?? "";
+  return summary.startsWith("Shop Closed");
+}
+
+async function listEventsOnCalendar(
+  calendarId: string,
+  startDate: string,
+  endDate: string,
+): Promise<GoogleEvent[]> {
+  const items: GoogleEvent[] = [];
+  let pageToken: string | undefined;
+  try {
+    do {
+      const params = new URLSearchParams({
+        timeMin: `${startDate}T00:00:00-06:00`,
+        timeMax: `${endDate}T23:59:59-05:00`,
+        singleEvents: "true",
+        orderBy: "startTime",
+        maxResults: "250",
+        showDeleted: "false",
+      });
+      if (pageToken) params.set("pageToken", pageToken);
+      const res = await callCalendar(
+        `/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events?${params.toString()}`,
+        { method: "GET" },
+      );
+      if (!res.ok) {
+        const txt = await res.text().catch(() => "");
+        console.error(
+          `[calendar] visual list ${calendarId} failed: HTTP ${res.status} ${txt}`,
+        );
+        return items;
+      }
+      const json = (await res.json()) as {
+        items?: GoogleEvent[];
+        nextPageToken?: string;
+      };
+      items.push(...(json.items ?? []));
+      pageToken = json.nextPageToken;
+    } while (pageToken);
+  } catch (err) {
+    console.error(`[calendar] visual list ${calendarId} threw:`, err);
+  }
+  return items;
+}
+
+function toVisualEvent(event: GoogleEvent): VisualCalendarEvent | null {
+  if (!event.id) return null;
+  const title = (event.summary ?? "(No title)").trim() || "(No title)";
+  if (event.start?.date) {
+    const start = event.start.date;
+    const endExclusive = event.end?.date ?? addOneDay(start);
+    return {
+      id: event.id,
+      title,
+      allDay: true,
+      startTime: "",
+      dates: enumerateDates(start, endExclusive),
+    };
+  }
+  if (!event.start?.dateTime) return null;
+  const start = new Date(event.start.dateTime);
+  const end = event.end?.dateTime ? new Date(event.end.dateTime) : start;
+  const startDate = shopDateFromInstant(start);
+  const endDate = shopDateFromInstant(new Date(Math.max(end.getTime() - 1, start.getTime())));
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: SHOP_TZ,
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).formatToParts(start);
+  const hour = parts.find((p) => p.type === "hour")?.value ?? "00";
+  const minute = parts.find((p) => p.type === "minute")?.value ?? "00";
+  return {
+    id: event.id,
+    title,
+    allDay: false,
+    startTime: `${hour}:${minute}`,
+    dates: enumerateDates(startDate, addOneDay(endDate)),
+  };
+}
+
+function shopDateFromInstant(d: Date): string {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: SHOP_TZ,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(d);
+}
+
+function enumerateDates(startInclusive: string, endExclusive: string): string[] {
+  const dates: string[] = [];
+  let cursor = startInclusive;
+  let guard = 0;
+  while (cursor < endExclusive && guard < 60) {
+    dates.push(cursor);
+    cursor = addOneDay(cursor);
+    guard += 1;
+  }
+  return dates.length > 0 ? dates : [startInclusive];
+}
+
+/**
  * Look up an event by our booking-id tag. Used to find duplicates /
  * orphans created by a previous failed sync. Excludes events that Google
  * has marked cancelled.

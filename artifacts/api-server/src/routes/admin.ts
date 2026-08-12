@@ -29,6 +29,7 @@ import {
   syncBookingCalendar,
   createBlockedDateEvent,
   deleteBlockedDateEvent,
+  listVisualCalendarEvents,
 } from "../lib/calendar";
 import { notifyBookingCancelled, notifyBookingRescheduled } from "../lib/notify";
 import { sendSms, smsBlockedDateConfirm } from "../lib/sms";
@@ -76,6 +77,22 @@ router.get("/admin/bookings", requireAdmin, async (_req, res) => {
     .from(bookingsTable)
     .orderBy(asc(bookingsTable.scheduledAt));
   res.json(rows);
+});
+
+router.get("/admin/calendar-events", requireAdmin, async (req, res) => {
+  const start = typeof req.query.start === "string" ? req.query.start : "";
+  const end = typeof req.query.end === "string" ? req.query.end : "";
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(start) || !/^\d{4}-\d{2}-\d{2}$/.test(end)) {
+    res.status(400).json({ message: "start and end must be YYYY-MM-DD" });
+    return;
+  }
+  try {
+    const events = await listVisualCalendarEvents(start, end);
+    res.json({ events });
+  } catch (err) {
+    console.error("[admin] calendar-events failed:", err);
+    res.json({ events: [] });
+  }
 });
 
 router.delete("/admin/bookings/:id", requireAdmin, async (req, res) => {

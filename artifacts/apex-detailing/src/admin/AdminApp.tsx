@@ -15,8 +15,6 @@ import CalendarPage from "./pages/CalendarPage";
 import CustomersPage from "./pages/CustomersPage";
 import VehiclesPage from "./pages/VehiclesPage";
 import ServicesPage from "./pages/ServicesPage";
-import PaymentsPage from "./pages/PaymentsPage";
-import ReviewsPage, { MessagesPage } from "./pages/ReviewsPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import SettingsPage from "./pages/SettingsPage";
 
@@ -67,11 +65,9 @@ function AdminSection() {
     case "services":
       return <ServicesPage />;
     case "payments":
-      return <PaymentsPage />;
     case "reviews":
-      return <ReviewsPage />;
     case "messages":
-      return <MessagesPage />;
+      return <DashboardHome />;
     case "analytics":
       return <AnalyticsPage />;
     case "settings":

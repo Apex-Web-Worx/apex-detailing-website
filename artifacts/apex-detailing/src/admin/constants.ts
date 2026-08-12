@@ -6,9 +6,6 @@ import {
   Users,
   Car,
   Sparkles,
-  CreditCard,
-  Star,
-  MessageSquare,
   BarChart3,
   Settings,
 } from "lucide-react";
@@ -46,9 +43,6 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/admin/customers", section: "customers", label: "Customers", icon: Users },
   { href: "/admin/vehicles", section: "vehicles", label: "Vehicles", icon: Car },
   { href: "/admin/services", section: "services", label: "Services", icon: Sparkles },
-  { href: "/admin/payments", section: "payments", label: "Payments", icon: CreditCard },
-  { href: "/admin/reviews", section: "reviews", label: "Reviews", icon: Star },
-  { href: "/admin/messages", section: "messages", label: "Messages", icon: MessageSquare },
   { href: "/admin/analytics", section: "analytics", label: "Analytics", icon: BarChart3 },
   { href: "/admin/settings", section: "settings", label: "Settings", icon: Settings },
 ];

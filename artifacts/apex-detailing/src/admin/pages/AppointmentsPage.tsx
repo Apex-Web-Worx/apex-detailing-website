@@ -5,15 +5,17 @@ import { bookingShopDate, displayStatus, matchesSearch } from "../utils";
 import AppointmentRow from "../components/AppointmentRow";
 import MonthCalendar from "../components/MonthCalendar";
 import { EmptyState, fieldClass, GhostButton } from "../components/ui";
+import { useOwnerCalendarEvents } from "../useOwnerCalendarEvents";
 
 export default function AppointmentsPage() {
-  const { bookings, blockedDates, isLoading, setDetail, setEditing, cancelBooking, openBlockDate, searchQuery, setSearchQuery } = useAdmin();
+  const { bookings, blockedDates, isLoading, setDetail, setEditing, cancelBooking, openBlockDate, searchQuery, setSearchQuery, token } = useAdmin();
   const [filterDate, setFilterDate] = useState("");
   const [filterService, setFilterService] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
   const [view, setView] = useState<"list" | "calendar">("list");
   const [calMonth, setCalMonth] = useState(todayDateString().slice(0, 7));
   const [selectedDate, setSelectedDate] = useState(todayDateString());
+  const { data: personalEvents = [] } = useOwnerCalendarEvents(token, calMonth);
 
   const serviceOptions = useMemo(
     () => Array.from(new Set(bookings.map((b) => b.serviceName))).sort(),
@@ -120,6 +122,7 @@ export default function AppointmentsPage() {
           onMonthChange={setCalMonth}
           bookings={bookings}
           blockedDates={blockedDates}
+          personalEvents={personalEvents}
           selectedDate={selectedDate}
           onSelectDate={setSelectedDate}
           onBlockDate={() => openBlockDate(selectedDate)}

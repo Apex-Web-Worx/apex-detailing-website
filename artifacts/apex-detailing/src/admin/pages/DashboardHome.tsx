@@ -6,7 +6,7 @@ import {
   Plus,
   RefreshCw,
 } from "lucide-react";
-import { formatPrice, todayDateString } from "@/lib/format";
+import { formatPrice, formatTime12h, todayDateString } from "@/lib/format";
 import { ADMIN_FIRST } from "../constants";
 import { useAdmin } from "../context";
 import {
@@ -25,6 +25,7 @@ import {
 import AppointmentRow from "../components/AppointmentRow";
 import MonthCalendar from "../components/MonthCalendar";
 import { AdminCard, EmptyState, GhostButton, Sparkline, StatusBadge } from "../components/ui";
+import { useOwnerCalendarEvents } from "../useOwnerCalendarEvents";
 import { useState, type ReactNode } from "react";
 
 export default function DashboardHome() {
@@ -37,11 +38,14 @@ export default function DashboardHome() {
     setEditing,
     cancelBooking,
     openBlockDate,
+    token,
   } = useAdmin();
   const [, setLocation] = useLocation();
   const today = todayDateString();
   const [calMonth, setCalMonth] = useState(today.slice(0, 7));
+  const { data: personalEvents = [] } = useOwnerCalendarEvents(token, calMonth);
   const kpis = computeKpis(bookings);
+  const todayPersonal = personalEvents.filter((e) => e.dates.includes(today));
   const todayAppts = bookings
     .filter((b) => b.status !== "cancelled" && bookingShopDate(b) === today)
     .sort((a, b) => bookingShopTime(a).localeCompare(bookingShopTime(b)));
@@ -97,7 +101,7 @@ export default function DashboardHome() {
           glow="rgba(138,82,255,0.25)"
         />
         <Kpi
-          href="/admin/payments"
+          href="/admin/analytics"
           label="Revenue"
           value={formatPrice(kpis.monthCollectedCents)}
           hint="Completed this month"
@@ -119,18 +123,32 @@ export default function DashboardHome() {
           <h3 className="text-lg font-bold">Today's Schedule</h3>
           {isLoading ? (
             <p className="text-sm text-[#9CA3AF]">Loading…</p>
-          ) : todayAppts.length === 0 ? (
+          ) : todayAppts.length === 0 && todayPersonal.length === 0 ? (
             <EmptyState title="No appointments today" body="When bookings land on today's date, they will show here." />
           ) : (
-            todayAppts.map((b) => (
-              <AppointmentRow
-                key={b.id}
-                booking={b}
-                onView={() => setDetail(b)}
-                onEdit={() => setEditing(b)}
-                onCancel={() => cancelBooking(b.id)}
-              />
-            ))
+            <>
+              {todayPersonal.map((e) => (
+                <div
+                  key={e.id}
+                  className="rounded-2xl border border-[#23B9FF]/20 bg-[#111111] px-4 py-3"
+                >
+                  <p className="text-[10px] font-bold tracking-[0.14em] text-[#23B9FF]">PERSONAL</p>
+                  <p className="text-sm font-semibold text-white mt-1">{e.title}</p>
+                  <p className="text-xs text-[#9CA3AF] mt-0.5">
+                    {e.allDay ? "All day" : formatTime12h(e.startTime)} · visual only
+                  </p>
+                </div>
+              ))}
+              {todayAppts.map((b) => (
+                <AppointmentRow
+                  key={b.id}
+                  booking={b}
+                  onView={() => setDetail(b)}
+                  onEdit={() => setEditing(b)}
+                  onCancel={() => cancelBooking(b.id)}
+                />
+              ))}
+            </>
           )}
         </div>
         <div className="xl:col-span-2">
@@ -139,6 +157,7 @@ export default function DashboardHome() {
             onMonthChange={setCalMonth}
             bookings={bookings}
             blockedDates={blockedDates}
+            personalEvents={personalEvents}
             selectedDate={today}
             onSelectDate={() => setLocation("/admin/calendar")}
             onBlockDate={() => openBlockDate()}

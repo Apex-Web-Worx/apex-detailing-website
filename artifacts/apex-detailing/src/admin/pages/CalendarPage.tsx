@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { formatDateLong, todayDateString } from "@/lib/format";
+import { formatDateLong, formatTime12h, todayDateString } from "@/lib/format";
 import { useAdmin } from "../context";
 import { bookingShopDate, bookingShopTime } from "../utils";
 import AppointmentRow from "../components/AppointmentRow";
@@ -7,6 +7,7 @@ import MonthCalendar from "../components/MonthCalendar";
 import { EmptyState, GhostButton } from "../components/ui";
 import { adminUnblockDate, getAdminListBlockedDatesQueryKey } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { useOwnerCalendarEvents } from "../useOwnerCalendarEvents";
 
 export default function CalendarPage() {
   const { token, bookings, blockedDates, setDetail, setEditing, cancelBooking, openBlockDate } = useAdmin();
@@ -14,9 +15,11 @@ export default function CalendarPage() {
   const [month, setMonth] = useState(today.slice(0, 7));
   const [selected, setSelected] = useState(today);
   const queryClient = useQueryClient();
+  const { data: personalEvents = [] } = useOwnerCalendarEvents(token, month);
   const dayBookings = bookings
     .filter((b) => bookingShopDate(b) === selected)
     .sort((a, b) => bookingShopTime(a).localeCompare(bookingShopTime(b)));
+  const dayPersonal = personalEvents.filter((e) => e.dates.includes(selected));
   const blocked = blockedDates.find((b) => b.date === selected);
 
   const unblock = async () => {
@@ -41,6 +44,7 @@ export default function CalendarPage() {
         onMonthChange={setMonth}
         bookings={bookings}
         blockedDates={blockedDates}
+        personalEvents={personalEvents}
         selectedDate={selected}
         onSelectDate={setSelected}
         onBlockDate={() => openBlockDate(selected)}
@@ -58,8 +62,24 @@ export default function CalendarPage() {
             <GhostButton type="button" onClick={unblock}>Re-open</GhostButton>
           </div>
         )}
-        {dayBookings.length === 0 ? (
-          <EmptyState title="No appointments this day" body="Select another date or create a booking from the public form." />
+        {dayPersonal.length > 0 && (
+          <div className="space-y-2 mb-3">
+            {dayPersonal.map((e) => (
+              <div
+                key={e.id}
+                className="rounded-2xl border border-[#23B9FF]/20 bg-[#111111] px-4 py-3"
+              >
+                <p className="text-[10px] font-bold tracking-[0.14em] text-[#23B9FF]">PERSONAL</p>
+                <p className="text-sm font-semibold text-white mt-1">{e.title}</p>
+                <p className="text-xs text-[#9CA3AF] mt-0.5">
+                  {e.allDay ? "All day" : formatTime12h(e.startTime)} · visual only, not a booking
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+        {dayBookings.length === 0 && dayPersonal.length === 0 ? (
+          <EmptyState title="Nothing on this day" body="No appointments or personal calendar events." />
         ) : (
           <div className="space-y-2">
             {dayBookings.map((b) => (
