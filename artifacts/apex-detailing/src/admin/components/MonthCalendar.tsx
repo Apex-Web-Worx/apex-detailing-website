@@ -184,7 +184,7 @@ export default function MonthCalendar({
         )}
       </div>
       <p className="text-[11px] text-[#9CA3AF] mt-2">
-        Blue text is from your Gmail calendar. It is visual only and does not change customer booking availability.
+        Blue text is from your Gmail and Interactio calendars. It is visual only and does not change customer booking availability.
       </p>
     </div>
   );

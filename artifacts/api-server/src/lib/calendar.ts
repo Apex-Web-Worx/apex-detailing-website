@@ -498,6 +498,7 @@ export type VisualCalendarEvent = {
   /** HH:MM shop-local, empty when all-day */
   startTime: string;
   dates: string[];
+  calendar: string;
 };
 
 type GoogleEvent = {
@@ -511,7 +512,12 @@ type GoogleEvent = {
 };
 
 const VISUAL_CALENDAR_IDS = [
-  process.env["OWNER_VISUAL_CALENDAR_ID"]?.trim() || "mgurovas@gmail.com",
+  ...(process.env["OWNER_VISUAL_CALENDAR_IDS"] ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean),
+  "mgurovas@gmail.com",
+  "michail.gurov@interactio.io",
   CALENDAR_ID,
 ];
 
@@ -528,7 +534,7 @@ export async function listVisualCalendarEvents(
     for (const item of items) {
       if (!item.id || item.status === "cancelled") continue;
       if (isApexManagedEvent(item)) continue;
-      const mapped = toVisualEvent(item);
+      const mapped = toVisualEvent(item, calendarId);
       if (!mapped || seen.has(mapped.id)) continue;
       seen.add(mapped.id);
       out.push(mapped);
@@ -587,18 +593,32 @@ async function listEventsOnCalendar(
   return items;
 }
 
-function toVisualEvent(event: GoogleEvent): VisualCalendarEvent | null {
+function calendarLabel(calendarId: string): string {
+  const id = calendarId.toLowerCase();
+  if (id.includes("interactio")) return "Interactio";
+  if (id.includes("gmail")) return "Gmail";
+  if (id === "primary") return "Gmail";
+  return "Calendar";
+}
+
+function toVisualEvent(
+  event: GoogleEvent,
+  calendarId: string,
+): VisualCalendarEvent | null {
   if (!event.id) return null;
   const title = (event.summary ?? "(No title)").trim() || "(No title)";
+  const calendar = calendarLabel(calendarId);
+  const id = `${calendarId}:${event.id}`;
   if (event.start?.date) {
     const start = event.start.date;
     const endExclusive = event.end?.date ?? addOneDay(start);
     return {
-      id: event.id,
+      id,
       title,
       allDay: true,
       startTime: "",
       dates: enumerateDates(start, endExclusive),
+      calendar,
     };
   }
   if (!event.start?.dateTime) return null;
@@ -615,11 +635,12 @@ function toVisualEvent(event: GoogleEvent): VisualCalendarEvent | null {
   const hour = parts.find((p) => p.type === "hour")?.value ?? "00";
   const minute = parts.find((p) => p.type === "minute")?.value ?? "00";
   return {
-    id: event.id,
+    id,
     title,
     allDay: false,
     startTime: `${hour}:${minute}`,
     dates: enumerateDates(startDate, addOneDay(endDate)),
+    calendar,
   };
 }
 

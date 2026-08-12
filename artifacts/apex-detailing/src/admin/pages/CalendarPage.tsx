@@ -69,7 +69,9 @@ export default function CalendarPage() {
                 key={e.id}
                 className="rounded-2xl border border-[#23B9FF]/20 bg-[#111111] px-4 py-3"
               >
-                <p className="text-[10px] font-bold tracking-[0.14em] text-[#23B9FF]">PERSONAL</p>
+                <p className="text-[10px] font-bold tracking-[0.14em] text-[#23B9FF]">
+                  PERSONAL{e.calendar ? ` · ${e.calendar.toUpperCase()}` : ""}
+                </p>
                 <p className="text-sm font-semibold text-white mt-1">{e.title}</p>
                 <p className="text-xs text-[#9CA3AF] mt-0.5">
                   {e.allDay ? "All day" : formatTime12h(e.startTime)} · visual only, not a booking

@@ -7,6 +7,7 @@ export type VisualCalendarEvent = {
   allDay: boolean;
   startTime: string;
   dates: string[];
+  calendar?: string;
 };
 
 export function useOwnerCalendarEvents(token: string, month: string) {
