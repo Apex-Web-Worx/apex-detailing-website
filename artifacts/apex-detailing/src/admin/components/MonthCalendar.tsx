@@ -56,7 +56,7 @@ export default function MonthCalendar({
   const blockedByDate = new Map(blockedDates.map((b) => [b.date, b]));
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-[#111111] p-4">
+    <div className="rounded-2xl border border-white/10 bg-[#111111] p-3 md:p-4">
       <div className="flex flex-wrap items-center gap-2 mb-4">
         <h3 className="font-bold text-white mr-auto">{monthLabel(month)}</h3>
         <GhostButton type="button" className="h-8 px-3 text-xs" onClick={() => onMonthChange(today.slice(0, 7))}>
@@ -64,7 +64,7 @@ export default function MonthCalendar({
         </GhostButton>
         <button
           type="button"
-          className="w-8 h-8 rounded-lg border border-white/10 hover:bg-white/5"
+          className="w-11 h-11 rounded-lg border border-white/10 hover:bg-white/5 touch-manipulation"
           onClick={() => onMonthChange(addMonths(month, -1))}
           aria-label="Previous month"
         >
@@ -72,7 +72,7 @@ export default function MonthCalendar({
         </button>
         <button
           type="button"
-          className="w-8 h-8 rounded-lg border border-white/10 hover:bg-white/5"
+          className="w-11 h-11 rounded-lg border border-white/10 hover:bg-white/5 touch-manipulation"
           onClick={() => onMonthChange(addMonths(month, 1))}
           aria-label="Next month"
         >
@@ -83,13 +83,14 @@ export default function MonthCalendar({
       <div className="grid grid-cols-7 gap-1 mb-1">
         {DOW.map((d) => (
           <div key={d} className="text-[10px] font-bold tracking-wider text-[#9CA3AF] text-center py-1">
-            {d}
+            <span className="md:hidden">{d.slice(0, 1)}</span>
+            <span className="hidden md:inline">{d}</span>
           </div>
         ))}
       </div>
       <div className="grid grid-cols-7 gap-1">
         {cells.map((date, i) => {
-          if (!date) return <div key={`e-${i}`} className="min-h-20 md:min-h-24" />;
+          if (!date) return <div key={`e-${i}`} className="min-h-11 md:min-h-20 lg:min-h-24" />;
           const dayBookings = bookings.filter((b) => bookingShopDate(b) === date);
           const dayPersonal = personalEvents.filter((e) => e.dates.includes(date));
           const blocked = blockedByDate.get(date);
@@ -132,7 +133,7 @@ export default function MonthCalendar({
               type="button"
               onClick={() => onSelectDate?.(date)}
               className={cn(
-                "min-h-20 md:min-h-24 rounded-xl p-1 text-left border transition duration-150 overflow-hidden",
+                "min-h-11 md:min-h-20 lg:min-h-24 rounded-lg md:rounded-xl p-0.5 md:p-1 text-left border transition duration-150 overflow-hidden touch-manipulation",
                 isSelected
                   ? "border-[#FF2AD4]/50 bg-[#FF2AD4]/10"
                   : "border-transparent hover:bg-white/5",
@@ -147,7 +148,21 @@ export default function MonthCalendar({
               >
                 {Number(date.slice(-2))}
               </span>
-              <div className="mt-0.5 space-y-0.5">
+              <div className="mt-0.5 flex flex-wrap gap-0.5 md:hidden">
+                {items.slice(0, 4).map((item) => (
+                  <span
+                    key={item.key}
+                    className={cn(
+                      "w-1.5 h-1.5 rounded-full",
+                      item.tone === "personal" && "bg-[#23B9FF]",
+                      item.tone === "booking" && "bg-[#FF2AD4]",
+                      item.tone === "blocked" && "bg-[#8A52FF]",
+                      item.tone === "done" && "bg-[#9CA3AF]",
+                    )}
+                  />
+                ))}
+              </div>
+              <div className="mt-0.5 space-y-0.5 hidden md:block">
                 {shown.map((item) => (
                   <p
                     key={item.key}
@@ -178,7 +193,7 @@ export default function MonthCalendar({
         <Legend color="bg-[#23B9FF]" label="Personal" />
         <Legend color="bg-[#8A52FF]" label="Blocked" />
         {onBlockDate && (
-          <PrimaryButton type="button" className="ml-auto h-8 px-3 text-xs" onClick={onBlockDate}>
+          <PrimaryButton type="button" className="ml-auto h-11 px-3 text-xs w-full sm:w-auto" onClick={onBlockDate}>
             + Block Date
           </PrimaryButton>
         )}

@@ -42,47 +42,51 @@ export default function AppointmentsPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col lg:flex-row lg:items-center gap-3">
-        <h2 className="text-2xl font-bold mr-auto">Appointments</h2>
-        <div className="flex rounded-xl border border-white/10 overflow-hidden">
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="text-xl md:text-2xl font-bold">Appointments</h2>
+          <GhostButton type="button" onClick={() => openBlockDate()} className="px-3 shrink-0">
+            Block
+          </GhostButton>
+        </div>
+        <div className="grid grid-cols-2 rounded-xl border border-white/10 overflow-hidden">
           <button
             type="button"
             onClick={() => setView("list")}
-            className={`h-10 px-4 text-sm ${view === "list" ? "bg-[#111111] text-white" : "text-[#9CA3AF]"}`}
+            className={`min-h-11 text-sm touch-manipulation ${view === "list" ? "bg-[#111111] text-white" : "text-[#9CA3AF]"}`}
           >
             List
           </button>
           <button
             type="button"
             onClick={() => setView("calendar")}
-            className={`h-10 px-4 text-sm ${view === "calendar" ? "bg-[#111111] text-white" : "text-[#9CA3AF]"}`}
+            className={`min-h-11 text-sm touch-manipulation ${view === "calendar" ? "bg-[#111111] text-white" : "text-[#9CA3AF]"}`}
           >
             Calendar
           </button>
         </div>
-        <GhostButton type="button" onClick={() => openBlockDate()}>+ Block Date</GhostButton>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap gap-2">
         <input
           type="search"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search appointments"
-          className={`${fieldClass} max-w-sm`}
+          className={`${fieldClass} sm:max-w-sm`}
           aria-label="Search appointments"
         />
         <input
           type="date"
           value={filterDate}
           onChange={(e) => setFilterDate(e.target.value)}
-          className={`${fieldClass} w-auto`}
+          className={fieldClass}
           aria-label="Filter by date"
         />
         <select
           value={filterService}
           onChange={(e) => setFilterService(e.target.value)}
-          className={`${fieldClass} w-auto`}
+          className={fieldClass}
           aria-label="Filter by service"
         >
           <option value="">All services</option>
@@ -93,7 +97,7 @@ export default function AppointmentsPage() {
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
-          className={`${fieldClass} w-auto`}
+          className={fieldClass}
           aria-label="Filter by status"
         >
           <option value="">All statuses</option>

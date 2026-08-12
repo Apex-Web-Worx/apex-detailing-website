@@ -57,30 +57,30 @@ export default function DashboardHome() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-end gap-4">
-        <div className="flex-1">
-          <h2 className="text-2xl md:text-3xl font-bold">
-            {greetingForNow()}, {ADMIN_FIRST} 👋
+      <div className="flex flex-col gap-3">
+        <div>
+          <h2 className="text-xl md:text-3xl font-bold">
+            {greetingForNow()}, {ADMIN_FIRST}
           </h2>
-          <p className="text-[#9CA3AF] mt-1">Here's what's happening with your business today.</p>
+          <p className="text-[#9CA3AF] mt-1 text-sm md:text-base hidden sm:block">Here's what's happening with your business today.</p>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <GhostButton type="button" onClick={() => refetch()}>
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
+          <GhostButton type="button" onClick={() => refetch()} className="px-3">
             <RefreshCw className="w-4 h-4" /> Refresh
           </GhostButton>
-          <GhostButton type="button" onClick={() => openBlockDate()}>
-            <CalendarOff className="w-4 h-4" /> Block Date
+          <GhostButton type="button" onClick={() => openBlockDate()} className="px-3">
+            <CalendarOff className="w-4 h-4" /> Block
           </GhostButton>
           <Link
             href="/book"
-            className="inline-flex items-center justify-center gap-2 h-10 px-4 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold transition duration-200 hover:bg-[#ff4adc] hover:shadow-[0_0_16px_rgba(255,42,212,0.28)]"
+            className="col-span-2 sm:col-span-1 inline-flex items-center justify-center gap-2 min-h-11 h-11 px-4 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold transition duration-200 hover:bg-[#ff4adc] hover:shadow-[0_0_16px_rgba(255,42,212,0.28)] touch-manipulation"
           >
             <Plus className="w-4 h-4" /> New Appointment
           </Link>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-2 md:gap-4">
         <Kpi
           href="/admin/appointments"
           label="Today"
@@ -109,7 +109,12 @@ export default function DashboardHome() {
 
       <div className="grid grid-cols-1 xl:grid-cols-5 gap-4">
         <div className="xl:col-span-3 space-y-3">
-          <h3 className="text-lg font-bold">Today's Schedule</h3>
+          <div className="flex items-center justify-between gap-2">
+            <h3 className="text-lg font-bold">Today's Schedule</h3>
+            <Link href="/admin/calendar" className="xl:hidden text-xs font-semibold text-[#23B9FF] py-2">
+              Calendar →
+            </Link>
+          </div>
           {isLoading ? (
             <p className="text-sm text-[#9CA3AF]">Loading…</p>
           ) : todayAppts.length === 0 && todayPersonal.length === 0 ? (
@@ -142,7 +147,7 @@ export default function DashboardHome() {
             </>
           )}
         </div>
-        <div className="xl:col-span-2">
+        <div className="hidden xl:block xl:col-span-2">
           <MonthCalendar
             month={calMonth}
             onMonthChange={setCalMonth}
@@ -240,19 +245,19 @@ function Kpi({
   glow: string;
 }) {
   return (
-    <Link href={href}>
-      <AdminCard className="p-5">
-        <div className="flex items-start justify-between">
-          <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#9CA3AF]">{label}</p>
+    <Link href={href} className="touch-manipulation">
+      <AdminCard className="p-3 md:p-5">
+        <div className="flex items-start justify-between gap-1">
+          <p className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.12em] text-[#9CA3AF] leading-tight">{label}</p>
           <span
-            className="w-9 h-9 rounded-xl bg-[#0B0B0B] border border-white/10 flex items-center justify-center"
+            className="hidden sm:flex w-9 h-9 rounded-xl bg-[#0B0B0B] border border-white/10 items-center justify-center"
             style={{ boxShadow: `0 0 18px ${glow}` }}
           >
             {icon}
           </span>
         </div>
-        <p className="text-3xl font-bold mt-3">{value}</p>
-        <p className="text-sm text-[#9CA3AF] mt-1">{hint}</p>
+        <p className="text-2xl md:text-3xl font-bold mt-2 md:mt-3">{value}</p>
+        <p className="text-[11px] md:text-sm text-[#9CA3AF] mt-0.5 md:mt-1 leading-tight">{hint}</p>
       </AdminCard>
     </Link>
   );

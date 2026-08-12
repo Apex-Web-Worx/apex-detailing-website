@@ -112,7 +112,7 @@ export default function BlockDateModal() {
       <form
         onClick={(e) => e.stopPropagation()}
         onSubmit={add}
-        className="w-full sm:max-w-lg bg-[#0B0B0B] border border-white/10 rounded-t-2xl sm:rounded-2xl p-5"
+        className="w-full sm:max-w-lg bg-[#0B0B0B] border border-white/10 rounded-t-2xl sm:rounded-2xl p-5 max-h-[92dvh] overflow-y-auto pb-[max(1.25rem,env(safe-area-inset-bottom))]"
       >
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold">Block Date</h2>

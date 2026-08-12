@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import type { DisplayStatus } from "../utils";
 
 export const fieldClass =
-  "w-full px-3.5 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white placeholder:text-gray-500 focus:border-[#FF2AD4] focus:outline-none focus:ring-2 focus:ring-[#FF2AD4]/20 transition duration-200";
+  "w-full px-3.5 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-base text-white placeholder:text-gray-500 focus:border-[#FF2AD4] focus:outline-none focus:ring-2 focus:ring-[#FF2AD4]/20 transition duration-200";
 
 export function StatusBadge({ status }: { status: DisplayStatus }) {
   const map: Record<DisplayStatus, string> = {
@@ -59,7 +59,7 @@ export function PrimaryButton({
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center gap-2 h-10 px-4 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold transition duration-200 hover:bg-[#ff4adc] hover:shadow-[0_0_16px_rgba(255,42,212,0.28)] disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none",
+        "inline-flex items-center justify-center gap-2 min-h-11 h-11 px-4 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold transition duration-200 hover:bg-[#ff4adc] hover:shadow-[0_0_16px_rgba(255,42,212,0.28)] disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none touch-manipulation",
         className,
       )}
       {...props}
@@ -78,7 +78,7 @@ export function GhostButton({
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center gap-2 h-10 px-4 rounded-xl border border-white/10 bg-transparent text-sm font-medium text-white transition duration-200 hover:bg-white/5 hover:border-white/20 disabled:opacity-40",
+        "inline-flex items-center justify-center gap-2 min-h-11 h-11 px-4 rounded-xl border border-white/10 bg-transparent text-sm font-medium text-white transition duration-200 hover:bg-white/5 hover:border-white/20 disabled:opacity-40 touch-manipulation",
         className,
       )}
       {...props}

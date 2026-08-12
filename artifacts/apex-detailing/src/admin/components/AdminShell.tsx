@@ -1,30 +1,48 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Link, useLocation } from "wouter";
 import {
-  Bell,
-  HelpCircle,
+  CalendarClock,
+  CalendarDays,
+  LayoutDashboard,
   LogOut,
   Menu,
+  MoreHorizontal,
   Search,
+  Users,
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import { cn } from "@/lib/utils";
 import { ADMIN_FIRST, ADMIN_NAME, ADMIN_ROLE, NAV_ITEMS, PAGE_TITLES } from "../constants";
 import { useAdmin } from "../context";
-import { formatShopDateLong, matchesSearch } from "../utils";
+import { matchesSearch } from "../utils";
 import { fieldClass } from "./ui";
+
+const TAB_ITEMS = [
+  { href: "/admin", section: "dashboard", label: "Home", icon: LayoutDashboard },
+  { href: "/admin/appointments", section: "appointments", label: "Appts", icon: CalendarClock },
+  { href: "/admin/calendar", section: "calendar", label: "Calendar", icon: CalendarDays },
+  { href: "/admin/customers", section: "customers", label: "Customers", icon: Users },
+] as const;
 
 export default function AdminShell({ children }: { children: ReactNode }) {
   const { section, bookings, searchQuery, setSearchQuery, onLogout, setDetail } = useAdmin();
   const [, setLocation] = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [helpOpen, setHelpOpen] = useState(false);
-  const [bellOpen, setBellOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
     setMobileOpen(false);
+    setSearchOpen(false);
   }, [section]);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [mobileOpen]);
 
   const results = useMemo(() => {
     if (!searchQuery.trim()) return [];
@@ -32,13 +50,22 @@ export default function AdminShell({ children }: { children: ReactNode }) {
   }, [bookings, searchQuery]);
 
   const title = PAGE_TITLES[section] ?? "Dashboard";
+  const moreActive = !TAB_ITEMS.some((t) => t.section === section);
+
+  const openResult = (id: number, booking = bookings.find((b) => b.id === id)) => {
+    if (!booking) return;
+    setDetail(booking);
+    setSearchOpen(false);
+    setSearchQuery("");
+    setLocation(`/admin/appointments/${booking.id}`);
+  };
 
   return (
-    <div className="apex-admin min-h-screen flex">
+    <div className="apex-admin min-h-dvh flex">
       {mobileOpen && (
         <button
           type="button"
-          className="fixed inset-0 z-40 bg-black/60 lg:hidden"
+          className="fixed inset-0 z-[45] bg-black/60 lg:hidden"
           aria-label="Close menu"
           onClick={() => setMobileOpen(false)}
         />
@@ -46,7 +73,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 w-64 flex flex-col border-r border-white/10 bg-[#0B0B0B] transition-transform duration-200 lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-50 w-[min(18rem,86vw)] flex flex-col border-r border-white/10 bg-[#0B0B0B] transition-transform duration-200 lg:translate-x-0 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]",
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         )}
       >
@@ -72,13 +99,13 @@ export default function AdminShell({ children }: { children: ReactNode }) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition duration-200",
+                  "flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition duration-200 min-h-11",
                   active
                     ? "bg-[#111111] text-white shadow-[inset_2px_0_0_#FF2AD4,0_0_18px_rgba(255,42,212,0.12)]"
                     : "text-[#9CA3AF] hover:text-white hover:bg-white/[0.04]",
                 )}
               >
-                <Icon className={cn("w-4 h-4", active ? "text-[#FF2AD4]" : "text-current")} />
+                <Icon className={cn("w-5 h-5", active ? "text-[#FF2AD4]" : "text-current")} />
                 {item.label}
               </Link>
             );
@@ -98,7 +125,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
           <button
             type="button"
             onClick={onLogout}
-            className="w-full inline-flex items-center justify-center gap-2 h-10 rounded-xl border border-white/10 text-sm text-[#9CA3AF] hover:text-white hover:bg-white/5 transition duration-200"
+            className="w-full inline-flex items-center justify-center gap-2 min-h-11 h-11 rounded-xl border border-white/10 text-sm text-[#9CA3AF] hover:text-white hover:bg-white/5 transition duration-200"
           >
             <LogOut className="w-4 h-4" /> Sign out
           </button>
@@ -106,17 +133,17 @@ export default function AdminShell({ children }: { children: ReactNode }) {
       </aside>
 
       <div className="flex-1 min-w-0 lg:pl-64">
-        <header className="sticky top-0 z-30 border-b border-white/10 bg-[#050505]/95 backdrop-blur">
-          <div className="h-16 px-4 md:px-6 flex items-center gap-3">
+        <header className="sticky top-0 z-30 border-b border-white/10 bg-[#050505]/95 backdrop-blur pt-[env(safe-area-inset-top)]">
+          <div className="h-14 md:h-16 px-3 md:px-6 flex items-center gap-2">
             <button
               type="button"
-              className="lg:hidden w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center text-white"
+              className="lg:hidden w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-white touch-manipulation"
               onClick={() => setMobileOpen(true)}
               aria-label="Open menu"
             >
               <Menu className="w-5 h-5" />
             </button>
-            <h1 className="text-base md:text-lg font-bold text-white shrink-0">{title}</h1>
+            <h1 className="text-base md:text-lg font-bold text-white truncate">{title}</h1>
 
             <div className="hidden md:flex flex-1 justify-center px-6">
               <div className="relative w-full max-w-md">
@@ -129,83 +156,26 @@ export default function AdminShell({ children }: { children: ReactNode }) {
                   }}
                   onFocus={() => setSearchOpen(true)}
                   placeholder="Search customers, vehicles, appointments…"
-                  className={cn(fieldClass, "pl-9 h-10 py-0")}
+                  className={cn(fieldClass, "pl-9 h-11 py-0")}
                 />
                 {searchOpen && searchQuery.trim() && (
-                  <div className="absolute top-full mt-2 w-full rounded-xl border border-white/10 bg-[#111111] shadow-xl overflow-hidden">
-                    {results.length === 0 ? (
-                      <p className="px-4 py-3 text-sm text-[#9CA3AF]">No matches</p>
-                    ) : (
-                      results.map((b) => (
-                        <button
-                          key={b.id}
-                          type="button"
-                          className="w-full text-left px-4 py-3 text-sm hover:bg-white/5 border-b border-white/5 last:border-0"
-                          onClick={() => {
-                            setDetail(b);
-                            setSearchOpen(false);
-                            setLocation(`/admin/appointments/${b.id}`);
-                          }}
-                        >
-                          <span className="text-white font-medium">{b.customerName}</span>
-                          <span className="text-[#9CA3AF]"> · {b.serviceName} · #{String(b.id).padStart(5, "0")}</span>
-                        </button>
-                      ))
-                    )}
-                  </div>
+                  <SearchResults results={results} onPick={openResult} />
                 )}
               </div>
             </div>
 
-            <div className="ml-auto flex items-center gap-1.5 md:gap-2">
+            <div className="ml-auto flex items-center gap-1.5">
               <button
                 type="button"
-                className="md:hidden w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center"
+                className="md:hidden w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center touch-manipulation"
                 onClick={() => setSearchOpen((v) => !v)}
                 aria-label="Search"
               >
                 <Search className="w-4 h-4" />
               </button>
-              <div className="relative">
-                <button
-                  type="button"
-                  className="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center text-[#9CA3AF] hover:text-white hover:bg-white/5 transition duration-200"
-                  onClick={() => {
-                    setBellOpen((v) => !v);
-                    setHelpOpen(false);
-                  }}
-                  aria-label="Notifications"
-                >
-                  <Bell className="w-4 h-4" />
-                </button>
-                {bellOpen && (
-                  <div className="absolute right-0 mt-2 w-64 rounded-xl border border-white/10 bg-[#111111] p-4 text-sm text-[#9CA3AF]">
-                    No notifications yet.
-                  </div>
-                )}
-              </div>
-              <div className="relative">
-                <button
-                  type="button"
-                  className="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center text-[#9CA3AF] hover:text-white hover:bg-white/5 transition duration-200"
-                  onClick={() => {
-                    setHelpOpen((v) => !v);
-                    setBellOpen(false);
-                  }}
-                  aria-label="Help"
-                >
-                  <HelpCircle className="w-4 h-4" />
-                </button>
-                {helpOpen && (
-                  <div className="absolute right-0 mt-2 w-72 rounded-xl border border-white/10 bg-[#111111] p-4 text-sm text-[#9CA3AF]">
-                    Open an appointment to view customer contact details, notes, and edit or cancel the booking.
-                  </div>
-                )}
-              </div>
-              <span className="hidden sm:block text-xs text-[#9CA3AF] px-2">{formatShopDateLong()}</span>
               <Link
                 href="/admin/settings"
-                className="w-9 h-9 rounded-full bg-[#111111] border border-white/10 flex items-center justify-center text-[11px] font-bold"
+                className="w-11 h-11 rounded-full bg-[#111111] border border-white/10 flex items-center justify-center text-[11px] font-bold"
                 title={ADMIN_NAME}
               >
                 {ADMIN_FIRST.slice(0, 1)}G
@@ -213,19 +183,104 @@ export default function AdminShell({ children }: { children: ReactNode }) {
             </div>
           </div>
           {searchOpen && (
-            <div className="md:hidden px-4 pb-3">
+            <div className="md:hidden px-3 pb-3">
               <input
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search…"
+                placeholder="Search customers, vehicles…"
+                autoFocus
                 className={fieldClass}
               />
+              {searchQuery.trim() && (
+                <div className="mt-2 rounded-xl border border-white/10 bg-[#111111] overflow-hidden">
+                  {results.length === 0 ? (
+                    <p className="px-4 py-3 text-sm text-[#9CA3AF]">No matches</p>
+                  ) : (
+                    results.map((b) => (
+                      <button
+                        key={b.id}
+                        type="button"
+                        className="w-full text-left px-4 py-3.5 text-sm hover:bg-white/5 border-b border-white/5 last:border-0 min-h-12"
+                        onClick={() => openResult(b.id, b)}
+                      >
+                        <span className="text-white font-medium">{b.customerName}</span>
+                        <span className="block text-[#9CA3AF] text-xs mt-0.5">
+                          {b.serviceName} · {b.vehicle}
+                        </span>
+                      </button>
+                    ))
+                  )}
+                </div>
+              )}
             </div>
           )}
         </header>
 
-        <main className="px-4 md:px-6 py-6">{children}</main>
+        <main className="px-3 md:px-6 py-4 md:py-6 pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-6">
+          {children}
+        </main>
       </div>
+
+      <nav className="lg:hidden fixed bottom-0 inset-x-0 z-40 border-t border-white/10 bg-[#0B0B0B]/95 backdrop-blur pb-[env(safe-area-inset-bottom)]">
+        <div className="grid grid-cols-5">
+          {TAB_ITEMS.map((item) => {
+            const active = section === item.section;
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "flex flex-col items-center justify-center gap-0.5 min-h-14 text-[10px] font-bold uppercase tracking-wide touch-manipulation",
+                  active ? "text-[#FF2AD4]" : "text-[#9CA3AF]",
+                )}
+              >
+                <Icon className="w-5 h-5" />
+                {item.label}
+              </Link>
+            );
+          })}
+          <button
+            type="button"
+            onClick={() => setMobileOpen(true)}
+            className={cn(
+              "flex flex-col items-center justify-center gap-0.5 min-h-14 text-[10px] font-bold uppercase tracking-wide touch-manipulation",
+              moreActive ? "text-[#FF2AD4]" : "text-[#9CA3AF]",
+            )}
+          >
+            <MoreHorizontal className="w-5 h-5" />
+            More
+          </button>
+        </div>
+      </nav>
+    </div>
+  );
+}
+
+function SearchResults({
+  results,
+  onPick,
+}: {
+  results: Array<{ id: number; customerName: string; serviceName: string }>;
+  onPick: (id: number) => void;
+}) {
+  return (
+    <div className="absolute top-full mt-2 w-full rounded-xl border border-white/10 bg-[#111111] shadow-xl overflow-hidden z-20">
+      {results.length === 0 ? (
+        <p className="px-4 py-3 text-sm text-[#9CA3AF]">No matches</p>
+      ) : (
+        results.map((b) => (
+          <button
+            key={b.id}
+            type="button"
+            className="w-full text-left px-4 py-3 text-sm hover:bg-white/5 border-b border-white/5 last:border-0"
+            onClick={() => onPick(b.id)}
+          >
+            <span className="text-white font-medium">{b.customerName}</span>
+            <span className="text-[#9CA3AF]"> · {b.serviceName} · #{String(b.id).padStart(5, "0")}</span>
+          </button>
+        ))
+      )}
     </div>
   );
 }

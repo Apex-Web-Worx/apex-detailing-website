@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import type { Booking } from "@workspace/api-client-react";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, Phone } from "lucide-react";
 import { formatDuration, formatTime12h } from "@/lib/format";
 import { displayStatus, notesPreview, bookingShopDate, bookingShopTime } from "../utils";
 import { StatusBadge } from "./ui";
@@ -34,12 +34,12 @@ export default function AppointmentRow({
   const canAct = status === "confirmed";
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-[#111111] px-4 py-3 hover:bg-[#161616] transition duration-200">
-      <div className="flex flex-col lg:flex-row lg:items-center gap-3">
-        <button type="button" onClick={onView} className="flex-1 min-w-0 text-left">
+    <div className="rounded-2xl border border-white/10 bg-[#111111] px-3 py-3 md:px-4 hover:bg-[#161616] transition duration-200">
+      <div className="flex items-start gap-3">
+        <button type="button" onClick={onView} className="flex-1 min-w-0 text-left touch-manipulation">
           <div className="flex items-start gap-3">
             {photoIds[0] ? (
-              <div className="w-10 h-10 rounded-lg overflow-hidden border border-white/10 shrink-0 mt-0.5">
+              <div className="w-12 h-12 rounded-xl overflow-hidden border border-white/10 shrink-0">
                 <AdminBookingPhoto
                   token={token}
                   bookingId={booking.id}
@@ -49,16 +49,19 @@ export default function AppointmentRow({
               </div>
             ) : null}
             <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <span className="text-sm font-bold text-white w-20 shrink-0">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-bold text-white shrink-0">
                   {formatTime12h(bookingShopTime(booking))}
                 </span>
-                <span className="font-semibold text-white">{booking.serviceName}</span>
-                <span className="text-xs text-[#9CA3AF]">{formatDuration(booking.serviceDurationMinutes)}</span>
+                <StatusBadge status={status} />
               </div>
-              <div className="mt-1 text-sm text-[#9CA3AF] truncate">
-                {booking.vehicle} · {booking.customerName}
-              </div>
+              <p className="mt-0.5 font-semibold text-white leading-snug">{booking.serviceName}</p>
+              <p className="mt-0.5 text-sm text-[#9CA3AF] truncate">
+                {booking.customerName} · {booking.vehicle}
+              </p>
+              <p className="mt-0.5 text-xs text-[#9CA3AF]">
+                {bookingShopDate(booking)} · {formatDuration(booking.serviceDurationMinutes)}
+              </p>
               <CustomerPhotoBadge count={photoCount} />
               {preview && (
                 <p className="mt-1 text-xs text-[#9CA3AF]/80 truncate">{preview}</p>
@@ -66,48 +69,28 @@ export default function AppointmentRow({
             </div>
           </div>
         </button>
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="hidden sm:inline text-xs text-[#9CA3AF]">{bookingShopDate(booking)}</span>
-          <StatusBadge status={status} />
-          <button
-            type="button"
-            onClick={onView}
-            className="h-8 px-3 rounded-lg text-xs font-medium border border-white/10 hover:bg-white/5"
+        <div className="flex flex-col items-center gap-1.5 shrink-0">
+          <a
+            href={`tel:${booking.phone}`}
+            className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-[#23B9FF] hover:bg-white/5 touch-manipulation"
+            aria-label={`Call ${booking.customerName}`}
           >
-            View Details
-          </button>
-          {canAct && onEdit && (
-            <button
-              type="button"
-              onClick={onEdit}
-              className="h-8 px-3 rounded-lg text-xs font-medium border border-white/10 hover:bg-white/5"
-            >
-              Edit
-            </button>
-          )}
-          {canAct && onCancel && (
-            <button
-              type="button"
-              onClick={onCancel}
-              className="h-8 px-3 rounded-lg text-xs font-medium text-red-400 border border-red-500/20 hover:bg-red-500/10"
-            >
-              Cancel
-            </button>
-          )}
+            <Phone className="w-4 h-4" />
+          </a>
           <div className="relative">
             <button
               type="button"
               onClick={() => setMenu((v) => !v)}
-              className="w-8 h-8 rounded-lg border border-white/10 flex items-center justify-center hover:bg-white/5"
+              className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center hover:bg-white/5 touch-manipulation"
               aria-label="More actions"
             >
               <MoreHorizontal className="w-4 h-4" />
             </button>
             {menu && (
-              <div className="absolute right-0 mt-1 w-44 rounded-xl border border-white/10 bg-[#0B0B0B] py-1 z-10">
+              <div className="absolute right-0 bottom-full mb-1 w-44 rounded-xl border border-white/10 bg-[#0B0B0B] py-1 z-20 shadow-xl">
                 <button
                   type="button"
-                  className="w-full text-left px-3 py-2 text-sm hover:bg-white/5"
+                  className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
                   onClick={() => {
                     setMenu(false);
                     onView();
@@ -118,7 +101,7 @@ export default function AppointmentRow({
                 {canAct && onEdit && (
                   <button
                     type="button"
-                    className="w-full text-left px-3 py-2 text-sm hover:bg-white/5"
+                    className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
                     onClick={() => {
                       setMenu(false);
                       onEdit();
@@ -127,16 +110,10 @@ export default function AppointmentRow({
                     Edit
                   </button>
                 )}
-                <a
-                  href={`tel:${booking.phone}`}
-                  className="block px-3 py-2 text-sm hover:bg-white/5"
-                >
-                  Call
-                </a>
                 {booking.manageToken && (
                   <Link
                     href={`/manage/${booking.id}?token=${booking.manageToken}`}
-                    className="block px-3 py-2 text-sm hover:bg-white/5"
+                    className="block px-3 py-3 text-sm hover:bg-white/5 min-h-11"
                   >
                     Customer link
                   </Link>
@@ -144,7 +121,7 @@ export default function AppointmentRow({
                 {canAct && onCancel && (
                   <button
                     type="button"
-                    className="w-full text-left px-3 py-2 text-sm text-red-400 hover:bg-red-500/10"
+                    className="w-full text-left px-3 py-3 text-sm text-red-400 hover:bg-red-500/10 min-h-11"
                     onClick={() => {
                       setMenu(false);
                       onCancel();

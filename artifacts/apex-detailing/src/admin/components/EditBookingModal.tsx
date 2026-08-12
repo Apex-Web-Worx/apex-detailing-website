@@ -58,7 +58,7 @@ export default function EditBookingModal({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full sm:max-w-2xl bg-[#0B0B0B] border border-white/10 rounded-t-2xl sm:rounded-2xl max-h-[95vh] overflow-y-auto"
+        className="w-full sm:max-w-2xl bg-[#0B0B0B] border border-white/10 rounded-t-2xl sm:rounded-2xl max-h-[92dvh] overflow-y-auto pb-[env(safe-area-inset-bottom)]"
       >
         <div className="sticky top-0 z-10 bg-[#0B0B0B] border-b border-white/10 px-5 py-4 flex items-center justify-between">
           <div className="min-w-0 flex-1 pr-3">

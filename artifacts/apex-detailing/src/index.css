@@ -1122,6 +1122,10 @@
   background: var(--admin-bg);
   color: var(--admin-text);
   overflow-x: hidden;
+  min-height: 100dvh;
+  -webkit-tap-highlight-color: transparent;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 .apex-admin input[type="date"],
