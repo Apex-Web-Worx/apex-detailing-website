@@ -21,6 +21,11 @@ import AppointmentRow from "../components/AppointmentRow";
 import MonthCalendar from "../components/MonthCalendar";
 import { AdminCard, EmptyState, GhostButton, StatusBadge } from "../components/ui";
 import { useOwnerCalendarEvents } from "../useOwnerCalendarEvents";
+import {
+  CustomerPhotoBadge,
+  photoIdsForBooking,
+  useAdminBookingPhotoIndex,
+} from "../components/CustomerPhotos";
 import { useState, type ReactNode } from "react";
 
 export default function DashboardHome() {
@@ -39,6 +44,7 @@ export default function DashboardHome() {
   const today = todayDateString();
   const [calMonth, setCalMonth] = useState(today.slice(0, 7));
   const { data: personalEvents = [] } = useOwnerCalendarEvents(token, calMonth);
+  const photosQuery = useAdminBookingPhotoIndex(token);
   const kpis = computeKpis(bookings);
   const todayPersonal = personalEvents.filter((e) => e.dates.includes(today));
   const todayAppts = bookings
@@ -178,6 +184,7 @@ export default function DashboardHome() {
                     <p className="text-xs text-[#9CA3AF] truncate">
                       {b.vehicle} · {b.serviceName}
                     </p>
+                    <CustomerPhotoBadge count={photoIdsForBooking(photosQuery.data, b.id).length} />
                   </div>
                 </button>
               ))}

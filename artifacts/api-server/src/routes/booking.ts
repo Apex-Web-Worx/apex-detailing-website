@@ -1,4 +1,4 @@
-import { Router, type IRouter } from "express";
+import express, { Router, type IRouter } from "express";
 import {
   db,
   servicesTable,
@@ -38,6 +38,14 @@ import {
   notifyBookingCancelled,
   notifyBookingRescheduled,
 } from "../lib/notify";
+import {
+  countBookingPhotos,
+  detectImageMime,
+  insertBookingPhoto,
+  MAX_PHOTO_BYTES,
+  MAX_PHOTOS_PER_BOOKING,
+  deletePhotosForBooking,
+} from "../lib/booking-photos";
 
 const router: IRouter = Router();
 
@@ -462,6 +470,61 @@ async function loadBookingByToken(
   return row;
 }
 
+router.post(
+  "/booking/bookings/:id/photos",
+  express.raw({ type: () => true, limit: MAX_PHOTO_BYTES }),
+  async (req, res) => {
+    const result = await loadBookingByToken(req.params.id, req.query["token"]);
+    if (result === "not_found") {
+      res.status(404).json({ message: "Booking not found" });
+      return;
+    }
+    if (result.status !== "confirmed") {
+      res.status(400).json({ message: "Photos can only be added to a confirmed booking." });
+      return;
+    }
+    if (result.scheduledAt.getTime() <= Date.now()) {
+      res.status(400).json({ message: "This appointment has already started." });
+      return;
+    }
+
+    const body = req.body;
+    const buf = Buffer.isBuffer(body)
+      ? body
+      : body instanceof Uint8Array
+        ? Buffer.from(body)
+        : Buffer.alloc(0);
+    if (buf.length === 0) {
+      res.status(400).json({ message: "Photo file is empty." });
+      return;
+    }
+    if (buf.length > MAX_PHOTO_BYTES) {
+      res.status(413).json({ message: "Photo is too large. Max 2 MB." });
+      return;
+    }
+    const mime = detectImageMime(buf);
+    if (!mime) {
+      res.status(400).json({ message: "Please upload a JPEG, PNG, or WebP photo." });
+      return;
+    }
+
+    const existing = await countBookingPhotos(result.id);
+    if (existing >= MAX_PHOTOS_PER_BOOKING) {
+      res.status(400).json({
+        message: `You can add up to ${MAX_PHOTOS_PER_BOOKING} photos.`,
+      });
+      return;
+    }
+
+    const saved = await insertBookingPhoto({
+      bookingId: result.id,
+      mime,
+      data: buf,
+    });
+    res.status(201).json({ id: saved.id, mime: saved.mime });
+  },
+);
+
 router.get("/booking/manage/:id", async (req, res) => {
   const result = await loadBookingByToken(req.params.id, req.query["token"]);
   if (result === "not_found") {
@@ -521,6 +584,7 @@ router.post("/booking/manage/:id/cancel", async (req, res) => {
   res.status(204).send();
 
   const cancelled = updatedRows[0]!;
+  await deletePhotosForBooking(cancelled.id);
   notifyBookingCancelled(bookingToEmailData(cancelled), "customer");
   void syncBookingCalendar(cancelled.id);
 });

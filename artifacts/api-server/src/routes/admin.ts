@@ -33,6 +33,12 @@ import {
 } from "../lib/calendar";
 import { notifyBookingCancelled, notifyBookingRescheduled } from "../lib/notify";
 import { sendSms, smsBlockedDateConfirm } from "../lib/sms";
+import {
+  deletePhotosForBooking,
+  getBookingPhoto,
+  listAllBookingPhotoMeta,
+  listBookingPhotoMeta,
+} from "../lib/booking-photos";
 
 const router: IRouter = Router();
 
@@ -79,6 +85,38 @@ router.get("/admin/bookings", requireAdmin, async (_req, res) => {
   res.json(rows);
 });
 
+router.get("/admin/booking-photos", requireAdmin, async (_req, res) => {
+  const rows = await listAllBookingPhotoMeta();
+  res.json({ photos: rows });
+});
+
+router.get("/admin/bookings/:id/photos", requireAdmin, async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isFinite(id)) {
+    res.status(400).json({ message: "Invalid id" });
+    return;
+  }
+  const photos = await listBookingPhotoMeta(id);
+  res.json({ photos });
+});
+
+router.get("/admin/bookings/:id/photos/:photoId", requireAdmin, async (req, res) => {
+  const bookingId = Number(req.params.id);
+  const photoId = Number(req.params.photoId);
+  if (!Number.isFinite(bookingId) || !Number.isFinite(photoId)) {
+    res.status(400).json({ message: "Invalid id" });
+    return;
+  }
+  const photo = await getBookingPhoto(bookingId, photoId);
+  if (!photo) {
+    res.status(404).json({ message: "Photo not found" });
+    return;
+  }
+  res.setHeader("Content-Type", photo.mime);
+  res.setHeader("Cache-Control", "private, max-age=300");
+  res.send(photo.data);
+});
+
 router.get("/admin/calendar-events", requireAdmin, async (req, res) => {
   const start = typeof req.query.start === "string" ? req.query.start : "";
   const end = typeof req.query.end === "string" ? req.query.end : "";
@@ -122,6 +160,9 @@ router.delete("/admin/bookings/:id", requireAdmin, async (req, res) => {
 
   const cancelled = cancelledRows[0];
   if (cancelled) {
+    void deletePhotosForBooking(cancelled.id).catch((err) =>
+      console.error("[admin] photo delete on cancel failed:", err),
+    );
     notifyBookingCancelled(bookingToEmailData(cancelled), "admin");
     void syncBookingCalendar(cancelled.id);
   }

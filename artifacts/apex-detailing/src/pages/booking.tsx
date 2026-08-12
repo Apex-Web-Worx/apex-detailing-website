@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { Link } from "wouter";
 import {
   useListServices,
@@ -18,7 +18,13 @@ import {
   addDaysToDateString,
 } from "@/lib/format";
 import VehiclePhoto from "@/components/VehiclePhoto";
+import VehiclePhotoPicker from "@/components/VehiclePhotoPicker";
 import { useVehicleImage } from "@/lib/vehicleImage";
+import {
+  revokePickedPhotos,
+  uploadBookingPhotos,
+  type PickedPhoto,
+} from "@/lib/bookingPhotos";
 
 // Slug-based merchandising badges shown on the service-picker cards.
 // Keep these short — the badge sits inline next to the title.
@@ -97,7 +103,15 @@ export default function BookingPage() {
   const [date, setDate] = useState<string | null>(null);
   const [time, setTime] = useState<string | null>(null);
   const [form, setForm] = useState<Form>(EMPTY_FORM);
+  const [vehiclePhotos, setVehiclePhotos] = useState<PickedPhoto[]>([]);
   const [confirmed, setConfirmed] = useState<Booking | null>(null);
+  const [photoWarning, setPhotoWarning] = useState(false);
+  const vehiclePhotosRef = useRef(vehiclePhotos);
+  vehiclePhotosRef.current = vehiclePhotos;
+
+  useEffect(() => {
+    return () => revokePickedPhotos(vehiclePhotosRef.current);
+  }, []);
 
   const stepIndex = ["service", "datetime", "info", "confirm"].indexOf(step);
 
@@ -206,7 +220,7 @@ export default function BookingPage() {
 
       <main className="max-w-5xl mx-auto px-4 py-8 pb-32">
         {confirmed ? (
-          <ConfirmationView booking={confirmed} />
+          <ConfirmationView booking={confirmed} photoWarning={photoWarning} />
         ) : step === "service" ? (
           <ServiceStep
             selected={service}
@@ -238,6 +252,8 @@ export default function BookingPage() {
           <InfoStep
             form={form}
             onChange={setForm}
+            photos={vehiclePhotos}
+            onPhotosChange={setVehiclePhotos}
             onBack={() => setStep("datetime")}
             onNext={() => setStep("confirm")}
           />
@@ -247,8 +263,12 @@ export default function BookingPage() {
             date={date!}
             time={time!}
             form={form}
+            photos={vehiclePhotos}
             onBack={() => setStep("info")}
-            onConfirmed={(b) => setConfirmed(b)}
+            onConfirmed={(b, photosFailed) => {
+              setPhotoWarning(photosFailed);
+              setConfirmed(b);
+            }}
           />
         )}
       </main>
@@ -617,11 +637,15 @@ function DateTimeStep({
 function InfoStep({
   form,
   onChange,
+  photos,
+  onPhotosChange,
   onBack,
   onNext,
 }: {
   form: Form;
   onChange: (f: Form) => void;
+  photos: PickedPhoto[];
+  onPhotosChange: (photos: PickedPhoto[]) => void;
   onBack: () => void;
   onNext: () => void;
 }) {
@@ -686,6 +710,9 @@ function InfoStep({
               <VehiclePhotoHint vehicle={form.vehicle} />
             </div>
           </div>
+        </div>
+        <div className="sm:col-span-2">
+          <VehiclePhotoPicker photos={photos} onChange={onPhotosChange} />
         </div>
         <div className="sm:col-span-2">
           <label className="block text-sm font-bold text-gray-300 mb-2">
@@ -791,6 +818,7 @@ function ConfirmStep({
   date,
   time,
   form,
+  photos,
   onBack,
   onConfirmed,
 }: {
@@ -798,8 +826,9 @@ function ConfirmStep({
   date: string;
   time: string;
   form: Form;
+  photos: PickedPhoto[];
   onBack: () => void;
-  onConfirmed: (b: Booking) => void;
+  onConfirmed: (b: Booking, photosFailed: boolean) => void;
 }) {
   const mutation = useCreateBooking();
 
@@ -818,7 +847,17 @@ function ConfirmStep({
           smsConsent: form.smsConsent,
         },
       });
-      onConfirmed(result);
+      let photosFailed = false;
+      if (photos.length > 0 && result.manageToken) {
+        try {
+          await uploadBookingPhotos(result.id, result.manageToken, photos);
+        } catch {
+          photosFailed = true;
+        }
+      } else if (photos.length > 0) {
+        photosFailed = true;
+      }
+      onConfirmed(result, photosFailed);
     } catch {
       // Error displayed below
     }
@@ -851,6 +890,21 @@ function ConfirmStep({
         <SummaryRow label="Email" value={form.email} />
         <SummaryRow label="Phone" value={form.phone} />
         <VehicleSummaryRow vehicle={form.vehicle} />
+        {photos.length > 0 && (
+          <div className="flex items-start justify-between gap-4 px-5 py-4">
+            <span className="text-sm text-gray-400 font-medium">Your photos</span>
+            <div className="flex gap-2">
+              {photos.map((p) => (
+                <img
+                  key={p.id}
+                  src={p.previewUrl}
+                  alt=""
+                  className="w-12 h-12 rounded-lg object-cover border border-white/10"
+                />
+              ))}
+            </div>
+          </div>
+        )}
         {form.notes && <SummaryRow label="Notes" value={form.notes} />}
       </div>
 
@@ -952,7 +1006,13 @@ function SummaryRow({
 }
 
 /* ---------- Confirmation view ---------- */
-function ConfirmationView({ booking }: { booking: Booking }) {
+function ConfirmationView({
+  booking,
+  photoWarning,
+}: {
+  booking: Booking;
+  photoWarning: boolean;
+}) {
   return (
     <section className="text-center max-w-2xl mx-auto pt-12">
       <div className="w-20 h-20 mx-auto rounded-full bg-[#FF1AD8] flex items-center justify-center mb-6 shadow-[0_0_18px_rgba(255,26,216,0.3)]">
@@ -983,6 +1043,13 @@ function ConfirmationView({ booking }: { booking: Booking }) {
         />
         <VehicleSummaryRow vehicle={booking.vehicle} />
       </div>
+
+      {photoWarning && (
+        <div className="mb-6 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-sm text-left">
+          Your appointment is booked, but we could not save the vehicle photos.
+          You can text them to the shop at 417-527-6165.
+        </div>
+      )}
 
       <div className="p-4 rounded-xl bg-[#00E5FF]/5 border border-[#00E5FF]/20 text-sm text-gray-300 flex gap-3 text-left mb-8">
         <MapPin className="w-5 h-5 text-[#00E5FF] flex-shrink-0 mt-0.5" />

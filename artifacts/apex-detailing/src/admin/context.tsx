@@ -110,6 +110,7 @@ export function AdminProvider({
   const refetch = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: getAdminListBookingsQueryKey() });
     queryClient.invalidateQueries({ queryKey: getAdminListBlockedDatesQueryKey() });
+    queryClient.invalidateQueries({ queryKey: ["admin-booking-photos"] });
   }, [queryClient]);
 
   const cancelBooking = useCallback(

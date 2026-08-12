@@ -6,9 +6,16 @@ import VehiclePhoto from "@/components/VehiclePhoto";
 import { useAdmin } from "../context";
 import { bookingIso, displayStatus } from "../utils";
 import { GhostButton, StatusBadge } from "./ui";
+import {
+  CustomerPhotoGallery,
+  photoIdsForBooking,
+  useAdminBookingPhotoIndex,
+} from "./CustomerPhotos";
 
 export default function AppointmentDetailDrawer() {
-  const { detail, setDetail, setEditing, cancelBooking } = useAdmin();
+  const { detail, setDetail, setEditing, cancelBooking, token } = useAdmin();
+  const photosQuery = useAdminBookingPhotoIndex(token);
+  const photoIds = detail ? photoIdsForBooking(photosQuery.data, detail.id) : [];
 
   useEffect(() => {
     if (!detail) return;
@@ -67,11 +74,22 @@ export default function AppointmentDetailDrawer() {
 
           <section>
             <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">Vehicle</h3>
-            <VehiclePhoto vehicle={detail.vehicle} size="hero" showCredit className="mb-3" />
-            <p className="text-white">{detail.vehicle}</p>
-            <p className="text-xs text-[#9CA3AF] mt-1">
-              Photo is a Wikipedia match for the vehicle text — not a picture of this specific car.
-            </p>
+            {photoIds.length > 0 ? (
+              <div className="mb-3">
+                <CustomerPhotoGallery token={token} bookingId={detail.id} photoIds={photoIds} />
+                <p className="text-xs text-[#9CA3AF] mt-2">
+                  Customer photos — deleted automatically after the appointment.
+                </p>
+              </div>
+            ) : (
+              <>
+                <VehiclePhoto vehicle={detail.vehicle} size="hero" showCredit className="mb-3" />
+                <p className="text-xs text-[#9CA3AF] mt-1">
+                  Photo is a Wikipedia match for the vehicle text — not a picture of this specific car.
+                </p>
+              </>
+            )}
+            <p className="text-white mt-2">{detail.vehicle}</p>
             <Link
               href={`/admin/vehicles/${encodeURIComponent(`${detail.email.toLowerCase()}||${detail.vehicle.toLowerCase()}`)}`}
               className="inline-block mt-3 text-xs text-[#23B9FF] hover:underline"

@@ -6,6 +6,13 @@ import { formatDuration, formatTime12h } from "@/lib/format";
 import VehiclePhoto from "@/components/VehiclePhoto";
 import { displayStatus, notesPreview, bookingShopDate, bookingShopTime } from "../utils";
 import { StatusBadge } from "./ui";
+import { useAdmin } from "../context";
+import {
+  AdminBookingPhoto,
+  CustomerPhotoBadge,
+  photoIdsForBooking,
+  useAdminBookingPhotoIndex,
+} from "./CustomerPhotos";
 
 export default function AppointmentRow({
   booking,
@@ -18,6 +25,10 @@ export default function AppointmentRow({
   onEdit?: () => void;
   onCancel?: () => void;
 }) {
+  const { token } = useAdmin();
+  const photosQuery = useAdminBookingPhotoIndex(token);
+  const photoIds = photoIdsForBooking(photosQuery.data, booking.id);
+  const photoCount = photoIds.length;
   const [menu, setMenu] = useState(false);
   const status = displayStatus(booking);
   const preview = notesPreview(booking.notes);
@@ -28,7 +39,18 @@ export default function AppointmentRow({
       <div className="flex flex-col lg:flex-row lg:items-center gap-3">
         <button type="button" onClick={onView} className="flex-1 min-w-0 text-left">
           <div className="flex items-start gap-3">
-            <VehiclePhoto vehicle={booking.vehicle} size="sm" className="mt-0.5" />
+            {photoIds[0] ? (
+              <div className="w-10 h-10 rounded-lg overflow-hidden border border-white/10 shrink-0 mt-0.5">
+                <AdminBookingPhoto
+                  token={token}
+                  bookingId={booking.id}
+                  photoId={photoIds[0]}
+                  className="w-full h-full"
+                />
+              </div>
+            ) : (
+              <VehiclePhoto vehicle={booking.vehicle} size="sm" className="mt-0.5" />
+            )}
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                 <span className="text-sm font-bold text-white w-20 shrink-0">
@@ -40,6 +62,7 @@ export default function AppointmentRow({
               <div className="mt-1 text-sm text-[#9CA3AF] truncate">
                 {booking.vehicle} · {booking.customerName}
               </div>
+              <CustomerPhotoBadge count={photoCount} />
               {preview && (
                 <p className="mt-1 text-xs text-[#9CA3AF]/80 truncate">{preview}</p>
               )}

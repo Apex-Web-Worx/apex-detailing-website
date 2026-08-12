@@ -1,6 +1,9 @@
 import app from "./app";
 import { startReminderCron } from "./lib/reminders";
-import { ensureBlockedDatesContactColumns } from "./lib/ensure-schema";
+import {
+  ensureBlockedDatesContactColumns,
+  ensureBookingPhotosTable,
+} from "./lib/ensure-schema";
 import { runSeed } from "./seed";
 
 const rawPort = process.env["PORT"];
@@ -22,6 +25,10 @@ if (Number.isNaN(port) || port <= 0) {
 ensureBlockedDatesContactColumns()
   .then(() => console.log("[schema] blocked_dates contact columns ready"))
   .catch((err) => console.error("[schema] ensure failed (continuing):", err));
+
+ensureBookingPhotosTable()
+  .then(() => console.log("[schema] booking_photos table ready"))
+  .catch((err) => console.error("[schema] booking_photos ensure failed (continuing):", err));
 
 // Auto-seed on startup. The seed is idempotent (upsert by slug + deactivate
 // missing), so re-running on every boot costs ~14 small queries and ensures

@@ -20,6 +20,7 @@ import { and, eq, gte, isNull, lte } from "drizzle-orm";
 import { shopLocalDateString, shopLocalTimeString } from "./availability";
 import type { BookingEmailData } from "./email";
 import { notifyReminder24h } from "./notify";
+import { purgeExpiredBookingPhotos } from "./booking-photos";
 
 const REMINDER_TICK_MS = 5 * 60 * 1000; // every 5 minutes
 const WINDOW_LOWER_MS = 23 * 60 * 60 * 1000;
@@ -95,6 +96,15 @@ async function runOnce(): Promise<void> {
       smsConsent: booking.smsConsent,
     };
     await notifyReminder24h(data);
+  }
+
+  try {
+    const purged = await purgeExpiredBookingPhotos();
+    if (purged > 0) {
+      console.log(`[reminders] purged ${purged} expired booking photo(s)`);
+    }
+  } catch (err) {
+    console.error("[reminders] photo purge failed:", err);
   }
 
   // Touch the unused servicesTable import so tree-shaking doesn't drop it.
