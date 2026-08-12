@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
-import { formatPrice } from "@/lib/format";
 import { useAdmin } from "../context";
 import { bookingIso, customerKey, displayStatus, groupCustomers } from "../utils";
 import { AdminCard, EmptyState, fieldClass, StatusBadge } from "../components/ui";
@@ -25,8 +24,6 @@ export default function CustomersPage() {
             <p className="text-white">{selected.name}</p>
             <p className="text-sm text-[#9CA3AF] mt-1">{selected.phone}</p>
             <p className="text-sm text-[#9CA3AF]">{selected.email}</p>
-            <p className="text-sm text-white mt-3">Lifetime value {formatPrice(selected.lifetimeCents)}</p>
-            <p className="text-[11px] text-[#9CA3AF]">Sum of completed appointment quoted prices.</p>
           </AdminCard>
           <AdminCard hover={false} className="p-5">
             <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">Vehicles</h3>
@@ -56,23 +53,10 @@ export default function CustomersPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <StatusBadge status={displayStatus(b)} />
-                  <span className="text-sm">{formatPrice(b.servicePriceCents)}</span>
                 </div>
               </div>
             ))}
           </div>
-        </AdminCard>
-        <AdminCard hover={false} className="p-5">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">Payments</h3>
-          <p className="text-sm text-[#9CA3AF]">
-            There is no separate payments ledger. Amounts below are the quoted service prices on each booking.
-          </p>
-          {selected.bookings.map((b) => (
-            <div key={b.id} className="flex justify-between text-sm py-2 border-b border-white/5">
-              <span>{b.serviceName}</span>
-              <span>{formatPrice(b.servicePriceCents)}</span>
-            </div>
-          ))}
         </AdminCard>
         <AdminCard hover={false} className="p-5">
           <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">Notes</h3>
@@ -83,10 +67,6 @@ export default function CustomersPage() {
               <p key={i} className="text-sm text-white whitespace-pre-wrap mb-3">{n}</p>
             ))
           )}
-        </AdminCard>
-        <AdminCard hover={false} className="p-5">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">Reviews</h3>
-          <p className="text-sm text-[#9CA3AF]">Reviews are not stored in the booking database yet.</p>
         </AdminCard>
       </div>
     );
@@ -120,7 +100,6 @@ export default function CustomersPage() {
                   </div>
                   <p className="text-sm text-[#9CA3AF]">{c.vehicles.length} vehicle{c.vehicles.length === 1 ? "" : "s"}</p>
                   <p className="text-sm text-[#9CA3AF]">{c.appointmentCount} appt{c.appointmentCount === 1 ? "" : "s"}</p>
-                  <p className="text-sm font-semibold">{formatPrice(c.lifetimeCents)}</p>
                 </div>
               </AdminCard>
             </Link>

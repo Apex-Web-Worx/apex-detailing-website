@@ -2,11 +2,10 @@ import { Link, useLocation } from "wouter";
 import {
   CalendarClock,
   CalendarOff,
-  DollarSign,
   Plus,
   RefreshCw,
 } from "lucide-react";
-import { formatPrice, formatTime12h, todayDateString } from "@/lib/format";
+import { formatTime12h, todayDateString } from "@/lib/format";
 import { ADMIN_FIRST } from "../constants";
 import { useAdmin } from "../context";
 import {
@@ -15,16 +14,11 @@ import {
   computeKpis,
   deriveTasks,
   displayStatus,
-  formatSignedPercent,
   greetingForNow,
-  monthLabel,
-  monthRevenue,
-  monthlySeries,
-  percentChange,
 } from "../utils";
 import AppointmentRow from "../components/AppointmentRow";
 import MonthCalendar from "../components/MonthCalendar";
-import { AdminCard, EmptyState, GhostButton, Sparkline, StatusBadge } from "../components/ui";
+import { AdminCard, EmptyState, GhostButton, StatusBadge } from "../components/ui";
 import { useOwnerCalendarEvents } from "../useOwnerCalendarEvents";
 import { useState, type ReactNode } from "react";
 
@@ -52,10 +46,6 @@ export default function DashboardHome() {
   const recent = [...bookings]
     .sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))
     .slice(0, 6);
-  const series = monthlySeries(bookings, 6);
-  const thisMonth = today.slice(0, 7);
-  const prevMonth = monthRevenue(bookings, series[series.length - 2]?.month ?? thisMonth);
-  const change = percentChange(kpis.monthCollectedCents, prevMonth);
   const tasks = deriveTasks(bookings);
 
   return (
@@ -83,7 +73,7 @@ export default function DashboardHome() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Kpi
           href="/admin/appointments"
           label="Today"
@@ -101,20 +91,12 @@ export default function DashboardHome() {
           glow="rgba(138,82,255,0.25)"
         />
         <Kpi
-          href="/admin/analytics"
-          label="Revenue"
-          value={formatPrice(kpis.monthCollectedCents)}
-          hint="Completed this month"
-          icon={<DollarSign className="w-4 h-4 text-[#23B9FF]" />}
-          glow="rgba(35,185,255,0.25)"
-        />
-        <Kpi
           href="/admin/appointments"
           label="Upcoming"
           value={String(kpis.upcomingQuotedCount)}
-          hint="Quoted appointments"
-          icon={<CalendarClock className="w-4 h-4 text-[#FF2AD4]" />}
-          glow="rgba(255,42,212,0.18)"
+          hint="Confirmed appointments"
+          icon={<CalendarClock className="w-4 h-4 text-[#23B9FF]" />}
+          glow="rgba(35,185,255,0.18)"
         />
       </div>
 
@@ -167,19 +149,8 @@ export default function DashboardHome() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-        <AdminCard hover={false} className="p-5 xl:col-span-1">
-          <h3 className="font-bold mb-1">Revenue Overview</h3>
-          <p className="text-sm text-[#9CA3AF]">{monthLabel(thisMonth)}</p>
-          <p className="text-3xl font-bold mt-3">{formatPrice(kpis.monthCollectedCents)}</p>
-          <p className={`text-sm mt-1 ${change && change > 0 ? "text-emerald-400" : change && change < 0 ? "text-red-400" : "text-[#9CA3AF]"}`}>
-            {formatSignedPercent(change)} vs previous month
-          </p>
-          <p className="text-[11px] text-[#9CA3AF] mt-1">Quoted value of completed appointments. Payments are not tracked separately.</p>
-          <Sparkline values={series.map((s) => s.cents)} className="mt-4" />
-        </AdminCard>
-
-        <AdminCard hover={false} className="p-5 xl:col-span-1">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+        <AdminCard hover={false} className="p-5">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-bold">Recent Bookings</h3>
             <Link href="/admin/appointments" className="text-xs text-[#23B9FF] hover:underline">
@@ -202,7 +173,7 @@ export default function DashboardHome() {
                     <StatusBadge status={displayStatus(b)} />
                   </div>
                   <p className="text-xs text-[#9CA3AF] truncate">
-                    {b.vehicle} · {b.serviceName} · {formatPrice(b.servicePriceCents)}
+                    {b.vehicle} · {b.serviceName}
                   </p>
                 </button>
               ))}
