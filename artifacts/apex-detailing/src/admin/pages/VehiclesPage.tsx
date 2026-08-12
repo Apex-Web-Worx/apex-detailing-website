@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
-import { formatPrice } from "@/lib/format";
 import { useAdmin } from "../context";
 import { bookingIso, displayStatus, groupVehicles } from "../utils";
 import { AdminCard, EmptyState, fieldClass, StatusBadge } from "../components/ui";
@@ -35,7 +34,6 @@ export default function VehiclesPage() {
               </div>
               <div className="flex items-center gap-2">
                 <StatusBadge status={displayStatus(b)} />
-                <span className="text-sm">{formatPrice(b.servicePriceCents)}</span>
               </div>
             </div>
           ))}
