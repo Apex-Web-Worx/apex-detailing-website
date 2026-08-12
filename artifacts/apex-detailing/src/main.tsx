@@ -2,6 +2,7 @@ import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App";
 import "./index.css";
+import { markAppReady } from "./lib/bootSplash";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,11 +20,15 @@ createRoot(document.getElementById("root")!).render(
   </QueryClientProvider>,
 );
 
-// Tell the HTML splash it can dismiss after React has painted (logo wait is separate).
+// Dismiss splash as soon as React has painted + fonts are ready.
+// Photos use LQIP + mobile WebP — they must not block entry.
 requestAnimationFrame(() => {
   requestAnimationFrame(() => {
-    (
-      window as Window & { __APEX_MARK_APP_READY__?: () => void }
-    ).__APEX_MARK_APP_READY__?.();
+    const finish = () => markAppReady();
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(finish).catch(finish);
+    } else {
+      finish();
+    }
   });
 });
