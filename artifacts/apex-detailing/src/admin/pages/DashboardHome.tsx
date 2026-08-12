@@ -6,7 +6,6 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { formatTime12h, todayDateString } from "@/lib/format";
-import VehiclePhoto from "@/components/VehiclePhoto";
 import { ADMIN_FIRST } from "../constants";
 import { useAdmin } from "../context";
 import {
@@ -22,6 +21,7 @@ import MonthCalendar from "../components/MonthCalendar";
 import { AdminCard, EmptyState, GhostButton, StatusBadge } from "../components/ui";
 import { useOwnerCalendarEvents } from "../useOwnerCalendarEvents";
 import {
+  AdminBookingPhoto,
   CustomerPhotoBadge,
   photoIdsForBooking,
   useAdminBookingPhotoIndex,
@@ -168,14 +168,25 @@ export default function DashboardHome() {
             <p className="text-sm text-[#9CA3AF]">No bookings yet.</p>
           ) : (
             <div className="space-y-3">
-              {recent.map((b) => (
+              {recent.map((b) => {
+                const ids = photoIdsForBooking(photosQuery.data, b.id);
+                return (
                 <button
                   key={b.id}
                   type="button"
                   onClick={() => setDetail(b)}
                   className="w-full text-left flex items-center gap-3"
                 >
-                  <VehiclePhoto vehicle={b.vehicle} size="sm" />
+                  {ids[0] ? (
+                    <div className="w-10 h-10 rounded-lg overflow-hidden border border-white/10 shrink-0">
+                      <AdminBookingPhoto
+                        token={token}
+                        bookingId={b.id}
+                        photoId={ids[0]}
+                        className="w-full h-full"
+                      />
+                    </div>
+                  ) : null}
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-sm font-medium truncate">{b.customerName}</span>
@@ -184,10 +195,11 @@ export default function DashboardHome() {
                     <p className="text-xs text-[#9CA3AF] truncate">
                       {b.vehicle} · {b.serviceName}
                     </p>
-                    <CustomerPhotoBadge count={photoIdsForBooking(photosQuery.data, b.id).length} />
+                    <CustomerPhotoBadge count={ids.length} />
                   </div>
                 </button>
-              ))}
+                );
+              })}
             </div>
           )}
         </AdminCard>

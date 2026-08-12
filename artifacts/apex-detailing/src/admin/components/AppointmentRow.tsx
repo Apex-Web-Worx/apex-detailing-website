@@ -3,7 +3,6 @@ import { Link } from "wouter";
 import type { Booking } from "@workspace/api-client-react";
 import { MoreHorizontal } from "lucide-react";
 import { formatDuration, formatTime12h } from "@/lib/format";
-import VehiclePhoto from "@/components/VehiclePhoto";
 import { displayStatus, notesPreview, bookingShopDate, bookingShopTime } from "../utils";
 import { StatusBadge } from "./ui";
 import { useAdmin } from "../context";
@@ -48,9 +47,7 @@ export default function AppointmentRow({
                   className="w-full h-full"
                 />
               </div>
-            ) : (
-              <VehiclePhoto vehicle={booking.vehicle} size="sm" className="mt-0.5" />
-            )}
+            ) : null}
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                 <span className="text-sm font-bold text-white w-20 shrink-0">

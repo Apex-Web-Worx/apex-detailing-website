@@ -584,7 +584,9 @@ router.post("/booking/manage/:id/cancel", async (req, res) => {
   res.status(204).send();
 
   const cancelled = updatedRows[0]!;
-  await deletePhotosForBooking(cancelled.id);
+  void deletePhotosForBooking(cancelled.id).catch((err) =>
+    console.error("[booking] photo delete on cancel failed:", err),
+  );
   notifyBookingCancelled(bookingToEmailData(cancelled), "customer");
   void syncBookingCalendar(cancelled.id);
 });

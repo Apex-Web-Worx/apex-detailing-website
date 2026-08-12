@@ -16,7 +16,6 @@ import {
   todayDateString,
   addDaysToDateString,
 } from "@/lib/format";
-import VehiclePhoto from "@/components/VehiclePhoto";
 import {
   ArrowLeft,
   Calendar,
@@ -248,7 +247,7 @@ function ManageBody({
         <Row label="Service" value={booking.serviceName} />
         <Row label="When" value={formatDateTimeLong(scheduledIso)} highlight />
         <Row label="Duration" value={formatDuration(booking.serviceDurationMinutes)} />
-        <VehicleManageRow vehicle={booking.vehicle} />
+        <Row label="Vehicle" value={booking.vehicle} />
       </div>
 
       <div className="p-4 rounded-xl bg-[#00E5FF]/5 border border-[#00E5FF]/20 text-sm text-gray-300 flex gap-3 mb-8">
@@ -668,7 +667,7 @@ function RescheduledView({ booking }: { booking: Booking }) {
       <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 text-left mb-6">
         <Row label="Service" value={booking.serviceName} />
         <Row label="New time" value={formatDateTimeLong(scheduledIso)} highlight />
-        <VehicleManageRow vehicle={booking.vehicle} />
+        <Row label="Vehicle" value={booking.vehicle} />
       </div>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <Link
@@ -683,18 +682,6 @@ function RescheduledView({ booking }: { booking: Booking }) {
 }
 
 /* ---------- Row ---------- */
-function VehicleManageRow({ vehicle }: { vehicle: string }) {
-  return (
-    <div className="flex items-center justify-between gap-4 px-5 py-4">
-      <span className="text-sm text-gray-400 font-medium">Vehicle</span>
-      <div className="flex items-center gap-3 min-w-0">
-        <VehiclePhoto vehicle={vehicle} size="sm" />
-        <span className="text-right font-semibold text-white truncate">{vehicle}</span>
-      </div>
-    </div>
-  );
-}
-
 function Row({
   label,
   value,

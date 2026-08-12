@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
-import VehiclePhoto from "@/components/VehiclePhoto";
 import { useAdmin } from "../context";
 import { bookingIso, displayStatus, groupVehicles } from "../utils";
 import { AdminCard, EmptyState, fieldClass, StatusBadge } from "../components/ui";
@@ -17,7 +16,6 @@ export default function VehiclesPage() {
     return (
       <div className="space-y-4">
         <Link href="/admin/vehicles" className="text-sm text-[#9CA3AF] hover:text-white">← Vehicles</Link>
-        <VehiclePhoto vehicle={selected.vehicle} size="hero" showCredit className="mb-2" />
         <h2 className="text-2xl font-bold">{selected.vehicle}</h2>
         <AdminCard hover={false} className="p-5">
           <p className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF]">Owner</p>
@@ -64,13 +62,8 @@ export default function VehiclesPage() {
           {filtered.map((v) => (
             <Link key={v.key} href={`/admin/vehicles/${encodeURIComponent(v.key)}`}>
               <AdminCard className="p-4">
-                <div className="flex items-center gap-3">
-                  <VehiclePhoto vehicle={v.vehicle} size="md" />
-                  <div className="min-w-0">
-                    <p className="font-semibold text-white">{v.vehicle}</p>
-                    <p className="text-sm text-[#9CA3AF]">Owner: {v.ownerName} · {v.bookings.length} service{v.bookings.length === 1 ? "" : "s"}</p>
-                  </div>
-                </div>
+                <p className="font-semibold text-white">{v.vehicle}</p>
+                <p className="text-sm text-[#9CA3AF]">Owner: {v.ownerName} · {v.bookings.length} service{v.bookings.length === 1 ? "" : "s"}</p>
               </AdminCard>
             </Link>
           ))}

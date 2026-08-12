@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { Link } from "wouter";
 import { Mail, Phone, X } from "lucide-react";
 import { formatDateTimeLong, formatDuration } from "@/lib/format";
-import VehiclePhoto from "@/components/VehiclePhoto";
 import { useAdmin } from "../context";
 import { bookingIso, displayStatus } from "../utils";
 import { GhostButton, StatusBadge } from "./ui";
@@ -81,15 +80,8 @@ export default function AppointmentDetailDrawer() {
                   Customer photos — deleted automatically after the appointment.
                 </p>
               </div>
-            ) : (
-              <>
-                <VehiclePhoto vehicle={detail.vehicle} size="hero" showCredit className="mb-3" />
-                <p className="text-xs text-[#9CA3AF] mt-1">
-                  Photo is a Wikipedia match for the vehicle text — not a picture of this specific car.
-                </p>
-              </>
-            )}
-            <p className="text-white mt-2">{detail.vehicle}</p>
+            ) : null}
+            <p className="text-white">{detail.vehicle}</p>
             <Link
               href={`/admin/vehicles/${encodeURIComponent(`${detail.email.toLowerCase()}||${detail.vehicle.toLowerCase()}`)}`}
               className="inline-block mt-3 text-xs text-[#23B9FF] hover:underline"
