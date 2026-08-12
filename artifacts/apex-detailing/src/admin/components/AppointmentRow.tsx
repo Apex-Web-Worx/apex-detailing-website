@@ -43,9 +43,6 @@ export default function AppointmentRow({
         <div className="flex items-center gap-2 flex-wrap">
           <span className="hidden sm:inline text-xs text-[#9CA3AF]">{bookingShopDate(booking)}</span>
           <StatusBadge status={status} />
-          <span className="text-sm font-semibold text-white">
-            ${(booking.servicePriceCents / 100).toFixed(0)}
-          </span>
           <button
             type="button"
             onClick={onView}

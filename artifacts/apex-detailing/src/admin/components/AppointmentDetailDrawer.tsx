@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link } from "wouter";
 import { Mail, Phone, X } from "lucide-react";
-import { formatDateTimeLong, formatDuration, formatPrice } from "@/lib/format";
+import { formatDateTimeLong, formatDuration } from "@/lib/format";
 import { useAdmin } from "../context";
 import { bookingIso, displayStatus } from "../utils";
 import { GhostButton, StatusBadge } from "./ui";
@@ -92,10 +92,6 @@ export default function AppointmentDetailDrawer() {
               <div>
                 <dt className="text-[#9CA3AF] text-xs">Duration</dt>
                 <dd className="text-white mt-0.5">{formatDuration(detail.serviceDurationMinutes)}</dd>
-              </div>
-              <div>
-                <dt className="text-[#9CA3AF] text-xs">Price</dt>
-                <dd className="text-white mt-0.5">{formatPrice(detail.servicePriceCents)}</dd>
               </div>
               <div>
                 <dt className="text-[#9CA3AF] text-xs">Status</dt>
