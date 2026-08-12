@@ -9,6 +9,7 @@ import TermsPage from "@/pages/terms";
 import NotFound from "@/pages/not-found";
 import VideoTemplate from "@/components/video/VideoTemplate";
 import PwaManifestSwitch from "@/components/PwaManifestSwitch";
+import ApexContentPage from "@/pages/ApexContentPage";
 
 function App() {
   const base = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
@@ -35,6 +36,8 @@ function App() {
         <Route path="/privacy" component={PrivacyPage} />
         <Route path="/terms" component={TermsPage} />
         <Route path="/video" component={VideoTemplate} />
+        <Route path="/blog" component={ApexContentPage} />
+        <Route path="/blog/:slug" component={ApexContentPage} />
         <Route component={NotFound} />
       </Switch>
     </Router>
