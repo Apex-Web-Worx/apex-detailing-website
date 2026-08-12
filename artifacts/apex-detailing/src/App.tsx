@@ -32,6 +32,8 @@ function App() {
         <Route path="/book" component={BookingPage} />
         <Route path="/manage/:id" component={ManagePage} />
         <Route path="/admin" component={AdminPage} />
+        <Route path="/admin/:section" component={AdminPage} />
+        <Route path="/admin/:section/:id" component={AdminPage} />
         <Route path="/gift-cards" component={GiftCardsPage} />
         <Route path="/privacy" component={PrivacyPage} />
         <Route path="/terms" component={TermsPage} />

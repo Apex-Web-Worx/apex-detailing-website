@@ -1106,3 +1106,27 @@
     border-color: rgba(212, 175, 55, 0.35);
   }
 }
+
+/* Apex Control Center — admin-only surface tokens */
+.apex-admin {
+  --admin-bg: #050505;
+  --admin-bg-2: #0b0b0b;
+  --admin-card: #111111;
+  --admin-card-hover: #161616;
+  --admin-border: rgba(255, 255, 255, 0.1);
+  --admin-text: #ffffff;
+  --admin-muted: #9ca3af;
+  --admin-pink: #ff2ad4;
+  --admin-blue: #23b9ff;
+  --admin-purple: #8a52ff;
+  background: var(--admin-bg);
+  color: var(--admin-text);
+  overflow-x: hidden;
+}
+
+.apex-admin input[type="date"],
+.apex-admin input[type="time"],
+.apex-admin select,
+.apex-admin option {
+  color-scheme: dark;
+}
