@@ -22,6 +22,8 @@ import {
   formatTime12h,
   todayDateString,
 } from "@/lib/format";
+import VehiclePhoto from "@/components/VehiclePhoto";
+import { useVehicleImage } from "@/lib/vehicleImage";
 import { scheduledAtToShopDate, scheduledAtToShopTime } from "../utils";
 import { fieldClass, PrimaryButton } from "./ui";
 
@@ -209,7 +211,13 @@ function DetailsTab({
         </Field>
       </div>
       <Field label="Vehicle">
-        <input value={vehicle} onChange={(e) => setVehicle(e.target.value)} required className={fieldClass} />
+        <div className="flex items-start gap-3">
+          <VehiclePhoto vehicle={vehicle} size="lg" showCredit />
+          <div className="flex-1 min-w-0">
+            <input value={vehicle} onChange={(e) => setVehicle(e.target.value)} required className={fieldClass} />
+            <EditVehicleHint vehicle={vehicle} />
+          </div>
+        </div>
       </Field>
       <Field label="Notes">
         <textarea
@@ -241,6 +249,29 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
       <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">{label}</span>
       {children}
     </label>
+  );
+}
+
+function EditVehicleHint({ vehicle }: { vehicle: string }) {
+  const { status } = useVehicleImage(vehicle);
+  if (status === "found") {
+    return (
+      <p className="mt-2 text-xs text-[#9CA3AF]">
+        Matching photo from Wikipedia — not a picture of this specific vehicle.
+      </p>
+    );
+  }
+  if (status === "none") {
+    return (
+      <p className="mt-2 text-xs text-[#9CA3AF]">
+        No matching photo yet. Try year, make, and model.
+      </p>
+    );
+  }
+  return (
+    <p className="mt-2 text-xs text-[#9CA3AF]">
+      Include year, make, and model to look up a matching photo.
+    </p>
   );
 }
 

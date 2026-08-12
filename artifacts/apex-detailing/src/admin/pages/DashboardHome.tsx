@@ -6,6 +6,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { formatTime12h, todayDateString } from "@/lib/format";
+import VehiclePhoto from "@/components/VehiclePhoto";
 import { ADMIN_FIRST } from "../constants";
 import { useAdmin } from "../context";
 import {
@@ -166,15 +167,18 @@ export default function DashboardHome() {
                   key={b.id}
                   type="button"
                   onClick={() => setDetail(b)}
-                  className="w-full text-left"
+                  className="w-full text-left flex items-center gap-3"
                 >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-sm font-medium truncate">{b.customerName}</span>
-                    <StatusBadge status={displayStatus(b)} />
+                  <VehiclePhoto vehicle={b.vehicle} size="sm" />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-sm font-medium truncate">{b.customerName}</span>
+                      <StatusBadge status={displayStatus(b)} />
+                    </div>
+                    <p className="text-xs text-[#9CA3AF] truncate">
+                      {b.vehicle} · {b.serviceName}
+                    </p>
                   </div>
-                  <p className="text-xs text-[#9CA3AF] truncate">
-                    {b.vehicle} · {b.serviceName}
-                  </p>
                 </button>
               ))}
             </div>

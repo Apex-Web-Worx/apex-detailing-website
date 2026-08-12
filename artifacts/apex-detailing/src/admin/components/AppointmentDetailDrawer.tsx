@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Link } from "wouter";
 import { Mail, Phone, X } from "lucide-react";
 import { formatDateTimeLong, formatDuration } from "@/lib/format";
+import VehiclePhoto from "@/components/VehiclePhoto";
 import { useAdmin } from "../context";
 import { bookingIso, displayStatus } from "../utils";
 import { GhostButton, StatusBadge } from "./ui";
@@ -66,9 +67,10 @@ export default function AppointmentDetailDrawer() {
 
           <section>
             <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">Vehicle</h3>
+            <VehiclePhoto vehicle={detail.vehicle} size="hero" showCredit className="mb-3" />
             <p className="text-white">{detail.vehicle}</p>
             <p className="text-xs text-[#9CA3AF] mt-1">
-              Year, make, model, color, and mileage are stored as a single vehicle field.
+              Photo is a Wikipedia match for the vehicle text — not a picture of this specific car.
             </p>
             <Link
               href={`/admin/vehicles/${encodeURIComponent(`${detail.email.toLowerCase()}||${detail.vehicle.toLowerCase()}`)}`}

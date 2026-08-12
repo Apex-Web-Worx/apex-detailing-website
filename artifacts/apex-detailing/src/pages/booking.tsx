@@ -17,6 +17,8 @@ import {
   todayDateString,
   addDaysToDateString,
 } from "@/lib/format";
+import VehiclePhoto from "@/components/VehiclePhoto";
+import { useVehicleImage } from "@/lib/vehicleImage";
 
 // Slug-based merchandising badges shown on the service-picker cards.
 // Keep these short — the badge sits inline next to the title.
@@ -666,13 +668,25 @@ function InfoStep({
           onChange={(v) => onChange({ ...form, phone: formatPhone(v) })}
           placeholder="(417) 555-0123"
         />
-        <Field
-          label="Vehicle (Year / Make / Model)"
-          required
-          value={form.vehicle}
-          onChange={(v) => onChange({ ...form, vehicle: v })}
-          placeholder="2022 Toyota Tacoma"
-        />
+        <div className="sm:col-span-2">
+          <label className="block text-sm font-bold text-gray-300 mb-2">
+            Vehicle (Year / Make / Model)
+            <span className="text-[#00E5FF] ml-1">*</span>
+          </label>
+          <div className="flex items-start gap-3">
+            <VehiclePhoto vehicle={form.vehicle} size="lg" showCredit />
+            <div className="flex-1 min-w-0">
+              <input
+                type="text"
+                value={form.vehicle}
+                onChange={(e) => onChange({ ...form, vehicle: e.target.value })}
+                placeholder="2022 Toyota Tacoma"
+                className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#00E5FF] focus:outline-none focus:ring-2 focus:ring-[#00E5FF]/20 transition"
+              />
+              <VehiclePhotoHint vehicle={form.vehicle} />
+            </div>
+          </div>
+        </div>
         <div className="sm:col-span-2">
           <label className="block text-sm font-bold text-gray-300 mb-2">
             Notes (optional)
@@ -836,7 +850,7 @@ function ConfirmStep({
         <SummaryRow label="Customer" value={form.customerName} />
         <SummaryRow label="Email" value={form.email} />
         <SummaryRow label="Phone" value={form.phone} />
-        <SummaryRow label="Vehicle" value={form.vehicle} />
+        <VehicleSummaryRow vehicle={form.vehicle} />
         {form.notes && <SummaryRow label="Notes" value={form.notes} />}
       </div>
 
@@ -874,6 +888,41 @@ function ConfirmStep({
         </button>
       </div>
     </section>
+  );
+}
+
+function VehiclePhotoHint({ vehicle }: { vehicle: string }) {
+  const { status } = useVehicleImage(vehicle);
+  if (status === "found") {
+    return (
+      <p className="mt-2 text-xs text-gray-500">
+        Matching photo from Wikipedia — not a picture of this specific vehicle.
+      </p>
+    );
+  }
+  if (status === "none") {
+    return (
+      <p className="mt-2 text-xs text-gray-500">
+        No matching photo yet. Try year, make, and model (for example 2022 Toyota Tacoma).
+      </p>
+    );
+  }
+  return (
+    <p className="mt-2 text-xs text-gray-500">
+      Include year, make, and model and we'll look up a matching photo.
+    </p>
+  );
+}
+
+function VehicleSummaryRow({ vehicle }: { vehicle: string }) {
+  return (
+    <div className="flex items-center justify-between gap-4 px-5 py-4">
+      <span className="text-sm text-gray-400 font-medium">Vehicle</span>
+      <div className="flex items-center gap-3 min-w-0">
+        <VehiclePhoto vehicle={vehicle} size="sm" />
+        <span className="text-right font-semibold text-white truncate">{vehicle}</span>
+      </div>
+    </div>
   );
 }
 
@@ -932,7 +981,7 @@ function ConfirmationView({ booking }: { booking: Booking }) {
               : new Date(booking.scheduledAt as unknown as string).toISOString(),
           )}
         />
-        <SummaryRow label="Vehicle" value={booking.vehicle} />
+        <VehicleSummaryRow vehicle={booking.vehicle} />
       </div>
 
       <div className="p-4 rounded-xl bg-[#00E5FF]/5 border border-[#00E5FF]/20 text-sm text-gray-300 flex gap-3 text-left mb-8">

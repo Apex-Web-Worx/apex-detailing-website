@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
+import VehiclePhoto from "@/components/VehiclePhoto";
 import { useAdmin } from "../context";
 import { bookingIso, customerKey, displayStatus, groupCustomers } from "../utils";
 import { AdminCard, EmptyState, fieldClass, StatusBadge } from "../components/ui";
@@ -34,9 +35,10 @@ export default function CustomersPage() {
                 <Link
                   key={v}
                   href={`/admin/vehicles/${encodeURIComponent(`${selected.key}||${v.toLowerCase()}`)}`}
-                  className="block text-sm text-white hover:text-[#23B9FF] py-1"
+                  className="flex items-center gap-3 text-sm text-white hover:text-[#23B9FF] py-1.5"
                 >
-                  {v}
+                  <VehiclePhoto vehicle={v} size="sm" />
+                  <span>{v}</span>
                 </Link>
               ))
             )}

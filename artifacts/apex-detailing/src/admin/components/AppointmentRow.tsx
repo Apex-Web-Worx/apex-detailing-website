@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import type { Booking } from "@workspace/api-client-react";
 import { MoreHorizontal } from "lucide-react";
 import { formatDuration, formatTime12h } from "@/lib/format";
+import VehiclePhoto from "@/components/VehiclePhoto";
 import { displayStatus, notesPreview, bookingShopDate, bookingShopTime } from "../utils";
 import { StatusBadge } from "./ui";
 
@@ -26,19 +27,24 @@ export default function AppointmentRow({
     <div className="rounded-2xl border border-white/10 bg-[#111111] px-4 py-3 hover:bg-[#161616] transition duration-200">
       <div className="flex flex-col lg:flex-row lg:items-center gap-3">
         <button type="button" onClick={onView} className="flex-1 min-w-0 text-left">
-          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <span className="text-sm font-bold text-white w-20 shrink-0">
-              {formatTime12h(bookingShopTime(booking))}
-            </span>
-            <span className="font-semibold text-white">{booking.serviceName}</span>
-            <span className="text-xs text-[#9CA3AF]">{formatDuration(booking.serviceDurationMinutes)}</span>
+          <div className="flex items-start gap-3">
+            <VehiclePhoto vehicle={booking.vehicle} size="sm" className="mt-0.5" />
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <span className="text-sm font-bold text-white w-20 shrink-0">
+                  {formatTime12h(bookingShopTime(booking))}
+                </span>
+                <span className="font-semibold text-white">{booking.serviceName}</span>
+                <span className="text-xs text-[#9CA3AF]">{formatDuration(booking.serviceDurationMinutes)}</span>
+              </div>
+              <div className="mt-1 text-sm text-[#9CA3AF] truncate">
+                {booking.vehicle} · {booking.customerName}
+              </div>
+              {preview && (
+                <p className="mt-1 text-xs text-[#9CA3AF]/80 truncate">{preview}</p>
+              )}
+            </div>
           </div>
-          <div className="mt-1 text-sm text-[#9CA3AF] truncate">
-            {booking.vehicle} · {booking.customerName}
-          </div>
-          {preview && (
-            <p className="mt-1 text-xs text-[#9CA3AF]/80 truncate">{preview}</p>
-          )}
         </button>
         <div className="flex items-center gap-2 flex-wrap">
           <span className="hidden sm:inline text-xs text-[#9CA3AF]">{bookingShopDate(booking)}</span>
