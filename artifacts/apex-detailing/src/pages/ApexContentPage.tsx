@@ -25,12 +25,15 @@ const GOOGLE_REVIEWS_LINK = "https://share.google/1Kz8Ag5wVniNZ3oyb";
 type PostSummary = {
   slug: string;
   title: string;
+  meta_title?: string;
   meta_description?: string;
   published_at?: string;
 };
 
 type ContentPost = PostSummary & {
   content: string;
+  ai_answer?: string;
+  json_ld?: unknown;
 };
 
 type ApiListResponse = {
@@ -619,6 +622,14 @@ function BlogPost({ post }: { post: ContentPost }) {
             </p>
           )}
         </header>
+        {post.ai_answer && (
+          <p
+            data-ai-answer
+            className="mb-10 border-l-2 border-[#00E5FF] bg-white/5 px-5 py-4 text-base leading-7 text-gray-200 sm:text-lg"
+          >
+            {post.ai_answer}
+          </p>
+        )}
         <MarkdownBody content={post.content} />
         <div className="mt-14 border-t border-white/10 pt-10">
           <p className="mb-5 text-lg font-semibold text-gray-300">
@@ -680,13 +691,45 @@ export default function ApexContentPage() {
   }, [slug]);
 
   useEffect(() => {
-    const title = post?.title ?? "Apex Detailing Journal | Missouri Detailing Tips";
+    const title =
+      post?.meta_title ??
+      post?.title ??
+      "Apex Detailing Journal | Missouri Detailing Tips";
     const description =
       post?.meta_description ??
       "Detailing tips and vehicle protection guidance from Apex Detailing in Nixa, Missouri.";
     document.title = title;
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute("content", description);
+    let meta = document.querySelector(
+      'meta[name="description"]',
+    ) as HTMLMetaElement | null;
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.name = "description";
+      document.head.appendChild(meta);
+    }
+    meta.content = description;
+
+    const previousJsonLd = document.head.querySelector(
+      'script[data-apex-content-json-ld="true"]',
+    );
+    previousJsonLd?.remove();
+
+    if (post?.json_ld) {
+      const jsonLdScript = document.createElement("script");
+      jsonLdScript.type = "application/ld+json";
+      jsonLdScript.dataset.apexContentJsonLd = "true";
+      jsonLdScript.textContent =
+        typeof post.json_ld === "string"
+          ? post.json_ld
+          : JSON.stringify(post.json_ld);
+      document.head.appendChild(jsonLdScript);
+
+      return () => {
+        jsonLdScript.remove();
+      };
+    }
+
+    return undefined;
   }, [post]);
 
   const content = isLoading ? (
