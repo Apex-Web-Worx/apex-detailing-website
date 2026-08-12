@@ -1,27 +1,12 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Booking, BlockedDate } from "@workspace/api-client-react";
-import { formatTime12h, todayDateString } from "@/lib/format";
+import { todayDateString } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import {
-  addMonths,
-  bookingShopDate,
-  bookingShopTime,
-  daysInMonth,
-  displayStatus,
-  monthLabel,
-} from "../utils";
+import { addMonths, bookingShopDate, daysInMonth, displayStatus, monthLabel } from "../utils";
 import type { VisualCalendarEvent } from "../useOwnerCalendarEvents";
 import { GhostButton, PrimaryButton } from "./ui";
 
 const DOW = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-
-type DayItem = {
-  key: string;
-  sort: string;
-  time: string;
-  label: string;
-  tone: "booking" | "personal" | "blocked" | "done";
-};
 
 export default function MonthCalendar({
   month,
@@ -32,6 +17,7 @@ export default function MonthCalendar({
   selectedDate,
   onSelectDate,
   onBlockDate,
+  compact = false,
 }: {
   month: string;
   onMonthChange: (next: string) => void;
@@ -41,6 +27,7 @@ export default function MonthCalendar({
   selectedDate?: string;
   onSelectDate?: (date: string) => void;
   onBlockDate?: () => void;
+  compact?: boolean;
 }) {
   const today = todayDateString();
   const [year, monthNum] = month.split("-").map(Number);
@@ -57,14 +44,14 @@ export default function MonthCalendar({
 
   return (
     <div className="rounded-2xl border border-white/10 bg-[#111111] p-3 md:p-4">
-      <div className="flex flex-wrap items-center gap-2 mb-4">
+      <div className="flex items-center gap-2 mb-3">
         <h3 className="font-bold text-white mr-auto">{monthLabel(month)}</h3>
         <GhostButton type="button" className="h-8 px-3 text-xs" onClick={() => onMonthChange(today.slice(0, 7))}>
           Today
         </GhostButton>
         <button
           type="button"
-          className="w-11 h-11 rounded-lg border border-white/10 hover:bg-white/5 touch-manipulation"
+          className="w-9 h-9 rounded-lg border border-white/10 hover:bg-white/5 touch-manipulation"
           onClick={() => onMonthChange(addMonths(month, -1))}
           aria-label="Previous month"
         >
@@ -72,7 +59,7 @@ export default function MonthCalendar({
         </button>
         <button
           type="button"
-          className="w-11 h-11 rounded-lg border border-white/10 hover:bg-white/5 touch-manipulation"
+          className="w-9 h-9 rounded-lg border border-white/10 hover:bg-white/5 touch-manipulation"
           onClick={() => onMonthChange(addMonths(month, 1))}
           aria-label="Next month"
         >
@@ -90,41 +77,19 @@ export default function MonthCalendar({
       </div>
       <div className="grid grid-cols-7 gap-1">
         {cells.map((date, i) => {
-          if (!date) return <div key={`e-${i}`} className="min-h-11 md:min-h-20 lg:min-h-24" />;
-          const dayBookings = bookings.filter((b) => bookingShopDate(b) === date);
+          if (!date) return <div key={`e-${i}`} className="min-h-10 md:min-h-12" />;
+          const dayBookings = bookings.filter((b) => bookingShopDate(b) === date && displayStatus(b) !== "cancelled");
           const dayPersonal = personalEvents.filter((e) => e.dates.includes(date));
           const blocked = blockedByDate.get(date);
-          const items: DayItem[] = [
-            ...dayBookings.map((b) => {
-              const status = displayStatus(b);
-              return {
-                key: `b-${b.id}`,
-                sort: bookingShopTime(b),
-                time: formatTime12h(bookingShopTime(b)),
-                label: b.serviceName,
-                tone: (status === "confirmed" ? "booking" : "done") as DayItem["tone"],
-              };
-            }),
-            ...dayPersonal.map((e) => ({
-              key: `p-${e.id}`,
-              sort: e.allDay ? "00:00" : e.startTime,
-              time: e.allDay ? "All day" : formatTime12h(e.startTime),
-              label: e.title,
-              tone: "personal" as const,
-            })),
-          ];
-          if (blocked) {
-            items.unshift({
-              key: `x-${blocked.id}`,
-              sort: "",
-              time: "",
-              label: blocked.reason?.trim() ? blocked.reason : "Blocked",
-              tone: "blocked",
-            });
+          const dots: Array<"booking" | "personal" | "blocked" | "done"> = [];
+          if (blocked) dots.push("blocked");
+          for (const b of dayBookings) {
+            if (dots.length >= 4) break;
+            dots.push(displayStatus(b) === "completed" ? "done" : "booking");
           }
-          items.sort((a, b) => a.sort.localeCompare(b.sort));
-          const shown = items.slice(0, 3);
-          const extra = items.length - shown.length;
+          for (let i = 0; i < dayPersonal.length && dots.length < 4; i++) {
+            dots.push("personal");
+          }
           const isToday = date === today;
           const isSelected = date === selectedDate;
           return (
@@ -133,74 +98,50 @@ export default function MonthCalendar({
               type="button"
               onClick={() => onSelectDate?.(date)}
               className={cn(
-                "min-h-11 md:min-h-20 lg:min-h-24 rounded-lg md:rounded-xl p-0.5 md:p-1 text-left border transition duration-150 overflow-hidden touch-manipulation",
+                "min-h-10 md:min-h-12 rounded-lg p-1 text-center border transition duration-150 touch-manipulation",
                 isSelected
                   ? "border-[#FF2AD4]/50 bg-[#FF2AD4]/10"
                   : "border-transparent hover:bg-white/5",
-                blocked && "opacity-80",
+                blocked && !isSelected && "bg-[#8A52FF]/10",
               )}
             >
               <span
                 className={cn(
-                  "text-xs font-semibold inline-flex w-6 h-6 items-center justify-center rounded-full",
+                  "text-xs font-semibold inline-flex w-6 h-6 items-center justify-center rounded-full mx-auto",
                   isToday ? "bg-[#FF2AD4] text-white" : "text-white",
                 )}
               >
                 {Number(date.slice(-2))}
               </span>
-              <div className="mt-0.5 flex flex-wrap gap-0.5 md:hidden">
-                {items.slice(0, 4).map((item) => (
+              <div className="mt-0.5 flex flex-wrap justify-center gap-0.5 min-h-1.5">
+                {dots.map((tone, idx) => (
                   <span
-                    key={item.key}
+                    key={`${date}-${idx}`}
                     className={cn(
                       "w-1.5 h-1.5 rounded-full",
-                      item.tone === "personal" && "bg-[#23B9FF]",
-                      item.tone === "booking" && "bg-[#FF2AD4]",
-                      item.tone === "blocked" && "bg-[#8A52FF]",
-                      item.tone === "done" && "bg-[#9CA3AF]",
+                      tone === "personal" && "bg-[#23B9FF]",
+                      tone === "booking" && "bg-[#FF2AD4]",
+                      tone === "blocked" && "bg-[#8A52FF]",
+                      tone === "done" && "bg-[#9CA3AF]",
                     )}
                   />
                 ))}
-              </div>
-              <div className="mt-0.5 space-y-0.5 hidden md:block">
-                {shown.map((item) => (
-                  <p
-                    key={item.key}
-                    className={cn(
-                      "text-[9px] md:text-[10px] leading-tight truncate",
-                      item.tone === "personal" && "text-[#23B9FF]",
-                      item.tone === "booking" && "text-[#FF2AD4]",
-                      item.tone === "blocked" && "text-[#8A52FF]",
-                      item.tone === "done" && "text-[#9CA3AF]",
-                    )}
-                    title={`${item.time} ${item.label}`.trim()}
-                  >
-                    {item.time ? `${item.time} ` : ""}
-                    {item.label}
-                  </p>
-                ))}
-                {extra > 0 && (
-                  <p className="text-[9px] text-[#9CA3AF]">+{extra} more</p>
-                )}
               </div>
             </button>
           );
         })}
       </div>
 
-      <div className="flex flex-wrap items-center gap-3 mt-4 text-[11px] text-[#9CA3AF]">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mt-3 text-[11px] text-[#9CA3AF]">
         <Legend color="bg-[#FF2AD4]" label="Appointment" />
         <Legend color="bg-[#23B9FF]" label="Personal" />
         <Legend color="bg-[#8A52FF]" label="Blocked" />
-        {onBlockDate && (
-          <PrimaryButton type="button" className="ml-auto h-11 px-3 text-xs w-full sm:w-auto" onClick={onBlockDate}>
+        {onBlockDate && !compact && (
+          <PrimaryButton type="button" className="ml-auto h-9 px-3 text-xs w-full sm:w-auto" onClick={onBlockDate}>
             {selectedDate && blockedByDate.has(selectedDate) ? "Edit blocked date" : "+ Block Date"}
           </PrimaryButton>
         )}
       </div>
-      <p className="text-[11px] text-[#9CA3AF] mt-2">
-        Blue text is from your Gmail and Interactio calendars. It is visual only and does not change customer booking availability.
-      </p>
     </div>
   );
 }

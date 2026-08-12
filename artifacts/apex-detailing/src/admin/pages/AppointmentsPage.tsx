@@ -127,7 +127,6 @@ export default function AppointmentsPage() {
           personalEvents={personalEvents}
           selectedDate={selectedDate}
           onSelectDate={setSelectedDate}
-          onBlockDate={() => openBlockDate(selectedDate)}
         />
       )}
 

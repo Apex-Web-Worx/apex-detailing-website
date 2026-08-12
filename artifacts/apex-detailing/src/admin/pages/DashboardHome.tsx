@@ -1,11 +1,6 @@
 import { Link, useLocation } from "wouter";
-import {
-  CalendarClock,
-  CalendarOff,
-  Plus,
-  RefreshCw,
-} from "lucide-react";
-import { formatTime12h, todayDateString } from "@/lib/format";
+import { CalendarOff, Plus, RefreshCw } from "lucide-react";
+import { todayDateString } from "@/lib/format";
 import { ADMIN_FIRST } from "../constants";
 import { useAdmin } from "../context";
 import {
@@ -18,6 +13,7 @@ import {
 } from "../utils";
 import AppointmentRow from "../components/AppointmentRow";
 import MonthCalendar from "../components/MonthCalendar";
+import { PersonalEventsCard } from "../components/PersonalEventsCard";
 import { AdminCard, EmptyState, GhostButton, StatusBadge } from "../components/ui";
 import { useOwnerCalendarEvents } from "../useOwnerCalendarEvents";
 import {
@@ -26,7 +22,7 @@ import {
   photoIdsForBooking,
   useAdminBookingPhotoIndex,
 } from "../components/CustomerPhotos";
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 
 export default function DashboardHome() {
   const {
@@ -56,15 +52,12 @@ export default function DashboardHome() {
   const tasks = deriveTasks(bookings);
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-3">
-        <div>
-          <h2 className="text-xl md:text-3xl font-bold">
-            {greetingForNow()}, {ADMIN_FIRST}
-          </h2>
-          <p className="text-[#9CA3AF] mt-1 text-sm md:text-base hidden sm:block">Here's what's happening with your business today.</p>
-        </div>
-        <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
+    <div className="space-y-5">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <h2 className="text-xl md:text-2xl font-bold">
+          {greetingForNow()}, {ADMIN_FIRST}
+        </h2>
+        <div className="flex flex-wrap gap-2">
           <GhostButton type="button" onClick={() => refetch()} className="px-3">
             <RefreshCw className="w-4 h-4" /> Refresh
           </GhostButton>
@@ -73,68 +66,33 @@ export default function DashboardHome() {
           </GhostButton>
           <Link
             href="/book"
-            className="col-span-2 sm:col-span-1 inline-flex items-center justify-center gap-2 min-h-11 h-11 px-4 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold transition duration-200 hover:bg-[#ff4adc] hover:shadow-[0_0_16px_rgba(255,42,212,0.28)] touch-manipulation"
+            className="inline-flex items-center justify-center gap-2 min-h-11 h-11 px-4 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold transition duration-200 hover:bg-[#ff4adc] touch-manipulation"
           >
             <Plus className="w-4 h-4" /> New Appointment
           </Link>
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-2 md:gap-4">
-        <Kpi
-          href="/admin/appointments"
-          label="Today"
-          value={String(kpis.todayCount)}
-          hint="Appointments"
-          icon={<CalendarClock className="w-4 h-4 text-[#FF2AD4]" />}
-          glow="rgba(255,42,212,0.25)"
-        />
-        <Kpi
-          href="/admin/appointments"
-          label="This week"
-          value={String(kpis.weekCount)}
-          hint="Appointments"
-          icon={<CalendarClock className="w-4 h-4 text-[#8A52FF]" />}
-          glow="rgba(138,82,255,0.25)"
-        />
-        <Kpi
-          href="/admin/appointments"
-          label="Upcoming"
-          value={String(kpis.upcomingQuotedCount)}
-          hint="Confirmed appointments"
-          icon={<CalendarClock className="w-4 h-4 text-[#23B9FF]" />}
-          glow="rgba(35,185,255,0.18)"
-        />
+      <div className="grid grid-cols-3 gap-2 md:gap-3">
+        <Kpi href="/admin/appointments" label="Today" value={String(kpis.todayCount)} />
+        <Kpi href="/admin/appointments" label="This week" value={String(kpis.weekCount)} />
+        <Kpi href="/admin/appointments" label="Upcoming" value={String(kpis.upcomingQuotedCount)} />
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-5 gap-4">
         <div className="xl:col-span-3 space-y-3">
           <div className="flex items-center justify-between gap-2">
-            <h3 className="text-lg font-bold">Today's Schedule</h3>
-            <Link href="/admin/calendar" className="xl:hidden text-xs font-semibold text-[#23B9FF] py-2">
+            <h3 className="text-base font-bold">Today</h3>
+            <Link href="/admin/calendar" className="xl:hidden text-xs font-semibold text-[#9CA3AF] py-2">
               Calendar →
             </Link>
           </div>
           {isLoading ? (
             <p className="text-sm text-[#9CA3AF]">Loading…</p>
           ) : todayAppts.length === 0 && todayPersonal.length === 0 ? (
-            <EmptyState title="No appointments today" body="When bookings land on today's date, they will show here." />
+            <EmptyState title="Nothing on the shop calendar today" body="New bookings will show up here." />
           ) : (
             <>
-              {todayPersonal.map((e) => (
-                <div
-                  key={e.id}
-                  className="rounded-2xl border border-[#23B9FF]/20 bg-[#111111] px-4 py-3"
-                >
-                  <p className="text-[10px] font-bold tracking-[0.14em] text-[#23B9FF]">
-                    PERSONAL{e.calendar ? ` · ${e.calendar.toUpperCase()}` : ""}
-                  </p>
-                  <p className="text-sm font-semibold text-white mt-1">{e.title}</p>
-                  <p className="text-xs text-[#9CA3AF] mt-0.5">
-                    {e.allDay ? "All day" : formatTime12h(e.startTime)} · visual only
-                  </p>
-                </div>
-              ))}
               {todayAppts.map((b) => (
                 <AppointmentRow
                   key={b.id}
@@ -144,11 +102,16 @@ export default function DashboardHome() {
                   onCancel={() => cancelBooking(b.id)}
                 />
               ))}
+              {todayAppts.length === 0 && (
+                <p className="text-sm text-[#9CA3AF]">No shop appointments today.</p>
+              )}
+              <PersonalEventsCard events={todayPersonal} />
             </>
           )}
         </div>
         <div className="hidden xl:block xl:col-span-2">
           <MonthCalendar
+            compact
             month={calMonth}
             onMonthChange={setCalMonth}
             bookings={bookings}
@@ -156,7 +119,6 @@ export default function DashboardHome() {
             personalEvents={personalEvents}
             selectedDate={today}
             onSelectDate={() => setLocation("/admin/calendar")}
-            onBlockDate={() => openBlockDate()}
           />
         </div>
       </div>
@@ -164,8 +126,8 @@ export default function DashboardHome() {
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
         <AdminCard hover={false} className="p-5">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-bold">Recent Bookings</h3>
-            <Link href="/admin/appointments" className="text-xs text-[#23B9FF] hover:underline">
+            <h3 className="font-bold">Recent</h3>
+            <Link href="/admin/appointments" className="text-xs text-[#9CA3AF] hover:text-white">
               View all →
             </Link>
           </div>
@@ -210,7 +172,7 @@ export default function DashboardHome() {
         </AdminCard>
 
         <AdminCard hover={false} className="p-5">
-          <h3 className="font-bold mb-3">Upcoming Tasks</h3>
+          <h3 className="font-bold mb-3">Follow-ups</h3>
           {tasks.length === 0 ? (
             <p className="text-sm text-[#9CA3AF]">No follow-ups from current bookings.</p>
           ) : (
@@ -233,31 +195,18 @@ function Kpi({
   href,
   label,
   value,
-  hint,
-  icon,
-  glow,
 }: {
   href: string;
   label: string;
   value: string;
-  hint: string;
-  icon: ReactNode;
-  glow: string;
 }) {
   return (
     <Link href={href} className="touch-manipulation">
-      <AdminCard className="p-3 md:p-5">
-        <div className="flex items-start justify-between gap-1">
-          <p className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.12em] text-[#9CA3AF] leading-tight">{label}</p>
-          <span
-            className="hidden sm:flex w-9 h-9 rounded-xl bg-[#0B0B0B] border border-white/10 items-center justify-center"
-            style={{ boxShadow: `0 0 18px ${glow}` }}
-          >
-            {icon}
-          </span>
-        </div>
-        <p className="text-2xl md:text-3xl font-bold mt-2 md:mt-3">{value}</p>
-        <p className="text-[11px] md:text-sm text-[#9CA3AF] mt-0.5 md:mt-1 leading-tight">{hint}</p>
+      <AdminCard className="p-3 md:p-4">
+        <p className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.12em] text-[#9CA3AF] leading-tight">
+          {label}
+        </p>
+        <p className="text-2xl md:text-3xl font-bold mt-1.5 md:mt-2">{value}</p>
       </AdminCard>
     </Link>
   );

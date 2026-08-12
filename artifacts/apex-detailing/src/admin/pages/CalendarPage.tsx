@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { formatDateLong, formatTime12h, todayDateString } from "@/lib/format";
+import { formatDateLong, todayDateString } from "@/lib/format";
 import { useAdmin } from "../context";
 import { bookingShopDate, bookingShopTime } from "../utils";
 import AppointmentRow from "../components/AppointmentRow";
 import MonthCalendar from "../components/MonthCalendar";
 import { EmptyState, GhostButton } from "../components/ui";
+import { PersonalEventsCard } from "../components/PersonalEventsCard";
 import { adminUnblockDate, getAdminListBlockedDatesQueryKey } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useOwnerCalendarEvents } from "../useOwnerCalendarEvents";
@@ -49,7 +50,6 @@ export default function CalendarPage() {
         personalEvents={personalEvents}
         selectedDate={selected}
         onSelectDate={setSelected}
-        onBlockDate={() => openBlockDate(selected)}
       />
       <div>
         <h3 className="font-bold mb-2">{formatDateLong(selected)}</h3>
@@ -67,28 +67,11 @@ export default function CalendarPage() {
             </div>
           </div>
         )}
-        {dayPersonal.length > 0 && (
-          <div className="space-y-2 mb-3">
-            {dayPersonal.map((e) => (
-              <div
-                key={e.id}
-                className="rounded-2xl border border-[#23B9FF]/20 bg-[#111111] px-4 py-3"
-              >
-                <p className="text-[10px] font-bold tracking-[0.14em] text-[#23B9FF]">
-                  PERSONAL{e.calendar ? ` · ${e.calendar.toUpperCase()}` : ""}
-                </p>
-                <p className="text-sm font-semibold text-white mt-1">{e.title}</p>
-                <p className="text-xs text-[#9CA3AF] mt-0.5">
-                  {e.allDay ? "All day" : formatTime12h(e.startTime)} · visual only, not a booking
-                </p>
-              </div>
-            ))}
-          </div>
-        )}
-        {dayBookings.length === 0 && dayPersonal.length === 0 ? (
+        <PersonalEventsCard events={dayPersonal} />
+        {dayBookings.length === 0 && dayPersonal.length === 0 && !blocked ? (
           <EmptyState title="Nothing on this day" body="No appointments or personal calendar events." />
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-2 mt-3">
             {dayBookings.map((b) => (
               <AppointmentRow
                 key={b.id}
