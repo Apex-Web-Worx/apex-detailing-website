@@ -194,7 +194,7 @@ export default function MonthCalendar({
         <Legend color="bg-[#8A52FF]" label="Blocked" />
         {onBlockDate && (
           <PrimaryButton type="button" className="ml-auto h-11 px-3 text-xs w-full sm:w-auto" onClick={onBlockDate}>
-            + Block Date
+            {selectedDate && blockedByDate.has(selectedDate) ? "Edit blocked date" : "+ Block Date"}
           </PrimaryButton>
         )}
       </div>

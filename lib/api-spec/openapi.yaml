@@ -424,6 +424,59 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   /admin/blocked-dates/{date}:
+    patch:
+      operationId: adminUpdateBlockedDate
+      tags: [admin]
+      summary: Update a blocked date (date, reason, and optional client contact)
+      parameters:
+        - name: date
+          in: path
+          required: true
+          schema:
+            type: string
+            description: YYYY-MM-DD of the existing blocked date
+        - name: x-admin-token
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateBlockedDateRequest"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlockedDate"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: Target date is already blocked
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     delete:
       operationId: adminUnblockDate
       tags: [admin]
@@ -790,6 +843,24 @@ components:
           description: Optional phone number (not required)
       required:
         - date
+    UpdateBlockedDateRequest:
+      type: object
+      description: Any subset of fields. Empty name/surname/phone clears that contact field.
+      properties:
+        date:
+          type: string
+          description: YYYY-MM-DD — move the block to this date
+        reason:
+          type: string
+        name:
+          type: string
+          description: Optional first name (empty string clears)
+        surname:
+          type: string
+          description: Optional surname (empty string clears)
+        phone:
+          type: string
+          description: Optional phone number (empty string clears)
     UpdateBookingRequest:
       type: object
       description: At least one field must be provided.

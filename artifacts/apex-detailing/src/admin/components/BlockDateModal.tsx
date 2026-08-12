@@ -9,8 +9,48 @@ import { todayDateString } from "@/lib/format";
 import { useAdmin } from "../context";
 import { fieldClass, GhostButton, PrimaryButton } from "./ui";
 
+function formatPhone(raw: string) {
+  const digits = raw.replace(/\D/g, "").slice(0, 10);
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+}
+
+function phoneDigits(value: string) {
+  return value.replace(/\D/g, "");
+}
+
+async function adminUpdateBlockedDate(
+  originalDate: string,
+  payload: {
+    date: string;
+    reason: string;
+    name: string;
+    surname: string;
+    phone: string;
+  },
+  token: string,
+) {
+  const res = await fetch(
+    `/api/admin/blocked-dates/${encodeURIComponent(originalDate)}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-token": token,
+      },
+      body: JSON.stringify(payload),
+    },
+  );
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(`${res.status} ${text}`);
+  }
+}
+
 export default function BlockDateModal() {
-  const { token, blockOpen, blockPrefillDate, closeBlockDate } = useAdmin();
+  const { token, blockOpen, blockPrefillDate, editingBlocked, closeBlockDate } =
+    useAdmin();
   const queryClient = useQueryClient();
   const [date, setDate] = useState("");
   const [reason, setReason] = useState("");
@@ -21,16 +61,26 @@ export default function BlockDateModal() {
   const [error, setError] = useState<string | null>(null);
   const [successNote, setSuccessNote] = useState<string | null>(null);
 
+  const isEditing = Boolean(editingBlocked);
+
   useEffect(() => {
     if (!blockOpen) return;
-    setDate(blockPrefillDate);
-    setReason("");
-    setName("");
-    setSurname("");
-    setPhone("");
+    if (editingBlocked) {
+      setDate(editingBlocked.date);
+      setReason(editingBlocked.reason ?? "");
+      setName(editingBlocked.name ?? "");
+      setSurname(editingBlocked.surname ?? "");
+      setPhone(formatPhone(editingBlocked.phone ?? ""));
+    } else {
+      setDate(blockPrefillDate);
+      setReason("");
+      setName("");
+      setSurname("");
+      setPhone("");
+    }
     setError(null);
     setSuccessNote(null);
-  }, [blockOpen, blockPrefillDate]);
+  }, [blockOpen, blockPrefillDate, editingBlocked]);
 
   useEffect(() => {
     if (!blockOpen) return;
@@ -48,52 +98,79 @@ export default function BlockDateModal() {
 
   if (!blockOpen) return null;
 
-  const formatPhone = (raw: string) => {
-    const digits = raw.replace(/\D/g, "").slice(0, 10);
-    if (digits.length <= 3) return digits;
-    if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
-    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
-  };
+  const today = todayDateString();
+  const dateMin =
+    isEditing &&
+    editingBlocked &&
+    date === editingBlocked.date &&
+    editingBlocked.date < today
+      ? editingBlocked.date
+      : today;
 
-  const add = async (e: React.FormEvent) => {
+  const save = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!date) return;
     setSubmitting(true);
     setError(null);
     setSuccessNote(null);
     try {
-      const payload: {
-        date: string;
-        reason?: string;
-        name?: string;
-        surname?: string;
-        phone?: string;
-      } = { date };
       const reasonTrim = reason.trim();
       const nameTrim = name.trim();
       const surnameTrim = surname.trim();
       const phoneTrim = phone.trim();
-      if (reasonTrim) payload.reason = reasonTrim;
-      if (nameTrim) payload.name = nameTrim;
-      if (surnameTrim) payload.surname = surnameTrim;
-      if (phoneTrim) payload.phone = phoneTrim;
 
-      await adminAddBlockedDate(payload, {
-        headers: { "x-admin-token": token },
-      });
-      setSuccessNote(
-        phoneTrim
-          ? `Date blocked. Confirmation text sent to ${phoneTrim}.`
-          : "Date blocked.",
-      );
+      if (editingBlocked) {
+        await adminUpdateBlockedDate(
+          editingBlocked.date,
+          {
+            date,
+            reason: reasonTrim,
+            name: nameTrim,
+            surname: surnameTrim,
+            phone: phoneTrim,
+          },
+          token,
+        );
+        const phoneChanged =
+          phoneDigits(phoneTrim) !== phoneDigits(editingBlocked.phone ?? "");
+        const dateChanged = date !== editingBlocked.date;
+        setSuccessNote(
+          phoneTrim && (phoneChanged || dateChanged)
+            ? `Saved. Confirmation text sent to ${phoneTrim}.`
+            : "Blocked date updated.",
+        );
+      } else {
+        const payload: {
+          date: string;
+          reason?: string;
+          name?: string;
+          surname?: string;
+          phone?: string;
+        } = { date };
+        if (reasonTrim) payload.reason = reasonTrim;
+        if (nameTrim) payload.name = nameTrim;
+        if (surnameTrim) payload.surname = surnameTrim;
+        if (phoneTrim) payload.phone = phoneTrim;
+
+        await adminAddBlockedDate(payload, {
+          headers: { "x-admin-token": token },
+        });
+        setSuccessNote(
+          phoneTrim
+            ? `Date blocked. Confirmation text sent to ${phoneTrim}.`
+            : "Date blocked.",
+        );
+      }
       queryClient.invalidateQueries({
         queryKey: getAdminListBlockedDatesQueryKey(),
       });
       setTimeout(() => closeBlockDate(), 1200);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : "Could not block date";
+      const msg = err instanceof Error ? err.message : "Could not save blocked date";
       if (/409/.test(msg)) {
         setError("That date is already blocked.");
+      } else if (/404/.test(msg)) {
+        setError("That blocked date was not found. It may have already been re-opened.");
       } else if (/400/.test(msg)) {
         setError("Pick a valid date that is today or later.");
       } else {
@@ -111,11 +188,13 @@ export default function BlockDateModal() {
     >
       <form
         onClick={(e) => e.stopPropagation()}
-        onSubmit={add}
+        onSubmit={save}
         className="w-full sm:max-w-lg bg-[#0B0B0B] border border-white/10 rounded-t-2xl sm:rounded-2xl p-5 max-h-[92dvh] overflow-y-auto pb-[max(1.25rem,env(safe-area-inset-bottom))]"
       >
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold">Block Date</h2>
+          <h2 className="text-lg font-bold">
+            {isEditing ? "Edit blocked date" : "Block Date"}
+          </h2>
           <button
             type="button"
             onClick={closeBlockDate}
@@ -134,7 +213,7 @@ export default function BlockDateModal() {
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              min={todayDateString()}
+              min={dateMin}
               required
               className={fieldClass}
             />
@@ -157,7 +236,9 @@ export default function BlockDateModal() {
               Optional customer / contact
             </p>
             <p className="text-xs text-[#9CA3AF]">
-              If you add a phone number, we send them an appointment confirmation text.
+              {isEditing
+                ? "If you add or change the phone number, or move the date, we send a confirmation text. Name-only changes do not resend."
+                : "If you add a phone number, we send them an appointment confirmation text."}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <input
@@ -203,7 +284,7 @@ export default function BlockDateModal() {
           </GhostButton>
           <PrimaryButton type="submit" disabled={!date || submitting}>
             {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-            Block Date
+            {isEditing ? "Save" : "Block Date"}
           </PrimaryButton>
         </div>
       </form>

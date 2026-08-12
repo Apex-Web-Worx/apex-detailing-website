@@ -43,7 +43,9 @@ type AdminContextValue = {
   setDetail: (b: Booking | null) => void;
   blockOpen: boolean;
   blockPrefillDate: string;
+  editingBlocked: BlockedDate | null;
   openBlockDate: (date?: string) => void;
+  openEditBlockedDate: (row: BlockedDate) => void;
   closeBlockDate: () => void;
 };
 
@@ -96,6 +98,7 @@ export function AdminProvider({
   const [detail, setDetail] = useState<Booking | null>(null);
   const [blockOpen, setBlockOpen] = useState(false);
   const [blockPrefillDate, setBlockPrefillDate] = useState("");
+  const [editingBlocked, setEditingBlocked] = useState<BlockedDate | null>(null);
 
   const bookings = bookingsQuery.data ?? [];
   const blockedDates = blockedQuery.data ?? [];
@@ -130,13 +133,30 @@ export function AdminProvider({
   );
 
   const openBlockDate = useCallback((date?: string) => {
+    if (date) {
+      const existing = blockedDates.find((row) => row.date === date);
+      if (existing) {
+        setEditingBlocked(existing);
+        setBlockPrefillDate(existing.date);
+        setBlockOpen(true);
+        return;
+      }
+    }
+    setEditingBlocked(null);
     setBlockPrefillDate(date ?? "");
+    setBlockOpen(true);
+  }, [blockedDates]);
+
+  const openEditBlockedDate = useCallback((row: BlockedDate) => {
+    setEditingBlocked(row);
+    setBlockPrefillDate(row.date);
     setBlockOpen(true);
   }, []);
 
   const closeBlockDate = useCallback(() => {
     setBlockOpen(false);
     setBlockPrefillDate("");
+    setEditingBlocked(null);
   }, []);
 
   const value = useMemo<AdminContextValue>(
@@ -166,7 +186,9 @@ export function AdminProvider({
       setDetail,
       blockOpen,
       blockPrefillDate,
+      editingBlocked,
       openBlockDate,
+      openEditBlockedDate,
       closeBlockDate,
     }),
     [
@@ -185,7 +207,9 @@ export function AdminProvider({
       detail,
       blockOpen,
       blockPrefillDate,
+      editingBlocked,
       openBlockDate,
+      openEditBlockedDate,
       closeBlockDate,
     ],
   );

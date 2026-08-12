@@ -414,21 +414,17 @@ function addOneDay(yyyyMmDd: string): string {
   return `${yy}-${mm}-${dd}`;
 }
 
-/**
- * Create an all-day "Shop Closed" event on the owner's calendar for an
- * admin-blocked date. Returns the new event id, or null if the call
- * failed (logged; never throws to the caller).
- */
-export async function createBlockedDateEvent(
+type BlockedDateContact = {
+  name?: string | null;
+  surname?: string | null;
+  phone?: string | null;
+};
+
+function blockedDateEventBody(
   date: string,
   reason: string,
-  contact?: {
-    name?: string | null;
-    surname?: string | null;
-    phone?: string | null;
-  },
-): Promise<string | null> {
-  await ensureCalendarShared();
+  contact?: BlockedDateContact,
+) {
   const summary = reason.trim().length > 0
     ? `Shop Closed — ${reason.trim()}`
     : "Shop Closed";
@@ -442,7 +438,7 @@ export async function createBlockedDateEvent(
     "Day blocked in the Apex Detailing admin — no bookings will be accepted.",
     ...contactParts,
   ].join("\n");
-  const body = {
+  return {
     summary,
     description,
     start: { date },
@@ -450,6 +446,20 @@ export async function createBlockedDateEvent(
     transparency: "opaque",
     source: { title: "Apex Detailing block", url: `${getSiteUrl()}/admin` },
   };
+}
+
+/**
+ * Create an all-day "Shop Closed" event on the owner's calendar for an
+ * admin-blocked date. Returns the new event id, or null if the call
+ * failed (logged; never throws to the caller).
+ */
+export async function createBlockedDateEvent(
+  date: string,
+  reason: string,
+  contact?: BlockedDateContact,
+): Promise<string | null> {
+  await ensureCalendarShared();
+  const body = blockedDateEventBody(date, reason, contact);
   try {
     const res = await callCalendar(
       `/calendar/v3/calendars/${encodeURIComponent(
@@ -469,6 +479,37 @@ export async function createBlockedDateEvent(
   } catch (err) {
     console.error("[calendar] block create threw:", err);
     return null;
+  }
+}
+
+/**
+ * Patch an existing blocked-date calendar event (date, reason, contact).
+ * Returns "gone" when the event vanished so the caller can recreate it.
+ * Never throws.
+ */
+export async function updateBlockedDateEvent(
+  eventId: string,
+  date: string,
+  reason: string,
+  contact?: BlockedDateContact,
+): Promise<"ok" | "gone" | "error"> {
+  try {
+    const res = await callCalendar(
+      `/calendar/v3/calendars/${encodeURIComponent(
+        CALENDAR_ID,
+      )}/events/${encodeURIComponent(eventId)}?sendUpdates=none`,
+      { method: "PATCH", body: blockedDateEventBody(date, reason, contact) },
+    );
+    if (res.ok) return "ok";
+    if (res.status === 404 || res.status === 410) return "gone";
+    const txt = await res.text().catch(() => "");
+    console.error(
+      `[calendar] block patch failed: HTTP ${res.status} ${res.statusText} ${txt}`,
+    );
+    return "error";
+  } catch (err) {
+    console.error("[calendar] block patch threw:", err);
+    return "error";
   }
 }
 

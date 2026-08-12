@@ -28,6 +28,7 @@ import { type BookingEmailData, formatDateLong } from "../lib/email";
 import {
   syncBookingCalendar,
   createBlockedDateEvent,
+  updateBlockedDateEvent,
   deleteBlockedDateEvent,
   listVisualCalendarEvents,
 } from "../lib/calendar";
@@ -466,6 +467,10 @@ router.post("/admin/bookings/:id/reschedule", requireAdmin, async (req, res) => 
   }
 });
 
+function phoneDigits(value: string | null | undefined): string {
+  return (value ?? "").replace(/\D/g, "");
+}
+
 router.get("/admin/blocked-dates", requireAdmin, async (_req, res) => {
   const rows = await db
     .select()
@@ -541,18 +546,7 @@ router.post("/admin/blocked-dates", requireAdmin, async (req, res) => {
 
     res.status(201).json(created);
   } catch (err) {
-    let cur: unknown = err;
-    let pgCode: unknown;
-    for (let i = 0; i < 5 && cur; i++) {
-      if (typeof cur === "object" && cur !== null && "code" in cur) {
-        pgCode = (cur as { code?: unknown }).code;
-        if (pgCode) break;
-      }
-      cur =
-        typeof cur === "object" && cur !== null && "cause" in cur
-          ? (cur as { cause?: unknown }).cause
-          : undefined;
-    }
+    const pgCode = pgErrorCode(err);
     if (pgCode === "23505") {
       res.status(409).json({ message: "That date is already blocked." });
       return;
@@ -568,6 +562,167 @@ router.post("/admin/blocked-dates", requireAdmin, async (req, res) => {
     }
     console.error("[admin] blocked-dates insert failed:", err);
     res.status(500).json({ message: "Could not block that date." });
+  }
+});
+
+router.patch("/admin/blocked-dates/:date", requireAdmin, async (req, res) => {
+  const raw = req.params.date;
+  const originalDate = typeof raw === "string" ? raw : "";
+  if (!originalDate || !parseDateString(originalDate)) {
+    res.status(400).json({ message: "Invalid date. Use YYYY-MM-DD." });
+    return;
+  }
+  const [existing] = await db
+    .select()
+    .from(blockedDatesTable)
+    .where(eq(blockedDatesTable.date, originalDate));
+  if (!existing) {
+    res.status(404).json({ message: "That blocked date was not found." });
+    return;
+  }
+
+  const body = (req.body ?? {}) as {
+    date?: unknown;
+    reason?: unknown;
+    name?: unknown;
+    surname?: unknown;
+    phone?: unknown;
+  };
+
+  let nextDate = existing.date;
+  if (body.date !== undefined) {
+    if (typeof body.date !== "string" || !parseDateString(body.date)) {
+      res.status(400).json({ message: "Invalid date. Use YYYY-MM-DD." });
+      return;
+    }
+    nextDate = body.date;
+  }
+  if (nextDate !== existing.date && nextDate < todayInShopLocal()) {
+    res.status(400).json({ message: "Cannot move a block to a date in the past." });
+    return;
+  }
+
+  const nextReason =
+    typeof body.reason === "string"
+      ? body.reason.trim().slice(0, 200)
+      : existing.reason;
+  const nextName =
+    body.name !== undefined
+      ? typeof body.name === "string"
+        ? body.name.trim().slice(0, 100) || null
+        : existing.name
+      : existing.name;
+  const nextSurname =
+    body.surname !== undefined
+      ? typeof body.surname === "string"
+        ? body.surname.trim().slice(0, 100) || null
+        : existing.surname
+      : existing.surname;
+  const nextPhone =
+    body.phone !== undefined
+      ? typeof body.phone === "string"
+        ? body.phone.trim().slice(0, 40) || null
+        : existing.phone
+      : existing.phone;
+
+  if (nextDate !== existing.date) {
+    const [conflict] = await db
+      .select({ id: blockedDatesTable.id })
+      .from(blockedDatesTable)
+      .where(eq(blockedDatesTable.date, nextDate));
+    if (conflict) {
+      res.status(409).json({ message: "That date is already blocked." });
+      return;
+    }
+  }
+
+  try {
+    const [updated] = await db
+      .update(blockedDatesTable)
+      .set({
+        date: nextDate,
+        reason: nextReason,
+        name: nextName,
+        surname: nextSurname,
+        phone: nextPhone,
+      })
+      .where(eq(blockedDatesTable.id, existing.id))
+      .returning();
+
+    const contact = {
+      name: nextName,
+      surname: nextSurname,
+      phone: nextPhone,
+    };
+    void (async () => {
+      try {
+        if (existing.googleEventId) {
+          const result = await updateBlockedDateEvent(
+            existing.googleEventId,
+            nextDate,
+            nextReason,
+            contact,
+          );
+          if (result === "gone") {
+            const eventId = await createBlockedDateEvent(
+              nextDate,
+              nextReason,
+              contact,
+            );
+            if (eventId) {
+              await db
+                .update(blockedDatesTable)
+                .set({ googleEventId: eventId })
+                .where(eq(blockedDatesTable.id, existing.id));
+            }
+          }
+        } else {
+          const eventId = await createBlockedDateEvent(
+            nextDate,
+            nextReason,
+            contact,
+          );
+          if (eventId) {
+            await db
+              .update(blockedDatesTable)
+              .set({ googleEventId: eventId })
+              .where(eq(blockedDatesTable.id, existing.id));
+          }
+        }
+      } catch (err) {
+        console.error("[admin] blocked-dates calendar update failed:", err);
+      }
+    })();
+
+    // SMS only when a phone is present and the number or date actually changed.
+    const nextDigits = phoneDigits(nextPhone);
+    const prevDigits = phoneDigits(existing.phone);
+    if (
+      nextPhone &&
+      nextDigits &&
+      (nextDigits !== prevDigits || nextDate !== existing.date)
+    ) {
+      const customerName = [nextName, nextSurname].filter(Boolean).join(" ").trim();
+      void sendSms({
+        to: nextPhone,
+        body: smsBlockedDateConfirm({
+          customerName,
+          dateLong: formatDateLong(nextDate),
+          reason: nextReason || undefined,
+        }),
+        context: `blocked-date-update ${nextDate}`,
+      });
+    }
+
+    res.json(updated);
+  } catch (err) {
+    const pgCode = pgErrorCode(err);
+    if (pgCode === "23505") {
+      res.status(409).json({ message: "That date is already blocked." });
+      return;
+    }
+    console.error("[admin] blocked-dates update failed:", err);
+    res.status(500).json({ message: "Could not update that blocked date." });
   }
 });
 

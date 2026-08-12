@@ -10,7 +10,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useOwnerCalendarEvents } from "../useOwnerCalendarEvents";
 
 export default function CalendarPage() {
-  const { token, bookings, blockedDates, setDetail, setEditing, cancelBooking, openBlockDate } = useAdmin();
+  const { token, bookings, blockedDates, setDetail, setEditing, cancelBooking, openBlockDate, openEditBlockedDate } = useAdmin();
   const today = todayDateString();
   const [month, setMonth] = useState(today.slice(0, 7));
   const [selected, setSelected] = useState(today);
@@ -38,7 +38,7 @@ export default function CalendarPage() {
       <div className="flex items-center justify-between gap-3">
         <h2 className="text-xl md:text-2xl font-bold">Calendar</h2>
         <GhostButton type="button" onClick={() => openBlockDate(selected)} className="px-3 shrink-0">
-          Block
+          {blocked ? "Edit block" : "Block"}
         </GhostButton>
       </div>
       <MonthCalendar
@@ -54,14 +54,17 @@ export default function CalendarPage() {
       <div>
         <h3 className="font-bold mb-2">{formatDateLong(selected)}</h3>
         {blocked && (
-          <div className="mb-3 rounded-xl border border-white/10 bg-[#111111] p-4 flex items-center justify-between gap-3">
+          <div className="mb-3 rounded-xl border border-white/10 bg-[#111111] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <p className="text-sm text-white">Blocked{blocked.reason ? ` · ${blocked.reason}` : ""}</p>
               {(blocked.name || blocked.phone) && (
                 <p className="text-xs text-[#9CA3AF]">{[blocked.name, blocked.surname].filter(Boolean).join(" ")} {blocked.phone}</p>
               )}
             </div>
-            <GhostButton type="button" onClick={unblock}>Re-open</GhostButton>
+            <div className="flex items-center gap-2 shrink-0">
+              <GhostButton type="button" onClick={() => openEditBlockedDate(blocked)}>Edit</GhostButton>
+              <GhostButton type="button" onClick={unblock}>Re-open</GhostButton>
+            </div>
           </div>
         )}
         {dayPersonal.length > 0 && (

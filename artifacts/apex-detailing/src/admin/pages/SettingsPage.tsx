@@ -8,7 +8,7 @@ import { adminUnblockDate, getAdminListBlockedDatesQueryKey } from "@workspace/a
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function SettingsPage() {
-  const { onLogout, blockedDates, token, openBlockDate } = useAdmin();
+  const { onLogout, blockedDates, token, openBlockDate, openEditBlockedDate } = useAdmin();
   const queryClient = useQueryClient();
   const today = todayDateString();
   const upcoming = blockedDates.filter((b) => b.date >= today);
@@ -50,10 +50,25 @@ export default function SettingsPage() {
                 <span>
                   {formatDateLong(b.date)}
                   {b.reason ? ` · ${b.reason}` : ""}
+                  {(b.name || b.phone) ? (
+                    <span className="block text-xs text-[#9CA3AF]">
+                      {[b.name, b.surname].filter(Boolean).join(" ")}
+                      {b.phone ? ` ${b.phone}` : ""}
+                    </span>
+                  ) : null}
                 </span>
-                <button type="button" className="text-red-400 text-xs" onClick={() => unblock(b.date)}>
-                  Re-open
-                </button>
+                <span className="flex items-center gap-3 shrink-0">
+                  <button
+                    type="button"
+                    className="text-[#23B9FF] text-xs"
+                    onClick={() => openEditBlockedDate(b)}
+                  >
+                    Edit
+                  </button>
+                  <button type="button" className="text-red-400 text-xs" onClick={() => unblock(b.date)}>
+                    Re-open
+                  </button>
+                </span>
               </div>
             ))}
           </div>
