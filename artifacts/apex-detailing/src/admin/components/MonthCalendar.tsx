@@ -1,12 +1,27 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Booking, BlockedDate } from "@workspace/api-client-react";
-import { todayDateString } from "@/lib/format";
+import { formatTime12h, todayDateString } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import { addMonths, bookingShopDate, daysInMonth, displayStatus, monthLabel } from "../utils";
+import {
+  addMonths,
+  bookingShopDate,
+  bookingShopTime,
+  daysInMonth,
+  displayStatus,
+  monthLabel,
+} from "../utils";
 import type { VisualCalendarEvent } from "../useOwnerCalendarEvents";
 import { GhostButton, PrimaryButton } from "./ui";
 
 const DOW = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+
+type DayItem = {
+  key: string;
+  sort: string;
+  time: string;
+  label: string;
+  tone: "booking" | "personal" | "blocked" | "done";
+};
 
 export default function MonthCalendar({
   month,
@@ -38,7 +53,7 @@ export default function MonthCalendar({
   ];
   while (cells.length % 7 !== 0) cells.push(null);
 
-  const blockedSet = new Set(blockedDates.map((b) => b.date));
+  const blockedByDate = new Map(blockedDates.map((b) => [b.date, b]));
 
   return (
     <div className="rounded-2xl border border-white/10 bg-[#111111] p-4">
@@ -74,23 +89,54 @@ export default function MonthCalendar({
       </div>
       <div className="grid grid-cols-7 gap-1">
         {cells.map((date, i) => {
-          if (!date) return <div key={`e-${i}`} className="min-h-14" />;
+          if (!date) return <div key={`e-${i}`} className="min-h-20 md:min-h-24" />;
           const dayBookings = bookings.filter((b) => bookingShopDate(b) === date);
           const dayPersonal = personalEvents.filter((e) => e.dates.includes(date));
+          const blocked = blockedByDate.get(date);
+          const items: DayItem[] = [
+            ...dayBookings.map((b) => {
+              const status = displayStatus(b);
+              return {
+                key: `b-${b.id}`,
+                sort: bookingShopTime(b),
+                time: formatTime12h(bookingShopTime(b)),
+                label: b.serviceName,
+                tone: (status === "confirmed" ? "booking" : "done") as DayItem["tone"],
+              };
+            }),
+            ...dayPersonal.map((e) => ({
+              key: `p-${e.id}`,
+              sort: e.allDay ? "00:00" : e.startTime,
+              time: e.allDay ? "All day" : formatTime12h(e.startTime),
+              label: e.title,
+              tone: "personal" as const,
+            })),
+          ];
+          if (blocked) {
+            items.unshift({
+              key: `x-${blocked.id}`,
+              sort: "",
+              time: "",
+              label: blocked.reason?.trim() ? blocked.reason : "Blocked",
+              tone: "blocked",
+            });
+          }
+          items.sort((a, b) => a.sort.localeCompare(b.sort));
+          const shown = items.slice(0, 3);
+          const extra = items.length - shown.length;
           const isToday = date === today;
           const isSelected = date === selectedDate;
-          const blocked = blockedSet.has(date);
           return (
             <button
               key={date}
               type="button"
               onClick={() => onSelectDate?.(date)}
               className={cn(
-                "min-h-14 rounded-xl p-1 text-left border transition duration-150",
+                "min-h-20 md:min-h-24 rounded-xl p-1 text-left border transition duration-150 overflow-hidden",
                 isSelected
                   ? "border-[#FF2AD4]/50 bg-[#FF2AD4]/10"
                   : "border-transparent hover:bg-white/5",
-                blocked && "opacity-60",
+                blocked && "opacity-80",
               )}
             >
               <span
@@ -101,21 +147,26 @@ export default function MonthCalendar({
               >
                 {Number(date.slice(-2))}
               </span>
-              <div className="flex flex-wrap gap-0.5 mt-1">
-                {dayBookings.slice(0, 3).map((b) => {
-                  const status = displayStatus(b);
-                  const color =
-                    status === "cancelled"
-                      ? "bg-red-400"
-                      : status === "completed"
-                        ? "bg-gray-500"
-                        : "bg-[#FF2AD4]";
-                  return <span key={b.id} className={cn("w-1.5 h-1.5 rounded-full", color)} />;
-                })}
-                {dayPersonal.slice(0, 2).map((e) => (
-                  <span key={e.id} className="w-1.5 h-1.5 rounded-full bg-[#23B9FF]" />
+              <div className="mt-0.5 space-y-0.5">
+                {shown.map((item) => (
+                  <p
+                    key={item.key}
+                    className={cn(
+                      "text-[9px] md:text-[10px] leading-tight truncate",
+                      item.tone === "personal" && "text-[#23B9FF]",
+                      item.tone === "booking" && "text-[#FF2AD4]",
+                      item.tone === "blocked" && "text-[#8A52FF]",
+                      item.tone === "done" && "text-[#9CA3AF]",
+                    )}
+                    title={`${item.time} ${item.label}`.trim()}
+                  >
+                    {item.time ? `${item.time} ` : ""}
+                    {item.label}
+                  </p>
                 ))}
-                {blocked && <span className="w-1.5 h-1.5 rounded-full bg-[#8A52FF]" />}
+                {extra > 0 && (
+                  <p className="text-[9px] text-[#9CA3AF]">+{extra} more</p>
+                )}
               </div>
             </button>
           );
@@ -123,10 +174,9 @@ export default function MonthCalendar({
       </div>
 
       <div className="flex flex-wrap items-center gap-3 mt-4 text-[11px] text-[#9CA3AF]">
-        <Legend color="bg-[#FF2AD4]" label="Confirmed" />
+        <Legend color="bg-[#FF2AD4]" label="Appointment" />
         <Legend color="bg-[#23B9FF]" label="Personal" />
         <Legend color="bg-[#8A52FF]" label="Blocked" />
-        <Legend color="bg-gray-500" label="Completed" />
         {onBlockDate && (
           <PrimaryButton type="button" className="ml-auto h-8 px-3 text-xs" onClick={onBlockDate}>
             + Block Date
@@ -134,7 +184,7 @@ export default function MonthCalendar({
         )}
       </div>
       <p className="text-[11px] text-[#9CA3AF] mt-2">
-        Personal events are from your Gmail calendar. They are visual only and do not change customer booking availability.
+        Blue text is from your Gmail calendar. It is visual only and does not change customer booking availability.
       </p>
     </div>
   );
