@@ -4,7 +4,7 @@ import { useAdmin } from "../context";
 import { bookingShopDate, displayStatus, matchesSearch } from "../utils";
 import AppointmentRow from "../components/AppointmentRow";
 import MonthCalendar from "../components/MonthCalendar";
-import { EmptyState, fieldClass, GhostButton } from "../components/ui";
+import { AdminSelect, EmptyState, fieldClass, GhostButton } from "../components/ui";
 import { useOwnerCalendarEvents } from "../useOwnerCalendarEvents";
 
 export default function AppointmentsPage() {
@@ -83,28 +83,26 @@ export default function AppointmentsPage() {
           className={fieldClass}
           aria-label="Filter by date"
         />
-        <select
+        <AdminSelect
           value={filterService}
-          onChange={(e) => setFilterService(e.target.value)}
-          className={fieldClass}
+          onChange={setFilterService}
           aria-label="Filter by service"
-        >
-          <option value="">All services</option>
-          {serviceOptions.map((s) => (
-            <option key={s} value={s}>{s}</option>
-          ))}
-        </select>
-        <select
+          options={[
+            { value: "", label: "All services" },
+            ...serviceOptions.map((s) => ({ value: s, label: s })),
+          ]}
+        />
+        <AdminSelect
           value={filterStatus}
-          onChange={(e) => setFilterStatus(e.target.value)}
-          className={fieldClass}
+          onChange={setFilterStatus}
           aria-label="Filter by status"
-        >
-          <option value="">All statuses</option>
-          <option value="confirmed">Confirmed</option>
-          <option value="completed">Completed</option>
-          <option value="cancelled">Cancelled</option>
-        </select>
+          options={[
+            { value: "", label: "All statuses" },
+            { value: "confirmed", label: "Confirmed" },
+            { value: "completed", label: "Completed" },
+            { value: "cancelled", label: "Cancelled" },
+          ]}
+        />
         {(filterDate || filterService || filterStatus) && (
           <GhostButton
             type="button"

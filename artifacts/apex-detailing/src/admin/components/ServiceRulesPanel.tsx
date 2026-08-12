@@ -13,7 +13,7 @@ import {
   type Service,
 } from "@workspace/api-client-react";
 import { Clock, Loader2, Plus, Trash2, X as XIcon } from "lucide-react";
-import { fieldClass, GhostButton, PrimaryButton } from "./ui";
+import { AdminSelect, fieldClass, GhostButton, PrimaryButton } from "./ui";
 
 const DOW_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const DOW_LONG = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -140,22 +140,28 @@ export default function ServiceRulesPanel({ token }: { token: string }) {
         Choose which days each service is bookable, the times offered, and whether one booking takes the whole day. Sundays stay closed automatically.
       </p>
       <form onSubmit={addRule} className="grid grid-cols-1 md:grid-cols-[1.2fr_0.6fr_0.5fr_1.4fr_auto] gap-3 mb-5 p-4 rounded-2xl border border-white/10 bg-[#111111]">
-        <select
-          value={newServiceId}
-          onChange={(e) => setNewServiceId(e.target.value === "" ? "" : Number(e.target.value))}
-          className={fieldClass}
-          required
-        >
-          <option value="">Pick a service…</option>
-          {(services ?? []).map((s: Service) => (
-            <option key={s.id} value={s.id}>{s.name}</option>
-          ))}
-        </select>
-        <select value={newDow} onChange={(e) => setNewDow(Number(e.target.value))} className={fieldClass}>
-          {DOW_LABELS.map((label, i) => (
-            <option key={i} value={i} disabled={i === 0}>{label}</option>
-          ))}
-        </select>
+        <AdminSelect
+          value={newServiceId === "" ? "" : String(newServiceId)}
+          onChange={(value) => setNewServiceId(value === "" ? "" : Number(value))}
+          aria-label="Service"
+          options={[
+            { value: "", label: "Pick a service…" },
+            ...(services ?? []).map((s: Service) => ({
+              value: String(s.id),
+              label: s.name,
+            })),
+          ]}
+        />
+        <AdminSelect
+          value={String(newDow)}
+          onChange={(value) => setNewDow(Number(value))}
+          aria-label="Day of week"
+          options={DOW_LABELS.map((label, i) => ({
+            value: String(i),
+            label,
+            disabled: i === 0,
+          }))}
+        />
         <label className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-sm cursor-pointer">
           <input type="checkbox" checked={newWholeDay} onChange={(e) => setNewWholeDay(e.target.checked)} className="accent-[#FF2AD4]" />
           Whole-day lock

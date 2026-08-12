@@ -1,9 +1,104 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { useEffect, useRef, useState, type ButtonHTMLAttributes, type ReactNode } from "react";
+import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { DisplayStatus } from "../utils";
 
 export const fieldClass =
   "w-full px-3.5 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-base text-white placeholder:text-gray-500 focus:border-[#FF2AD4] focus:outline-none focus:ring-2 focus:ring-[#FF2AD4]/20 transition duration-200";
+
+export type AdminSelectOption = {
+  value: string;
+  label: string;
+  disabled?: boolean;
+};
+
+export function AdminSelect({
+  value,
+  onChange,
+  options,
+  className,
+  "aria-label": ariaLabel,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  options: AdminSelectOption[];
+  className?: string;
+  "aria-label"?: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const selected = options.find((option) => option.value === value) ?? options[0];
+
+  useEffect(() => {
+    if (!open) return;
+    const onDoc = (event: MouseEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", onDoc);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDoc);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  return (
+    <div ref={rootRef} className={cn("relative", className)}>
+      <button
+        type="button"
+        aria-label={ariaLabel}
+        aria-expanded={open}
+        aria-haspopup="listbox"
+        onClick={() => setOpen((current) => !current)}
+        className={cn(fieldClass, "flex items-center justify-between gap-2 text-left")}
+      >
+        <span className="truncate">{selected?.label ?? ""}</span>
+        <ChevronDown
+          className={cn(
+            "w-4 h-4 shrink-0 text-[#9CA3AF] transition-transform",
+            open && "rotate-180",
+          )}
+        />
+      </button>
+      {open && (
+        <ul
+          role="listbox"
+          className="absolute z-40 mt-1 w-full max-h-60 overflow-y-auto rounded-xl border border-white/10 bg-[#111111] py-1 shadow-[0_16px_40px_rgba(0,0,0,0.65)]"
+        >
+          {options.map((option) => {
+            const isActive = option.value === value;
+            return (
+              <li key={option.value || option.label}>
+                <button
+                  type="button"
+                  role="option"
+                  aria-selected={isActive}
+                  disabled={option.disabled}
+                  onClick={() => {
+                    onChange(option.value);
+                    setOpen(false);
+                  }}
+                  className={cn(
+                    "w-full text-left px-3.5 py-2.5 text-sm transition duration-150",
+                    option.disabled && "opacity-40 cursor-not-allowed",
+                    isActive
+                      ? "bg-[#FF2AD4]/20 text-white"
+                      : "text-white hover:bg-white/[0.08]",
+                  )}
+                >
+                  {option.label}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 export function StatusBadge({ status }: { status: DisplayStatus }) {
   const map: Record<DisplayStatus, string> = {

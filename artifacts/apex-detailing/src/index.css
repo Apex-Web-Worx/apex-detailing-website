@@ -1130,7 +1130,22 @@
 
 .apex-admin input[type="date"],
 .apex-admin input[type="time"],
-.apex-admin select,
-.apex-admin option {
+.apex-admin select {
   color-scheme: dark;
+  background-color: #111111;
+  color: #ffffff;
+}
+
+.apex-admin option,
+.apex-admin optgroup {
+  color-scheme: dark;
+  background-color: #111111;
+  color: #ffffff;
+}
+
+.apex-admin option:checked,
+.apex-admin option:hover,
+.apex-admin option:focus {
+  background-color: #ff2ad4;
+  color: #ffffff;
 }
