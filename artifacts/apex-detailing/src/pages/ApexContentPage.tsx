@@ -247,6 +247,7 @@ function SiteNavigation() {
     { label: "Gallery", href: homeSectionHref("gallery") },
     { label: "Testimonials", href: homeSectionHref("testimonials") },
     { label: "FAQ", href: homeSectionHref("faq") },
+    { label: "Journal", href: base ? `${base}/blog` : "/blog" },
     { label: "Buy Gift Card", href: giftCardsHref },
   ];
 
@@ -362,6 +363,7 @@ function SiteFooter() {
     { label: "Gallery", href: homeSectionHref("gallery") },
     { label: "Testimonials", href: homeSectionHref("testimonials") },
     { label: "FAQ", href: homeSectionHref("faq") },
+    { label: "Journal", href: base ? `${base}/blog` : "/blog" },
     { label: "Buy Gift Card", href: giftCardsHref },
   ];
   const services = [
