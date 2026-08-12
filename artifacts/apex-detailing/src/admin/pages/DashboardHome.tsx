@@ -8,19 +8,12 @@ import {
   bookingShopTime,
   computeKpis,
   deriveTasks,
-  displayStatus,
   greetingForNow,
 } from "../utils";
 import AppointmentRow from "../components/AppointmentRow";
 import MonthCalendar from "../components/MonthCalendar";
-import { AdminCard, EmptyState, GhostButton, StatusBadge } from "../components/ui";
+import { AdminCard, EmptyState, GhostButton } from "../components/ui";
 import { useOwnerCalendarEvents } from "../useOwnerCalendarEvents";
-import {
-  AdminBookingPhoto,
-  CustomerPhotoBadge,
-  photoIdsForBooking,
-  useAdminBookingPhotoIndex,
-} from "../components/CustomerPhotos";
 import { useState } from "react";
 
 export default function DashboardHome() {
@@ -40,15 +33,11 @@ export default function DashboardHome() {
   const today = todayDateString();
   const [calMonth, setCalMonth] = useState(today.slice(0, 7));
   const { data: personalEvents = [] } = useOwnerCalendarEvents(token, calMonth);
-  const photosQuery = useAdminBookingPhotoIndex(token);
   const kpis = computeKpis(bookings);
   const todayBlocked = blockedDates.find((b) => b.date === today);
   const todayAppts = bookings
     .filter((b) => b.status !== "cancelled" && bookingShopDate(b) === today)
     .sort((a, b) => bookingShopTime(a).localeCompare(bookingShopTime(b)));
-  const recent = [...bookings]
-    .sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))
-    .slice(0, 6);
   const tasks = deriveTasks(bookings);
 
   return (
@@ -141,70 +130,19 @@ export default function DashboardHome() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-        <AdminCard hover={false} className="p-5">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-bold">Recent</h3>
-            <Link href="/admin/appointments" className="text-xs text-[#9CA3AF] hover:text-white">
-              View all →
-            </Link>
-          </div>
-          {recent.length === 0 ? (
-            <p className="text-sm text-[#9CA3AF]">No bookings yet.</p>
-          ) : (
-            <div className="space-y-3">
-              {recent.map((b) => {
-                const ids = photoIdsForBooking(photosQuery.data, b.id);
-                return (
-                <button
-                  key={b.id}
-                  type="button"
-                  onClick={() => setDetail(b)}
-                  className="w-full text-left flex items-center gap-3"
-                >
-                  {ids[0] ? (
-                    <div className="w-10 h-10 rounded-lg overflow-hidden border border-white/10 shrink-0">
-                      <AdminBookingPhoto
-                        token={token}
-                        bookingId={b.id}
-                        photoId={ids[0]}
-                        className="w-full h-full"
-                      />
-                    </div>
-                  ) : null}
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-sm font-medium truncate">{b.customerName}</span>
-                      <StatusBadge status={displayStatus(b)} />
-                    </div>
-                    <p className="text-xs text-[#9CA3AF] truncate">
-                      {b.vehicle} · {b.serviceName}
-                    </p>
-                    <CustomerPhotoBadge count={ids.length} />
-                  </div>
-                </button>
-                );
-              })}
-            </div>
-          )}
-        </AdminCard>
-
-        <AdminCard hover={false} className="p-5">
+      {tasks.length > 0 && (
+        <AdminCard hover={false} className="p-5 max-w-xl">
           <h3 className="font-bold mb-3">Follow-ups</h3>
-          {tasks.length === 0 ? (
-            <p className="text-sm text-[#9CA3AF]">No follow-ups from current bookings.</p>
-          ) : (
-            <div className="space-y-3">
-              {tasks.map((t) => (
-                <Link key={t.id} href={t.href} className="block">
-                  <p className="text-sm font-medium text-white">{t.title}</p>
-                  <p className="text-xs text-[#9CA3AF]">{t.detail}</p>
-                </Link>
-              ))}
-            </div>
-          )}
+          <div className="space-y-3">
+            {tasks.map((t) => (
+              <Link key={t.id} href={t.href} className="block">
+                <p className="text-sm font-medium text-white">{t.title}</p>
+                <p className="text-xs text-[#9CA3AF]">{t.detail}</p>
+              </Link>
+            ))}
+          </div>
         </AdminCard>
-      </div>
+      )}
     </div>
   );
 }
