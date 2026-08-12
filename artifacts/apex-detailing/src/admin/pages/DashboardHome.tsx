@@ -13,7 +13,6 @@ import {
 } from "../utils";
 import AppointmentRow from "../components/AppointmentRow";
 import MonthCalendar from "../components/MonthCalendar";
-import { PersonalEventsCard } from "../components/PersonalEventsCard";
 import { AdminCard, EmptyState, GhostButton, StatusBadge } from "../components/ui";
 import { useOwnerCalendarEvents } from "../useOwnerCalendarEvents";
 import {
@@ -34,6 +33,7 @@ export default function DashboardHome() {
     setEditing,
     cancelBooking,
     openBlockDate,
+    openEditBlockedDate,
     token,
   } = useAdmin();
   const [, setLocation] = useLocation();
@@ -42,7 +42,7 @@ export default function DashboardHome() {
   const { data: personalEvents = [] } = useOwnerCalendarEvents(token, calMonth);
   const photosQuery = useAdminBookingPhotoIndex(token);
   const kpis = computeKpis(bookings);
-  const todayPersonal = personalEvents.filter((e) => e.dates.includes(today));
+  const todayBlocked = blockedDates.find((b) => b.date === today);
   const todayAppts = bookings
     .filter((b) => b.status !== "cancelled" && bookingShopDate(b) === today)
     .sort((a, b) => bookingShopTime(a).localeCompare(bookingShopTime(b)));
@@ -82,17 +82,39 @@ export default function DashboardHome() {
       <div className="grid grid-cols-1 xl:grid-cols-5 gap-4">
         <div className="xl:col-span-3 space-y-3">
           <div className="flex items-center justify-between gap-2">
-            <h3 className="text-base font-bold">Today</h3>
-            <Link href="/admin/calendar" className="xl:hidden text-xs font-semibold text-[#9CA3AF] py-2">
+            <h3 className="text-base font-bold">Today's Schedule</h3>
+            <Link href="/admin/calendar" className="text-xs font-semibold text-[#9CA3AF] py-2">
               Calendar →
             </Link>
           </div>
           {isLoading ? (
             <p className="text-sm text-[#9CA3AF]">Loading…</p>
-          ) : todayAppts.length === 0 && todayPersonal.length === 0 ? (
-            <EmptyState title="Nothing on the shop calendar today" body="New bookings will show up here." />
+          ) : todayAppts.length === 0 && !todayBlocked ? (
+            <EmptyState title="No detailing appointments today" body="Shop bookings and blocked days show here. Personal calendar items are on Calendar." />
           ) : (
             <>
+              {todayBlocked && (
+                <div className="rounded-xl border border-white/10 bg-[#111111] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <p className="text-sm text-white">
+                      Blocked{todayBlocked.reason ? ` · ${todayBlocked.reason}` : ""}
+                    </p>
+                    {(todayBlocked.name || todayBlocked.phone) && (
+                      <p className="text-xs text-[#9CA3AF]">
+                        {[todayBlocked.name, todayBlocked.surname].filter(Boolean).join(" ")}
+                        {todayBlocked.phone ? ` ${todayBlocked.phone}` : ""}
+                      </p>
+                    )}
+                  </div>
+                  <GhostButton
+                    type="button"
+                    className="shrink-0"
+                    onClick={() => openEditBlockedDate(todayBlocked)}
+                  >
+                    Edit
+                  </GhostButton>
+                </div>
+              )}
               {todayAppts.map((b) => (
                 <AppointmentRow
                   key={b.id}
@@ -102,10 +124,6 @@ export default function DashboardHome() {
                   onCancel={() => cancelBooking(b.id)}
                 />
               ))}
-              {todayAppts.length === 0 && (
-                <p className="text-sm text-[#9CA3AF]">No shop appointments today.</p>
-              )}
-              <PersonalEventsCard events={todayPersonal} />
             </>
           )}
         </div>
