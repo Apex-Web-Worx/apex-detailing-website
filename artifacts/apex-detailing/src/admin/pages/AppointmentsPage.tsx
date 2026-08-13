@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import type { BlockedDate, Booking } from "@workspace/api-client-react";
 import { todayDateString } from "@/lib/format";
+import { RefreshCw } from "lucide-react";
 import { useAdmin } from "../context";
 import {
   bookingShopDate,
@@ -25,7 +26,7 @@ type ListItem =
   | { kind: "hold"; key: string; date: string; status: "confirmed" | "completed"; hold: BlockedDate };
 
 export default function AppointmentsPage() {
-  const { bookings, blockedDates, isLoading, setDetail, setEditing, cancelBooking, openBlockDate, searchQuery, setSearchQuery, token } = useAdmin();
+  const { bookings, blockedDates, isLoading, isRefreshing, refetch, setDetail, setEditing, cancelBooking, openBlockDate, searchQuery, setSearchQuery, token } = useAdmin();
   const [filterDate, setFilterDate] = useState("");
   const [filterService, setFilterService] = useState("");
   const [filterStatus, setFilterStatus] = useState<DisplayStatus | "">("confirmed");
@@ -110,9 +111,14 @@ export default function AppointmentsPage() {
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between gap-3">
           <h2 className="text-xl md:text-2xl font-bold">Appointments</h2>
-          <GhostButton type="button" onClick={() => openBlockDate()} className="px-3 shrink-0">
-            Block
-          </GhostButton>
+          <div className="flex items-center gap-2 shrink-0">
+            <GhostButton type="button" onClick={() => void refetch()} disabled={isRefreshing} className="px-3">
+              <RefreshCw className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`} /> Refresh
+            </GhostButton>
+            <GhostButton type="button" onClick={() => openBlockDate()} className="px-3">
+              Block
+            </GhostButton>
+          </div>
         </div>
         <div className="grid grid-cols-2 rounded-xl border border-white/10 overflow-hidden md:inline-grid md:w-72">
           <button

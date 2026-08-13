@@ -32,6 +32,7 @@ export default function DashboardHome() {
     blockedDates,
     isLoading,
     refetch,
+    isRefreshing,
     setDetail,
     setEditing,
     cancelBooking,
@@ -74,8 +75,8 @@ export default function DashboardHome() {
           {greetingForNow()}, {ADMIN_FIRST}
         </h2>
         <div className="flex flex-wrap gap-2">
-          <GhostButton type="button" onClick={() => refetch()} className="px-3">
-            <RefreshCw className="w-4 h-4" /> Refresh
+          <GhostButton type="button" onClick={() => void refetch()} disabled={isRefreshing} className="px-3">
+            <RefreshCw className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`} /> Refresh
           </GhostButton>
           <GhostButton type="button" onClick={() => openBlockDate()} className="px-3">
             <CalendarOff className="w-4 h-4" /> Block

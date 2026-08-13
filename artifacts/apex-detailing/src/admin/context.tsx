@@ -16,6 +16,7 @@ import {
   useAdminListBlockedDates,
   getAdminListBlockedDatesQueryKey,
   useListServices,
+  getListServicesQueryKey,
   type Booking,
   type BlockedDate,
   type Service,
@@ -34,7 +35,8 @@ type AdminContextValue = {
   isLoading: boolean;
   searchQuery: string;
   setSearchQuery: (q: string) => void;
-  refetch: () => void;
+  refetch: () => Promise<void>;
+  isRefreshing: boolean;
   onLogout: () => void;
   cancelBooking: (id: number) => Promise<void>;
   startBooking: (id: number) => Promise<void>;
@@ -80,11 +82,11 @@ export function AdminProvider({
 
   const bookingsQuery = useAdminListBookings({
     request: { headers },
-    query: { queryKey: getAdminListBookingsQueryKey(), retry: false },
+    query: { queryKey: getAdminListBookingsQueryKey(), retry: false, staleTime: 0 },
   });
   const blockedQuery = useAdminListBlockedDates({
     request: { headers },
-    query: { queryKey: getAdminListBlockedDatesQueryKey(), retry: false },
+    query: { queryKey: getAdminListBlockedDatesQueryKey(), retry: false, staleTime: 0 },
   });
   const servicesQuery = useListServices();
 
@@ -114,16 +116,26 @@ export function AdminProvider({
   const services = servicesQuery.data ?? [];
 
   useEffect(() => {
-    if (!routeId || section !== "appointments") return;
-    const found = bookings.find((b) => String(b.id) === routeId);
-    if (found) setDetail(found);
-  }, [routeId, section, bookings]);
+    if (routeId && section === "appointments") {
+      const found = bookings.find((b) => String(b.id) === routeId);
+      if (found) setDetail(found);
+      return;
+    }
+    if (!detail) return;
+    const fresh = bookings.find((b) => b.id === detail.id);
+    if (fresh) setDetail(fresh);
+  }, [routeId, section, bookings, detail?.id]);
 
-  const refetch = useCallback(() => {
-    queryClient.invalidateQueries({ queryKey: getAdminListBookingsQueryKey() });
-    queryClient.invalidateQueries({ queryKey: getAdminListBlockedDatesQueryKey() });
-    queryClient.invalidateQueries({ queryKey: ["admin-booking-photos"] });
+  const refetch = useCallback(async () => {
+    await Promise.all([
+      queryClient.refetchQueries({ queryKey: getAdminListBookingsQueryKey() }),
+      queryClient.refetchQueries({ queryKey: getAdminListBlockedDatesQueryKey() }),
+      queryClient.refetchQueries({ queryKey: getListServicesQueryKey() }),
+      queryClient.refetchQueries({ queryKey: ["admin-booking-photos"] }),
+      queryClient.refetchQueries({ queryKey: ["admin-calendar-events"] }),
+    ]);
   }, [queryClient]);
+  const isRefreshing = bookingsQuery.isFetching || blockedQuery.isFetching || servicesQuery.isFetching;
 
   const cancelBooking = useCallback(
     async (id: number) => {
@@ -250,6 +262,7 @@ export function AdminProvider({
       blockedDates,
       services,
       isLoading: bookingsQuery.isLoading,
+      isRefreshing,
       searchQuery,
       setSearchQuery,
       refetch,
@@ -288,6 +301,7 @@ export function AdminProvider({
       blockedDates,
       services,
       bookingsQuery.isLoading,
+      isRefreshing,
       searchQuery,
       refetch,
       onLogout,

@@ -18,12 +18,12 @@ export function useOwnerCalendarEvents(token: string, month: string) {
     queryFn: async (): Promise<VisualCalendarEvent[]> => {
       const res = await fetch(
         `/api/admin/calendar-events?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`,
-        { headers: { "x-admin-token": token } },
+        { headers: { "x-admin-token": token }, cache: "no-store" },
       );
       if (!res.ok) return [];
       const json = (await res.json()) as { events?: VisualCalendarEvent[] };
       return json.events ?? [];
     },
-    staleTime: 60_000,
+    staleTime: 0,
   });
 }

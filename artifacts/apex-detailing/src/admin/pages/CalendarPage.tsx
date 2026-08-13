@@ -6,13 +6,14 @@ import AppointmentRow from "../components/AppointmentRow";
 import HeldAppointmentRow from "../components/HeldAppointmentRow";
 import MonthCalendar from "../components/MonthCalendar";
 import { EmptyState, GhostButton } from "../components/ui";
+import { RefreshCw } from "lucide-react";
 import { PersonalEventsCard } from "../components/PersonalEventsCard";
 import { adminUnblockDate, getAdminListBlockedDatesQueryKey, getAdminListBookingsQueryKey } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useOwnerCalendarEvents } from "../useOwnerCalendarEvents";
 
 export default function CalendarPage() {
-  const { token, bookings, blockedDates, setDetail, setEditing, cancelBooking, openBlockDate, openEditBlockedDate } = useAdmin();
+  const { token, bookings, blockedDates, isRefreshing, refetch, setDetail, setEditing, cancelBooking, openBlockDate, openEditBlockedDate } = useAdmin();
   const today = todayDateString();
   const [month, setMonth] = useState(today.slice(0, 7));
   const [selected, setSelected] = useState(today);
@@ -47,9 +48,14 @@ export default function CalendarPage() {
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-3">
         <h2 className="text-xl md:text-2xl font-bold">Calendar</h2>
-        <GhostButton type="button" onClick={() => openBlockDate(selected)} className="px-3 shrink-0">
-          {blocked ? "Edit" : "Block"}
-        </GhostButton>
+        <div className="flex items-center gap-2 shrink-0">
+          <GhostButton type="button" onClick={() => void refetch()} disabled={isRefreshing} className="px-3">
+            <RefreshCw className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`} /> Refresh
+          </GhostButton>
+          <GhostButton type="button" onClick={() => openBlockDate(selected)} className="px-3">
+            {blocked ? "Edit" : "Block"}
+          </GhostButton>
+        </div>
       </div>
       <MonthCalendar
         month={month}

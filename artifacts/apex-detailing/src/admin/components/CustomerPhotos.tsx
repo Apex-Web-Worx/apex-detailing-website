@@ -14,6 +14,7 @@ export function useAdminBookingPhotoIndex(token: string) {
     queryFn: async (): Promise<BookingPhotoMeta[]> => {
       const res = await fetch("/api/admin/booking-photos", {
         headers: { "x-admin-token": token },
+        cache: "no-store",
       });
       if (!res.ok) return [];
       const json = (await res.json()) as { photos?: BookingPhotoMeta[] };
