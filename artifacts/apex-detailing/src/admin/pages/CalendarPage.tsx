@@ -40,7 +40,7 @@ export default function CalendarPage() {
       <div className="flex items-center justify-between gap-3">
         <h2 className="text-xl md:text-2xl font-bold">Calendar</h2>
         <GhostButton type="button" onClick={() => openBlockDate(selected)} className="px-3 shrink-0">
-          {blocked ? (isClientHold(blocked) ? "Edit hold" : "Edit block") : "Block"}
+          {blocked ? "Edit" : "Block"}
         </GhostButton>
       </div>
       <MonthCalendar
