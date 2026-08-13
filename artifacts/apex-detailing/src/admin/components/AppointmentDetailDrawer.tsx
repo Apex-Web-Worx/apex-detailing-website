@@ -5,10 +5,12 @@ import { formatDateTimeLong, formatDuration } from "@/lib/format";
 import { useAdmin } from "../context";
 import {
   bookingIso,
+  bookingStoredDetailMs,
   canMarkCompleted,
   canMarkReady,
   canStartJob,
   displayStatus,
+  formatElapsedLong,
 } from "../utils";
 import { GhostButton, PrimaryButton, StatusBadge } from "./ui";
 import DetailTimer from "./DetailTimer";
@@ -95,6 +97,7 @@ export default function AppointmentDetailDrawer() {
   const complete = canMarkCompleted(detail);
   const canStart = canStartJob(detail);
   const alreadyReady = status === "ready_for_pickup" || status === "completed";
+  const storedDetailMs = bookingStoredDetailMs(detail);
   const smsHref = `sms:${detail.phone}`;
   const pickupNote = comms.find((c) => c.messageType === "vehicle_ready" && (c.status === "sent" || c.status === "delivered"));
   const reviewSched = comms.find((c) => c.messageType === "review_request" && c.status === "scheduled");
@@ -230,8 +233,15 @@ export default function AppointmentDetailDrawer() {
                 <dt className="text-[#9CA3AF] text-xs">Status</dt>
                 <dd className="mt-1"><StatusBadge status={status} /></dd>
               </div>
+              {storedDetailMs != null ? (
+                <div className="col-span-2">
+                  <dt className="text-[#9CA3AF] text-xs">Time on this car</dt>
+                  <dd className="text-white mt-0.5">{formatElapsedLong(storedDetailMs)}</dd>
+                </div>
+              ) : null}
             </dl>
-            {(status === "in_progress" || alreadyReady) && detail.inProgressAt ? (
+            {(status === "in_progress" || alreadyReady) &&
+            (detail.inProgressAt || detail.detailDurationMinutes != null) ? (
               <div className="mt-4 rounded-xl border border-white/10 bg-[#111111] p-4">
                 <DetailTimer booking={detail} size="lg" />
               </div>

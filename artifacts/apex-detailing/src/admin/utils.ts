@@ -124,6 +124,36 @@ export function bookingDetailElapsedMs(
   return null;
 }
 
+/** Finished detailing time only — not the live in-progress clock. */
+export function bookingStoredDetailMs(
+  booking: Pick<Booking, "inProgressAt" | "readyAt" | "detailDurationMinutes">,
+): number | null {
+  if (booking.detailDurationMinutes != null) return booking.detailDurationMinutes * 60_000;
+  if (booking.inProgressAt && booking.readyAt) {
+    return Math.max(
+      0,
+      new Date(booking.readyAt).getTime() - new Date(booking.inProgressAt).getTime(),
+    );
+  }
+  return null;
+}
+
+export function vehicleDurationStats(bookings: Booking[]): {
+  lastMs: number | null;
+  averageMs: number | null;
+  timedCount: number;
+} {
+  const times = bookings
+    .map(bookingStoredDetailMs)
+    .filter((ms): ms is number => ms != null);
+  if (times.length === 0) {
+    return { lastMs: null, averageMs: null, timedCount: 0 };
+  }
+  const lastMs = times[0];
+  const averageMs = Math.round(times.reduce((sum, ms) => sum + ms, 0) / times.length);
+  return { lastMs, averageMs, timedCount: times.length };
+}
+
 export function notesPreview(notes: string | null | undefined, max = 72): string {
   const text = (notes ?? "").trim();
   if (!text) return "";
@@ -281,6 +311,9 @@ export type VehicleRecord = {
   ownerEmail: string;
   ownerPhone: string;
   bookings: Booking[];
+  lastDetailMs: number | null;
+  averageDetailMs: number | null;
+  timedVisitCount: number;
 };
 
 export function groupVehicles(bookings: Booking[]): VehicleRecord[] {
@@ -296,6 +329,9 @@ export function groupVehicles(bookings: Booking[]): VehicleRecord[] {
         ownerEmail: booking.email,
         ownerPhone: booking.phone,
         bookings: [booking],
+        lastDetailMs: null,
+        averageDetailMs: null,
+        timedVisitCount: 0,
       });
       continue;
     }
@@ -306,6 +342,10 @@ export function groupVehicles(bookings: Booking[]): VehicleRecord[] {
   }
   for (const vehicle of map.values()) {
     vehicle.bookings.sort((a, b) => +new Date(bookingIso(b)) - +new Date(bookingIso(a)));
+    const stats = vehicleDurationStats(vehicle.bookings);
+    vehicle.lastDetailMs = stats.lastMs;
+    vehicle.averageDetailMs = stats.averageMs;
+    vehicle.timedVisitCount = stats.timedCount;
   }
   return Array.from(map.values()).sort((a, b) => a.vehicle.localeCompare(b.vehicle));
 }

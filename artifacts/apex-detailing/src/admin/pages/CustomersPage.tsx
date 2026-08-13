@@ -1,7 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { useAdmin } from "../context";
-import { bookingIso, customerKey, displayStatus, groupCustomers } from "../utils";
+import {
+  bookingIso,
+  bookingStoredDetailMs,
+  customerKey,
+  displayStatus,
+  formatElapsedLong,
+  groupCustomers,
+} from "../utils";
 import { AdminCard, EmptyState, fieldClass, StatusBadge } from "../components/ui";
 import { formatDateTimeLong } from "@/lib/format";
 
@@ -46,17 +53,28 @@ export default function CustomersPage() {
         <AdminCard hover={false} className="p-5">
           <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">Appointment history</h3>
           <div className="space-y-3">
-            {selected.bookings.map((b) => (
-              <div key={b.id} className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 pb-3">
-                <div>
-                  <p className="text-sm text-white">{b.serviceName}</p>
-                  <p className="text-xs text-[#9CA3AF]">{new Date(bookingIso(b)).toLocaleString()}</p>
+            {selected.bookings.map((b) => {
+              const took = bookingStoredDetailMs(b);
+              return (
+                <div key={b.id} className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 pb-3">
+                  <div>
+                    <p className="text-sm text-white">{b.serviceName}</p>
+                    <p className="text-xs text-[#9CA3AF]">
+                      {b.vehicle ? `${b.vehicle} · ` : ""}
+                      {new Date(bookingIso(b)).toLocaleString()}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {took != null ? (
+                      <span className="text-xs font-semibold tabular-nums text-[#23B9FF]">
+                        {formatElapsedLong(took)}
+                      </span>
+                    ) : null}
+                    <StatusBadge status={displayStatus(b)} />
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <StatusBadge status={displayStatus(b)} />
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </AdminCard>
         <AdminCard hover={false} className="p-5">

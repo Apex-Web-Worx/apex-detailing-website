@@ -1,7 +1,13 @@
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
 import { useAdmin } from "../context";
-import { bookingIso, displayStatus, groupVehicles } from "../utils";
+import {
+  bookingIso,
+  bookingStoredDetailMs,
+  displayStatus,
+  formatElapsedLong,
+  groupVehicles,
+} from "../utils";
 import { AdminCard, EmptyState, fieldClass, StatusBadge } from "../components/ui";
 
 export default function VehiclesPage() {
@@ -25,18 +31,55 @@ export default function VehiclesPage() {
           <p className="text-sm text-[#9CA3AF] mt-1">{selected.ownerPhone}</p>
         </AdminCard>
         <AdminCard hover={false} className="p-5">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">Service history</h3>
-          {selected.bookings.map((b) => (
-            <div key={b.id} className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 py-3">
+          <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">
+            Detailing time for this car
+          </h3>
+          {selected.timedVisitCount === 0 ? (
+            <p className="text-sm text-[#9CA3AF]">
+              Time is saved when you tap Ready for Pickup after starting the job.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-white">{b.serviceName}</p>
-                <p className="text-xs text-[#9CA3AF]">{new Date(bookingIso(b)).toLocaleDateString("en-US", { month: "short", year: "numeric", timeZone: "America/Chicago" })}</p>
+                <p className="text-xs text-[#9CA3AF]">Last visit</p>
+                <p className="text-xl font-bold text-white mt-1">
+                  {selected.lastDetailMs != null ? formatElapsedLong(selected.lastDetailMs) : "—"}
+                </p>
               </div>
-              <div className="flex items-center gap-2">
-                <StatusBadge status={displayStatus(b)} />
+              <div>
+                <p className="text-xs text-[#9CA3AF]">
+                  Average{selected.timedVisitCount > 1 ? ` · ${selected.timedVisitCount} visits` : ""}
+                </p>
+                <p className="text-xl font-bold text-white mt-1">
+                  {selected.averageDetailMs != null ? formatElapsedLong(selected.averageDetailMs) : "—"}
+                </p>
               </div>
             </div>
-          ))}
+          )}
+        </AdminCard>
+        <AdminCard hover={false} className="p-5">
+          <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">Service history</h3>
+          {selected.bookings.map((b) => {
+            const took = bookingStoredDetailMs(b);
+            return (
+              <div key={b.id} className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 py-3">
+                <div>
+                  <p className="text-sm text-white">{b.serviceName}</p>
+                  <p className="text-xs text-[#9CA3AF]">
+                    {new Date(bookingIso(b)).toLocaleDateString("en-US", { month: "short", year: "numeric", timeZone: "America/Chicago" })}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  {took != null ? (
+                    <span className="text-xs font-semibold tabular-nums text-[#23B9FF]">
+                      {formatElapsedLong(took)}
+                    </span>
+                  ) : null}
+                  <StatusBadge status={displayStatus(b)} />
+                </div>
+              </div>
+            );
+          })}
           <p className="text-xs text-[#9CA3AF] mt-4">
             Last ceramic coating, paint correction, and recommended next service will appear when those fields exist in the database.
           </p>
@@ -63,7 +106,10 @@ export default function VehiclesPage() {
             <Link key={v.key} href={`/admin/vehicles/${encodeURIComponent(v.key)}`}>
               <AdminCard className="p-4">
                 <p className="font-semibold text-white">{v.vehicle}</p>
-                <p className="text-sm text-[#9CA3AF]">Owner: {v.ownerName} · {v.bookings.length} service{v.bookings.length === 1 ? "" : "s"}</p>
+                <p className="text-sm text-[#9CA3AF]">
+                  Owner: {v.ownerName} · {v.bookings.length} service{v.bookings.length === 1 ? "" : "s"}
+                  {v.lastDetailMs != null ? ` · last ${formatElapsedLong(v.lastDetailMs)}` : ""}
+                </p>
               </AdminCard>
             </Link>
           ))}

@@ -59,7 +59,7 @@ export default function AppointmentRow({
                 <StatusBadge status={status} />
               </div>
               {(status === "in_progress" || status === "ready_for_pickup" || status === "completed") &&
-              booking.inProgressAt ? (
+              (booking.inProgressAt || booking.detailDurationMinutes != null) ? (
                 <div className="mt-1">
                   <DetailTimer booking={booking} size="sm" />
                 </div>
