@@ -199,6 +199,9 @@ router.post("/admin/bookings/:id/ready-for-pickup", requireAdmin, async (req, re
     sendSms?: unknown;
     sendEmail?: unknown;
     resend?: unknown;
+    smsBody?: unknown;
+    emailSubject?: unknown;
+    emailBody?: unknown;
   };
   const date = typeof body.pickupDate === "string" ? body.pickupDate : "";
   const time = typeof body.pickupTime === "string" ? body.pickupTime : "";
@@ -217,6 +220,9 @@ router.post("/admin/bookings/:id/ready-for-pickup", requireAdmin, async (req, re
     sendSms: body.sendSms !== false,
     sendEmail: body.sendEmail !== false,
     resend: body.resend === true,
+    smsBody: typeof body.smsBody === "string" ? body.smsBody : null,
+    emailSubject: typeof body.emailSubject === "string" ? body.emailSubject : null,
+    emailBody: typeof body.emailBody === "string" ? body.emailBody : null,
   });
   if ("error" in result) {
     if (result.error === "not_found") {

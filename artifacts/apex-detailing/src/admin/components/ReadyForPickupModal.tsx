@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Booking } from "@workspace/api-client-react";
 import { Check, Loader2, X } from "lucide-react";
 import { formatDateTimeLong } from "@/lib/format";
 import { useAdmin } from "../context";
 import { bookingIso, bookingAllowsCustomerSms, shopNowPlusMinutes } from "../utils";
-import { GhostButton, PrimaryButton } from "./ui";
+import { GhostButton, PrimaryButton, fieldClass } from "./ui";
 import AdminDatePicker from "./AdminDatePicker";
 import AdminTimePicker, { snapTimeToFiveMinutes } from "./AdminTimePicker";
 
@@ -32,6 +32,13 @@ export default function ReadyForPickupModal({
   const [sendSms, setSendSms] = useState(canSms);
   const [sendEmail, setSendEmail] = useState(true);
   const [preview, setPreview] = useState<Preview | null>(null);
+  const [smsBody, setSmsBody] = useState("");
+  const [emailSubject, setEmailSubject] = useState("");
+  const [emailBody, setEmailBody] = useState("");
+  const [smsDirty, setSmsDirty] = useState(false);
+  const [emailDirty, setEmailDirty] = useState(false);
+  const smsDirtyRef = useRef(false);
+  const emailDirtyRef = useRef(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [warnBothOff, setWarnBothOff] = useState(false);
@@ -57,7 +64,13 @@ export default function ReadyForPickupModal({
         const res = await fetch(url, { headers: { "x-admin-token": token } });
         if (!res.ok) return;
         const json = (await res.json()) as Preview;
-        if (!cancelled) setPreview(json);
+        if (cancelled) return;
+        setPreview(json);
+        if (!smsDirtyRef.current) setSmsBody(json.sms);
+        if (!emailDirtyRef.current) {
+          setEmailSubject(json.emailSubject);
+          setEmailBody(json.emailBody);
+        }
       } catch {
         /* preview is best-effort */
       }
@@ -90,6 +103,9 @@ export default function ReadyForPickupModal({
           sendSms,
           sendEmail,
           resend,
+          smsBody,
+          emailSubject,
+          emailBody,
         }),
       });
       if (!res.ok) {
@@ -187,10 +203,76 @@ export default function ReadyForPickupModal({
           </label>
         </div>
 
-        {preview && (
-          <div className="mb-4 rounded-xl border border-white/10 bg-white/[0.02] p-3">
-            <p className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-2">Preview</p>
-            <p className="text-sm text-white whitespace-pre-wrap">{preview.sms}</p>
+        {(sendSms || sendEmail) && (
+          <div className="mb-4 space-y-3">
+            {sendSms ? (
+              <label className="block">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
+                  SMS message
+                </span>
+                <textarea
+                  value={smsBody}
+                  onChange={(e) => {
+                    smsDirtyRef.current = true;
+                    setSmsDirty(true);
+                    setSmsBody(e.target.value);
+                  }}
+                  rows={7}
+                  className={`${fieldClass} resize-y min-h-32`}
+                />
+              </label>
+            ) : null}
+            {sendEmail ? (
+              <div className="space-y-3">
+                <label className="block">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
+                    Email subject
+                  </span>
+                  <input
+                    type="text"
+                    value={emailSubject}
+                    onChange={(e) => {
+                      emailDirtyRef.current = true;
+                      setEmailDirty(true);
+                      setEmailSubject(e.target.value);
+                    }}
+                    className={fieldClass}
+                  />
+                </label>
+                <label className="block">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
+                    Email message
+                  </span>
+                  <textarea
+                    value={emailBody}
+                    onChange={(e) => {
+                      emailDirtyRef.current = true;
+                      setEmailDirty(true);
+                      setEmailBody(e.target.value);
+                    }}
+                    rows={7}
+                    className={`${fieldClass} resize-y min-h-32`}
+                  />
+                </label>
+              </div>
+            ) : null}
+            {(smsDirty || emailDirty) && preview ? (
+              <button
+                type="button"
+                className="text-xs font-semibold text-[#9CA3AF] hover:text-white"
+                onClick={() => {
+                  smsDirtyRef.current = false;
+                  emailDirtyRef.current = false;
+                  setSmsDirty(false);
+                  setEmailDirty(false);
+                  setSmsBody(preview.sms);
+                  setEmailSubject(preview.emailSubject);
+                  setEmailBody(preview.emailBody);
+                }}
+              >
+                Reset to template
+              </button>
+            ) : null}
           </div>
         )}
 

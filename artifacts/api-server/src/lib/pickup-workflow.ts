@@ -32,6 +32,13 @@ import {
 } from "./message-templates";
 
 const STOP = "Reply STOP to opt out.";
+
+function withStopLine(body: string): string {
+  const trimmed = body.trim().slice(0, 1600);
+  if (!trimmed) return STOP;
+  if (/reply stop/i.test(trimmed)) return trimmed;
+  return `${trimmed}\n\n${STOP}`.slice(0, 1600);
+}
 const REVIEW_DELAY_MS = 24 * 60 * 60 * 1000;
 
 type BookingRow = typeof bookingsTable.$inferSelect;
@@ -389,6 +396,9 @@ export async function markReadyAndNotify(args: {
   sendSms: boolean;
   sendEmail: boolean;
   resend: boolean;
+  smsBody?: string | null;
+  emailSubject?: string | null;
+  emailBody?: string | null;
 }) {
   const [booking] = await db
     .select()
@@ -477,13 +487,16 @@ export async function markReadyAndNotify(args: {
 
   const wantSms = args.sendSms && bookingAllowsCustomerSms(current);
   const wantEmail = args.sendEmail;
+  const smsOut = args.smsBody?.trim() ? withStopLine(args.smsBody) : preview.sms;
+  const emailSubjectOut = args.emailSubject?.trim() || preview.emailSubject;
+  const emailBodyOut = args.emailBody?.trim() || preview.emailBody;
 
   if (wantSms) {
     await sendChannel({
       booking: current,
       messageType: "vehicle_ready",
       channel: "sms",
-      body: preview.sms,
+      body: smsOut,
     });
   }
   if (wantEmail) {
@@ -491,8 +504,8 @@ export async function markReadyAndNotify(args: {
       booking: current,
       messageType: "vehicle_ready",
       channel: "email",
-      body: preview.emailBody,
-      emailSubject: preview.emailSubject,
+      body: emailBodyOut,
+      emailSubject: emailSubjectOut,
     });
   }
 
