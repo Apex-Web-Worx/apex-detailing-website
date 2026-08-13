@@ -106,7 +106,6 @@ export default function AppointmentDetailDrawer() {
   const storedDetailMs = bookingStoredDetailMs(detail);
   const smsHref = `sms:${detail.phone}`;
   const pickupNote = comms.find((c) => c.messageType === "vehicle_ready" && (c.status === "sent" || c.status === "delivered"));
-  const reviewSched = comms.find((c) => c.messageType === "review_request" && c.status === "scheduled");
   const reviewFailed = comms.find((c) => c.messageType === "review_request" && c.status === "failed");
   const reviewSkipped = comms.find((c) => c.messageType === "review_request" && c.status === "skipped");
   const reviewSent = comms.find(
@@ -201,7 +200,7 @@ export default function AppointmentDetailDrawer() {
     setReviewNote(null);
     try {
       await unskipReviewRequest(detail.id);
-      setReviewNote("Review is allowed again. It will send 24 hours after ready/complete, or you can send it now.");
+      setReviewNote("Review is allowed again. Send it from the dashboard when you want.");
       await reloadTimeline();
     } catch (e) {
       setReviewNote(e instanceof Error ? e.message : "Could not allow review");
@@ -370,12 +369,6 @@ export default function AppointmentDetailDrawer() {
                   {reviewSent.sentAt ? ` · ${formatDateTimeLong(reviewSent.sentAt)}` : ""}
                 </p>
               )}
-              {reviewSched && !reviewSent && !reviewSkipped && (
-                <p className="text-xs text-[#9CA3AF]">
-                  Review request scheduled
-                  {reviewSched.scheduledAt ? ` · ${formatDateTimeLong(reviewSched.scheduledAt)}` : ""}
-                </p>
-              )}
               {reviewFailed && (
                 <div className="text-xs text-red-300">
                   Review request failed{reviewFailed.error ? ` · ${reviewFailed.error}` : ""}
@@ -401,7 +394,7 @@ export default function AppointmentDetailDrawer() {
                 <Star className="w-4 h-4 text-[#FF2AD4]" /> Review link
               </p>
               <p className="text-xs text-[#9CA3AF]">
-                Send the Google review link now, or it goes out automatically 24 hours after the job is ready or completed. It will not send twice. You can skip the review for this client.
+                Reviews are not sent automatically. Send the Google review link from here or the dashboard when you want. You can also skip this client.
               </p>
               {reviewSkipped ? (
                 <p className="text-xs text-amber-300">Will not send to this client</p>
@@ -409,11 +402,9 @@ export default function AppointmentDetailDrawer() {
                 <p className="text-xs text-emerald-300">
                   Sent{reviewSent.sentAt ? ` · ${formatDateTimeLong(reviewSent.sentAt)}` : ""}
                 </p>
-              ) : reviewSched ? (
-                <p className="text-xs text-[#9CA3AF]">
-                  Scheduled{reviewSched.scheduledAt ? ` · ${formatDateTimeLong(reviewSched.scheduledAt)}` : ""}
-                </p>
-              ) : null}
+              ) : (
+                <p className="text-xs text-[#9CA3AF]">Not sent yet</p>
+              )}
               {reviewNote ? <p className="text-xs text-[#23B9FF]">{reviewNote}</p> : null}
               {status !== "confirmed" && !reviewSkipped ? (
                 <GhostButton

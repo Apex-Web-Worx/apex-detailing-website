@@ -6,7 +6,7 @@ import {
   notificationTemplatesTable,
   shopSettingsTable,
 } from "@workspace/db";
-import { and, asc, desc, eq, inArray, lte } from "drizzle-orm";
+import { and, asc, desc, eq, inArray } from "drizzle-orm";
 import {
   formatDateLong,
   formatTime12h,
@@ -39,7 +39,6 @@ function withStopLine(body: string): string {
   if (/reply stop/i.test(trimmed)) return trimmed;
   return `${trimmed}\n\n${STOP}`.slice(0, 1600);
 }
-const REVIEW_DELAY_MS = 24 * 60 * 60 * 1000;
 
 type BookingRow = typeof bookingsTable.$inferSelect;
 
@@ -269,11 +268,11 @@ function summarizeReviewStatus(rows: Array<{ status: string }>): ReviewQueueStat
   if (rows.some((row) => row.status === "skipped")) return "skipped";
   if (rows.some((row) => ["sent", "delivered", "pending"].includes(row.status))) return "sent";
   if (rows.some((row) => row.status === "failed")) return "failed";
-  if (rows.some((row) => row.status === "scheduled")) return "scheduled";
   return "none";
 }
 
 export async function listReviewQueue() {
+  await sendDueReviewRequests();
   const settings = await getShopSettings();
   const jobs = await db
     .select()
@@ -390,8 +389,6 @@ export async function markCompleted(bookingId: number) {
     detail: "Customer picked up — marked COMPLETED",
     occurredAt: now,
   });
-  const settings = await getShopSettings();
-  await scheduleReview(updated, updated.readyAt ?? now, settings);
   return updated;
 }
 
@@ -418,58 +415,6 @@ export async function cancelScheduledReviews(bookingId: number, reason: string) 
     });
   }
   return updated;
-}
-
-async function scheduleReview(booking: BookingRow, readyAt: Date, settings: Awaited<ReturnType<typeof getShopSettings>>) {
-  const existing = await db
-    .select({ id: communicationsTable.id })
-    .from(communicationsTable)
-    .where(
-      and(
-        eq(communicationsTable.bookingId, booking.id),
-        eq(communicationsTable.messageType, "review_request"),
-        inArray(communicationsTable.status, ["scheduled", "pending", "sent", "delivered", "skipped"]),
-      ),
-    )
-    .limit(1);
-  if (existing.length > 0) return existing[0];
-
-  const scheduledAt = new Date(readyAt.getTime() + REVIEW_DELAY_MS);
-  const templates = await getTemplates();
-  const tpl = templateByKey(templates, "review_request");
-  const vars = bookingTemplateVars(booking, booking.pickupAt, settings);
-  const smsBody = `${interpolateTemplate(tpl?.smsBody ?? DEFAULT_REVIEW_SMS, vars)}\n\n${STOP}`;
-  const emailBody = interpolateTemplate(tpl?.emailBody ?? DEFAULT_REVIEW_EMAIL, vars);
-  const channels: Array<{ channel: "sms" | "email"; body: string }> = [];
-  if (bookingAllowsCustomerSms(booking)) channels.push({ channel: "sms", body: smsBody });
-  if (!isHoldBookingEmail(booking.email)) channels.push({ channel: "email", body: emailBody });
-  if (channels.length === 0) return null;
-
-  const inserted = await db
-    .insert(communicationsTable)
-    .values(
-      channels.map((c) => ({
-        bookingId: booking.id,
-        customerEmail: booking.email.trim().toLowerCase(),
-        messageType: "review_request" as const,
-        channel: c.channel,
-        direction: "outbound",
-        body: c.body,
-        status: "scheduled",
-        scheduledAt,
-      })),
-    )
-    .returning();
-
-  await logEvent({
-    bookingId: booking.id,
-    actor: "system",
-    action: "review_request_scheduled",
-    status: "scheduled",
-    detail: `Review request scheduled for ${scheduledAt.toISOString()}`,
-    occurredAt: readyAt,
-  });
-  return inserted[0];
 }
 
 export async function markReadyAndNotify(args: {
@@ -591,10 +536,6 @@ export async function markReadyAndNotify(args: {
     });
   }
 
-  if (!alreadyReady) {
-    await scheduleReview(current, current.readyAt ?? now, settings);
-  }
-
   const communications = await listBookingCommunications(current.id);
   const events = await listBookingTimeline(current.id);
   return { booking: current, communications, events, alreadyReady: false as const };
@@ -648,141 +589,25 @@ export async function retryReviewRequest(bookingId: number) {
 
 export async function sendDueReviewRequests(): Promise<number> {
   const now = new Date();
-  const due = await db
-    .select()
-    .from(communicationsTable)
+  const cancelled = await db
+    .update(communicationsTable)
+    .set({
+      status: "cancelled",
+      error: "Automatic review send is off — send from admin",
+      updatedAt: now,
+    })
     .where(
       and(
         eq(communicationsTable.messageType, "review_request"),
         eq(communicationsTable.status, "scheduled"),
-        lte(communicationsTable.scheduledAt, now),
       ),
-    );
-
-  let sent = 0;
-  for (const row of due) {
-    const claimed = await db
-      .update(communicationsTable)
-      .set({ status: "pending", updatedAt: now })
-      .where(
-        and(
-          eq(communicationsTable.id, row.id),
-          eq(communicationsTable.status, "scheduled"),
-        ),
-      )
-      .returning();
-    if (claimed.length === 0) continue;
-
-    const [booking] = await db
-      .select()
-      .from(bookingsTable)
-      .where(eq(bookingsTable.id, row.bookingId));
-    if (!booking || booking.status === "cancelled") {
-      await db
-        .update(communicationsTable)
-        .set({
-          status: "cancelled",
-          error: "Appointment cancelled before review send",
-          updatedAt: new Date(),
-        })
-        .where(eq(communicationsTable.id, row.id));
-      continue;
-    }
-
-    const skipped = await hasReviewInStatuses(booking.id, ["skipped"]);
-    if (skipped) {
-      await db
-        .update(communicationsTable)
-        .set({
-          status: "cancelled",
-          error: "Review skipped for this client",
-          updatedAt: new Date(),
-        })
-        .where(eq(communicationsTable.id, row.id));
-      continue;
-    }
-
-    const settings = await getShopSettings();
-    const templates = await getTemplates();
-    const tpl = templateByKey(templates, "review_request");
-    const vars = bookingTemplateVars(booking, booking.pickupAt, settings);
-
-    if (row.channel === "sms") {
-      if (!bookingAllowsCustomerSms(booking)) {
-        await db
-          .update(communicationsTable)
-          .set({
-            status: "cancelled",
-            error: "Customer SMS opt-out",
-            updatedAt: new Date(),
-          })
-          .where(eq(communicationsTable.id, row.id));
-        continue;
-      }
-      const body = `${interpolateTemplate(tpl?.smsBody ?? DEFAULT_REVIEW_SMS, vars)}\n\n${STOP}`;
-      const result = await sendSmsWithResult({
-        to: booking.phone,
-        body,
-        context: `review_request-sms #${booking.id}`,
-      });
-      await db
-        .update(communicationsTable)
-        .set({
-          status: result.ok ? "sent" : "failed",
-          body,
-          providerMessageId: result.sid ?? null,
-          error: result.ok ? null : result.error ?? "SMS send failed",
-          sentAt: result.ok ? new Date() : null,
-          updatedAt: new Date(),
-        })
-        .where(eq(communicationsTable.id, row.id));
-      await logEvent({
-        bookingId: booking.id,
-        actor: "system",
-        action: "review_request",
-        channel: "sms",
-        status: result.ok ? "sent" : "failed",
-        detail: result.ok ? "Review request SMS sent" : result.error ?? "SMS failed",
-      });
-    } else {
-      const body = interpolateTemplate(tpl?.emailBody ?? DEFAULT_REVIEW_EMAIL, vars);
-      const subject = interpolateTemplate(
-        tpl?.emailSubject ?? "How was your Apex Detailing service?",
-        vars,
-      );
-      const result = await sendCustomerNotice({
-        to: booking.email,
-        subject,
-        text: body,
-      });
-      await db
-        .update(communicationsTable)
-        .set({
-          status: result.ok ? "sent" : "failed",
-          body,
-          providerMessageId: result.id ?? null,
-          error: result.ok ? null : result.error ?? "Email send failed",
-          sentAt: result.ok ? new Date() : null,
-          updatedAt: new Date(),
-        })
-        .where(eq(communicationsTable.id, row.id));
-      await logEvent({
-        bookingId: booking.id,
-        actor: "system",
-        action: "review_request",
-        channel: "email",
-        status: result.ok ? "sent" : "failed",
-        detail: result.ok ? "Review request email sent" : result.error ?? "Email failed",
-      });
-    }
-
-    sent += 1;
-  }
-  return sent;
+    )
+    .returning({ id: communicationsTable.id });
+  return cancelled.length;
 }
 
+
 const REVIEW_DONE = ["sent", "delivered", "pending"] as const;
-const REVIEW_BLOCKING = ["scheduled", "pending", "sent", "delivered", "skipped"] as const;
 
 async function hasReviewInStatuses(bookingId: number, statuses: readonly string[]) {
   const rows = await db
@@ -927,35 +752,14 @@ export async function unskipReviewRequest(bookingId: number) {
     bookingId,
     actor: "admin",
     action: "review_unskipped",
-    status: "scheduled",
-    detail: "Review request re-enabled for this client",
+    status: "none",
+    detail: "Review request re-enabled for this client — send manually from admin",
   });
-
-  if (booking.status === "ready_for_pickup" || booking.status === "completed") {
-    const settings = await getShopSettings();
-    const origin = booking.readyAt ?? booking.completedAt ?? new Date();
-    await scheduleReview(booking, origin, settings);
-  }
 
   const communications = await listBookingCommunications(bookingId);
   return { booking, communications, alreadyUnskipped: false as const };
 }
 
 export async function ensureForgottenReviewRequests(): Promise<number> {
-  const cutoff = new Date(Date.now() - REVIEW_DELAY_MS);
-  const jobs = await db
-    .select()
-    .from(bookingsTable)
-    .where(inArray(bookingsTable.status, ["ready_for_pickup", "completed"]));
-
-  let sent = 0;
-  for (const booking of jobs) {
-    const origin = booking.readyAt ?? booking.completedAt ?? booking.scheduledAt;
-    if (origin > cutoff) continue;
-    const blocking = await hasReviewInStatuses(booking.id, REVIEW_BLOCKING);
-    if (blocking) continue;
-    const result = await sendReviewRequestNow(booking.id);
-    if (!("error" in result) && !result.alreadySent) sent += 1;
-  }
-  return sent;
+  return 0;
 }

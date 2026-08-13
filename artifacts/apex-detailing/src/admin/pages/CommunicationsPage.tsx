@@ -243,8 +243,8 @@ function CommCard({
           <p className="text-xs uppercase tracking-wider text-[#9CA3AF]">Review Request</p>
           <p className="text-white mt-1">
             {reviewRow
-              ? reviewRow.status === "scheduled" && reviewRow.scheduledAt
-                ? `Scheduled for ${formatDateTimeLong(reviewRow.scheduledAt)}`
+              ? reviewRow.status === "scheduled" || reviewRow.status === "cancelled"
+                ? "Not sent yet"
                 : `${reviewRow.status}${reviewRow.error ? ` · ${reviewRow.error}` : ""}`
               : "Not scheduled"}
           </p>

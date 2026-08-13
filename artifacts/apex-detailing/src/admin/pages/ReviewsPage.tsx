@@ -26,7 +26,7 @@ type ReviewItem = {
   reviewError: string | null;
 };
 
-type Filter = "action" | "scheduled" | "sent" | "skipped" | "all";
+type Filter = "action" | "sent" | "skipped" | "all";
 
 function jobStatus(item: ReviewItem): DisplayStatus {
   const status = item.status;
@@ -45,11 +45,6 @@ function reviewLabel(item: ReviewItem): string {
   if (item.reviewStatus === "skipped") return "Will not send";
   if (item.reviewStatus === "sent") {
     return item.reviewSentAt ? `Sent · ${formatDateTimeLong(item.reviewSentAt)}` : "Sent";
-  }
-  if (item.reviewStatus === "scheduled") {
-    return item.reviewScheduledAt
-      ? `Scheduled · ${formatDateTimeLong(item.reviewScheduledAt)}`
-      : "Scheduled in 24 hours";
   }
   if (item.reviewStatus === "failed") {
     return item.reviewError ? `Failed · ${item.reviewError}` : "Failed";
@@ -96,11 +91,10 @@ export default function ReviewsPage() {
 
   const counts = useMemo(() => {
     const action = items.filter(
-      (item) => item.reviewStatus === "none" || item.reviewStatus === "failed" || item.reviewStatus === "scheduled",
+      (item) => item.reviewStatus === "none" || item.reviewStatus === "failed",
     ).length;
     return {
       action,
-      scheduled: items.filter((item) => item.reviewStatus === "scheduled").length,
       sent: items.filter((item) => item.reviewStatus === "sent").length,
       skipped: items.filter((item) => item.reviewStatus === "skipped").length,
       all: items.length,
@@ -111,7 +105,7 @@ export default function ReviewsPage() {
     if (filter === "all") return items;
     if (filter === "action") {
       return items.filter(
-        (item) => item.reviewStatus === "none" || item.reviewStatus === "failed" || item.reviewStatus === "scheduled",
+        (item) => item.reviewStatus === "none" || item.reviewStatus === "failed",
       );
     }
     return items.filter((item) => item.reviewStatus === filter);
@@ -159,7 +153,7 @@ export default function ReviewsPage() {
             <Star className="w-5 h-5 text-[#FF2AD4]" /> Reviews
           </h2>
           <p className="text-sm text-[#9CA3AF] mt-1">
-            Send the Google review link, let it go out 24 hours after ready/complete, or skip it for this client.
+            Send the Google review link yourself. Nothing is sent until you tap Send.
           </p>
         </div>
         <GhostButton type="button" onClick={() => void load()} disabled={loading} className="px-3">
@@ -190,7 +184,6 @@ export default function ReviewsPage() {
         {(
           [
             ["action", `Needs send (${counts.action})`],
-            ["scheduled", `Scheduled (${counts.scheduled})`],
             ["sent", `Sent (${counts.sent})`],
             ["skipped", `Skipped (${counts.skipped})`],
             ["all", `All (${counts.all})`],
@@ -218,7 +211,7 @@ export default function ReviewsPage() {
       ) : visible.length === 0 ? (
         <EmptyState
           title={filter === "action" ? "Nothing waiting to send" : "No reviews in this list"}
-          body="Jobs show here after you start detailing. Ready or completed jobs get the Google review 24 hours later unless you send now or skip this client."
+          body="Jobs show here after you start detailing. Send the Google review from this page or the dashboard when you want. Nothing is sent automatically."
         />
       ) : (
         <div className="space-y-3">

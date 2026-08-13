@@ -22,9 +22,9 @@ import {
 import AppointmentRow from "../components/AppointmentRow";
 import HeldAppointmentRow from "../components/HeldAppointmentRow";
 import MonthCalendar from "../components/MonthCalendar";
-import { AdminCard, GhostButton } from "../components/ui";
+import { AdminCard, GhostButton, PrimaryButton } from "../components/ui";
 import { useOwnerCalendarEvents } from "../useOwnerCalendarEvents";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function DashboardHome() {
   const {
@@ -39,10 +39,40 @@ export default function DashboardHome() {
     openBlockDate,
     openEditBlockedDate,
     token,
+    sendReviewRequest,
+    skipReviewRequest,
   } = useAdmin();
   const [, setLocation] = useLocation();
   const today = todayDateString();
   const [calMonth, setCalMonth] = useState(today.slice(0, 7));
+  const [reviewItems, setReviewItems] = useState<
+    Array<{
+      bookingId: number;
+      customerName: string;
+      vehicle: string;
+      reviewStatus: string;
+    }>
+  >([]);
+  const [reviewBusyId, setReviewBusyId] = useState<number | null>(null);
+  const [reviewNote, setReviewNote] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/admin/review-requests", { headers: { "x-admin-token": token } })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((json) => {
+        if (cancelled || !json || !Array.isArray(json.items)) return;
+        setReviewItems(json.items);
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, [token, bookings]);
+
+  const pendingReviews = reviewItems.filter(
+    (item) => item.reviewStatus === "none" || item.reviewStatus === "failed",
+  );
   const { data: personalEvents = [] } = useOwnerCalendarEvents(token, calMonth);
   const kpis = computeKpis(bookings, blockedDates);
   const todayBlocked = blockedDates.find((b) => b.date === today);
@@ -133,12 +163,82 @@ export default function DashboardHome() {
         <div className="flex items-center justify-between gap-2 mb-3">
           <h3 className="text-base font-bold">Reviews</h3>
           <Link href="/admin/reviews" className="text-xs font-semibold text-[#9CA3AF] hover:text-white py-1">
-            Open Reviews
+            All reviews
           </Link>
         </div>
-        <p className="text-sm text-[#9CA3AF]">
-          Send the Google review link, wait 24 hours after ready/complete, or skip it for a client. Open Reviews to manage each job.
+        <p className="text-sm text-[#9CA3AF] mb-3">
+          Reviews are not sent automatically. Send the Google review link here when you want.
         </p>
+        {reviewNote ? <p className="text-sm text-[#23B9FF] mb-3">{reviewNote}</p> : null}
+        {pendingReviews.length === 0 ? (
+          <p className="text-sm text-[#9CA3AF]">No reviews waiting to send.</p>
+        ) : (
+          <div className="space-y-3">
+            {pendingReviews.map((item) => (
+              <div
+                key={item.bookingId}
+                className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-3 last:border-0 last:pb-0"
+              >
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-white truncate">{item.customerName}</p>
+                  <p className="text-xs text-[#9CA3AF] truncate">{item.vehicle}</p>
+                </div>
+                <div className="flex flex-wrap gap-2 shrink-0">
+                  <PrimaryButton
+                    type="button"
+                    className="h-10 text-xs px-3"
+                    disabled={reviewBusyId === item.bookingId}
+                    onClick={() => {
+                      setReviewBusyId(item.bookingId);
+                      setReviewNote(null);
+                      void sendReviewRequest(item.bookingId)
+                        .then((result) => {
+                          setReviewNote(
+                            result === "already" ? "Review link already sent." : "Review link sent.",
+                          );
+                          setReviewItems((rows) =>
+                            rows.map((row) =>
+                              row.bookingId === item.bookingId ? { ...row, reviewStatus: "sent" } : row,
+                            ),
+                          );
+                        })
+                        .catch((e) => {
+                          setReviewNote(e instanceof Error ? e.message : "Could not send review");
+                        })
+                        .finally(() => setReviewBusyId(null));
+                    }}
+                  >
+                    Send review link
+                  </PrimaryButton>
+                  <GhostButton
+                    type="button"
+                    className="h-10 text-xs px-3"
+                    disabled={reviewBusyId === item.bookingId}
+                    onClick={() => {
+                      setReviewBusyId(item.bookingId);
+                      setReviewNote(null);
+                      void skipReviewRequest(item.bookingId)
+                        .then(() => {
+                          setReviewNote("Review will not be sent to this client.");
+                          setReviewItems((rows) =>
+                            rows.map((row) =>
+                              row.bookingId === item.bookingId ? { ...row, reviewStatus: "skipped" } : row,
+                            ),
+                          );
+                        })
+                        .catch((e) => {
+                          setReviewNote(e instanceof Error ? e.message : "Could not skip review");
+                        })
+                        .finally(() => setReviewBusyId(null));
+                    }}
+                  >
+                    Don’t send
+                  </GhostButton>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </AdminCard>
 
       <AdminCard hover={false} className="p-4 md:p-5">
