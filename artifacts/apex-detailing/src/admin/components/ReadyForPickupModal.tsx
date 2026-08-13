@@ -6,6 +6,7 @@ import { useAdmin } from "../context";
 import { bookingIso, shopNowPlusMinutes } from "../utils";
 import { fieldClass, GhostButton, PrimaryButton } from "./ui";
 import AdminDatePicker from "./AdminDatePicker";
+import AdminTimePicker, { snapTimeToFiveMinutes } from "./AdminTimePicker";
 
 type Preview = {
   sms: string;
@@ -26,7 +27,7 @@ export default function ReadyForPickupModal({
   const { token, refetch, setDetail, bookings, blockedDates } = useAdmin();
   const defaults = shopNowPlusMinutes(30);
   const [pickupDate, setPickupDate] = useState(defaults.date);
-  const [pickupTime, setPickupTime] = useState(defaults.time);
+  const [pickupTime, setPickupTime] = useState(() => snapTimeToFiveMinutes(defaults.time));
   const [sendSms, setSendSms] = useState(Boolean(booking.smsConsent));
   const [sendEmail, setSendEmail] = useState(true);
   const [preview, setPreview] = useState<Preview | null>(null);
@@ -147,18 +148,12 @@ export default function ReadyForPickupModal({
               required
             />
           </div>
-          <label className="block">
+          <div>
             <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
               Pickup time
             </span>
-            <input
-              type="time"
-              value={pickupTime}
-              onChange={(e) => setPickupTime(e.target.value)}
-              required
-              className={fieldClass}
-            />
-          </label>
+            <AdminTimePicker value={pickupTime} onChange={setPickupTime} />
+          </div>
         </div>
 
         <div className="mb-4">
