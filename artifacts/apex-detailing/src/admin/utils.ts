@@ -34,12 +34,60 @@ export function bookingShopTime(booking: Booking): string {
   return scheduledAtToShopTime(bookingIso(booking));
 }
 
-export type DisplayStatus = "confirmed" | "completed" | "cancelled";
+export type DisplayStatus =
+  | "confirmed"
+  | "in_progress"
+  | "ready_for_pickup"
+  | "completed"
+  | "cancelled";
 
 export function displayStatus(booking: Booking, now = new Date()): DisplayStatus {
-  if (booking.status === "cancelled") return "cancelled";
-  if (new Date(bookingIso(booking)) < now) return "completed";
+  const stored = booking.status;
+  if (stored === "cancelled") return "cancelled";
+  if (stored === "completed") return "completed";
+  if (stored === "ready_for_pickup") return "ready_for_pickup";
+  if (stored === "in_progress") return "in_progress";
+  const date = bookingShopDate(booking);
+  const today = todayDateString();
+  if (date < today) return "completed";
+  if (new Date(bookingIso(booking)) <= now) return "in_progress";
   return "confirmed";
+}
+
+export function canMarkReady(booking: Booking, now = new Date()): boolean {
+  const status = displayStatus(booking, now);
+  return status === "in_progress";
+}
+
+export function canMarkCompleted(booking: Booking): boolean {
+  return displayStatus(booking) === "ready_for_pickup";
+}
+
+export function customerFirstName(fullName: string): string {
+  return fullName.trim().split(/\s+/)[0] || "there";
+}
+
+export function interpolateTemplate(
+  template: string,
+  vars: Record<string, string>,
+): string {
+  const vehicle = (vars.vehicle ?? "").trim();
+  let out = template.replace(
+    /\{\{\s*vehicle_year\s*\}\}(\s*)\{\{\s*vehicle_make\s*\}\}(\s*)\{\{\s*vehicle_model\s*\}\}/g,
+    vehicle,
+  );
+  out = out.replace(/\{\{\s*([a-z0-9_]+)\s*\}\}/gi, (_, key: string) => {
+    const k = key.toLowerCase();
+    if (k === "vehicle_year" || k === "vehicle_make" || k === "vehicle_model") return vehicle;
+    return vars[k] ?? "";
+  });
+  return out.replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+
+export function shopNowPlusMinutes(minutes: number): { date: string; time: string } {
+  const d = new Date(Date.now() + minutes * 60 * 1000);
+  const iso = d.toISOString();
+  return { date: scheduledAtToShopDate(iso), time: scheduledAtToShopTime(iso) };
 }
 
 export function notesPreview(notes: string | null | undefined, max = 72): string {

@@ -3,7 +3,9 @@ import { startReminderCron } from "./lib/reminders";
 import {
   ensureBlockedDatesContactColumns,
   ensureBookingPhotosTable,
+  ensurePickupWorkflow,
 } from "./lib/ensure-schema";
+import { seedNotificationDefaults } from "./lib/pickup-workflow";
 import { runSeed } from "./seed";
 
 const rawPort = process.env["PORT"];
@@ -29,6 +31,11 @@ ensureBlockedDatesContactColumns()
 ensureBookingPhotosTable()
   .then(() => console.log("[schema] booking_photos table ready"))
   .catch((err) => console.error("[schema] booking_photos ensure failed (continuing):", err));
+
+ensurePickupWorkflow()
+  .then(() => seedNotificationDefaults())
+  .then(() => console.log("[schema] pickup workflow ready"))
+  .catch((err) => console.error("[schema] pickup workflow ensure failed (continuing):", err));
 
 // Auto-seed on startup. The seed is idempotent (upsert by slug + deactivate
 // missing), so re-running on every boot costs ~14 small queries and ensures

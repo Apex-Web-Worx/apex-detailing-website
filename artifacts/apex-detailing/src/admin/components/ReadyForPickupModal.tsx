@@ -1,0 +1,219 @@
+import { useEffect, useState } from "react";
+import type { Booking } from "@workspace/api-client-react";
+import { Check, Loader2, X } from "lucide-react";
+import { formatDateTimeLong } from "@/lib/format";
+import { useAdmin } from "../context";
+import { bookingIso, shopNowPlusMinutes } from "../utils";
+import { fieldClass, GhostButton, PrimaryButton } from "./ui";
+
+type Preview = {
+  sms: string;
+  emailSubject: string;
+  emailBody: string;
+  smsConsent: boolean;
+};
+
+export default function ReadyForPickupModal({
+  booking,
+  resend = false,
+  onClose,
+}: {
+  booking: Booking;
+  resend?: boolean;
+  onClose: () => void;
+}) {
+  const { token, refetch, setDetail } = useAdmin();
+  const defaults = shopNowPlusMinutes(30);
+  const [pickupDate, setPickupDate] = useState(defaults.date);
+  const [pickupTime, setPickupTime] = useState(defaults.time);
+  const [sendSms, setSendSms] = useState(Boolean(booking.smsConsent));
+  const [sendEmail, setSendEmail] = useState(true);
+  const [preview, setPreview] = useState<Preview | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [warnBothOff, setWarnBothOff] = useState(false);
+
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const t = window.setTimeout(async () => {
+      try {
+        const url = `/api/admin/bookings/${booking.id}/ready-preview?pickupDate=${encodeURIComponent(pickupDate)}&pickupTime=${encodeURIComponent(pickupTime)}`;
+        const res = await fetch(url, { headers: { "x-admin-token": token } });
+        if (!res.ok) return;
+        const json = (await res.json()) as Preview;
+        if (!cancelled) setPreview(json);
+      } catch {
+        /* preview is best-effort */
+      }
+    }, 150);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(t);
+    };
+  }, [booking.id, pickupDate, pickupTime, token]);
+
+  const bothOff = !sendSms && !sendEmail;
+
+  const submit = async () => {
+    if (bothOff && !warnBothOff) {
+      setWarnBothOff(true);
+      return;
+    }
+    setSubmitting(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/admin/bookings/${booking.id}/ready-for-pickup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-token": token,
+        },
+        body: JSON.stringify({
+          pickupDate,
+          pickupTime,
+          sendSms,
+          sendEmail,
+          resend,
+        }),
+      });
+      if (!res.ok) {
+        const text = await res.text().catch(() => "");
+        throw new Error(text || `${res.status}`);
+      }
+      const json = await res.json();
+      refetch();
+      if (json.booking) setDetail(json.booking);
+      onClose();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not mark ready");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/70 p-0 sm:p-4"
+      onClick={onClose}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="w-full sm:max-w-lg bg-[#0B0B0B] border border-white/10 rounded-t-2xl sm:rounded-2xl p-5 max-h-[92dvh] overflow-y-auto pb-[max(1.25rem,env(safe-area-inset-bottom))]"
+      >
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-bold">Vehicle Ready for Pickup</h2>
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-11 h-11 rounded-lg text-[#9CA3AF] hover:text-white hover:bg-white/5"
+            aria-label="Close"
+          >
+            <X className="w-5 h-5 mx-auto" />
+          </button>
+        </div>
+
+        <div className="rounded-xl border border-white/10 bg-[#111111] p-4 mb-4">
+          <p className="font-semibold text-white">{booking.customerName}</p>
+          <p className="text-sm text-[#9CA3AF] mt-1">{booking.vehicle}</p>
+          <p className="text-sm text-white mt-2">{booking.serviceName}</p>
+          <p className="text-xs text-[#9CA3AF] mt-1">{formatDateTimeLong(bookingIso(booking))}</p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          <label className="block">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
+              Pickup date
+            </span>
+            <input
+              type="date"
+              value={pickupDate}
+              onChange={(e) => setPickupDate(e.target.value)}
+              required
+              className={fieldClass}
+            />
+          </label>
+          <label className="block">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
+              Pickup time
+            </span>
+            <input
+              type="time"
+              value={pickupTime}
+              onChange={(e) => setPickupTime(e.target.value)}
+              required
+              className={fieldClass}
+            />
+          </label>
+        </div>
+
+        <div className="mb-4">
+          <p className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-2">
+            Send customer notification
+          </p>
+          <label className="flex items-center gap-3 min-h-11 text-sm text-white">
+            <input
+              type="checkbox"
+              checked={sendSms}
+              disabled={!booking.smsConsent}
+              onChange={(e) => setSendSms(e.target.checked)}
+              className="accent-[#FF2AD4]"
+            />
+            SMS{!booking.smsConsent ? " (customer opted out)" : ""}
+          </label>
+          <label className="flex items-center gap-3 min-h-11 text-sm text-white">
+            <input
+              type="checkbox"
+              checked={sendEmail}
+              onChange={(e) => setSendEmail(e.target.checked)}
+              className="accent-[#FF2AD4]"
+            />
+            Email
+          </label>
+        </div>
+
+        {preview && (
+          <div className="mb-4 rounded-xl border border-white/10 bg-white/[0.02] p-3">
+            <p className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-2">Preview</p>
+            <p className="text-sm text-white whitespace-pre-wrap">{preview.sms}</p>
+          </div>
+        )}
+
+        {bothOff && (
+          <div className="mb-3 p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-200 text-sm">
+            {warnBothOff
+              ? "No notification will be sent. Click again to mark ready anyway."
+              : "SMS and email are both off. The customer will not be notified."}
+          </div>
+        )}
+        {error && (
+          <div className="mb-3 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-sm">
+            {error}
+          </div>
+        )}
+
+        <div className="flex justify-end gap-2">
+          <GhostButton type="button" onClick={onClose}>
+            Cancel
+          </GhostButton>
+          <PrimaryButton type="button" disabled={submitting} onClick={submit} className="min-h-12">
+            {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+            {resend ? "Resend notification" : "Mark ready & send"}
+          </PrimaryButton>
+        </div>
+      </div>
+    </div>
+  );
+}

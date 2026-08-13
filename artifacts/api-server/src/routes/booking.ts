@@ -5,7 +5,7 @@ import {
   bookingsTable,
   blockedDatesTable,
 } from "@workspace/db";
-import { and, asc, eq, gte, lte, ne } from "drizzle-orm";
+import { and, asc, eq, gte, lte, ne, inArray } from "drizzle-orm";
 import {
   CreateBookingBody,
   GetAvailabilityQueryParams,
@@ -33,6 +33,7 @@ import {
 } from "../lib/availability-rules";
 import { type BookingEmailData } from "../lib/email";
 import { syncBookingCalendar } from "../lib/calendar";
+import { OCCUPYING_STATUS_LIST } from "../lib/occupying-statuses";
 import {
   notifyBookingCreated,
   notifyBookingCancelled,
@@ -143,7 +144,7 @@ router.get("/booking/availability", async (req, res) => {
         and(
           gte(bookingsTable.scheduledAt, rangeStartUtc),
           lte(bookingsTable.scheduledAt, rangeEndUtc),
-          eq(bookingsTable.status, "confirmed"),
+          inArray(bookingsTable.status, OCCUPYING_STATUS_LIST),
         ),
       ),
     db

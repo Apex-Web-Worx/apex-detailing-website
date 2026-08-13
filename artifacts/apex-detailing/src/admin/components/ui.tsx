@@ -103,11 +103,15 @@ export function AdminSelect({
 export function StatusBadge({ status }: { status: DisplayStatus }) {
   const map: Record<DisplayStatus, string> = {
     confirmed: "bg-[#FF2AD4]/15 text-[#FF2AD4] border-[#FF2AD4]/30",
+    in_progress: "bg-[#23B9FF]/15 text-[#23B9FF] border-[#23B9FF]/30",
+    ready_for_pickup: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
     completed: "bg-white/5 text-gray-400 border-white/10",
     cancelled: "bg-red-500/10 text-red-400 border-red-500/25",
   };
   const label: Record<DisplayStatus, string> = {
     confirmed: "CONFIRMED",
+    in_progress: "IN PROGRESS",
+    ready_for_pickup: "READY FOR PICKUP",
     completed: "COMPLETED",
     cancelled: "CANCELLED",
   };

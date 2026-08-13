@@ -164,6 +164,11 @@ export interface Booking {
   status: string;
   /** Returned to the booking creator and via the manage endpoints. Used in the customer self-manage URL. */
   manageToken?: string | null;
+  smsConsent?: boolean;
+  inProgressAt?: string | null;
+  readyAt?: string | null;
+  pickupAt?: string | null;
+  completedAt?: string | null;
   createdAt: string;
 }
 

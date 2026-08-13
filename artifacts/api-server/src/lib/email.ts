@@ -142,7 +142,7 @@ async function sendViaGmail(args: {
   subject: string;
   html: string;
   text: string;
-}): Promise<void> {
+}): Promise<string | null> {
   const raw = buildRawMessage({
     fromName: FROM_NAME,
     fromEmail: OWNER_EMAIL,
@@ -169,6 +169,43 @@ async function sendViaGmail(args: {
     throw new Error(
       `Gmail send failed: HTTP ${response.status} ${response.statusText} ${text}`,
     );
+  }
+  const json = (await response.json().catch(() => ({}))) as { id?: string };
+  return json.id ?? null;
+}
+
+export type EmailSendResult = {
+  ok: boolean;
+  id?: string;
+  error?: string;
+};
+
+/** Customer-only notice (pickup / review). Does not CC the owner. */
+export async function sendCustomerNotice(args: {
+  to: string;
+  subject: string;
+  text: string;
+}): Promise<EmailSendResult> {
+  const html = emailShell({
+    preheader: args.subject,
+    headerGradient: "linear-gradient(90deg,#FF2AD4,#8A52FF)",
+    eyebrow: FROM_NAME,
+    headline: args.subject,
+    bodyHtml: `<p style="white-space:pre-wrap;font-size:15px;line-height:1.6;color:#ffffff;">${escapeHtml(args.text).replace(/\n/g, "<br/>")}</p>`,
+  });
+  try {
+    const id = await sendViaGmail({
+      to: args.to,
+      replyTo: OWNER_EMAIL,
+      subject: args.subject,
+      html,
+      text: args.text,
+    });
+    return { ok: true, id: id ?? undefined };
+  } catch (err) {
+    const error = err instanceof Error ? err.message : "Email send failed";
+    console.error("[email] customer notice failed:", error);
+    return { ok: false, error };
   }
 }
 

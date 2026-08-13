@@ -1,20 +1,57 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { Mail, MessageSquare, Phone, X } from "lucide-react";
+import { Mail, MessageSquare, Phone, X, Check } from "lucide-react";
 import { formatDateTimeLong, formatDuration } from "@/lib/format";
 import { useAdmin } from "../context";
-import { bookingIso, displayStatus } from "../utils";
-import { GhostButton, StatusBadge } from "./ui";
+import {
+  bookingIso,
+  canMarkCompleted,
+  canMarkReady,
+  displayStatus,
+} from "../utils";
+import { GhostButton, PrimaryButton, StatusBadge } from "./ui";
 import {
   CustomerPhotoGallery,
   photoIdsForBooking,
   useAdminBookingPhotoIndex,
 } from "./CustomerPhotos";
 
+type TimelineEvent = {
+  id: number;
+  occurredAt: string;
+  actor: string;
+  action: string;
+  channel: string | null;
+  status: string | null;
+  detail: string;
+};
+
+type Communication = {
+  id: number;
+  messageType: string;
+  channel: string;
+  status: string;
+  error: string | null;
+  scheduledAt: string | null;
+  sentAt: string | null;
+  createdAt: string;
+};
+
 export default function AppointmentDetailDrawer() {
-  const { detail, setDetail, setEditing, cancelBooking, token } = useAdmin();
+  const {
+    detail,
+    setDetail,
+    setEditing,
+    cancelBooking,
+    token,
+    refetch,
+    openReadyModal,
+  } = useAdmin();
   const photosQuery = useAdminBookingPhotoIndex(token);
   const photoIds = detail ? photoIdsForBooking(photosQuery.data, detail.id) : [];
+  const [events, setEvents] = useState<TimelineEvent[]>([]);
+  const [comms, setComms] = useState<Communication[]>([]);
+  const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     if (!detail) return;
@@ -30,10 +67,86 @@ export default function AppointmentDetailDrawer() {
     };
   }, [detail, setDetail]);
 
+  useEffect(() => {
+    if (!detail) return;
+    let cancelled = false;
+    fetch(`/api/admin/bookings/${detail.id}/timeline`, {
+      headers: { "x-admin-token": token },
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((json) => {
+        if (cancelled || !json) return;
+        setEvents(json.events ?? []);
+        setComms(json.communications ?? []);
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, [detail, token]);
+
   if (!detail) return null;
   const status = displayStatus(detail);
   const canAct = status === "confirmed";
+  const ready = canMarkReady(detail);
+  const complete = canMarkCompleted(detail);
+  const alreadyReady = status === "ready_for_pickup" || status === "completed";
   const smsHref = `sms:${detail.phone}`;
+  const pickupNote = comms.find((c) => c.messageType === "vehicle_ready" && (c.status === "sent" || c.status === "delivered"));
+  const reviewSched = comms.find((c) => c.messageType === "review_request" && c.status === "scheduled");
+  const reviewFailed = comms.find((c) => c.messageType === "review_request" && c.status === "failed");
+
+  const markInProgress = async () => {
+    setBusy(true);
+    try {
+      const res = await fetch(`/api/admin/bookings/${detail.id}/in-progress`, {
+        method: "POST",
+        headers: { "x-admin-token": token },
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const json = await res.json();
+      setDetail(json);
+      refetch();
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Could not start job");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const markComplete = async () => {
+    setBusy(true);
+    try {
+      const res = await fetch(`/api/admin/bookings/${detail.id}/complete`, {
+        method: "POST",
+        headers: { "x-admin-token": token },
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const json = await res.json();
+      setDetail(json);
+      refetch();
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Could not complete");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const retryReview = async () => {
+    setBusy(true);
+    try {
+      const res = await fetch(`/api/admin/bookings/${detail.id}/review-request/retry`, {
+        method: "POST",
+        headers: { "x-admin-token": token },
+      });
+      if (!res.ok) throw new Error(await res.text());
+      refetch();
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Retry failed");
+    } finally {
+      setBusy(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-stretch sm:justify-end">
@@ -125,6 +238,63 @@ export default function AppointmentDetailDrawer() {
             </dl>
           </section>
 
+          {alreadyReady && (
+            <section className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 space-y-2">
+              <p className="text-sm font-semibold text-emerald-300 flex items-center gap-2">
+                <Check className="w-4 h-4" /> Ready for pickup
+              </p>
+              {pickupNote && (
+                <p className="text-xs text-[#9CA3AF]">
+                  Pickup notification sent
+                  {pickupNote.sentAt ? ` · ${formatDateTimeLong(pickupNote.sentAt)}` : ""}
+                </p>
+              )}
+              {reviewSched && (
+                <p className="text-xs text-[#9CA3AF]">
+                  Review request scheduled
+                  {reviewSched.scheduledAt ? ` · ${formatDateTimeLong(reviewSched.scheduledAt)}` : ""}
+                </p>
+              )}
+              {reviewFailed && (
+                <div className="text-xs text-red-300">
+                  Review request failed{reviewFailed.error ? ` · ${reviewFailed.error}` : ""}
+                  <button
+                    type="button"
+                    className="ml-2 text-[#23B9FF]"
+                    onClick={retryReview}
+                    disabled={busy}
+                  >
+                    Retry
+                  </button>
+                </div>
+              )}
+              <GhostButton type="button" className="h-10 text-xs" onClick={() => openReadyModal(detail, true)}>
+                Resend notification
+              </GhostButton>
+            </section>
+          )}
+
+          <section>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">Timeline</h3>
+            {events.length === 0 ? (
+              <p className="text-sm text-[#9CA3AF]">No workflow events yet.</p>
+            ) : (
+              <ol className="space-y-3">
+                {events.map((ev) => (
+                  <li key={ev.id} className="border-l border-white/10 pl-3">
+                    <p className="text-xs text-[#9CA3AF]">{formatDateTimeLong(ev.occurredAt)}</p>
+                    <p className="text-sm text-white">{ev.detail || ev.action.replace(/_/g, " ")}</p>
+                    <p className="text-[11px] text-[#9CA3AF]">
+                      {ev.actor}
+                      {ev.channel ? ` · ${ev.channel}` : ""}
+                      {ev.status ? ` · ${ev.status}` : ""}
+                    </p>
+                  </li>
+                ))}
+              </ol>
+            )}
+          </section>
+
           <section>
             <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">Customer notes</h3>
             <p className="text-sm text-white whitespace-pre-wrap">
@@ -134,6 +304,26 @@ export default function AppointmentDetailDrawer() {
         </div>
 
         <div className="shrink-0 border-t border-white/10 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] bg-[#0B0B0B] space-y-2">
+          {ready && (
+            <PrimaryButton
+              type="button"
+              className="w-full min-h-12"
+              disabled={busy}
+              onClick={() => openReadyModal(detail)}
+            >
+              <Check className="w-4 h-4" /> Ready for pickup
+            </PrimaryButton>
+          )}
+          {status === "confirmed" && (
+            <GhostButton type="button" className="w-full min-h-12" disabled={busy} onClick={markInProgress}>
+              Start job
+            </GhostButton>
+          )}
+          {complete && (
+            <PrimaryButton type="button" className="w-full min-h-12" disabled={busy} onClick={markComplete}>
+              Mark completed
+            </PrimaryButton>
+          )}
           <div className="grid grid-cols-2 gap-2">
             <a
               href={`tel:${detail.phone}`}
@@ -167,6 +357,15 @@ export default function AppointmentDetailDrawer() {
                 Cancel
               </GhostButton>
             </div>
+          )}
+          {(status === "in_progress" || status === "ready_for_pickup") && (
+            <GhostButton
+              type="button"
+              className="w-full text-red-400 border-red-500/20 hover:bg-red-500/10"
+              onClick={() => cancelBooking(detail.id)}
+            >
+              Cancel appointment
+            </GhostButton>
           )}
         </div>
       </aside>

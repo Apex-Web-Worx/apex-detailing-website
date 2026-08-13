@@ -47,6 +47,10 @@ type AdminContextValue = {
   openBlockDate: (date?: string) => void;
   openEditBlockedDate: (row: BlockedDate) => void;
   closeBlockDate: () => void;
+  readyTarget: Booking | null;
+  readyResend: boolean;
+  openReadyModal: (booking: Booking, resend?: boolean) => void;
+  closeReadyModal: () => void;
 };
 
 const AdminContext = createContext<AdminContextValue | null>(null);
@@ -99,6 +103,8 @@ export function AdminProvider({
   const [blockOpen, setBlockOpen] = useState(false);
   const [blockPrefillDate, setBlockPrefillDate] = useState("");
   const [editingBlocked, setEditingBlocked] = useState<BlockedDate | null>(null);
+  const [readyTarget, setReadyTarget] = useState<Booking | null>(null);
+  const [readyResend, setReadyResend] = useState(false);
 
   const bookings = bookingsQuery.data ?? [];
   const blockedDates = blockedQuery.data ?? [];
@@ -159,6 +165,16 @@ export function AdminProvider({
     setEditingBlocked(null);
   }, []);
 
+  const openReadyModal = useCallback((booking: Booking, resend = false) => {
+    setReadyTarget(booking);
+    setReadyResend(resend);
+  }, []);
+
+  const closeReadyModal = useCallback(() => {
+    setReadyTarget(null);
+    setReadyResend(false);
+  }, []);
+
   const value = useMemo<AdminContextValue>(
     () => ({
       token,
@@ -190,6 +206,10 @@ export function AdminProvider({
       openBlockDate,
       openEditBlockedDate,
       closeBlockDate,
+      readyTarget,
+      readyResend,
+      openReadyModal,
+      closeReadyModal,
     }),
     [
       token,
@@ -211,6 +231,10 @@ export function AdminProvider({
       openBlockDate,
       openEditBlockedDate,
       closeBlockDate,
+      readyTarget,
+      readyResend,
+      openReadyModal,
+      closeReadyModal,
     ],
   );
 

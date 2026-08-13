@@ -8,6 +8,7 @@ import { AdminProvider, useAdmin } from "./context";
 import AdminShell from "./components/AdminShell";
 import AppointmentDetailDrawer from "./components/AppointmentDetailDrawer";
 import BlockDateModal from "./components/BlockDateModal";
+import ReadyForPickupModal from "./components/ReadyForPickupModal";
 import EditBookingModal from "./components/EditBookingModal";
 import DashboardHome from "./pages/DashboardHome";
 import AppointmentsPage from "./pages/AppointmentsPage";
@@ -15,6 +16,7 @@ import CalendarPage from "./pages/CalendarPage";
 import CustomersPage from "./pages/CustomersPage";
 import VehiclesPage from "./pages/VehiclesPage";
 import ServicesPage from "./pages/ServicesPage";
+import CommunicationsPage from "./pages/CommunicationsPage";
 import SettingsPage from "./pages/SettingsPage";
 
 export default function AdminApp() {
@@ -65,9 +67,10 @@ function AdminSection() {
       return <ServicesPage />;
     case "payments":
     case "reviews":
-    case "messages":
     case "analytics":
       return <DashboardHome />;
+    case "messages":
+      return <CommunicationsPage />;
     case "settings":
       return <SettingsPage />;
     default:
@@ -76,11 +79,18 @@ function AdminSection() {
 }
 
 function AdminOverlays() {
-  const { editing, setEditing, token, refetch } = useAdmin();
+  const { editing, setEditing, token, refetch, readyTarget, readyResend, closeReadyModal } = useAdmin();
   return (
     <>
       <AppointmentDetailDrawer />
       <BlockDateModal />
+      {readyTarget && (
+        <ReadyForPickupModal
+          booking={readyTarget}
+          resend={readyResend}
+          onClose={closeReadyModal}
+        />
+      )}
       {editing && (
         <EditBookingModal
           booking={editing}

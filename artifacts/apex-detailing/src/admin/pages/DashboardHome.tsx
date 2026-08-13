@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { CalendarOff, Plus, RefreshCw } from "lucide-react";
-import { todayDateString } from "@/lib/format";
+import { todayDateString, formatTime12h } from "@/lib/format";
 import { ADMIN_FIRST } from "../constants";
 import { useAdmin } from "../context";
 import {
@@ -8,8 +8,11 @@ import {
   bookingShopTime,
   computeKpis,
   deriveTasks,
+  displayStatus,
   greetingForNow,
   isClientHold,
+  scheduledAtToShopTime,
+  bookingIso,
 } from "../utils";
 import AppointmentRow from "../components/AppointmentRow";
 import HeldAppointmentRow from "../components/HeldAppointmentRow";
@@ -42,6 +45,7 @@ export default function DashboardHome() {
     .sort((a, b) => bookingShopTime(a).localeCompare(bookingShopTime(b)));
   const tasks = deriveTasks(bookings);
   const shopEmpty = todayAppts.length === 0 && !todayBlocked;
+  const readyForPickup = bookings.filter((b) => displayStatus(b) === "ready_for_pickup");
 
   return (
     <div className="max-w-7xl mx-auto space-y-4">
@@ -70,6 +74,31 @@ export default function DashboardHome() {
         <Kpi href="/admin/appointments" label="This week" value={String(kpis.weekCount)} />
         <Kpi href="/admin/appointments" label="Upcoming" value={String(kpis.upcomingQuotedCount)} />
       </div>
+
+      {readyForPickup.length > 0 && (
+        <AdminCard hover={false} className="p-4 md:p-5">
+          <h3 className="text-base font-bold mb-3">Ready for pickup</h3>
+          <p className="text-sm text-[#9CA3AF] mb-3">
+            {readyForPickup.length} vehicle{readyForPickup.length === 1 ? "" : "s"} ready
+          </p>
+          <div className="space-y-3">
+            {readyForPickup.map((b) => (
+              <div key={b.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <p className="text-sm font-medium text-white">{b.customerName}</p>
+                  <p className="text-xs text-[#9CA3AF]">{b.vehicle}</p>
+                  <p className="text-xs text-[#9CA3AF]">
+                    Pickup: {formatTime12h(scheduledAtToShopTime(b.pickupAt || bookingIso(b)))}
+                  </p>
+                </div>
+                <GhostButton type="button" className="shrink-0" onClick={() => setDetail(b)}>
+                  View appointment
+                </GhostButton>
+              </div>
+            ))}
+          </div>
+        </AdminCard>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:items-stretch">
         <div className="flex flex-col gap-4 min-h-0">

@@ -49,6 +49,14 @@ export const bookingsTable = pgTable(
     // of booking and that we will only contact non-opted-in customers by
     // email and phone. Owner-facing SMS is unaffected.
     smsConsent: boolean("sms_consent").notNull().default(false),
+    /** When the shop marked the job in progress. */
+    inProgressAt: timestamp("in_progress_at", { withTimezone: true }),
+    /** When the vehicle was marked ready for pickup. Timer origin for the 24h review request. */
+    readyAt: timestamp("ready_at", { withTimezone: true }),
+    /** Admin-selected expected pickup datetime (shop-local interpreted, stored UTC). */
+    pickupAt: timestamp("pickup_at", { withTimezone: true }),
+    /** When the customer picked up and the job was marked completed. */
+    completedAt: timestamp("completed_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),

@@ -24,6 +24,8 @@ import {
   isDayWholeDayLocked,
   hasOtherConfirmedBookingOnDate,
 } from "../lib/availability-rules";
+import pickupRouter, { cancelScheduledReviews } from "./admin-pickup";
+import { OCCUPYING_STATUS_LIST } from "../lib/occupying-statuses";
 import { type BookingEmailData, formatDateLong } from "../lib/email";
 import {
   syncBookingCalendar,
@@ -152,7 +154,7 @@ router.delete("/admin/bookings/:id", requireAdmin, async (req, res) => {
     .where(
       and(
         eq(bookingsTable.id, id),
-        eq(bookingsTable.status, "confirmed"),
+        inArray(bookingsTable.status, OCCUPYING_STATUS_LIST),
       ),
     )
     .returning();
@@ -161,6 +163,9 @@ router.delete("/admin/bookings/:id", requireAdmin, async (req, res) => {
 
   const cancelled = cancelledRows[0];
   if (cancelled) {
+    void cancelScheduledReviews(cancelled.id, "Appointment cancelled").catch((err) =>
+      console.error("[admin] cancel review requests failed:", err),
+    );
     void deletePhotosForBooking(cancelled.id).catch((err) =>
       console.error("[admin] photo delete on cancel failed:", err),
     );
@@ -1016,5 +1021,7 @@ router.delete(
     res.status(204).send();
   },
 );
+
+router.use(pickupRouter);
 
 export default router;

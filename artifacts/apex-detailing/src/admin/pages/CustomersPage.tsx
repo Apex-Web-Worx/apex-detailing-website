@@ -1,11 +1,12 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { useAdmin } from "../context";
 import { bookingIso, customerKey, displayStatus, groupCustomers } from "../utils";
 import { AdminCard, EmptyState, fieldClass, StatusBadge } from "../components/ui";
+import { formatDateTimeLong } from "@/lib/format";
 
 export default function CustomersPage() {
-  const { bookings, routeId, section } = useAdmin();
+  const { bookings, routeId, section, token } = useAdmin();
   const customers = useMemo(() => groupCustomers(bookings), [bookings]);
   const [q, setQ] = useState("");
   const selected = section === "customers" && routeId
@@ -59,6 +60,10 @@ export default function CustomersPage() {
           </div>
         </AdminCard>
         <AdminCard hover={false} className="p-5">
+          <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">Communications</h3>
+          <CustomerComms email={selected.email} token={token} />
+        </AdminCard>
+        <AdminCard hover={false} className="p-5">
           <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">Notes</h3>
           {notes.length === 0 ? (
             <p className="text-sm text-[#9CA3AF]">No notes on this customer's bookings.</p>
@@ -106,6 +111,48 @@ export default function CustomersPage() {
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+function CustomerComms({ email, token }: { email: string; token: string }) {
+  const [rows, setRows] = useState<Array<{
+    id: number;
+    messageType: string;
+    channel: string;
+    status: string;
+    error: string | null;
+    scheduledAt: string | null;
+    sentAt: string | null;
+    createdAt: string;
+  }>>([]);
+
+  useEffect(() => {
+    fetch(`/api/admin/communications?email=${encodeURIComponent(email)}`, {
+      headers: { "x-admin-token": token },
+    })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((list) => setRows(Array.isArray(list) ? list : []))
+      .catch(() => undefined);
+  }, [email, token]);
+
+  if (rows.length === 0) {
+    return <p className="text-sm text-[#9CA3AF]">No pickup or review messages yet.</p>;
+  }
+
+  const last = rows[0];
+  return (
+    <div className="space-y-2">
+      <p className="text-sm text-white">
+        Last communication: {last.messageType.replace(/_/g, " ")} · {last.channel} · {last.status}
+        {last.sentAt ? ` · ${formatDateTimeLong(last.sentAt)}` : last.scheduledAt ? ` · ${formatDateTimeLong(last.scheduledAt)}` : ""}
+      </p>
+      {rows.slice(0, 8).map((row) => (
+        <p key={row.id} className="text-xs text-[#9CA3AF]">
+          {row.messageType.replace(/_/g, " ")} · {row.channel} · {row.status}
+          {row.error ? ` · ${row.error}` : ""}
+        </p>
+      ))}
     </div>
   );
 }

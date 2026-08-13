@@ -7,6 +7,7 @@ import {
   Car,
   Sparkles,
   Settings,
+  MessageSquare,
 } from "lucide-react";
 
 export const TOKEN_KEY = "apex_admin_token";
@@ -42,6 +43,7 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/admin/customers", section: "customers", label: "Customers", icon: Users },
   { href: "/admin/vehicles", section: "vehicles", label: "Vehicles", icon: Car },
   { href: "/admin/services", section: "services", label: "Services", icon: Sparkles },
+  { href: "/admin/messages", section: "messages", label: "Communications", icon: MessageSquare },
   { href: "/admin/settings", section: "settings", label: "Settings", icon: Settings },
 ];
 
@@ -54,7 +56,7 @@ export const PAGE_TITLES: Record<AdminSection, string> = {
   services: "Services",
   payments: "Payments",
   reviews: "Reviews",
-  messages: "Messages",
+  messages: "Communications",
   analytics: "Analytics",
   settings: "Settings",
 };

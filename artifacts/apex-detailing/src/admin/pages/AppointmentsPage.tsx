@@ -10,6 +10,7 @@ import {
   isClientHold,
   matchesHold,
   matchesSearch,
+  type DisplayStatus,
 } from "../utils";
 import AppointmentRow from "../components/AppointmentRow";
 import HeldAppointmentRow from "../components/HeldAppointmentRow";
@@ -18,7 +19,7 @@ import { AdminSelect, EmptyState, fieldClass, GhostButton } from "../components/
 import { useOwnerCalendarEvents } from "../useOwnerCalendarEvents";
 
 type ListItem =
-  | { kind: "booking"; key: string; date: string; status: "confirmed" | "completed" | "cancelled"; booking: Booking }
+  | { kind: "booking"; key: string; date: string; status: DisplayStatus; booking: Booking }
   | { kind: "hold"; key: string; date: string; status: "confirmed" | "completed"; hold: BlockedDate };
 
 export default function AppointmentsPage() {
@@ -69,10 +70,16 @@ export default function AppointmentsPage() {
         hold,
       });
     }
-    const rank = { confirmed: 0, completed: 1, cancelled: 2 };
+    const rank: Record<string, number> = {
+      confirmed: 0,
+      in_progress: 1,
+      ready_for_pickup: 2,
+      completed: 3,
+      cancelled: 4,
+    };
     list.sort((a, b) => {
       if (rank[a.status] !== rank[b.status]) return rank[a.status] - rank[b.status];
-      if (a.status === "confirmed") {
+      if (a.status === "confirmed" || a.status === "in_progress" || a.status === "ready_for_pickup") {
         if (a.date !== b.date) return a.date.localeCompare(b.date);
         if (a.kind !== b.kind) return a.kind === "hold" ? -1 : 1;
         if (a.kind === "booking" && b.kind === "booking") {
@@ -148,6 +155,8 @@ export default function AppointmentsPage() {
           options={[
             { value: "", label: "All statuses" },
             { value: "confirmed", label: "Confirmed" },
+            { value: "in_progress", label: "In progress" },
+            { value: "ready_for_pickup", label: "Ready for pickup" },
             { value: "completed", label: "Completed" },
             { value: "cancelled", label: "Cancelled" },
           ]}

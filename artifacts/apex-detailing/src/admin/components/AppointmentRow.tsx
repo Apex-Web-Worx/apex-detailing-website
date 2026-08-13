@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import type { Booking } from "@workspace/api-client-react";
-import { MoreHorizontal, Phone } from "lucide-react";
+import { MoreHorizontal, Phone, Check } from "lucide-react";
 import { formatDuration, formatTime12h } from "@/lib/format";
-import { displayStatus, notesPreview, bookingShopDate, bookingShopTime } from "../utils";
+import { displayStatus, notesPreview, bookingShopDate, bookingShopTime, canMarkReady } from "../utils";
 import { StatusBadge } from "./ui";
 import { useAdmin } from "../context";
 import {
@@ -24,7 +24,7 @@ export default function AppointmentRow({
   onEdit?: () => void;
   onCancel?: () => void;
 }) {
-  const { token } = useAdmin();
+  const { token, openReadyModal } = useAdmin();
   const photosQuery = useAdminBookingPhotoIndex(token);
   const photoIds = photoIdsForBooking(photosQuery.data, booking.id);
   const photoCount = photoIds.length;
@@ -32,6 +32,7 @@ export default function AppointmentRow({
   const status = displayStatus(booking);
   const preview = notesPreview(booking.notes);
   const canAct = status === "confirmed";
+  const ready = canMarkReady(booking);
 
   return (
     <div className="rounded-2xl border border-white/10 bg-[#111111] px-3 py-3 md:px-4 hover:bg-[#161616] transition duration-200">
@@ -70,6 +71,16 @@ export default function AppointmentRow({
           </div>
         </button>
         <div className="flex flex-col items-center gap-1.5 shrink-0">
+          {ready ? (
+            <button
+              type="button"
+              onClick={() => openReadyModal(booking)}
+              className="w-11 h-11 rounded-xl bg-[#FF2AD4] text-white flex items-center justify-center hover:bg-[#ff4adc] touch-manipulation"
+              aria-label="Ready for pickup"
+            >
+              <Check className="w-4 h-4" />
+            </button>
+          ) : null}
           <a
             href={`tel:${booking.phone}`}
             className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-[#23B9FF] hover:bg-white/5 touch-manipulation"

@@ -33,6 +33,7 @@ import { ReplitConnectors } from "@replit/connectors-sdk";
 import { db, bookingsTable } from "@workspace/db";
 import { and, eq, isNull } from "drizzle-orm";
 import { getSiteUrl } from "./site-url";
+import { OCCUPYING_STATUS_LIST } from "./occupying-statuses";
 
 const connectors = new ReplitConnectors();
 
@@ -106,7 +107,7 @@ async function doSync(bookingId: number): Promise<void> {
   }
   if (!row) return;
 
-  if (row.status === "confirmed") {
+  if (OCCUPYING_STATUS_LIST.includes(row.status) || row.status === "completed") {
     await reconcileConfirmed(row);
   } else {
     await reconcileNonConfirmed(row);

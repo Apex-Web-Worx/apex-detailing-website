@@ -126,41 +126,60 @@ interface SendSmsArgs {
   context: string; // e.g. "customer-confirm #123" — only used in logs
 }
 
+export type SmsSendResult = {
+  ok: boolean;
+  sid?: string;
+  error?: string;
+};
+
 /**
- * Fire-and-forget SMS send. Never throws — logs and swallows everything.
- * Twilio error 21610 (recipient opted out / STOP) is logged at info, not
- * error, since it's an expected and benign outcome.
+ * SMS send that reports success/failure so pickup/review records can
+ * store provider ids without marking delivered on a failed send.
  */
-export async function sendSms(args: SendSmsArgs): Promise<void> {
+export async function sendSmsWithResult(args: SendSmsArgs): Promise<SmsSendResult> {
   const to = normalizeUsPhone(args.to);
   if (!to) {
     console.warn(`[sms] ${args.context}: invalid phone — skipped`);
-    return;
+    return { ok: false, error: "Invalid phone number" };
   }
   let client: Twilio;
   let from: string;
   try {
     ({ client, from } = await getClient());
   } catch (err) {
+    const error = err instanceof Error ? err.message : "SMS client init failed";
     console.error(`[sms] ${args.context}: client init failed:`, err);
-    return;
+    return { ok: false, error };
   }
   try {
     const msg = await client.messages.create({ to, from, body: args.body });
     console.log(`[sms] ${args.context}: sent sid=${msg.sid} to=${to}`);
+    return { ok: true, sid: msg.sid };
   } catch (err) {
     const e = err as { code?: number; status?: number; message?: string };
     if (e.code === 21610) {
+      const error = "Recipient opted out (STOP)";
       console.log(
         `[sms] ${args.context}: recipient opted out (STOP) to=${to} — skipped`,
       );
-      return;
+      return { ok: false, error };
     }
+    const error = e.message ?? "SMS send failed";
     console.error(
       `[sms] ${args.context}: send failed to=${to} code=${e.code} status=${e.status}:`,
-      e.message ?? err,
+      error,
     );
+    return { ok: false, error };
   }
+}
+
+/**
+ * Fire-and-forget SMS send. Never throws — logs and swallows everything.
+ * Twilio error 21610 (recipient opted out / STOP) is logged at info, not
+ * error, since it's an expected and benign outcome.
+ */
+export async function sendSms(args: SendSmsArgs): Promise<void> {
+  await sendSmsWithResult(args);
 }
 
 /* ------------------------------------------------------------------ */

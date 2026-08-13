@@ -25,6 +25,7 @@ import {
   bookingsTable,
 } from "@workspace/db";
 import { and, asc, eq, gte, lte, inArray } from "drizzle-orm";
+import { OCCUPYING_STATUS_LIST } from "./occupying-statuses";
 import { parseDateString, shopLocalDateString } from "./availability";
 
 export interface RuleWithSlots {
@@ -244,7 +245,7 @@ export async function hasOtherConfirmedBookingOnDate(
       and(
         gte(bookingsTable.scheduledAt, dayStart),
         lte(bookingsTable.scheduledAt, dayEnd),
-        eq(bookingsTable.status, "confirmed"),
+        inArray(bookingsTable.status, OCCUPYING_STATUS_LIST),
       ),
     );
   return candidates.some(
@@ -287,7 +288,7 @@ export async function isDayWholeDayLocked(
       and(
         gte(bookingsTable.scheduledAt, dayStart),
         lte(bookingsTable.scheduledAt, dayEnd),
-        eq(bookingsTable.status, "confirmed"),
+        inArray(bookingsTable.status, OCCUPYING_STATUS_LIST),
         inArray(bookingsTable.serviceId, lockingServiceIds),
       ),
     );
