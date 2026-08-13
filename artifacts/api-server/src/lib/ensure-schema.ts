@@ -45,14 +45,19 @@ export async function ensurePickupWorkflow(): Promise<void> {
       id integer PRIMARY KEY DEFAULT 1,
       business_name text NOT NULL DEFAULT 'Apex Detailing',
       business_phone text NOT NULL DEFAULT '(417) 527-6165',
-      review_link text NOT NULL DEFAULT '',
+      review_link text NOT NULL DEFAULT 'https://g.page/r/CQphdJbRExhREAE/review',
       updated_at timestamptz NOT NULL DEFAULT now()
     )
   `);
   await pool.query(`
-    INSERT INTO shop_settings (id)
-    VALUES (1)
+    INSERT INTO shop_settings (id, review_link)
+    VALUES (1, 'https://g.page/r/CQphdJbRExhREAE/review')
     ON CONFLICT (id) DO NOTHING
+  `);
+  await pool.query(`
+    UPDATE shop_settings
+    SET review_link = 'https://g.page/r/CQphdJbRExhREAE/review'
+    WHERE id = 1 AND (review_link IS NULL OR review_link = '')
   `);
 
   await pool.query(`

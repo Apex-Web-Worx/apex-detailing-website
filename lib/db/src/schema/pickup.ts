@@ -13,7 +13,7 @@ export const shopSettingsTable = pgTable("shop_settings", {
   id: integer("id").primaryKey().default(1),
   businessName: text("business_name").notNull().default("Apex Detailing"),
   businessPhone: text("business_phone").notNull().default("(417) 527-6165"),
-  reviewLink: text("review_link").notNull().default(""),
+  reviewLink: text("review_link").notNull().default("https://g.page/r/CQphdJbRExhREAE/review"),
   updatedAt: timestamp("updated_at", { withTimezone: true })
     .notNull()
     .defaultNow(),

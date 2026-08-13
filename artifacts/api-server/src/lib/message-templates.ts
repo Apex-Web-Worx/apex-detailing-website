@@ -1,3 +1,5 @@
+export const DEFAULT_REVIEW_LINK = "https://g.page/r/CQphdJbRExhREAE/review";
+
 export type TemplateVars = {
   customer_first_name: string;
   vehicle: string;

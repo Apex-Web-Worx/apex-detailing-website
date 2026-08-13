@@ -129,7 +129,7 @@ export default function CommunicationsPage() {
             <input
               value={reviewLink}
               onChange={(e) => setReviewLink(e.target.value)}
-              placeholder="https://…"
+              placeholder="https://g.page/r/CQphdJbRExhREAE/review"
               className={fieldClass}
             />
             <PrimaryButton type="button" disabled={saving} onClick={saveSettings}>

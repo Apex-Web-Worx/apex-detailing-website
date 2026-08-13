@@ -26,6 +26,7 @@ import {
   DEFAULT_VEHICLE_READY_EMAIL,
   DEFAULT_REVIEW_SMS,
   DEFAULT_REVIEW_EMAIL,
+  DEFAULT_REVIEW_LINK,
   type TemplateVars,
 } from "./message-templates";
 
@@ -37,8 +38,13 @@ type BookingRow = typeof bookingsTable.$inferSelect;
 export async function seedNotificationDefaults(): Promise<void> {
   await db
     .insert(shopSettingsTable)
-    .values({ id: 1, businessName: FROM_NAME, businessPhone: SHOP_PHONE, reviewLink: "" })
+    .values({ id: 1, businessName: FROM_NAME, businessPhone: SHOP_PHONE, reviewLink: DEFAULT_REVIEW_LINK })
     .onConflictDoNothing();
+
+  await db
+    .update(shopSettingsTable)
+    .set({ reviewLink: DEFAULT_REVIEW_LINK })
+    .where(and(eq(shopSettingsTable.id, 1), eq(shopSettingsTable.reviewLink, "")));
 
   await db
     .insert(notificationTemplatesTable)

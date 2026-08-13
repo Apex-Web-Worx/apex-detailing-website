@@ -35,7 +35,7 @@ import BrandLogo from "@/components/BrandLogo";
 const BOOKING_LINK = "/book";
 const INSTAGRAM_LINK = "https://www.instagram.com/apexdetailing_sf";
 const FACEBOOK_LINK = "https://www.facebook.com/profile.php?id=61556776603500";
-const GOOGLE_REVIEWS_LINK = "https://share.google/1Kz8Ag5wVniNZ3oyb";
+const GOOGLE_REVIEWS_LINK = "https://g.page/r/CQphdJbRExhREAE/review";
 
 const AddonCard = ({ addon }: { addon: { name: string; price: string; description?: string } }) => {
   const [isExpanded, setIsExpanded] = useState(false);
