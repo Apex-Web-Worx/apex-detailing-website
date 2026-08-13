@@ -4,7 +4,7 @@ import { Check, Loader2, X } from "lucide-react";
 import { formatDateTimeLong } from "@/lib/format";
 import { useAdmin } from "../context";
 import { bookingIso, shopNowPlusMinutes } from "../utils";
-import { fieldClass, GhostButton, PrimaryButton } from "./ui";
+import { GhostButton, PrimaryButton } from "./ui";
 import AdminDatePicker from "./AdminDatePicker";
 import AdminTimePicker, { snapTimeToFiveMinutes } from "./AdminTimePicker";
 
