@@ -3,7 +3,7 @@ import type { Booking } from "@workspace/api-client-react";
 import { Check, Loader2, X } from "lucide-react";
 import { formatDateTimeLong } from "@/lib/format";
 import { useAdmin } from "../context";
-import { bookingIso, shopNowPlusMinutes } from "../utils";
+import { bookingIso, bookingAllowsCustomerSms, shopNowPlusMinutes } from "../utils";
 import { GhostButton, PrimaryButton } from "./ui";
 import AdminDatePicker from "./AdminDatePicker";
 import AdminTimePicker, { snapTimeToFiveMinutes } from "./AdminTimePicker";
@@ -26,9 +26,10 @@ export default function ReadyForPickupModal({
 }) {
   const { token, refetch, setDetail, bookings, blockedDates } = useAdmin();
   const defaults = shopNowPlusMinutes(30);
+  const canSms = bookingAllowsCustomerSms(booking);
   const [pickupDate, setPickupDate] = useState(defaults.date);
   const [pickupTime, setPickupTime] = useState(() => snapTimeToFiveMinutes(defaults.time));
-  const [sendSms, setSendSms] = useState(Boolean(booking.smsConsent));
+  const [sendSms, setSendSms] = useState(canSms);
   const [sendEmail, setSendEmail] = useState(true);
   const [preview, setPreview] = useState<Preview | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -164,11 +165,16 @@ export default function ReadyForPickupModal({
             <input
               type="checkbox"
               checked={sendSms}
-              disabled={!booking.smsConsent}
+              disabled={!canSms}
               onChange={(e) => setSendSms(e.target.checked)}
               className="accent-[#FF2AD4]"
             />
-            SMS{!booking.smsConsent ? " (customer opted out)" : ""}
+            SMS
+            {!canSms
+              ? booking.phone.replace(/\D/g, "").length < 7
+                ? " (no phone number)"
+                : " (customer opted out)"
+              : ""}
           </label>
           <label className="flex items-center gap-3 min-h-11 text-sm text-white">
             <input

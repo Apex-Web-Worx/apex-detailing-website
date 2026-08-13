@@ -58,6 +58,17 @@ export function holdBookingEmail(holdId: number): string {
   return `hold-${holdId}@apexdetailing.net`;
 }
 
+export function bookingAllowsCustomerSms(booking: {
+  smsConsent?: boolean | null;
+  email: string;
+  phone: string;
+}): boolean {
+  if (booking.smsConsent) return true;
+  const hold = /^hold-\d+@apexdetailing\.net$/i.test(booking.email.trim());
+  const digits = booking.phone.replace(/\D/g, "").length;
+  return hold && digits >= 7;
+}
+
 export function linkedHoldBooking(bookings: Booking[], hold: BlockedDate): Booking | null {
   const email = holdBookingEmail(hold.id).toLowerCase();
   const matches = bookings.filter((booking) => booking.email.toLowerCase() === email);

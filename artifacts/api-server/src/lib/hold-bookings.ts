@@ -9,13 +9,12 @@ import { and, asc, eq } from "drizzle-orm";
 import { buildScheduledAt } from "./availability";
 import { OCCUPYING_STATUS_LIST } from "./occupying-statuses";
 import { markInProgress } from "./pickup-workflow";
+import { hasSmsPhone, holdBookingEmail } from "./customer-sms";
 
 export type HoldRow = typeof blockedDatesTable.$inferSelect;
 export type BookingRow = typeof bookingsTable.$inferSelect;
 
-export function holdBookingEmail(holdId: number): string {
-  return `hold-${holdId}@apexdetailing.net`;
-}
+export { holdBookingEmail, hasSmsPhone, bookingAllowsCustomerSms } from "./customer-sms";
 
 export function isClientHold(row: {
   name?: string | null;
@@ -76,11 +75,14 @@ export async function ensureHoldBooking(hold: HoldRow): Promise<BookingRow | nul
       vehicle?: string;
       serviceName?: string;
       scheduledAt?: Date;
+      smsConsent?: boolean;
     } = {};
     if (customerName !== existing.customerName) patch.customerName = customerName;
     if (phone !== existing.phone) patch.phone = phone;
     if (vehicle !== existing.vehicle) patch.vehicle = vehicle;
     if (serviceName !== existing.serviceName) patch.serviceName = serviceName;
+    const nextConsent = hasSmsPhone(phone);
+    if (nextConsent && !existing.smsConsent) patch.smsConsent = true;
     if (scheduledAt && existing.status === "confirmed") {
       const nextIso = scheduledAt.toISOString();
       const prevIso = existing.scheduledAt.toISOString();
@@ -125,7 +127,7 @@ export async function ensureHoldBooking(hold: HoldRow): Promise<BookingRow | nul
           scheduledAt,
           status: "confirmed",
           manageToken: randomBytes(24).toString("base64url"),
-          smsConsent: false,
+          smsConsent: hasSmsPhone(phone),
         })
         .returning();
       if (created) return created;

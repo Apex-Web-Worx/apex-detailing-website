@@ -15,6 +15,7 @@ import {
   FROM_NAME,
 } from "./email";
 import { sendSmsWithResult } from "./sms";
+import { bookingAllowsCustomerSms } from "./customer-sms";
 import {
   shopLocalDateString,
   shopLocalTimeString,
@@ -352,7 +353,7 @@ async function scheduleReview(booking: BookingRow, readyAt: Date, settings: Awai
   const smsBody = `${interpolateTemplate(tpl?.smsBody ?? DEFAULT_REVIEW_SMS, vars)}\n\n${STOP}`;
   const emailBody = interpolateTemplate(tpl?.emailBody ?? DEFAULT_REVIEW_EMAIL, vars);
   const channels: Array<{ channel: "sms" | "email"; body: string }> = [];
-  if (booking.smsConsent) channels.push({ channel: "sms", body: smsBody });
+  if (bookingAllowsCustomerSms(booking)) channels.push({ channel: "sms", body: smsBody });
   channels.push({ channel: "email", body: emailBody });
 
   const inserted = await db
@@ -474,7 +475,7 @@ export async function markReadyAndNotify(args: {
     emailBody: readyTpl?.emailBody ?? DEFAULT_VEHICLE_READY_EMAIL,
   });
 
-  const wantSms = args.sendSms && current.smsConsent;
+  const wantSms = args.sendSms && bookingAllowsCustomerSms(current);
   const wantEmail = args.sendEmail;
 
   if (wantSms) {
@@ -535,7 +536,7 @@ export async function retryReviewRequest(bookingId: number) {
   );
 
   if (failed.channel === "sms") {
-    if (!booking.smsConsent) return { error: "sms_opt_out" as const, booking };
+    if (!bookingAllowsCustomerSms(booking)) return { error: "sms_opt_out" as const, booking };
     await sendChannel({ booking, messageType: "review_request", channel: "sms", body: smsBody });
   } else {
     await sendChannel({
@@ -599,7 +600,7 @@ export async function sendDueReviewRequests(): Promise<number> {
     const vars = bookingTemplateVars(booking, booking.pickupAt, settings);
 
     if (row.channel === "sms") {
-      if (!booking.smsConsent) {
+      if (!bookingAllowsCustomerSms(booking)) {
         await db
           .update(communicationsTable)
           .set({
