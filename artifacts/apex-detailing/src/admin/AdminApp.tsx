@@ -17,6 +17,7 @@ import CustomersPage from "./pages/CustomersPage";
 import VehiclesPage from "./pages/VehiclesPage";
 import ServicesPage from "./pages/ServicesPage";
 import CommunicationsPage from "./pages/CommunicationsPage";
+import ReviewsPage from "./pages/ReviewsPage";
 import SettingsPage from "./pages/SettingsPage";
 
 export default function AdminApp() {
@@ -66,9 +67,10 @@ function AdminSection() {
     case "services":
       return <ServicesPage />;
     case "payments":
-    case "reviews":
     case "analytics":
       return <DashboardHome />;
+    case "reviews":
+      return <ReviewsPage />;
     case "messages":
       return <CommunicationsPage />;
     case "settings":

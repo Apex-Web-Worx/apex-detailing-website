@@ -131,6 +131,18 @@ export default function DashboardHome() {
 
       <AdminCard hover={false} className="p-4 md:p-5">
         <div className="flex items-center justify-between gap-2 mb-3">
+          <h3 className="text-base font-bold">Reviews</h3>
+          <Link href="/admin/reviews" className="text-xs font-semibold text-[#9CA3AF] hover:text-white py-1">
+            Open Reviews
+          </Link>
+        </div>
+        <p className="text-sm text-[#9CA3AF]">
+          Send the Google review link, wait 24 hours after ready/complete, or skip it for a client. Open Reviews to manage each job.
+        </p>
+      </AdminCard>
+
+      <AdminCard hover={false} className="p-4 md:p-5">
+        <div className="flex items-center justify-between gap-2 mb-3">
           <h3 className="text-base font-bold">Detailing times</h3>
           <Link href="/admin/vehicles" className="text-xs font-semibold text-[#9CA3AF] hover:text-white py-1">
             Vehicles

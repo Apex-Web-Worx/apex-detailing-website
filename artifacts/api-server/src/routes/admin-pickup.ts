@@ -14,6 +14,7 @@ import {
   listBookingCommunications,
   listBookingTimeline,
   listCustomerCommunications,
+  listReviewQueue,
   markCompleted,
   markInProgress,
   markReadyAndNotify,
@@ -113,6 +114,10 @@ router.patch("/admin/notification-templates/:key", requireAdmin, async (req, res
     return;
   }
   res.json(updated);
+});
+
+router.get("/admin/review-requests", requireAdmin, async (_req, res) => {
+  res.json(await listReviewQueue());
 });
 
 router.get("/admin/communications", requireAdmin, async (req, res) => {

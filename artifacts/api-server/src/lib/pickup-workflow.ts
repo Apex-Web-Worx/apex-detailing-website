@@ -263,6 +263,85 @@ export async function listCustomerCommunications(email: string) {
     .orderBy(desc(communicationsTable.createdAt));
 }
 
+export type ReviewQueueStatus = "none" | "scheduled" | "sent" | "failed" | "skipped";
+
+function summarizeReviewStatus(rows: Array<{ status: string }>): ReviewQueueStatus {
+  if (rows.some((row) => row.status === "skipped")) return "skipped";
+  if (rows.some((row) => ["sent", "delivered", "pending"].includes(row.status))) return "sent";
+  if (rows.some((row) => row.status === "failed")) return "failed";
+  if (rows.some((row) => row.status === "scheduled")) return "scheduled";
+  return "none";
+}
+
+export async function listReviewQueue() {
+  const settings = await getShopSettings();
+  const jobs = await db
+    .select()
+    .from(bookingsTable)
+    .where(inArray(bookingsTable.status, ["in_progress", "ready_for_pickup", "completed"]));
+  const comms = await db
+    .select()
+    .from(communicationsTable)
+    .where(eq(communicationsTable.messageType, "review_request"))
+    .orderBy(desc(communicationsTable.createdAt));
+
+  const byBooking = new Map<number, typeof comms>();
+  for (const row of comms) {
+    const list = byBooking.get(row.bookingId) ?? [];
+    list.push(row);
+    byBooking.set(row.bookingId, list);
+  }
+
+  const jobIds = new Set(jobs.map((job) => job.id));
+  const extraIds = [...byBooking.keys()].filter((id) => !jobIds.has(id));
+  const extra =
+    extraIds.length > 0
+      ? await db.select().from(bookingsTable).where(inArray(bookingsTable.id, extraIds))
+      : [];
+  const allJobs = [...jobs, ...extra.filter((job) => job.status !== "cancelled")];
+
+  const items = allJobs.map((booking) => {
+    const rows = byBooking.get(booking.id) ?? [];
+    const reviewStatus = summarizeReviewStatus(rows);
+    const featured =
+      rows.find((row) => row.status === "skipped") ??
+      rows.find((row) => ["sent", "delivered", "pending"].includes(row.status)) ??
+      rows.find((row) => row.status === "failed") ??
+      rows.find((row) => row.status === "scheduled") ??
+      rows[0] ??
+      null;
+    return {
+      bookingId: booking.id,
+      customerName: booking.customerName,
+      phone: booking.phone,
+      email: booking.email,
+      vehicle: booking.vehicle,
+      serviceName: booking.serviceName,
+      status: booking.status,
+      scheduledAt: booking.scheduledAt,
+      readyAt: booking.readyAt,
+      completedAt: booking.completedAt,
+      reviewStatus,
+      reviewChannel: featured?.channel ?? null,
+      reviewScheduledAt: featured?.scheduledAt ?? null,
+      reviewSentAt: featured?.sentAt ?? null,
+      reviewError: featured?.error ?? null,
+    };
+  });
+
+  items.sort((a, b) => {
+    const rank = (status: ReviewQueueStatus) =>
+      ({ failed: 0, none: 1, scheduled: 2, skipped: 3, sent: 4 })[status];
+    const diff = rank(a.reviewStatus) - rank(b.reviewStatus);
+    if (diff !== 0) return diff;
+    const aAt = (a.readyAt ?? a.scheduledAt).getTime();
+    const bAt = (b.readyAt ?? b.scheduledAt).getTime();
+    return bAt - aAt;
+  });
+
+  return { reviewLink: settings.reviewLink, items };
+}
+
 export async function markInProgress(bookingId: number) {
   const now = new Date();
   const [updated] = await db
