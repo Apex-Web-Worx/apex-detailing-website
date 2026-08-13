@@ -55,7 +55,7 @@ export function canStartJob(booking: Booking): boolean {
 }
 
 export function canStartHold(row: BlockedDate): boolean {
-  return isClientHold(row) && row.date >= todayDateString() && holdDisplayStatus(row) === "confirmed";
+  return isClientHold(row) && holdDisplayStatus(row) === "confirmed";
 }
 
 export function canMarkReady(booking: Booking): boolean {
