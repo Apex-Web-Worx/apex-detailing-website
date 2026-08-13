@@ -38,6 +38,7 @@ type AdminContextValue = {
   onLogout: () => void;
   cancelBooking: (id: number) => Promise<void>;
   startBooking: (id: number) => Promise<void>;
+  startHold: (id: number) => Promise<void>;
   completeBooking: (id: number) => Promise<void>;
   editing: Booking | null;
   setEditing: (b: Booking | null) => void;
@@ -161,6 +162,27 @@ export function AdminProvider({
     [headers, refetch],
   );
 
+  const startHold = useCallback(
+    async (id: number) => {
+      try {
+        const res = await fetch(`/api/admin/blocked-dates/${id}/start`, {
+          method: "POST",
+          headers,
+        });
+        if (!res.ok) {
+          const text = await res.text().catch(() => "");
+          throw new Error(text || `Could not start job (${res.status})`);
+        }
+        const json = await res.json();
+        refetch();
+        setDetail(json);
+      } catch (e) {
+        alert(`Could not start: ${e instanceof Error ? e.message : "unknown"}`);
+      }
+    },
+    [headers, refetch],
+  );
+
   const completeBooking = useCallback(
     async (id: number) => {
       try {
@@ -241,6 +263,7 @@ export function AdminProvider({
       },
       cancelBooking,
       startBooking,
+      startHold,
       completeBooking,
       editing,
       setEditing,
@@ -270,6 +293,7 @@ export function AdminProvider({
       onLogout,
       cancelBooking,
       startBooking,
+      startHold,
       completeBooking,
       editing,
       detail,

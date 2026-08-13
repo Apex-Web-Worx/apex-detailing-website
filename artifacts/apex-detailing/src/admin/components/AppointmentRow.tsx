@@ -213,8 +213,8 @@ export default function AppointmentRow({
         {primaryAction}
       </div>
 
-      <div className="hidden md:flex md:items-center md:gap-4">
-        <button type="button" onClick={onView} className="flex items-center gap-4 min-w-0 flex-1 text-left">
+      <div className="hidden md:flex md:items-center md:gap-3">
+        <button type="button" onClick={onView} className="flex items-center gap-4 min-w-0 text-left">
           {photo}
           <div className="shrink-0">
             <p className="text-sm font-bold text-white tabular-nums leading-none">{time}</p>
@@ -222,7 +222,7 @@ export default function AppointmentRow({
               <StatusBadge status={status} />
             </div>
           </div>
-          <div className="min-w-0 flex-1">
+          <div className="min-w-0">
             {showTimer ? (
               <div className="mb-1">
                 <DetailTimer booking={booking} size="sm" />
@@ -240,7 +240,7 @@ export default function AppointmentRow({
           </div>
         </button>
         {primaryAction ? <div className="shrink-0">{primaryAction}</div> : null}
-        {icons}
+        <div className="ml-auto shrink-0">{icons}</div>
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import { Router, type IRouter, type Request, type Response, type NextFunction } from "express";
+import { randomBytes } from "node:crypto";
 import {
   db,
   bookingsTable,
@@ -743,6 +744,73 @@ router.patch("/admin/blocked-dates/:date", requireAdmin, async (req, res) => {
     console.error("[admin] blocked-dates update failed:", err);
     res.status(500).json({ message: "Could not update that blocked date." });
   }
+});
+
+router.post("/admin/blocked-dates/:id/start", requireAdmin, async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isFinite(id)) {
+    res.status(400).json({ message: "Invalid id" });
+    return;
+  }
+  const [hold] = await db.select().from(blockedDatesTable).where(eq(blockedDatesTable.id, id));
+  if (!hold) {
+    res.status(404).json({ message: "Held appointment not found." });
+    return;
+  }
+  const isHold = Boolean(
+    hold.name?.trim() || hold.surname?.trim() || hold.phone?.trim() || hold.vehicle?.trim(),
+  );
+  if (!isHold) {
+    res.status(400).json({ message: "This blocked day has no customer to start." });
+    return;
+  }
+  const services = await db
+    .select()
+    .from(servicesTable)
+    .where(eq(servicesTable.active, true))
+    .orderBy(asc(servicesTable.sortOrder));
+  const reason = (hold.reason ?? "").trim();
+  const service =
+    services.find((row) => row.name.toLowerCase() === reason.toLowerCase()) ?? services[0];
+  if (!service) {
+    res.status(400).json({ message: "No services are set up to start this job." });
+    return;
+  }
+  const scheduledAt = buildScheduledAt(hold.date, "08:00");
+  if (!scheduledAt) {
+    res.status(400).json({ message: "Invalid held date." });
+    return;
+  }
+  const now = new Date();
+  const customerName =
+    [hold.name, hold.surname].filter(Boolean).join(" ").trim() || "Customer";
+  const phone = (hold.phone ?? "").trim() || "—";
+  const vehicle = (hold.vehicle ?? "").trim() || "Vehicle";
+  const [created] = await db
+    .insert(bookingsTable)
+    .values({
+      serviceId: service.id,
+      serviceName: reason || service.name,
+      servicePriceCents: service.priceCents,
+      serviceDurationMinutes: service.durationMinutes,
+      customerName,
+      email: `hold-${hold.id}@apexdetailing.net`,
+      phone,
+      vehicle,
+      notes: "",
+      scheduledAt,
+      status: "in_progress",
+      inProgressAt: now,
+      manageToken: randomBytes(24).toString("base64url"),
+      smsConsent: false,
+    })
+    .returning();
+  await db.delete(blockedDatesTable).where(eq(blockedDatesTable.id, hold.id));
+  if (hold.googleEventId) {
+    void deleteBlockedDateEvent(hold.googleEventId);
+  }
+  void syncBookingCalendar(created.id);
+  res.json(created);
 });
 
 router.delete("/admin/blocked-dates/:date", requireAdmin, async (req, res) => {

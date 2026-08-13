@@ -51,7 +51,11 @@ export function displayStatus(booking: Booking, _now = new Date()): DisplayStatu
 }
 
 export function canStartJob(booking: Booking): boolean {
-  return booking.status === "confirmed" && bookingShopDate(booking) >= todayDateString();
+  return displayStatus(booking) === "confirmed" && bookingShopDate(booking) >= todayDateString();
+}
+
+export function canStartHold(row: BlockedDate): boolean {
+  return isClientHold(row) && row.date >= todayDateString() && holdDisplayStatus(row) === "confirmed";
 }
 
 export function canMarkReady(booking: Booking): boolean {
