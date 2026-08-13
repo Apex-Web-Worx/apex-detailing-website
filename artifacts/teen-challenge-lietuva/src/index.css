@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+
+  --color-navy: #073b78;
+  --color-navy-dark: #052b59;
+  --color-blue: #1769c2;
+  --color-gold: #f9b916;
+  --color-gold-dark: #e0a40c;
+  --color-green: #087443;
+  --color-green-dark: #065c35;
+  --color-red: #e53935;
+  --color-canvas: #f8fafc;
+  --color-ink: #172033;
+  --color-muted: #667085;
+  --color-line: #e6ebf2;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 100;
+  border-radius: 0.5rem;
+  background: var(--color-navy);
+  color: white;
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-fade {
+  animation: fade-up 0.85s ease-out both;
+}
+
+.hero-fade-delay-1 {
+  animation-delay: 0.12s;
+}
+
+.hero-fade-delay-2 {
+  animation-delay: 0.24s;
+}
+
+.hero-fade-delay-3 {
+  animation-delay: 0.36s;
+}
+
+.yellow-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.yellow-underline::after {
+  content: "";
+  display: block;
+  width: 4.5rem;
+  height: 3px;
+  margin-top: 0.85rem;
+  background: var(--color-gold);
+  border-radius: 999px;
+}
