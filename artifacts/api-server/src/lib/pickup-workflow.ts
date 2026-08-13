@@ -349,7 +349,7 @@ async function scheduleReview(booking: BookingRow, readyAt: Date, settings: Awai
       and(
         eq(communicationsTable.bookingId, booking.id),
         eq(communicationsTable.messageType, "review_request"),
-        inArray(communicationsTable.status, ["scheduled", "pending", "sent", "delivered"]),
+        inArray(communicationsTable.status, ["scheduled", "pending", "sent", "delivered", "skipped"]),
       ),
     )
     .limit(1);
@@ -610,6 +610,19 @@ export async function sendDueReviewRequests(): Promise<number> {
       continue;
     }
 
+    const skipped = await hasReviewInStatuses(booking.id, ["skipped"]);
+    if (skipped) {
+      await db
+        .update(communicationsTable)
+        .set({
+          status: "cancelled",
+          error: "Review skipped for this client",
+          updatedAt: new Date(),
+        })
+        .where(eq(communicationsTable.id, row.id));
+      continue;
+    }
+
     const settings = await getShopSettings();
     const templates = await getTemplates();
     const tpl = templateByKey(templates, "review_request");
@@ -690,7 +703,7 @@ export async function sendDueReviewRequests(): Promise<number> {
 }
 
 const REVIEW_DONE = ["sent", "delivered", "pending"] as const;
-const REVIEW_BLOCKING = ["scheduled", "pending", "sent", "delivered"] as const;
+const REVIEW_BLOCKING = ["scheduled", "pending", "sent", "delivered", "skipped"] as const;
 
 async function hasReviewInStatuses(bookingId: number, statuses: readonly string[]) {
   const rows = await db
@@ -711,6 +724,12 @@ export async function sendReviewRequestNow(bookingId: number) {
   const [booking] = await db.select().from(bookingsTable).where(eq(bookingsTable.id, bookingId));
   if (!booking) return { error: "not_found" as const };
   if (booking.status === "cancelled") return { error: "cancelled" as const };
+
+  const skipped = await hasReviewInStatuses(bookingId, ["skipped"]);
+  if (skipped) {
+    const communications = await listBookingCommunications(bookingId);
+    return { error: "skipped" as const, booking, communications };
+  }
 
   const already = await hasReviewInStatuses(bookingId, REVIEW_DONE);
   if (already) {
@@ -750,6 +769,97 @@ export async function sendReviewRequestNow(bookingId: number) {
 
   const communications = await listBookingCommunications(bookingId);
   return { booking, communications, alreadySent: false as const };
+}
+
+export async function skipReviewRequest(bookingId: number) {
+  const [booking] = await db.select().from(bookingsTable).where(eq(bookingsTable.id, bookingId));
+  if (!booking) return { error: "not_found" as const };
+  if (booking.status === "cancelled") return { error: "cancelled" as const };
+
+  const alreadySent = await hasReviewInStatuses(bookingId, REVIEW_DONE);
+  if (alreadySent) {
+    const communications = await listBookingCommunications(bookingId);
+    return { error: "already_sent" as const, booking, communications };
+  }
+
+  const alreadySkipped = await hasReviewInStatuses(bookingId, ["skipped"]);
+  if (alreadySkipped) {
+    const communications = await listBookingCommunications(bookingId);
+    return { booking, communications, alreadySkipped: true as const };
+  }
+
+  await cancelScheduledReviews(bookingId, "Review skipped for this client");
+
+  const now = new Date();
+  await db.insert(communicationsTable).values({
+    bookingId,
+    customerEmail: booking.email.trim().toLowerCase(),
+    messageType: "review_request",
+    channel: "internal",
+    direction: "outbound",
+    body: "Review request skipped for this client",
+    status: "skipped",
+    scheduledAt: now,
+    error: "skipped_by_admin",
+  });
+
+  await logEvent({
+    bookingId,
+    actor: "admin",
+    action: "review_skipped",
+    status: "skipped",
+    detail: "Review will not be sent to this client",
+  });
+
+  const communications = await listBookingCommunications(bookingId);
+  return { booking, communications, alreadySkipped: false as const };
+}
+
+export async function unskipReviewRequest(bookingId: number) {
+  const [booking] = await db.select().from(bookingsTable).where(eq(bookingsTable.id, bookingId));
+  if (!booking) return { error: "not_found" as const };
+
+  const skipped = await db
+    .select()
+    .from(communicationsTable)
+    .where(
+      and(
+        eq(communicationsTable.bookingId, bookingId),
+        eq(communicationsTable.messageType, "review_request"),
+        eq(communicationsTable.status, "skipped"),
+      ),
+    );
+  if (skipped.length === 0) {
+    const communications = await listBookingCommunications(bookingId);
+    return { booking, communications, alreadyUnskipped: true as const };
+  }
+
+  await db
+    .delete(communicationsTable)
+    .where(
+      and(
+        eq(communicationsTable.bookingId, bookingId),
+        eq(communicationsTable.messageType, "review_request"),
+        eq(communicationsTable.status, "skipped"),
+      ),
+    );
+
+  await logEvent({
+    bookingId,
+    actor: "admin",
+    action: "review_unskipped",
+    status: "scheduled",
+    detail: "Review request re-enabled for this client",
+  });
+
+  if (booking.status === "ready_for_pickup" || booking.status === "completed") {
+    const settings = await getShopSettings();
+    const origin = booking.readyAt ?? booking.completedAt ?? new Date();
+    await scheduleReview(booking, origin, settings);
+  }
+
+  const communications = await listBookingCommunications(bookingId);
+  return { booking, communications, alreadyUnskipped: false as const };
 }
 
 export async function ensureForgottenReviewRequests(): Promise<number> {

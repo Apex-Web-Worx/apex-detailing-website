@@ -54,6 +54,8 @@ export default function AppointmentDetailDrawer() {
     startBooking,
     completeBooking,
     sendReviewRequest,
+    skipReviewRequest,
+    unskipReviewRequest,
   } = useAdmin();
   const photosQuery = useAdminBookingPhotoIndex(token);
   const photoIds = detail ? photoIdsForBooking(photosQuery.data, detail.id) : [];
@@ -106,11 +108,23 @@ export default function AppointmentDetailDrawer() {
   const pickupNote = comms.find((c) => c.messageType === "vehicle_ready" && (c.status === "sent" || c.status === "delivered"));
   const reviewSched = comms.find((c) => c.messageType === "review_request" && c.status === "scheduled");
   const reviewFailed = comms.find((c) => c.messageType === "review_request" && c.status === "failed");
+  const reviewSkipped = comms.find((c) => c.messageType === "review_request" && c.status === "skipped");
   const reviewSent = comms.find(
     (c) =>
       c.messageType === "review_request" &&
       (c.status === "sent" || c.status === "delivered" || c.status === "pending"),
   );
+
+  const reloadTimeline = async () => {
+    const res = await fetch(`/api/admin/bookings/${detail.id}/timeline`, {
+      headers: { "x-admin-token": token },
+    });
+    if (res.ok) {
+      const json = await res.json();
+      setEvents(json.events ?? []);
+      setComms(json.communications ?? []);
+    }
+  };
 
   const markInProgress = async () => {
     setBusy(true);
@@ -147,6 +161,10 @@ export default function AppointmentDetailDrawer() {
   };
 
   const sendReview = async () => {
+    if (reviewSkipped) {
+      setReviewNote("Review is skipped for this client. Allow the review first if you want to send it.");
+      return;
+    }
     if (reviewSent) {
       setReviewNote("Review link already sent. It will not send again.");
       return;
@@ -156,16 +174,37 @@ export default function AppointmentDetailDrawer() {
     try {
       const result = await sendReviewRequest(detail.id);
       setReviewNote(result === "already" ? "Review link already sent. It will not send again." : "Review link sent.");
-      const res = await fetch(`/api/admin/bookings/${detail.id}/timeline`, {
-        headers: { "x-admin-token": token },
-      });
-      if (res.ok) {
-        const json = await res.json();
-        setEvents(json.events ?? []);
-        setComms(json.communications ?? []);
-      }
+      await reloadTimeline();
     } catch (e) {
       setReviewNote(e instanceof Error ? e.message : "Could not send review link");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const skipReview = async () => {
+    setBusy(true);
+    setReviewNote(null);
+    try {
+      await skipReviewRequest(detail.id);
+      setReviewNote("Review will not be sent to this client.");
+      await reloadTimeline();
+    } catch (e) {
+      setReviewNote(e instanceof Error ? e.message : "Could not skip review");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const allowReview = async () => {
+    setBusy(true);
+    setReviewNote(null);
+    try {
+      await unskipReviewRequest(detail.id);
+      setReviewNote("Review is allowed again. It will send 24 hours after ready/complete, or you can send it now.");
+      await reloadTimeline();
+    } catch (e) {
+      setReviewNote(e instanceof Error ? e.message : "Could not allow review");
     } finally {
       setBusy(false);
     }
@@ -322,13 +361,16 @@ export default function AppointmentDetailDrawer() {
                   {pickupNote.sentAt ? ` · ${formatDateTimeLong(pickupNote.sentAt)}` : ""}
                 </p>
               )}
+              {reviewSkipped && (
+                <p className="text-xs text-[#9CA3AF]">Review will not be sent to this client</p>
+              )}
               {reviewSent && (
                 <p className="text-xs text-[#9CA3AF]">
                   Review request sent
                   {reviewSent.sentAt ? ` · ${formatDateTimeLong(reviewSent.sentAt)}` : ""}
                 </p>
               )}
-              {reviewSched && !reviewSent && (
+              {reviewSched && !reviewSent && !reviewSkipped && (
                 <p className="text-xs text-[#9CA3AF]">
                   Review request scheduled
                   {reviewSched.scheduledAt ? ` · ${formatDateTimeLong(reviewSched.scheduledAt)}` : ""}
@@ -353,15 +395,17 @@ export default function AppointmentDetailDrawer() {
             </section>
           )}
 
-          {status !== "cancelled" && status !== "confirmed" ? (
+          {status !== "cancelled" ? (
             <section className="rounded-xl border border-white/10 bg-[#111111] p-4 space-y-2">
               <p className="text-sm font-semibold text-white flex items-center gap-2">
                 <Star className="w-4 h-4 text-[#FF2AD4]" /> Review link
               </p>
               <p className="text-xs text-[#9CA3AF]">
-                Send the Google review link now, or it goes out automatically 24 hours after the job is ready or completed. It will not send twice.
+                Send the Google review link now, or it goes out automatically 24 hours after the job is ready or completed. It will not send twice. You can skip the review for this client.
               </p>
-              {reviewSent ? (
+              {reviewSkipped ? (
+                <p className="text-xs text-amber-300">Will not send to this client</p>
+              ) : reviewSent ? (
                 <p className="text-xs text-emerald-300">
                   Sent{reviewSent.sentAt ? ` · ${formatDateTimeLong(reviewSent.sentAt)}` : ""}
                 </p>
@@ -371,14 +415,35 @@ export default function AppointmentDetailDrawer() {
                 </p>
               ) : null}
               {reviewNote ? <p className="text-xs text-[#23B9FF]">{reviewNote}</p> : null}
-              <GhostButton
-                type="button"
-                className="h-10 text-xs w-full"
-                disabled={busy || Boolean(reviewSent)}
-                onClick={() => void sendReview()}
-              >
-                {reviewSent ? "Review link sent" : "Send review link"}
-              </GhostButton>
+              {status !== "confirmed" && !reviewSkipped ? (
+                <GhostButton
+                  type="button"
+                  className="h-10 text-xs w-full"
+                  disabled={busy || Boolean(reviewSent)}
+                  onClick={() => void sendReview()}
+                >
+                  {reviewSent ? "Review link sent" : "Send review link"}
+                </GhostButton>
+              ) : null}
+              {reviewSkipped ? (
+                <GhostButton
+                  type="button"
+                  className="h-10 text-xs w-full"
+                  disabled={busy}
+                  onClick={() => void allowReview()}
+                >
+                  Allow review for this client
+                </GhostButton>
+              ) : !reviewSent ? (
+                <GhostButton
+                  type="button"
+                  className="h-10 text-xs w-full"
+                  disabled={busy}
+                  onClick={() => void skipReview()}
+                >
+                  Don’t send review to this client
+                </GhostButton>
+              ) : null}
             </section>
           ) : null}
 

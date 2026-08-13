@@ -35,7 +35,7 @@ export default function AppointmentRow({
   onCancel?: () => void;
   stackedAction?: boolean;
 }) {
-  const { token, openReadyModal, startBooking, completeBooking, sendReviewRequest } = useAdmin();
+  const { token, openReadyModal, startBooking, completeBooking, sendReviewRequest, skipReviewRequest, unskipReviewRequest } = useAdmin();
   const photosQuery = useAdminBookingPhotoIndex(token);
   const photoIds = photoIdsForBooking(photosQuery.data, booking.id);
   const photoCount = photoIds.length;
@@ -153,6 +153,46 @@ export default function AppointmentRow({
               >
                 Send review link
               </button>
+            ) : null}
+            {status !== "cancelled" ? (
+              <>
+                <button
+                  type="button"
+                  className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
+                  onClick={() => {
+                    setMenu(false);
+                    void skipReviewRequest(booking.id)
+                      .then((result) => {
+                        alert(
+                          result === "already"
+                            ? "Review is already skipped for this client."
+                            : "Review will not be sent to this client.",
+                        );
+                      })
+                      .catch((e) => {
+                        alert(e instanceof Error ? e.message : "Could not skip review");
+                      });
+                  }}
+                >
+                  Don’t send review to this client
+                </button>
+                <button
+                  type="button"
+                  className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
+                  onClick={() => {
+                    setMenu(false);
+                    void unskipReviewRequest(booking.id)
+                      .then(() => {
+                        alert("Review is allowed again for this client.");
+                      })
+                      .catch((e) => {
+                        alert(e instanceof Error ? e.message : "Could not allow review");
+                      });
+                  }}
+                >
+                  Allow review for this client
+                </button>
+              </>
             ) : null}
             {canAct && onEdit && (
               <button

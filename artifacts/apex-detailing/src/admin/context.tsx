@@ -43,6 +43,8 @@ type AdminContextValue = {
   startHold: (id: number) => Promise<void>;
   completeBooking: (id: number) => Promise<void>;
   sendReviewRequest: (id: number) => Promise<"sent" | "already">;
+  skipReviewRequest: (id: number) => Promise<"skipped" | "already">;
+  unskipReviewRequest: (id: number) => Promise<void>;
   editing: Booking | null;
   setEditing: (b: Booking | null) => void;
   detail: Booking | null;
@@ -224,12 +226,56 @@ export function AdminProvider({
         headers,
       });
       if (!res.ok) {
-        const text = await res.text().catch(() => "");
-        throw new Error(text || `Could not send review (${res.status})`);
+        const json = await res.json().catch(() => null);
+        const message =
+          json && typeof json === "object" && "message" in json && typeof json.message === "string"
+            ? json.message
+            : `Could not send review (${res.status})`;
+        throw new Error(message);
       }
       const json = (await res.json()) as { alreadySent?: boolean; communications?: unknown };
       refetch();
       return json.alreadySent ? "already" : "sent";
+    },
+    [headers, refetch],
+  );
+
+  const skipReviewRequest = useCallback(
+    async (id: number) => {
+      const res = await fetch(`/api/admin/bookings/${id}/review-request/skip`, {
+        method: "POST",
+        headers,
+      });
+      if (!res.ok) {
+        const json = await res.json().catch(() => null);
+        const message =
+          json && typeof json === "object" && "message" in json && typeof json.message === "string"
+            ? json.message
+            : `Could not skip review (${res.status})`;
+        throw new Error(message);
+      }
+      const json = (await res.json()) as { alreadySkipped?: boolean };
+      refetch();
+      return json.alreadySkipped ? "already" : "skipped";
+    },
+    [headers, refetch],
+  );
+
+  const unskipReviewRequest = useCallback(
+    async (id: number) => {
+      const res = await fetch(`/api/admin/bookings/${id}/review-request/unskip`, {
+        method: "POST",
+        headers,
+      });
+      if (!res.ok) {
+        const json = await res.json().catch(() => null);
+        const message =
+          json && typeof json === "object" && "message" in json && typeof json.message === "string"
+            ? json.message
+            : `Could not allow review (${res.status})`;
+        throw new Error(message);
+      }
+      refetch();
     },
     [headers, refetch],
   );
@@ -297,6 +343,8 @@ export function AdminProvider({
       startHold,
       completeBooking,
       sendReviewRequest,
+      skipReviewRequest,
+      unskipReviewRequest,
       editing,
       setEditing,
       detail,
@@ -329,6 +377,8 @@ export function AdminProvider({
       startHold,
       completeBooking,
       sendReviewRequest,
+      skipReviewRequest,
+      unskipReviewRequest,
       editing,
       detail,
       blockOpen,

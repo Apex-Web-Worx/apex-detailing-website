@@ -22,6 +22,8 @@ import {
   seedNotificationDefaults,
   bookingTemplateVars,
   sendReviewRequestNow,
+  skipReviewRequest,
+  unskipReviewRequest,
 } from "../lib/pickup-workflow";
 import {
   DEFAULT_VEHICLE_READY_EMAIL,
@@ -278,7 +280,57 @@ router.post("/admin/bookings/:id/review-request", requireAdmin, async (req, res)
       res.status(400).json({ message: "No phone or email to send the review link." });
       return;
     }
+    if (result.error === "skipped") {
+      res.status(400).json({
+        message: "Review is skipped for this client. Allow the review first if you want to send it.",
+      });
+      return;
+    }
     res.status(400).json({ message: "Could not send review request." });
+    return;
+  }
+  res.json(result);
+});
+
+router.post("/admin/bookings/:id/review-request/skip", requireAdmin, async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isFinite(id)) {
+    res.status(400).json({ message: "Invalid id" });
+    return;
+  }
+  const result = await skipReviewRequest(id);
+  if ("error" in result) {
+    if (result.error === "not_found") {
+      res.status(404).json({ message: "Booking not found" });
+      return;
+    }
+    if (result.error === "cancelled") {
+      res.status(400).json({ message: "Appointment is cancelled." });
+      return;
+    }
+    if (result.error === "already_sent") {
+      res.status(400).json({ message: "Review link already sent. It cannot be skipped." });
+      return;
+    }
+    res.status(400).json({ message: "Could not skip review request." });
+    return;
+  }
+  res.json(result);
+});
+
+router.post("/admin/bookings/:id/review-request/unskip", requireAdmin, async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isFinite(id)) {
+    res.status(400).json({ message: "Invalid id" });
+    return;
+  }
+  const result = await unskipReviewRequest(id);
+  if ("error" in result) {
+    if (result.error === "not_found") {
+      res.status(404).json({ message: "Booking not found" });
+      return;
+    }
+    res.status(400).json({ message: "Could not re-enable review request." });
     return;
   }
   res.json(result);
