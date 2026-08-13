@@ -229,6 +229,132 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "badge.express": "Express",
     "badge.notice": "3-Day Notice",
 
+    "addons.interior": "Interior Addons",
+    "addons.exterior": "Exterior Addons",
+
+    "pkg.full.title": "Apex Full Detailing",
+    "pkg.full.desc":
+      "The ultimate package! Includes interior and exterior detailed cleaning and protection. Get your vehicle looking showroom fresh inside and out. Add-ons available to customize your package.",
+    "pkg.full.price.0": "Coupe / Sedan: $300-$400",
+    "pkg.full.price.1": "Truck / Jeep / 2-Row SUV: $350 – $450",
+    "pkg.full.price.2": "Minivan / 3-Row SUV: $350 – $500",
+    "pkg.full.feat.0": "Complete Exterior Detailing",
+    "pkg.full.feat.1": "Complete Interior Detailing",
+    "pkg.full.feat.2": "Paint Protection",
+    "pkg.full.feat.3": "Professional Results",
+    "pkg.full.feat.4": "Customizable Add-ons",
+
+    "pkg.interior.title": "Apex Interior Detailing",
+    "pkg.interior.desc":
+      "Comprehensive interior cleaning that transforms every surface. From carpets to leather to air vents. Add-ons available to customize your package.",
+    "pkg.interior.price.0": "2-Row: $200 – $300",
+    "pkg.interior.price.1": "3-Row: $250 – $350",
+    "pkg.interior.feat.0": "Air vents cleaned",
+    "pkg.interior.feat.1": "Free air fresheners",
+    "pkg.interior.feat.2": "Steam cleaning of center console and door panels",
+    "pkg.interior.feat.3": "All plastic surfaces wiped down",
+    "pkg.interior.feat.4": "Cloth seats cleaned and steamed",
+    "pkg.interior.feat.5": "Spot cleaning of the headliner",
+    "pkg.interior.feat.6": "Cleaning of interior windows and mirrors",
+    "pkg.interior.feat.7": "Trunk area vacuumed",
+    "pkg.interior.feat.8": "Leather seats cleaned and conditioned",
+    "pkg.interior.feat.9": "Rubber mats washed",
+    "pkg.interior.feat.10": "Extensive vacuuming of the interior",
+    "pkg.interior.feat.11": "Floor mats steam-cleaned",
+    "pkg.interior.feat.12": "Steam-cleaning of brake and gas pedals",
+
+    "pkg.express.title": "Apex Express Interior Detailing",
+    "pkg.express.desc":
+      "A fast, high-quality interior refresh designed to keep your vehicle clean, fresh, and presentable—without the time commitment of a full detail. This service includes a thorough vacuum, wipe-down of all interior surfaces, floor mats cleaned, interior glass polished, and a light refresh of high-touch areas. Perfect for well-maintained vehicles or as a maintenance service between full details.",
+    "pkg.express.warn":
+      "This service is intended only to maintain a semi-clean vehicle. Heavily soiled interiors, stains, excessive pet hair, or deep cleaning needs may require a Full Interior Detail. Final service type will be confirmed upon inspection.",
+    "pkg.express.price.0": "2-Row: $100–$150",
+    "pkg.express.price.1": "3-Row: $150–$200",
+    "pkg.express.feat.0": "Thorough Vacuum",
+    "pkg.express.feat.1": "Interior Surfaces Wiped Down",
+    "pkg.express.feat.2": "Floor Mats Cleaned",
+    "pkg.express.feat.3": "Interior Glass Polished",
+    "pkg.express.feat.4": "High-Touch Areas Refreshed",
+
+    "pkg.exterior.title": "Apex Exterior Detailing",
+    "pkg.exterior.desc":
+      "Comprehensive exterior cleaning and protection to make your car turn heads everywhere you go. Includes detailed hand wash, exterior windows and mirrors cleaning, wheels and tires cleaned, polished, and dressed, door jambs wiped down, and spray sealant for 1-month protection.",
+    "pkg.exterior.price.0": "Sedan: $150",
+    "pkg.exterior.price.1": "SUV: $200–$250",
+    "pkg.exterior.feat.0": "Detailed Hand Wash",
+    "pkg.exterior.feat.1": "Windows & Mirrors Cleaned",
+    "pkg.exterior.feat.2": "Wheels & Tires Detailed",
+    "pkg.exterior.feat.3": "Door Jambs Wiped",
+    "pkg.exterior.feat.4": "1-Month Spray Sealant",
+
+    "pkg.wax.title": "Apex Wash, Clay & Wax",
+    "pkg.wax.desc":
+      "First, the vehicle receives a thorough hand wash to remove dirt, dust, and road grime. Next, a clay bar treatment is used to safely remove embedded contaminants such as tar, brake dust, and industrial fallout that normal washing cannot remove. Finally, a protective wax coating is applied to enhance shine, protect the paint, and help repel water and dirt.",
+    "pkg.wax.price.0": "Sedan: $250",
+    "pkg.wax.price.1": "SUV: $300–$350",
+    "pkg.wax.feat.0": "Thorough Hand Wash",
+    "pkg.wax.feat.1": "Clay Bar Treatment",
+    "pkg.wax.feat.2": "Professional Wax Coating",
+    "pkg.wax.feat.3": "Enhanced Paint Protection",
+    "pkg.wax.feat.4": "Water & Dirt Repellent",
+
+    "pkg.headlight.title": "Apex Headlight Restoration",
+    "pkg.headlight.desc":
+      "Fix foggy, yellowed headlights to improve nighttime visibility and dramatically improve your car's appearance.",
+    "pkg.headlight.feat.0": "Improves Safety",
+    "pkg.headlight.feat.1": "Removes Oxidation",
+    "pkg.headlight.feat.2": "UV Protection Applied",
+
+    "pkg.ceramic.title": "Apex Ceramic Coating",
+    "pkg.ceramic.desc":
+      "Ultimate protection and extreme gloss for your vehicle's paint. Lasts for years, making maintenance washes a breeze.",
+    "pkg.ceramic.feat.0": "Up to 5 Years Protection",
+    "pkg.ceramic.feat.1": "Extreme Hydrophobics",
+    "pkg.ceramic.feat.2": "Scratch Resistance",
+
+    "pkg.paint.title": "Apex Paint Correction",
+    "pkg.paint.desc":
+      "Restore your paint to a flawless, mirror-like finish. We offer four levels of correction depending on the condition of your vehicle and the result you're after — from a quick gloss refresh to full show-level restoration.",
+    "pkg.paint.price.0":
+      "Paint Enhancement — starting at $300: Light machine polish for added gloss, minor haze removal, and better shine. Great for vehicles that just need a refresh.",
+    "pkg.paint.price.1":
+      "1-Step Paint Correction — starting at $600: Includes wash, iron removal, clay bar, single-stage machine polish, and sealant. Removes light swirls, haze, and minor defects.",
+    "pkg.paint.price.2":
+      "2-Step Paint Correction — starting at $1,100: Includes compound + polish for deeper swirl/scratch removal and stronger reflection. Recommended before ceramic coating.",
+    "pkg.paint.price.3":
+      "Advanced Paint Correction — starting at $1,800: For heavily swirled, oxidized, black, or show-level vehicles. Final price depends on paint condition, size, and desired result.",
+    "pkg.paint.feat.0": "Swirl Mark Removal",
+    "pkg.paint.feat.1": "Deep Gloss Restoration",
+    "pkg.paint.feat.2": "Enhances Resale Value",
+
+    "addon.pet-hair.name": "Pet Hair Removal",
+    "addon.pet-hair.desc":
+      "Pet hair removal is a specialized interior detailing service designed to extract stubborn pet hair from seats, carpets, floor mats, and other fabric surfaces inside the vehicle. Professional tools such as rubber brushes, specialized vacuums, air compressors, and detailing tools are used to loosen and remove hair that is deeply embedded in upholstery fibers.",
+    "addon.deep-shampooing.name": "Deep Shampooing & Stain Removal",
+    "addon.deep-shampooing.desc":
+      "Deep shampooing and stain removal is an intensive cleaning process designed to eliminate deeply embedded dirt, odors, and stubborn stains from carpets and upholstery. High-quality cleaning solutions and powerful extraction equipment lift contaminants from the fibers, leaving surfaces sanitized, refreshed, and looking like new.",
+    "addon.plastic-uv.name": "Interior Plastic UV Treatment",
+    "addon.plastic-uv.desc":
+      "Interior Plastic UV Treatment protects dashboards, door panels, and other plastic surfaces from sun damage. The treatment restores the original appearance while adding a protective layer that helps prevent fading, cracking, and discoloration.",
+    "addon.exterior-detailing.name": "Exterior Detailing",
+    "addon.exterior-detailing.desc":
+      "Comprehensive exterior cleaning and protection to make your car turn heads everywhere you go. Includes detailed hand wash, exterior windows and mirrors cleaning, wheels and tires cleaned, polished, and dressed, door jambs wiped down, and spray sealant for 1-month protection.",
+    "addon.wash-clay-wax.name": "Wash, Clay & Wax",
+    "addon.wash-clay-wax.desc":
+      "First, the vehicle receives a thorough hand wash to remove dirt, dust, and road grime. Next, a clay bar treatment is used to safely remove embedded contaminants such as tar, brake dust, and industrial fallout that normal washing cannot remove. Finally, a protective wax coating is applied to enhance shine, protect the paint, and help repel water and dirt.",
+    "addon.dress-exterior.name": "Dress Exterior Plastic",
+    "addon.dress-exterior.desc":
+      "Exterior Plastic Dressing is a detailing service that restores and protects the plastic and rubber trim on the outside of your vehicle. A professional-grade dressing is applied to faded or dull plastic surfaces to bring back their deep, rich color while adding protection against sun damage and weather.",
+    "addon.clay-bar.name": "Clay Bar Treatment",
+    "addon.clay-bar.desc":
+      "Clay Bar Treatment is a detailing process that removes embedded contaminants from your vehicle's paint that regular washing cannot eliminate. Using a specialized clay bar and lubricant, the surface is gently treated to lift off bonded particles such as brake dust, tar, tree sap, and industrial fallout. This process leaves the paint smooth to the touch, improves the vehicle's shine, and prepares the surface for wax, sealant, or ceramic coating.",
+    "addon.headlight.name": "Headlight Restoration",
+    "addon.headlight.desc":
+      "Headlight Restoration is a detailing service that removes oxidation, haze, and yellowing from vehicle headlights to restore clarity and brightness. Over time, sun exposure and environmental contaminants can make headlights cloudy, reducing visibility and the overall appearance of your vehicle.",
+    "addon.engine-bay.name": "Engine Bay Cleaning",
+    "addon.engine-bay.desc":
+      "Engine Bay Cleaning is a detailing service that safely cleans the engine compartment to remove built-up dirt, grease, dust, and debris. Using specialized cleaners and careful techniques, the engine bay is degreased, gently washed, and dried to restore a clean and well-maintained appearance.",
+
     "manage.loading": "Loading your booking…",
     "gift.back": "Back to site",
 
@@ -465,6 +591,132 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "badge.value": "Выгода",
     "badge.express": "Экспресс",
     "badge.notice": "За 3 дня",
+
+    "addons.interior": "Допы для салона",
+    "addons.exterior": "Допы для кузова",
+
+    "pkg.full.title": "Полный детейлинг Apex",
+    "pkg.full.desc":
+      "Максимальный пакет: чистка и защита салона и кузова. Авто как из салона — внутри и снаружи. Можно добавить опции.",
+    "pkg.full.price.0": "Купе / седан: $300–$400",
+    "pkg.full.price.1": "Пикап / Jeep / 2 ряда: $350 – $450",
+    "pkg.full.price.2": "Минивэн / 3 ряда: $350 – $500",
+    "pkg.full.feat.0": "Полный детейлинг кузова",
+    "pkg.full.feat.1": "Полный детейлинг салона",
+    "pkg.full.feat.2": "Защита ЛКП",
+    "pkg.full.feat.3": "Профессиональный результат",
+    "pkg.full.feat.4": "Доп. услуги по желанию",
+
+    "pkg.interior.title": "Детейлинг салона Apex",
+    "pkg.interior.desc":
+      "Полная чистка салона: ковры, кожа, дефлекторы. Можно добавить опции.",
+    "pkg.interior.price.0": "2 ряда: $200 – $300",
+    "pkg.interior.price.1": "3 ряда: $250 – $350",
+    "pkg.interior.feat.0": "Чистка дефлекторов",
+    "pkg.interior.feat.1": "Бесплатный освежитель",
+    "pkg.interior.feat.2": "Паровая чистка консоли и дверных карт",
+    "pkg.interior.feat.3": "Протирка всего пластика",
+    "pkg.interior.feat.4": "Чистка и пар тканевых сидений",
+    "pkg.interior.feat.5": "Точечная чистка потолка",
+    "pkg.interior.feat.6": "Стёкла и зеркала внутри",
+    "pkg.interior.feat.7": "Пылесос в багажнике",
+    "pkg.interior.feat.8": "Чистка и кондиционер кожи",
+    "pkg.interior.feat.9": "Мойка резиновых ковриков",
+    "pkg.interior.feat.10": "Тщательный пылесос салона",
+    "pkg.interior.feat.11": "Паровая чистка ковриков",
+    "pkg.interior.feat.12": "Пар педалей тормоза и газа",
+
+    "pkg.express.title": "Экспресс-салон Apex",
+    "pkg.express.desc":
+      "Быстрое качественное освежение салона — без полного детейлинга. Пылесос, протирка поверхностей, коврики, стёкла внутри и лёгкое обновление зон частого касания. Для ухоженных авто или как поддержка между полными услугами.",
+    "pkg.express.warn":
+      "Только для относительно чистого салона. Сильные загрязнения, пятна, шерсть или глубокая чистка — нужен полный детейлинг салона. Итог подтверждаем после осмотра.",
+    "pkg.express.price.0": "2 ряда: $100–$150",
+    "pkg.express.price.1": "3 ряда: $150–$200",
+    "pkg.express.feat.0": "Тщательный пылесос",
+    "pkg.express.feat.1": "Протирка поверхностей салона",
+    "pkg.express.feat.2": "Чистка ковриков",
+    "pkg.express.feat.3": "Полировка стёкол внутри",
+    "pkg.express.feat.4": "Освежение зон частого касания",
+
+    "pkg.exterior.title": "Детейлинг кузова Apex",
+    "pkg.exterior.desc":
+      "Чистка и защита кузова, чтобы авто собирало взгляды. Ручная мойка, стёкла и зеркала снаружи, диски и шины (чистка, полировка, чернение), проёмы дверей и спрей-силант на 1 месяц.",
+    "pkg.exterior.price.0": "Седан: $150",
+    "pkg.exterior.price.1": "SUV: $200–$250",
+    "pkg.exterior.feat.0": "Детальная ручная мойка",
+    "pkg.exterior.feat.1": "Стёкла и зеркала",
+    "pkg.exterior.feat.2": "Диски и шины",
+    "pkg.exterior.feat.3": "Проёмы дверей",
+    "pkg.exterior.feat.4": "Спрей-силант на 1 месяц",
+
+    "pkg.wax.title": "Мойка, глина и воск Apex",
+    "pkg.wax.desc":
+      "Сначала ручная мойка от пыли и дорожной грязи. Затем глина снимает въевшиеся загрязнения — гудрон, тормозную пыль, промышленный налёт, которые обычная мойка не берёт. В конце защитный воск: блеск, защита ЛКП, вода и грязь скатываются.",
+    "pkg.wax.price.0": "Седан: $250",
+    "pkg.wax.price.1": "SUV: $300–$350",
+    "pkg.wax.feat.0": "Тщательная ручная мойка",
+    "pkg.wax.feat.1": "Обработка глиной",
+    "pkg.wax.feat.2": "Профессиональный воск",
+    "pkg.wax.feat.3": "Усиленная защита ЛКП",
+    "pkg.wax.feat.4": "Отталкивает воду и грязь",
+
+    "pkg.headlight.title": "Восстановление фар Apex",
+    "pkg.headlight.desc":
+      "Убираем мутность и желтизну фар — лучше видно ночью и авто выглядит свежее.",
+    "pkg.headlight.feat.0": "Безопасность на дороге",
+    "pkg.headlight.feat.1": "Снятие окисления",
+    "pkg.headlight.feat.2": "УФ-защита",
+
+    "pkg.ceramic.title": "Керамика Apex",
+    "pkg.ceramic.desc":
+      "Максимальная защита и глубокий блеск ЛКП. Держится годы — мойка становится проще.",
+    "pkg.ceramic.feat.0": "Защита до 5 лет",
+    "pkg.ceramic.feat.1": "Сильный гидрофоб",
+    "pkg.ceramic.feat.2": "Стойкость к царапинам",
+
+    "pkg.paint.title": "Коррекция ЛКП Apex",
+    "pkg.paint.desc":
+      "Возвращаем краске зеркальный вид. Четыре уровня — от лёгкого блеска до шоу-качества, в зависимости от состояния авто и желаемого результата.",
+    "pkg.paint.price.0":
+      "Освежение ЛКП — от $300: лёгкая машинная полировка, меньше дымки, больше блеска. Для авто, которым нужно освежить вид.",
+    "pkg.paint.price.1":
+      "1-этапная коррекция — от $600: мойка, обезжелезивание, глина, одноэтапная полировка и силант. Снимает лёгкие голограммы, дымку и мелкие дефекты.",
+    "pkg.paint.price.2":
+      "2-этапная коррекция — от $1,100: абразив + полироль для более глубоких кругов и царапин и сильнее отражение. Рекомендуем перед керамикой.",
+    "pkg.paint.price.3":
+      "Продвинутая коррекция — от $1,800: сильные круги, окисление, чёрный цвет, шоу-уровень. Цена зависит от состояния, размера и цели.",
+    "pkg.paint.feat.0": "Снятие голограмм",
+    "pkg.paint.feat.1": "Глубокий блеск",
+    "pkg.paint.feat.2": "Выше остаточная стоимость",
+
+    "addon.pet-hair.name": "Удаление шерсти",
+    "addon.pet-hair.desc":
+      "Специальная чистка салона: шерсть с сидений, ковров, ковриков и ткани. Резиновые щётки, профпылесос, компрессор и детейлинг-инструмент поднимают въевшийся ворс.",
+    "addon.deep-shampooing.name": "Глубокий шампунь и пятна",
+    "addon.deep-shampooing.desc":
+      "Интенсивная чистка: грязь, запахи и стойкие пятна с ковров и обивки. Профхимия и экстракция поднимают загрязнения из волокон — поверхность чистая и как новая.",
+    "addon.plastic-uv.name": "УФ-защита пластика салона",
+    "addon.plastic-uv.desc":
+      "Защита торпедо, дверных карт и пластика от солнца. Возвращает вид и слой от выгорания, трещин и потери цвета.",
+    "addon.exterior-detailing.name": "Детейлинг кузова",
+    "addon.exterior-detailing.desc":
+      "Чистка и защита кузова. Ручная мойка, стёкла и зеркала, диски и шины, проёмы дверей и спрей-силант на 1 месяц.",
+    "addon.wash-clay-wax.name": "Мойка, глина и воск",
+    "addon.wash-clay-wax.desc":
+      "Ручная мойка, затем глина от въевшихся загрязнений, затем защитный воск для блеска и защиты ЛКП.",
+    "addon.dress-exterior.name": "Чернение пластика снаружи",
+    "addon.dress-exterior.desc":
+      "Восстановление и защита наружного пластика и резины. Профсредство возвращает насыщенный цвет и защищает от солнца и погоды.",
+    "addon.clay-bar.name": "Обработка глиной",
+    "addon.clay-bar.desc":
+      "Глина снимает с ЛКП то, что обычная мойка не берёт: тормозную пыль, гудрон, смолу, промышленный налёт. Краска гладкая, блеск лучше, поверхность готова к воску, силанту или керамике.",
+    "addon.headlight.name": "Восстановление фар",
+    "addon.headlight.desc":
+      "Снимаем окисление, мутность и желтизну фар. Солнце и среда мутят стекло — хуже свет и вид авто.",
+    "addon.engine-bay.name": "Мойка подкапотки",
+    "addon.engine-bay.desc":
+      "Аккуратная чистка моторного отсека от грязи, масла, пыли. Спецсредства, бережная мойка и сушка — чистый ухоженный вид.",
 
     "manage.loading": "Загружаем запись…",
     "gift.back": "На сайт",

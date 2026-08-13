@@ -14,6 +14,7 @@ type LanguageContextValue = {
   lang: Lang;
   setLang: (lang: Lang) => void;
   t: (key: string) => string;
+  list: (prefix: string) => string[];
 };
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
@@ -50,8 +51,24 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     [lang],
   );
 
+  const list = useCallback(
+    (prefix: string) => {
+      const items: string[] = [];
+      for (let i = 0; i < 40; i++) {
+        const key = `${prefix}.${i}`;
+        const value = STRINGS[lang][key] ?? STRINGS.en[key];
+        if (value == null) break;
+        items.push(value);
+      }
+      return items;
+    },
+    [lang],
+  );
+
   return (
-    <LanguageContext.Provider value={{ lang, setLang, t }}>{children}</LanguageContext.Provider>
+    <LanguageContext.Provider value={{ lang, setLang, t, list }}>
+      {children}
+    </LanguageContext.Provider>
   );
 }
 

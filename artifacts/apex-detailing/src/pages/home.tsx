@@ -50,8 +50,11 @@ const NAV_ITEMS = [
   { id: "gift", kind: "path" as const, path: "gift-cards" },
 ];
 
-const AddonCard = ({ addon }: { addon: { name: string; price: string; description?: string } }) => {
+const AddonCard = ({ addon }: { addon: { id: string; price: string } }) => {
+  const { t } = useLanguage();
   const [isExpanded, setIsExpanded] = useState(false);
+  const name = t(`addon.${addon.id}.name`);
+  const description = t(`addon.${addon.id}.desc`);
   return (
     <div
       className="relative overflow-hidden p-4 rounded-lg bg-[#080808] border border-white/10 hover:border-[#00E5FF]/40 transition-all cursor-pointer group"
@@ -66,9 +69,9 @@ const AddonCard = ({ addon }: { addon: { name: string; price: string; descriptio
             "radial-gradient(ellipse 90% 70% at 0% 0%, rgba(255,255,255,0.04), transparent 55%)",
         }}
       />
-      <h4 className="relative z-10 text-base font-bold text-white mb-1 group-hover:text-[#00E5FF] transition-colors duration-300">{addon.name}</h4>
+      <h4 className="relative z-10 text-base font-bold text-white mb-1 group-hover:text-[#00E5FF] transition-colors duration-300">{name}</h4>
       <p className="relative z-10 text-potential font-bold text-sm">{addon.price}</p>
-      {addon.description && (
+      {description && (
         <div 
           onClick={(e) => {
             e.stopPropagation();
@@ -77,7 +80,7 @@ const AddonCard = ({ addon }: { addon: { name: string; price: string; descriptio
           className={`relative z-10 overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-96' : 'max-h-0'}`}
         >
           <p className="text-gray-300 text-xs mt-3 leading-relaxed">
-            {addon.description}
+            {description}
           </p>
         </div>
       )}
@@ -88,130 +91,51 @@ const AddonCard = ({ addon }: { addon: { name: string; price: string; descriptio
 const services = [
   {
     id: "full-detailing",
-    title: "Apex Full Detailing",
-    description:
-      "The ultimate package! Includes interior and exterior detailed cleaning and protection. Get your vehicle looking showroom fresh inside and out. Add-ons available to customize your package.",
+    pkg: "full",
     icon: <Wand2 className="w-10 h-10 text-[#FF1AD8]" />,
     pricing: "$300",
-    pricingDetails: ["Coupe / Sedan: $300-$400", "Truck / Jeep / 2-Row SUV: $350 – $450", "Minivan / 3-Row SUV: $350 – $500"],
-    features: [
-      "Complete Exterior Detailing",
-      "Complete Interior Detailing",
-      "Paint Protection",
-      "Professional Results",
-      "Customizable Add-ons",
-    ],
   },
   {
     id: "interior-detailing",
-    title: "Apex Interior Detailing",
-    description:
-      "Comprehensive interior cleaning that transforms every surface. From carpets to leather to air vents. Add-ons available to customize your package.",
+    pkg: "interior",
     icon: <Droplets className="w-10 h-10 text-[#FF1AD8]" />,
     pricing: "$200",
-    pricingDetails: ["2-Row: $200 – $300", "3-Row: $250 – $350"],
-    features: [
-      "Air vents cleaned",
-      "Free air fresheners",
-      "Steam cleaning of center console and door panels",
-      "All plastic surfaces wiped down",
-      "Cloth seats cleaned and steamed",
-      "Spot cleaning of the headliner",
-      "Cleaning of interior windows and mirrors",
-      "Trunk area vacuumed",
-      "Leather seats cleaned and conditioned",
-      "Rubber mats washed",
-      "Extensive vacuuming of the interior",
-      "Floor mats steam-cleaned",
-      "Steam-cleaning of brake and gas pedals",
-    ],
   },
   {
     id: "apex-express-interior-detailing",
-    title: "Apex Express Interior Detailing",
-    description: (
-      <>
-        A fast, high-quality interior refresh designed to keep your vehicle clean, fresh, and presentable—without the time commitment of a full detail. This service includes a thorough vacuum, wipe-down of all interior surfaces, floor mats cleaned, interior glass polished, and a light refresh of high-touch areas. Perfect for well-maintained vehicles or as a maintenance service between full details.{" "}
-        <span className="text-[#FFA500] font-bold">
-          This service is intended only to maintain a semi-clean vehicle. Heavily soiled interiors, stains, excessive pet hair, or deep cleaning needs may require a Full Interior Detail. Final service type will be confirmed upon inspection.
-        </span>
-      </>
-    ),
+    pkg: "express",
     icon: <Droplets className="w-10 h-10 text-[#FF1AD8]" />,
     pricing: "$100",
-    pricingDetails: ["2-Row: $100–$150", "3-Row: $150–$200"],
-    features: [
-      "Thorough Vacuum",
-      "Interior Surfaces Wiped Down",
-      "Floor Mats Cleaned",
-      "Interior Glass Polished",
-      "High-Touch Areas Refreshed",
-    ],
   },
   {
     id: "exterior-detailing",
-    title: "Apex Exterior Detailing",
-    description:
-      "Comprehensive exterior cleaning and protection to make your car turn heads everywhere you go. Includes detailed hand wash, exterior windows and mirrors cleaning, wheels and tires cleaned, polished, and dressed, door jambs wiped down, and spray sealant for 1-month protection.",
+    pkg: "exterior",
     icon: <Car className="w-10 h-10 text-[#00E5FF]" />,
     pricing: "$150",
-    pricingDetails: ["Sedan: $150", "SUV: $200–$250"],
-    features: [
-      "Detailed Hand Wash",
-      "Windows & Mirrors Cleaned",
-      "Wheels & Tires Detailed",
-      "Door Jambs Wiped",
-      "1-Month Spray Sealant",
-    ],
   },
   {
     id: "wash-clay-wax",
-    title: "Apex Wash, Clay & Wax",
-    description:
-      "First, the vehicle receives a thorough hand wash to remove dirt, dust, and road grime. Next, a clay bar treatment is used to safely remove embedded contaminants such as tar, brake dust, and industrial fallout that normal washing cannot remove. Finally, a protective wax coating is applied to enhance shine, protect the paint, and help repel water and dirt.",
+    pkg: "wax",
     icon: <Sparkles className="w-10 h-10 text-[#FF1AD8]" />,
     pricing: "$250",
-    pricingDetails: ["Sedan: $250", "SUV: $300–$350"],
-    features: [
-      "Thorough Hand Wash",
-      "Clay Bar Treatment",
-      "Professional Wax Coating",
-      "Enhanced Paint Protection",
-      "Water & Dirt Repellent",
-    ],
   },
   {
     id: "headlight-restoration",
-    title: "Apex Headlight Restoration",
-    description:
-      "Fix foggy, yellowed headlights to improve nighttime visibility and dramatically improve your car's appearance.",
+    pkg: "headlight",
     icon: <CheckCircle2 className="w-10 h-10 text-[#00E5FF]" />,
     pricing: "$125",
-    features: ["Improves Safety", "Removes Oxidation", "UV Protection Applied"],
   },
   {
     id: "ceramic-coating",
-    title: "Apex Ceramic Coating",
-    description:
-      "Ultimate protection and extreme gloss for your vehicle's paint. Lasts for years, making maintenance washes a breeze.",
+    pkg: "ceramic",
     icon: <Shield className="w-10 h-10 text-[#00E5FF]" />,
     pricing: "Call for Quote",
-    features: ["Up to 5 Years Protection", "Extreme Hydrophobics", "Scratch Resistance"],
   },
   {
     id: "paint-correction",
-    title: "Apex Paint Correction",
-    description:
-      "Restore your paint to a flawless, mirror-like finish. We offer four levels of correction depending on the condition of your vehicle and the result you're after — from a quick gloss refresh to full show-level restoration.",
+    pkg: "paint",
     icon: <Sparkles className="w-10 h-10 text-[#FF1AD8]" />,
     pricing: "$300+",
-    pricingDetails: [
-      "Paint Enhancement — starting at $300: Light machine polish for added gloss, minor haze removal, and better shine. Great for vehicles that just need a refresh.",
-      "1-Step Paint Correction — starting at $600: Includes wash, iron removal, clay bar, single-stage machine polish, and sealant. Removes light swirls, haze, and minor defects.",
-      "2-Step Paint Correction — starting at $1,100: Includes compound + polish for deeper swirl/scratch removal and stronger reflection. Recommended before ceramic coating.",
-      "Advanced Paint Correction — starting at $1,800: For heavily swirled, oxidized, black, or show-level vehicles. Final price depends on paint condition, size, and desired result.",
-    ],
-    features: ["Swirl Mark Removal", "Deep Gloss Restoration", "Enhances Resale Value"],
   },
 ];
 
@@ -327,66 +251,20 @@ const googleReviews = [
 
 function AddonsSection() {
   const { t } = useLanguage();
-  const [expandedAddon, setExpandedAddon] = useState(null);
 
   const interiorAddons = [
-    {
-      id: "pet-hair",
-      name: "Pet Hair Removal",
-      price: "$0 – $100",
-      description: "Pet hair removal is a specialized interior detailing service designed to extract stubborn pet hair from seats, carpets, floor mats, and other fabric surfaces inside the vehicle. Professional tools such as rubber brushes, specialized vacuums, air compressors, and detailing tools are used to loosen and remove hair that is deeply embedded in upholstery fibers."
-    },
-    {
-      id: "deep-shampooing",
-      name: "Deep Shampooing & Stain Removal",
-      price: "$120+",
-      description: "Deep shampooing and stain removal is an intensive cleaning process designed to eliminate deeply embedded dirt, odors, and stubborn stains from carpets and upholstery. High-quality cleaning solutions and powerful extraction equipment lift contaminants from the fibers, leaving surfaces sanitized, refreshed, and looking like new."
-    },
-    {
-      id: "plastic-uv",
-      name: "Interior Plastic UV Treatment",
-      price: "$60",
-      description: "Interior Plastic UV Treatment protects dashboards, door panels, and other plastic surfaces from sun damage. The treatment restores the original appearance while adding a protective layer that helps prevent fading, cracking, and discoloration."
-    }
+    { id: "pet-hair", price: "$0 – $100" },
+    { id: "deep-shampooing", price: "$120+" },
+    { id: "plastic-uv", price: "$60" },
   ];
 
   const exteriorAddons = [
-    {
-      id: "exterior-detailing",
-      name: "Exterior Detailing",
-      price: "Sedan: $150 | SUV: $200",
-      description: "Comprehensive exterior cleaning and protection to make your car turn heads everywhere you go. Includes detailed hand wash, exterior windows and mirrors cleaning, wheels and tires cleaned, polished, and dressed, door jambs wiped down, and spray sealant for 1-month protection."
-    },
-    {
-      id: "wash-clay-wax",
-      name: "Wash, Clay & Wax",
-      price: "Sedan: $250 | SUV: $300–$350",
-      description: "First, the vehicle receives a thorough hand wash to remove dirt, dust, and road grime. Next, a clay bar treatment is used to safely remove embedded contaminants such as tar, brake dust, and industrial fallout that normal washing cannot remove. Finally, a protective wax coating is applied to enhance shine, protect the paint, and help repel water and dirt."
-    },
-    {
-      id: "dress-exterior",
-      name: "Dress Exterior Plastic",
-      price: "$45",
-      description: "Exterior Plastic Dressing is a detailing service that restores and protects the plastic and rubber trim on the outside of your vehicle. A professional-grade dressing is applied to faded or dull plastic surfaces to bring back their deep, rich color while adding protection against sun damage and weather."
-    },
-    {
-      id: "clay-bar",
-      name: "Clay Bar Treatment",
-      price: "$55+",
-      description: "Clay Bar Treatment is a detailing process that removes embedded contaminants from your vehicle's paint that regular washing cannot eliminate. Using a specialized clay bar and lubricant, the surface is gently treated to lift off bonded particles such as brake dust, tar, tree sap, and industrial fallout. This process leaves the paint smooth to the touch, improves the vehicle's shine, and prepares the surface for wax, sealant, or ceramic coating."
-    },
-    {
-      id: "headlight",
-      name: "Headlight Restoration",
-      price: "$125",
-      description: "Headlight Restoration is a detailing service that removes oxidation, haze, and yellowing from vehicle headlights to restore clarity and brightness. Over time, sun exposure and environmental contaminants can make headlights cloudy, reducing visibility and the overall appearance of your vehicle."
-    },
-    {
-      id: "engine-bay",
-      name: "Engine Bay Cleaning",
-      price: "$60+",
-      description: "Engine Bay Cleaning is a detailing service that safely cleans the engine compartment to remove built-up dirt, grease, dust, and debris. Using specialized cleaners and careful techniques, the engine bay is degreased, gently washed, and dried to restore a clean and well-maintained appearance."
-    }
+    { id: "exterior-detailing", price: "Sedan: $150 | SUV: $200" },
+    { id: "wash-clay-wax", price: "Sedan: $250 | SUV: $300–$350" },
+    { id: "dress-exterior", price: "$45" },
+    { id: "clay-bar", price: "$55+" },
+    { id: "headlight", price: "$125" },
+    { id: "engine-bay", price: "$60+" },
   ];
 
   return (
@@ -396,7 +274,7 @@ function AddonsSection() {
         <div>
           <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4 font-display">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-              Interior Addons
+              {t("addons.interior")}
             </span>
           </h3>
           <p className="text-gray-400 text-sm mb-6">
@@ -414,7 +292,7 @@ function AddonsSection() {
         <div>
           <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4 font-display">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-              Exterior Addons
+              {t("addons.exterior")}
             </span>
           </h3>
           <p className="text-gray-400 text-sm mb-6">
@@ -433,7 +311,7 @@ function AddonsSection() {
 }
 
 export default function Home() {
-  const { t } = useLanguage();
+  const { t, list } = useLanguage();
   const [, setLocation] = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -1283,7 +1161,7 @@ export default function Home() {
                     {service.icon}
                   </div>
                   <h4 className="relative z-10 text-2xl font-black mb-2 text-white group-hover:text-[#00E5FF] transition-colors duration-300 flex items-center flex-wrap gap-2">
-                    {service.title}
+                    {t(`pkg.${service.pkg}.title`)}
                     {service.id === "interior-detailing" && (
                       <span className="badge-gold inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider">
                         <Star className="w-3 h-3" fill="currentColor" /> {t("services.mostBooked")}
@@ -1307,19 +1185,27 @@ export default function Home() {
                       </p>
                     )}
                     <p className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-                      {service.pricing}
+                      {/call/i.test(service.pricing) ? t("services.callQuote") : service.pricing}
                     </p>
                   </div>
-                  {service.pricingDetails && (
+                  {list(`pkg.${service.pkg}.price`).length > 0 && (
                     <div className="relative z-10 mb-4 text-sm text-gray-300 bg-white/[0.03] border border-white/10 p-3 rounded-lg">
-                      {service.pricingDetails.map((detail, i) => (
+                      {list(`pkg.${service.pkg}.price`).map((detail, i) => (
                         <p key={i} className="text-xs mb-1">{detail}</p>
                       ))}
                     </div>
                   )}
-                  <p className="relative z-10 text-gray-400 mb-6 flex-grow">{service.description}</p>
+                  <p className="relative z-10 text-gray-400 mb-6 flex-grow">
+                    {t(`pkg.${service.pkg}.desc`)}
+                    {service.pkg === "express" && (
+                      <>
+                        {" "}
+                        <span className="text-[#FFA500] font-bold">{t("pkg.express.warn")}</span>
+                      </>
+                    )}
+                  </p>
                   <ul className="relative z-10 space-y-2 mb-8">
-                    {service.features.map((feature, i) => (
+                    {list(`pkg.${service.pkg}.feat`).map((feature, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-gray-300 font-medium">
                         <CheckCircle2 className="w-4 h-4 text-[#00E5FF] mt-0.5 shrink-0" />
                         {feature}
@@ -2260,7 +2146,7 @@ export default function Home() {
                     key={service.id}
                     className="hover:text-white transition-colors cursor-pointer flex items-center gap-2"
                   >
-                    <ChevronRight className="w-3 h-3 text-[#FF1AD8]" /> {service.title}
+                    <ChevronRight className="w-3 h-3 text-[#FF1AD8]" /> {t(`pkg.${service.pkg}.title`)}
                   </li>
                 ))}
               </ul>

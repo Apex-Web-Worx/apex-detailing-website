@@ -373,12 +373,12 @@ function SiteFooter() {
     { id: "gift", href: giftCardsHref },
   ];
   const services = [
-    "Apex Full Detailing",
-    "Interior Detailing",
-    "Exterior Detailing",
-    "Ceramic Coating",
-    "Paint Correction",
-    "Headlight Restoration",
+    "pkg.full.title",
+    "pkg.interior.title",
+    "pkg.exterior.title",
+    "pkg.ceramic.title",
+    "pkg.paint.title",
+    "pkg.headlight.title",
   ];
 
   return (
@@ -456,7 +456,7 @@ function SiteFooter() {
               {services.map((service) => (
                 <li key={service} className="flex items-center gap-2">
                   <ChevronRight className="h-3 w-3 text-[#FF1AD8]" />
-                  {service}
+                  {t(service)}
                 </li>
               ))}
             </ul>

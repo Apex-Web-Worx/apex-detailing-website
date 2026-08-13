@@ -20,6 +20,7 @@ import {
 import VehiclePhotoPicker from "@/components/VehiclePhotoPicker";
 import LanguageToggle from "@/components/LanguageToggle";
 import { useLanguage } from "@/i18n/LanguageProvider";
+import { packageDescKey, packageTitleKey, BOOKING_SLUG_TO_PKG } from "@/i18n/packageMap";
 import {
   revokePickedPhotos,
   uploadBookingPhotos,
@@ -88,6 +89,14 @@ const EMPTY_FORM: Form = {
   notes: "",
   smsConsent: true,
 };
+
+function locServiceName(
+  t: (key: string) => string,
+  service: { slug: string; name: string },
+) {
+  const key = packageTitleKey(service.slug);
+  return key ? t(key) : service.name;
+}
 
 // Auto-format phone as user types: (XXX) XXX-XXXX
 function formatPhone(raw: string): string {
@@ -379,7 +388,7 @@ function ServiceStep({
                 )}
                 <div className="min-w-0 flex-1">
                   <h3 className="text-lg font-bold text-white leading-snug">
-                    {s.name}
+                    {packageTitleKey(s.slug) ? t(packageTitleKey(s.slug)!) : s.name}
                   </h3>
                   {badge && (
                     <span
@@ -424,7 +433,13 @@ function ServiceStep({
               </div>
 
               <p className="text-sm text-gray-300 mb-4 leading-relaxed flex-1">
-                {s.description}
+                {packageDescKey(s.slug) ? t(packageDescKey(s.slug)!) : s.description}
+                {BOOKING_SLUG_TO_PKG[s.slug] === "express" && (
+                  <>
+                    {" "}
+                    <span className="text-[#FFA500] font-bold">{t("pkg.express.warn")}</span>
+                  </>
+                )}
               </p>
 
               <div className="mt-auto flex items-center justify-end pt-1">
@@ -516,7 +531,7 @@ function DateTimeStep({
       </button>
       <h1 className="text-3xl sm:text-4xl font-black mb-2 font-display">{t("book.pickDate")}</h1>
       <p className="text-gray-400 mb-8">
-        {t("book.booking")} <span className="text-white font-semibold">{service.name}</span>
+        {t("book.booking")} <span className="text-white font-semibold">{locServiceName(t, service)}</span>
       </p>
 
       {/* Date picker */}
@@ -882,7 +897,7 @@ function ConfirmStep({
       </p>
 
       <div className="rounded-2xl border border-white/10 bg-white/[0.02] divide-y divide-white/5">
-        <SummaryRow label={t("book.step.service")} value={service.name} />
+        <SummaryRow label={t("book.step.service")} value={locServiceName(t, service)} />
         <SummaryRow
           label={t("book.when")}
           value={`${formatDateLong(date)} at ${formatTime12h(time)}`}
