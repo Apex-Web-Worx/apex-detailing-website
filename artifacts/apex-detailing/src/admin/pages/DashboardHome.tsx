@@ -6,13 +6,17 @@ import { useAdmin } from "../context";
 import {
   bookingShopDate,
   bookingShopTime,
+  bookingStoredDetailMs,
   computeKpis,
+  customerKey,
   deriveTasks,
   displayStatus,
+  formatElapsedLong,
   greetingForNow,
   isClientHold,
   scheduledAtToShopTime,
   bookingIso,
+  vehicleKey,
 } from "../utils";
 import AppointmentRow from "../components/AppointmentRow";
 import HeldAppointmentRow from "../components/HeldAppointmentRow";
@@ -46,6 +50,14 @@ export default function DashboardHome() {
   const tasks = deriveTasks(bookings);
   const shopEmpty = todayAppts.length === 0 && !todayBlocked;
   const readyForPickup = bookings.filter((b) => displayStatus(b) === "ready_for_pickup");
+  const recentDetailTimes = bookings
+    .filter((b) => bookingStoredDetailMs(b) != null)
+    .sort((a, b) => {
+      const aAt = a.readyAt ? new Date(a.readyAt).getTime() : +new Date(bookingIso(a));
+      const bAt = b.readyAt ? new Date(b.readyAt).getTime() : +new Date(bookingIso(b));
+      return bAt - aAt;
+    })
+    .slice(0, 8);
 
   return (
     <div className="max-w-7xl mx-auto space-y-4">
@@ -82,23 +94,71 @@ export default function DashboardHome() {
             {readyForPickup.length} vehicle{readyForPickup.length === 1 ? "" : "s"} ready
           </p>
           <div className="space-y-3">
-            {readyForPickup.map((b) => (
-              <div key={b.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div>
-                  <p className="text-sm font-medium text-white">{b.customerName}</p>
-                  <p className="text-xs text-[#9CA3AF]">{b.vehicle}</p>
-                  <p className="text-xs text-[#9CA3AF]">
-                    Pickup: {formatTime12h(scheduledAtToShopTime(b.pickupAt || bookingIso(b)))}
-                  </p>
+            {readyForPickup.map((b) => {
+              const took = bookingStoredDetailMs(b);
+              return (
+                <div key={b.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    <p className="text-sm font-medium text-white">{b.customerName}</p>
+                    <p className="text-xs text-[#9CA3AF]">{b.vehicle}</p>
+                    {took != null ? (
+                      <p className="text-xs font-semibold text-[#23B9FF]">
+                        Detailed {formatElapsedLong(took)}
+                      </p>
+                    ) : null}
+                    <p className="text-xs text-[#9CA3AF]">
+                      Pickup: {formatTime12h(scheduledAtToShopTime(b.pickupAt || bookingIso(b)))}
+                    </p>
+                  </div>
+                  <GhostButton type="button" className="shrink-0" onClick={() => setDetail(b)}>
+                    View appointment
+                  </GhostButton>
                 </div>
-                <GhostButton type="button" className="shrink-0" onClick={() => setDetail(b)}>
-                  View appointment
-                </GhostButton>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </AdminCard>
       )}
+
+      <AdminCard hover={false} className="p-4 md:p-5">
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <h3 className="text-base font-bold">Detailing times</h3>
+          <Link href="/admin/vehicles" className="text-xs font-semibold text-[#9CA3AF] hover:text-white py-1">
+            Vehicles
+          </Link>
+        </div>
+        {recentDetailTimes.length === 0 ? (
+          <p className="text-sm text-[#9CA3AF]">
+            Tap Start on a job, then Ready for Pickup. Time for that car is saved here.
+          </p>
+        ) : (
+          <div className="space-y-3">
+            {recentDetailTimes.map((b) => {
+              const took = bookingStoredDetailMs(b);
+              return (
+                <Link
+                  key={b.id}
+                  href={`/admin/vehicles/${encodeURIComponent(`${customerKey(b.email)}||${vehicleKey(b.vehicle)}`)}`}
+                  className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 pb-3 last:border-0 last:pb-0"
+                >
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-white truncate">{b.vehicle}</p>
+                    <p className="text-xs text-[#9CA3AF] truncate">
+                      {b.serviceName}
+                      {b.readyAt
+                        ? ` · ${new Date(b.readyAt).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "America/Chicago" })}`
+                        : ""}
+                    </p>
+                  </div>
+                  <p className="text-sm font-bold tabular-nums text-[#23B9FF] shrink-0">
+                    {took != null ? formatElapsedLong(took) : "—"}
+                  </p>
+                </Link>
+              );
+            })}
+          </div>
+        )}
+      </AdminCard>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:items-stretch">
         <div className="flex flex-col gap-4 min-h-0">
