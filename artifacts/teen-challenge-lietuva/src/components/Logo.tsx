@@ -9,33 +9,39 @@ type LogoProps = {
 };
 
 export function Logo({ compact = false, onDark = false, className }: LogoProps) {
+  const markSize = onDark
+    ? "h-14 w-14"
+    : compact
+      ? "h-10 w-10"
+      : "h-11 w-11";
+
   return (
     <Link
       href="/"
       className={cn(
-        "flex min-w-0 items-center gap-3 rounded-[10px] focus-visible:outline-offset-4",
+        "flex shrink-0 items-center gap-2.5 rounded-[10px] focus-visible:outline-offset-4",
         className,
       )}
     >
       <span
         className={cn(
           "flex shrink-0 items-center justify-center overflow-hidden bg-white",
-          onDark ? "rounded-[12px] p-1.5 shadow-sm" : "rounded-md",
+          markSize,
+          onDark ? "rounded-[10px] p-1 shadow-sm" : "rounded-md",
         )}
       >
         <img
           src={asset("images/logo-nav.png")}
           alt=""
-          className={cn(
-            "w-auto object-contain transition-all duration-300",
-            compact ? "h-10 md:h-11" : "h-12 md:h-[3.35rem]",
-          )}
+          width={56}
+          height={56}
+          className="h-full w-full object-contain object-center"
         />
       </span>
-      <span className="min-w-0">
+      <span className="hidden min-[380px]:block">
         <span
           className={cn(
-            "block truncate text-[0.7rem] font-extrabold uppercase leading-none tracking-[0.16em] md:text-xs",
+            "block whitespace-nowrap text-[0.68rem] font-extrabold uppercase leading-none tracking-[0.12em] sm:text-xs",
             onDark ? "text-gold" : "text-navy",
           )}
         >
@@ -43,7 +49,7 @@ export function Logo({ compact = false, onDark = false, className }: LogoProps) 
         </span>
         <span
           className={cn(
-            "mt-1 block truncate text-base font-extrabold leading-none md:text-lg",
+            "mt-1 block text-base font-extrabold leading-none",
             onDark ? "text-white" : "text-navy",
           )}
         >

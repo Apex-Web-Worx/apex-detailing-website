@@ -48,8 +48,8 @@ export function Navbar() {
     >
       <div
         className={cn(
-          "mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 transition-all duration-300 sm:px-6 lg:px-8",
-          scrolled ? "h-[4.25rem]" : "h-[5.25rem]",
+          "mx-auto flex max-w-7xl items-center justify-between gap-4 overflow-hidden px-4 transition-all duration-300 sm:px-6 lg:px-8",
+          scrolled ? "h-16" : "h-[4.5rem]",
         )}
       >
         <Logo compact={scrolled} />
