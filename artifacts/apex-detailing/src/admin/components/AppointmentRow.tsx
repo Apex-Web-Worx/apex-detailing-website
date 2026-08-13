@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Link } from "wouter";
 import type { Booking } from "@workspace/api-client-react";
 import { MoreHorizontal, Phone, Check, Play } from "lucide-react";
@@ -45,11 +45,25 @@ export default function AppointmentRow({
   const canStart = canStartJob(booking);
   const canComplete = canMarkCompleted(booking);
 
+  const primaryAction = canStart ? (
+    <StatusAction onClick={() => void startBooking(booking.id)}>
+      <Play className="w-4 h-4" /> Start detailing
+    </StatusAction>
+  ) : ready ? (
+    <StatusAction onClick={() => openReadyModal(booking)}>
+      <Check className="w-4 h-4" /> Ready for pickup
+    </StatusAction>
+  ) : canComplete ? (
+    <StatusAction onClick={() => void completeBooking(booking.id)}>
+      <Check className="w-4 h-4" /> Mark completed
+    </StatusAction>
+  ) : null;
+
   return (
     <div className="rounded-2xl border border-white/10 bg-[#111111] px-3 py-3 md:px-4 hover:bg-[#161616] transition duration-200">
-      <div className="flex items-start gap-3">
+      <div className="flex items-start md:items-center gap-3">
         <button type="button" onClick={onView} className="flex-1 min-w-0 text-left touch-manipulation">
-          <div className="flex items-start gap-3">
+          <div className="flex items-start md:items-center gap-3">
             {photoIds[0] ? (
               <div className="w-12 h-12 rounded-xl overflow-hidden border border-white/10 shrink-0">
                 <AdminBookingPhoto
@@ -60,34 +74,51 @@ export default function AppointmentRow({
                 />
               </div>
             ) : null}
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2">
+            <div className="min-w-0 flex-1 md:grid md:grid-cols-[7.5rem_minmax(12rem,1.4fr)_minmax(8rem,0.8fr)] md:items-center md:gap-4">
+              <div className="flex items-center gap-2 min-w-0">
                 <span className="text-sm font-bold text-white shrink-0">
                   {formatTime12h(bookingShopTime(booking))}
                 </span>
                 <StatusBadge status={status} />
               </div>
-              {(status === "in_progress" || status === "ready_for_pickup" || status === "completed") &&
-              (booking.inProgressAt || booking.detailDurationMinutes != null) ? (
-                <div className="mt-1">
-                  <DetailTimer booking={booking} size="sm" />
+              <div className="min-w-0">
+                {(status === "in_progress" || status === "ready_for_pickup" || status === "completed") &&
+                (booking.inProgressAt || booking.detailDurationMinutes != null) ? (
+                  <div className="mt-1 md:mt-0 md:mb-1">
+                    <DetailTimer booking={booking} size="sm" />
+                  </div>
+                ) : null}
+                <p className="mt-0.5 md:mt-0 font-semibold text-white leading-snug truncate">
+                  {booking.serviceName}
+                </p>
+                <p className="mt-0.5 text-sm text-[#9CA3AF] truncate">
+                  {booking.customerName} · {booking.vehicle}
+                </p>
+                <p className="mt-0.5 text-xs text-[#9CA3AF] md:hidden">
+                  {bookingShopDate(booking)} · {formatDuration(booking.serviceDurationMinutes)}
+                </p>
+                <div className="md:hidden">
+                  <CustomerPhotoBadge count={photoCount} />
+                  {preview && (
+                    <p className="mt-1 text-xs text-[#9CA3AF]/80 truncate">{preview}</p>
+                  )}
                 </div>
-              ) : null}
-              <p className="mt-0.5 font-semibold text-white leading-snug">{booking.serviceName}</p>
-              <p className="mt-0.5 text-sm text-[#9CA3AF] truncate">
-                {booking.customerName} · {booking.vehicle}
-              </p>
-              <p className="mt-0.5 text-xs text-[#9CA3AF]">
-                {bookingShopDate(booking)} · {formatDuration(booking.serviceDurationMinutes)}
-              </p>
-              <CustomerPhotoBadge count={photoCount} />
-              {preview && (
-                <p className="mt-1 text-xs text-[#9CA3AF]/80 truncate">{preview}</p>
-              )}
+              </div>
+              <div className="hidden md:block min-w-0">
+                <p className="text-sm text-white truncate">{bookingShopDate(booking)}</p>
+                <p className="mt-0.5 text-xs text-[#9CA3AF] truncate">
+                  {formatDuration(booking.serviceDurationMinutes)}
+                  {photoCount ? ` · ${photoCount} photo${photoCount === 1 ? "" : "s"}` : ""}
+                </p>
+                {preview ? (
+                  <p className="mt-1 text-xs text-[#9CA3AF]/80 truncate">{preview}</p>
+                ) : null}
+              </div>
             </div>
           </div>
         </button>
-        <div className="flex flex-col items-center gap-1.5 shrink-0">
+        {primaryAction ? <div className="hidden md:block shrink-0">{primaryAction}</div> : null}
+        <div className="flex flex-col md:flex-row items-center gap-1.5 shrink-0">
           <a
             href={`tel:${booking.phone}`}
             className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-[#23B9FF] hover:bg-white/5 touch-manipulation"
@@ -189,33 +220,25 @@ export default function AppointmentRow({
           </div>
         </div>
       </div>
-      {canStart ? (
-        <button
-          type="button"
-          onClick={() => void startBooking(booking.id)}
-          className="mt-3 w-full min-h-12 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold flex items-center justify-center gap-2 hover:bg-[#ff4adc] touch-manipulation"
-        >
-          <Play className="w-4 h-4" /> Start detailing
-        </button>
-      ) : null}
-      {ready ? (
-        <button
-          type="button"
-          onClick={() => openReadyModal(booking)}
-          className="mt-3 w-full min-h-12 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold flex items-center justify-center gap-2 hover:bg-[#ff4adc] touch-manipulation"
-        >
-          <Check className="w-4 h-4" /> Ready for pickup
-        </button>
-      ) : null}
-      {canComplete ? (
-        <button
-          type="button"
-          onClick={() => void completeBooking(booking.id)}
-          className="mt-3 w-full min-h-12 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold flex items-center justify-center gap-2 hover:bg-[#ff4adc] touch-manipulation"
-        >
-          <Check className="w-4 h-4" /> Mark completed
-        </button>
-      ) : null}
+      {primaryAction ? <div className="md:hidden">{primaryAction}</div> : null}
     </div>
+  );
+}
+
+function StatusAction({
+  onClick,
+  children,
+}: {
+  onClick: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="mt-3 w-full min-h-12 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold inline-flex items-center justify-center gap-2 hover:bg-[#ff4adc] touch-manipulation md:mt-0 md:w-auto md:min-w-[10.5rem] md:h-11 md:min-h-11 md:px-4"
+    >
+      {children}
+    </button>
   );
 }

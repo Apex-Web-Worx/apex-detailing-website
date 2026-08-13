@@ -106,7 +106,7 @@ export default function AppointmentsPage() {
             Block
           </GhostButton>
         </div>
-        <div className="grid grid-cols-2 rounded-xl border border-white/10 overflow-hidden">
+        <div className="grid grid-cols-2 rounded-xl border border-white/10 overflow-hidden md:inline-grid md:w-72">
           <button
             type="button"
             onClick={() => setView("list")}
@@ -146,6 +146,7 @@ export default function AppointmentsPage() {
           value={filterService}
           onChange={setFilterService}
           aria-label="Filter by service"
+          className="lg:w-52"
           options={[
             { value: "", label: "All services" },
             ...serviceOptions.map((s) => ({ value: s, label: s })),
@@ -155,6 +156,7 @@ export default function AppointmentsPage() {
           value={filterStatus}
           onChange={setFilterStatus}
           aria-label="Filter by status"
+          className="lg:w-52"
           options={[
             { value: "", label: "All statuses" },
             { value: "confirmed", label: "Confirmed" },
