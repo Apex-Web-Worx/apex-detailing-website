@@ -18,6 +18,7 @@ export default function MonthCalendar({
   onSelectDate,
   onBlockDate,
   compact = false,
+  className,
 }: {
   month: string;
   onMonthChange: (next: string) => void;
@@ -28,6 +29,7 @@ export default function MonthCalendar({
   onSelectDate?: (date: string) => void;
   onBlockDate?: () => void;
   compact?: boolean;
+  className?: string;
 }) {
   const today = todayDateString();
   const [year, monthNum] = month.split("-").map(Number);
@@ -43,7 +45,7 @@ export default function MonthCalendar({
   const blockedByDate = new Map(blockedDates.map((b) => [b.date, b]));
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-[#111111] p-3 md:p-4">
+    <div className={cn("rounded-2xl border border-white/10 bg-[#111111] p-3 md:p-4 h-full", className)}>
       <div className="flex items-center gap-2 mb-3">
         <h3 className="font-bold text-white mr-auto">{monthLabel(month)}</h3>
         <GhostButton type="button" className="h-8 px-3 text-xs" onClick={() => onMonthChange(today.slice(0, 7))}>

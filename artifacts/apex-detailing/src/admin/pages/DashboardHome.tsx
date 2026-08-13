@@ -12,7 +12,7 @@ import {
 } from "../utils";
 import AppointmentRow from "../components/AppointmentRow";
 import MonthCalendar from "../components/MonthCalendar";
-import { AdminCard, EmptyState, GhostButton } from "../components/ui";
+import { AdminCard, GhostButton } from "../components/ui";
 import { useOwnerCalendarEvents } from "../useOwnerCalendarEvents";
 import { useState } from "react";
 
@@ -39,9 +39,10 @@ export default function DashboardHome() {
     .filter((b) => b.status !== "cancelled" && bookingShopDate(b) === today)
     .sort((a, b) => bookingShopTime(a).localeCompare(bookingShopTime(b)));
   const tasks = deriveTasks(bookings);
+  const shopEmpty = todayAppts.length === 0 && !todayBlocked;
 
   return (
-    <div className="max-w-7xl mx-auto space-y-5">
+    <div className="max-w-7xl mx-auto space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <h2 className="text-xl md:text-2xl font-bold">
           {greetingForNow()}, {ADMIN_FIRST}
@@ -62,63 +63,83 @@ export default function DashboardHome() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-2 md:gap-3">
+      <div className="grid grid-cols-3 gap-3 md:gap-4">
         <Kpi href="/admin/appointments" label="Today" value={String(kpis.todayCount)} />
         <Kpi href="/admin/appointments" label="This week" value={String(kpis.weekCount)} />
         <Kpi href="/admin/appointments" label="Upcoming" value={String(kpis.upcomingQuotedCount)} />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="space-y-3">
-          <div className="flex items-center justify-between gap-2">
-            <h3 className="text-base font-bold">Today's Schedule</h3>
-            <Link href="/admin/calendar" className="lg:hidden text-xs font-semibold text-[#9CA3AF] py-2">
-              Calendar →
-            </Link>
-          </div>
-          {isLoading ? (
-            <p className="text-sm text-[#9CA3AF]">Loading…</p>
-          ) : todayAppts.length === 0 && !todayBlocked ? (
-            <EmptyState title="No detailing appointments today" body="Shop bookings and blocked days show here. Personal calendar items are on Calendar." />
-          ) : (
-            <>
-              {todayBlocked && (
-                <div className="rounded-xl border border-white/10 bg-[#111111] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <div>
-                    <p className="text-sm text-white">
-                      Blocked{todayBlocked.reason ? ` · ${todayBlocked.reason}` : ""}
-                    </p>
-                    {(todayBlocked.name || todayBlocked.phone) && (
-                      <p className="text-xs text-[#9CA3AF]">
-                        {[todayBlocked.name, todayBlocked.surname].filter(Boolean).join(" ")}
-                        {todayBlocked.phone ? ` ${todayBlocked.phone}` : ""}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:items-stretch">
+        <div className="flex flex-col gap-4 min-h-0">
+          <AdminCard hover={false} className="p-4 md:p-5 flex-1 flex flex-col min-h-[280px]">
+            <div className="flex items-center justify-between gap-2 mb-3">
+              <h3 className="text-base font-bold">Today's Schedule</h3>
+              <Link href="/admin/calendar" className="text-xs font-semibold text-[#9CA3AF] hover:text-white py-1">
+                View calendar
+              </Link>
+            </div>
+            {isLoading ? (
+              <p className="text-sm text-[#9CA3AF]">Loading…</p>
+            ) : shopEmpty ? (
+              <p className="text-sm text-[#9CA3AF] m-auto py-8 text-center">
+                No detailing appointments today.
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {todayBlocked && (
+                  <div className="rounded-xl border border-white/10 bg-[#0B0B0B] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                      <p className="text-sm text-white">
+                        Blocked{todayBlocked.reason ? ` · ${todayBlocked.reason}` : ""}
                       </p>
-                    )}
+                      {(todayBlocked.name || todayBlocked.phone) && (
+                        <p className="text-xs text-[#9CA3AF]">
+                          {[todayBlocked.name, todayBlocked.surname].filter(Boolean).join(" ")}
+                          {todayBlocked.phone ? ` ${todayBlocked.phone}` : ""}
+                        </p>
+                      )}
+                    </div>
+                    <GhostButton
+                      type="button"
+                      className="shrink-0"
+                      onClick={() => openEditBlockedDate(todayBlocked)}
+                    >
+                      Edit
+                    </GhostButton>
                   </div>
-                  <GhostButton
-                    type="button"
-                    className="shrink-0"
-                    onClick={() => openEditBlockedDate(todayBlocked)}
-                  >
-                    Edit
-                  </GhostButton>
-                </div>
-              )}
-              {todayAppts.map((b) => (
-                <AppointmentRow
-                  key={b.id}
-                  booking={b}
-                  onView={() => setDetail(b)}
-                  onEdit={() => setEditing(b)}
-                  onCancel={() => cancelBooking(b.id)}
-                />
-              ))}
-            </>
+                )}
+                {todayAppts.map((b) => (
+                  <AppointmentRow
+                    key={b.id}
+                    booking={b}
+                    onView={() => setDetail(b)}
+                    onEdit={() => setEditing(b)}
+                    onCancel={() => cancelBooking(b.id)}
+                  />
+                ))}
+              </div>
+            )}
+          </AdminCard>
+
+          {tasks.length > 0 && (
+            <AdminCard hover={false} className="p-4 md:p-5">
+              <h3 className="font-bold mb-3">Follow-ups</h3>
+              <div className="space-y-3">
+                {tasks.map((t) => (
+                  <Link key={t.id} href={t.href} className="block">
+                    <p className="text-sm font-medium text-white">{t.title}</p>
+                    <p className="text-xs text-[#9CA3AF]">{t.detail}</p>
+                  </Link>
+                ))}
+              </div>
+            </AdminCard>
           )}
         </div>
-        <div className="hidden lg:block">
+
+        <div className="hidden lg:block min-h-[280px]">
           <MonthCalendar
             compact
+            className="h-full"
             month={calMonth}
             onMonthChange={setCalMonth}
             bookings={bookings}
@@ -129,20 +150,6 @@ export default function DashboardHome() {
           />
         </div>
       </div>
-
-      {tasks.length > 0 && (
-        <AdminCard hover={false} className="p-5 max-w-xl">
-          <h3 className="font-bold mb-3">Follow-ups</h3>
-          <div className="space-y-3">
-            {tasks.map((t) => (
-              <Link key={t.id} href={t.href} className="block">
-                <p className="text-sm font-medium text-white">{t.title}</p>
-                <p className="text-xs text-[#9CA3AF]">{t.detail}</p>
-              </Link>
-            ))}
-          </div>
-        </AdminCard>
-      )}
     </div>
   );
 }
@@ -157,12 +164,13 @@ function Kpi({
   value: string;
 }) {
   return (
-    <Link href={href} className="touch-manipulation">
-      <AdminCard className="p-3 md:p-4">
-        <p className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.12em] text-[#9CA3AF] leading-tight">
+    <Link href={href} className="block h-full touch-manipulation">
+      <AdminCard hover={false} className="h-full p-4 md:p-5">
+        <p className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.12em] text-[#9CA3AF]">
           {label}
         </p>
-        <p className="text-2xl md:text-3xl font-bold mt-1.5 md:mt-2">{value}</p>
+        <p className="text-2xl md:text-3xl font-bold mt-2">{value}</p>
+        <p className="text-xs text-[#9CA3AF] mt-1">Appointments</p>
       </AdminCard>
     </Link>
   );
