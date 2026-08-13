@@ -2,7 +2,7 @@ import { useState, type ReactNode } from "react";
 import { Link } from "wouter";
 import type { Booking } from "@workspace/api-client-react";
 import { MoreHorizontal, Phone, Check, Play } from "lucide-react";
-import { formatDuration, formatTime12h } from "@/lib/format";
+import { formatDateShort, formatDuration, formatTime12h } from "@/lib/format";
 import {
   displayStatus,
   notesPreview,
@@ -44,6 +44,11 @@ export default function AppointmentRow({
   const ready = canMarkReady(booking);
   const canStart = canStartJob(booking);
   const canComplete = canMarkCompleted(booking);
+  const date = bookingShopDate(booking);
+  const time = formatTime12h(bookingShopTime(booking));
+  const showTimer =
+    (status === "in_progress" || status === "ready_for_pickup" || status === "completed") &&
+    (booking.inProgressAt || booking.detailDurationMinutes != null);
 
   const primaryAction = canStart ? (
     <StatusAction onClick={() => void startBooking(booking.id)}>
@@ -59,168 +64,184 @@ export default function AppointmentRow({
     </StatusAction>
   ) : null;
 
+  const icons = (
+    <div className="flex flex-col md:flex-row items-center gap-1.5 shrink-0">
+      <a
+        href={`tel:${booking.phone}`}
+        className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-[#23B9FF] hover:bg-white/5 touch-manipulation"
+        aria-label={`Call ${booking.customerName}`}
+      >
+        <Phone className="w-4 h-4" />
+      </a>
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => setMenu((v) => !v)}
+          className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center hover:bg-white/5 touch-manipulation"
+          aria-label="More actions"
+        >
+          <MoreHorizontal className="w-4 h-4" />
+        </button>
+        {menu && (
+          <div className="absolute right-0 bottom-full mb-1 w-44 rounded-xl border border-white/10 bg-[#0B0B0B] py-1 z-20 shadow-xl">
+            <button
+              type="button"
+              className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
+              onClick={() => {
+                setMenu(false);
+                onView();
+              }}
+            >
+              View
+            </button>
+            {canStart ? (
+              <button
+                type="button"
+                className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
+                onClick={() => {
+                  setMenu(false);
+                  void startBooking(booking.id);
+                }}
+              >
+                Start detailing
+              </button>
+            ) : null}
+            {ready ? (
+              <button
+                type="button"
+                className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
+                onClick={() => {
+                  setMenu(false);
+                  openReadyModal(booking);
+                }}
+              >
+                Ready for pickup
+              </button>
+            ) : null}
+            {canComplete ? (
+              <button
+                type="button"
+                className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
+                onClick={() => {
+                  setMenu(false);
+                  void completeBooking(booking.id);
+                }}
+              >
+                Mark completed
+              </button>
+            ) : null}
+            {canAct && onEdit && (
+              <button
+                type="button"
+                className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
+                onClick={() => {
+                  setMenu(false);
+                  onEdit();
+                }}
+              >
+                Edit
+              </button>
+            )}
+            {booking.manageToken && (
+              <Link
+                href={`/manage/${booking.id}?token=${booking.manageToken}`}
+                className="block px-3 py-3 text-sm hover:bg-white/5 min-h-11"
+              >
+                Customer link
+              </Link>
+            )}
+            {(canAct || status === "in_progress" || status === "ready_for_pickup") && onCancel && (
+              <button
+                type="button"
+                className="w-full text-left px-3 py-3 text-sm text-red-400 hover:bg-red-500/10 min-h-11"
+                onClick={() => {
+                  setMenu(false);
+                  onCancel();
+                }}
+              >
+                Cancel
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  const photo = photoIds[0] ? (
+    <div className="w-12 h-12 rounded-xl overflow-hidden border border-white/10 shrink-0">
+      <AdminBookingPhoto
+        token={token}
+        bookingId={booking.id}
+        photoId={photoIds[0]}
+        className="w-full h-full"
+      />
+    </div>
+  ) : null;
+
   return (
     <div className="rounded-2xl border border-white/10 bg-[#111111] px-3 py-3 md:px-4 hover:bg-[#161616] transition duration-200">
-      <div className="flex items-start md:items-center gap-3">
-        <button type="button" onClick={onView} className="flex-1 min-w-0 text-left touch-manipulation">
-          <div className="flex items-start md:items-center gap-3">
-            {photoIds[0] ? (
-              <div className="w-12 h-12 rounded-xl overflow-hidden border border-white/10 shrink-0">
-                <AdminBookingPhoto
-                  token={token}
-                  bookingId={booking.id}
-                  photoId={photoIds[0]}
-                  className="w-full h-full"
-                />
-              </div>
-            ) : null}
-            <div className="min-w-0 flex-1 md:grid md:grid-cols-[minmax(10rem,auto)_minmax(0,1fr)_minmax(7.5rem,auto)] md:items-center md:gap-5">
-              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 min-w-0">
-                <span className="text-sm font-bold text-white shrink-0">
-                  {formatTime12h(bookingShopTime(booking))}
-                </span>
-                <StatusBadge status={status} />
-              </div>
-              <div className="min-w-0">
-                {(status === "in_progress" || status === "ready_for_pickup" || status === "completed") &&
-                (booking.inProgressAt || booking.detailDurationMinutes != null) ? (
-                  <div className="mt-1 md:mt-0 md:mb-1">
+      <div className="md:hidden">
+        <div className="flex items-start gap-3">
+          <button type="button" onClick={onView} className="flex-1 min-w-0 text-left touch-manipulation">
+            <div className="flex items-start gap-3">
+              {photo}
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-bold text-white shrink-0">{time}</span>
+                  <StatusBadge status={status} />
+                </div>
+                {showTimer ? (
+                  <div className="mt-1">
                     <DetailTimer booking={booking} size="sm" />
                   </div>
                 ) : null}
-                <p className="mt-0.5 md:mt-0 font-semibold text-white leading-snug truncate">
-                  {booking.serviceName}
-                </p>
+                <p className="mt-0.5 font-semibold text-white leading-snug">{booking.serviceName}</p>
                 <p className="mt-0.5 text-sm text-[#9CA3AF] truncate">
                   {booking.customerName} · {booking.vehicle}
                 </p>
-                <p className="mt-0.5 text-xs text-[#9CA3AF] md:hidden">
-                  {bookingShopDate(booking)} · {formatDuration(booking.serviceDurationMinutes)}
+                <p className="mt-0.5 text-xs text-[#9CA3AF]">
+                  {date} · {formatDuration(booking.serviceDurationMinutes)}
                 </p>
-                <div className="md:hidden">
-                  <CustomerPhotoBadge count={photoCount} />
-                  {preview && (
-                    <p className="mt-1 text-xs text-[#9CA3AF]/80 truncate">{preview}</p>
-                  )}
-                </div>
-              </div>
-              <div className="hidden md:block min-w-0">
-                <p className="text-sm text-white truncate">{bookingShopDate(booking)}</p>
-                <p className="mt-0.5 text-xs text-[#9CA3AF] truncate">
-                  {formatDuration(booking.serviceDurationMinutes)}
-                  {photoCount ? ` · ${photoCount} photo${photoCount === 1 ? "" : "s"}` : ""}
-                </p>
-                {preview ? (
-                  <p className="mt-1 text-xs text-[#9CA3AF]/80 truncate">{preview}</p>
-                ) : null}
+                <CustomerPhotoBadge count={photoCount} />
+                {preview ? <p className="mt-1 text-xs text-[#9CA3AF]/80 truncate">{preview}</p> : null}
               </div>
             </div>
+          </button>
+          {icons}
+        </div>
+        {primaryAction}
+      </div>
+
+      <div className="hidden md:flex md:items-center md:gap-4">
+        <button type="button" onClick={onView} className="flex items-center gap-4 min-w-0 flex-1 text-left">
+          {photo}
+          <div className="shrink-0">
+            <p className="text-sm font-bold text-white tabular-nums leading-none">{time}</p>
+            <div className="mt-1.5">
+              <StatusBadge status={status} />
+            </div>
+          </div>
+          <div className="min-w-0 flex-1">
+            {showTimer ? (
+              <div className="mb-1">
+                <DetailTimer booking={booking} size="sm" />
+              </div>
+            ) : null}
+            <p className="font-semibold text-white leading-snug truncate">{booking.serviceName}</p>
+            <p className="mt-0.5 text-sm text-[#9CA3AF] truncate">
+              {booking.customerName} · {booking.vehicle}
+            </p>
+            <p className="mt-0.5 text-xs text-[#9CA3AF] truncate">
+              {formatDateShort(date)} · {formatDuration(booking.serviceDurationMinutes)}
+              {photoCount ? ` · ${photoCount} photo${photoCount === 1 ? "" : "s"}` : ""}
+              {preview ? ` · ${preview}` : ""}
+            </p>
           </div>
         </button>
-        {primaryAction ? <div className="hidden md:block shrink-0 min-w-[10.5rem]">{primaryAction}</div> : null}
-        <div className="flex flex-col md:flex-row items-center gap-1.5 shrink-0">
-          <a
-            href={`tel:${booking.phone}`}
-            className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-[#23B9FF] hover:bg-white/5 touch-manipulation"
-            aria-label={`Call ${booking.customerName}`}
-          >
-            <Phone className="w-4 h-4" />
-          </a>
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setMenu((v) => !v)}
-              className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center hover:bg-white/5 touch-manipulation"
-              aria-label="More actions"
-            >
-              <MoreHorizontal className="w-4 h-4" />
-            </button>
-            {menu && (
-              <div className="absolute right-0 bottom-full mb-1 w-44 rounded-xl border border-white/10 bg-[#0B0B0B] py-1 z-20 shadow-xl">
-                <button
-                  type="button"
-                  className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
-                  onClick={() => {
-                    setMenu(false);
-                    onView();
-                  }}
-                >
-                  View
-                </button>
-                {canStart ? (
-                  <button
-                    type="button"
-                    className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
-                    onClick={() => {
-                      setMenu(false);
-                      void startBooking(booking.id);
-                    }}
-                  >
-                    Start detailing
-                  </button>
-                ) : null}
-                {ready ? (
-                  <button
-                    type="button"
-                    className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
-                    onClick={() => {
-                      setMenu(false);
-                      openReadyModal(booking);
-                    }}
-                  >
-                    Ready for pickup
-                  </button>
-                ) : null}
-                {canComplete ? (
-                  <button
-                    type="button"
-                    className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
-                    onClick={() => {
-                      setMenu(false);
-                      void completeBooking(booking.id);
-                    }}
-                  >
-                    Mark completed
-                  </button>
-                ) : null}
-                {canAct && onEdit && (
-                  <button
-                    type="button"
-                    className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
-                    onClick={() => {
-                      setMenu(false);
-                      onEdit();
-                    }}
-                  >
-                    Edit
-                  </button>
-                )}
-                {booking.manageToken && (
-                  <Link
-                    href={`/manage/${booking.id}?token=${booking.manageToken}`}
-                    className="block px-3 py-3 text-sm hover:bg-white/5 min-h-11"
-                  >
-                    Customer link
-                  </Link>
-                )}
-                {(canAct || status === "in_progress" || status === "ready_for_pickup") && onCancel && (
-                  <button
-                    type="button"
-                    className="w-full text-left px-3 py-3 text-sm text-red-400 hover:bg-red-500/10 min-h-11"
-                    onClick={() => {
-                      setMenu(false);
-                      onCancel();
-                    }}
-                  >
-                    Cancel
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
+        {primaryAction ? <div className="shrink-0">{primaryAction}</div> : null}
+        {icons}
       </div>
-      {primaryAction ? <div className="md:hidden">{primaryAction}</div> : null}
     </div>
   );
 }
@@ -236,7 +257,7 @@ function StatusAction({
     <button
       type="button"
       onClick={onClick}
-      className="mt-3 w-full min-h-12 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold inline-flex items-center justify-center gap-2 hover:bg-[#ff4adc] touch-manipulation md:mt-0 md:w-auto md:min-w-[10.5rem] md:h-11 md:min-h-11 md:px-4"
+      className="mt-3 w-full min-h-12 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold inline-flex items-center justify-center gap-2 hover:bg-[#ff4adc] touch-manipulation md:mt-0 md:w-auto md:h-11 md:min-h-11 md:px-4 md:whitespace-nowrap"
     >
       {children}
     </button>

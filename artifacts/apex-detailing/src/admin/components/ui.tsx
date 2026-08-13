@@ -118,7 +118,7 @@ export function StatusBadge({ status }: { status: DisplayStatus }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-bold tracking-[0.12em]",
+        "inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold tracking-[0.08em] whitespace-nowrap",
         map[status],
       )}
     >
