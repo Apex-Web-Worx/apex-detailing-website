@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { CalendarOff, Play, Plus, RefreshCw } from "lucide-react";
+import { CalendarOff, Plus, RefreshCw } from "lucide-react";
 import { todayDateString, formatTime12h } from "@/lib/format";
 import { ADMIN_FIRST } from "../constants";
 import { useAdmin } from "../context";
@@ -7,16 +7,12 @@ import {
   bookingShopDate,
   bookingShopTime,
   bookingStoredDetailMs,
-  canStartHold,
-  canStartJob,
   computeKpis,
   customerKey,
   deriveTasks,
   displayStatus,
   formatElapsedLong,
   greetingForNow,
-  heldCustomerName,
-  holdServiceLabel,
   isClientHold,
   linkedHoldBooking,
   scheduledAtToShopTime,
@@ -41,8 +37,6 @@ export default function DashboardHome() {
     cancelBooking,
     openBlockDate,
     openEditBlockedDate,
-    startBooking,
-    startHold,
     token,
   } = useAdmin();
   const [, setLocation] = useLocation();
@@ -63,9 +57,6 @@ export default function DashboardHome() {
   const showHoldRow =
     Boolean(todayBlocked && isClientHold(todayBlocked) && !linkedTodayHold);
   const shopEmpty = todayAppts.length === 0 && !todayBlocked;
-  const startableToday = todayAppts.filter(canStartJob);
-  const startableHold =
-    todayBlocked && canStartHold(todayBlocked) && !linkedTodayHold ? todayBlocked : null;
   const readyForPickup = bookings.filter((b) => displayStatus(b) === "ready_for_pickup");
   const recentDetailTimes = bookings
     .filter((b) => bookingStoredDetailMs(b) != null)
@@ -144,46 +135,11 @@ export default function DashboardHome() {
             Vehicles
           </Link>
         </div>
-        {(startableHold || startableToday.length > 0) && (
-          <div className="space-y-2 mb-4">
-            {startableHold ? (
-              <div className="rounded-xl border border-white/10 bg-[#0B0B0B] p-3">
-                <p className="text-sm font-semibold text-white">{holdServiceLabel(startableHold)}</p>
-                <p className="text-xs text-[#9CA3AF] mt-0.5">
-                  {heldCustomerName(startableHold)}
-                  {startableHold.vehicle ? ` · ${startableHold.vehicle}` : ""}
-                </p>
-                <button
-                  type="button"
-                  onClick={() => void startHold(startableHold.id)}
-                  className="mt-3 w-full min-h-12 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold inline-flex items-center justify-center gap-2 hover:bg-[#ff4adc] touch-manipulation"
-                >
-                  <Play className="w-4 h-4" /> Start detailing
-                </button>
-              </div>
-            ) : null}
-            {startableToday.map((b) => (
-              <div key={b.id} className="rounded-xl border border-white/10 bg-[#0B0B0B] p-3">
-                <p className="text-sm font-semibold text-white">{b.serviceName}</p>
-                <p className="text-xs text-[#9CA3AF] mt-0.5">
-                  {b.customerName} · {b.vehicle}
-                </p>
-                <button
-                  type="button"
-                  onClick={() => void startBooking(b.id)}
-                  className="mt-3 w-full min-h-12 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold inline-flex items-center justify-center gap-2 hover:bg-[#ff4adc] touch-manipulation"
-                >
-                  <Play className="w-4 h-4" /> Start detailing
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-        {recentDetailTimes.length === 0 && !startableHold && startableToday.length === 0 ? (
+        {recentDetailTimes.length === 0 ? (
           <p className="text-sm text-[#9CA3AF]">
             Tap Start on a job, then Ready for Pickup. Time for that car is saved here.
           </p>
-        ) : recentDetailTimes.length > 0 ? (
+        ) : (
           <div className="space-y-3">
             {recentDetailTimes.map((b) => {
               const took = bookingStoredDetailMs(b);
@@ -209,7 +165,7 @@ export default function DashboardHome() {
               );
             })}
           </div>
-        ) : null}
+        )}
       </AdminCard>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:items-stretch">
