@@ -24,12 +24,12 @@ export function Hero() {
     <section className="relative isolate min-h-[560px] overflow-hidden md:min-h-[680px] md:h-[72vh] md:max-h-[750px]">
       <img
         src={asset("images/hero.jpg")}
-        alt="Žmogus kalnų viršūnėje auštant – vilties ir naujos pradžios iliustracija"
-        className="absolute inset-0 size-full object-cover object-[center_30%]"
+        alt="Žmogus, stovintis ant kalno ir žvelgiantis į saulėtekį – vilties ir naujos pradžios iliustracija"
+        className="absolute inset-0 size-full object-cover object-[center_45%]"
         fetchPriority="high"
       />
       <div
-        className="absolute inset-0 bg-gradient-to-r from-navy-dark/88 via-navy/72 to-navy-dark/35"
+        className="absolute inset-0 bg-gradient-to-r from-navy-dark/90 via-navy/70 to-navy-dark/25"
         aria-hidden="true"
       />
       <div
