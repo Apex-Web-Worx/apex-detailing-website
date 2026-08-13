@@ -135,7 +135,7 @@ export default function HeldAppointmentRow({
         {startButton && !stackedAction ? <div className="shrink-0">{startButton}</div> : null}
         <div className="ml-auto shrink-0">{icons}</div>
       </div>
-      {startButton && stackedAction ? startButton : null}
+      {startButton && stackedAction ? <div className="hidden md:block">{startButton}</div> : null}
     </div>
   );
 }
