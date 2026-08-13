@@ -16,6 +16,7 @@ import AppointmentRow from "../components/AppointmentRow";
 import HeldAppointmentRow from "../components/HeldAppointmentRow";
 import MonthCalendar from "../components/MonthCalendar";
 import { AdminSelect, EmptyState, fieldClass, GhostButton } from "../components/ui";
+import AdminDatePicker from "../components/AdminDatePicker";
 import { useOwnerCalendarEvents } from "../useOwnerCalendarEvents";
 
 type ListItem =
@@ -132,13 +133,15 @@ export default function AppointmentsPage() {
           className={`${fieldClass} sm:max-w-sm`}
           aria-label="Search appointments"
         />
-        <input
-          type="date"
-          value={filterDate}
-          onChange={(e) => setFilterDate(e.target.value)}
-          className={fieldClass}
-          aria-label="Filter by date"
-        />
+        <div className="sm:max-w-xs w-full">
+          <AdminDatePicker
+            value={filterDate}
+            onChange={setFilterDate}
+            bookings={bookings}
+            blockedDates={blockedDates}
+            compact
+          />
+        </div>
         <AdminSelect
           value={filterService}
           onChange={setFilterService}

@@ -8,6 +8,7 @@ import { Loader2, X } from "lucide-react";
 import { todayDateString } from "@/lib/format";
 import { useAdmin } from "../context";
 import { fieldClass, GhostButton, PrimaryButton } from "./ui";
+import AdminDatePicker from "./AdminDatePicker";
 
 function formatPhone(raw: string) {
   const digits = raw.replace(/\D/g, "").slice(0, 10);
@@ -50,7 +51,7 @@ async function adminUpdateBlockedDate(
 }
 
 export default function BlockDateModal() {
-  const { token, blockOpen, blockPrefillDate, editingBlocked, closeBlockDate } =
+  const { token, blockOpen, blockPrefillDate, editingBlocked, closeBlockDate, bookings, blockedDates } =
     useAdmin();
   const queryClient = useQueryClient();
   const [date, setDate] = useState("");
@@ -213,19 +214,21 @@ export default function BlockDateModal() {
           </button>
         </div>
         <div className="space-y-3">
-          <label className="block">
+          <div>
             <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
               Date
             </span>
-            <input
-              type="date"
+            <AdminDatePicker
               value={date}
-              onChange={(e) => setDate(e.target.value)}
-              min={dateMin}
+              onChange={setDate}
+              minDate={dateMin}
+              bookings={bookings}
+              blockedDates={blockedDates}
+              allowDate={editingBlocked?.date}
+              disableBlocked
               required
-              className={fieldClass}
             />
-          </label>
+          </div>
           <label className="block">
             <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
               Reason

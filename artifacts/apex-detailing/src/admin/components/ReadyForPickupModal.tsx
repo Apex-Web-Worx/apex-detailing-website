@@ -5,6 +5,7 @@ import { formatDateTimeLong } from "@/lib/format";
 import { useAdmin } from "../context";
 import { bookingIso, shopNowPlusMinutes } from "../utils";
 import { fieldClass, GhostButton, PrimaryButton } from "./ui";
+import AdminDatePicker from "./AdminDatePicker";
 
 type Preview = {
   sms: string;
@@ -22,7 +23,7 @@ export default function ReadyForPickupModal({
   resend?: boolean;
   onClose: () => void;
 }) {
-  const { token, refetch, setDetail } = useAdmin();
+  const { token, refetch, setDetail, bookings, blockedDates } = useAdmin();
   const defaults = shopNowPlusMinutes(30);
   const [pickupDate, setPickupDate] = useState(defaults.date);
   const [pickupTime, setPickupTime] = useState(defaults.time);
@@ -132,19 +133,20 @@ export default function ReadyForPickupModal({
           <p className="text-xs text-[#9CA3AF] mt-1">{formatDateTimeLong(bookingIso(booking))}</p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 mb-4">
-          <label className="block">
+        <div className="mb-4 space-y-3">
+          <div>
             <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
               Pickup date
             </span>
-            <input
-              type="date"
+            <AdminDatePicker
               value={pickupDate}
-              onChange={(e) => setPickupDate(e.target.value)}
+              onChange={setPickupDate}
+              minDate={defaults.date}
+              bookings={bookings}
+              blockedDates={blockedDates}
               required
-              className={fieldClass}
             />
-          </label>
+          </div>
           <label className="block">
             <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
               Pickup time
