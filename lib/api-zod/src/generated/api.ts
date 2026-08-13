@@ -305,6 +305,10 @@ export const AdminListBlockedDatesResponseItem = zod.object({
     .string()
     .nullish()
     .describe("Optional phone number for who the day is held for"),
+  vehicle: zod
+    .string()
+    .nullish()
+    .describe("Optional vehicle for who the day is held for"),
   createdAt: zod.date(),
 });
 export const AdminListBlockedDatesResponse = zod.array(
@@ -327,6 +331,7 @@ export const AdminAddBlockedDateBody = zod.object({
     .string()
     .optional()
     .describe("Optional phone number (not required)"),
+  vehicle: zod.string().optional().describe("Optional vehicle (not required)"),
 });
 
 /**

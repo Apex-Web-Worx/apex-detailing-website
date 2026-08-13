@@ -10,7 +10,8 @@ export async function ensureBlockedDatesContactColumns(): Promise<void> {
     ALTER TABLE blocked_dates
       ADD COLUMN IF NOT EXISTS name text,
       ADD COLUMN IF NOT EXISTS surname text,
-      ADD COLUMN IF NOT EXISTS phone text
+      ADD COLUMN IF NOT EXISTS phone text,
+      ADD COLUMN IF NOT EXISTS vehicle text
   `);
 }
 

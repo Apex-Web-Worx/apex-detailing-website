@@ -9,8 +9,10 @@ import {
   computeKpis,
   deriveTasks,
   greetingForNow,
+  isClientHold,
 } from "../utils";
 import AppointmentRow from "../components/AppointmentRow";
+import HeldAppointmentRow from "../components/HeldAppointmentRow";
 import MonthCalendar from "../components/MonthCalendar";
 import { AdminCard, GhostButton } from "../components/ui";
 import { useOwnerCalendarEvents } from "../useOwnerCalendarEvents";
@@ -33,7 +35,7 @@ export default function DashboardHome() {
   const today = todayDateString();
   const [calMonth, setCalMonth] = useState(today.slice(0, 7));
   const { data: personalEvents = [] } = useOwnerCalendarEvents(token, calMonth);
-  const kpis = computeKpis(bookings);
+  const kpis = computeKpis(bookings, blockedDates);
   const todayBlocked = blockedDates.find((b) => b.date === today);
   const todayAppts = bookings
     .filter((b) => b.status !== "cancelled" && bookingShopDate(b) === today)
@@ -86,18 +88,15 @@ export default function DashboardHome() {
               </p>
             ) : (
               <div className="space-y-2">
-                {todayBlocked && (
+                {todayBlocked && isClientHold(todayBlocked) && (
+                  <HeldAppointmentRow hold={todayBlocked} />
+                )}
+                {todayBlocked && !isClientHold(todayBlocked) && (
                   <div className="rounded-xl border border-white/10 bg-[#0B0B0B] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div>
                       <p className="text-sm text-white">
                         Blocked{todayBlocked.reason ? ` · ${todayBlocked.reason}` : ""}
                       </p>
-                      {(todayBlocked.name || todayBlocked.phone) && (
-                        <p className="text-xs text-[#9CA3AF]">
-                          {[todayBlocked.name, todayBlocked.surname].filter(Boolean).join(" ")}
-                          {todayBlocked.phone ? ` ${todayBlocked.phone}` : ""}
-                        </p>
-                      )}
                     </div>
                     <GhostButton
                       type="button"

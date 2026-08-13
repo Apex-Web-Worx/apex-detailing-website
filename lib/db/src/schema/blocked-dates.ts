@@ -10,6 +10,8 @@ export const blockedDatesTable = pgTable("blocked_dates", {
   name: text("name"),
   surname: text("surname"),
   phone: text("phone"),
+  /** Optional vehicle for a client hold (single string, same as bookings). */
+  vehicle: text("vehicle"),
   googleEventId: text("google_event_id"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()

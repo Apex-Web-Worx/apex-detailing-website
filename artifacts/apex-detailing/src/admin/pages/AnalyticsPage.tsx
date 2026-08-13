@@ -1,16 +1,19 @@
 import { useAdmin } from "../context";
 import { formatPrice, todayDateString } from "@/lib/format";
-import { computeKpis, displayStatus, formatSignedPercent, monthLabel, monthlySeries, percentChange } from "../utils";
+import { computeKpis, displayStatus, formatSignedPercent, isClientHold, monthLabel, monthlySeries, percentChange } from "../utils";
 import { AdminCard, Sparkline } from "../components/ui";
 
 export default function AnalyticsPage() {
-  const { bookings } = useAdmin();
-  const kpis = computeKpis(bookings);
+  const { bookings, blockedDates } = useAdmin();
+  const kpis = computeKpis(bookings, blockedDates);
   const series = monthlySeries(bookings, 6);
   const thisMonth = todayDateString().slice(0, 7);
   const prev = series.length >= 2 ? series[series.length - 2].cents : 0;
   const change = percentChange(kpis.monthCollectedCents, prev);
   const completed = bookings.filter((b) => displayStatus(b) === "completed").length;
+  const holdCount = blockedDates.filter(isClientHold).length;
+  const appointmentCount =
+    bookings.filter((b) => b.status !== "cancelled").length + holdCount;
   const avg =
     completed === 0
       ? 0
@@ -21,7 +24,7 @@ export default function AnalyticsPage() {
       <h2 className="text-2xl font-bold">Analytics</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-3">
         <Stat label="Revenue" value={formatPrice(kpis.monthCollectedCents)} hint={monthLabel(thisMonth)} />
-        <Stat label="Appointments" value={String(bookings.filter((b) => b.status !== "cancelled").length)} hint="All non-cancelled" />
+        <Stat label="Appointments" value={String(appointmentCount)} hint="Bookings and held days" />
         <Stat label="Avg booking value" value={formatPrice(Math.round(avg))} hint="Completed only" />
         <Stat label="Completed services" value={String(completed)} hint="Past confirmed" />
         <Stat label="Upcoming quoted" value={String(kpis.upcomingQuotedCount)} hint="Confirmed future" />

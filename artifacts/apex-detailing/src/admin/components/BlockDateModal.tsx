@@ -28,6 +28,7 @@ async function adminUpdateBlockedDate(
     name: string;
     surname: string;
     phone: string;
+    vehicle: string;
   },
   token: string,
 ) {
@@ -57,6 +58,7 @@ export default function BlockDateModal() {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [phone, setPhone] = useState("");
+  const [vehicle, setVehicle] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successNote, setSuccessNote] = useState<string | null>(null);
@@ -71,12 +73,14 @@ export default function BlockDateModal() {
       setName(editingBlocked.name ?? "");
       setSurname(editingBlocked.surname ?? "");
       setPhone(formatPhone(editingBlocked.phone ?? ""));
+      setVehicle(editingBlocked.vehicle ?? "");
     } else {
       setDate(blockPrefillDate);
       setReason("");
       setName("");
       setSurname("");
       setPhone("");
+      setVehicle("");
     }
     setError(null);
     setSuccessNote(null);
@@ -118,6 +122,7 @@ export default function BlockDateModal() {
       const nameTrim = name.trim();
       const surnameTrim = surname.trim();
       const phoneTrim = phone.trim();
+      const vehicleTrim = vehicle.trim();
 
       if (editingBlocked) {
         await adminUpdateBlockedDate(
@@ -128,6 +133,7 @@ export default function BlockDateModal() {
             name: nameTrim,
             surname: surnameTrim,
             phone: phoneTrim,
+            vehicle: vehicleTrim,
           },
           token,
         );
@@ -146,11 +152,13 @@ export default function BlockDateModal() {
           name?: string;
           surname?: string;
           phone?: string;
+          vehicle?: string;
         } = { date };
         if (reasonTrim) payload.reason = reasonTrim;
         if (nameTrim) payload.name = nameTrim;
         if (surnameTrim) payload.surname = surnameTrim;
         if (phoneTrim) payload.phone = phoneTrim;
+        if (vehicleTrim) payload.vehicle = vehicleTrim;
 
         await adminAddBlockedDate(payload, {
           headers: { "x-admin-token": token },
@@ -237,8 +245,8 @@ export default function BlockDateModal() {
             </p>
             <p className="text-xs text-[#9CA3AF]">
               {isEditing
-                ? "If you add or change the phone number, or move the date, we send a confirmation text. Name-only changes do not resend."
-                : "If you add a phone number, we send them an appointment confirmation text."}
+                ? "Name, phone, or vehicle makes this day count as an appointment. Changing the phone or moving the date sends a confirmation text. Name-only changes do not resend."
+                : "Add a name, phone, or vehicle to hold this day as an appointment. A phone number also sends a confirmation text."}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <input
@@ -266,6 +274,14 @@ export default function BlockDateModal() {
                 className={fieldClass}
               />
             </div>
+            <input
+              type="text"
+              value={vehicle}
+              onChange={(e) => setVehicle(e.target.value)}
+              placeholder="Vehicle, e.g. 2022 BMW M4"
+              maxLength={120}
+              className={fieldClass}
+            />
           </div>
         </div>
         {error && (

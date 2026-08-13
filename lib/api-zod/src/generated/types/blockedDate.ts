@@ -18,4 +18,6 @@ export interface BlockedDate {
   /** Optional phone number for who the day is held for */
   phone?: string | null;
   createdAt: Date;
+  /** Optional vehicle for who the day is held for */
+  vehicle?: string | null;
 }

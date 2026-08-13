@@ -15,7 +15,7 @@ import BrandLogo from "@/components/BrandLogo";
 import { cn } from "@/lib/utils";
 import { ADMIN_FIRST, ADMIN_NAME, ADMIN_ROLE, NAV_ITEMS, PAGE_TITLES } from "../constants";
 import { useAdmin } from "../context";
-import { matchesSearch } from "../utils";
+import { matchesHold, matchesSearch, heldCustomerName, holdServiceLabel, isClientHold } from "../utils";
 import { fieldClass } from "./ui";
 
 const TAB_ITEMS = [
@@ -26,7 +26,7 @@ const TAB_ITEMS = [
 ] as const;
 
 export default function AdminShell({ children }: { children: ReactNode }) {
-  const { section, bookings, searchQuery, setSearchQuery, onLogout, setDetail } = useAdmin();
+  const { section, bookings, blockedDates, searchQuery, setSearchQuery, onLogout, setDetail, openEditBlockedDate } = useAdmin();
   const [, setLocation] = useLocation();
   const [navOpen, setNavOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -52,19 +52,35 @@ export default function AdminShell({ children }: { children: ReactNode }) {
 
   const results = useMemo(() => {
     if (!searchQuery.trim()) return [];
-    return bookings.filter((b) => matchesSearch(b, searchQuery)).slice(0, 8);
-  }, [bookings, searchQuery]);
+    const bookingHits = bookings.filter((b) => matchesSearch(b, searchQuery)).map((b) => ({
+      key: `booking-${b.id}`,
+      title: b.customerName,
+      subtitle: `${b.serviceName} · ${b.vehicle}`,
+      onPick: () => {
+        setDetail(b);
+        setSearchOpen(false);
+        setSearchQuery("");
+        setLocation(`/admin/appointments/${b.id}`);
+      },
+    }));
+    const holdHits = blockedDates
+      .filter((row) => isClientHold(row) && matchesHold(row, searchQuery))
+      .map((row) => ({
+        key: `hold-${row.id}`,
+        title: heldCustomerName(row),
+        subtitle: [holdServiceLabel(row), row.vehicle].filter(Boolean).join(" · "),
+        onPick: () => {
+          openEditBlockedDate(row);
+          setSearchOpen(false);
+          setSearchQuery("");
+          setLocation("/admin/calendar");
+        },
+      }));
+    return [...holdHits, ...bookingHits].slice(0, 8);
+  }, [bookings, blockedDates, searchQuery, openEditBlockedDate, setDetail, setSearchQuery, setLocation]);
 
   const title = PAGE_TITLES[section] ?? "Dashboard";
   const moreActive = !TAB_ITEMS.some((t) => t.section === section);
-
-  const openResult = (id: number, booking = bookings.find((b) => b.id === id)) => {
-    if (!booking) return;
-    setDetail(booking);
-    setSearchOpen(false);
-    setSearchQuery("");
-    setLocation(`/admin/appointments/${booking.id}`);
-  };
 
   return (
     <div className="apex-admin min-h-dvh">
@@ -173,7 +189,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
                   className={cn(fieldClass, "pl-9 h-11 py-0")}
                 />
                 {searchOpen && searchQuery.trim() && (
-                  <SearchResults results={results} onPick={openResult} />
+                  <SearchResults results={results} />
                 )}
               </div>
             </div>
@@ -210,16 +226,16 @@ export default function AdminShell({ children }: { children: ReactNode }) {
                   {results.length === 0 ? (
                     <p className="px-4 py-3 text-sm text-[#9CA3AF]">No matches</p>
                   ) : (
-                    results.map((b) => (
+                    results.map((hit) => (
                       <button
-                        key={b.id}
+                        key={hit.key}
                         type="button"
                         className="w-full text-left px-4 py-3.5 text-sm hover:bg-white/5 border-b border-white/5 last:border-0 min-h-12"
-                        onClick={() => openResult(b.id, b)}
+                        onClick={hit.onPick}
                       >
-                        <span className="text-white font-medium">{b.customerName}</span>
+                        <span className="text-white font-medium">{hit.title}</span>
                         <span className="block text-[#9CA3AF] text-xs mt-0.5">
-                          {b.serviceName} · {b.vehicle}
+                          {hit.subtitle}
                         </span>
                       </button>
                     ))
@@ -273,25 +289,23 @@ export default function AdminShell({ children }: { children: ReactNode }) {
 
 function SearchResults({
   results,
-  onPick,
 }: {
-  results: Array<{ id: number; customerName: string; serviceName: string }>;
-  onPick: (id: number) => void;
+  results: Array<{ key: string; title: string; subtitle: string; onPick: () => void }>;
 }) {
   return (
     <div className="absolute top-full mt-2 w-full rounded-xl border border-white/10 bg-[#111111] shadow-xl overflow-hidden z-20">
       {results.length === 0 ? (
         <p className="px-4 py-3 text-sm text-[#9CA3AF]">No matches</p>
       ) : (
-        results.map((b) => (
+        results.map((hit) => (
           <button
-            key={b.id}
+            key={hit.key}
             type="button"
             className="w-full text-left px-4 py-3 text-sm hover:bg-white/5 border-b border-white/5 last:border-0"
-            onClick={() => onPick(b.id)}
+            onClick={hit.onPick}
           >
-            <span className="text-white font-medium">{b.customerName}</span>
-            <span className="text-[#9CA3AF]"> · {b.serviceName} · #{String(b.id).padStart(5, "0")}</span>
+            <span className="text-white font-medium">{hit.title}</span>
+            <span className="text-[#9CA3AF]"> · {hit.subtitle}</span>
           </button>
         ))
       )}

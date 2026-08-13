@@ -3,6 +3,7 @@ import { AdminPwaInstallHint } from "@/components/PwaManifestSwitch";
 import { ADMIN_NAME, ADMIN_ROLE } from "../constants";
 import { useAdmin } from "../context";
 import { formatDateLong, todayDateString } from "@/lib/format";
+import { heldCustomerName, isClientHold } from "../utils";
 import { GhostButton, PrimaryButton, AdminCard } from "../components/ui";
 import { adminUnblockDate, getAdminListBlockedDatesQueryKey } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -49,11 +50,16 @@ export default function SettingsPage() {
               <div key={b.id} className="flex items-center justify-between gap-3 text-sm">
                 <span>
                   {formatDateLong(b.date)}
-                  {b.reason ? ` · ${b.reason}` : ""}
-                  {(b.name || b.phone) ? (
+                  {isClientHold(b)
+                    ? ` · ${b.reason?.trim() || "Held appointment"}`
+                    : b.reason
+                      ? ` · ${b.reason}`
+                      : ""}
+                  {(isClientHold(b) || b.name || b.phone) ? (
                     <span className="block text-xs text-[#9CA3AF]">
-                      {[b.name, b.surname].filter(Boolean).join(" ")}
-                      {b.phone ? ` ${b.phone}` : ""}
+                      {[heldCustomerName(b) !== "Held day" ? heldCustomerName(b) : null, b.vehicle, b.phone]
+                        .filter(Boolean)
+                        .join(" · ")}
                     </span>
                   ) : null}
                 </span>
