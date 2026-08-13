@@ -14,6 +14,7 @@ import {
   formatElapsedLong,
   greetingForNow,
   isClientHold,
+  isDuplicateHoldBooking,
   linkedHoldBooking,
   scheduledAtToShopTime,
   bookingIso,
@@ -79,6 +80,7 @@ export default function DashboardHome() {
   const todayAppts = bookings
     .filter((b) => {
       if (bookingShopDate(b) !== today) return false;
+      if (isDuplicateHoldBooking(b, bookings)) return false;
       const status = displayStatus(b);
       return status !== "cancelled" && status !== "completed";
     })

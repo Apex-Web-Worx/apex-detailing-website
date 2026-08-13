@@ -58,27 +58,67 @@ export function holdBookingEmail(holdId: number): string {
   return `hold-${holdId}@apexdetailing.net`;
 }
 
+export function isHoldBookingEmail(email: string | null | undefined): boolean {
+  return /^hold-\d+@apexdetailing\.net$/i.test((email ?? "").trim());
+}
+
+function phoneDigits(phone: string | null | undefined): string {
+  return (phone ?? "").replace(/\D/g, "");
+}
+
+function namesMatch(a: string, b: string): boolean {
+  const left = a.trim().toLowerCase();
+  const right = b.trim().toLowerCase();
+  return Boolean(left) && left === right;
+}
+
 export function bookingAllowsCustomerSms(booking: {
   smsConsent?: boolean | null;
   email: string;
   phone: string;
 }): boolean {
   if (booking.smsConsent) return true;
-  const hold = /^hold-\d+@apexdetailing\.net$/i.test(booking.email.trim());
-  const digits = booking.phone.replace(/\D/g, "").length;
-  return hold && digits >= 7;
+  const hold = isHoldBookingEmail(booking.email);
+  return hold && phoneDigits(booking.phone).length >= 7;
 }
 
 export function linkedHoldBooking(bookings: Booking[], hold: BlockedDate): Booking | null {
   const email = holdBookingEmail(hold.id).toLowerCase();
-  const matches = bookings.filter((booking) => booking.email.toLowerCase() === email);
+  const byEmail = bookings.filter((booking) => booking.email.toLowerCase() === email);
+  const live = byEmail.find(
+    (booking) => booking.status !== "cancelled" && booking.status !== "completed",
+  );
+  if (live) return live;
+  if (byEmail[0]) return byEmail[0];
+
+  const holdPhone = phoneDigits(hold.phone);
+  const holdName = heldCustomerName(hold);
+  const sameDay = bookings.filter((booking) => bookingShopDate(booking) === hold.date);
+  const byPhone =
+    holdPhone.length >= 7
+      ? sameDay.find((booking) => phoneDigits(booking.phone) === holdPhone)
+      : undefined;
+  if (byPhone) return byPhone;
   return (
-    matches.find(
-      (booking) => booking.status !== "cancelled" && booking.status !== "completed",
-    ) ??
-    matches[0] ??
+    sameDay.find((booking) => namesMatch(booking.customerName, holdName) && holdName !== "Held day") ??
     null
   );
+}
+
+/** Hide leftover hold-email jobs when the real appointment for that client/day already exists. */
+export function isDuplicateHoldBooking(booking: Booking, bookings: Booking[]): boolean {
+  if (!isHoldBookingEmail(booking.email)) return false;
+  const date = bookingShopDate(booking);
+  const phone = phoneDigits(booking.phone);
+  const name = booking.customerName.trim().toLowerCase();
+  return bookings.some((other) => {
+    if (other.id === booking.id) return false;
+    if (isHoldBookingEmail(other.email)) return false;
+    if (bookingShopDate(other) !== date) return false;
+    if (other.status === "cancelled") return false;
+    if (phone.length >= 7 && phoneDigits(other.phone) === phone) return true;
+    return Boolean(name) && other.customerName.trim().toLowerCase() === name;
+  });
 }
 
 export function canStartHold(row: BlockedDate): boolean {

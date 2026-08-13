@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { formatDateLong, todayDateString } from "@/lib/format";
 import { useAdmin } from "../context";
-import { bookingShopDate, bookingShopTime, displayStatus, isClientHold, linkedHoldBooking } from "../utils";
+import { bookingShopDate, bookingShopTime, displayStatus, isClientHold, isDuplicateHoldBooking, linkedHoldBooking } from "../utils";
 import AppointmentRow from "../components/AppointmentRow";
 import HeldAppointmentRow from "../components/HeldAppointmentRow";
 import MonthCalendar from "../components/MonthCalendar";
@@ -20,7 +20,7 @@ export default function CalendarPage() {
   const queryClient = useQueryClient();
   const { data: personalEvents = [] } = useOwnerCalendarEvents(token, month);
   const dayBookings = bookings
-    .filter((b) => bookingShopDate(b) === selected && displayStatus(b) !== "cancelled")
+    .filter((b) => bookingShopDate(b) === selected && displayStatus(b) !== "cancelled" && !isDuplicateHoldBooking(b, bookings))
     .sort((a, b) => bookingShopTime(a).localeCompare(bookingShopTime(b)));
   const dayPersonal = personalEvents.filter((e) => e.dates.includes(selected));
   const blocked = blockedDates.find((b) => b.date === selected);

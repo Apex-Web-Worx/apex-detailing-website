@@ -210,13 +210,16 @@ export function AdminProvider({
           throw new Error(text || `Could not complete (${res.status})`);
         }
         const json = await res.json();
-        refetch();
+        queryClient.setQueryData<Booking[]>(getAdminListBookingsQueryKey(), (current) =>
+          (current ?? []).map((row) => (row.id === id ? { ...row, ...json } : row)),
+        );
         setDetail((current) => (current?.id === id ? json : current));
+        void refetch();
       } catch (e) {
         alert(`Could not complete: ${e instanceof Error ? e.message : "unknown"}`);
       }
     },
-    [headers, refetch],
+    [headers, queryClient, refetch],
   );
 
   const sendReviewRequest = useCallback(

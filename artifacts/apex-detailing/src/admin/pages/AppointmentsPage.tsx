@@ -10,6 +10,7 @@ import {
   holdServiceLabel,
   isClientHold,
   linkedHoldBooking,
+  isDuplicateHoldBooking,
   matchesHold,
   matchesSearch,
   type DisplayStatus,
@@ -29,7 +30,7 @@ export default function AppointmentsPage() {
   const { bookings, blockedDates, isLoading, isRefreshing, refetch, setDetail, setEditing, cancelBooking, openBlockDate, searchQuery, setSearchQuery, token } = useAdmin();
   const [filterDate, setFilterDate] = useState("");
   const [filterService, setFilterService] = useState("");
-  const [filterStatus, setFilterStatus] = useState<DisplayStatus | "">("confirmed");
+  const [filterStatus, setFilterStatus] = useState<DisplayStatus | "">("");
   const [view, setView] = useState<"list" | "calendar">("list");
   const [calMonth, setCalMonth] = useState(todayDateString().slice(0, 7));
   const [selectedDate, setSelectedDate] = useState(todayDateString());
@@ -52,8 +53,11 @@ export default function AppointmentsPage() {
       const date = bookingShopDate(booking);
       if (filterDate && date !== filterDate) continue;
       const status = displayStatus(booking);
+      if (isDuplicateHoldBooking(booking, bookings)) continue;
       if (status === "completed" && filterStatus !== "completed") continue;
+      if (status === "cancelled" && filterStatus !== "cancelled") continue;
       if (filterStatus && status !== filterStatus) continue;
+      if (!filterStatus && !filterDate && view === "list" && status === "confirmed" && date < today) continue;
       if (filterStatus === "confirmed" && !filterDate && view === "list" && date < today) continue;
       list.push({
         kind: "booking",
@@ -71,7 +75,7 @@ export default function AppointmentsPage() {
       const status = holdDisplayStatus(hold);
       if (status === "completed" && filterStatus !== "completed") continue;
       if (filterStatus && status !== filterStatus) continue;
-      if (filterStatus === "confirmed" && !filterDate && view === "list" && hold.date < today) continue;
+      if (!filterDate && view === "list" && hold.date < today && filterStatus !== "completed") continue;
       list.push({
         kind: "hold",
         key: `hold-${hold.id}`,
@@ -172,22 +176,22 @@ export default function AppointmentsPage() {
           aria-label="Filter by status"
           className="lg:w-52"
           options={[
+            { value: "", label: "Upcoming" },
             { value: "confirmed", label: "Confirmed" },
             { value: "in_progress", label: "In progress" },
             { value: "ready_for_pickup", label: "Ready for pickup" },
-            { value: "", label: "Active (hide completed)" },
             { value: "completed", label: "Completed" },
             { value: "cancelled", label: "Cancelled" },
           ]}
         />
-        {(filterDate || filterService || filterStatus !== "confirmed") && (
+        {(filterDate || filterService || filterStatus) && (
           <GhostButton
             type="button"
             className="h-10"
             onClick={() => {
               setFilterDate("");
               setFilterService("");
-              setFilterStatus("confirmed");
+              setFilterStatus("");
             }}
           >
             Clear

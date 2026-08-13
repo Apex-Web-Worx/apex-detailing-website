@@ -6,7 +6,7 @@ import {
   servicesTable,
 } from "@workspace/db";
 import { and, asc, eq } from "drizzle-orm";
-import { buildScheduledAt } from "./availability";
+import { buildScheduledAt, shopLocalDateString } from "./availability";
 import { OCCUPYING_STATUS_LIST } from "./occupying-statuses";
 import { markInProgress } from "./pickup-workflow";
 import { hasSmsPhone, holdBookingEmail } from "./customer-sms";
@@ -100,11 +100,22 @@ export async function ensureHoldBooking(hold: HoldRow): Promise<BookingRow | nul
   // A cancelled/completed hold booking must not be recreated as a confirmed job.
   if (rows.length > 0) return null;
 
+  const phone = (hold.phone ?? "").trim();
+  const phoneDigits = phone.replace(/\D/g, "");
+  if (phoneDigits.length >= 7) {
+    const sameDay = await db.select().from(bookingsTable);
+    const already = sameDay.find((booking) => {
+      if (booking.status === "cancelled") return false;
+      if (shopLocalDateString(booking.scheduledAt) !== hold.date) return false;
+      return booking.phone.replace(/\D/g, "") === phoneDigits;
+    });
+    if (already) return already.status === "cancelled" ? null : already;
+  }
+
   const service = await pickService(hold.reason ?? "");
   if (!service) return null;
   const customerName =
     [hold.name, hold.surname].filter(Boolean).join(" ").trim() || "Customer";
-  const phone = (hold.phone ?? "").trim() || "—";
   const vehicle = (hold.vehicle ?? "").trim() || "Vehicle";
   const reason = (hold.reason ?? "").trim();
   const times = ["08:00", "08:15", "08:30", "09:00", "12:00"];
@@ -121,13 +132,13 @@ export async function ensureHoldBooking(hold: HoldRow): Promise<BookingRow | nul
           serviceDurationMinutes: service.durationMinutes,
           customerName,
           email: holdBookingEmail(hold.id),
-          phone,
+          phone: phone || "—",
           vehicle,
           notes: "",
           scheduledAt,
           status: "confirmed",
           manageToken: randomBytes(24).toString("base64url"),
-          smsConsent: hasSmsPhone(phone),
+          smsConsent: hasSmsPhone(phone || "—"),
         })
         .returning();
       if (created) return created;
