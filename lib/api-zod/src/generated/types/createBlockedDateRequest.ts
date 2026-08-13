@@ -16,4 +16,6 @@ export interface CreateBlockedDateRequest {
   surname?: string;
   /** Optional phone number (not required) */
   phone?: string;
+  /** Optional vehicle (not required) */
+  vehicle?: string;
 }

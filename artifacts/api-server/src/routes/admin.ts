@@ -480,12 +480,13 @@ router.get("/admin/blocked-dates", requireAdmin, async (_req, res) => {
 });
 
 router.post("/admin/blocked-dates", requireAdmin, async (req, res) => {
-  const { date, reason, name, surname, phone } = (req.body ?? {}) as {
+  const { date, reason, name, surname, phone, vehicle } = (req.body ?? {}) as {
     date?: unknown;
     reason?: unknown;
     name?: unknown;
     surname?: unknown;
     phone?: unknown;
+    vehicle?: unknown;
   };
   if (typeof date !== "string" || !parseDateString(date)) {
     res.status(400).json({ message: "Invalid date. Use YYYY-MM-DD." });
@@ -503,6 +504,8 @@ router.post("/admin/blocked-dates", requireAdmin, async (req, res) => {
     typeof surname === "string" ? surname.trim().slice(0, 100) : "";
   const phoneStr =
     typeof phone === "string" ? phone.trim().slice(0, 40) : "";
+  const vehicleStr =
+    typeof vehicle === "string" ? vehicle.trim().slice(0, 120) : "";
   try {
     const [created] = await db
       .insert(blockedDatesTable)
@@ -512,6 +515,7 @@ router.post("/admin/blocked-dates", requireAdmin, async (req, res) => {
         name: nameStr || null,
         surname: surnameStr || null,
         phone: phoneStr || null,
+        vehicle: vehicleStr || null,
       })
       .returning();
     // Fire-and-forget calendar sync so admin response stays fast even if
@@ -521,6 +525,7 @@ router.post("/admin/blocked-dates", requireAdmin, async (req, res) => {
       name: nameStr || null,
       surname: surnameStr || null,
       phone: phoneStr || null,
+      vehicle: vehicleStr || null,
     }).then(async (eventId) => {
       if (eventId) {
         await db
@@ -587,6 +592,7 @@ router.patch("/admin/blocked-dates/:date", requireAdmin, async (req, res) => {
     name?: unknown;
     surname?: unknown;
     phone?: unknown;
+    vehicle?: unknown;
   };
 
   let nextDate = existing.date;
@@ -624,6 +630,12 @@ router.patch("/admin/blocked-dates/:date", requireAdmin, async (req, res) => {
         ? body.phone.trim().slice(0, 40) || null
         : existing.phone
       : existing.phone;
+  const nextVehicle =
+    body.vehicle !== undefined
+      ? typeof body.vehicle === "string"
+        ? body.vehicle.trim().slice(0, 120) || null
+        : existing.vehicle
+      : existing.vehicle;
 
   if (nextDate !== existing.date) {
     const [conflict] = await db
@@ -645,6 +657,7 @@ router.patch("/admin/blocked-dates/:date", requireAdmin, async (req, res) => {
         name: nextName,
         surname: nextSurname,
         phone: nextPhone,
+        vehicle: nextVehicle,
       })
       .where(eq(blockedDatesTable.id, existing.id))
       .returning();
@@ -653,6 +666,7 @@ router.patch("/admin/blocked-dates/:date", requireAdmin, async (req, res) => {
       name: nextName,
       surname: nextSurname,
       phone: nextPhone,
+      vehicle: nextVehicle,
     };
     void (async () => {
       try {

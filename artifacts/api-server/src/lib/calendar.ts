@@ -418,6 +418,7 @@ type BlockedDateContact = {
   name?: string | null;
   surname?: string | null;
   phone?: string | null;
+  vehicle?: string | null;
 };
 
 function blockedDateEventBody(
@@ -425,19 +426,31 @@ function blockedDateEventBody(
   reason: string,
   contact?: BlockedDateContact,
 ) {
-  const summary = reason.trim().length > 0
-    ? `Shop Closed — ${reason.trim()}`
-    : "Shop Closed";
-  const contactParts: string[] = [];
   const fullName = [contact?.name?.trim(), contact?.surname?.trim()]
     .filter(Boolean)
     .join(" ");
+  const vehicle = contact?.vehicle?.trim() || "";
+  const hasHold = Boolean(fullName || contact?.phone?.trim() || vehicle);
+  const summary = fullName
+    ? `Held — ${fullName}`
+    : vehicle
+      ? `Held — ${vehicle}`
+      : hasHold
+        ? "Held appointment"
+        : reason.trim().length > 0
+          ? `Shop Closed — ${reason.trim()}`
+          : "Shop Closed";
+  const contactParts: string[] = [];
   if (fullName) contactParts.push(`Contact: ${fullName}`);
   if (contact?.phone?.trim()) contactParts.push(`Phone: ${contact.phone.trim()}`);
+  if (vehicle) contactParts.push(`Vehicle: ${vehicle}`);
   const description = [
-    "Day blocked in the Apex Detailing admin — no bookings will be accepted.",
+    hasHold
+      ? "Day held in the Apex Detailing admin — counted as an appointment; no other bookings will be accepted."
+      : "Day blocked in the Apex Detailing admin — no bookings will be accepted.",
     ...contactParts,
-  ].join("\n");
+    reason.trim() && hasHold ? `Note: ${reason.trim()}` : "",
+  ].filter(Boolean).join("\n");
   return {
     summary,
     description,

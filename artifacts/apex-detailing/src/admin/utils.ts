@@ -1,4 +1,4 @@
-import type { Booking } from "@workspace/api-client-react";
+import type { Booking, BlockedDate } from "@workspace/api-client-react";
 import { formatPrice, todayDateString } from "@/lib/format";
 import type { AdminSection } from "./constants";
 
@@ -235,7 +235,50 @@ export type DashboardKpis = {
   upcomingQuotedCount: number;
 };
 
-export function computeKpis(bookings: Booking[], now = new Date()): DashboardKpis {
+export function isClientHold(row: BlockedDate): boolean {
+  return Boolean(
+    row.name?.trim() ||
+    row.surname?.trim() ||
+    row.phone?.trim() ||
+    row.vehicle?.trim(),
+  );
+}
+
+export function heldCustomerName(row: BlockedDate): string {
+  return [row.name, row.surname].filter(Boolean).join(" ").trim() || "Held day";
+}
+
+export function holdServiceLabel(row: BlockedDate): string {
+  return row.reason?.trim() || "Held appointment";
+}
+
+export function holdDisplayStatus(row: BlockedDate): "confirmed" | "completed" {
+  return row.date < todayDateString() ? "completed" : "confirmed";
+}
+
+export function matchesHold(row: BlockedDate, query: string): boolean {
+  const q = query.trim().toLowerCase();
+  if (!q) return true;
+  const hay = [
+    row.date,
+    row.reason,
+    row.name,
+    row.surname,
+    row.phone,
+    row.vehicle,
+    heldCustomerName(row),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+  return hay.includes(q);
+}
+
+export function computeKpis(
+  bookings: Booking[],
+  blockedDates: BlockedDate[] = [],
+  now = new Date(),
+): DashboardKpis {
   const today = todayDateString();
   const weekStart = startOfWeekSunday(today);
   const weekEnd = endOfWeekSaturday(today);
@@ -254,6 +297,11 @@ export function computeKpis(bookings: Booking[], now = new Date()): DashboardKpi
       monthCollectedCents += booking.servicePriceCents;
     }
     if (status === "confirmed") upcomingQuotedCount += 1;
+  }
+  for (const hold of blockedDates.filter(isClientHold)) {
+    if (hold.date === today) todayCount += 1;
+    if (hold.date >= weekStart && hold.date <= weekEnd) weekCount += 1;
+    if (hold.date >= today) upcomingQuotedCount += 1;
   }
   return { todayCount, weekCount, monthCollectedCents, upcomingQuotedCount };
 }

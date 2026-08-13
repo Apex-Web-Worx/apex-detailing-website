@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Booking, BlockedDate } from "@workspace/api-client-react";
 import { todayDateString } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import { addMonths, bookingShopDate, daysInMonth, displayStatus, monthLabel } from "../utils";
+import { addMonths, bookingShopDate, daysInMonth, displayStatus, isClientHold, monthLabel } from "../utils";
 import type { VisualCalendarEvent } from "../useOwnerCalendarEvents";
 import { GhostButton, PrimaryButton } from "./ui";
 
@@ -83,8 +83,12 @@ export default function MonthCalendar({
           const dayBookings = bookings.filter((b) => bookingShopDate(b) === date && displayStatus(b) !== "cancelled");
           const dayPersonal = personalEvents.filter((e) => e.dates.includes(date));
           const blocked = blockedByDate.get(date);
+          const hold = blocked && isClientHold(blocked);
           const dots: Array<"booking" | "personal" | "blocked" | "done"> = [];
-          if (blocked) dots.push("blocked");
+          if (blocked) {
+            if (hold) dots.push(date < today ? "done" : "booking");
+            else dots.push("blocked");
+          }
           for (const b of dayBookings) {
             if (dots.length >= 4) break;
             dots.push(displayStatus(b) === "completed" ? "done" : "booking");
@@ -104,7 +108,7 @@ export default function MonthCalendar({
                 isSelected
                   ? "border-[#FF2AD4]/50 bg-[#FF2AD4]/10"
                   : "border-transparent hover:bg-white/5",
-                blocked && !isSelected && "bg-[#8A52FF]/10",
+                blocked && !hold && !isSelected && "bg-[#8A52FF]/10",
               )}
             >
               <span

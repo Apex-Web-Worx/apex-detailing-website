@@ -1,11 +1,25 @@
 import { useMemo, useState } from "react";
+import type { BlockedDate, Booking } from "@workspace/api-client-react";
 import { todayDateString } from "@/lib/format";
 import { useAdmin } from "../context";
-import { bookingShopDate, displayStatus, matchesSearch } from "../utils";
+import {
+  bookingShopDate,
+  displayStatus,
+  holdDisplayStatus,
+  holdServiceLabel,
+  isClientHold,
+  matchesHold,
+  matchesSearch,
+} from "../utils";
 import AppointmentRow from "../components/AppointmentRow";
+import HeldAppointmentRow from "../components/HeldAppointmentRow";
 import MonthCalendar from "../components/MonthCalendar";
 import { AdminSelect, EmptyState, fieldClass, GhostButton } from "../components/ui";
 import { useOwnerCalendarEvents } from "../useOwnerCalendarEvents";
+
+type ListItem =
+  | { kind: "booking"; key: string; date: string; status: "confirmed" | "completed" | "cancelled"; booking: Booking }
+  | { kind: "hold"; key: string; date: string; status: "confirmed" | "completed"; hold: BlockedDate };
 
 export default function AppointmentsPage() {
   const { bookings, blockedDates, isLoading, setDetail, setEditing, cancelBooking, openBlockDate, searchQuery, setSearchQuery, token } = useAdmin();
@@ -17,28 +31,63 @@ export default function AppointmentsPage() {
   const [selectedDate, setSelectedDate] = useState(todayDateString());
   const { data: personalEvents = [] } = useOwnerCalendarEvents(token, calMonth);
 
-  const serviceOptions = useMemo(
-    () => Array.from(new Set(bookings.map((b) => b.serviceName))).sort(),
-    [bookings],
-  );
+  const serviceOptions = useMemo(() => {
+    const names = new Set(bookings.map((b) => b.serviceName));
+    for (const hold of blockedDates.filter(isClientHold)) {
+      names.add(holdServiceLabel(hold));
+    }
+    return Array.from(names).sort();
+  }, [bookings, blockedDates]);
 
-  const filtered = bookings.filter((b) => {
-    if (searchQuery && !matchesSearch(b, searchQuery)) return false;
-    if (filterService && b.serviceName !== filterService) return false;
-    if (filterDate && bookingShopDate(b) !== filterDate) return false;
-    if (filterStatus && displayStatus(b) !== filterStatus) return false;
-    return true;
-  });
-
-  const sorted = [...filtered].sort((a, b) => {
-    const sa = displayStatus(a);
-    const sb = displayStatus(b);
+  const items = useMemo(() => {
+    const list: ListItem[] = [];
+    for (const booking of bookings) {
+      if (searchQuery && !matchesSearch(booking, searchQuery)) continue;
+      if (filterService && booking.serviceName !== filterService) continue;
+      if (filterDate && bookingShopDate(booking) !== filterDate) continue;
+      const status = displayStatus(booking);
+      if (filterStatus && status !== filterStatus) continue;
+      list.push({
+        kind: "booking",
+        key: `booking-${booking.id}`,
+        date: bookingShopDate(booking),
+        status,
+        booking,
+      });
+    }
+    for (const hold of blockedDates.filter(isClientHold)) {
+      if (searchQuery && !matchesHold(hold, searchQuery)) continue;
+      if (filterService && holdServiceLabel(hold) !== filterService) continue;
+      if (filterDate && hold.date !== filterDate) continue;
+      const status = holdDisplayStatus(hold);
+      if (filterStatus && status !== filterStatus) continue;
+      list.push({
+        kind: "hold",
+        key: `hold-${hold.id}`,
+        date: hold.date,
+        status,
+        hold,
+      });
+    }
     const rank = { confirmed: 0, completed: 1, cancelled: 2 };
-    if (rank[sa] !== rank[sb]) return rank[sa] - rank[sb];
-    if (sa === "confirmed") return +new Date(a.scheduledAt) - +new Date(b.scheduledAt);
-    return +new Date(b.scheduledAt) - +new Date(a.scheduledAt);
-  });
-  const dayList = sorted.filter((b) => bookingShopDate(b) === selectedDate);
+    list.sort((a, b) => {
+      if (rank[a.status] !== rank[b.status]) return rank[a.status] - rank[b.status];
+      if (a.status === "confirmed") {
+        if (a.date !== b.date) return a.date.localeCompare(b.date);
+        if (a.kind !== b.kind) return a.kind === "hold" ? -1 : 1;
+        if (a.kind === "booking" && b.kind === "booking") {
+          return +new Date(a.booking.scheduledAt) - +new Date(b.booking.scheduledAt);
+        }
+        return 0;
+      }
+      if (a.date !== b.date) return b.date.localeCompare(a.date);
+      if (a.kind !== b.kind) return a.kind === "hold" ? -1 : 1;
+      return 0;
+    });
+    return list;
+  }, [bookings, blockedDates, searchQuery, filterService, filterDate, filterStatus]);
+
+  const visible = view === "calendar" ? items.filter((item) => item.date === selectedDate) : items;
 
   return (
     <div className="space-y-4">
@@ -132,19 +181,23 @@ export default function AppointmentsPage() {
 
       {isLoading ? (
         <p className="text-sm text-[#9CA3AF]">Loading bookings…</p>
-      ) : (view === "calendar" ? dayList : sorted).length === 0 ? (
+      ) : visible.length === 0 ? (
         <EmptyState title="No appointments" body="No bookings match these filters." />
       ) : (
         <div className="space-y-2">
-          {(view === "calendar" ? dayList : sorted).map((b) => (
-            <AppointmentRow
-              key={b.id}
-              booking={b}
-              onView={() => setDetail(b)}
-              onEdit={() => setEditing(b)}
-              onCancel={() => cancelBooking(b.id)}
-            />
-          ))}
+          {visible.map((item) =>
+            item.kind === "hold" ? (
+              <HeldAppointmentRow key={item.key} hold={item.hold} />
+            ) : (
+              <AppointmentRow
+                key={item.key}
+                booking={item.booking}
+                onView={() => setDetail(item.booking)}
+                onEdit={() => setEditing(item.booking)}
+                onCancel={() => cancelBooking(item.booking.id)}
+              />
+            ),
+          )}
         </div>
       )}
     </div>

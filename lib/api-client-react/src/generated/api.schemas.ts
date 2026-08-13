@@ -66,6 +66,8 @@ export interface BlockedDate {
   surname?: string | null;
   /** Optional phone number for who the day is held for */
   phone?: string | null;
+  /** Optional vehicle for who the day is held for */
+  vehicle?: string | null;
   createdAt: string;
 }
 
@@ -79,6 +81,8 @@ export interface CreateBlockedDateRequest {
   surname?: string;
   /** Optional phone number (not required) */
   phone?: string;
+  /** Optional vehicle (not required) */
+  vehicle?: string;
 }
 
 /**
