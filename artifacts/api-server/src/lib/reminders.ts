@@ -20,7 +20,7 @@ import { and, eq, gte, isNull, lte } from "drizzle-orm";
 import { shopLocalDateString, shopLocalTimeString } from "./availability";
 import type { BookingEmailData } from "./email";
 import { notifyReminder24h } from "./notify";
-import { sendDueReviewRequests } from "./pickup-workflow";
+import { sendDueReviewRequests, ensureForgottenReviewRequests } from "./pickup-workflow";
 import { purgeExpiredBookingPhotos } from "./booking-photos";
 
 const REMINDER_TICK_MS = 5 * 60 * 1000; // every 5 minutes
@@ -106,6 +106,15 @@ async function runOnce(): Promise<void> {
     }
   } catch (err) {
     console.error("[reminders] review send failed:", err);
+  }
+
+  try {
+    const forgotten = await ensureForgottenReviewRequests();
+    if (forgotten > 0) {
+      console.log(`[reminders] sent ${forgotten} forgotten review request(s)`);
+    }
+  } catch (err) {
+    console.error("[reminders] forgotten review send failed:", err);
   }
 
   try {

@@ -15,7 +15,7 @@ import {
   FROM_NAME,
 } from "./email";
 import { sendSmsWithResult } from "./sms";
-import { bookingAllowsCustomerSms } from "./customer-sms";
+import { bookingAllowsCustomerSms, isHoldBookingEmail } from "./customer-sms";
 import {
   shopLocalDateString,
   shopLocalTimeString,
@@ -311,6 +311,8 @@ export async function markCompleted(bookingId: number) {
     detail: "Customer picked up — marked COMPLETED",
     occurredAt: now,
   });
+  const settings = await getShopSettings();
+  await scheduleReview(updated, updated.readyAt ?? now, settings);
   return updated;
 }
 
@@ -361,7 +363,8 @@ async function scheduleReview(booking: BookingRow, readyAt: Date, settings: Awai
   const emailBody = interpolateTemplate(tpl?.emailBody ?? DEFAULT_REVIEW_EMAIL, vars);
   const channels: Array<{ channel: "sms" | "email"; body: string }> = [];
   if (bookingAllowsCustomerSms(booking)) channels.push({ channel: "sms", body: smsBody });
-  channels.push({ channel: "email", body: emailBody });
+  if (!isHoldBookingEmail(booking.email)) channels.push({ channel: "email", body: emailBody });
+  if (channels.length === 0) return null;
 
   const inserted = await db
     .insert(communicationsTable)
@@ -682,6 +685,88 @@ export async function sendDueReviewRequests(): Promise<number> {
     }
 
     sent += 1;
+  }
+  return sent;
+}
+
+const REVIEW_DONE = ["sent", "delivered", "pending"] as const;
+const REVIEW_BLOCKING = ["scheduled", "pending", "sent", "delivered"] as const;
+
+async function hasReviewInStatuses(bookingId: number, statuses: readonly string[]) {
+  const rows = await db
+    .select({ id: communicationsTable.id, status: communicationsTable.status })
+    .from(communicationsTable)
+    .where(
+      and(
+        eq(communicationsTable.bookingId, bookingId),
+        eq(communicationsTable.messageType, "review_request"),
+        inArray(communicationsTable.status, [...statuses]),
+      ),
+    )
+    .limit(1);
+  return rows[0] ?? null;
+}
+
+export async function sendReviewRequestNow(bookingId: number) {
+  const [booking] = await db.select().from(bookingsTable).where(eq(bookingsTable.id, bookingId));
+  if (!booking) return { error: "not_found" as const };
+  if (booking.status === "cancelled") return { error: "cancelled" as const };
+
+  const already = await hasReviewInStatuses(bookingId, REVIEW_DONE);
+  if (already) {
+    const communications = await listBookingCommunications(bookingId);
+    return { booking, communications, alreadySent: true as const };
+  }
+
+  await cancelScheduledReviews(bookingId, "Sent immediately from admin");
+
+  const settings = await getShopSettings();
+  const templates = await getTemplates();
+  const tpl = templateByKey(templates, "review_request");
+  const vars = bookingTemplateVars(booking, booking.pickupAt, settings);
+  const smsBody = `${interpolateTemplate(tpl?.smsBody ?? DEFAULT_REVIEW_SMS, vars)}\n\n${STOP}`;
+  const emailBody = interpolateTemplate(tpl?.emailBody ?? DEFAULT_REVIEW_EMAIL, vars);
+  const emailSubject = interpolateTemplate(
+    tpl?.emailSubject ?? "How was your Apex Detailing service?",
+    vars,
+  );
+
+  const wantSms = bookingAllowsCustomerSms(booking);
+  const wantEmail = !isHoldBookingEmail(booking.email);
+  if (!wantSms && !wantEmail) return { error: "no_channel" as const, booking };
+
+  if (wantSms) {
+    await sendChannel({ booking, messageType: "review_request", channel: "sms", body: smsBody });
+  }
+  if (wantEmail) {
+    await sendChannel({
+      booking,
+      messageType: "review_request",
+      channel: "email",
+      body: emailBody,
+      emailSubject,
+    });
+  }
+
+  const communications = await listBookingCommunications(bookingId);
+  return { booking, communications, alreadySent: false as const };
+}
+
+export async function ensureForgottenReviewRequests(): Promise<number> {
+  const cutoff = new Date(Date.now() - REVIEW_DELAY_MS);
+  const jobs = await db
+    .select()
+    .from(bookingsTable)
+    .where(inArray(bookingsTable.status, ["ready_for_pickup", "completed"]));
+
+  let sent = 0;
+  for (const booking of jobs) {
+    const origin = booking.readyAt ?? booking.completedAt ?? booking.scheduledAt;
+    if (origin > cutoff) continue;
+    const blocking = await hasReviewInStatuses(booking.id, REVIEW_BLOCKING);
+    if (blocking) continue;
+    const result = await sendReviewRequestNow(booking.id);
+    if (!("error" in result) && !result.alreadySent) sent += 1;
   }
   return sent;
 }

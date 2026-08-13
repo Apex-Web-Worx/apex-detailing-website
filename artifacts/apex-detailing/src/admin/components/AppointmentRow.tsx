@@ -35,7 +35,7 @@ export default function AppointmentRow({
   onCancel?: () => void;
   stackedAction?: boolean;
 }) {
-  const { token, openReadyModal, startBooking, completeBooking } = useAdmin();
+  const { token, openReadyModal, startBooking, completeBooking, sendReviewRequest } = useAdmin();
   const photosQuery = useAdminBookingPhotoIndex(token);
   const photoIds = photoIdsForBooking(photosQuery.data, booking.id);
   const photoCount = photoIds.length;
@@ -130,6 +130,28 @@ export default function AppointmentRow({
                 }}
               >
                 Mark completed
+              </button>
+            ) : null}
+            {status === "in_progress" || status === "ready_for_pickup" || status === "completed" ? (
+              <button
+                type="button"
+                className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
+                onClick={() => {
+                  setMenu(false);
+                  void sendReviewRequest(booking.id)
+                    .then((result) => {
+                      alert(
+                        result === "already"
+                          ? "Review link already sent. It will not send again."
+                          : "Review link sent.",
+                      );
+                    })
+                    .catch((e) => {
+                      alert(e instanceof Error ? e.message : "Could not send review link");
+                    });
+                }}
+              >
+                Send review link
               </button>
             ) : null}
             {canAct && onEdit && (

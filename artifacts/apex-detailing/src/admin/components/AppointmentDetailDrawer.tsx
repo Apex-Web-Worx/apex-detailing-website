@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { Mail, MessageSquare, Phone, X, Check, Play } from "lucide-react";
+import { Mail, MessageSquare, Phone, X, Check, Play, Star } from "lucide-react";
 import { formatDateTimeLong, formatDuration } from "@/lib/format";
 import { useAdmin } from "../context";
 import {
@@ -53,12 +53,14 @@ export default function AppointmentDetailDrawer() {
     openReadyModal,
     startBooking,
     completeBooking,
+    sendReviewRequest,
   } = useAdmin();
   const photosQuery = useAdminBookingPhotoIndex(token);
   const photoIds = detail ? photoIdsForBooking(photosQuery.data, detail.id) : [];
   const [events, setEvents] = useState<TimelineEvent[]>([]);
   const [comms, setComms] = useState<Communication[]>([]);
   const [busy, setBusy] = useState(false);
+  const [reviewNote, setReviewNote] = useState<string | null>(null);
 
   useEffect(() => {
     if (!detail) return;
@@ -104,6 +106,11 @@ export default function AppointmentDetailDrawer() {
   const pickupNote = comms.find((c) => c.messageType === "vehicle_ready" && (c.status === "sent" || c.status === "delivered"));
   const reviewSched = comms.find((c) => c.messageType === "review_request" && c.status === "scheduled");
   const reviewFailed = comms.find((c) => c.messageType === "review_request" && c.status === "failed");
+  const reviewSent = comms.find(
+    (c) =>
+      c.messageType === "review_request" &&
+      (c.status === "sent" || c.status === "delivered" || c.status === "pending"),
+  );
 
   const markInProgress = async () => {
     setBusy(true);
@@ -134,6 +141,31 @@ export default function AppointmentDetailDrawer() {
       refetch();
     } catch (e) {
       alert(e instanceof Error ? e.message : "Retry failed");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const sendReview = async () => {
+    if (reviewSent) {
+      setReviewNote("Review link already sent. It will not send again.");
+      return;
+    }
+    setBusy(true);
+    setReviewNote(null);
+    try {
+      const result = await sendReviewRequest(detail.id);
+      setReviewNote(result === "already" ? "Review link already sent. It will not send again." : "Review link sent.");
+      const res = await fetch(`/api/admin/bookings/${detail.id}/timeline`, {
+        headers: { "x-admin-token": token },
+      });
+      if (res.ok) {
+        const json = await res.json();
+        setEvents(json.events ?? []);
+        setComms(json.communications ?? []);
+      }
+    } catch (e) {
+      setReviewNote(e instanceof Error ? e.message : "Could not send review link");
     } finally {
       setBusy(false);
     }
@@ -290,7 +322,13 @@ export default function AppointmentDetailDrawer() {
                   {pickupNote.sentAt ? ` · ${formatDateTimeLong(pickupNote.sentAt)}` : ""}
                 </p>
               )}
-              {reviewSched && (
+              {reviewSent && (
+                <p className="text-xs text-[#9CA3AF]">
+                  Review request sent
+                  {reviewSent.sentAt ? ` · ${formatDateTimeLong(reviewSent.sentAt)}` : ""}
+                </p>
+              )}
+              {reviewSched && !reviewSent && (
                 <p className="text-xs text-[#9CA3AF]">
                   Review request scheduled
                   {reviewSched.scheduledAt ? ` · ${formatDateTimeLong(reviewSched.scheduledAt)}` : ""}
@@ -314,6 +352,35 @@ export default function AppointmentDetailDrawer() {
               </GhostButton>
             </section>
           )}
+
+          {status !== "cancelled" && status !== "confirmed" ? (
+            <section className="rounded-xl border border-white/10 bg-[#111111] p-4 space-y-2">
+              <p className="text-sm font-semibold text-white flex items-center gap-2">
+                <Star className="w-4 h-4 text-[#FF2AD4]" /> Review link
+              </p>
+              <p className="text-xs text-[#9CA3AF]">
+                Send the Google review link now, or it goes out automatically 24 hours after the job is ready or completed. It will not send twice.
+              </p>
+              {reviewSent ? (
+                <p className="text-xs text-emerald-300">
+                  Sent{reviewSent.sentAt ? ` · ${formatDateTimeLong(reviewSent.sentAt)}` : ""}
+                </p>
+              ) : reviewSched ? (
+                <p className="text-xs text-[#9CA3AF]">
+                  Scheduled{reviewSched.scheduledAt ? ` · ${formatDateTimeLong(reviewSched.scheduledAt)}` : ""}
+                </p>
+              ) : null}
+              {reviewNote ? <p className="text-xs text-[#23B9FF]">{reviewNote}</p> : null}
+              <GhostButton
+                type="button"
+                className="h-10 text-xs w-full"
+                disabled={busy || Boolean(reviewSent)}
+                onClick={() => void sendReview()}
+              >
+                {reviewSent ? "Review link sent" : "Send review link"}
+              </GhostButton>
+            </section>
+          ) : null}
 
           <section>
             <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">Timeline</h3>

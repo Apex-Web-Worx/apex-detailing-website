@@ -21,6 +21,7 @@ import {
   retryReviewRequest,
   seedNotificationDefaults,
   bookingTemplateVars,
+  sendReviewRequestNow,
 } from "../lib/pickup-workflow";
 import {
   DEFAULT_VEHICLE_READY_EMAIL,
@@ -255,6 +256,32 @@ router.post("/admin/bookings/:id/complete", requireAdmin, async (req, res) => {
     return;
   }
   res.json(updated);
+});
+
+router.post("/admin/bookings/:id/review-request", requireAdmin, async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isFinite(id)) {
+    res.status(400).json({ message: "Invalid id" });
+    return;
+  }
+  const result = await sendReviewRequestNow(id);
+  if ("error" in result) {
+    if (result.error === "not_found") {
+      res.status(404).json({ message: "Booking not found" });
+      return;
+    }
+    if (result.error === "cancelled") {
+      res.status(400).json({ message: "Appointment is cancelled." });
+      return;
+    }
+    if (result.error === "no_channel") {
+      res.status(400).json({ message: "No phone or email to send the review link." });
+      return;
+    }
+    res.status(400).json({ message: "Could not send review request." });
+    return;
+  }
+  res.json(result);
 });
 
 router.post("/admin/bookings/:id/review-request/retry", requireAdmin, async (req, res) => {
