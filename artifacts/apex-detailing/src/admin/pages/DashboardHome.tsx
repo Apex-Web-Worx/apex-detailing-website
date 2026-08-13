@@ -41,7 +41,7 @@ export default function DashboardHome() {
   const tasks = deriveTasks(bookings);
 
   return (
-    <div className="space-y-5">
+    <div className="max-w-7xl mx-auto space-y-5">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <h2 className="text-xl md:text-2xl font-bold">
           {greetingForNow()}, {ADMIN_FIRST}
@@ -68,11 +68,11 @@ export default function DashboardHome() {
         <Kpi href="/admin/appointments" label="Upcoming" value={String(kpis.upcomingQuotedCount)} />
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-5 gap-4">
-        <div className="xl:col-span-3 space-y-3">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="space-y-3">
           <div className="flex items-center justify-between gap-2">
             <h3 className="text-base font-bold">Today's Schedule</h3>
-            <Link href="/admin/calendar" className="text-xs font-semibold text-[#9CA3AF] py-2">
+            <Link href="/admin/calendar" className="lg:hidden text-xs font-semibold text-[#9CA3AF] py-2">
               Calendar →
             </Link>
           </div>
@@ -116,7 +116,7 @@ export default function DashboardHome() {
             </>
           )}
         </div>
-        <div className="hidden xl:block xl:col-span-2">
+        <div className="hidden lg:block">
           <MonthCalendar
             compact
             month={calMonth}
