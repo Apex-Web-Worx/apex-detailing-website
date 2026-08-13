@@ -244,7 +244,7 @@ export default function AppointmentRow({
         {primaryAction && !stackedAction ? <div className="shrink-0">{primaryAction}</div> : null}
         <div className="ml-auto shrink-0">{icons}</div>
       </div>
-      {primaryAction && stackedAction ? primaryAction : null}
+      {primaryAction && stackedAction ? <div className="hidden md:block">{primaryAction}</div> : null}
     </div>
   );
 }
