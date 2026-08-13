@@ -1,10 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Play } from "lucide-react";
 import { Button } from "@/components/Button";
 import { asset } from "@/lib/utils";
 
 export function Hero() {
   const [videoOpen, setVideoOpen] = useState(false);
+
+  useEffect(() => {
+    if (!videoOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setVideoOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = previous;
+    };
+  }, [videoOpen]);
 
   return (
     <section className="relative isolate min-h-[560px] overflow-hidden md:min-h-[680px] md:h-[72vh] md:max-h-[750px]">
@@ -60,8 +74,12 @@ export function Hero() {
           role="dialog"
           aria-modal="true"
           aria-labelledby="video-title"
+          onClick={() => setVideoOpen(false)}
         >
-          <div className="w-full max-w-2xl rounded-[16px] bg-white p-6 shadow-2xl">
+          <div
+            className="w-full max-w-2xl rounded-[16px] bg-white p-6 shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
             <h2 id="video-title" className="text-xl font-extrabold text-navy">
               Vaizdo įrašas
             </h2>

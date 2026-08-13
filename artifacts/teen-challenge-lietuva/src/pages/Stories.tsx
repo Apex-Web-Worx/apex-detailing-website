@@ -17,7 +17,7 @@ export default function Stories() {
         description="Tikros istorijos bus skelbiamos čia, kai bus patvirtintos ir gautas sutikimas."
         image="images/story-featured.jpg"
       />
-      <StoriesSection />
+      <StoriesSection showIntro={false} />
     </Layout>
   );
 }

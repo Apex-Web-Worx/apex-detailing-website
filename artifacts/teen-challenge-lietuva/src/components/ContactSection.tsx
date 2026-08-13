@@ -4,12 +4,12 @@ import { FadeIn } from "@/components/FadeIn";
 import { SectionHeading } from "@/components/SectionHeading";
 import { contact } from "@/data/site";
 
-export function ContactSection() {
+export function ContactSection({ heading = "Susisiekime" }: { heading?: string }) {
   return (
     <section className="bg-white py-20 md:py-28" id="kontaktai">
       <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
         <FadeIn>
-          <SectionHeading title="Susisiekime" />
+          <SectionHeading title={heading} />
           <p className="mt-5 max-w-md text-muted">
             Kontaktiniai duomenys bus patikslinti. Žemiau palikti aiškūs laukai,
             kuriuos vėliau galima pakeisti vienoje vietoje – faile

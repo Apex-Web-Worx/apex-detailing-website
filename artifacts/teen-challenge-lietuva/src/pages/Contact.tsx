@@ -17,7 +17,7 @@ export default function Contact() {
         description="Palikite žinutę – kontaktiniai duomenys bus patikslinti oficialioje informacijoje."
         image="images/help.jpg"
       />
-      <ContactSection />
+      <ContactSection heading="Parašykite mums" />
     </Layout>
   );
 }

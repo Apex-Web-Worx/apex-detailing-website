@@ -17,7 +17,7 @@ export default function Programs() {
         description="Pagalba prasideda nuo žmogaus, bet pokytis keičia visą gyvenimą."
         image="images/community.jpg"
       />
-      <ProgramsSection />
+      <ProgramsSection showIntro={false} />
     </Layout>
   );
 }

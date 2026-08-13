@@ -5,18 +5,24 @@ import { SectionHeading } from "@/components/SectionHeading";
 import { programs } from "@/data/programs";
 import { asset } from "@/lib/utils";
 
-export function ProgramsSection() {
+type ProgramsSectionProps = {
+  showIntro?: boolean;
+};
+
+export function ProgramsSection({ showIntro = true }: ProgramsSectionProps) {
   return (
     <section className="bg-canvas py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <FadeIn>
-          <SectionHeading
-            title="Mūsų veikla"
-            description="Pagalba prasideda nuo žmogaus, bet pokytis keičia visą gyvenimą."
-          />
-        </FadeIn>
+        {showIntro ? (
+          <FadeIn>
+            <SectionHeading
+              title="Mūsų veikla"
+              description="Pagalba prasideda nuo žmogaus, bet pokytis keičia visą gyvenimą."
+            />
+          </FadeIn>
+        ) : null}
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
+        <div className={`grid gap-6 md:grid-cols-2 ${showIntro ? "mt-12" : ""}`}>
           {programs.map((program, index) => (
             <FadeIn key={program.id} delay={index * 80}>
               <Link

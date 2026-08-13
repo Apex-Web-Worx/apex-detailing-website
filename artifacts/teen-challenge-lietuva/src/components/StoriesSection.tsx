@@ -4,27 +4,33 @@ import { FadeIn } from "@/components/FadeIn";
 import { getFeaturedStory, stories } from "@/data/stories";
 import { asset } from "@/lib/utils";
 
-export function StoriesSection() {
+type StoriesSectionProps = {
+  showIntro?: boolean;
+};
+
+export function StoriesSection({ showIntro = true }: StoriesSectionProps) {
   const featured = getFeaturedStory();
   const others = stories.filter((story) => story.id !== featured.id);
 
   return (
     <section className="bg-white py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <FadeIn>
-          <h2 className="text-3xl font-extrabold leading-tight text-navy md:text-4xl lg:text-[2.75rem]">
-            Tikros istorijos.
-            <span className="block">Tikri gyvenimai.</span>
-          </h2>
-          <span className="mt-5 block h-[3px] w-16 rounded-full bg-gold" aria-hidden="true" />
-          <p className="mt-5 max-w-2xl text-lg text-muted">
-            Šios istorijos yra laikinas turinio pavyzdys ir nėra tikrų žmonių
-            liudijimai.
-          </p>
-        </FadeIn>
+        {showIntro ? (
+          <FadeIn>
+            <h2 className="text-3xl font-extrabold leading-tight text-navy md:text-4xl lg:text-[2.75rem]">
+              Tikros istorijos.
+              <span className="block">Tikri gyvenimai.</span>
+            </h2>
+            <span className="mt-5 block h-[3px] w-16 rounded-full bg-gold" aria-hidden="true" />
+            <p className="mt-5 max-w-2xl text-lg text-muted">
+              Šios istorijos yra laikinas turinio pavyzdys ir nėra tikrų žmonių
+              liudijimai.
+            </p>
+          </FadeIn>
+        ) : null}
 
         <FadeIn>
-          <article className="mt-12 grid overflow-hidden rounded-[16px] bg-navy text-white shadow-[0_24px_50px_rgba(7,59,120,0.16)] lg:grid-cols-2">
+          <article className={`grid overflow-hidden rounded-[16px] bg-navy text-white shadow-[0_24px_50px_rgba(7,59,120,0.16)] lg:grid-cols-2 ${showIntro ? "mt-12" : ""}`}>
             <div className="group overflow-hidden">
               <img
                 src={asset(featured.image)}
