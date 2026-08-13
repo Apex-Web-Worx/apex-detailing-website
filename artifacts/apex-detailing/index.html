@@ -35,7 +35,59 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Apex Detailing - Premium Car Detailing in Nixa, MO" />
     <meta name="twitter:description" content="Professional auto detailing services in Nixa, Springfield & Ozark. Ceramic coating, paint correction, interior detailing." />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="ru_RU" />
     <link rel="canonical" href="https://www.apexdetailing.net" />
+    <link rel="alternate" hreflang="en" href="https://www.apexdetailing.net/" />
+    <link rel="alternate" hreflang="ru" href="https://www.apexdetailing.net/?lang=ru" />
+    <link rel="alternate" hreflang="x-default" href="https://www.apexdetailing.net/" />
+    <script>
+      // Russian SEO bootstrap — runs before React so ?lang=ru has the right
+      // title/description/html lang for crawlers and shared links.
+      (function () {
+        try {
+          if ((window.location.pathname || "/").indexOf("/admin") !== -1) return;
+          if (new URLSearchParams(window.location.search).get("lang") !== "ru") return;
+          var path = (window.location.pathname || "/").replace(/\/$/, "") || "/";
+          var pages = {
+            "/": {
+              title: "Apex Detailing — премиум детейлинг в Никсе, Спрингфилде и Озарке, Миссури",
+              description: "Детейлинг в Никсе, Озарке и Спрингфилде, Миссури. Керамика, коррекция ЛКП, салон и восстановление фар. Оценка 5 звёзд.",
+            },
+            "/book": {
+              title: "Запись на детейлинг | Apex Detailing Никса, Миссури",
+              description: "Онлайн-запись на детейлинг в Никсе, Миссури. Салон, кузов, керамика или коррекция ЛКП — выберите услугу и время.",
+            },
+            "/gift-cards": {
+              title: "Подарочные карты | Apex Detailing Никса, Миссури",
+              description: "Подарочная карта Apex Detailing. Мгновенно на email, без срока. Никса, Спрингфилд и Озарк, Миссури.",
+            },
+          };
+          var copy = pages[path];
+          if (!copy) return;
+          document.documentElement.lang = "ru";
+          document.title = copy.title;
+          var desc = document.querySelector('meta[name="description"]');
+          if (desc) desc.setAttribute("content", copy.description);
+          var ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute("content", copy.title);
+          var ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute("content", copy.description);
+          var ogLocale = document.querySelector('meta[property="og:locale"]');
+          if (ogLocale) ogLocale.setAttribute("content", "ru_RU");
+          var twTitle = document.querySelector('meta[name="twitter:title"]');
+          if (twTitle) twTitle.setAttribute("content", copy.title);
+          var twDesc = document.querySelector('meta[name="twitter:description"]');
+          if (twDesc) twDesc.setAttribute("content", copy.description);
+          var origin = "https://www.apexdetailing.net";
+          var selfUrl = path === "/" ? origin + "/?lang=ru" : origin + path + "?lang=ru";
+          var ogUrl = document.querySelector('meta[property="og:url"]');
+          if (ogUrl) ogUrl.setAttribute("content", selfUrl);
+          var canonical = document.querySelector('link[rel="canonical"]');
+          if (canonical) canonical.setAttribute("href", selfUrl);
+        } catch (e) {}
+      })();
+    </script>
     <link rel="icon" type="image/png" href="/images/favicon.png" />
     <!-- PWA / iOS "Add to Home Screen" support -->
     <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" sizes="180x180" />
@@ -121,6 +173,8 @@
         "Ozark, MO"
       ],
       "url": "https://www.apexdetailing.net",
+      "availableLanguage": ["en", "ru"],
+      "inLanguage": ["en", "ru"],
       "sameAs": [
         "https://www.instagram.com/apexdetailing_sf",
         "https://www.facebook.com/profile.php?id=61556776603500"

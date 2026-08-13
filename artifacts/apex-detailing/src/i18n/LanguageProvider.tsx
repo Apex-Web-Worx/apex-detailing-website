@@ -6,7 +6,13 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { useLocation } from "wouter";
 import { STRINGS, type Lang } from "./strings";
+import {
+  applyDocumentSeo,
+  readLangFromLocation,
+  syncLangQuery,
+} from "./seo";
 
 const STORAGE_KEY = "apex_lang";
 
@@ -29,8 +35,20 @@ function readStoredLang(): Lang {
   return "en";
 }
 
+function readInitialLang(): Lang {
+  return readLangFromLocation() ?? readStoredLang();
+}
+
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>(readStoredLang);
+  const [location] = useLocation();
+  const [lang, setLangState] = useState<Lang>(readInitialLang);
+
+  useEffect(() => {
+    const fromUrl = readLangFromLocation();
+    if (fromUrl && fromUrl !== lang) setLangState(fromUrl);
+    // Pathname changes (not lang) should still honor ?lang=ru on shared links.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- URL is source of truth on navigation
+  }, [location]);
 
   useEffect(() => {
     const onAdmin = window.location.pathname.includes("/admin");
@@ -40,7 +58,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     } catch {
       // ignore
     }
-  }, [lang]);
+    if (!onAdmin) {
+      syncLangQuery(lang);
+      applyDocumentSeo(lang, location);
+    }
+  }, [lang, location]);
 
   const setLang = useCallback((next: Lang) => {
     setLangState(next);
