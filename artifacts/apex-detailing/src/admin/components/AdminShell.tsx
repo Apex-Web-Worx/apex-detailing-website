@@ -15,7 +15,7 @@ import BrandLogo from "@/components/BrandLogo";
 import { cn } from "@/lib/utils";
 import { ADMIN_FIRST, ADMIN_NAME, ADMIN_ROLE, NAV_ITEMS, PAGE_TITLES } from "../constants";
 import { useAdmin } from "../context";
-import { matchesHold, matchesSearch, heldCustomerName, holdServiceLabel, isClientHold } from "../utils";
+import { matchesHold, matchesSearch, heldCustomerName, holdServiceLabel, isClientHold, linkedHoldBooking } from "../utils";
 import { fieldClass } from "./ui";
 
 const TAB_ITEMS = [
@@ -65,17 +65,33 @@ export default function AdminShell({ children }: { children: ReactNode }) {
     }));
     const holdHits = blockedDates
       .filter((row) => isClientHold(row) && matchesHold(row, searchQuery))
-      .map((row) => ({
-        key: `hold-${row.id}`,
-        title: heldCustomerName(row),
-        subtitle: [holdServiceLabel(row), row.vehicle].filter(Boolean).join(" · "),
-        onPick: () => {
-          openEditBlockedDate(row);
-          setSearchOpen(false);
-          setSearchQuery("");
-          setLocation("/admin/calendar");
-        },
-      }));
+      .map((row) => {
+        const linked = linkedHoldBooking(bookings, row);
+        if (linked) {
+          return {
+            key: `hold-${row.id}`,
+            title: linked.customerName,
+            subtitle: `${linked.serviceName} · ${linked.vehicle}`,
+            onPick: () => {
+              setDetail(linked);
+              setSearchOpen(false);
+              setSearchQuery("");
+              setLocation(`/admin/appointments/${linked.id}`);
+            },
+          };
+        }
+        return {
+          key: `hold-${row.id}`,
+          title: heldCustomerName(row),
+          subtitle: [holdServiceLabel(row), row.vehicle].filter(Boolean).join(" · "),
+          onPick: () => {
+            openEditBlockedDate(row);
+            setSearchOpen(false);
+            setSearchQuery("");
+            setLocation("/admin/calendar");
+          },
+        };
+      });
     return [...holdHits, ...bookingHits].slice(0, 8);
   }, [bookings, blockedDates, searchQuery, openEditBlockedDate, setDetail, setSearchQuery, setLocation]);
 

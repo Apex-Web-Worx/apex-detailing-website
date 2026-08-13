@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import {
   adminAddBlockedDate,
   getAdminListBlockedDatesQueryKey,
+  getAdminListBookingsQueryKey,
 } from "@workspace/api-client-react";
 import { Loader2, X } from "lucide-react";
 import { todayDateString } from "@/lib/format";
@@ -172,6 +173,9 @@ export default function BlockDateModal() {
       }
       queryClient.invalidateQueries({
         queryKey: getAdminListBlockedDatesQueryKey(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: getAdminListBookingsQueryKey(),
       });
       setTimeout(() => closeBlockDate(), 1200);
     } catch (err) {

@@ -18,6 +18,7 @@ import {
   heldCustomerName,
   holdServiceLabel,
   isClientHold,
+  linkedHoldBooking,
   scheduledAtToShopTime,
   bookingIso,
   vehicleKey,
@@ -58,9 +59,13 @@ export default function DashboardHome() {
     })
     .sort((a, b) => bookingShopTime(a).localeCompare(bookingShopTime(b)));
   const tasks = deriveTasks(bookings);
+  const linkedTodayHold = todayBlocked ? linkedHoldBooking(bookings, todayBlocked) : null;
+  const showHoldRow =
+    Boolean(todayBlocked && isClientHold(todayBlocked) && !linkedTodayHold);
   const shopEmpty = todayAppts.length === 0 && !todayBlocked;
   const startableToday = todayAppts.filter(canStartJob);
-  const startableHold = todayBlocked && canStartHold(todayBlocked) ? todayBlocked : null;
+  const startableHold =
+    todayBlocked && canStartHold(todayBlocked) && !linkedTodayHold ? todayBlocked : null;
   const readyForPickup = bookings.filter((b) => displayStatus(b) === "ready_for_pickup");
   const recentDetailTimes = bookings
     .filter((b) => bookingStoredDetailMs(b) != null)
@@ -204,7 +209,7 @@ export default function DashboardHome() {
               );
             })}
           </div>
-        )}
+        ) : null}
       </AdminCard>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:items-stretch">
@@ -224,8 +229,8 @@ export default function DashboardHome() {
               </p>
             ) : (
               <div className="space-y-2">
-                {todayBlocked && isClientHold(todayBlocked) && (
-                  <HeldAppointmentRow hold={todayBlocked} />
+                {showHoldRow && todayBlocked && (
+                  <HeldAppointmentRow hold={todayBlocked} stackedAction />
                 )}
                 {todayBlocked && !isClientHold(todayBlocked) && (
                   <div className="rounded-xl border border-white/10 bg-[#0B0B0B] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">

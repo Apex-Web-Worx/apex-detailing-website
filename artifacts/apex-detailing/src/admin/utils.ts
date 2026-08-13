@@ -51,11 +51,24 @@ export function displayStatus(booking: Booking, _now = new Date()): DisplayStatu
 }
 
 export function canStartJob(booking: Booking): boolean {
-  return displayStatus(booking) === "confirmed" && bookingShopDate(booking) >= todayDateString();
+  return displayStatus(booking) === "confirmed";
+}
+
+export function holdBookingEmail(holdId: number): string {
+  return `hold-${holdId}@apexdetailing.net`;
+}
+
+export function linkedHoldBooking(bookings: Booking[], hold: BlockedDate): Booking | null {
+  const email = holdBookingEmail(hold.id).toLowerCase();
+  return (
+    bookings.find(
+      (booking) => booking.email.toLowerCase() === email && booking.status !== "cancelled",
+    ) ?? null
+  );
 }
 
 export function canStartHold(row: BlockedDate): boolean {
-  return isClientHold(row) && holdDisplayStatus(row) === "confirmed";
+  return isClientHold(row);
 }
 
 export function canMarkReady(booking: Booking): boolean {
@@ -422,6 +435,7 @@ export function computeKpis(
     if (status === "confirmed" && date >= today) upcomingQuotedCount += 1;
   }
   for (const hold of blockedDates.filter(isClientHold)) {
+    if (linkedHoldBooking(bookings, hold)) continue;
     if (hold.date === today) todayCount += 1;
     if (hold.date >= weekStart && hold.date <= weekEnd) weekCount += 1;
     if (hold.date >= today) upcomingQuotedCount += 1;

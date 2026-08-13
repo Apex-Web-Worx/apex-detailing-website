@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { formatDateLong, todayDateString } from "@/lib/format";
 import { useAdmin } from "../context";
-import { bookingShopDate, bookingShopTime, isClientHold } from "../utils";
+import { bookingShopDate, bookingShopTime, isClientHold, linkedHoldBooking } from "../utils";
 import AppointmentRow from "../components/AppointmentRow";
 import HeldAppointmentRow from "../components/HeldAppointmentRow";
 import MonthCalendar from "../components/MonthCalendar";
 import { EmptyState, GhostButton } from "../components/ui";
 import { PersonalEventsCard } from "../components/PersonalEventsCard";
-import { adminUnblockDate, getAdminListBlockedDatesQueryKey } from "@workspace/api-client-react";
+import { adminUnblockDate, getAdminListBlockedDatesQueryKey, getAdminListBookingsQueryKey } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useOwnerCalendarEvents } from "../useOwnerCalendarEvents";
 
@@ -23,6 +23,8 @@ export default function CalendarPage() {
     .sort((a, b) => bookingShopTime(a).localeCompare(bookingShopTime(b)));
   const dayPersonal = personalEvents.filter((e) => e.dates.includes(selected));
   const blocked = blockedDates.find((b) => b.date === selected);
+  const linkedHold = blocked ? linkedHoldBooking(bookings, blocked) : null;
+  const showHoldRow = Boolean(blocked && isClientHold(blocked) && !linkedHold);
 
   const unblock = async () => {
     if (!blocked) return;
@@ -30,6 +32,7 @@ export default function CalendarPage() {
     try {
       await adminUnblockDate(blocked.date, { headers: { "x-admin-token": token } });
       queryClient.invalidateQueries({ queryKey: getAdminListBlockedDatesQueryKey() });
+      queryClient.invalidateQueries({ queryKey: getAdminListBookingsQueryKey() });
     } catch (e) {
       alert(`Could not re-open: ${e instanceof Error ? e.message : "unknown"}`);
     }
@@ -54,12 +57,17 @@ export default function CalendarPage() {
       />
       <div>
         <h3 className="font-bold mb-2">{formatDateLong(selected)}</h3>
-        {blocked && isClientHold(blocked) && (
+        {showHoldRow && blocked && (
           <div className="mb-3 space-y-2">
             <HeldAppointmentRow hold={blocked} />
             <div className="flex justify-end">
               <GhostButton type="button" onClick={unblock}>Re-open</GhostButton>
             </div>
+          </div>
+        )}
+        {blocked && isClientHold(blocked) && linkedHold && (
+          <div className="mb-3 flex justify-end">
+            <GhostButton type="button" onClick={unblock}>Re-open day</GhostButton>
           </div>
         )}
         {blocked && !isClientHold(blocked) && (

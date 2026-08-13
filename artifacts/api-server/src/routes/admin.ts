@@ -38,6 +38,12 @@ import {
 import { notifyBookingCancelled, notifyBookingRescheduled } from "../lib/notify";
 import { sendSms, smsBlockedDateConfirm } from "../lib/sms";
 import {
+  cancelIdleHoldBooking,
+  ensureClientHoldBookings,
+  startHoldBooking,
+  syncHoldBookingFromRow,
+} from "../lib/hold-bookings";
+import {
   deletePhotosForBooking,
   getBookingPhoto,
   listAllBookingPhotoMeta,
@@ -82,6 +88,11 @@ function bookingToEmailData(
 }
 
 router.get("/admin/bookings", requireAdmin, async (_req, res) => {
+  try {
+    await ensureClientHoldBookings();
+  } catch (err) {
+    console.error("[admin] ensureClientHoldBookings failed:", err);
+  }
   const rows = await db
     .select()
     .from(bookingsTable)
@@ -555,6 +566,10 @@ router.post("/admin/blocked-dates", requireAdmin, async (req, res) => {
       });
     }
 
+    void syncHoldBookingFromRow(created).catch((err) =>
+      console.error("[admin] hold booking create failed:", err),
+    );
+
     res.status(201).json(created);
   } catch (err) {
     const pgCode = pgErrorCode(err);
@@ -734,6 +749,10 @@ router.patch("/admin/blocked-dates/:date", requireAdmin, async (req, res) => {
       });
     }
 
+    void syncHoldBookingFromRow(updated).catch((err) =>
+      console.error("[admin] hold booking update failed:", err),
+    );
+
     res.json(updated);
   } catch (err) {
     const pgCode = pgErrorCode(err);
@@ -757,60 +776,17 @@ router.post("/admin/blocked-dates/:id/start", requireAdmin, async (req, res) => 
     res.status(404).json({ message: "Held appointment not found." });
     return;
   }
-  const isHold = Boolean(
-    hold.name?.trim() || hold.surname?.trim() || hold.phone?.trim() || hold.vehicle?.trim(),
-  );
-  if (!isHold) {
-    res.status(400).json({ message: "This blocked day has no customer to start." });
-    return;
+  try {
+    const started = await startHoldBooking(hold);
+    if (!started) {
+      res.status(400).json({ message: "This blocked day has no customer to start." });
+      return;
+    }
+    res.json(started);
+  } catch (err) {
+    console.error("[admin] blocked-dates start failed:", err);
+    res.status(500).json({ message: "Could not start that job." });
   }
-  const services = await db
-    .select()
-    .from(servicesTable)
-    .where(eq(servicesTable.active, true))
-    .orderBy(asc(servicesTable.sortOrder));
-  const reason = (hold.reason ?? "").trim();
-  const service =
-    services.find((row) => row.name.toLowerCase() === reason.toLowerCase()) ?? services[0];
-  if (!service) {
-    res.status(400).json({ message: "No services are set up to start this job." });
-    return;
-  }
-  const scheduledAt = buildScheduledAt(hold.date, "08:00");
-  if (!scheduledAt) {
-    res.status(400).json({ message: "Invalid held date." });
-    return;
-  }
-  const now = new Date();
-  const customerName =
-    [hold.name, hold.surname].filter(Boolean).join(" ").trim() || "Customer";
-  const phone = (hold.phone ?? "").trim() || "—";
-  const vehicle = (hold.vehicle ?? "").trim() || "Vehicle";
-  const [created] = await db
-    .insert(bookingsTable)
-    .values({
-      serviceId: service.id,
-      serviceName: reason || service.name,
-      servicePriceCents: service.priceCents,
-      serviceDurationMinutes: service.durationMinutes,
-      customerName,
-      email: `hold-${hold.id}@apexdetailing.net`,
-      phone,
-      vehicle,
-      notes: "",
-      scheduledAt,
-      status: "in_progress",
-      inProgressAt: now,
-      manageToken: randomBytes(24).toString("base64url"),
-      smsConsent: false,
-    })
-    .returning();
-  await db.delete(blockedDatesTable).where(eq(blockedDatesTable.id, hold.id));
-  if (hold.googleEventId) {
-    void deleteBlockedDateEvent(hold.googleEventId);
-  }
-  void syncBookingCalendar(created.id);
-  res.json(created);
 });
 
 router.delete("/admin/blocked-dates/:date", requireAdmin, async (req, res) => {
@@ -821,13 +797,18 @@ router.delete("/admin/blocked-dates/:date", requireAdmin, async (req, res) => {
     return;
   }
   // Read first so we can clean up the calendar event after the row is gone.
-  const [existing] = await db
-    .select({ googleEventId: blockedDatesTable.googleEventId })
+  const [row] = await db
+    .select()
     .from(blockedDatesTable)
     .where(eq(blockedDatesTable.date, date));
   await db.delete(blockedDatesTable).where(eq(blockedDatesTable.date, date));
-  if (existing?.googleEventId) {
-    void deleteBlockedDateEvent(existing.googleEventId);
+  if (row?.id) {
+    void cancelIdleHoldBooking(row.id).catch((err) =>
+      console.error("[admin] cancel hold booking failed:", err),
+    );
+  }
+  if (row?.googleEventId) {
+    void deleteBlockedDateEvent(row.googleEventId);
   }
   res.status(204).send();
 });

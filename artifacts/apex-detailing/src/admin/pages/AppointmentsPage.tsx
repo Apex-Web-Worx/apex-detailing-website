@@ -8,6 +8,7 @@ import {
   holdDisplayStatus,
   holdServiceLabel,
   isClientHold,
+  linkedHoldBooking,
   matchesHold,
   matchesSearch,
   type DisplayStatus,
@@ -62,6 +63,7 @@ export default function AppointmentsPage() {
       });
     }
     for (const hold of blockedDates.filter(isClientHold)) {
+      if (linkedHoldBooking(bookings, hold)) continue;
       if (searchQuery && !matchesHold(hold, searchQuery)) continue;
       if (filterService && holdServiceLabel(hold) !== filterService) continue;
       if (filterDate && hold.date !== filterDate) continue;
