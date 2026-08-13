@@ -74,8 +74,8 @@ export default function AppointmentRow({
                 />
               </div>
             ) : null}
-            <div className="min-w-0 flex-1 md:grid md:grid-cols-[7.5rem_minmax(12rem,1.4fr)_minmax(8rem,0.8fr)] md:items-center md:gap-4">
-              <div className="flex items-center gap-2 min-w-0">
+            <div className="min-w-0 flex-1 md:grid md:grid-cols-[minmax(10rem,auto)_minmax(0,1fr)_minmax(7.5rem,auto)] md:items-center md:gap-5">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 min-w-0">
                 <span className="text-sm font-bold text-white shrink-0">
                   {formatTime12h(bookingShopTime(booking))}
                 </span>
@@ -117,7 +117,7 @@ export default function AppointmentRow({
             </div>
           </div>
         </button>
-        {primaryAction ? <div className="hidden md:block shrink-0">{primaryAction}</div> : null}
+        {primaryAction ? <div className="hidden md:block shrink-0 min-w-[10.5rem]">{primaryAction}</div> : null}
         <div className="flex flex-col md:flex-row items-center gap-1.5 shrink-0">
           <a
             href={`tel:${booking.phone}`}

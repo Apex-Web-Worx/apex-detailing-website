@@ -27,7 +27,7 @@ export default function AppointmentsPage() {
   const { bookings, blockedDates, isLoading, setDetail, setEditing, cancelBooking, openBlockDate, searchQuery, setSearchQuery, token } = useAdmin();
   const [filterDate, setFilterDate] = useState("");
   const [filterService, setFilterService] = useState("");
-  const [filterStatus, setFilterStatus] = useState("");
+  const [filterStatus, setFilterStatus] = useState<DisplayStatus | "">("confirmed");
   const [view, setView] = useState<"list" | "calendar">("list");
   const [calMonth, setCalMonth] = useState(todayDateString().slice(0, 7));
   const [selectedDate, setSelectedDate] = useState(todayDateString());
@@ -42,17 +42,21 @@ export default function AppointmentsPage() {
   }, [bookings, blockedDates]);
 
   const items = useMemo(() => {
+    const today = todayDateString();
     const list: ListItem[] = [];
     for (const booking of bookings) {
       if (searchQuery && !matchesSearch(booking, searchQuery)) continue;
       if (filterService && booking.serviceName !== filterService) continue;
-      if (filterDate && bookingShopDate(booking) !== filterDate) continue;
+      const date = bookingShopDate(booking);
+      if (filterDate && date !== filterDate) continue;
       const status = displayStatus(booking);
+      if (status === "completed" && filterStatus !== "completed") continue;
       if (filterStatus && status !== filterStatus) continue;
+      if (filterStatus === "confirmed" && !filterDate && view === "list" && date < today) continue;
       list.push({
         kind: "booking",
         key: `booking-${booking.id}`,
-        date: bookingShopDate(booking),
+        date,
         status,
         booking,
       });
@@ -62,7 +66,9 @@ export default function AppointmentsPage() {
       if (filterService && holdServiceLabel(hold) !== filterService) continue;
       if (filterDate && hold.date !== filterDate) continue;
       const status = holdDisplayStatus(hold);
+      if (status === "completed" && filterStatus !== "completed") continue;
       if (filterStatus && status !== filterStatus) continue;
+      if (filterStatus === "confirmed" && !filterDate && view === "list" && hold.date < today) continue;
       list.push({
         kind: "hold",
         key: `hold-${hold.id}`,
@@ -93,7 +99,7 @@ export default function AppointmentsPage() {
       return 0;
     });
     return list;
-  }, [bookings, blockedDates, searchQuery, filterService, filterDate, filterStatus]);
+  }, [bookings, blockedDates, searchQuery, filterService, filterDate, filterStatus, view]);
 
   const visible = view === "calendar" ? items.filter((item) => item.date === selectedDate) : items;
 
@@ -154,26 +160,26 @@ export default function AppointmentsPage() {
         />
         <AdminSelect
           value={filterStatus}
-          onChange={setFilterStatus}
+          onChange={(value) => setFilterStatus(value as DisplayStatus | "")}
           aria-label="Filter by status"
           className="lg:w-52"
           options={[
-            { value: "", label: "All statuses" },
             { value: "confirmed", label: "Confirmed" },
             { value: "in_progress", label: "In progress" },
             { value: "ready_for_pickup", label: "Ready for pickup" },
+            { value: "", label: "Active (hide completed)" },
             { value: "completed", label: "Completed" },
             { value: "cancelled", label: "Cancelled" },
           ]}
         />
-        {(filterDate || filterService || filterStatus) && (
+        {(filterDate || filterService || filterStatus !== "confirmed") && (
           <GhostButton
             type="button"
             className="h-10"
             onClick={() => {
               setFilterDate("");
               setFilterService("");
-              setFilterStatus("");
+              setFilterStatus("confirmed");
             }}
           >
             Clear

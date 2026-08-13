@@ -45,7 +45,11 @@ export default function DashboardHome() {
   const kpis = computeKpis(bookings, blockedDates);
   const todayBlocked = blockedDates.find((b) => b.date === today);
   const todayAppts = bookings
-    .filter((b) => b.status !== "cancelled" && bookingShopDate(b) === today)
+    .filter((b) => {
+      if (bookingShopDate(b) !== today) return false;
+      const status = displayStatus(b);
+      return status !== "cancelled" && status !== "completed";
+    })
     .sort((a, b) => bookingShopTime(a).localeCompare(bookingShopTime(b)));
   const tasks = deriveTasks(bookings);
   const shopEmpty = todayAppts.length === 0 && !todayBlocked;
