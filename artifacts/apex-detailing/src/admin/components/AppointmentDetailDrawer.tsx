@@ -13,6 +13,7 @@ import {
   formatElapsedLong,
 } from "../utils";
 import { GhostButton, PrimaryButton, StatusBadge } from "./ui";
+import { cn } from "@/lib/utils";
 import DetailTimer from "./DetailTimer";
 import {
   CustomerPhotoGallery,
@@ -51,6 +52,7 @@ export default function AppointmentDetailDrawer() {
     refetch,
     openReadyModal,
     startBooking,
+    completeBooking,
   } = useAdmin();
   const photosQuery = useAdminBookingPhotoIndex(token);
   const photoIds = detail ? photoIdsForBooking(photosQuery.data, detail.id) : [];
@@ -115,16 +117,7 @@ export default function AppointmentDetailDrawer() {
   const markComplete = async () => {
     setBusy(true);
     try {
-      const res = await fetch(`/api/admin/bookings/${detail.id}/complete`, {
-        method: "POST",
-        headers: { "x-admin-token": token },
-      });
-      if (!res.ok) throw new Error(await res.text());
-      const json = await res.json();
-      setDetail(json);
-      refetch();
-    } catch (e) {
-      alert(e instanceof Error ? e.message : "Could not complete");
+      await completeBooking(detail.id);
     } finally {
       setBusy(false);
     }
@@ -248,6 +241,44 @@ export default function AppointmentDetailDrawer() {
             ) : null}
           </section>
 
+          {status !== "cancelled" ? (
+            <section>
+              <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">
+                Change status
+              </h3>
+              <ol className="space-y-2 text-sm">
+                <StatusStep
+                  n={1}
+                  label="Confirmed"
+                  hint="Tap Start detailing when you begin the job."
+                  current={status === "confirmed"}
+                  done={status === "in_progress" || status === "ready_for_pickup" || status === "completed"}
+                />
+                <StatusStep
+                  n={2}
+                  label="In progress"
+                  hint="Timer runs until Ready for pickup."
+                  current={status === "in_progress"}
+                  done={status === "ready_for_pickup" || status === "completed"}
+                />
+                <StatusStep
+                  n={3}
+                  label="Ready for pickup"
+                  hint="Saves time for this car and notifies the customer."
+                  current={status === "ready_for_pickup"}
+                  done={status === "completed"}
+                />
+                <StatusStep
+                  n={4}
+                  label="Completed"
+                  hint="Tap Mark completed after they pick up."
+                  current={status === "completed"}
+                  done={false}
+                />
+              </ol>
+            </section>
+          ) : null}
+
           {alreadyReady && (
             <section className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 space-y-2">
               <p className="text-sm font-semibold text-emerald-300 flex items-center gap-2">
@@ -316,7 +347,7 @@ export default function AppointmentDetailDrawer() {
         <div className="shrink-0 border-t border-white/10 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] bg-[#0B0B0B] space-y-2">
           {canStart && (
             <PrimaryButton type="button" className="w-full min-h-12" disabled={busy} onClick={markInProgress}>
-              <Play className="w-4 h-4" /> Start
+              <Play className="w-4 h-4" /> Start detailing
             </PrimaryButton>
           )}
           {ready && (
@@ -380,5 +411,29 @@ export default function AppointmentDetailDrawer() {
         </div>
       </aside>
     </div>
+  );
+}
+
+function StatusStep({
+  n,
+  label,
+  hint,
+  current,
+  done,
+}: {
+  n: number;
+  label: string;
+  hint: string;
+  current: boolean;
+  done: boolean;
+}) {
+  return (
+    <li className={cn("rounded-xl border px-3 py-2.5", current ? "border-[#FF2AD4]/40 bg-[#FF2AD4]/10" : "border-white/10")}>
+      <p className={cn("text-sm font-semibold", current || done ? "text-white" : "text-[#9CA3AF]")}>
+        {n}. {label}
+        {current ? " · now" : done ? " · done" : ""}
+      </p>
+      <p className="text-xs text-[#9CA3AF] mt-0.5">{hint}</p>
+    </li>
   );
 }

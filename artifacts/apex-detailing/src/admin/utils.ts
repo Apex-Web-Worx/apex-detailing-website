@@ -41,20 +41,17 @@ export type DisplayStatus =
   | "completed"
   | "cancelled";
 
-export function displayStatus(booking: Booking, now = new Date()): DisplayStatus {
+export function displayStatus(booking: Booking, _now = new Date()): DisplayStatus {
   const stored = booking.status;
   if (stored === "cancelled") return "cancelled";
   if (stored === "completed") return "completed";
   if (stored === "ready_for_pickup") return "ready_for_pickup";
   if (stored === "in_progress") return "in_progress";
-  const date = bookingShopDate(booking);
-  const today = todayDateString();
-  if (date < today) return "completed";
   return "confirmed";
 }
 
 export function canStartJob(booking: Booking): boolean {
-  return displayStatus(booking) === "confirmed";
+  return booking.status === "confirmed";
 }
 
 export function canMarkReady(booking: Booking): boolean {
@@ -62,7 +59,7 @@ export function canMarkReady(booking: Booking): boolean {
 }
 
 export function canMarkCompleted(booking: Booking): boolean {
-  return displayStatus(booking) === "ready_for_pickup";
+  return booking.status === "ready_for_pickup";
 }
 
 export function customerFirstName(fullName: string): string {
@@ -418,7 +415,7 @@ export function computeKpis(
     if (status === "completed" && date.startsWith(month)) {
       monthCollectedCents += booking.servicePriceCents;
     }
-    if (status === "confirmed") upcomingQuotedCount += 1;
+    if (status === "confirmed" && date >= today) upcomingQuotedCount += 1;
   }
   for (const hold of blockedDates.filter(isClientHold)) {
     if (hold.date === today) todayCount += 1;

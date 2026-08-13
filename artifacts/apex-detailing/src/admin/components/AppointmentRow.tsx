@@ -3,7 +3,15 @@ import { Link } from "wouter";
 import type { Booking } from "@workspace/api-client-react";
 import { MoreHorizontal, Phone, Check, Play } from "lucide-react";
 import { formatDuration, formatTime12h } from "@/lib/format";
-import { displayStatus, notesPreview, bookingShopDate, bookingShopTime, canMarkReady, canStartJob } from "../utils";
+import {
+  displayStatus,
+  notesPreview,
+  bookingShopDate,
+  bookingShopTime,
+  canMarkCompleted,
+  canMarkReady,
+  canStartJob,
+} from "../utils";
 import { StatusBadge } from "./ui";
 import { useAdmin } from "../context";
 import DetailTimer from "./DetailTimer";
@@ -25,7 +33,7 @@ export default function AppointmentRow({
   onEdit?: () => void;
   onCancel?: () => void;
 }) {
-  const { token, openReadyModal, startBooking } = useAdmin();
+  const { token, openReadyModal, startBooking, completeBooking } = useAdmin();
   const photosQuery = useAdminBookingPhotoIndex(token);
   const photoIds = photoIdsForBooking(photosQuery.data, booking.id);
   const photoCount = photoIds.length;
@@ -35,6 +43,7 @@ export default function AppointmentRow({
   const canAct = status === "confirmed";
   const ready = canMarkReady(booking);
   const canStart = canStartJob(booking);
+  const canComplete = canMarkCompleted(booking);
 
   return (
     <div className="rounded-2xl border border-white/10 bg-[#111111] px-3 py-3 md:px-4 hover:bg-[#161616] transition duration-200">
@@ -79,26 +88,6 @@ export default function AppointmentRow({
           </div>
         </button>
         <div className="flex flex-col items-center gap-1.5 shrink-0">
-          {canStart ? (
-            <button
-              type="button"
-              onClick={() => startBooking(booking.id)}
-              className="w-11 h-11 rounded-xl bg-[#FF2AD4] text-white flex items-center justify-center hover:bg-[#ff4adc] touch-manipulation"
-              aria-label="Start detailing"
-            >
-              <Play className="w-4 h-4" />
-            </button>
-          ) : null}
-          {ready ? (
-            <button
-              type="button"
-              onClick={() => openReadyModal(booking)}
-              className="w-11 h-11 rounded-xl bg-[#FF2AD4] text-white flex items-center justify-center hover:bg-[#ff4adc] touch-manipulation"
-              aria-label="Ready for pickup"
-            >
-              <Check className="w-4 h-4" />
-            </button>
-          ) : null}
           <a
             href={`tel:${booking.phone}`}
             className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-[#23B9FF] hover:bg-white/5 touch-manipulation"
@@ -127,6 +116,42 @@ export default function AppointmentRow({
                 >
                   View
                 </button>
+                {canStart ? (
+                  <button
+                    type="button"
+                    className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
+                    onClick={() => {
+                      setMenu(false);
+                      void startBooking(booking.id);
+                    }}
+                  >
+                    Start detailing
+                  </button>
+                ) : null}
+                {ready ? (
+                  <button
+                    type="button"
+                    className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
+                    onClick={() => {
+                      setMenu(false);
+                      openReadyModal(booking);
+                    }}
+                  >
+                    Ready for pickup
+                  </button>
+                ) : null}
+                {canComplete ? (
+                  <button
+                    type="button"
+                    className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
+                    onClick={() => {
+                      setMenu(false);
+                      void completeBooking(booking.id);
+                    }}
+                  >
+                    Mark completed
+                  </button>
+                ) : null}
                 {canAct && onEdit && (
                   <button
                     type="button"
@@ -147,7 +172,7 @@ export default function AppointmentRow({
                     Customer link
                   </Link>
                 )}
-                {canAct && onCancel && (
+                {(canAct || status === "in_progress" || status === "ready_for_pickup") && onCancel && (
                   <button
                     type="button"
                     className="w-full text-left px-3 py-3 text-sm text-red-400 hover:bg-red-500/10 min-h-11"
@@ -164,6 +189,33 @@ export default function AppointmentRow({
           </div>
         </div>
       </div>
+      {canStart ? (
+        <button
+          type="button"
+          onClick={() => void startBooking(booking.id)}
+          className="mt-3 w-full min-h-12 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold flex items-center justify-center gap-2 hover:bg-[#ff4adc] touch-manipulation"
+        >
+          <Play className="w-4 h-4" /> Start detailing
+        </button>
+      ) : null}
+      {ready ? (
+        <button
+          type="button"
+          onClick={() => openReadyModal(booking)}
+          className="mt-3 w-full min-h-12 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold flex items-center justify-center gap-2 hover:bg-[#ff4adc] touch-manipulation"
+        >
+          <Check className="w-4 h-4" /> Ready for pickup
+        </button>
+      ) : null}
+      {canComplete ? (
+        <button
+          type="button"
+          onClick={() => void completeBooking(booking.id)}
+          className="mt-3 w-full min-h-12 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold flex items-center justify-center gap-2 hover:bg-[#ff4adc] touch-manipulation"
+        >
+          <Check className="w-4 h-4" /> Mark completed
+        </button>
+      ) : null}
     </div>
   );
 }
