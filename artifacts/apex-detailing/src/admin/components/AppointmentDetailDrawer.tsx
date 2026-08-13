@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { Mail, MessageSquare, Phone, X, Check } from "lucide-react";
+import { Mail, MessageSquare, Phone, X, Check, Play } from "lucide-react";
 import { formatDateTimeLong, formatDuration } from "@/lib/format";
 import { useAdmin } from "../context";
 import {
   bookingIso,
   canMarkCompleted,
   canMarkReady,
+  canStartJob,
   displayStatus,
 } from "../utils";
 import { GhostButton, PrimaryButton, StatusBadge } from "./ui";
+import DetailTimer from "./DetailTimer";
 import {
   CustomerPhotoGallery,
   photoIdsForBooking,
@@ -46,6 +48,7 @@ export default function AppointmentDetailDrawer() {
     token,
     refetch,
     openReadyModal,
+    startBooking,
   } = useAdmin();
   const photosQuery = useAdminBookingPhotoIndex(token);
   const photoIds = detail ? photoIdsForBooking(photosQuery.data, detail.id) : [];
@@ -90,6 +93,7 @@ export default function AppointmentDetailDrawer() {
   const canAct = status === "confirmed";
   const ready = canMarkReady(detail);
   const complete = canMarkCompleted(detail);
+  const canStart = canStartJob(detail);
   const alreadyReady = status === "ready_for_pickup" || status === "completed";
   const smsHref = `sms:${detail.phone}`;
   const pickupNote = comms.find((c) => c.messageType === "vehicle_ready" && (c.status === "sent" || c.status === "delivered"));
@@ -99,16 +103,7 @@ export default function AppointmentDetailDrawer() {
   const markInProgress = async () => {
     setBusy(true);
     try {
-      const res = await fetch(`/api/admin/bookings/${detail.id}/in-progress`, {
-        method: "POST",
-        headers: { "x-admin-token": token },
-      });
-      if (!res.ok) throw new Error(await res.text());
-      const json = await res.json();
-      setDetail(json);
-      refetch();
-    } catch (e) {
-      alert(e instanceof Error ? e.message : "Could not start job");
+      await startBooking(detail.id);
     } finally {
       setBusy(false);
     }
@@ -228,7 +223,7 @@ export default function AppointmentDetailDrawer() {
                 <dd className="text-white mt-0.5">{formatDateTimeLong(bookingIso(detail))}</dd>
               </div>
               <div>
-                <dt className="text-[#9CA3AF] text-xs">Duration</dt>
+                <dt className="text-[#9CA3AF] text-xs">Booked</dt>
                 <dd className="text-white mt-0.5">{formatDuration(detail.serviceDurationMinutes)}</dd>
               </div>
               <div>
@@ -236,6 +231,11 @@ export default function AppointmentDetailDrawer() {
                 <dd className="mt-1"><StatusBadge status={status} /></dd>
               </div>
             </dl>
+            {(status === "in_progress" || alreadyReady) && detail.inProgressAt ? (
+              <div className="mt-4 rounded-xl border border-white/10 bg-[#111111] p-4">
+                <DetailTimer booking={detail} size="lg" />
+              </div>
+            ) : null}
           </section>
 
           {alreadyReady && (
@@ -304,6 +304,11 @@ export default function AppointmentDetailDrawer() {
         </div>
 
         <div className="shrink-0 border-t border-white/10 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] bg-[#0B0B0B] space-y-2">
+          {canStart && (
+            <PrimaryButton type="button" className="w-full min-h-12" disabled={busy} onClick={markInProgress}>
+              <Play className="w-4 h-4" /> Start
+            </PrimaryButton>
+          )}
           {ready && (
             <PrimaryButton
               type="button"
@@ -313,11 +318,6 @@ export default function AppointmentDetailDrawer() {
             >
               <Check className="w-4 h-4" /> Ready for pickup
             </PrimaryButton>
-          )}
-          {status === "confirmed" && (
-            <GhostButton type="button" className="w-full min-h-12" disabled={busy} onClick={markInProgress}>
-              Start job
-            </GhostButton>
           )}
           {complete && (
             <PrimaryButton type="button" className="w-full min-h-12" disabled={busy} onClick={markComplete}>

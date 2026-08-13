@@ -57,6 +57,8 @@ export const bookingsTable = pgTable(
     pickupAt: timestamp("pickup_at", { withTimezone: true }),
     /** When the customer picked up and the job was marked completed. */
     completedAt: timestamp("completed_at", { withTimezone: true }),
+    /** Elapsed detailing time in minutes from Start to Ready for Pickup. */
+    detailDurationMinutes: integer("detail_duration_minutes"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),

@@ -50,13 +50,15 @@ export function displayStatus(booking: Booking, now = new Date()): DisplayStatus
   const date = bookingShopDate(booking);
   const today = todayDateString();
   if (date < today) return "completed";
-  if (new Date(bookingIso(booking)) <= now) return "in_progress";
   return "confirmed";
 }
 
-export function canMarkReady(booking: Booking, now = new Date()): boolean {
-  const status = displayStatus(booking, now);
-  return status === "in_progress";
+export function canStartJob(booking: Booking): boolean {
+  return displayStatus(booking) === "confirmed";
+}
+
+export function canMarkReady(booking: Booking): boolean {
+  return booking.status === "in_progress";
 }
 
 export function canMarkCompleted(booking: Booking): boolean {
@@ -88,6 +90,38 @@ export function shopNowPlusMinutes(minutes: number): { date: string; time: strin
   const d = new Date(Date.now() + minutes * 60 * 1000);
   const iso = d.toISOString();
   return { date: scheduledAtToShopDate(iso), time: scheduledAtToShopTime(iso) };
+}
+
+export function formatElapsedClock(ms: number): string {
+  const totalSec = Math.max(0, Math.floor(ms / 1000));
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  if (h > 0) return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+export function formatElapsedLong(ms: number): string {
+  const totalMin = Math.max(0, Math.round(ms / 60000));
+  const h = Math.floor(totalMin / 60);
+  const m = totalMin % 60;
+  if (totalMin === 0) return "less than a minute";
+  if (h === 0) return `${m} min`;
+  if (m === 0) return `${h} hr${h === 1 ? "" : "s"}`;
+  return `${h} hr${h === 1 ? "" : "s"} ${m} min`;
+}
+
+export function bookingDetailElapsedMs(
+  booking: Pick<Booking, "inProgressAt" | "readyAt" | "detailDurationMinutes">,
+  now = Date.now(),
+): number | null {
+  if (booking.inProgressAt) {
+    const start = new Date(booking.inProgressAt).getTime();
+    const end = booking.readyAt ? new Date(booking.readyAt).getTime() : now;
+    return Math.max(0, end - start);
+  }
+  if (booking.detailDurationMinutes != null) return booking.detailDurationMinutes * 60_000;
+  return null;
 }
 
 export function notesPreview(notes: string | null | undefined, max = 72): string {

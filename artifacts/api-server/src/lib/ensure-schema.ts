@@ -37,7 +37,8 @@ export async function ensurePickupWorkflow(): Promise<void> {
       ADD COLUMN IF NOT EXISTS in_progress_at timestamptz,
       ADD COLUMN IF NOT EXISTS ready_at timestamptz,
       ADD COLUMN IF NOT EXISTS pickup_at timestamptz,
-      ADD COLUMN IF NOT EXISTS completed_at timestamptz
+      ADD COLUMN IF NOT EXISTS completed_at timestamptz,
+      ADD COLUMN IF NOT EXISTS detail_duration_minutes integer
   `);
 
   await pool.query(`

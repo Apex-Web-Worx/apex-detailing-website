@@ -273,7 +273,7 @@ export async function markInProgress(bookingId: number) {
     actor: "admin",
     action: "status_in_progress",
     status: "in_progress",
-    detail: "Status changed to IN PROGRESS",
+    detail: "Job started — detailing timer running",
     occurredAt: now,
   });
   return updated;
@@ -411,12 +411,16 @@ export async function markReadyAndNotify(args: {
   const now = new Date();
   let current = booking;
   if (!alreadyReady) {
+    const startedAt = booking.inProgressAt ?? now;
+    const durationMinutes = Math.max(0, Math.round((now.getTime() - startedAt.getTime()) / 60000));
     const [updated] = await db
       .update(bookingsTable)
       .set({
         status: "ready_for_pickup",
         pickupAt: args.pickupAt,
         readyAt: now,
+        inProgressAt: booking.inProgressAt ?? now,
+        detailDurationMinutes: durationMinutes,
       })
       .where(
         and(
@@ -438,12 +442,16 @@ export async function markReadyAndNotify(args: {
       return { error: "conflict" as const, booking: again ?? booking };
     }
     current = updated;
+    const hours = Math.floor((current.detailDurationMinutes ?? durationMinutes) / 60);
+    const mins = (current.detailDurationMinutes ?? durationMinutes) % 60;
+    const durationLabel =
+      hours > 0 ? `${hours} hr${hours === 1 ? "" : "s"} ${mins} min` : `${mins} min`;
     await logEvent({
       bookingId: current.id,
       actor: "admin",
       action: "status_ready_for_pickup",
       status: "ready_for_pickup",
-      detail: "Vehicle marked READY FOR PICKUP",
+      detail: `Vehicle marked READY FOR PICKUP · detailed ${durationLabel}`,
       occurredAt: now,
     });
   } else if (args.resend) {

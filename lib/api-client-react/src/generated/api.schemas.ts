@@ -169,6 +169,7 @@ export interface Booking {
   readyAt?: string | null;
   pickupAt?: string | null;
   completedAt?: string | null;
+  detailDurationMinutes?: number | null;
   createdAt: string;
 }
 
