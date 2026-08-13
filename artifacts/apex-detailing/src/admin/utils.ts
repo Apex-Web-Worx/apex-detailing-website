@@ -60,10 +60,13 @@ export function holdBookingEmail(holdId: number): string {
 
 export function linkedHoldBooking(bookings: Booking[], hold: BlockedDate): Booking | null {
   const email = holdBookingEmail(hold.id).toLowerCase();
+  const matches = bookings.filter((booking) => booking.email.toLowerCase() === email);
   return (
-    bookings.find(
-      (booking) => booking.email.toLowerCase() === email && booking.status !== "cancelled",
-    ) ?? null
+    matches.find(
+      (booking) => booking.status !== "cancelled" && booking.status !== "completed",
+    ) ??
+    matches[0] ??
+    null
   );
 }
 

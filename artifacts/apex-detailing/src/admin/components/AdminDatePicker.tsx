@@ -10,6 +10,7 @@ import {
   daysInMonth,
   displayStatus,
   isClientHold,
+  linkedHoldBooking,
   monthLabel,
 } from "../utils";
 
@@ -58,6 +59,7 @@ export default function AdminDatePicker({
     }
     for (const row of blockedDates) {
       if (!isClientHold(row)) continue;
+      if (linkedHoldBooking(bookings, row)) continue;
       counts.set(row.date, (counts.get(row.date) ?? 0) + 1);
     }
     return counts;

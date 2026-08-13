@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { formatDateLong, todayDateString } from "@/lib/format";
 import { useAdmin } from "../context";
-import { bookingShopDate, bookingShopTime, isClientHold, linkedHoldBooking } from "../utils";
+import { bookingShopDate, bookingShopTime, displayStatus, isClientHold, linkedHoldBooking } from "../utils";
 import AppointmentRow from "../components/AppointmentRow";
 import HeldAppointmentRow from "../components/HeldAppointmentRow";
 import MonthCalendar from "../components/MonthCalendar";
@@ -19,12 +19,17 @@ export default function CalendarPage() {
   const queryClient = useQueryClient();
   const { data: personalEvents = [] } = useOwnerCalendarEvents(token, month);
   const dayBookings = bookings
-    .filter((b) => bookingShopDate(b) === selected)
+    .filter((b) => bookingShopDate(b) === selected && displayStatus(b) !== "cancelled")
     .sort((a, b) => bookingShopTime(a).localeCompare(bookingShopTime(b)));
   const dayPersonal = personalEvents.filter((e) => e.dates.includes(selected));
   const blocked = blockedDates.find((b) => b.date === selected);
   const linkedHold = blocked ? linkedHoldBooking(bookings, blocked) : null;
+  const liveLinked =
+    Boolean(linkedHold) &&
+    linkedHold?.status !== "cancelled" &&
+    linkedHold?.status !== "completed";
   const showHoldRow = Boolean(blocked && isClientHold(blocked) && !linkedHold);
+  const showBlockedCard = Boolean(blocked && !showHoldRow && !liveLinked);
 
   const unblock = async () => {
     if (!blocked) return;
@@ -65,12 +70,12 @@ export default function CalendarPage() {
             </div>
           </div>
         )}
-        {blocked && isClientHold(blocked) && linkedHold && (
+        {liveLinked && blocked && (
           <div className="mb-3 flex justify-end">
             <GhostButton type="button" onClick={unblock}>Re-open day</GhostButton>
           </div>
         )}
-        {blocked && !isClientHold(blocked) && (
+        {showBlockedCard && blocked && (
           <div className="mb-3 rounded-xl border border-white/10 bg-[#111111] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <p className="text-sm text-white">Blocked{blocked.reason ? ` · ${blocked.reason}` : ""}</p>

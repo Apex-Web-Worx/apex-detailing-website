@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Booking, BlockedDate } from "@workspace/api-client-react";
 import { todayDateString } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import { addMonths, bookingShopDate, daysInMonth, displayStatus, isClientHold, monthLabel } from "../utils";
+import { addMonths, bookingShopDate, daysInMonth, displayStatus, isClientHold, linkedHoldBooking, monthLabel } from "../utils";
 import type { VisualCalendarEvent } from "../useOwnerCalendarEvents";
 import { GhostButton, PrimaryButton } from "./ui";
 
@@ -84,10 +84,14 @@ export default function MonthCalendar({
           const dayPersonal = personalEvents.filter((e) => e.dates.includes(date));
           const blocked = blockedByDate.get(date);
           const hold = blocked && isClientHold(blocked);
+          const linked = hold && blocked ? linkedHoldBooking(bookings, blocked) : null;
+          const holdOpen = Boolean(hold && !linked);
           const dots: Array<"booking" | "personal" | "blocked" | "done"> = [];
           if (blocked) {
-            if (hold) dots.push(date < today ? "done" : "booking");
-            else dots.push("blocked");
+            if (holdOpen) dots.push(date < today ? "done" : "booking");
+            else if (!hold || linked?.status === "cancelled" || linked?.status === "completed") {
+              dots.push("blocked");
+            }
           }
           for (const b of dayBookings) {
             if (dots.length >= 4) break;

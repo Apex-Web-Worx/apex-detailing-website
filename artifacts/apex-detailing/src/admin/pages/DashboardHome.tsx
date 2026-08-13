@@ -188,7 +188,7 @@ export default function DashboardHome() {
                 {showHoldRow && todayBlocked && (
                   <HeldAppointmentRow hold={todayBlocked} stackedAction />
                 )}
-                {todayBlocked && !isClientHold(todayBlocked) && (
+                {todayBlocked && !showHoldRow && todayAppts.length === 0 && (
                   <div className="rounded-xl border border-white/10 bg-[#0B0B0B] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div>
                       <p className="text-sm text-white">

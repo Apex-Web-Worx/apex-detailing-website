@@ -31,12 +31,17 @@ export function isClientHold(row: {
   );
 }
 
-export async function findLiveHoldBooking(holdId: number): Promise<BookingRow | null> {
+export async function findHoldBookings(holdId: number): Promise<BookingRow[]> {
   const email = holdBookingEmail(holdId);
-  const rows = await db
-    .select()
-    .from(bookingsTable)
-    .where(eq(bookingsTable.email, email));
+  return db.select().from(bookingsTable).where(eq(bookingsTable.email, email));
+}
+
+export async function findLiveHoldBooking(holdId: number): Promise<BookingRow | null> {
+  const rows = await findHoldBookings(holdId);
+  return findLiveHoldBookingFromRows(rows);
+}
+
+function findLiveHoldBookingFromRows(rows: BookingRow[]): BookingRow | null {
   return rows.find((row) => OCCUPYING_STATUS_LIST.includes(row.status)) ?? null;
 }
 
@@ -56,7 +61,8 @@ async function pickService(reason: string) {
 
 export async function ensureHoldBooking(hold: HoldRow): Promise<BookingRow | null> {
   if (!isClientHold(hold)) return null;
-  const existing = await findLiveHoldBooking(hold.id);
+  const rows = await findHoldBookings(hold.id);
+  const existing = findLiveHoldBookingFromRows(rows);
   if (existing) {
     const customerName =
       [hold.name, hold.surname].filter(Boolean).join(" ").trim() || existing.customerName;
@@ -88,6 +94,9 @@ export async function ensureHoldBooking(hold: HoldRow): Promise<BookingRow | nul
       .returning();
     return updated ?? existing;
   }
+
+  // A cancelled/completed hold booking must not be recreated as a confirmed job.
+  if (rows.length > 0) return null;
 
   const service = await pickService(hold.reason ?? "");
   if (!service) return null;
