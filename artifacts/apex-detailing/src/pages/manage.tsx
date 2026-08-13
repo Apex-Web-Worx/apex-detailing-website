@@ -16,6 +16,8 @@ import {
   todayDateString,
   addDaysToDateString,
 } from "@/lib/format";
+import LanguageToggle from "@/components/LanguageToggle";
+import { useLanguage } from "@/i18n/LanguageProvider";
 import {
   ArrowLeft,
   Calendar,
@@ -60,6 +62,7 @@ function scheduledAtToShopTime(iso: string): string {
 }
 
 export default function ManagePage() {
+  const { t } = useLanguage();
   const [, params] = useRoute<{ id: string }>("/manage/:id");
   const id = Number(params?.id);
   const token = useMemo(getTokenFromLocation, []);
@@ -89,7 +92,7 @@ export default function ManagePage() {
     return (
       <ManageShell>
         <div className="flex items-center gap-3 text-gray-400 py-16 justify-center">
-          <Loader2 className="w-5 h-5 animate-spin" /> Loading your booking…
+          <Loader2 className="w-5 h-5 animate-spin" /> {t("manage.loading")}
         </div>
       </ManageShell>
     );
@@ -119,9 +122,7 @@ function ManageShell({ children }: { children: React.ReactNode }) {
             <ArrowLeft className="w-4 h-4" />
             <span className="text-sm font-medium">Apex Detailing</span>
           </Link>
-          <div className="text-sm font-bold tracking-widest text-white/80">
-            MANAGE BOOKING
-          </div>
+          <LanguageToggle />
           <a
             href="tel:417-527-6165"
             className="hidden sm:flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-[#00E5FF] transition"

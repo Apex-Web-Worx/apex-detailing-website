@@ -12,6 +12,8 @@ import {
   X,
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
+import LanguageToggle from "@/components/LanguageToggle";
+import { useLanguage } from "@/i18n/LanguageProvider";
 
 const CONTENT_ENDPOINT =
   "https://apex-seo-ai.vercel.app/api/public/content";
@@ -234,6 +236,7 @@ function MarkdownBody({ content }: { content: string }) {
 }
 
 function SiteNavigation() {
+  const { t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const base = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
   const homeHref = base ? `${base}/` : "/";
@@ -241,14 +244,14 @@ function SiteNavigation() {
   const homeSectionHref = (section: string) => `${homeHref}#${section}`;
 
   const links = [
-    { label: "Home", href: homeHref },
-    { label: "Services", href: homeSectionHref("services") },
-    { label: "About", href: homeSectionHref("about") },
-    { label: "Gallery", href: homeSectionHref("gallery") },
-    { label: "Testimonials", href: homeSectionHref("testimonials") },
-    { label: "FAQ", href: homeSectionHref("faq") },
-    { label: "Journal", href: base ? `${base}/blog` : "/blog" },
-    { label: "Buy Gift Card", href: giftCardsHref },
+    { id: "home", href: homeHref },
+    { id: "services", href: homeSectionHref("services") },
+    { id: "about", href: homeSectionHref("about") },
+    { id: "gallery", href: homeSectionHref("gallery") },
+    { id: "testimonials", href: homeSectionHref("testimonials") },
+    { id: "faq", href: homeSectionHref("faq") },
+    { id: "journal", href: base ? `${base}/blog` : "/blog" },
+    { id: "gift", href: giftCardsHref },
   ];
 
   return (
@@ -271,31 +274,33 @@ function SiteNavigation() {
           </Link>
 
           <div className="hidden items-center space-x-8 md:flex">
+            <LanguageToggle />
             <a
               href="tel:417-527-6165"
               className="inline-flex items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#00E5FF]"
               aria-label="Call Apex Detailing"
             >
               <Phone className="h-4 w-4 text-[#00E5FF]" />
-              <span>Call</span>
+              <span>{t("nav.call")}</span>
             </a>
             {links.map((link) => (
               <a
-                key={link.label}
+                key={link.id}
                 href={link.href}
                 className="group relative text-sm font-semibold uppercase tracking-wider text-gray-300 transition-colors hover:text-white"
               >
-                {link.label}
+                {t(`nav.${link.id}`)}
                 <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
             <Link href={BOOKING_LINK} className="btn-cyber btn-cyber-sm">
-              <span>Book now</span>
+              <span>{t("nav.book")}</span>
               <ChevronRight className="h-4 w-4" />
             </Link>
           </div>
 
           <div className="flex items-center gap-2 md:hidden">
+            <LanguageToggle />
             <a
               href="tel:417-527-6165"
               className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-colors hover:border-[#00E5FF] hover:text-[#00E5FF]"
@@ -307,7 +312,7 @@ function SiteNavigation() {
               type="button"
               onClick={() => setMobileMenuOpen((open) => !open)}
               className="p-2 text-white focus:outline-none"
-              aria-label="Toggle menu"
+              aria-label={t("nav.menu")}
               aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? (
@@ -330,12 +335,12 @@ function SiteNavigation() {
         <div className="flex flex-col space-y-4 px-6">
           {links.map((link) => (
             <a
-              key={link.label}
+              key={link.id}
               href={link.href}
               onClick={() => setMobileMenuOpen(false)}
               className="text-left text-lg font-semibold uppercase tracking-wider text-gray-300 hover:text-white"
             >
-              {link.label}
+              {t(`nav.${link.id}`)}
             </a>
           ))}
           <Link
@@ -343,7 +348,7 @@ function SiteNavigation() {
             onClick={() => setMobileMenuOpen(false)}
             className="btn-cyber btn-cyber-block mt-4"
           >
-            <span>Book now</span>
+            <span>{t("nav.book")}</span>
           </Link>
         </div>
       </div>
@@ -352,19 +357,20 @@ function SiteNavigation() {
 }
 
 function SiteFooter() {
+  const { t } = useLanguage();
   const base = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
   const homeHref = base ? `${base}/` : "/";
   const giftCardsHref = base ? `${base}/gift-cards` : "/gift-cards";
   const homeSectionHref = (section: string) => `${homeHref}#${section}`;
   const quickLinks = [
-    { label: "Home", href: homeHref },
-    { label: "Services", href: homeSectionHref("services") },
-    { label: "About", href: homeSectionHref("about") },
-    { label: "Gallery", href: homeSectionHref("gallery") },
-    { label: "Testimonials", href: homeSectionHref("testimonials") },
-    { label: "FAQ", href: homeSectionHref("faq") },
-    { label: "Journal", href: base ? `${base}/blog` : "/blog" },
-    { label: "Buy Gift Card", href: giftCardsHref },
+    { id: "home", href: homeHref },
+    { id: "services", href: homeSectionHref("services") },
+    { id: "about", href: homeSectionHref("about") },
+    { id: "gallery", href: homeSectionHref("gallery") },
+    { id: "testimonials", href: homeSectionHref("testimonials") },
+    { id: "faq", href: homeSectionHref("faq") },
+    { id: "journal", href: base ? `${base}/blog` : "/blog" },
+    { id: "gift", href: giftCardsHref },
   ];
   const services = [
     "Apex Full Detailing",
@@ -390,8 +396,7 @@ function SiteFooter() {
               />
             </div>
             <p className="mb-6 font-medium text-gray-400">
-              Prestige vehicle detailing and ceramic coating services. Expert
-              craftsmanship, exceptional results.
+              {t("footer.blurb")}
             </p>
             <div className="flex gap-4">
               <a
@@ -426,17 +431,17 @@ function SiteFooter() {
 
           <div>
             <h2 className="mb-6 text-lg font-black uppercase tracking-wider">
-              Quick Links
+              {t("footer.links")}
             </h2>
             <ul className="space-y-3 font-medium text-gray-400">
               {quickLinks.map((link) => (
-                <li key={link.label}>
+                <li key={link.id}>
                   <a
                     href={link.href}
                     className="flex items-center gap-2 transition-all hover:translate-x-1 hover:text-white"
                   >
                     <ChevronRight className="h-3 w-3 text-[#00E5FF]" />
-                    {link.label}
+                    {t(`nav.${link.id}`)}
                   </a>
                 </li>
               ))}
@@ -445,7 +450,7 @@ function SiteFooter() {
 
           <div>
             <h2 className="mb-6 text-lg font-black uppercase tracking-wider">
-              Services
+              {t("footer.services")}
             </h2>
             <ul className="space-y-3 font-medium text-gray-400">
               {services.map((service) => (
@@ -459,7 +464,7 @@ function SiteFooter() {
 
           <div>
             <h2 className="mb-6 text-lg font-black uppercase tracking-wider">
-              Contact
+              {t("footer.contact")}
             </h2>
             <ul className="space-y-4 text-gray-400">
               <li className="flex items-start gap-3">
@@ -487,14 +492,14 @@ function SiteFooter() {
               <li className="flex items-start gap-3">
                 <Clock className="mt-0.5 h-5 w-5 shrink-0 text-[#FF1AD8]" />
                 <div className="text-sm">
-                  <p className="font-bold text-white">Mon – Sat</p>
-                  <p>7:00 AM – 6:00 PM</p>
-                  <p className="mt-1 text-gray-500">Closed Sundays</p>
+                  <p className="font-bold text-white">{t("footer.monSat")}</p>
+                  <p>{t("footer.hoursTime")}</p>
+                  <p className="mt-1 text-gray-500">{t("footer.closedSun")}</p>
                 </div>
               </li>
               <li className="flex items-start gap-3">
                 <Mail className="mt-0.5 h-5 w-5 shrink-0 text-[#00E5FF]" />
-                <span>Contact us via social media</span>
+                <span>{t("footer.social")}</span>
               </li>
             </ul>
           </div>
@@ -516,7 +521,7 @@ function SiteFooter() {
               className="h-16 w-auto object-contain opacity-70 transition-opacity group-hover:opacity-100"
             />
             <p className="text-xs font-medium uppercase tracking-widest text-gray-500 transition-colors group-hover:text-white">
-              Designed and developed by{" "}
+              {t("footer.designed")}{" "}
               <span className="text-potential font-bold">APEX WEB WORX</span>
             </p>
           </a>
@@ -524,15 +529,14 @@ function SiteFooter() {
 
         <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-center md:flex-row md:text-left">
           <p className="text-sm font-medium text-gray-500">
-            &copy; {new Date().getFullYear()} Apex Detailing. All rights
-            reserved.
+            &copy; {new Date().getFullYear()} {t("footer.rights")}
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-sm font-medium text-gray-500 sm:gap-6 md:justify-end">
             <Link href="/privacy" className="transition-colors hover:text-white">
-              Privacy Policy
+              {t("footer.privacy")}
             </Link>
             <Link href="/terms" className="transition-colors hover:text-white">
-              Terms of Service
+              {t("footer.terms")}
             </Link>
           </div>
         </div>
@@ -542,26 +546,27 @@ function SiteFooter() {
 }
 
 function BlogIndex({ posts }: { posts: PostSummary[] }) {
+  const { t } = useLanguage();
   return (
     <main className="min-h-screen bg-[#0a0a0a] px-4 pb-24 pt-36 text-white sm:px-6 lg:px-8">
       <div className="container mx-auto max-w-5xl">
         <div className="mb-12 max-w-3xl">
           <p className="mb-3 text-sm font-bold uppercase tracking-widest text-potential">
-            Apex Detailing Journal
+            {t("journal.kicker")}
           </p>
           <h1 className="font-display text-4xl font-black uppercase tracking-tight sm:text-6xl">
-            Detailing insights for{" "}
-            <span className="brand-gradient-text">Missouri drivers</span>
+            {t("journal.title")}{" "}
+            <span className="brand-gradient-text">{t("journal.titleAccent")}</span>
           </h1>
           <p className="mt-6 text-lg leading-8 text-gray-400">
-            Practical guidance on ceramic coating, paint correction, interior
-            detailing, and protecting your vehicle in the Ozarks.
+            {t("journal.sub")}
           </p>
+          <p className="mt-3 text-sm text-[#23B9FF]">{t("journal.enOnly")}</p>
         </div>
 
         {posts.length === 0 ? (
           <div className="surface-card rounded-2xl p-8 text-gray-300">
-            No articles are published yet. Check back soon.
+            {t("journal.empty")}
           </div>
         ) : (
           <div className="grid gap-5 md:grid-cols-2">
@@ -585,7 +590,7 @@ function BlogIndex({ posts }: { posts: PostSummary[] }) {
                   href={`/blog/${post.slug}`}
                   className="mt-6 inline-flex items-center gap-2 font-bold text-[#00E5FF] transition-colors group-hover:text-white"
                 >
-                  Read article
+                  {t("journal.read")}
                   <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Link>
               </article>
@@ -598,6 +603,7 @@ function BlogIndex({ posts }: { posts: PostSummary[] }) {
 }
 
 function BlogPost({ post }: { post: ContentPost }) {
+  const { t } = useLanguage();
   return (
     <main className="min-h-screen bg-[#0a0a0a] px-4 pb-24 pt-36 text-white sm:px-6 lg:px-8">
       <article className="container mx-auto max-w-4xl">
@@ -606,18 +612,18 @@ function BlogPost({ post }: { post: ContentPost }) {
           className="mb-8 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-[#00E5FF] transition-colors hover:text-white"
         >
           <ChevronRight className="h-4 w-4 rotate-180" />
-          Back to articles
+          {t("journal.back")}
         </Link>
         <header className="mb-12 border-b border-white/10 pb-10">
           <p className="mb-4 text-sm font-bold uppercase tracking-widest text-potential">
-            Apex Detailing Journal
+            {t("journal.kicker")}
           </p>
           <h1 className="font-display text-4xl font-black uppercase leading-tight tracking-tight sm:text-6xl">
             {post.title}
           </h1>
           {post.published_at && (
             <p className="mt-5 text-sm text-gray-500">
-              Published{" "}
+              {t("journal.published")}{" "}
               {new Intl.DateTimeFormat("en-US", {
                 dateStyle: "long",
               }).format(new Date(post.published_at))}

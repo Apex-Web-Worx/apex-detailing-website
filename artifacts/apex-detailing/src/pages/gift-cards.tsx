@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
+import LanguageToggle from "@/components/LanguageToggle";
+import { useLanguage } from "@/i18n/LanguageProvider";
 import {
   ArrowLeft,
   ChevronRight,
@@ -141,6 +143,7 @@ const FAQS = [
 ];
 
 export default function GiftCardsPage() {
+  const { t } = useLanguage();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState<string>("150");
 
@@ -159,15 +162,16 @@ export default function GiftCardsPage() {
             className="flex items-center gap-2 text-gray-300 hover:text-white transition"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm font-medium">Back to site</span>
+            <span className="text-sm font-medium">{t("gift.back")}</span>
           </Link>
+          <LanguageToggle />
           <a
             href={SQUARE_GIFT_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden sm:inline-flex items-center gap-1 text-sm font-bold text-[#00E5FF] hover:text-white transition"
           >
-            Skip to checkout <ChevronRight className="w-4 h-4" />
+            {t("gift.skip")} <ChevronRight className="w-4 h-4" />
           </a>
         </div>
       </header>
@@ -181,28 +185,26 @@ export default function GiftCardsPage() {
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/10 mb-5">
                 <Gift className="w-4 h-4 text-[#00E5FF]" />
                 <span className="text-xs font-bold tracking-widest uppercase text-gray-300">
-                  Gift Cards
+                  {t("gift.kicker")}
                 </span>
               </div>
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-[0.95] mb-6 font-display">
-                Give the Gift of a{" "}
+                {t("gift.title")}{" "}
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] to-[#00E5FF]">
-                  Showroom Shine
+                  {t("gift.titleAccent")}
                 </span>
               </h1>
               <p className="text-lg text-gray-300 leading-relaxed mb-8 max-w-xl">
-                The perfect gift for the car-lover, the busy parent, or anyone
-                who deserves to drive a clean ride. Delivered instantly by
-                email. Never expires.
+                {t("gift.sub")}
               </p>
               <div className="flex flex-wrap items-center gap-5 text-sm text-gray-400">
                 <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4 text-[#00E5FF]" />
-                  <span>Delivered instantly</span>
+                  <span>{t("gift.instant")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-[#00E5FF]" />
-                  <span>Never expires</span>
+                  <span>{t("gift.neverExpires")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Star

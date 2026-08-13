@@ -10,12 +10,14 @@ import NotFound from "@/pages/not-found";
 import VideoTemplate from "@/components/video/VideoTemplate";
 import PwaManifestSwitch from "@/components/PwaManifestSwitch";
 import ApexContentPage from "@/pages/ApexContentPage";
+import { LanguageProvider } from "@/i18n/LanguageProvider";
 
 function App() {
   const base = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
 
   return (
     <Router base={base}>
+      <LanguageProvider>
       <PwaManifestSwitch />
       {/* Shared stroke gradient for cyber button icons */}
       <svg width="0" height="0" aria-hidden="true" className="absolute">
@@ -42,6 +44,7 @@ function App() {
         <Route path="/blog/:slug" component={ApexContentPage} />
         <Route component={NotFound} />
       </Switch>
+      </LanguageProvider>
     </Router>
   );
 }

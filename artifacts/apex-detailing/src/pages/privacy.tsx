@@ -1,9 +1,12 @@
 import { Link } from "wouter";
 import { ArrowLeft, Phone } from "lucide-react";
+import LanguageToggle from "@/components/LanguageToggle";
+import { useLanguage } from "@/i18n/LanguageProvider";
 
 const EFFECTIVE = "May 2, 2026";
 
 export default function PrivacyPage() {
+  const { t } = useLanguage();
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
       <header className="border-b border-white/10 bg-[#0a0a0a]/95 backdrop-blur sticky top-0 z-30">
@@ -13,11 +16,9 @@ export default function PrivacyPage() {
             className="flex items-center gap-2 text-gray-300 hover:text-white transition"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm font-medium">Back to site</span>
+            <span className="text-sm font-medium">{t("book.backSite")}</span>
           </Link>
-          <div className="text-sm font-bold tracking-widest text-white/80">
-            PRIVACY POLICY
-          </div>
+          <LanguageToggle />
           <a
             href="tel:417-527-6165"
             className="hidden sm:flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-[#00E5FF] transition"
@@ -29,6 +30,7 @@ export default function PrivacyPage() {
       </header>
 
       <main className="max-w-3xl mx-auto px-4 py-12">
+        <p className="text-sm text-[#23B9FF] mb-6">{t("legal.enOnly")}</p>
         <h1 className="text-4xl font-extrabold mb-2">Privacy Policy</h1>
         <p className="text-sm text-gray-400 mb-10">
           Effective {EFFECTIVE} &middot; Apex Detailing &middot; Nixa, Missouri

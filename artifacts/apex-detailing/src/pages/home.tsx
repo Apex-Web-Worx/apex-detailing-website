@@ -31,11 +31,24 @@ import img1306 from "@assets/IMG_1306_1775780654765.jpeg";
 import paintCorrectionBefore from "@assets/IMG_1662_1779061738951.jpeg";
 import paintCorrectionAfter from "@assets/IMG_1668_1779061738951.jpeg";
 import BrandLogo from "@/components/BrandLogo";
+import LanguageToggle from "@/components/LanguageToggle";
+import { useLanguage } from "@/i18n/LanguageProvider";
 
 const BOOKING_LINK = "/book";
 const INSTAGRAM_LINK = "https://www.instagram.com/apexdetailing_sf";
 const FACEBOOK_LINK = "https://www.facebook.com/profile.php?id=61556776603500";
 const GOOGLE_REVIEWS_LINK = "https://g.page/r/CQphdJbRExhREAE/review";
+
+const NAV_ITEMS = [
+  { id: "home", kind: "section" as const },
+  { id: "services", kind: "section" as const },
+  { id: "about", kind: "section" as const },
+  { id: "gallery", kind: "section" as const },
+  { id: "testimonials", kind: "section" as const },
+  { id: "faq", kind: "section" as const },
+  { id: "journal", kind: "path" as const, path: "blog" },
+  { id: "gift", kind: "path" as const, path: "gift-cards" },
+];
 
 const AddonCard = ({ addon }: { addon: { name: string; price: string; description?: string } }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -313,6 +326,7 @@ const googleReviews = [
 ];
 
 function AddonsSection() {
+  const { t } = useLanguage();
   const [expandedAddon, setExpandedAddon] = useState(null);
 
   const interiorAddons = [
@@ -386,7 +400,7 @@ function AddonsSection() {
             </span>
           </h3>
           <p className="text-gray-400 text-sm mb-6">
-            Optional Services (Extra Charges Apply)
+            {t("addons.optional")}
           </p>
           
           <div className="space-y-4">
@@ -404,7 +418,7 @@ function AddonsSection() {
             </span>
           </h3>
           <p className="text-gray-400 text-sm mb-6">
-            Optional Services (Extra Charges Apply)
+            {t("addons.optional")}
           </p>
           
           <div className="space-y-4">
@@ -419,6 +433,7 @@ function AddonsSection() {
 }
 
 export default function Home() {
+  const { t } = useLanguage();
   const [, setLocation] = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -962,39 +977,37 @@ export default function Home() {
               <span className="brand-logo-nav__streaks" aria-hidden="true" />
             </div>
 
-            <div className="hidden md:flex items-center space-x-8">
+            <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
+              <LanguageToggle />
               <a
                 href="tel:417-527-6165"
                 className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-[#00E5FF] transition-colors"
                 aria-label="Call Apex Detailing"
               >
                 <Phone className="w-4 h-4 text-[#00E5FF]" />
-                <span>Call</span>
+                <span>{t("nav.call")}</span>
               </a>
-              {["Home", "Services", "About", "Gallery", "Testimonials", "FAQ", "Journal", "Buy Gift Card"].map((item) => {
-                const isGiftCard = item === "Buy Gift Card";
-                const isJournal = item === "Journal";
-                const href = isGiftCard
-                  ? `${import.meta.env.BASE_URL}gift-cards`
-                  : isJournal
-                    ? `${import.meta.env.BASE_URL}blog`
-                    : `#${item.toLowerCase()}`;
+              {NAV_ITEMS.map((item) => {
+                const href =
+                  item.kind === "path"
+                    ? `${import.meta.env.BASE_URL}${item.path}`
+                    : `#${item.id}`;
                 return (
                   <a
-                    key={item}
+                    key={item.id}
                     href={href}
                     onClick={(e) => {
-                      if (isGiftCard || isJournal) return;
+                      if (item.kind === "path") return;
                       e.preventDefault();
-                      scrollToSection(item.toLowerCase());
+                      scrollToSection(item.id);
                     }}
                     className={`font-semibold text-sm tracking-wider uppercase transition-colors relative group ${
-                      activeSection === item.toLowerCase()
+                      activeSection === item.id
                         ? "text-white header-shine"
                         : "text-gray-300 hover:text-white"
                     }`}
                   >
-                    {item}
+                    {t(`nav.${item.id}`)}
                     <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] transition-all duration-300 group-hover:w-full" />
                   </a>
                 );
@@ -1007,11 +1020,12 @@ export default function Home() {
                 }}
                 className="btn-cyber btn-cyber-sm"
               >
-                <span>Book now</span> <ChevronRight className="w-4 h-4" />
+                <span>{t("nav.book")}</span> <ChevronRight className="w-4 h-4" />
               </a>
             </div>
 
             <div className="md:hidden flex items-center gap-2">
+              <LanguageToggle />
               <a
                 href="tel:417-527-6165"
                 className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10 text-white hover:text-[#00E5FF] hover:border-[#00E5FF] transition-colors"
@@ -1022,7 +1036,7 @@ export default function Home() {
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="text-white p-2 focus:outline-none"
-                aria-label="Toggle menu"
+                aria-label={t("nav.menu")}
               >
                 {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
@@ -1036,29 +1050,26 @@ export default function Home() {
           }`}
         >
           <div className="flex flex-col space-y-4 px-6">
-            {["Home", "Services", "About", "Gallery", "Testimonials", "FAQ", "Journal", "Buy Gift Card"].map((item) => {
-              const isGiftCard = item === "Buy Gift Card";
-              const isJournal = item === "Journal";
-              const href = isGiftCard
-                ? `${import.meta.env.BASE_URL}gift-cards`
-                : isJournal
-                  ? `${import.meta.env.BASE_URL}blog`
-                  : `#${item.toLowerCase()}`;
+            {NAV_ITEMS.map((item) => {
+              const href =
+                item.kind === "path"
+                  ? `${import.meta.env.BASE_URL}${item.path}`
+                  : `#${item.id}`;
               return (
                 <a
-                  key={item}
+                  key={item.id}
                   href={href}
                   onClick={(e) => {
-                    if (isGiftCard || isJournal) {
+                    if (item.kind === "path") {
                       setMobileMenuOpen(false);
                       return;
                     }
                     e.preventDefault();
-                    scrollToSection(item.toLowerCase());
+                    scrollToSection(item.id);
                   }}
                   className="text-left text-gray-300 hover:text-white font-semibold text-lg tracking-wider uppercase"
                 >
-                  {item}
+                  {t(`nav.${item.id}`)}
                 </a>
               );
             })}
@@ -1070,7 +1081,7 @@ export default function Home() {
               }}
               className="btn-cyber btn-cyber-block mt-4"
             >
-              <span>Book now</span>
+              <span>{t("nav.book")}</span>
             </a>
           </div>
         </div>
@@ -1112,20 +1123,20 @@ export default function Home() {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-sm bg-white/[0.03] border border-white/10 backdrop-blur-sm mb-6 sm:mb-8 max-w-full">
             <span className="flex h-2 w-2 rounded-full bg-[#FF1AD8] animate-pulse" />
             <span className="text-[10px] sm:text-sm font-bold tracking-widest text-gray-300 uppercase text-center">
-              Nixa Ozark Springfield, MO Premium Detailing
+              {t("hero.badge")}
             </span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.92] sm:leading-[0.9] mb-5 sm:mb-6 drop-shadow-2xl uppercase font-display">
-            Unleash Your <br />
+            {t("hero.title1")} <br />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-              Car's True Potential
+              {t("hero.title2")}
             </span>
           </h1>
 
           <p className="max-w-2xl text-base sm:text-lg md:text-xl text-gray-300 mb-8 sm:mb-10 font-medium px-1">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#FF1AD8] to-[#00E5FF]">Premium auto detailing, ceramic coating, and paint correction</span> services serving
-            <span className="text-potential font-bold"> Nixa Ozark Springfield, MO</span>. We bring the showroom shine to your vehicle.
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#FF1AD8] to-[#00E5FF]">{t("hero.subtitleLead")}</span>{t("hero.subtitleRest")}
+            <span className="text-potential font-bold"> Nixa Ozark Springfield, MO</span>{t("hero.subtitleEnd")}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 w-full sm:w-auto items-stretch sm:items-center justify-center">
@@ -1138,14 +1149,14 @@ export default function Home() {
                 }}
                 className="btn-cyber btn-cyber-lg group w-full min-w-[15.5rem] h-[3.5rem]"
               >
-                <span>Book your detail</span>
+                <span>{t("hero.book")}</span>
                 <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
               </a>
               <a
                 href={`${import.meta.env.BASE_URL}gift-cards`}
                 className="btn-cyber btn-cyber-outline btn-cyber-lg group w-full min-w-[15.5rem] h-[3.5rem]"
               >
-                <span>Buy gift card</span>
+                <span>{t("hero.gift")}</span>
                 <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
               </a>
             </div>
@@ -1157,7 +1168,7 @@ export default function Home() {
               }}
               className="group inline-flex items-center justify-center gap-2 px-6 h-[3.5rem] text-gray-300 font-semibold text-sm sm:text-base tracking-[0.12em] uppercase transition-colors duration-300 hover:text-white w-full sm:w-auto"
             >
-              Explore services
+              {t("hero.explore")}
               <ChevronRight className="w-4 h-4 opacity-60 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100" />
             </a>
           </div>
@@ -1168,7 +1179,7 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
             className="mt-8 inline-flex items-center gap-3 px-5 py-3 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:border-[#D4AF37]/60 transition-colors"
-            aria-label="See our Google reviews"
+            aria-label={t("hero.reviewsAria")}
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -1182,21 +1193,21 @@ export default function Home() {
                 <Star key={s} className="w-3.5 h-3.5 text-[#E8C547]" fill="currentColor" />
               ))}
             </div>
-            <span className="text-gray-300 text-xs sm:text-sm font-medium">on Google</span>
+            <span className="text-gray-300 text-xs sm:text-sm font-medium">{t("hero.google")}</span>
           </a>
 
           <div className="mt-10 flex flex-wrap justify-center items-center gap-6 sm:gap-8 opacity-80 hover:opacity-100 transition-all duration-500">
             <div className="flex items-center gap-2">
               <Shield className="w-6 h-6 text-[#FF1AD8]" />
-              <span className="font-bold">Satisfaction Guaranteed</span>
+              <span className="font-bold">{t("hero.guarantee")}</span>
             </div>
             <div className="flex items-center gap-2">
               <Award className="w-6 h-6 text-[#E8C547]" />
-              <span className="font-bold text-gold">5.0★ on Google</span>
+              <span className="font-bold text-gold">{t("hero.googleStars")}</span>
             </div>
             <div className="flex items-center gap-2">
               <MapPin className="w-6 h-6 text-[#FF1AD8]" />
-              <span className="font-bold">Shop-Based · Nixa, MO</span>
+              <span className="font-bold">{t("hero.shop")}</span>
             </div>
           </div>
 
@@ -1223,17 +1234,16 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-sm font-bold tracking-widest text-potential uppercase mb-3">
-              What We Do
+              {t("services.kicker")}
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-6 font-display">
-              Elite{" "}
+              {t("services.title")}{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-                Services
+                {t("services.titleAccent")}
               </span>
             </h3>
             <p className="text-gray-400 text-lg">
-              We offer comprehensive detailing solutions tailored to protect your investment and keep
-              your vehicle looking immaculate.
+              {t("services.intro")}
             </p>
           </div>
 
@@ -1247,7 +1257,7 @@ export default function Home() {
               }}
             />
             <p className="relative z-10 text-gray-300 text-sm leading-relaxed">
-              <span className="font-black text-[#FF1AD8]">Pricing Note:</span> The price ranges listed below are standard for the majority of vehicles. The final cost will depend on the condition of your vehicle and any additional services you request. For a more accurate estimate, please contact us directly.
+              <span className="font-black text-[#FF1AD8]">{t("services.pricingNoteLabel")}</span>{t("services.pricingNote")}
             </p>
           </div>
 
@@ -1276,24 +1286,24 @@ export default function Home() {
                     {service.title}
                     {service.id === "interior-detailing" && (
                       <span className="badge-gold inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider">
-                        <Star className="w-3 h-3" fill="currentColor" /> Most Booked
+                        <Star className="w-3 h-3" fill="currentColor" /> {t("services.mostBooked")}
                       </span>
                     )}
                     {service.id === "full-detailing" && (
                       <span className="badge-gold inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider">
-                        Best Value
+                        {t("services.bestValue")}
                       </span>
                     )}
                     {service.id === "apex-express-interior-detailing" && (
                       <span className="badge-gold inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider">
-                        <Zap className="w-3 h-3" /> Express
+                        <Zap className="w-3 h-3" /> {t("services.express")}
                       </span>
                     )}
                   </h4>
                   <div className="relative z-10 mb-4">
                     {!/call/i.test(service.pricing) && (
                       <p className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-0.5">
-                        Starting at
+                        {t("services.startingAt")}
                       </p>
                     )}
                     <p className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
@@ -1320,7 +1330,7 @@ export default function Home() {
                     href={BOOKING_LINK}
                     className="btn-cyber btn-cyber-sm relative z-10 mt-auto self-start"
                   >
-                    <span>Book Now</span>
+                    <span>{t("services.book")}</span>
                     <ChevronRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -1338,20 +1348,20 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-14">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
-              How It Works
+              {t("how.kicker")}
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
-              Three Simple{" "}
+              {t("how.title")}{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-                Steps
+                {t("how.titleAccent")}
               </span>
             </h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {[
-              { step: "01", title: "Book Online", desc: "Pick your service, day, and time in under 2 minutes — right here on our site.", icon: <Clock className="w-7 h-7 text-[#00E5FF]" /> },
-              { step: "02", title: "We Detail", desc: "Drop your car off at our shop. We handle every surface with care, from paint to upholstery.", icon: <Sparkles className="w-7 h-7 text-[#FF1AD8]" /> },
-              { step: "03", title: "Drive Happy", desc: "Step into a like-new vehicle and enjoy long-lasting protection and shine.", icon: <Car className="w-7 h-7 text-[#00E5FF]" /> },
+              { step: "01", title: t("how.1.title"), desc: t("how.1.desc"), icon: <Clock className="w-7 h-7 text-[#00E5FF]" /> },
+              { step: "02", title: t("how.2.title"), desc: t("how.2.desc"), icon: <Sparkles className="w-7 h-7 text-[#FF1AD8]" /> },
+              { step: "03", title: t("how.3.title"), desc: t("how.3.desc"), icon: <Car className="w-7 h-7 text-[#00E5FF]" /> },
             ].map((s) => (
               <div key={s.step} className="relative p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-white/20 transition-colors">
                 <div className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] mb-4">{s.step}</div>
@@ -1412,7 +1422,7 @@ export default function Home() {
                     <div>
                       <p className="font-black text-white text-lg leading-tight">⭐⭐⭐⭐⭐</p>
                       <p className="text-xs font-bold tracking-wider text-gray-400 uppercase">
-                        5-Star Rated
+                        {t("about.rated")}
                       </p>
                     </div>
                   </div>
@@ -1423,10 +1433,10 @@ export default function Home() {
 
             <div className="order-1 lg:order-2">
               <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
-                About Us
+                {t("about.kicker")}
               </h2>
               <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight mb-6 sm:mb-8 leading-tight font-display">
-                Welcome to{" "}
+                {t("about.title")}{" "}
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
                   Apex Detailing
                 </span>
@@ -1434,25 +1444,25 @@ export default function Home() {
 
               <div className="space-y-5 sm:space-y-6 text-gray-400 text-base sm:text-lg mb-8 sm:mb-10">
                 <p>
-                  Where passion, precision, and purpose come together to serve you with excellence. Serving the Nixa Ozark Springfield, MO areas, we specialize in high-quality car detailing that restores beauty, protects value, and reflects the pride you have in your vehicle.
+                  {t("about.p1")}
                 </p>
                 <p>
-                  Our dedication to quality and customer satisfaction has helped us become <strong className="text-gold">#1 Ranked in Nixa for 2024 and 2025</strong>, a recognition we are truly grateful for.
+                  {t("about.p2a")}<strong className="text-gold">{t("about.p2b")}</strong>{t("about.p2c")}
                 </p>
                 <p className="italic">
-                  Our business is built on <span className="text-potential font-semibold">Christian</span> values, with <span className="text-potential font-semibold">Christ</span> at the center of everything we do. We believe in working with integrity, serving others with a joyful heart, and honoring <span className="text-potential font-semibold">God</span> through the quality of our craft.
+                  {t("about.p3a")}<span className="text-potential font-semibold">{t("about.p3b")}</span>{t("about.p3c")}<span className="text-potential font-semibold">{t("about.p3d")}</span>{t("about.p3e")}<span className="text-potential font-semibold">{t("about.p3f")}</span>{t("about.p3g")}
                 </p>
                 <p className="italic text-[#FF1AD8] text-sm mt-4">
-                  "Whatever you do, work at it with all your heart, as working for the Lord, not for men. Colossians 3:23 (NIV)"
+                  {t("about.verse")}
                 </p>
                 <p>
-                  Apex Detailing was founded by Michail, who is known for his meticulous nature and commitment to perfection. What started as a personal passion for detailing has grown into a trusted service grounded in faith, excellence, and care.
+                  {t("about.p4")}
                 </p>
                 <p>
-                  At Apex, we use only premium-grade chemicals and professional techniques to ensure every vehicle gets the attention it deserves — inside and out. Whether it's a deep interior clean, paint correction, or exterior protection, our goal is to go above and beyond your expectations.
+                  {t("about.p5")}
                 </p>
                 <p>
-                  <strong className="text-white">Experience the Apex difference — where faith fuels our service and quality drives every detail.</strong>
+                  <strong className="text-white">{t("about.p6")}</strong>
                 </p>
                 <div className="mt-8 flex items-center gap-5 p-5 rounded-2xl bg-white/[0.03] border border-white/10">
                   <div className="relative shrink-0">
@@ -1467,13 +1477,13 @@ export default function Home() {
                   </div>
                   <div>
                     <p className="text-xs uppercase tracking-wider text-gray-500 font-bold mb-1">
-                      Meet your detailer
+                      {t("about.meet")}
                     </p>
                     <p className="text-white font-black text-lg sm:text-xl leading-tight">
                       Michail Gurov
                     </p>
                     <p className="text-[#FF1AD8] font-bold text-sm">
-                      Founder &amp; Detailing Specialist
+                      {t("about.role")}
                     </p>
                   </div>
                 </div>
@@ -1483,23 +1493,23 @@ export default function Home() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 {[
                   {
-                    title: "Premium Products",
-                    desc: "Professional-grade chemicals only",
+                    title: t("about.perk1.title"),
+                    desc: t("about.perk1.desc"),
                     icon: <Shield className="text-[#FF1AD8]" />,
                   },
                   {
-                    title: "Insured & Certified",
-                    desc: "Peace of mind for your investment",
+                    title: t("about.perk2.title"),
+                    desc: t("about.perk2.desc"),
                     icon: <Award className="text-[#E8C547]" />,
                   },
                   {
-                    title: "Flexible Scheduling",
-                    desc: "Book easily online anytime",
+                    title: t("about.perk3.title"),
+                    desc: t("about.perk3.desc"),
                     icon: <Clock className="text-[#FF1AD8]" />,
                   },
                   {
-                    title: "Expert Team",
-                    desc: "Certified professionals on staff",
+                    title: t("about.perk4.title"),
+                    desc: t("about.perk4.desc"),
                     icon: <Sparkles className="text-[#00E5FF]" />,
                   },
                 ].map((item, i) => (
@@ -1525,10 +1535,13 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-10 sm:mb-16">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
-              See the Difference
+              {t("ba.kicker")}
             </h2>
             <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
-              Before & After <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">Transformations</span>
+              {t("ba.title")}{" "}
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
+                {t("ba.titleAccent")}
+              </span>
             </h3>
           </div>
 
@@ -1657,12 +1670,12 @@ export default function Home() {
           <div className="flex flex-col md:flex-row justify-between items-end mb-10 sm:mb-16 gap-6">
             <div className="max-w-2xl">
               <h2 className="text-sm font-bold tracking-widest text-potential uppercase mb-3">
-                Our Work
+                {t("gallery.kicker")}
               </h2>
               <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
-                Results That{" "}
+                {t("gallery.title")}{" "}
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-                  Speak
+                  {t("gallery.titleAccent")}
                 </span>
               </h3>
             </div>
@@ -1875,12 +1888,12 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
-              Testimonials
+              {t("testimonials.kicker")}
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
-              Client{" "}
+              {t("testimonials.title")}{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-                Reactions
+                {t("testimonials.titleAccent")}
               </span>
             </h3>
           </div>
@@ -1918,23 +1931,23 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl mx-auto text-center mb-20">
             <h2 className="text-sm font-bold tracking-widest text-potential uppercase mb-3">
-              Google Reviews
+              {t("reviews.kicker")}
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-6 font-display">
-              Trusted by Our{" "}
+              {t("reviews.title")}{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-                Happy Customers
+                {t("reviews.titleAccent")}
               </span>
             </h3>
             <p className="text-gray-400 text-lg mb-8">
-              See what our clients are saying about Apex Detailing. We maintain a 5-star rating across all platforms.
+              {t("reviews.sub")}
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
               {[
-                { rating: "5.0", reviews: "Excellent", description: "Rating" },
-                { rating: "100%", reviews: "Positive", description: "Customer Rating" },
-                { rating: "5h", reviews: "Response", description: "Support Time" },
+                { rating: "5.0", reviews: t("reviews.excellent"), description: t("reviews.rating") },
+                { rating: "100%", reviews: t("reviews.positive"), description: t("reviews.customerRating") },
+                { rating: "5h", reviews: t("reviews.response"), description: t("reviews.supportTime") },
               ].map((stat, i) => (
                 <div key={i} className="text-center p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:border-white/20 transition-colors">
                   <p className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] mb-2">
@@ -1985,16 +1998,16 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-sm font-bold tracking-widest text-potential uppercase mb-3">
-              Service Area
+              {t("area.kicker")}
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-4 font-display">
-              Serving the{" "}
+              {t("area.title")}{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-                Ozarks
+                {t("area.titleAccent")}
               </span>
             </h3>
             <p className="text-gray-400 text-lg">
-              Located in Nixa, Missouri — proudly serving customers from across Greene & Christian Counties. Drop your vehicle off at our shop.
+              {t("area.sub")}
             </p>
           </div>
 
@@ -2037,7 +2050,7 @@ export default function Home() {
               <div className="flex items-center gap-3 p-5 rounded-xl bg-white/5 border border-white/10">
                 <Clock className="w-5 h-5 text-[#FF1AD8]" />
                 <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wider font-bold">Hours</p>
+                  <p className="text-xs text-gray-500 uppercase tracking-wider font-bold">{t("footer.hours")}</p>
                   <p className="text-white font-bold">Mon–Sat · 7am – 6pm</p>
                 </div>
               </div>
@@ -2051,12 +2064,12 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
-              FAQ
+              {t("faq.kicker")}
             </h2>
             <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
-              Frequently Asked{" "}
+              {t("faq.title")}{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-                Questions
+                {t("faq.titleAccent")}
               </span>
             </h3>
           </div>
@@ -2076,7 +2089,7 @@ export default function Home() {
                     : "bg-white/5 text-gray-400 border-white/10 hover:border-white/30 hover:text-white"
                 }`}
               >
-                {cat}
+                {cat === "General" ? t("faq.general") : cat === "Paint Correction" ? t("faq.paint") : t("faq.ceramic")}
               </button>
             ))}
           </div>
@@ -2132,15 +2145,15 @@ export default function Home() {
 
             <div className="relative z-10 max-w-3xl mx-auto">
               <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tight mb-6 font-display">
-                Ready to Experience <br />
-                The Apex Difference?
+                {t("cta.title1")} <br />
+                {t("cta.title2")}
               </h2>
               <p className="text-xl text-gray-400 mb-10 font-medium">
-                Book your appointment today.
+                {t("cta.sub")}
               </p>
               <div className="mb-8 p-6 rounded-xl bg-white/5 border border-[#00E5FF]/30 backdrop-blur-sm max-w-2xl">
                 <p className="text-gray-300 text-sm leading-relaxed">
-                  <span className="font-black text-potential">Important:</span> All scheduling needs to be done prior to your visit. We appreciate your understanding and encourage you to book ahead to secure your preferred time.
+                  <span className="font-black text-potential">{t("cta.important")}</span>{t("cta.note")}
                 </p>
               </div>
               <a
@@ -2151,7 +2164,7 @@ export default function Home() {
                 }}
                 className="btn-cyber btn-cyber-xl group"
               >
-                <span>BOOK APPOINTMENT NOW</span>
+                <span>{t("cta.book")}</span>
                 <ChevronRight className="w-6 h-6" />
               </a>
             </div>
@@ -2174,8 +2187,7 @@ export default function Home() {
                 />
               </div>
               <p className="text-gray-400 mb-6 font-medium">
-                Prestige vehicle detailing and ceramic coating services. Expert craftsmanship,
-                exceptional results.
+                {t("footer.blurb")}
               </p>
               <div className="flex gap-4">
                 <a
@@ -2214,28 +2226,25 @@ export default function Home() {
             </div>
 
             <div>
-              <h4 className="font-black text-lg uppercase tracking-wider mb-6">Quick Links</h4>
+              <h4 className="font-black text-lg uppercase tracking-wider mb-6">{t("footer.links")}</h4>
               <ul className="space-y-3 font-medium text-gray-400">
-                {["Home", "Services", "About", "Gallery", "Testimonials", "FAQ", "Journal", "Buy Gift Card"].map((item) => {
-                  const isGiftCard = item === "Buy Gift Card";
-                  const isJournal = item === "Journal";
-                  const href = isGiftCard
-                    ? `${import.meta.env.BASE_URL}gift-cards`
-                    : isJournal
-                      ? `${import.meta.env.BASE_URL}blog`
-                      : `#${item.toLowerCase()}`;
+                {NAV_ITEMS.map((item) => {
+                  const href =
+                    item.kind === "path"
+                      ? `${import.meta.env.BASE_URL}${item.path}`
+                      : `#${item.id}`;
                   return (
-                    <li key={item}>
+                    <li key={item.id}>
                       <a
                         href={href}
                         onClick={(e) => {
-                          if (isGiftCard || isJournal) return;
+                          if (item.kind === "path") return;
                           e.preventDefault();
-                          scrollToSection(item.toLowerCase());
+                          scrollToSection(item.id);
                         }}
                         className="hover:text-white hover:translate-x-1 transition-all flex items-center gap-2"
                       >
-                        <ChevronRight className="w-3 h-3 text-[#00E5FF]" /> {item}
+                        <ChevronRight className="w-3 h-3 text-[#00E5FF]" /> {t(`nav.${item.id}`)}
                       </a>
                     </li>
                   );
@@ -2244,7 +2253,7 @@ export default function Home() {
             </div>
 
             <div>
-              <h4 className="font-black text-lg uppercase tracking-wider mb-6">Services</h4>
+              <h4 className="font-black text-lg uppercase tracking-wider mb-6">{t("footer.services")}</h4>
               <ul className="space-y-3 font-medium text-gray-400">
                 {services.map((service) => (
                   <li
@@ -2258,7 +2267,7 @@ export default function Home() {
             </div>
 
             <div>
-              <h4 className="font-black text-lg uppercase tracking-wider mb-6">Contact</h4>
+              <h4 className="font-black text-lg uppercase tracking-wider mb-6">{t("footer.contact")}</h4>
               <ul className="space-y-4 text-gray-400">
                 <li className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-[#00E5FF] shrink-0 mt-0.5" />
@@ -2284,15 +2293,15 @@ export default function Home() {
                 <li className="flex items-start gap-3">
                   <Clock className="w-5 h-5 text-[#FF1AD8] shrink-0 mt-0.5" />
                   <div className="text-sm">
-                    <p className="text-white font-bold">Mon – Sat</p>
-                    <p className="text-gray-400">7:00 AM – 6:00 PM</p>
-                    <p className="text-gray-500 mt-1">Closed Sundays</p>
+                    <p className="text-white font-bold">{t("footer.monSat")}</p>
+                    <p className="text-gray-400">{t("footer.hoursTime")}</p>
+                    <p className="text-gray-500 mt-1">{t("footer.closedSun")}</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3 group cursor-pointer">
                   <Mail className="w-5 h-5 text-[#00E5FF] shrink-0 mt-0.5" />
                   <div className="flex flex-col">
-                    <span className="md:group-hover:hidden block md:block">Contact us via<br />social media</span>
+                    <span className="md:group-hover:hidden block md:block">{t("footer.social")}</span>
                     <div className="flex md:hidden group-hover:flex gap-3 pt-2">
                       <a
                         href={INSTAGRAM_LINK}
@@ -2356,20 +2365,20 @@ export default function Home() {
 
           <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
             <p className="text-gray-500 text-sm font-medium">
-              &copy; {new Date().getFullYear()} Apex Detailing. All rights reserved.
+              &copy; {new Date().getFullYear()} {t("footer.rights")}
             </p>
             <div className="flex flex-wrap justify-center md:justify-end gap-4 sm:gap-6 text-sm text-gray-500 font-medium">
               <button
                 onClick={() => setLegalModal("privacy")}
                 className="hover:text-white cursor-pointer transition-colors"
               >
-                Privacy Policy
+                {t("footer.privacy")}
               </button>
               <button
                 onClick={() => setLegalModal("terms")}
                 className="hover:text-white cursor-pointer transition-colors"
               >
-                Terms of Service
+                {t("footer.terms")}
               </button>
             </div>
           </div>
@@ -2384,7 +2393,7 @@ export default function Home() {
           aria-label="Call Apex Detailing"
         >
           <Phone className="w-4 h-4 text-[#00E5FF]" />
-          CALL NOW
+          {t("nav.call")}
         </a>
         <a
           href={BOOKING_LINK}
@@ -2394,7 +2403,7 @@ export default function Home() {
           }}
           className="btn-cyber btn-cyber-sm btn-cyber-block"
         >
-          <span>BOOK NOW</span>
+          <span>{t("nav.book")}</span>
           <ChevronRight className="w-4 h-4" />
         </a>
       </div>

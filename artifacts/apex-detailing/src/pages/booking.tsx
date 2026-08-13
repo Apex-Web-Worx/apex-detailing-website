@@ -18,6 +18,8 @@ import {
   addDaysToDateString,
 } from "@/lib/format";
 import VehiclePhotoPicker from "@/components/VehiclePhotoPicker";
+import LanguageToggle from "@/components/LanguageToggle";
+import { useLanguage } from "@/i18n/LanguageProvider";
 import {
   revokePickedPhotos,
   uploadBookingPhotos,
@@ -96,6 +98,7 @@ function formatPhone(raw: string): string {
 }
 
 export default function BookingPage() {
+  const { t } = useLanguage();
   const [step, setStep] = useState<Step>("service");
   const [service, setService] = useState<Service | null>(null);
   const [date, setDate] = useState<string | null>(null);
@@ -124,7 +127,7 @@ export default function BookingPage() {
               className="flex items-center gap-2 text-gray-300 hover:text-white transition"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span className="text-sm font-medium">Back to site</span>
+              <span className="text-sm font-medium">{t("book.backSite")}</span>
             </Link>
           ) : (
             <button
@@ -138,17 +141,20 @@ export default function BookingPage() {
             >
               <ArrowLeft className="w-4 h-4" />
               <span className="text-sm font-medium">
-                Back to{" "}
+                {t("book.backTo")}{" "}
                 {step === "datetime"
-                  ? "service"
+                  ? t("book.backService")
                   : step === "info"
-                    ? "date & time"
-                    : "your info"}
+                    ? t("book.backDate")
+                    : t("book.backInfo")}
               </span>
             </button>
           )}
-          <div className="text-sm font-bold tracking-widest text-white/80">
-            BOOK A DETAIL
+          <div className="flex items-center gap-3">
+            <LanguageToggle />
+            <div className="text-sm font-bold tracking-widest text-white/80">
+              {t("book.title")}
+            </div>
           </div>
           <a
             href="tel:417-527-6165"
@@ -165,10 +171,10 @@ export default function BookingPage() {
         <div className="max-w-5xl mx-auto px-4 pt-8 pb-4">
           <div className="flex items-center justify-between gap-2">
             {[
-              { label: "Service", n: 0 },
-              { label: "Date & Time", n: 1 },
-              { label: "Your Info", n: 2 },
-              { label: "Confirm", n: 3 },
+              { label: t("book.step.service"), n: 0 },
+              { label: t("book.step.datetime"), n: 1 },
+              { label: t("book.step.info"), n: 2 },
+              { label: t("book.step.confirm"), n: 3 },
             ].map((s, i) => {
               const active = i === stepIndex;
               const done = i < stepIndex;
@@ -274,24 +280,24 @@ export default function BookingPage() {
       <footer className="border-t border-white/10 bg-[#0a0a0a] mt-8">
         <div className="max-w-5xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
           <div className="flex items-center gap-2 text-center sm:text-left">
-            <span>Questions? Call</span>
+            <span>{t("book.questions")}</span>
             <a
               href="tel:417-527-6165"
               className="text-[#00E5FF] font-semibold hover:underline"
             >
               417-527-6165
             </a>
-            <span className="hidden sm:inline">to book by phone</span>
+            <span className="hidden sm:inline">{t("book.byPhone")}</span>
           </div>
           <nav className="flex items-center gap-5">
             <Link href="/" className="hover:text-white transition">
-              Home
+              {t("book.home")}
             </Link>
             <Link href="/privacy" className="hover:text-white transition">
-              Privacy Policy
+              {t("footer.privacy")}
             </Link>
             <Link href="/terms" className="hover:text-white transition">
-              Terms &amp; Conditions
+              {t("footer.terms")}
             </Link>
           </nav>
         </div>
@@ -336,17 +342,18 @@ function ServiceStep({
   selected: Service | null;
   onSelect: (s: Service) => void;
 }) {
+  const { t } = useLanguage();
   const { data, isLoading, error } = useListServices();
 
   return (
     <section>
-      <h1 className="text-3xl sm:text-4xl font-black mb-2 font-display">Choose your service</h1>
+      <h1 className="text-3xl sm:text-4xl font-black mb-2 font-display">{t("book.choose")}</h1>
       <p className="text-gray-300 mb-8">
-        Pick the package that fits your vehicle. You can always upgrade in person.
+        {t("book.chooseSub")}
       </p>
 
-      {isLoading && <Loading label="Loading services…" />}
-      {error && <ErrorMessage>Couldn't load services. Try again.</ErrorMessage>}
+      {isLoading && <Loading label={t("book.loadingServices")} />}
+      {error && <ErrorMessage>{t("book.loadFail")}</ErrorMessage>}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
         {data?.map((s) => {
@@ -383,7 +390,13 @@ function ServiceStep({
                       }`}
                     >
                       {badge.tone === "express" && <Zap className="w-3 h-3" />}
-                      {badge.label}
+                      {badge.tone === "popular"
+                        ? t("badge.popular")
+                        : badge.tone === "value"
+                          ? t("badge.value")
+                          : badge.tone === "express"
+                            ? t("badge.express")
+                            : t("badge.notice")}
                     </span>
                   )}
                 </div>
@@ -393,7 +406,7 @@ function ServiceStep({
                 {s.priceCents > 0 ? (
                   <>
                     <span className="text-xs uppercase tracking-wider text-gray-500 font-semibold">
-                      Starting at
+                      {t("services.startingAt")}
                     </span>
                     <span className="text-2xl font-black text-white font-display">
                       {formatPrice(s.priceCents)}
@@ -401,7 +414,7 @@ function ServiceStep({
                   </>
                 ) : (
                   <span className="text-base font-black text-[#00E5FF]">
-                    Call for quote
+                    {t("services.callQuote")}
                   </span>
                 )}
                 <span className="text-xs text-gray-500 flex items-center gap-1">
@@ -416,7 +429,7 @@ function ServiceStep({
 
               <div className="mt-auto flex items-center justify-end pt-1">
                 <span className="text-[#00E5FF] font-bold text-xs flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
-                  Select <ArrowRight className="w-3.5 h-3.5" />
+                  {t("book.select")} <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </div>
             </button>
@@ -441,6 +454,7 @@ function DateTimeStep({
   onSelect: (date: string, time: string) => void;
   onBack: () => void;
 }) {
+  const { t } = useLanguage();
   const today = todayDateString();
   const [windowStart, setWindowStart] = useState(today);
   const [pickedDate, setPickedDate] = useState<string | null>(date);
@@ -498,11 +512,11 @@ function DateTimeStep({
         onClick={onBack}
         className="text-sm text-gray-400 hover:text-white flex items-center gap-1 mb-4"
       >
-        <ChevronLeft className="w-4 h-4" /> Change service
+        <ChevronLeft className="w-4 h-4" /> {t("book.changeService")}
       </button>
-      <h1 className="text-3xl sm:text-4xl font-black mb-2 font-display">Pick a date & time</h1>
+      <h1 className="text-3xl sm:text-4xl font-black mb-2 font-display">{t("book.pickDate")}</h1>
       <p className="text-gray-400 mb-8">
-        Booking <span className="text-white font-semibold">{service.name}</span>
+        {t("book.booking")} <span className="text-white font-semibold">{service.name}</span>
       </p>
 
       {/* Date picker */}
@@ -510,7 +524,7 @@ function DateTimeStep({
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-sm font-bold text-gray-300 uppercase tracking-wide">
             <Calendar className="w-4 h-4 inline mr-2 -mt-0.5" />
-            Select a day
+            {t("book.selectDay")}
           </h3>
           <div className="flex items-center gap-2">
             <button
@@ -532,7 +546,7 @@ function DateTimeStep({
         </div>
 
         {isLoading ? (
-          <Loading label="Checking availability…" />
+          <Loading label={t("book.checking")} />
         ) : (
           <div className="grid grid-cols-3 sm:grid-cols-7 gap-2">
             {days.map((d) => {
@@ -564,12 +578,12 @@ function DateTimeStep({
                   </div>
                   <div className="text-[10px] mt-1 opacity-70">
                     {isPast
-                      ? "Past"
+                      ? t("book.past")
                       : d.closed
-                        ? "Closed"
+                        ? t("book.closed")
                         : allFull
-                          ? "Full"
-                          : "Open"}
+                          ? t("book.full")
+                          : t("book.open")}
                   </div>
                 </button>
               );
@@ -608,7 +622,7 @@ function DateTimeStep({
           </div>
           {selectedDay.slots.every((s) => !s.available) && (
             <p className="text-sm text-gray-400 mt-4">
-              All slots booked for this day. Pick another date or call us at{" "}
+              {t("book.allBooked")}{" "}
               <a href="tel:417-527-6165" className="text-[#00E5FF] underline">
                 417-527-6165
               </a>
@@ -624,7 +638,7 @@ function DateTimeStep({
           onClick={() => onSelect(pickedDate!, pickedTime!)}
           className="btn-cyber disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          <span>Continue</span> <ArrowRight className="w-4 h-4" />
+          <span>{t("book.continue")}</span> <ArrowRight className="w-4 h-4" />
         </button>
       </div>
     </section>
@@ -647,6 +661,7 @@ function InfoStep({
   onBack: () => void;
   onNext: () => void;
 }) {
+  const { t } = useLanguage();
   const valid =
     form.customerName.trim().length > 0 &&
     /\S+@\S+\.\S+/.test(form.email) &&
@@ -659,23 +674,23 @@ function InfoStep({
         onClick={onBack}
         className="text-sm text-gray-400 hover:text-white flex items-center gap-1 mb-4"
       >
-        <ChevronLeft className="w-4 h-4" /> Change time
+        <ChevronLeft className="w-4 h-4" /> {t("book.changeTime")}
       </button>
-      <h1 className="text-3xl sm:text-4xl font-black mb-2 font-display">Your details</h1>
+      <h1 className="text-3xl sm:text-4xl font-black mb-2 font-display">{t("book.yourDetails")}</h1>
       <p className="text-gray-400 mb-8">
-        We'll send a confirmation and reminder to the contact info you provide.
+        {t("book.detailsSub")}
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Field
-          label="Full Name"
+          label={t("book.name")}
           required
           value={form.customerName}
           onChange={(v) => onChange({ ...form, customerName: v })}
           placeholder="Jane Smith"
         />
         <Field
-          label="Email"
+          label={t("book.email")}
           required
           type="email"
           value={form.email}
@@ -683,7 +698,7 @@ function InfoStep({
           placeholder="jane@example.com"
         />
         <Field
-          label="Phone"
+          label={t("book.phone")}
           required
           type="tel"
           value={form.phone}
@@ -691,7 +706,7 @@ function InfoStep({
           placeholder="(417) 555-0123"
         />
         <Field
-          label="Vehicle (Year / Make / Model)"
+          label={t("book.vehicle")}
           required
           value={form.vehicle}
           onChange={(v) => onChange({ ...form, vehicle: v })}
@@ -702,12 +717,12 @@ function InfoStep({
         </div>
         <div className="sm:col-span-2">
           <label className="block text-sm font-bold text-gray-300 mb-2">
-            Notes (optional)
+            {t("book.notesLabel")}
           </label>
           <textarea
             value={form.notes}
             onChange={(e) => onChange({ ...form, notes: e.target.value })}
-            placeholder="Anything we should know? Pet hair, problem stains, etc."
+            placeholder={t("book.notes")}
             rows={4}
             className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#00E5FF] focus:outline-none focus:ring-2 focus:ring-[#00E5FF]/20 transition resize-none"
           />
@@ -759,7 +774,7 @@ function InfoStep({
           onClick={onNext}
           className="btn-cyber disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          <span>Review booking</span> <ArrowRight className="w-4 h-4" />
+          <span>{t("book.reviewBooking")}</span> <ArrowRight className="w-4 h-4" />
         </button>
       </div>
     </section>
@@ -816,6 +831,7 @@ function ConfirmStep({
   onBack: () => void;
   onConfirmed: (b: Booking, photosFailed: boolean) => void;
 }) {
+  const { t } = useLanguage();
   const mutation = useCreateBooking();
 
   const submit = async () => {
@@ -858,27 +874,27 @@ function ConfirmStep({
         onClick={onBack}
         className="text-sm text-gray-400 hover:text-white flex items-center gap-1 mb-4"
       >
-        <ChevronLeft className="w-4 h-4" /> Edit details
+        <ChevronLeft className="w-4 h-4" /> {t("book.editDetails")}
       </button>
-      <h1 className="text-3xl sm:text-4xl font-black mb-2 font-display">Review & confirm</h1>
+      <h1 className="text-3xl sm:text-4xl font-black mb-2 font-display">{t("book.review")}</h1>
       <p className="text-gray-400 mb-8">
-        Double-check everything below, then confirm your booking.
+        {t("book.reviewSub")}
       </p>
 
       <div className="rounded-2xl border border-white/10 bg-white/[0.02] divide-y divide-white/5">
-        <SummaryRow label="Service" value={service.name} />
+        <SummaryRow label={t("book.step.service")} value={service.name} />
         <SummaryRow
-          label="When"
+          label={t("book.when")}
           value={`${formatDateLong(date)} at ${formatTime12h(time)}`}
           highlight
         />
-        <SummaryRow label="Customer" value={form.customerName} />
-        <SummaryRow label="Email" value={form.email} />
-        <SummaryRow label="Phone" value={form.phone} />
-        <SummaryRow label="Vehicle" value={form.vehicle} />
+        <SummaryRow label={t("book.customer")} value={form.customerName} />
+        <SummaryRow label={t("book.email")} value={form.email} />
+        <SummaryRow label={t("book.phone")} value={form.phone} />
+        <SummaryRow label={t("book.vehicle")} value={form.vehicle} />
         {photos.length > 0 && (
           <div className="flex items-start justify-between gap-4 px-5 py-4">
-            <span className="text-sm text-gray-400 font-medium">Your photos</span>
+            <span className="text-sm text-gray-400 font-medium">{t("book.photos")}</span>
             <div className="flex gap-2">
               {photos.map((p) => (
                 <img
@@ -891,14 +907,14 @@ function ConfirmStep({
             </div>
           </div>
         )}
-        {form.notes && <SummaryRow label="Notes" value={form.notes} />}
+        {form.notes && <SummaryRow label={t("book.notesRow")} value={form.notes} />}
       </div>
 
       <div className="mt-6 p-4 rounded-xl bg-[#00E5FF]/5 border border-[#00E5FF]/20 text-sm text-gray-300 flex gap-3">
         <MapPin className="w-5 h-5 text-[#00E5FF] flex-shrink-0 mt-0.5" />
         <div>
-          <p className="font-bold text-white mb-1">Drop off at our shop</p>
-          <p>1114 E Lakota St, Nixa, MO 65714. We're open Mon–Sat 7 AM – 6 PM.</p>
+          <p className="font-bold text-white mb-1">{t("book.dropOff")}</p>
+          <p>{t("book.dropOffAddr")}</p>
         </div>
       </div>
 
@@ -909,7 +925,7 @@ function ConfirmStep({
           onClick={onBack}
           className="px-6 py-3 rounded-full border border-white/10 text-gray-300 font-bold hover:bg-white/5 transition"
         >
-          Back
+          {t("book.back")}
         </button>
         <button
           disabled={mutation.isPending}
@@ -918,11 +934,11 @@ function ConfirmStep({
         >
           {mutation.isPending ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin" /> <span>Booking…</span>
+              <Loader2 className="w-4 h-4 animate-spin" /> <span>{t("book.bookingPending")}</span>
             </>
           ) : (
             <>
-              <span>Confirm booking</span> <Check className="w-4 h-4" />
+              <span>{t("book.confirm")}</span> <Check className="w-4 h-4" />
             </>
           )}
         </button>
@@ -964,49 +980,49 @@ function ConfirmationView({
   booking: Booking;
   photoWarning: boolean;
 }) {
+  const { t } = useLanguage();
   return (
     <section className="text-center max-w-2xl mx-auto pt-12">
       <div className="w-20 h-20 mx-auto rounded-full bg-[#FF1AD8] flex items-center justify-center mb-6 shadow-[0_0_18px_rgba(255,26,216,0.3)]">
         <Check className="w-10 h-10 text-white" />
       </div>
-      <h1 className="text-4xl sm:text-5xl font-black mb-3 font-display">You're booked!</h1>
+      <h1 className="text-4xl sm:text-5xl font-black mb-3 font-display">{t("book.youreBooked")}</h1>
       <p className="text-gray-400 text-lg mb-8">
-        We've got your appointment locked in. See you soon, {booking.customerName.split(" ")[0]}.
+        {t("book.lockedIn")} {booking.customerName.split(" ")[0]}.
       </p>
 
       <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 text-left mb-6">
         <div className="flex items-center justify-between mb-4 pb-4 border-b border-white/5">
           <div>
             <div className="text-xs uppercase tracking-wider text-gray-500 font-bold mb-1">
-              Confirmation
+              {t("book.confirmation")}
             </div>
             <div className="text-lg font-black">#{String(booking.id).padStart(5, "0")}</div>
           </div>
         </div>
-        <SummaryRow label="Service" value={booking.serviceName} />
+        <SummaryRow label={t("book.step.service")} value={booking.serviceName} />
         <SummaryRow
-          label="When"
+          label={t("book.when")}
           value={formatDateTimeLong(
             typeof booking.scheduledAt === "string"
               ? booking.scheduledAt
               : new Date(booking.scheduledAt as unknown as string).toISOString(),
           )}
         />
-        <SummaryRow label="Vehicle" value={booking.vehicle} />
+        <SummaryRow label={t("book.vehicle")} value={booking.vehicle} />
       </div>
 
       {photoWarning && (
         <div className="mb-6 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-sm text-left">
-          Your appointment is booked, but we could not save the vehicle photos.
-          You can text them to the shop at 417-527-6165.
+          {t("book.photoWarn")}
         </div>
       )}
 
       <div className="p-4 rounded-xl bg-[#00E5FF]/5 border border-[#00E5FF]/20 text-sm text-gray-300 flex gap-3 text-left mb-8">
         <MapPin className="w-5 h-5 text-[#00E5FF] flex-shrink-0 mt-0.5" />
         <div>
-          <p className="font-bold text-white mb-1">Drop-off address</p>
-          <p>1114 E Lakota St, Nixa, MO 65714 — call 417-527-6165 if you need anything.</p>
+          <p className="font-bold text-white mb-1">{t("book.dropOffTitle")}</p>
+          <p>{t("book.dropOffCall")}</p>
         </div>
       </div>
 
@@ -1015,13 +1031,13 @@ function ConfirmationView({
           href="/"
           className="px-6 py-3 rounded-full border border-white/10 text-gray-300 font-bold hover:bg-white/5 transition"
         >
-          Back to home
+          {t("404.home")}
         </Link>
         <a
           href="tel:417-527-6165"
           className="btn-cyber"
         >
-          <Phone className="w-4 h-4" /> <span>Call the shop</span>
+          <Phone className="w-4 h-4" /> <span>{t("book.callShop")}</span>
         </a>
       </div>
     </section>
