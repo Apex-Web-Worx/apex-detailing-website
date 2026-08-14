@@ -1,5 +1,4 @@
 import { Link } from "wouter";
-import { AdminPwaInstallHint } from "@/components/PwaManifestSwitch";
 import { ADMIN_NAME, ADMIN_ROLE } from "../constants";
 import { useAdmin } from "../context";
 import { formatDateLong, todayDateString } from "@/lib/format";
@@ -38,7 +37,6 @@ export default function SettingsPage() {
               <p className="text-sm text-[#9CA3AF]">{ADMIN_ROLE}</p>
             </div>
           </AdminCard>
-          <AdminPwaInstallHint className="mt-0" />
           <div className="flex flex-wrap gap-2">
             <Link href="/">
               <GhostButton type="button">Back to site</GhostButton>
