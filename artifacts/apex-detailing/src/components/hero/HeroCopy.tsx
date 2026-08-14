@@ -76,16 +76,16 @@ export default function HeroCopy({
       </a>
       <div className="apex-hero-trust">
         <div className="apex-hero-trust-item">
-          <Shield className="apex-hero-trust-icon" aria-hidden="true" />
-          <span className="font-bold">{t("hero.guarantee")}</span>
+          <Shield className="apex-hero-trust-icon" strokeWidth={2.4} aria-hidden="true" />
+          <span>{t("hero.guarantee")}</span>
         </div>
         <div className="apex-hero-trust-item">
-          <Award className="apex-hero-trust-icon gold" aria-hidden="true" />
-          <span className="font-bold text-gold">{t("hero.googleStars")}</span>
+          <Award className="apex-hero-trust-icon gold" strokeWidth={2.4} aria-hidden="true" />
+          <span>{t("hero.googleStars")}</span>
         </div>
         <div className="apex-hero-trust-item">
-          <MapPin className="apex-hero-trust-icon" aria-hidden="true" />
-          <span className="font-bold">{t("hero.shop")}</span>
+          <MapPin className="apex-hero-trust-icon" strokeWidth={2.4} aria-hidden="true" />
+          <span>{t("hero.shop")}</span>
         </div>
       </div>
     </div>

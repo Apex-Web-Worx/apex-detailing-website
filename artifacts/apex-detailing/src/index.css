@@ -1313,28 +1313,39 @@
   .apex-hero-trust {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.85rem 1.35rem;
-    margin-top: 0.35rem;
-    padding-top: 0.85rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    gap: 1rem 1.75rem;
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.22);
   }
 
   .apex-hero-trust-item {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    font-size: 0.8rem;
-    color: rgba(229, 231, 235, 0.92);
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    color: #fff;
+  }
+
+  .apex-hero-trust-item:has(.gold) {
+    color: #f0d278;
   }
 
   .apex-hero-trust-icon {
-    width: 1rem;
-    height: 1rem;
-    color: var(--brand-magenta);
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #ff4de3;
     flex-shrink: 0;
+    stroke-width: 2.35;
+    filter: drop-shadow(0 0 7px rgba(255, 26, 216, 0.75));
   }
 
-  .apex-hero-trust-icon.gold { color: var(--brand-gold-bright); }
+  .apex-hero-trust-icon.gold {
+    color: #e8c547;
+    filter: drop-shadow(0 0 7px rgba(232, 197, 71, 0.7));
+  }
 
   .apex-hero-blend {
     position: absolute;
