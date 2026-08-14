@@ -863,18 +863,10 @@ export default function Home() {
               </a>
             </div>
 
-            <div className="md:hidden flex items-center gap-2">
-              <LanguageToggle />
-              <a
-                href="tel:417-527-6165"
-                className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10 text-white hover:text-[#00E5FF] hover:border-[#00E5FF] transition-colors"
-                aria-label="Call Apex Detailing"
-              >
-                <Phone className="w-5 h-5" />
-              </a>
+            <div className="md:hidden flex items-center">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="text-white p-2 focus:outline-none"
+                className="text-white p-2 focus:outline-none drop-shadow-[0_0_10px_rgba(157,0,255,0.65)]"
                 aria-label={t("nav.menu")}
               >
                 {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -889,6 +881,7 @@ export default function Home() {
           }`}
         >
           <div className="flex flex-col space-y-4 px-6">
+            <LanguageToggle />
             {NAV_ITEMS.map((item) => {
               const href =
                 item.kind === "path"

@@ -1422,8 +1422,8 @@
     .apex-hero {
       display: flex;
       flex-direction: column;
-      min-height: 100svh;
-      min-height: 100dvh;
+      padding-top: 4.5rem;
+      min-height: unset;
     }
 
     .apex-hero-stage {
@@ -1431,9 +1431,9 @@
       inset: auto;
       left: auto;
       width: 100%;
-      height: min(46vh, 380px);
-      min-height: 240px;
-      order: 2;
+      height: min(48vh, 420px);
+      min-height: 250px;
+      order: 1;
     }
 
     .apex-hero-plate {
@@ -1449,14 +1449,44 @@
     }
 
     .apex-hero-shell {
-      order: 1;
+      order: 2;
       background: #050505;
-      padding: 5.5rem 1.25rem 1.5rem;
-      align-items: flex-start;
+      padding: 1.35rem 1.25rem 5.75rem;
+      align-items: center;
+      justify-content: flex-start;
     }
 
     .apex-hero-copy {
       max-width: 36rem;
+      width: 100%;
+      align-items: center;
+      text-align: center;
+      gap: 1rem;
+    }
+
+    .apex-hero-title {
+      font-size: clamp(1.85rem, 8.4vw, 2.55rem);
+      text-align: center;
+    }
+
+    .apex-hero-ctas {
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+      max-width: 22rem;
+      gap: 0.7rem;
+    }
+
+    .apex-hero-ctas .btn-cyber {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .apex-hero-sub,
+    .apex-hero-explore,
+    .apex-hero-rating,
+    .apex-hero-trust {
+      display: none;
     }
 
     .apex-seam,
