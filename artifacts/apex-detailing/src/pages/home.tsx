@@ -949,13 +949,7 @@ export default function Home() {
           scrollToSection("services");
         }}
       />
-      <HeroDip
-        href="#services"
-        onExplore={(e) => {
-          e.preventDefault();
-          scrollToSection("services");
-        }}
-      />
+      <HeroDip />
       {/* Services Section */}
       <section id="services" className="py-24 relative bg-[#050505] overflow-x-hidden overflow-y-visible">
         {/* Minimal atmosphere — kept off the top seam so it matches the hero/footer black */}
@@ -1091,7 +1085,7 @@ export default function Home() {
           <AddonsSection />
         </div>
       </section>
-      <HeroDip href="#how" />
+      <HeroDip />
 
       {/* How It Works */}
       <section id="how" className="py-20 sm:py-24 relative section-pink-wash overflow-x-hidden overflow-y-visible">
@@ -1123,7 +1117,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <HeroDip href="#about" />
+      <HeroDip />
 
       {/* About Section */}
       <section id="about" className="py-24 relative section-pink-wash overflow-x-hidden overflow-y-visible">
@@ -1280,7 +1274,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <HeroDip href="#before-after" />
+      <HeroDip />
 
       {/* Before/After Slider Section */}
       <section id="before-after" className="py-20 sm:py-24 relative section-pink-wash overflow-x-hidden overflow-y-visible">
@@ -1415,7 +1409,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <HeroDip href="#gallery" />
+      <HeroDip />
 
       {/* Gallery Section */}
       <section id="gallery" className="py-24 relative section-pink-wash overflow-x-hidden overflow-y-visible">
@@ -1521,7 +1515,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <HeroDip href="#testimonials" />
+      <HeroDip />
 
       {/* Gallery Lightbox Modal */}
       {selectedGalleryItem && (
@@ -1659,7 +1653,7 @@ export default function Home() {
 
         </div>
       </section>
-      <HeroDip href="#reviews" />
+      <HeroDip />
 
       {/* Google Reviews Showcase */}
       <section id="reviews" className="py-24 relative section-pink-wash overflow-x-hidden overflow-y-visible">
@@ -1728,7 +1722,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <HeroDip href="#area" />
+      <HeroDip />
 
       {/* Service Area */}
       <section id="area" className="py-20 sm:py-24 relative section-pink-wash overflow-x-hidden overflow-y-visible">
@@ -1796,7 +1790,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <HeroDip href="#faq" />
+      <HeroDip />
 
       {/* FAQ Section */}
       <section id="faq" className="py-20 sm:py-24 relative section-pink-wash overflow-x-hidden overflow-y-visible">
@@ -1875,7 +1869,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <HeroDip href="#cta" />
+      <HeroDip />
 
       {/* CTA Section */}
       <section id="cta" className="py-24 relative section-pink-wash overflow-x-hidden overflow-y-visible">
@@ -1911,7 +1905,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <HeroDip href="#contact" />
+      <HeroDip />
 
       {/* Footer */}
       <footer id="contact" className="relative bg-[#050505] pt-20 pb-10">
