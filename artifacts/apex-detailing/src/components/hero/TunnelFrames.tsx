@@ -22,11 +22,11 @@ export default function TunnelFrames({ clockMs, reduced }: Props) {
     const cy = 520;
     return Array.from({ length: FRAME_COUNT }, (_, i) => {
       const t = i / (FRAME_COUNT - 1);
-      const rx = 92 + t * 490;
-      const ry = rx * 0.72;
+      const rx = 110 + t * 470;
+      const ry = rx * 0.70;
       return {
         d: hexPath(cx, cy, rx, ry),
-        stroke: 2.2 + t * 2.4,
+        stroke: 1.6 + t * 1.8,
       };
     });
   }, []);

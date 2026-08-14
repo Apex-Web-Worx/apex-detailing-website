@@ -1324,38 +1324,30 @@
 
   @media (max-width: 1023px) {
     .apex-hero {
-      display: flex;
-      flex-direction: column-reverse;
-      min-height: auto;
-      overflow: hidden;
+      min-height: 100svh;
+      min-height: 100dvh;
     }
 
     .apex-hero-stage {
-      position: relative;
-      inset: auto;
+      position: absolute;
+      inset: 0;
       width: 100%;
-      height: min(62vw, 420px);
-      min-height: 260px;
-      flex-shrink: 0;
+      height: 100%;
     }
 
     .apex-hero-plate {
-      left: 62%;
-      top: 46%;
-      transform: translate(-62%, -46%);
+      left: 72%;
+      top: 62%;
+      transform: translate(-72%, -42%);
     }
 
     .apex-hero-wash {
-      display: none;
+      background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.78) 38%, rgba(0, 0, 0, 0.22) 62%, rgba(0, 0, 0, 0.5) 100%);
     }
 
     .apex-hero-shell {
-      position: relative;
-      z-index: 10;
-      width: 100%;
-      max-width: none;
-      margin: 0;
-      padding: 5.5rem 1.25rem 1.35rem;
+      padding: 5.5rem 1.25rem 6.75rem;
       align-items: flex-start;
     }
 
