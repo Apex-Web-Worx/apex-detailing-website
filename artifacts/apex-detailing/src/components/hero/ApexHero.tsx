@@ -2,8 +2,7 @@ import { useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { imageUrl } from "@/components/OptimizedImage";
 import HeroCopy from "./HeroCopy";
-import TunnelFrames from "./TunnelFrames";
-import { INTRO_MS, overlayFade, ramp } from "./heroTiming";
+import { INTRO_MS, ramp } from "./heroTiming";
 
 type Props = {
   bookingHref: string;
@@ -42,9 +41,8 @@ function waitForSplashGone(): Promise<void> {
 }
 
 /**
- * Hero visual is the front-facing Camaro + hex tunnel photograph, shown in
- * full (contain) so the picture matches the reference. 8 SVG paths light
- * back→front, then fade so the settled frame is the photo.
+ * Hero visual is the front-facing Camaro + hex tunnel photograph on the right.
+ * No SVG rings over the car — those blocked the grille.
  */
 export default function ApexHero({
   bookingHref,
@@ -91,7 +89,6 @@ export default function ApexHero({
   const scene = imageUrl("hero-tunnel-scene.jpg");
   const sceneWebp = scene.replace(/\.jpg$/i, ".webp");
   const sceneBright = 0.22 + ramp(clockMs, 200, INTRO_MS, reduce) * 0.78;
-  const glow = overlayFade(clockMs, reduce);
 
   return (
     <section id="home" className="apex-hero">
@@ -116,9 +113,6 @@ export default function ApexHero({
               draggable={false}
             />
           </picture>
-          <div className="apex-hero-tunnel-layer" style={{ opacity: glow }}>
-            <TunnelFrames clockMs={clockMs} reduced={reduce} />
-          </div>
         </div>
       </div>
       <div className="apex-hero-wash" aria-hidden="true" />
