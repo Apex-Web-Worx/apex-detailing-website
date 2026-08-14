@@ -1128,13 +1128,13 @@
     container-type: size;
   }
 
-  /* Front-facing plate at 50% of cover — zoomed out so tunnel + floor stay visible. */
+  /* Show the full front-facing photo (contain), not a cropped 3/4 plate. */
   .apex-hero-plate {
     position: absolute;
-    width: max(50cqw, calc(50cqh * 1536 / 1024));
-    height: max(50cqh, calc(50cqw * 1024 / 1536));
-    left: 58%;
-    top: 52%;
+    width: min(100cqw, calc(100cqh * 1536 / 1024));
+    height: min(100cqh, calc(100cqw * 1024 / 1536));
+    left: 50%;
+    top: 50%;
     transform: translate(-50%, -50%);
   }
 
@@ -1183,8 +1183,8 @@
     z-index: 4;
     pointer-events: none;
     background:
-      linear-gradient(90deg, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.58) 30%, rgba(0, 0, 0, 0.12) 52%, transparent 66%),
-      linear-gradient(180deg, rgba(0, 0, 0, 0.32) 0%, transparent 20%, transparent 74%, rgba(0, 0, 0, 0.5) 100%);
+      linear-gradient(90deg, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.42) 26%, rgba(0, 0, 0, 0.08) 48%, transparent 62%),
+      linear-gradient(180deg, rgba(0, 0, 0, 0.28) 0%, transparent 18%, transparent 78%, rgba(0, 0, 0, 0.4) 100%);
   }
 
   .apex-hero-shell {
@@ -1336,11 +1336,11 @@
     }
 
     .apex-hero-plate {
-      width: max(62cqw, calc(48cqh * 1536 / 1024));
-      height: max(48cqh, calc(62cqw * 1024 / 1536));
+      width: min(100cqw, calc(100cqh * 1536 / 1024));
+      height: min(100cqh, calc(100cqw * 1024 / 1536));
       left: 50%;
-      top: 70%;
-      transform: translate(-50%, -42%);
+      top: 54%;
+      transform: translate(-50%, -50%);
     }
 
     .apex-hero-wash {
