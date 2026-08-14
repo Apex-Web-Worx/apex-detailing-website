@@ -1467,6 +1467,19 @@
       inset 0 0 12px rgba(0, 229, 255, 0.12);
   }
 
+  .apex-hero-dip-btn svg {
+    animation: apex-dip-nudge 1.8s ease-in-out infinite;
+  }
+
+  @keyframes apex-dip-nudge {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(3px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apex-hero-dip-btn svg { animation: none; }
+  }
+
   @media (max-width: 1023px) {
     .apex-hero {
       display: flex;
