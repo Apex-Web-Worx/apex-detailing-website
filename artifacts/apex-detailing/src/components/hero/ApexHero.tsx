@@ -146,40 +146,6 @@ export default function ApexHero({
           onExplore={onExplore}
         />
       </div>
-      <div className="apex-hero-bridge" aria-hidden="true">
-        <div className="apex-hero-bridge-fade" />
-        <div className="apex-hero-bridge-pattern" />
-        <svg className="apex-hero-bridge-hex" viewBox="0 0 1440 160" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="bridgeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#FF1AD8" />
-              <stop offset="50%" stopColor="#9D00FF" />
-              <stop offset="100%" stopColor="#00E5FF" />
-            </linearGradient>
-          </defs>
-          {[0.18, 0.34, 0.5, 0.66, 0.82].map((t, i) => {
-            const cx = 220 + t * 1000;
-            const cy = 78;
-            const rx = 70 + i * 14;
-            const ry = rx * 0.55;
-            const pts = Array.from({ length: 6 }, (_, k) => {
-              const a = (Math.PI / 3) * k - Math.PI / 2;
-              return `${(cx + Math.cos(a) * rx).toFixed(1)},${(cy + Math.sin(a) * ry).toFixed(1)}`;
-            });
-            return (
-              <polygon
-                key={i}
-                points={pts.join(" ")}
-                fill="none"
-                stroke="url(#bridgeGrad)"
-                strokeWidth={1.2 + i * 0.15}
-                opacity={0.22 + i * 0.08}
-              />
-            );
-          })}
-        </svg>
-        <div className="apex-hero-bridge-bar" />
-      </div>
     </section>
   );
 }
