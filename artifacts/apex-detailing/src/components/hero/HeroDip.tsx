@@ -2,17 +2,32 @@ import { ChevronDown } from "lucide-react";
 import { useId, type MouseEvent } from "react";
 
 type Props = {
-  onExplore: (e: MouseEvent) => void;
+  href: string;
+  onExplore?: (e: MouseEvent) => void;
 };
 
-/** Neon dip sitting on the horizontal join between hero and services. */
-export default function HeroDip({ onExplore }: Props) {
+/** Magenta-to-cyan dip + ripple on the join between two page blocks. */
+export default function HeroDip({ href, onExplore }: Props) {
   const uid = useId().replace(/:/g, "");
   const gradId = `dipGrad-${uid}`;
   const glowId = `dipGlow-${uid}`;
+  const id = href.replace(/^#/, "");
+
+  const onClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    if (onExplore) {
+      onExplore(e);
+      return;
+    }
+    const el = document.getElementById(id);
+    if (!el) return;
+    e.preventDefault();
+    const offset = 80;
+    const top = el.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top, behavior: "smooth" });
+  };
 
   return (
-    <div className="apex-hero-dip">
+    <div className="apex-seam">
       <div className="apex-hero-ripple" aria-hidden="true" />
       <svg className="apex-hero-dip-line" viewBox="0 0 1000 110" preserveAspectRatio="none">
         <defs>
@@ -38,12 +53,7 @@ export default function HeroDip({ onExplore }: Props) {
           filter={`url(#${glowId})`}
         />
       </svg>
-      <a
-        href="#services"
-        className="apex-hero-dip-btn"
-        onClick={onExplore}
-        aria-label="Scroll to services"
-      >
+      <a href={href} className="apex-hero-dip-btn" onClick={onClick} aria-label="Next section">
         <ChevronDown className="w-5 h-5" strokeWidth={2.4} />
       </a>
     </div>

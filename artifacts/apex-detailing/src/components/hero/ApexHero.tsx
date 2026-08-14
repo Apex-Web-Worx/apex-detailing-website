@@ -2,7 +2,6 @@ import { useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { imageUrl } from "@/components/OptimizedImage";
 import HeroCopy from "./HeroCopy";
-import HeroDip from "./HeroDip";
 import { INTRO_MS, ramp } from "./heroTiming";
 
 type Props = {
@@ -148,7 +147,6 @@ export default function ApexHero({
         />
       </div>
       <div className="apex-hero-blend" aria-hidden="true" />
-      <HeroDip onExplore={onExplore} />
     </section>
   );
 }
