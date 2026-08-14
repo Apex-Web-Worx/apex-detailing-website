@@ -127,6 +127,12 @@ export default function ApexHero({
             <span className="apex-hl-brow apex-hl-brow-r">
               <span className="apex-hl-sheen" />
             </span>
+            <span className="apex-hl-drl apex-hl-drl-l">
+              <span className="apex-hl-sheen" />
+            </span>
+            <span className="apex-hl-drl apex-hl-drl-r">
+              <span className="apex-hl-sheen" />
+            </span>
           </div>
         </div>
       </div>
