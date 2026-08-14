@@ -1017,19 +1017,9 @@
     border-color: rgba(212, 175, 55, 0.35);
   }
 
-  /* Services + rest slide over the frozen hero, same black as the footer */
-  .apex-page-sheet {
-    position: relative;
-    z-index: 2;
-    background: #050505;
-    overflow-x: hidden;
-  }
-
   /* ── Tunnel hero (reference storyboard) ── */
   .apex-hero {
-    position: sticky;
-    top: 0;
-    z-index: 0;
+    position: relative;
     isolation: isolate;
     min-height: 90svh;
     min-height: 90dvh;
