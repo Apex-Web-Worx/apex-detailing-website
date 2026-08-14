@@ -1105,6 +1105,264 @@
   .ring-gold {
     border-color: rgba(212, 175, 55, 0.35);
   }
+
+  /* ── Tunnel hero (reference storyboard) ── */
+  .apex-hero {
+    position: relative;
+    isolation: isolate;
+    min-height: 90svh;
+    min-height: 90dvh;
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+    background: #000;
+    color: #fff;
+  }
+
+  .apex-hero-stage {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    container-type: size;
+  }
+
+  /* 1536×1024 plate = the reference photo. Img + SVG share this box so hexes stay on the picture. */
+  .apex-hero-plate {
+    position: absolute;
+    width: max(100cqw, calc(100cqh * 1536 / 1024));
+    height: max(100cqh, calc(100cqw * 1024 / 1536));
+    left: 68%;
+    top: 48%;
+    transform: translate(-68%, -48%);
+  }
+
+  .apex-hero-plate picture,
+  .apex-hero-scene {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .apex-hero-scene {
+    object-fit: fill;
+    object-position: center;
+  }
+
+  .apex-hero-tunnel-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    mix-blend-mode: screen;
+  }
+
+  .apex-tunnel {
+    position: absolute;
+    inset: 0;
+  }
+
+  .apex-tunnel-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .tunnel-frame {
+    vector-effect: non-scaling-stroke;
+    filter: drop-shadow(0 0 5px rgba(138, 82, 255, 0.5));
+  }
+
+  .apex-hero-wash {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.58) 30%, rgba(0, 0, 0, 0.12) 52%, transparent 66%),
+      linear-gradient(180deg, rgba(0, 0, 0, 0.32) 0%, transparent 20%, transparent 74%, rgba(0, 0, 0, 0.5) 100%);
+  }
+
+  .apex-hero-shell {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: clamp(5.5rem, 12vh, 7.5rem) clamp(1.25rem, 4vw, 2.5rem) clamp(2rem, 6vh, 3.5rem);
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  .apex-hero-shell a,
+  .apex-hero-shell button {
+    pointer-events: auto;
+  }
+
+  .apex-hero-copy {
+    max-width: min(36rem, 42vw);
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .apex-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    width: fit-content;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 26, 216, 0.35);
+    background: rgba(255, 26, 216, 0.08);
+    color: #f3e8ff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .apex-hero-badge-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: var(--brand-magenta);
+    box-shadow: 0 0 10px rgba(255, 26, 216, 0.8);
+  }
+
+  .apex-hero-title {
+    margin: 0;
+    font-size: clamp(2.15rem, 5.2vw, 3.75rem);
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .apex-hero-title-grad {
+    background-image: linear-gradient(90deg, var(--brand-magenta), var(--brand-purple), var(--brand-cyan));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .apex-hero-sub {
+    margin: 0;
+    max-width: 34rem;
+    color: rgba(229, 231, 235, 0.9);
+    font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+    line-height: 1.55;
+  }
+
+  .apex-hero-sub-lead { color: #fff; font-weight: 600; }
+
+  .apex-hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    margin-top: 0.25rem;
+  }
+
+  .apex-hero-explore {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.35rem 0.15rem;
+  }
+
+  .apex-hero-explore:hover { color: #fff; }
+
+  .apex-hero-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    width: fit-content;
+    text-decoration: none;
+    color: inherit;
+    margin-top: 0.15rem;
+  }
+
+  .apex-hero-stars { display: inline-flex; gap: 0.1rem; }
+
+  .apex-hero-trust {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem 1.35rem;
+    margin-top: 0.35rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .apex-hero-trust-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: rgba(229, 231, 235, 0.92);
+  }
+
+  .apex-hero-trust-icon {
+    width: 1rem;
+    height: 1rem;
+    color: var(--brand-magenta);
+    flex-shrink: 0;
+  }
+
+  .apex-hero-trust-icon.gold { color: var(--brand-gold-bright); }
+
+  @media (max-width: 1023px) {
+    .apex-hero {
+      display: flex;
+      flex-direction: column-reverse;
+      min-height: auto;
+      overflow: hidden;
+    }
+
+    .apex-hero-stage {
+      position: relative;
+      inset: auto;
+      width: 100%;
+      height: min(62vw, 420px);
+      min-height: 260px;
+      flex-shrink: 0;
+    }
+
+    .apex-hero-plate {
+      left: 62%;
+      top: 46%;
+      transform: translate(-62%, -46%);
+    }
+
+    .apex-hero-wash {
+      display: none;
+    }
+
+    .apex-hero-shell {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 5.5rem 1.25rem 1.35rem;
+      align-items: flex-start;
+    }
+
+    .apex-hero-copy {
+      max-width: 36rem;
+    }
+  }
 }
 
 /* Apex Control Center — admin-only surface tokens */
