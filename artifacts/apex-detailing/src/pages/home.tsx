@@ -784,7 +784,7 @@ export default function Home() {
             "radial-gradient(ellipse 85% 55% at 8% -8%, rgba(255,26,216,0.08), transparent 52%), radial-gradient(ellipse 65% 45% at 92% 18%, rgba(157,0,255,0.04), transparent 48%), radial-gradient(ellipse 50% 40% at 50% 80%, rgba(255,26,216,0.03), transparent 55%)",
         }}
       />
-      <div className="relative z-10 overflow-x-hidden">
+      <div className="relative z-10">
       {/* Ambient neon bubbles — inside content stack so they stay above section BGs */}
       <div className="page-bubbles" aria-hidden="true">
         {pageBubbles.map((b) => (
@@ -948,9 +948,10 @@ export default function Home() {
           scrollToSection("services");
         }}
       />
+      <div className="apex-page-sheet">
       <HeroDip />
       {/* Services Section */}
-      <section id="services" className="py-24 relative bg-[#050505] overflow-x-hidden overflow-y-visible">
+      <section id="services" className="py-24 relative bg-[#050505] overflow-x-hidden">
         {/* Minimal atmosphere — kept off the top seam so it matches the hero/footer black */}
         <div className="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
           <div className="absolute top-[28%] left-[-10%] w-[42rem] h-[42rem] rounded-full bg-[#FF1AD8]/[0.04] blur-[120px]" />
@@ -2119,6 +2120,7 @@ export default function Home() {
           </div>
         </div>
       </footer>
+      </div>
 
       {/* Sticky Mobile Action Bar */}
       <div className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#0a0a0a]/95 backdrop-blur-md border-t border-white/10 px-3 py-2 grid grid-cols-2 gap-2 shadow-[0_-4px_20px_rgba(0,0,0,0.5)]">
