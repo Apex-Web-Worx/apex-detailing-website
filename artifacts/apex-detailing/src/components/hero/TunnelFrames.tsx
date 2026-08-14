@@ -1,20 +1,25 @@
 import { useId, useMemo } from "react";
-import { FRAME_COUNT, hexPath } from "./heroTiming";
+import { FRAME_COUNT, frameOpacity, hexPath } from "./heroTiming";
+
+type Props = {
+  clockMs: number;
+  reduced: boolean;
+};
 
 /**
- * Outer hex rings only. A center mask keeps strokes off the car.
- * Slow blink is CSS (opacity + glow).
+ * Outer SVG hex frames only (inner/middle rings omitted so the grille stays clear).
+ * Geometry is static. Only opacity + glow change.
  */
-export default function TunnelFrames() {
+export default function TunnelFrames({ clockMs, reduced }: Props) {
   const uid = useId().replace(/:/g, "");
   const gradId = `tunGrad-${uid}`;
   const glowId = `tunGlow-${uid}`;
-  const maskId = `tunMask-${uid}`;
 
   const frames = useMemo(() => {
+    // Skip inner rings so they do not sit on the grille
     const cx = 768;
     const cy = 500;
-    const innerSkip = 5;
+    const innerSkip = 3;
     return Array.from({ length: FRAME_COUNT - innerSkip }, (_, j) => {
       const i = j + innerSkip;
       const t = i / (FRAME_COUNT - 1);
@@ -23,7 +28,7 @@ export default function TunnelFrames() {
       return {
         i,
         d: hexPath(cx, cy, rx, ry),
-        stroke: 1.8 + t * 1.6,
+        stroke: 1.6 + t * 1.8,
       };
     });
   }, []);
@@ -48,12 +53,8 @@ export default function TunnelFrames() {
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
-          <mask id={maskId}>
-            <rect width="1536" height="1024" fill="white" />
-            <ellipse cx="768" cy="530" rx="310" ry="250" fill="black" />
-          </mask>
         </defs>
-        <g filter={`url(#${glowId})`} mask={`url(#${maskId})`}>
+        <g filter={`url(#${glowId})`}>
           {frames.map((f) => (
             <path
               key={f.i}
@@ -63,6 +64,7 @@ export default function TunnelFrames() {
               stroke={`url(#${gradId})`}
               strokeWidth={f.stroke}
               strokeLinejoin="round"
+              opacity={frameOpacity(clockMs, f.i, reduced)}
             />
           ))}
         </g>
