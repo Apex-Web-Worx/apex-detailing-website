@@ -1198,8 +1198,8 @@
   }
 
   .apex-hl-spot {
-    width: 5.2%;
-    height: 5.8%;
+    width: 3.6%;
+    height: 4%;
     border-radius: 50%;
     transform: translate(-50%, -50%);
   }
@@ -1209,8 +1209,8 @@
   .apex-hl-spot-r { left: 62.88%; top: 59.3%; }
 
   .apex-hl-brow {
-    width: 7.4%;
-    height: 1.6%;
+    width: 5.2%;
+    height: 1.1%;
     border-radius: 999px;
   }
 
@@ -1227,8 +1227,8 @@
   }
 
   .apex-hl-drl {
-    width: 1.35%;
-    height: 8.5%;
+    width: 0.9%;
+    height: 6%;
     border-radius: 999px;
     transform: translate(-50%, -50%);
   }
