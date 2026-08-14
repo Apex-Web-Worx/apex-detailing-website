@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import LanguageToggle from "@/components/LanguageToggle";
+import { ApexHero, HeroDip } from "@/components/hero";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
 
@@ -773,16 +774,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-['Mulish'] selection:bg-[#FF1AD8] selection:text-white">
-      {/* Soft global pink wash over black */}
-      <div
-        className="pointer-events-none fixed inset-0 z-0"
-        aria-hidden="true"
-        style={{
-          background:
-            "radial-gradient(ellipse 85% 55% at 8% -8%, rgba(255,26,216,0.08), transparent 52%), radial-gradient(ellipse 65% 45% at 92% 18%, rgba(157,0,255,0.04), transparent 48%), radial-gradient(ellipse 50% 40% at 50% 80%, rgba(255,26,216,0.03), transparent 55%)",
-        }}
-      />
+    <div className="min-h-screen bg-[#050505] text-white font-['Mulish'] selection:bg-[#FF1AD8] selection:text-white apex-page">
       <div className="relative z-10 overflow-x-hidden">
       {/* Ambient neon bubbles — inside content stack so they stay above section BGs */}
       <div className="page-bubbles" aria-hidden="true">
@@ -812,27 +804,26 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             <div
-              className="brand-logo-nav relative z-10 flex items-center cursor-pointer shrink-0 min-w-[4rem]"
+              className="brand-logo-nav relative z-10 flex items-center cursor-pointer shrink-0"
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               aria-label="Back to top"
             >
               <BrandLogo
                 variant="nav"
                 priority
-                className="brand-logo-nav__mark h-16 md:h-24 lg:h-[6.5rem] w-auto max-w-[9rem] md:max-w-[12rem] object-contain opacity-100"
+                className="brand-logo-nav__mark h-14 md:h-16 lg:h-[4.25rem] w-auto max-w-[7.5rem] md:max-w-[9.5rem] object-contain opacity-100"
               />
               <span className="brand-logo-nav__sheen" aria-hidden="true" />
-              <span className="brand-logo-nav__streaks" aria-hidden="true" />
             </div>
 
-            <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-              <LanguageToggle />
+            <div className="hidden md:flex items-center gap-2.5 lg:gap-3.5 min-w-0">
+              <LanguageToggle className="shrink-0" />
               <a
                 href="tel:417-527-6165"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-[#00E5FF] transition-colors"
+                className="inline-flex items-center gap-1.5 text-[11px] lg:text-xs font-semibold text-white hover:text-[#00E5FF] transition-colors whitespace-nowrap shrink-0"
                 aria-label="Call Apex Detailing"
               >
-                <Phone className="w-4 h-4 text-[#00E5FF]" />
+                <Phone className="w-3.5 h-3.5 text-[#00E5FF]" />
                 <span>{t("nav.call")}</span>
               </a>
               {NAV_ITEMS.map((item) => {
@@ -849,7 +840,7 @@ export default function Home() {
                       e.preventDefault();
                       scrollToSection(item.id);
                     }}
-                    className={`font-semibold text-sm tracking-wider uppercase transition-colors relative group ${
+                    className={`font-semibold text-[11px] lg:text-xs tracking-wide uppercase transition-colors relative group whitespace-nowrap ${
                       activeSection === item.id
                         ? "text-white header-shine"
                         : "text-gray-300 hover:text-white"
@@ -866,24 +857,16 @@ export default function Home() {
                   e.preventDefault();
                   goToBooking();
                 }}
-                className="btn-cyber btn-cyber-sm"
+                className="btn-cyber btn-cyber-sm whitespace-nowrap shrink-0"
               >
-                <span>{t("nav.book")}</span> <ChevronRight className="w-4 h-4" />
+                <span>{t("nav.book")}</span>
               </a>
             </div>
 
-            <div className="md:hidden flex items-center gap-2">
-              <LanguageToggle />
-              <a
-                href="tel:417-527-6165"
-                className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10 text-white hover:text-[#00E5FF] hover:border-[#00E5FF] transition-colors"
-                aria-label="Call Apex Detailing"
-              >
-                <Phone className="w-5 h-5" />
-              </a>
+            <div className="md:hidden flex items-center">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="text-white p-2 focus:outline-none"
+                className="text-white p-2 focus:outline-none drop-shadow-[0_0_10px_rgba(157,0,255,0.65)]"
                 aria-label={t("nav.menu")}
               >
                 {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -898,6 +881,7 @@ export default function Home() {
           }`}
         >
           <div className="flex flex-col space-y-4 px-6">
+            <LanguageToggle />
             {NAV_ITEMS.map((item) => {
               const href =
                 item.kind === "path"
@@ -935,141 +919,27 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden section-pink-wash">
-        {/* Hero Background Image */}
-        <div className="absolute inset-0 z-0">
-          <OptimizedImage
-            src={imageUrl("hero-2.jpg")}
-            alt={t("hero.alt")}
-            className="w-full h-full object-cover opacity-25"
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/60 via-[#0a0a0a]/80 to-[#0a0a0a]" />
-        </div>
-        {/* Soap Bubbles in Header */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-          <div className="soap-bubble absolute bottom-[5%] left-[5%] w-12 h-12" style={{ animationDuration: '16s', animationDelay: '0s' }} />
-          <div className="soap-bubble absolute bottom-[10%] left-[15%] w-16 h-16" style={{ animationDuration: '18s', animationDelay: '1s' }} />
-          <div className="soap-bubble absolute bottom-[8%] right-[10%] w-20 h-20" style={{ animationDuration: '20s', animationDelay: '2s' }} />
-          <div className="soap-bubble absolute bottom-[15%] right-[5%] w-14 h-14" style={{ animationDuration: '17s', animationDelay: '0.5s' }} />
-          <div className="soap-bubble absolute bottom-[3%] left-[40%] w-10 h-10" style={{ animationDuration: '19s', animationDelay: '1.5s' }} />
-          <div className="soap-bubble absolute bottom-[12%] left-[25%] w-6 h-6" style={{ animationDuration: '15s', animationDelay: '0.8s' }} />
-          <div className="soap-bubble absolute bottom-[7%] right-[20%] w-8 h-8" style={{ animationDuration: '17s', animationDelay: '2.5s' }} />
-          <div className="soap-bubble absolute bottom-[20%] left-[60%] w-7 h-7" style={{ animationDuration: '16s', animationDelay: '1.2s' }} />
-        </div>
-
-        <div className="absolute inset-0 z-0 opacity-40">
-          <div className="absolute top-[20%] left-[10%] w-96 h-96 bg-[#FF1AD8] rounded-full mix-blend-screen filter blur-[100px] opacity-40 animate-[pulse_8s_ease-in-out_infinite]" />
-          <div className="absolute bottom-[20%] right-[10%] w-96 h-96 bg-[#00E5FF] rounded-full mix-blend-screen filter blur-[100px] opacity-35 animate-[pulse_8s_ease-in-out_infinite_1s]" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0a0a0a]/80 to-[#0a0a0a]" />
-        </div>
-
-        <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-sm bg-white/[0.03] border border-white/10 backdrop-blur-sm mb-6 sm:mb-8 max-w-full">
-            <span className="flex h-2 w-2 rounded-full bg-[#FF1AD8] animate-pulse" />
-            <span className="text-[10px] sm:text-sm font-bold tracking-widest text-gray-300 uppercase text-center">
-              {t("hero.badge")}
-            </span>
-          </div>
-
-          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.92] sm:leading-[0.9] mb-5 sm:mb-6 drop-shadow-2xl uppercase font-display">
-            {t("hero.title1")} <br />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-              {t("hero.title2")}
-            </span>
-          </h1>
-
-          <p className="max-w-2xl text-base sm:text-lg md:text-xl text-gray-300 mb-8 sm:mb-10 font-medium px-1">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#FF1AD8] to-[#00E5FF]">{t("hero.subtitleLead")}</span>{t("hero.subtitleRest")}
-            <span className="text-potential font-bold"> Nixa Ozark Springfield, MO</span>{t("hero.subtitleEnd")}
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 w-full sm:w-auto items-stretch sm:items-center justify-center">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full sm:w-auto">
-              <a
-                href={BOOKING_LINK}
-                onClick={(e) => {
-                  e.preventDefault();
-                  goToBooking();
-                }}
-                className="btn-cyber btn-cyber-lg group w-full min-w-[15.5rem] h-[3.5rem]"
-              >
-                <span>{t("hero.book")}</span>
-                <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-              </a>
-              <a
-                href={`${import.meta.env.BASE_URL}gift-cards`}
-                className="btn-cyber btn-cyber-outline btn-cyber-lg group w-full min-w-[15.5rem] h-[3.5rem]"
-              >
-                <span>{t("hero.gift")}</span>
-                <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-              </a>
-            </div>
-            <a
-              href={`${import.meta.env.BASE_URL}#services`}
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection("services");
-              }}
-              className="group inline-flex items-center justify-center gap-2 px-6 h-[3.5rem] text-gray-300 font-semibold text-sm sm:text-base tracking-[0.12em] uppercase transition-colors duration-300 hover:text-white w-full sm:w-auto"
-            >
-              {t("hero.explore")}
-              <ChevronRight className="w-4 h-4 opacity-60 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100" />
-            </a>
-          </div>
-
-          {/* Google Reviews Badge */}
-          <a
-            href={GOOGLE_REVIEWS_LINK}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-8 inline-flex items-center gap-3 px-5 py-3 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:border-[#D4AF37]/60 transition-colors"
-            aria-label={t("hero.reviewsAria")}
-          >
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-            </svg>
-            <span className="font-bold text-white text-sm sm:text-base">5.0</span>
-            <div className="flex gap-0.5">
-              {[1,2,3,4,5].map((s) => (
-                <Star key={s} className="w-3.5 h-3.5 text-[#E8C547]" fill="currentColor" />
-              ))}
-            </div>
-            <span className="text-gray-300 text-xs sm:text-sm font-medium">{t("hero.google")}</span>
-          </a>
-
-          <div className="mt-10 flex flex-wrap justify-center items-center gap-6 sm:gap-8 opacity-80 hover:opacity-100 transition-all duration-500">
-            <div className="flex items-center gap-2">
-              <Shield className="w-6 h-6 text-[#FF1AD8]" />
-              <span className="font-bold">{t("hero.guarantee")}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Award className="w-6 h-6 text-[#E8C547]" />
-              <span className="font-bold text-gold">{t("hero.googleStars")}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <MapPin className="w-6 h-6 text-[#FF1AD8]" />
-              <span className="font-bold">{t("hero.shop")}</span>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
+      <ApexHero
+        bookingHref={BOOKING_LINK}
+        giftHref={`${import.meta.env.BASE_URL}gift-cards`}
+        reviewsHref={GOOGLE_REVIEWS_LINK}
+        onBook={(e) => {
+          e.preventDefault();
+          goToBooking();
+        }}
+        onExplore={(e) => {
+          e.preventDefault();
+          scrollToSection("services");
+        }}
+      />
+      <HeroDip />
       {/* Services Section */}
-      <section id="services" className="py-24 relative border-t border-white/5 section-pink-wash overflow-hidden">
-        {/* Minimal pink-on-black atmosphere */}
+      <section id="services" className="py-24 relative bg-[#050505] overflow-x-hidden">
+        {/* Minimal atmosphere — kept off the top seam so it matches the hero/footer black */}
         <div className="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
-          <div className="absolute -top-24 left-[-10%] w-[42rem] h-[42rem] rounded-full bg-[#FF1AD8]/[0.05] blur-[120px]" />
-          <div className="absolute top-[40%] right-[-15%] w-[36rem] h-[36rem] rounded-full bg-[#00E5FF]/[0.04] blur-[140px]" />
-          <div className="absolute bottom-[-10%] left-[30%] w-[28rem] h-[28rem] rounded-full bg-[#9D00FF]/[0.05] blur-[110px]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,26,216,0.06),transparent_55%)]" />
+          <div className="absolute top-[28%] left-[-10%] w-[42rem] h-[42rem] rounded-full bg-[#FF1AD8]/[0.04] blur-[120px]" />
+          <div className="absolute top-[48%] right-[-15%] w-[36rem] h-[36rem] rounded-full bg-[#00E5FF]/[0.04] blur-[140px]" />
+          <div className="absolute bottom-[-10%] left-[30%] w-[28rem] h-[28rem] rounded-full bg-[#9D00FF]/[0.04] blur-[110px]" />
         </div>
         {/* Soap Bubbles in Services Section Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
@@ -1198,9 +1068,10 @@ export default function Home() {
           <AddonsSection />
         </div>
       </section>
+      <HeroDip />
 
       {/* How It Works */}
-      <section className="py-20 sm:py-24 relative section-pink-wash border-t border-white/5 overflow-hidden">
+      <section id="how" className="py-20 sm:py-24 relative section-pink-wash overflow-x-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-14">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
@@ -1229,9 +1100,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <HeroDip />
 
       {/* About Section */}
-      <section id="about" className="py-24 relative section-pink-wash overflow-hidden">
+      <section id="about" className="py-24 relative section-pink-wash overflow-x-hidden">
         {/* Soap Bubbles in About Section */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
           <div className="soap-bubble absolute bottom-[5%] left-[5%] w-12 h-12" style={{ animationDuration: '16s', animationDelay: '0s' }} />
@@ -1385,9 +1257,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <HeroDip />
 
       {/* Before/After Slider Section */}
-      <section className="py-20 sm:py-24 relative section-pink-wash overflow-hidden">
+      <section id="before-after" className="py-20 sm:py-24 relative section-pink-wash overflow-x-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-10 sm:mb-16">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
@@ -1519,9 +1392,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <HeroDip />
 
       {/* Gallery Section */}
-      <section id="gallery" className="py-24 relative section-pink-wash border-y border-white/5 overflow-hidden">
+      <section id="gallery" className="py-24 relative section-pink-wash overflow-x-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-end mb-10 sm:mb-16 gap-6">
             <div className="max-w-2xl">
@@ -1624,6 +1498,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <HeroDip />
 
       {/* Gallery Lightbox Modal */}
       {selectedGalleryItem && (
@@ -1720,7 +1595,7 @@ export default function Home() {
       )}
 
       {/* Testimonials */}
-      <section id="testimonials" className="py-24 relative section-pink-wash overflow-hidden">
+      <section id="testimonials" className="py-24 relative section-pink-wash overflow-x-hidden">
         <div className="absolute right-0 bottom-0 w-[600px] h-[600px] bg-[#00E5FF]/10 rounded-full mix-blend-screen filter blur-[150px]" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -1761,9 +1636,10 @@ export default function Home() {
 
         </div>
       </section>
+      <HeroDip />
 
       {/* Google Reviews Showcase */}
-      <section className="py-24 relative section-pink-wash border-y border-white/5 overflow-hidden">
+      <section id="reviews" className="py-24 relative section-pink-wash overflow-x-hidden">
         <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-[#FF1AD8]/10 rounded-full mix-blend-screen filter blur-[120px] -translate-y-1/2" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -1829,9 +1705,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <HeroDip />
 
       {/* Service Area */}
-      <section className="py-20 sm:py-24 relative section-pink-wash border-t border-white/5 overflow-hidden">
+      <section id="area" className="py-20 sm:py-24 relative section-pink-wash overflow-x-hidden">
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#00E5FF]/10 rounded-full mix-blend-screen filter blur-[120px]" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-12">
@@ -1896,9 +1773,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <HeroDip />
 
       {/* FAQ Section */}
-      <section id="faq" className="py-20 sm:py-24 relative section-pink-wash border-t border-white/5 overflow-hidden">
+      <section id="faq" className="py-20 sm:py-24 relative section-pink-wash overflow-x-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
@@ -1974,9 +1852,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <HeroDip />
 
       {/* CTA Section */}
-      <section className="py-24 relative z-10 section-pink-wash overflow-hidden">
+      <section id="cta" className="py-24 relative section-pink-wash overflow-x-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative rounded-3xl overflow-hidden bg-[#111] border border-white/10 p-10 md:p-20 text-center">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-full bg-gradient-to-b from-[#FF1AD8]/20 to-[#00E5FF]/20 blur-3xl" />
@@ -2009,9 +1888,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <HeroDip />
 
       {/* Footer */}
-      <footer id="contact" className="bg-[#050505] border-t border-white/5 pt-20 pb-10">
+      <footer id="contact" className="relative bg-[#050505] pt-20 pb-10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12 sm:mb-16">
             <div className="col-span-1 md:col-span-2 lg:col-span-1">

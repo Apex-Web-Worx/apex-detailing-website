@@ -198,25 +198,6 @@
   }
 }
 
-/* Magenta / purple / cyan color lines sweeping left → right */
-@keyframes brand-logo-color-streaks {
-  0%,
-  52% {
-    transform: translateX(-140%) skewX(-18deg);
-    opacity: 0;
-  }
-  58% {
-    opacity: 1;
-  }
-  86% {
-    opacity: 0.95;
-  }
-  100% {
-    transform: translateX(160%) skewX(-18deg);
-    opacity: 0;
-  }
-}
-
 @keyframes header-shine {
   0%, 100% {
     text-shadow: 0 0 0.6rem rgba(0, 229, 255, 0.35);
@@ -328,58 +309,7 @@
     animation: brand-logo-sheen-loop 5.2s ease-in-out 1.2s infinite;
   }
 
-  /* Color lines (magenta → purple → cyan) traveling right from the logo */
-  .brand-logo-nav__streaks {
-    position: absolute;
-    inset: -25% -70%;
-    z-index: 4;
-    pointer-events: none;
-    overflow: visible;
-    transform: translateX(-140%) skewX(-18deg);
-    opacity: 0;
-    animation: brand-logo-color-streaks 6.4s ease-in-out 2s infinite;
-    will-change: transform, opacity;
-  }
-
-  .brand-logo-nav__streaks::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(
-        105deg,
-        transparent 36%,
-        rgba(255, 26, 216, 0.15) 38%,
-        #ff1ad8 39.2%,
-        #ff1ad8 40.6%,
-        rgba(255, 26, 216, 0.15) 42%,
-        transparent 44%
-      ),
-      linear-gradient(
-        105deg,
-        transparent 44%,
-        rgba(157, 0, 255, 0.15) 46%,
-        #9d00ff 47.2%,
-        #9d00ff 48.6%,
-        rgba(157, 0, 255, 0.15) 50%,
-        transparent 52%
-      ),
-      linear-gradient(
-        105deg,
-        transparent 52%,
-        rgba(0, 229, 255, 0.15) 54%,
-        #00e5ff 55.2%,
-        #00e5ff 56.6%,
-        rgba(0, 229, 255, 0.15) 58%,
-        transparent 60%
-      );
-    filter:
-      drop-shadow(0 0 0.35rem rgba(255, 26, 216, 0.85))
-      drop-shadow(0 0 0.55rem rgba(0, 229, 255, 0.65));
-    mix-blend-mode: screen;
-  }
-
-  /* Desktop / fine pointer: hover spectrum + quick sheen / streaks */
+  /* Desktop / fine pointer: hover spectrum + quick sheen */
   @media (hover: hover) and (pointer: fine) {
     .brand-logo-nav:hover .brand-logo-nav__mark,
     .brand-logo-nav:focus-within .brand-logo-nav__mark {
@@ -389,11 +319,6 @@
     .brand-logo-nav:hover .brand-logo-nav__sheen,
     .brand-logo-nav:focus-within .brand-logo-nav__sheen {
       animation: brand-logo-sheen 1.05s ease-in-out;
-    }
-
-    .brand-logo-nav:hover .brand-logo-nav__streaks,
-    .brand-logo-nav:focus-within .brand-logo-nav__streaks {
-      animation: brand-logo-color-streaks 1.35s ease-in-out;
     }
   }
 
@@ -405,10 +330,6 @@
 
     .brand-logo-nav:active .brand-logo-nav__sheen {
       animation: brand-logo-sheen 0.95s ease-in-out;
-    }
-
-    .brand-logo-nav:active .brand-logo-nav__streaks {
-      animation: brand-logo-color-streaks 1.2s ease-in-out;
     }
   }
 
@@ -429,12 +350,6 @@
     .brand-logo-nav__sheen {
       animation-duration: 5.8s;
     }
-
-    .brand-logo-nav__streaks {
-      inset: -30% -85%;
-      animation-duration: 5.8s;
-      animation-delay: 1.4s;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -448,11 +363,7 @@
     .brand-logo-nav__sheen,
     .brand-logo-nav:hover .brand-logo-nav__sheen,
     .brand-logo-nav:focus-within .brand-logo-nav__sheen,
-    .brand-logo-nav:active .brand-logo-nav__sheen,
-    .brand-logo-nav__streaks,
-    .brand-logo-nav:hover .brand-logo-nav__streaks,
-    .brand-logo-nav:focus-within .brand-logo-nav__streaks,
-    .brand-logo-nav:active .brand-logo-nav__streaks {
+    .brand-logo-nav:active .brand-logo-nav__sheen {
       animation: none !important;
       opacity: 0 !important;
     }
@@ -616,9 +527,9 @@
   .btn-cyber-sm {
     --cyber-cut: 9px;
     --cyber-border: 2px;
-    padding: 0.55rem 1.1rem;
-    font-size: 0.8rem;
-    letter-spacing: 0.12em;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
   }
 
   .btn-cyber-lg {
@@ -988,15 +899,13 @@
     }
   }
 
-  /* Ambient page-wide neon bubbles — soft background layer */
+  /* Ambient page bubbles — in document flow so they scroll with the page */
   .page-bubbles {
-    position: fixed;
+    position: absolute;
     inset: 0;
-    /* Above section backgrounds, below nav (z-50) and dialogs */
-    z-index: 15;
+    z-index: 0;
     pointer-events: none;
     overflow: hidden;
-    mix-blend-mode: screen;
     opacity: 0.35;
   }
 
@@ -1050,10 +959,9 @@
     }
   }
 
-  /* Phones: skip mix-blend (often washes out on OLED) + stronger presence */
+  /* Phones: stronger bubble presence */
   @media (max-width: 640px) {
     .page-bubbles {
-      mix-blend-mode: normal;
       opacity: 0.85;
     }
     .page-bubble {
@@ -1104,6 +1012,488 @@
 
   .ring-gold {
     border-color: rgba(212, 175, 55, 0.35);
+  }
+
+  .apex-page {
+    background-color: #050505;
+    background-image:
+      radial-gradient(ellipse 85% 55% at 8% -8%, rgba(255, 26, 216, 0.08), transparent 52%),
+      radial-gradient(ellipse 65% 45% at 92% 18%, rgba(157, 0, 255, 0.04), transparent 48%),
+      radial-gradient(ellipse 50% 40% at 50% 80%, rgba(255, 26, 216, 0.03), transparent 55%);
+    background-attachment: scroll;
+  }
+
+  /* ── Tunnel hero (reference storyboard) ── */
+  .apex-hero {
+    position: relative;
+    z-index: 0;
+    min-height: 90svh;
+    min-height: 90dvh;
+    display: flex;
+    align-items: stretch;
+    overflow-x: hidden;
+    background: #050505;
+    color: #fff;
+  }
+
+  .apex-hero-stage {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 46%;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    container-type: size;
+    background: #050505;
+  }
+
+  /* Picture lives only in the right pane; left copy stays on solid black. */
+  .apex-hero-plate {
+    position: absolute;
+    width: max(100cqw, calc(100cqh * 1536 / 1024));
+    height: max(100cqh, calc(100cqw * 1024 / 1536));
+    left: 58%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .apex-hero-plate picture,
+  .apex-hero-scene {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .apex-hero-scene {
+    object-fit: fill;
+    object-position: center;
+  }
+
+  .apex-hero-tunnel-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    mix-blend-mode: screen;
+  }
+
+  .apex-tunnel {
+    position: absolute;
+    inset: 0;
+  }
+
+  .apex-tunnel-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .tunnel-frame {
+    vector-effect: non-scaling-stroke;
+    filter: drop-shadow(0 0 5px rgba(138, 82, 255, 0.5));
+  }
+
+  .apex-hero-lights {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+
+  .apex-hl-spot,
+  .apex-hl-brow,
+  .apex-hl-drl {
+    position: absolute;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .apex-hl-spot {
+    width: 3.6%;
+    height: 4%;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Measured from hero-tunnel-scene.jpg headlight cores */
+  .apex-hl-spot-l { left: 36.95%; top: 59.4%; }
+  .apex-hl-spot-r { left: 62.88%; top: 59.3%; }
+
+  .apex-hl-brow {
+    width: 5.2%;
+    height: 1.1%;
+    border-radius: 999px;
+  }
+
+  .apex-hl-brow-l {
+    left: 35.6%;
+    top: 56.8%;
+    transform: translate(-50%, -50%) rotate(-16deg);
+  }
+
+  .apex-hl-brow-r {
+    left: 64.4%;
+    top: 56.8%;
+    transform: translate(-50%, -50%) rotate(16deg);
+  }
+
+  .apex-hl-drl {
+    width: 0.9%;
+    height: 6%;
+    border-radius: 999px;
+    transform: translate(-50%, -50%);
+  }
+
+  .apex-hl-drl-l { left: 33.7%; top: 62.2%; }
+  .apex-hl-drl-r { left: 66.3%; top: 62.2%; }
+
+  /* Same sweep as .brand-logo-nav__sheen, white only */
+  .apex-hl-sheen {
+    position: absolute;
+    inset: -30% -80%;
+    background: linear-gradient(
+      105deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.12) 42%,
+      rgba(255, 255, 255, 0.95) 50%,
+      rgba(255, 255, 255, 0.18) 58%,
+      transparent 72%
+    );
+    background-size: 260% 100%;
+    background-repeat: no-repeat;
+    background-position: 140% 0;
+    opacity: 0;
+  }
+
+  .apex-hero.is-shining .apex-hl-spot-l .apex-hl-sheen,
+  .apex-hero.is-shining .apex-hl-brow-l .apex-hl-sheen,
+  .apex-hero.is-shining .apex-hl-drl-l .apex-hl-sheen {
+    animation: brand-logo-sheen-loop 5.2s ease-in-out 1.2s infinite;
+  }
+
+  .apex-hero.is-shining .apex-hl-spot-r .apex-hl-sheen,
+  .apex-hero.is-shining .apex-hl-brow-r .apex-hl-sheen,
+  .apex-hero.is-shining .apex-hl-drl-r .apex-hl-sheen {
+    animation: brand-logo-sheen-loop 5.2s ease-in-out 1.45s infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apex-hero.is-shining .apex-hl-sheen {
+      animation: none;
+      opacity: 0;
+    }
+  }
+
+  .apex-hero-wash {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, #050505 0%, #050505 46%, rgba(5, 5, 5, 0.55) 50%, transparent 58%);
+  }
+
+  .apex-hero-shell {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: clamp(5.5rem, 12vh, 7.5rem) clamp(1.25rem, 4vw, 2.5rem) clamp(2rem, 6vh, 3.5rem);
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  .apex-hero-shell a,
+  .apex-hero-shell button {
+    pointer-events: auto;
+  }
+
+  .apex-hero-copy {
+    max-width: min(34rem, 40vw);
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .apex-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    width: fit-content;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 26, 216, 0.35);
+    background: rgba(255, 26, 216, 0.08);
+    color: #f3e8ff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .apex-hero-badge-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: var(--brand-magenta);
+    box-shadow: 0 0 10px rgba(255, 26, 216, 0.8);
+  }
+
+  .apex-hero-title {
+    margin: 0;
+    font-family: "Michroma", "Mulish", sans-serif;
+    font-size: clamp(2.35rem, 5.2vw, 4.5rem);
+    line-height: 0.92;
+    font-weight: 400;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .apex-hero-title-grad {
+    background-image: linear-gradient(90deg, var(--brand-magenta), var(--brand-purple), var(--brand-cyan));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .apex-hero-sub {
+    margin: 0;
+    max-width: 34rem;
+    color: rgba(229, 231, 235, 0.9);
+    font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+    line-height: 1.55;
+  }
+
+  .apex-hero-sub-lead { color: #fff; font-weight: 600; }
+
+  .apex-hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    margin-top: 0.25rem;
+  }
+
+  .apex-hero-explore {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.35rem 0.15rem;
+  }
+
+  .apex-hero-explore:hover { color: #fff; }
+
+  .apex-hero-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    width: fit-content;
+    text-decoration: none;
+    color: inherit;
+    margin-top: 0.15rem;
+  }
+
+  .apex-hero-stars { display: inline-flex; gap: 0.1rem; }
+
+  .apex-hero-trust {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.75rem;
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.22);
+  }
+
+  .apex-hero-trust-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    color: #fff;
+  }
+
+  .apex-hero-trust-item:has(.gold) {
+    color: #f0d278;
+  }
+
+  .apex-hero-trust-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #ff4de3;
+    flex-shrink: 0;
+    stroke-width: 2.35;
+    filter: drop-shadow(0 0 7px rgba(255, 26, 216, 0.75));
+  }
+
+  .apex-hero-trust-icon.gold {
+    color: #e8c547;
+    filter: drop-shadow(0 0 7px rgba(232, 197, 71, 0.7));
+  }
+
+  .apex-hero-blend {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 11;
+    height: 10.5rem;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, transparent 0%, #050505 78%),
+      radial-gradient(ellipse 16% 85% at 20% 92%, rgba(255, 26, 216, 0.2), transparent 72%),
+      radial-gradient(ellipse 10% 70% at 32% 95%, rgba(255, 26, 216, 0.1), transparent 70%),
+      radial-gradient(ellipse 14% 75% at 82% 94%, rgba(0, 229, 255, 0.08), transparent 72%);
+  }
+
+  .apex-hero-ripple {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.4;
+    background:
+      radial-gradient(ellipse 11% 80% at 18% 55%, rgba(255, 26, 216, 0.45), transparent 70%),
+      radial-gradient(ellipse 7% 60% at 27% 62%, rgba(255, 26, 216, 0.22), transparent 68%),
+      radial-gradient(ellipse 9% 70% at 76% 58%, rgba(0, 229, 255, 0.14), transparent 70%);
+    -webkit-mask-image:
+      linear-gradient(180deg, transparent 0%, #000 28%, #000 62%, transparent 100%),
+      repeating-linear-gradient(
+        to bottom,
+        #000 0 3px,
+        transparent 3px 6px,
+        #000 6px 8px,
+        transparent 8px 12px
+      );
+    mask-image:
+      linear-gradient(180deg, transparent 0%, #000 28%, #000 62%, transparent 100%),
+      repeating-linear-gradient(
+        to bottom,
+        #000 0 3px,
+        transparent 3px 6px,
+        #000 6px 8px,
+        transparent 8px 12px
+      );
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+
+  /* In-flow black join — same #050505 as the footer, scrolls with the page */
+  .apex-seam,
+  .apex-hero-dip {
+    position: relative;
+    z-index: 0;
+    height: 4.75rem;
+    margin: 0;
+    overflow: hidden;
+    pointer-events: none;
+    background: #050505;
+    transform: none;
+  }
+
+  .apex-hero-dip-line {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    filter: drop-shadow(0 0 8px rgba(255, 26, 216, 0.45)) drop-shadow(0 0 10px rgba(0, 229, 255, 0.28));
+  }
+
+  @media (max-width: 1023px) {
+    .apex-hero {
+      display: flex;
+      flex-direction: column;
+      padding-top: 4.5rem;
+      min-height: unset;
+    }
+
+    .apex-hero-stage {
+      position: relative;
+      inset: auto;
+      left: auto;
+      width: 100%;
+      height: min(48vh, 420px);
+      min-height: 250px;
+      order: 1;
+    }
+
+    .apex-hero-plate {
+      width: max(100cqw, calc(100cqh * 1536 / 1024));
+      height: max(100cqh, calc(100cqw * 1024 / 1536));
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .apex-hero-wash {
+      display: none;
+    }
+
+    .apex-hero-shell {
+      order: 2;
+      background: #050505;
+      padding: 1.35rem 1.25rem 5.75rem;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .apex-hero-copy {
+      max-width: 36rem;
+      width: 100%;
+      align-items: center;
+      text-align: center;
+      gap: 1rem;
+    }
+
+    .apex-hero-title {
+      font-size: clamp(1.85rem, 8.4vw, 2.55rem);
+      text-align: center;
+    }
+
+    .apex-hero-ctas {
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+      max-width: 22rem;
+      gap: 0.7rem;
+    }
+
+    .apex-hero-ctas .btn-cyber {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .apex-hero-sub,
+    .apex-hero-explore,
+    .apex-hero-rating,
+    .apex-hero-trust {
+      display: none;
+    }
+
+    .apex-seam,
+    .apex-hero-dip {
+      height: 4.75rem;
+      margin: 0;
+    }
   }
 }
 

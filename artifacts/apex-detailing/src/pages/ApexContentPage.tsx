@@ -260,42 +260,40 @@ function SiteNavigation() {
         <div className="flex items-center justify-between">
           <Link
             href="/"
-            className="brand-logo-nav relative z-10 flex shrink-0 min-w-[4rem] items-center"
+            className="brand-logo-nav relative z-10 flex shrink-0 items-center"
             aria-label="Apex Detailing home"
             onClick={() => setMobileMenuOpen(false)}
           >
             <BrandLogo
               variant="nav"
               priority
-              className="brand-logo-nav__mark h-16 w-auto max-w-[9rem] object-contain opacity-100 md:h-24 md:max-w-[12rem] lg:h-[6.5rem]"
+              className="brand-logo-nav__mark h-14 w-auto max-w-[7.5rem] object-contain opacity-100 md:h-16 md:max-w-[9.5rem] lg:h-[4.25rem]"
             />
             <span className="brand-logo-nav__sheen" aria-hidden="true" />
-            <span className="brand-logo-nav__streaks" aria-hidden="true" />
           </Link>
 
-          <div className="hidden items-center space-x-8 md:flex">
-            <LanguageToggle />
+          <div className="hidden md:flex items-center gap-2.5 lg:gap-3.5 min-w-0">
+            <LanguageToggle className="shrink-0" />
             <a
               href="tel:417-527-6165"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#00E5FF]"
+              className="inline-flex items-center gap-1.5 text-[11px] lg:text-xs font-semibold text-white transition-colors hover:text-[#00E5FF] whitespace-nowrap shrink-0"
               aria-label="Call Apex Detailing"
             >
-              <Phone className="h-4 w-4 text-[#00E5FF]" />
+              <Phone className="h-3.5 w-3.5 text-[#00E5FF]" />
               <span>{t("nav.call")}</span>
             </a>
             {links.map((link) => (
               <a
                 key={link.id}
                 href={link.href}
-                className="group relative text-sm font-semibold uppercase tracking-wider text-gray-300 transition-colors hover:text-white"
+                className="group relative text-[11px] lg:text-xs font-semibold uppercase tracking-wide text-gray-300 transition-colors hover:text-white whitespace-nowrap"
               >
                 {t(`nav.${link.id}`)}
                 <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
-            <Link href={BOOKING_LINK} className="btn-cyber btn-cyber-sm">
+            <Link href={BOOKING_LINK} className="btn-cyber btn-cyber-sm whitespace-nowrap shrink-0">
               <span>{t("nav.book")}</span>
-              <ChevronRight className="h-4 w-4" />
             </Link>
           </div>
 
