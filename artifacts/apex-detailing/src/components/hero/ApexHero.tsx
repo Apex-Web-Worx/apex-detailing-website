@@ -148,8 +148,8 @@ export default function ApexHero({
           onExplore={onExplore}
         />
       </div>
-      <div className="apex-hero-dip" aria-hidden="false">
-        <svg className="apex-hero-dip-line" viewBox="0 0 1440 110" preserveAspectRatio="none">
+      <div className="apex-hero-dip">
+        <svg className="apex-hero-dip-line apex-hero-dip-line--desk" viewBox="0 0 1000 110" preserveAspectRatio="none">
           <defs>
             <linearGradient id={`dipGrad-${dipId}`} x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#FF1AD8" />
@@ -164,13 +164,38 @@ export default function ApexHero({
               </feMerge>
             </filter>
           </defs>
+          {/* Slope starts at the 46% black | photo seam */}
           <path
-            d="M0 28 H560 L640 78 H800 L880 28 H1440"
+            d="M0 28 H460 L540 78 H660 L740 28 H1000"
             fill="none"
             stroke={`url(#dipGrad-${dipId})`}
-            strokeWidth="2.4"
+            strokeWidth="2.6"
             strokeLinejoin="miter"
             filter={`url(#dipGlow-${dipId})`}
+          />
+        </svg>
+        <svg className="apex-hero-dip-line apex-hero-dip-line--mobile" viewBox="0 0 1000 110" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id={`dipGradM-${dipId}`} x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#FF1AD8" />
+              <stop offset="50%" stopColor="#9D00FF" />
+              <stop offset="100%" stopColor="#00E5FF" />
+            </linearGradient>
+            <filter id={`dipGlowM-${dipId}`} x="-20%" y="-80%" width="140%" height="260%">
+              <feGaussianBlur stdDeviation="3.2" result="b" />
+              <feMerge>
+                <feMergeNode in="b" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          <path
+            d="M0 28 H380 L460 78 H540 L620 28 H1000"
+            fill="none"
+            stroke={`url(#dipGradM-${dipId})`}
+            strokeWidth="2.6"
+            strokeLinejoin="miter"
+            filter={`url(#dipGlowM-${dipId})`}
           />
         </svg>
         <a

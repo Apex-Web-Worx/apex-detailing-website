@@ -1436,10 +1436,14 @@
     filter: drop-shadow(0 0 8px rgba(255, 26, 216, 0.45)) drop-shadow(0 0 10px rgba(0, 229, 255, 0.28));
   }
 
+  .apex-hero-dip-line--mobile {
+    display: none;
+  }
+
   .apex-hero-dip-btn {
     pointer-events: auto;
     position: absolute;
-    left: 50%;
+    left: 60%;
     bottom: 0.85rem;
     transform: translateX(-50%);
     width: 2.65rem;
@@ -1525,6 +1529,18 @@
       order: 3;
       position: relative;
       height: 6.25rem;
+    }
+
+    .apex-hero-dip-line--desk {
+      display: none;
+    }
+
+    .apex-hero-dip-line--mobile {
+      display: block;
+    }
+
+    .apex-hero-dip-btn {
+      left: 50%;
     }
   }
 }
