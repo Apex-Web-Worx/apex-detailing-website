@@ -89,9 +89,10 @@ export default function ApexHero({
   const scene = imageUrl("hero-tunnel-scene.jpg");
   const sceneWebp = scene.replace(/\.jpg$/i, ".webp");
   const sceneBright = 0.22 + ramp(clockMs, 200, INTRO_MS, reduce) * 0.78;
+  const shine = !reduce && (freezeAt == null ? clockMs > 0 : true);
 
   return (
-    <section id="home" className="apex-hero">
+    <section id="home" className={`apex-hero${shine ? " is-shining" : ""}`}>
       <div className="apex-hero-stage" aria-hidden="true">
         <div className="apex-hero-plate">
           <picture>
@@ -113,6 +114,20 @@ export default function ApexHero({
               draggable={false}
             />
           </picture>
+          <div className="apex-hero-lights" aria-hidden="true">
+            <span className="apex-hl-spot apex-hl-spot-l">
+              <span className="apex-hl-sheen" />
+            </span>
+            <span className="apex-hl-spot apex-hl-spot-r">
+              <span className="apex-hl-sheen" />
+            </span>
+            <span className="apex-hl-brow apex-hl-brow-l">
+              <span className="apex-hl-sheen" />
+            </span>
+            <span className="apex-hl-brow apex-hl-brow-r">
+              <span className="apex-hl-sheen" />
+            </span>
+          </div>
         </div>
       </div>
       <div className="apex-hero-wash" aria-hidden="true" />

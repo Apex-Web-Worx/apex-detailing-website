@@ -1181,6 +1181,86 @@
     filter: drop-shadow(0 0 5px rgba(138, 82, 255, 0.5));
   }
 
+  .apex-hero-lights {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+
+  .apex-hl-spot,
+  .apex-hl-brow {
+    position: absolute;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .apex-hl-spot {
+    width: 6.8%;
+    height: 7.6%;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 18px rgba(255, 255, 255, 0.18);
+  }
+
+  .apex-hl-spot-l { left: 40.6%; top: 46.4%; }
+  .apex-hl-spot-r { left: 59.4%; top: 46.4%; }
+
+  .apex-hl-brow {
+    width: 9.2%;
+    height: 2.1%;
+    border-radius: 999px;
+    transform: translate(-50%, -50%) rotate(-12deg);
+  }
+
+  .apex-hl-brow-l {
+    left: 38.4%;
+    top: 44.6%;
+    transform: translate(-50%, -50%) rotate(-18deg);
+  }
+
+  .apex-hl-brow-r {
+    left: 61.6%;
+    top: 44.6%;
+    transform: translate(-50%, -50%) rotate(18deg);
+  }
+
+  /* Same sweep as .brand-logo-nav__sheen, white only */
+  .apex-hl-sheen {
+    position: absolute;
+    inset: -30% -80%;
+    background: linear-gradient(
+      105deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.12) 42%,
+      rgba(255, 255, 255, 0.95) 50%,
+      rgba(255, 255, 255, 0.18) 58%,
+      transparent 72%
+    );
+    background-size: 260% 100%;
+    background-repeat: no-repeat;
+    background-position: 140% 0;
+    opacity: 0;
+  }
+
+  .apex-hero.is-shining .apex-hl-spot-l .apex-hl-sheen,
+  .apex-hero.is-shining .apex-hl-brow-l .apex-hl-sheen {
+    animation: brand-logo-sheen-loop 5.2s ease-in-out 1.2s infinite;
+  }
+
+  .apex-hero.is-shining .apex-hl-spot-r .apex-hl-sheen,
+  .apex-hero.is-shining .apex-hl-brow-r .apex-hl-sheen {
+    animation: brand-logo-sheen-loop 5.2s ease-in-out 1.45s infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apex-hero.is-shining .apex-hl-sheen {
+      animation: none;
+      opacity: 0;
+    }
+  }
+
   .apex-hero-wash {
     position: absolute;
     inset: 0;
