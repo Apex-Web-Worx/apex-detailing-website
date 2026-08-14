@@ -29,7 +29,7 @@ export default function HeroDip({ onExplore }: Props) {
           </filter>
         </defs>
         <path
-          d="M0 28 H380 L460 86 H540 L620 28 H1000"
+          d="M0 2 H380 L460 72 H540 L620 2 H1000"
           fill="none"
           stroke={`url(#${gradId})`}
           strokeWidth="2.6"
