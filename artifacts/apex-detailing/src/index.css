@@ -1121,20 +1121,24 @@
 
   .apex-hero-stage {
     position: absolute;
-    inset: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 46%;
     z-index: 0;
     pointer-events: none;
     overflow: hidden;
     container-type: size;
+    background: #000;
   }
 
-  /* 70% zoom-in from contain so the Camaro fills more of the hero. */
+  /* Picture lives only in the right pane; left copy stays on solid black. */
   .apex-hero-plate {
     position: absolute;
-    width: min(170cqw, calc(170cqh * 1536 / 1024));
-    height: min(170cqh, calc(170cqw * 1024 / 1536));
-    left: 50%;
-    top: 52%;
+    width: max(100cqw, calc(100cqh * 1536 / 1024));
+    height: max(100cqh, calc(100cqw * 1024 / 1536));
+    left: 58%;
+    top: 50%;
     transform: translate(-50%, -50%);
   }
 
@@ -1183,8 +1187,7 @@
     z-index: 4;
     pointer-events: none;
     background:
-      linear-gradient(90deg, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.42) 26%, rgba(0, 0, 0, 0.08) 48%, transparent 62%),
-      linear-gradient(180deg, rgba(0, 0, 0, 0.28) 0%, transparent 18%, transparent 78%, rgba(0, 0, 0, 0.4) 100%);
+      linear-gradient(90deg, #000 0%, #000 46%, rgba(0, 0, 0, 0.55) 50%, transparent 58%);
   }
 
   .apex-hero-shell {
@@ -1205,7 +1208,7 @@
   }
 
   .apex-hero-copy {
-    max-width: min(36rem, 42vw);
+    max-width: min(34rem, 40vw);
     display: flex;
     flex-direction: column;
     gap: 1.1rem;
@@ -1324,32 +1327,38 @@
 
   @media (max-width: 1023px) {
     .apex-hero {
+      display: flex;
+      flex-direction: column;
       min-height: 100svh;
       min-height: 100dvh;
     }
 
     .apex-hero-stage {
-      position: absolute;
-      inset: 0;
+      position: relative;
+      inset: auto;
+      left: auto;
       width: 100%;
-      height: 100%;
+      height: min(46vh, 380px);
+      min-height: 240px;
+      order: 2;
     }
 
     .apex-hero-plate {
-      width: min(170cqw, calc(170cqh * 1536 / 1024));
-      height: min(170cqh, calc(170cqw * 1024 / 1536));
+      width: max(100cqw, calc(100cqh * 1536 / 1024));
+      height: max(100cqh, calc(100cqw * 1024 / 1536));
       left: 50%;
-      top: 58%;
+      top: 50%;
       transform: translate(-50%, -50%);
     }
 
     .apex-hero-wash {
-      background:
-        linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.78) 38%, rgba(0, 0, 0, 0.22) 62%, rgba(0, 0, 0, 0.5) 100%);
+      display: none;
     }
 
     .apex-hero-shell {
-      padding: 5.5rem 1.25rem 6.75rem;
+      order: 1;
+      background: #000;
+      padding: 5.5rem 1.25rem 1.5rem;
       align-items: flex-start;
     }
 
