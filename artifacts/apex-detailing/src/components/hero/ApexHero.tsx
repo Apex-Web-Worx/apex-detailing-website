@@ -2,7 +2,7 @@ import { useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { imageUrl } from "@/components/OptimizedImage";
 import HeroCopy from "./HeroCopy";
-import { INTRO_MS, ramp } from "./heroTiming";
+import TunnelFrames from "./TunnelFrames";
 
 type Props = {
   bookingHref: string;
@@ -11,14 +11,6 @@ type Props = {
   onBook: (e: React.MouseEvent) => void;
   onExplore: (e: React.MouseEvent) => void;
 };
-
-function readHeroAt(): number | null {
-  if (typeof window === "undefined") return null;
-  const raw = new URLSearchParams(window.location.search).get("heroAt");
-  if (raw == null || raw === "") return null;
-  const n = Number(raw);
-  return Number.isFinite(n) ? Math.max(0, n) : null;
-}
 
 function waitForSplashGone(): Promise<void> {
   return new Promise((resolve) => {
@@ -41,8 +33,8 @@ function waitForSplashGone(): Promise<void> {
 }
 
 /**
- * Hero visual is the front-facing Camaro + hex tunnel photograph on the right.
- * No SVG rings over the car — those blocked the grille.
+ * Front-facing Camaro on the right. Headlights and outer tunnel rings
+ * blink slowly. A mask keeps hex strokes off the car.
  */
 export default function ApexHero({
   bookingHref,
@@ -52,46 +44,25 @@ export default function ApexHero({
   onExplore,
 }: Props) {
   const reduce = !!useReducedMotion();
-  const freezeAt = useRef(readHeroAt()).current;
-  const [clockMs, setClockMs] = useState(() =>
-    reduce ? INTRO_MS : (freezeAt ?? 0),
-  );
+  const [animating, setAnimating] = useState(false);
 
   useEffect(() => {
-    if (reduce) {
-      setClockMs(INTRO_MS);
-      return;
-    }
-    if (freezeAt != null) {
-      setClockMs(freezeAt);
-      return;
-    }
+    if (reduce) return;
     let cancelled = false;
-    let raf = 0;
     (async () => {
       await waitForSplashGone();
-      if (cancelled) return;
-      const t0 = performance.now();
-      const tick = (now: number) => {
-        if (cancelled) return;
-        const ms = Math.min(INTRO_MS, now - t0);
-        setClockMs(ms);
-        if (ms < INTRO_MS) raf = requestAnimationFrame(tick);
-      };
-      raf = requestAnimationFrame(tick);
+      if (!cancelled) setAnimating(true);
     })();
     return () => {
       cancelled = true;
-      cancelAnimationFrame(raf);
     };
-  }, [reduce, freezeAt]);
+  }, [reduce]);
 
   const scene = imageUrl("hero-tunnel-scene.jpg");
   const sceneWebp = scene.replace(/\.jpg$/i, ".webp");
-  const sceneBright = 0.22 + ramp(clockMs, 200, INTRO_MS, reduce) * 0.78;
 
   return (
-    <section id="home" className="apex-hero">
+    <section id="home" className={`apex-hero${animating ? " is-animating" : ""}`}>
       <div className="apex-hero-stage" aria-hidden="true">
         <div className="apex-hero-plate">
           <picture>
@@ -106,13 +77,21 @@ export default function ApexHero({
               width={1536}
               height={1024}
               className="apex-hero-scene"
-              style={{ filter: `brightness(${sceneBright})` }}
               loading="eager"
               fetchPriority="high"
               decoding="async"
               draggable={false}
             />
           </picture>
+          <div className="apex-hero-tunnel-layer">
+            <TunnelFrames />
+          </div>
+          <div className="apex-hero-lights">
+            <span className="apex-hl apex-hl-l" />
+            <span className="apex-hl apex-hl-r" />
+            <span className="apex-hl apex-hl-drl-l" />
+            <span className="apex-hl apex-hl-drl-r" />
+          </div>
         </div>
       </div>
       <div className="apex-hero-wash" aria-hidden="true" />

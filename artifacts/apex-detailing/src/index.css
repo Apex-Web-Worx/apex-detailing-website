@@ -1179,6 +1179,109 @@
   .tunnel-frame {
     vector-effect: non-scaling-stroke;
     filter: drop-shadow(0 0 5px rgba(138, 82, 255, 0.5));
+    opacity: 0.45;
+  }
+
+  .apex-hero.is-animating .tunnel-frame {
+    animation: apex-tunnel-blink 3.4s ease-in-out infinite;
+  }
+
+  .apex-hero.is-animating .tunnel-frame.frame-6 {
+    animation-delay: 0s;
+  }
+
+  .apex-hero.is-animating .tunnel-frame.frame-7 {
+    animation-delay: 0.7s;
+  }
+
+  .apex-hero.is-animating .tunnel-frame.frame-8 {
+    animation-delay: 1.4s;
+  }
+
+  @keyframes apex-tunnel-blink {
+    0%, 100% { opacity: 0.18; }
+    50% { opacity: 0.9; }
+  }
+
+  .apex-hero-lights {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+
+  .apex-hl {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.55;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(200, 230, 255, 0.45) 28%, transparent 70%);
+  }
+
+  .apex-hl-l {
+    left: 40.5%;
+    top: 46.5%;
+    width: 7.5%;
+    height: 8.5%;
+    transform: translate(-50%, -50%);
+  }
+
+  .apex-hl-r {
+    left: 59.5%;
+    top: 46.5%;
+    width: 7.5%;
+    height: 8.5%;
+    transform: translate(-50%, -50%);
+  }
+
+  .apex-hl-drl-l {
+    left: 33.8%;
+    top: 60.5%;
+    width: 2.2%;
+    height: 11%;
+    border-radius: 40%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(ellipse, rgba(255, 255, 255, 0.9) 0%, rgba(180, 220, 255, 0.35) 40%, transparent 72%);
+  }
+
+  .apex-hl-drl-r {
+    left: 66.2%;
+    top: 60.5%;
+    width: 2.2%;
+    height: 11%;
+    border-radius: 40%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(ellipse, rgba(255, 255, 255, 0.9) 0%, rgba(180, 220, 255, 0.35) 40%, transparent 72%);
+  }
+
+  .apex-hero.is-animating .apex-hl-l,
+  .apex-hero.is-animating .apex-hl-r {
+    animation: apex-hl-blink 2.8s ease-in-out infinite;
+  }
+
+  .apex-hero.is-animating .apex-hl-drl-l,
+  .apex-hero.is-animating .apex-hl-drl-r {
+    animation: apex-hl-blink 2.8s ease-in-out infinite;
+    animation-delay: 0.15s;
+  }
+
+  @keyframes apex-hl-blink {
+    0%, 12% { opacity: 1; }
+    22% { opacity: 0.2; }
+    32% { opacity: 1; }
+    70% { opacity: 0.45; }
+    100% { opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apex-hero.is-animating .tunnel-frame,
+    .apex-hero.is-animating .apex-hl-l,
+    .apex-hero.is-animating .apex-hl-r,
+    .apex-hero.is-animating .apex-hl-drl-l,
+    .apex-hero.is-animating .apex-hl-drl-r {
+      animation: none;
+      opacity: 0.7;
+    }
   }
 
   .apex-hero-wash {
