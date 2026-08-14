@@ -1333,10 +1333,12 @@
 
   .apex-hero-title {
     margin: 0;
-    font-size: clamp(2.15rem, 5.2vw, 3.75rem);
-    line-height: 1.05;
-    font-weight: 800;
-    letter-spacing: -0.02em;
+    font-family: var(--font-display), 'Michroma', sans-serif;
+    font-size: clamp(2.35rem, 5.2vw, 4.5rem);
+    line-height: 0.92;
+    font-weight: 400;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
     text-wrap: balance;
   }
 
