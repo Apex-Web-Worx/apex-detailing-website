@@ -42,9 +42,9 @@ function waitForSplashGone(): Promise<void> {
 }
 
 /**
- * Hero visual is the photographic Camaro + hex tunnel plate (same picture
- * as the reference). 8 SVG paths light back→front over it, then fade so the
- * settled frame is the photo — not a reconstructed car.
+ * Hero visual is the front-facing Camaro + hex tunnel photo, shown at 50% zoom
+ * so the full rings and wet floor stay in frame. 8 SVG paths light back→front
+ * over it, then fade so the settled frame is the photo.
  */
 export default function ApexHero({
   bookingHref,

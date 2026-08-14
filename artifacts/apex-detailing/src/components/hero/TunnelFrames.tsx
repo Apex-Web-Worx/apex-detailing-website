@@ -17,13 +17,13 @@ export default function TunnelFrames({ clockMs, reduced }: Props) {
   const glowId = `tunGlow-${uid}`;
 
   const frames = useMemo(() => {
-    // Measured from apex-option-a-nologo.png neon centroid
-    const cx = 966;
-    const cy = 520;
+    // Front-facing plate: tunnel vanishing point at image center
+    const cx = 768;
+    const cy = 500;
     return Array.from({ length: FRAME_COUNT }, (_, i) => {
       const t = i / (FRAME_COUNT - 1);
-      const rx = 110 + t * 470;
-      const ry = rx * 0.70;
+      const rx = 70 + t * 360;
+      const ry = rx * 0.68;
       return {
         d: hexPath(cx, cy, rx, ry),
         stroke: 1.6 + t * 1.8,

@@ -1128,14 +1128,14 @@
     container-type: size;
   }
 
-  /* 1536×1024 plate = the reference photo. Img + SVG share this box so hexes stay on the picture. */
+  /* Front-facing plate at 50% of cover — zoomed out so tunnel + floor stay visible. */
   .apex-hero-plate {
     position: absolute;
-    width: max(100cqw, calc(100cqh * 1536 / 1024));
-    height: max(100cqh, calc(100cqw * 1024 / 1536));
-    left: 68%;
-    top: 48%;
-    transform: translate(-68%, -48%);
+    width: max(50cqw, calc(50cqh * 1536 / 1024));
+    height: max(50cqh, calc(50cqw * 1024 / 1536));
+    left: 58%;
+    top: 52%;
+    transform: translate(-50%, -50%);
   }
 
   .apex-hero-plate picture,
@@ -1336,9 +1336,11 @@
     }
 
     .apex-hero-plate {
-      left: 72%;
-      top: 62%;
-      transform: translate(-72%, -42%);
+      width: max(62cqw, calc(48cqh * 1536 / 1024));
+      height: max(48cqh, calc(62cqw * 1024 / 1536));
+      left: 50%;
+      top: 70%;
+      transform: translate(-50%, -42%);
     }
 
     .apex-hero-wash {
