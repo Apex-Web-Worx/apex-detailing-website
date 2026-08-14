@@ -1418,12 +1418,11 @@
   .apex-hero-trust-icon.gold { color: var(--brand-gold-bright); }
 
   .apex-hero-dip {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 14;
-    height: 7.25rem;
+    position: relative;
+    z-index: 20;
+    height: 5.5rem;
+    margin-top: -1.7rem;
+    margin-bottom: -2.4rem;
     pointer-events: none;
   }
 
@@ -1436,15 +1435,11 @@
     filter: drop-shadow(0 0 8px rgba(255, 26, 216, 0.45)) drop-shadow(0 0 10px rgba(0, 229, 255, 0.28));
   }
 
-  .apex-hero-dip-line--mobile {
-    display: none;
-  }
-
   .apex-hero-dip-btn {
     pointer-events: auto;
     position: absolute;
-    left: 60%;
-    bottom: 0.85rem;
+    left: 50%;
+    bottom: 0.15rem;
     transform: translateX(-50%);
     width: 2.65rem;
     height: 2.65rem;
@@ -1526,21 +1521,9 @@
     }
 
     .apex-hero-dip {
-      order: 3;
-      position: relative;
-      height: 6.25rem;
-    }
-
-    .apex-hero-dip-line--desk {
-      display: none;
-    }
-
-    .apex-hero-dip-line--mobile {
-      display: block;
-    }
-
-    .apex-hero-dip-btn {
-      left: 50%;
+      height: 5.25rem;
+      margin-top: -0.4rem;
+      margin-bottom: -2.1rem;
     }
   }
 }

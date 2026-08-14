@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import LanguageToggle from "@/components/LanguageToggle";
-import { ApexHero } from "@/components/hero";
+import { ApexHero, HeroDip } from "@/components/hero";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
 
@@ -944,6 +944,12 @@ export default function Home() {
           e.preventDefault();
           goToBooking();
         }}
+        onExplore={(e) => {
+          e.preventDefault();
+          scrollToSection("services");
+        }}
+      />
+      <HeroDip
         onExplore={(e) => {
           e.preventDefault();
           scrollToSection("services");
