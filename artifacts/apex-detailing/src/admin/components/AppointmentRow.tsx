@@ -27,13 +27,11 @@ export default function AppointmentRow({
   onView,
   onEdit,
   onCancel,
-  stackedAction = false,
 }: {
   booking: Booking;
   onView: () => void;
   onEdit?: () => void;
   onCancel?: () => void;
-  stackedAction?: boolean;
 }) {
   const { token, openReadyModal, startBooking, completeBooking, sendReviewRequest, skipReviewRequest, unskipReviewRequest } = useAdmin();
   const photosQuery = useAdminBookingPhotoIndex(token);
@@ -53,21 +51,22 @@ export default function AppointmentRow({
     (booking.inProgressAt || booking.detailDurationMinutes != null);
 
   const primaryAction = canStart ? (
-    <StatusAction fullWidth={stackedAction} onClick={() => void startBooking(booking.id)}>
-      <Play className="w-4 h-4" /> Start detailing
+    <StatusAction onClick={() => void startBooking(booking.id)}>
+      <Play className="w-3.5 h-3.5" /> Start detailing
     </StatusAction>
   ) : ready ? (
-    <StatusAction fullWidth={stackedAction} onClick={() => openReadyModal(booking)}>
-      <Check className="w-4 h-4" /> Ready for pickup
+    <StatusAction onClick={() => openReadyModal(booking)}>
+      <Check className="w-3.5 h-3.5" /> Ready for pickup
     </StatusAction>
   ) : canComplete ? (
-    <StatusAction fullWidth={stackedAction} onClick={() => void completeBooking(booking.id)}>
-      <Check className="w-4 h-4" /> Mark completed
+    <StatusAction onClick={() => void completeBooking(booking.id)}>
+      <Check className="w-3.5 h-3.5" /> Mark completed
     </StatusAction>
   ) : null;
 
   const icons = (
-    <div className="flex flex-col md:flex-row items-center gap-1.5 shrink-0">
+    <div className="flex flex-row items-center gap-1.5 shrink-0 ml-auto">
+      {primaryAction}
       <a
         href={`tel:${booking.phone}`}
         className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-[#23B9FF] hover:bg-white/5 touch-manipulation"
@@ -274,7 +273,6 @@ export default function AppointmentRow({
           </button>
           {icons}
         </div>
-        {primaryAction}
       </div>
 
       <div className="hidden md:flex md:items-center md:gap-3">
@@ -303,10 +301,8 @@ export default function AppointmentRow({
             </p>
           </div>
         </button>
-        {primaryAction && !stackedAction ? <div className="shrink-0">{primaryAction}</div> : null}
-        <div className="ml-auto shrink-0">{icons}</div>
+        {icons}
       </div>
-      {primaryAction && stackedAction ? <div className="hidden md:block">{primaryAction}</div> : null}
     </div>
   );
 }
@@ -314,21 +310,15 @@ export default function AppointmentRow({
 function StatusAction({
   onClick,
   children,
-  fullWidth = false,
 }: {
   onClick: () => void;
   children: ReactNode;
-  fullWidth?: boolean;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={
-        fullWidth
-          ? "mt-3 w-full min-h-12 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold inline-flex items-center justify-center gap-2 hover:bg-[#ff4adc] touch-manipulation"
-          : "mt-3 w-full min-h-12 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold inline-flex items-center justify-center gap-2 hover:bg-[#ff4adc] touch-manipulation md:mt-0 md:w-auto md:h-11 md:min-h-11 md:px-4 md:whitespace-nowrap"
-      }
+      className="h-11 px-3 rounded-xl bg-[#FF2AD4] text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 hover:bg-[#ff4adc] touch-manipulation whitespace-nowrap shrink-0"
     >
       {children}
     </button>

@@ -301,7 +301,7 @@ export default function DashboardHome() {
             ) : (
               <div className="space-y-2">
                 {showHoldRow && todayBlocked && (
-                  <HeldAppointmentRow hold={todayBlocked} stackedAction />
+                  <HeldAppointmentRow hold={todayBlocked} />
                 )}
                 {todayBlocked && !showHoldRow && todayAppts.length === 0 && (
                   <div className="rounded-xl border border-white/10 bg-[#0B0B0B] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -323,7 +323,6 @@ export default function DashboardHome() {
                   <AppointmentRow
                     key={b.id}
                     booking={b}
-                    stackedAction
                     onView={() => setDetail(b)}
                     onEdit={() => setEditing(b)}
                     onCancel={() => cancelBooking(b.id)}

@@ -8,10 +8,8 @@ import { StatusBadge } from "./ui";
 
 export default function HeldAppointmentRow({
   hold,
-  stackedAction = false,
 }: {
   hold: BlockedDate;
-  stackedAction?: boolean;
 }) {
   const { openEditBlockedDate, startHold } = useAdmin();
   const name = heldCustomerName(hold);
@@ -24,18 +22,15 @@ export default function HeldAppointmentRow({
     <button
       type="button"
       onClick={() => void startHold(hold.id)}
-      className={
-        stackedAction
-          ? "mt-3 w-full min-h-12 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold inline-flex items-center justify-center gap-2 hover:bg-[#ff4adc] touch-manipulation"
-          : "mt-3 w-full min-h-12 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold inline-flex items-center justify-center gap-2 hover:bg-[#ff4adc] touch-manipulation md:mt-0 md:w-auto md:h-11 md:min-h-11 md:px-4 md:whitespace-nowrap"
-      }
+      className="h-11 px-3 rounded-xl bg-[#FF2AD4] text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 hover:bg-[#ff4adc] touch-manipulation whitespace-nowrap shrink-0"
     >
-      <Play className="w-4 h-4" /> Start detailing
+      <Play className="w-3.5 h-3.5" /> Start detailing
     </button>
   ) : null;
 
   const icons = (
-    <div className="flex flex-col md:flex-row items-center gap-1.5 shrink-0">
+    <div className="flex flex-row items-center gap-1.5 shrink-0 ml-auto">
+      {startButton}
       {hold.phone ? (
         <a
           href={`tel:${hold.phone}`}
@@ -107,7 +102,6 @@ export default function HeldAppointmentRow({
           </button>
           {icons}
         </div>
-        {startButton}
       </div>
 
       <div className="hidden md:flex md:items-center md:gap-3">
@@ -132,10 +126,8 @@ export default function HeldAppointmentRow({
             </p>
           </div>
         </button>
-        {startButton && !stackedAction ? <div className="shrink-0">{startButton}</div> : null}
-        <div className="ml-auto shrink-0">{icons}</div>
+        {icons}
       </div>
-      {startButton && stackedAction ? <div className="hidden md:block">{startButton}</div> : null}
     </div>
   );
 }
