@@ -813,27 +813,26 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             <div
-              className="brand-logo-nav relative z-10 flex items-center cursor-pointer shrink-0 min-w-[4rem]"
+              className="brand-logo-nav relative z-10 flex items-center cursor-pointer shrink-0"
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               aria-label="Back to top"
             >
               <BrandLogo
                 variant="nav"
                 priority
-                className="brand-logo-nav__mark h-16 md:h-24 lg:h-[6.5rem] w-auto max-w-[9rem] md:max-w-[12rem] object-contain opacity-100"
+                className="brand-logo-nav__mark h-14 md:h-16 lg:h-[4.25rem] w-auto max-w-[7.5rem] md:max-w-[9.5rem] object-contain opacity-100"
               />
               <span className="brand-logo-nav__sheen" aria-hidden="true" />
-              <span className="brand-logo-nav__streaks" aria-hidden="true" />
             </div>
 
-            <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-              <LanguageToggle />
+            <div className="hidden md:flex items-center gap-2.5 lg:gap-3.5 min-w-0">
+              <LanguageToggle className="shrink-0" />
               <a
                 href="tel:417-527-6165"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-[#00E5FF] transition-colors"
+                className="inline-flex items-center gap-1.5 text-[11px] lg:text-xs font-semibold text-white hover:text-[#00E5FF] transition-colors whitespace-nowrap shrink-0"
                 aria-label="Call Apex Detailing"
               >
-                <Phone className="w-4 h-4 text-[#00E5FF]" />
+                <Phone className="w-3.5 h-3.5 text-[#00E5FF]" />
                 <span>{t("nav.call")}</span>
               </a>
               {NAV_ITEMS.map((item) => {
@@ -850,7 +849,7 @@ export default function Home() {
                       e.preventDefault();
                       scrollToSection(item.id);
                     }}
-                    className={`font-semibold text-sm tracking-wider uppercase transition-colors relative group ${
+                    className={`font-semibold text-[11px] lg:text-xs tracking-wide uppercase transition-colors relative group whitespace-nowrap ${
                       activeSection === item.id
                         ? "text-white header-shine"
                         : "text-gray-300 hover:text-white"
@@ -867,9 +866,9 @@ export default function Home() {
                   e.preventDefault();
                   goToBooking();
                 }}
-                className="btn-cyber btn-cyber-sm"
+                className="btn-cyber btn-cyber-sm whitespace-nowrap shrink-0"
               >
-                <span>{t("nav.book")}</span> <ChevronRight className="w-4 h-4" />
+                <span>{t("nav.book")}</span>
               </a>
             </div>
 
