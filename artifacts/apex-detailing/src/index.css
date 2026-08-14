@@ -1116,7 +1116,7 @@
     align-items: stretch;
     overflow-x: hidden;
     overflow-y: visible;
-    background: #000;
+    background: #050505;
     color: #fff;
   }
 
@@ -1130,7 +1130,7 @@
     pointer-events: none;
     overflow: hidden;
     container-type: size;
-    background: #000;
+    background: #050505;
   }
 
   /* Picture lives only in the right pane; left copy stays on solid black. */
@@ -1417,6 +1417,17 @@
   }
 
   .apex-hero-trust-icon.gold { color: var(--brand-gold-bright); }
+
+  .apex-hero-blend {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 11;
+    height: 9.5rem;
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent 0%, #050505 72%);
+  }
 
   .apex-hero-dip {
     position: absolute;

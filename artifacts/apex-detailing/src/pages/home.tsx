@@ -950,13 +950,12 @@ export default function Home() {
         }}
       />
       {/* Services Section */}
-      <section id="services" className="py-24 relative section-pink-wash overflow-hidden">
-        {/* Minimal pink-on-black atmosphere */}
+      <section id="services" className="py-24 relative bg-[#050505] overflow-hidden">
+        {/* Minimal atmosphere — kept off the top seam so it matches the hero/footer black */}
         <div className="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
-          <div className="absolute -top-24 left-[-10%] w-[42rem] h-[42rem] rounded-full bg-[#FF1AD8]/[0.05] blur-[120px]" />
-          <div className="absolute top-[40%] right-[-15%] w-[36rem] h-[36rem] rounded-full bg-[#00E5FF]/[0.04] blur-[140px]" />
-          <div className="absolute bottom-[-10%] left-[30%] w-[28rem] h-[28rem] rounded-full bg-[#9D00FF]/[0.05] blur-[110px]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,26,216,0.06),transparent_55%)]" />
+          <div className="absolute top-[28%] left-[-10%] w-[42rem] h-[42rem] rounded-full bg-[#FF1AD8]/[0.04] blur-[120px]" />
+          <div className="absolute top-[48%] right-[-15%] w-[36rem] h-[36rem] rounded-full bg-[#00E5FF]/[0.04] blur-[140px]" />
+          <div className="absolute bottom-[-10%] left-[30%] w-[28rem] h-[28rem] rounded-full bg-[#9D00FF]/[0.04] blur-[110px]" />
         </div>
         {/* Soap Bubbles in Services Section Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">

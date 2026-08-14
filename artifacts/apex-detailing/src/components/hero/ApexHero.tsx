@@ -147,6 +147,7 @@ export default function ApexHero({
           onExplore={onExplore}
         />
       </div>
+      <div className="apex-hero-blend" aria-hidden="true" />
       <HeroDip onExplore={onExplore} />
     </section>
   );
