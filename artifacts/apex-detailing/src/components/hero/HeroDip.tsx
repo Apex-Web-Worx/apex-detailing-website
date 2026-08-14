@@ -13,6 +13,7 @@ export default function HeroDip({ onExplore }: Props) {
 
   return (
     <div className="apex-hero-dip">
+      <div className="apex-hero-ripple" aria-hidden="true" />
       <svg className="apex-hero-dip-line" viewBox="0 0 1000 110" preserveAspectRatio="none">
         <defs>
           <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="0%">

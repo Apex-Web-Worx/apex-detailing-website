@@ -1280,7 +1280,7 @@
     z-index: 4;
     pointer-events: none;
     background:
-      linear-gradient(90deg, #000 0%, #000 46%, rgba(0, 0, 0, 0.55) 50%, transparent 58%);
+      linear-gradient(90deg, #050505 0%, #050505 46%, rgba(5, 5, 5, 0.55) 50%, transparent 58%);
   }
 
   .apex-hero-shell {
@@ -1424,9 +1424,48 @@
     right: 0;
     bottom: 0;
     z-index: 11;
-    height: 9.5rem;
+    height: 10.5rem;
     pointer-events: none;
-    background: linear-gradient(180deg, transparent 0%, #050505 72%);
+    background:
+      linear-gradient(180deg, transparent 0%, #050505 78%),
+      radial-gradient(ellipse 16% 85% at 20% 92%, rgba(255, 26, 216, 0.2), transparent 72%),
+      radial-gradient(ellipse 10% 70% at 32% 95%, rgba(255, 26, 216, 0.1), transparent 70%),
+      radial-gradient(ellipse 14% 75% at 82% 94%, rgba(0, 229, 255, 0.08), transparent 72%);
+  }
+
+  .apex-hero-ripple {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -4.5rem;
+    height: 9rem;
+    pointer-events: none;
+    opacity: 0.45;
+    mix-blend-mode: screen;
+    background:
+      radial-gradient(ellipse 11% 80% at 18% 55%, rgba(255, 26, 216, 0.55), transparent 70%),
+      radial-gradient(ellipse 7% 60% at 27% 62%, rgba(255, 26, 216, 0.28), transparent 68%),
+      radial-gradient(ellipse 9% 70% at 76% 58%, rgba(0, 229, 255, 0.16), transparent 70%);
+    -webkit-mask-image:
+      linear-gradient(180deg, transparent 0%, #000 28%, #000 62%, transparent 100%),
+      repeating-linear-gradient(
+        to bottom,
+        #000 0 3px,
+        transparent 3px 6px,
+        #000 6px 8px,
+        transparent 8px 12px
+      );
+    mask-image:
+      linear-gradient(180deg, transparent 0%, #000 28%, #000 62%, transparent 100%),
+      repeating-linear-gradient(
+        to bottom,
+        #000 0 3px,
+        transparent 3px 6px,
+        #000 6px 8px,
+        transparent 8px 12px
+      );
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
   }
 
   .apex-hero-dip {
@@ -1525,7 +1564,7 @@
 
     .apex-hero-shell {
       order: 1;
-      background: #000;
+      background: #050505;
       padding: 5.5rem 1.25rem 1.5rem;
       align-items: flex-start;
     }
