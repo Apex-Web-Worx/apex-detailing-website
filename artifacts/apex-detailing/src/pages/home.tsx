@@ -950,7 +950,7 @@ export default function Home() {
         }}
       />
       {/* Services Section */}
-      <section id="services" className="py-24 relative border-t border-white/5 section-pink-wash overflow-hidden">
+      <section id="services" className="py-24 relative section-pink-wash overflow-hidden">
         {/* Minimal pink-on-black atmosphere */}
         <div className="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
           <div className="absolute -top-24 left-[-10%] w-[42rem] h-[42rem] rounded-full bg-[#FF1AD8]/[0.05] blur-[120px]" />

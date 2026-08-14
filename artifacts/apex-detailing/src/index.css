@@ -1417,6 +1417,56 @@
 
   .apex-hero-trust-icon.gold { color: var(--brand-gold-bright); }
 
+  .apex-hero-dip {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 14;
+    height: 7.25rem;
+    pointer-events: none;
+  }
+
+  .apex-hero-dip-line {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    filter: drop-shadow(0 0 8px rgba(255, 26, 216, 0.45)) drop-shadow(0 0 10px rgba(0, 229, 255, 0.28));
+  }
+
+  .apex-hero-dip-btn {
+    pointer-events: auto;
+    position: absolute;
+    left: 50%;
+    bottom: 0.85rem;
+    transform: translateX(-50%);
+    width: 2.65rem;
+    height: 2.65rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #e9d5ff;
+    background: #050505;
+    border: 1.5px solid rgba(157, 0, 255, 0.85);
+    box-shadow:
+      0 0 0 1px rgba(255, 26, 216, 0.18),
+      0 0 16px rgba(157, 0, 255, 0.55),
+      inset 0 0 10px rgba(157, 0, 255, 0.18);
+    transition: color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .apex-hero-dip-btn:hover {
+    color: #fff;
+    transform: translateX(-50%) translateY(2px);
+    box-shadow:
+      0 0 0 1px rgba(0, 229, 255, 0.25),
+      0 0 22px rgba(157, 0, 255, 0.7),
+      inset 0 0 12px rgba(0, 229, 255, 0.12);
+  }
+
   @media (max-width: 1023px) {
     .apex-hero {
       display: flex;
@@ -1456,6 +1506,12 @@
 
     .apex-hero-copy {
       max-width: 36rem;
+    }
+
+    .apex-hero-dip {
+      order: 3;
+      position: relative;
+      height: 6.25rem;
     }
   }
 }

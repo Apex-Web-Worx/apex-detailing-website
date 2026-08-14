@@ -1,5 +1,6 @@
 import { useReducedMotion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { ChevronDown } from "lucide-react";
+import { useEffect, useId, useRef, useState } from "react";
 import { imageUrl } from "@/components/OptimizedImage";
 import HeroCopy from "./HeroCopy";
 import { INTRO_MS, ramp } from "./heroTiming";
@@ -90,6 +91,7 @@ export default function ApexHero({
   const sceneWebp = scene.replace(/\.jpg$/i, ".webp");
   const sceneBright = 0.22 + ramp(clockMs, 200, INTRO_MS, reduce) * 0.78;
   const shine = !reduce && (freezeAt == null ? clockMs > 0 : true);
+  const dipId = useId().replace(/:/g, "");
 
   return (
     <section id="home" className={`apex-hero${shine ? " is-shining" : ""}`}>
@@ -145,6 +147,40 @@ export default function ApexHero({
           onBook={onBook}
           onExplore={onExplore}
         />
+      </div>
+      <div className="apex-hero-dip" aria-hidden="false">
+        <svg className="apex-hero-dip-line" viewBox="0 0 1440 110" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id={`dipGrad-${dipId}`} x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#FF1AD8" />
+              <stop offset="50%" stopColor="#9D00FF" />
+              <stop offset="100%" stopColor="#00E5FF" />
+            </linearGradient>
+            <filter id={`dipGlow-${dipId}`} x="-20%" y="-80%" width="140%" height="260%">
+              <feGaussianBlur stdDeviation="3.2" result="b" />
+              <feMerge>
+                <feMergeNode in="b" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          <path
+            d="M0 28 H560 L640 78 H800 L880 28 H1440"
+            fill="none"
+            stroke={`url(#dipGrad-${dipId})`}
+            strokeWidth="2.4"
+            strokeLinejoin="miter"
+            filter={`url(#dipGlow-${dipId})`}
+          />
+        </svg>
+        <a
+          href="#services"
+          className="apex-hero-dip-btn"
+          onClick={onExplore}
+          aria-label="Scroll to services"
+        >
+          <ChevronDown className="w-5 h-5" strokeWidth={2.4} />
+        </a>
       </div>
     </section>
   );
