@@ -147,7 +147,8 @@
       })();
     </script>
     <link rel="preload" as="image" href="/images/logo-splash.webp" type="image/webp" fetchpriority="high" />
-    <link rel="preload" as="image" href="/images/hero-2.jpg" fetchpriority="high" />
+    <link rel="preload" as="image" href="/images/hero-2.sm.webp" type="image/webp" fetchpriority="high" />
+    <link rel="preload" as="image" href="/images/hero-2.lqip.webp" type="image/webp" fetchpriority="high" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
@@ -197,6 +198,9 @@
     </script>
     <style>
       html, body { background: #050505; margin: 0; }
+      html.is-booting #root {
+        visibility: hidden;
+      }
       #app-loading {
         position: fixed; inset: 0;
         display: flex; align-items: center; justify-content: center;
@@ -436,23 +440,27 @@
           field.appendChild(frag);
         }
 
-        // Keep splash until: logo decoded + app mounted + short minimum time
+        // Keep splash until shell is ready (logo + fonts + React) — do NOT wait on photos.
         var splash = document.getElementById("app-loading");
         var logo = document.getElementById("splash-logo");
         var logoReady = false;
         var appReady = false;
+        var fontsReady = false;
         var minTimeDone = false;
         var dismissed = false;
 
+        document.documentElement.classList.add("is-booting");
+
         function dismiss() {
           if (dismissed || !splash) return;
-          if (!logoReady || !appReady || !minTimeDone) return;
+          if (!logoReady || !appReady || !fontsReady || !minTimeDone) return;
           dismissed = true;
+          document.documentElement.classList.remove("is-booting");
           splash.classList.add("is-done");
           splash.setAttribute("aria-busy", "false");
           window.setTimeout(function () {
             if (splash && splash.parentNode) splash.parentNode.removeChild(splash);
-          }, 420);
+          }, 480);
         }
 
         function markLogoReady() {
@@ -472,24 +480,37 @@
           logoReady = true;
         }
 
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(function () {
+            fontsReady = true;
+            dismiss();
+          }).catch(function () {
+            fontsReady = true;
+            dismiss();
+          });
+        } else {
+          fontsReady = true;
+        }
+
         window.setTimeout(function () {
           minTimeDone = true;
           dismiss();
         }, 700);
 
-        // Hard cap so a hung asset never blocks the site
         window.setTimeout(function () {
           logoReady = true;
           appReady = true;
+          fontsReady = true;
           minTimeDone = true;
           if (logo) logo.classList.add("is-ready");
           dismiss();
-        }, 4500);
+        }, 5000);
 
         window.__APEX_MARK_APP_READY__ = function () {
           appReady = true;
           dismiss();
         };
+        window.__APEX_MARK_CONTENT_READY__ = function () {};
       })();
     </script>
     <script type="module" src="/src/main.tsx"></script>

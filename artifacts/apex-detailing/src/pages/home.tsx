@@ -21,18 +21,10 @@ import {
   Wand2,
   Zap,
 } from "lucide-react";
-import ownerPhoto from "@assets/ChatGPT_Image_May_2,_2026,_08_13_52_PM_1777770867408.png";
-import img1290 from "@assets/IMG_1290_1775780654764.jpeg";
-import img1303 from "@assets/IMG_1303_1775780654764.jpeg";
-import img1297 from "@assets/IMG_1297_1775780654765.jpeg";
-import img1309 from "@assets/IMG_1309_1775780654765.jpeg";
-import img1294 from "@assets/IMG_1294_1775780654765.jpeg";
-import img1306 from "@assets/IMG_1306_1775780654765.jpeg";
-import paintCorrectionBefore from "@assets/IMG_1662_1779061738951.jpeg";
-import paintCorrectionAfter from "@assets/IMG_1668_1779061738951.jpeg";
 import BrandLogo from "@/components/BrandLogo";
 import LanguageToggle from "@/components/LanguageToggle";
 import { useLanguage } from "@/i18n/LanguageProvider";
+import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
 
 const BOOKING_LINK = "/book";
 const INSTAGRAM_LINK = "https://www.instagram.com/apexdetailing_sf";
@@ -140,54 +132,48 @@ const services = [
 ];
 
 const gallery = [
-  { id: 1, title: "Paint Correction", beforeAfter: false, color: "from-blue-900 to-[#00E5FF]", thumbnail: `${import.meta.env.BASE_URL}images/paint-correction-thumbnail.jpg`, images: [
-    `${import.meta.env.BASE_URL}images/paint-correction-1.jpg`,
-    `${import.meta.env.BASE_URL}images/paint-correction-2.jpg`,
-    `${import.meta.env.BASE_URL}images/paint-correction-3.jpg`,
-    `${import.meta.env.BASE_URL}images/paint-correction-4.jpg`,
-    `${import.meta.env.BASE_URL}images/paint-correction-5.jpg`,
-    `${import.meta.env.BASE_URL}images/paint-correction-6.jpg`,
-    `${import.meta.env.BASE_URL}images/paint-correction-7.jpg`,
-    `${import.meta.env.BASE_URL}images/gallery/paint-correction/IMG_1968.jpeg`,
-    `${import.meta.env.BASE_URL}images/gallery/paint-correction/IMG_1969.jpeg`,
-    `${import.meta.env.BASE_URL}images/gallery/paint-correction/IMG_1970.jpeg`,
+  { id: 1, title: "Paint Correction", beforeAfter: false, color: "from-blue-900 to-[#00E5FF]", thumbnail: imageUrl("paint-correction-thumbnail.jpg"), images: [
+    imageUrl("paint-correction-1.jpg"),
+    imageUrl("paint-correction-2.jpg"),
+    imageUrl("paint-correction-3.jpg"),
+    imageUrl("paint-correction-4.jpg"),
+    imageUrl("paint-correction-5.jpg"),
+    imageUrl("paint-correction-6.jpg"),
+    imageUrl("paint-correction-7.jpg"),
+    imageUrl("gallery/paint-correction/IMG_1968.jpeg"),
+    imageUrl("gallery/paint-correction/IMG_1969.jpeg"),
+    imageUrl("gallery/paint-correction/IMG_1970.jpeg"),
   ], currentImageIndex: 0 },
-  { id: 2, title: "Ceramic Coating", beforeAfter: true, color: "from-[#FF1AD8] to-purple-900", video: `${import.meta.env.BASE_URL}videos/ceramic-coating-demo.MOV` },
-  { id: 3, title: "Interior Restoration", beforeAfter: true, color: "from-blue-900 to-indigo-900", thumbnail: `${import.meta.env.BASE_URL}images/interior-restoration-video.mp4`, images: [
-    { src: img1290, label: "Before" },
-    { src: img1303, label: "After" },
-    { src: img1297, label: "Before" },
-    { src: img1309, label: "After" },
-    { src: img1294, label: "Before" },
-    { src: img1306, label: "After" },
-    { src: `${import.meta.env.BASE_URL}images/interior-before-1.jpg`, label: "Before" },
-    { src: `${import.meta.env.BASE_URL}images/interior-after-1.jpg`, label: "After" },
-    { src: `${import.meta.env.BASE_URL}images/interior-before-2.jpg`, label: "Before" },
-    { src: `${import.meta.env.BASE_URL}images/interior-after-2.jpg`, label: "After" },
-    { src: `${import.meta.env.BASE_URL}images/interior-before-3.jpg`, label: "Before" },
-    { src: `${import.meta.env.BASE_URL}images/interior-after-3.jpg`, label: "After" },
-    { src: `${import.meta.env.BASE_URL}images/interior-before-4.jpg`, label: "Before" },
-    { src: `${import.meta.env.BASE_URL}images/interior-after-4.jpg`, label: "After" },
-    { src: `${import.meta.env.BASE_URL}images/interior-before-5.jpg`, label: "Before" },
-    { src: `${import.meta.env.BASE_URL}images/interior-after-5.jpg`, label: "After" },
-    { src: `${import.meta.env.BASE_URL}images/interior-before-6.jpg`, label: "Before" },
-    { src: `${import.meta.env.BASE_URL}images/interior-after-6.jpg`, label: "After" },
-    { src: `${import.meta.env.BASE_URL}images/interior-before-7.jpg`, label: "Before" },
-    { src: `${import.meta.env.BASE_URL}images/interior-after-7.jpg`, label: "After" },
+  { id: 2, title: "Ceramic Coating", beforeAfter: true, color: "from-[#FF1AD8] to-purple-900", thumbnail: imageUrl("ceramic-3.jpg") },
+  { id: 3, title: "Interior Restoration", beforeAfter: true, color: "from-blue-900 to-indigo-900", thumbnail: imageUrl("interior-restoration-thumbnail.jpg"), images: [
+    { src: imageUrl("interior-before-1.jpg"), label: "Before" },
+    { src: imageUrl("interior-after-1.jpg"), label: "After" },
+    { src: imageUrl("interior-before-2.jpg"), label: "Before" },
+    { src: imageUrl("interior-after-2.jpg"), label: "After" },
+    { src: imageUrl("interior-before-3.jpg"), label: "Before" },
+    { src: imageUrl("interior-after-3.jpg"), label: "After" },
+    { src: imageUrl("interior-before-4.jpg"), label: "Before" },
+    { src: imageUrl("interior-after-4.jpg"), label: "After" },
+    { src: imageUrl("interior-before-5.jpg"), label: "Before" },
+    { src: imageUrl("interior-after-5.jpg"), label: "After" },
+    { src: imageUrl("interior-before-6.jpg"), label: "Before" },
+    { src: imageUrl("interior-after-6.jpg"), label: "After" },
+    { src: imageUrl("interior-before-7.jpg"), label: "Before" },
+    { src: imageUrl("interior-after-7.jpg"), label: "After" },
   ], currentImageIndex: 0 },
-  { id: 4, title: "Exterior Detail", beforeAfter: true, color: "from-purple-900 to-black", thumbnail: `${import.meta.env.BASE_URL}images/exterior-detail-thumbnail.jpg`, video: `${import.meta.env.BASE_URL}images/exterior-detail-video.mov`, images: [
-    { src: `${import.meta.env.BASE_URL}images/exterior-before-1.jpg`, label: "Before" },
-    { src: `${import.meta.env.BASE_URL}images/exterior-after-1.jpg`, label: "After" },
-    { src: `${import.meta.env.BASE_URL}images/exterior-before-2.jpg`, label: "Before" },
-    { src: `${import.meta.env.BASE_URL}images/exterior-after-2.jpg`, label: "After" },
+  { id: 4, title: "Exterior Detail", beforeAfter: true, color: "from-purple-900 to-black", thumbnail: imageUrl("exterior-detail-thumbnail.jpg"), images: [
+    { src: imageUrl("exterior-before-1.jpg"), label: "Before" },
+    { src: imageUrl("exterior-after-1.jpg"), label: "After" },
+    { src: imageUrl("exterior-before-2.jpg"), label: "Before" },
+    { src: imageUrl("exterior-after-2.jpg"), label: "After" },
   ], currentImageIndex: 0 },
-  { id: 5, title: "Headlights Restoration", beforeAfter: true, color: "from-cyan-900 to-blue-600", thumbnail: `${import.meta.env.BASE_URL}images/headlights-video.mp4`, images: [
-    { src: `${import.meta.env.BASE_URL}images/headlights-before-1.jpg`, label: "Before" },
-    { src: `${import.meta.env.BASE_URL}images/headlights-after-1.jpg`, label: "After" },
-    { src: `${import.meta.env.BASE_URL}images/headlights-before-2.jpg`, label: "Before" },
-    { src: `${import.meta.env.BASE_URL}images/headlights-after-2.jpg`, label: "After" },
-    { src: `${import.meta.env.BASE_URL}images/headlights-before-3.jpg`, label: "Before" },
-    { src: `${import.meta.env.BASE_URL}images/headlights-after-3.jpg`, label: "After" },
+  { id: 5, title: "Headlights Restoration", beforeAfter: true, color: "from-cyan-900 to-blue-600", thumbnail: imageUrl("headlights-restoration-thumbnail.jpg"), images: [
+    { src: imageUrl("headlights-before-1.jpg"), label: "Before" },
+    { src: imageUrl("headlights-after-1.jpg"), label: "After" },
+    { src: imageUrl("headlights-before-2.jpg"), label: "Before" },
+    { src: imageUrl("headlights-after-2.jpg"), label: "After" },
+    { src: imageUrl("headlights-before-3.jpg"), label: "Before" },
+    { src: imageUrl("headlights-after-3.jpg"), label: "After" },
   ], currentImageIndex: 0 },
 ];
 
@@ -323,7 +309,6 @@ export default function Home() {
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
   const [aboutImageIdx, setAboutImageIdx] = useState(0);
-  const [failedVideos, setFailedVideos] = useState<Set<number>>(new Set());
   const [mapChooserOpen, setMapChooserOpen] = useState(false);
   const [sliderPosition, setSliderPosition] = useState(50);
   const [isDraggingSlider, setIsDraggingSlider] = useState(false);
@@ -495,68 +480,53 @@ export default function Home() {
   const beforeAfterPairs: Array<{ title: string; before: string; after: string }> = [
     {
       title: "Interior Restoration",
-      before: img1290,
-      after: img1303,
+      before: imageUrl("interior-before-1.jpg"),
+      after: imageUrl("interior-after-1.jpg"),
     },
     {
       title: "Interior Restoration",
-      before: img1297,
-      after: img1309,
+      before: imageUrl("interior-before-2.jpg"),
+      after: imageUrl("interior-after-2.jpg"),
     },
     {
       title: "Interior Restoration",
-      before: img1294,
-      after: img1306,
+      before: imageUrl("interior-before-3.jpg"),
+      after: imageUrl("interior-after-3.jpg"),
     },
     {
       title: "Interior Restoration",
-      before: `${import.meta.env.BASE_URL}images/interior-before-1.jpg`,
-      after: `${import.meta.env.BASE_URL}images/interior-after-1.jpg`,
-    },
-    {
-      title: "Interior Restoration",
-      before: `${import.meta.env.BASE_URL}images/interior-before-2.jpg`,
-      after: `${import.meta.env.BASE_URL}images/interior-after-2.jpg`,
-    },
-    {
-      title: "Interior Restoration",
-      before: `${import.meta.env.BASE_URL}images/interior-before-3.jpg`,
-      after: `${import.meta.env.BASE_URL}images/interior-after-3.jpg`,
-    },
-    {
-      title: "Interior Restoration",
-      before: `${import.meta.env.BASE_URL}images/interior-before-7.jpg`,
-      after: `${import.meta.env.BASE_URL}images/interior-after-7.jpg`,
+      before: imageUrl("interior-before-7.jpg"),
+      after: imageUrl("interior-after-7.jpg"),
     },
     {
       title: "Exterior Detail",
-      before: `${import.meta.env.BASE_URL}images/exterior-before-1.jpg`,
-      after: `${import.meta.env.BASE_URL}images/exterior-after-1.jpg`,
+      before: imageUrl("exterior-before-1.jpg"),
+      after: imageUrl("exterior-after-1.jpg"),
     },
     {
       title: "Exterior Detail",
-      before: `${import.meta.env.BASE_URL}images/exterior-before-2.jpg`,
-      after: `${import.meta.env.BASE_URL}images/exterior-after-2.jpg`,
+      before: imageUrl("exterior-before-2.jpg"),
+      after: imageUrl("exterior-after-2.jpg"),
     },
     {
       title: "Headlights Restoration",
-      before: `${import.meta.env.BASE_URL}images/headlights-before-1.jpg`,
-      after: `${import.meta.env.BASE_URL}images/headlights-after-1.jpg`,
+      before: imageUrl("headlights-before-1.jpg"),
+      after: imageUrl("headlights-after-1.jpg"),
     },
     {
       title: "Headlights Restoration",
-      before: `${import.meta.env.BASE_URL}images/headlights-before-2.jpg`,
-      after: `${import.meta.env.BASE_URL}images/headlights-after-2.jpg`,
+      before: imageUrl("headlights-before-2.jpg"),
+      after: imageUrl("headlights-after-2.jpg"),
     },
     {
       title: "Headlights Restoration",
-      before: `${import.meta.env.BASE_URL}images/headlights-before-3.jpg`,
-      after: `${import.meta.env.BASE_URL}images/headlights-after-3.jpg`,
+      before: imageUrl("headlights-before-3.jpg"),
+      after: imageUrl("headlights-after-3.jpg"),
     },
     {
       title: "Paint Correction",
-      before: paintCorrectionBefore,
-      after: paintCorrectionAfter,
+      before: imageUrl("ba/paint-correction-before.jpg"),
+      after: imageUrl("ba/paint-correction-after.jpg"),
     },
   ];
 
@@ -969,9 +939,9 @@ export default function Home() {
       <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden section-pink-wash">
         {/* Hero Background Image */}
         <div className="absolute inset-0 z-0">
-          <img
-            src={`${import.meta.env.BASE_URL}images/hero-2.jpg`}
-            alt="Apex Detailing freshly detailed vehicle"
+          <OptimizedImage
+            src={imageUrl("hero-2.jpg")}
+            alt={t("hero.alt")}
             className="w-full h-full object-cover opacity-25"
             loading="eager"
             fetchPriority="high"
@@ -1278,7 +1248,7 @@ export default function Home() {
               <div className="aspect-[4/5] rounded-2xl overflow-hidden relative group">
                 {/* Image container with smooth transitions */}
                 {aboutImages.map((img, idx) => (
-                  <img
+                  <OptimizedImage
                     key={idx}
                     src={img}
                     alt={`About image ${idx + 1}`}
@@ -1353,8 +1323,8 @@ export default function Home() {
                 <div className="mt-8 flex items-center gap-5 p-5 rounded-2xl bg-white/[0.03] border border-white/10">
                   <div className="relative shrink-0">
                     <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-[#FF1AD8] to-[#00E5FF] blur-md opacity-60" />
-                    <img
-                      src={ownerPhoto}
+                    <OptimizedImage
+                      src={imageUrl("owner-michail.jpg")}
                       alt="Michail Gurov, Founder of Apex Detailing"
                       className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-2 border-white/20"
                       loading="lazy"
@@ -1460,7 +1430,7 @@ export default function Home() {
               onClick={handleSliderDrag}
             >
               {/* After Image (Background) */}
-              <img
+              <OptimizedImage
                 src={beforeAfterPairs[currentSliderIndex].after}
                 alt="After"
                 className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
@@ -1474,7 +1444,7 @@ export default function Home() {
                 className="absolute inset-0 overflow-hidden transition-opacity duration-300"
                 style={{ width: `${sliderPosition}%`, opacity: sliderFading ? 0 : 1 }}
               >
-                <img
+                <OptimizedImage
                   src={beforeAfterPairs[currentSliderIndex].before}
                   alt="Before"
                   className="w-screen h-full object-cover"
@@ -1574,68 +1544,50 @@ export default function Home() {
                 className="group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer w-full"
                 onClick={() => handleGalleryItemClick(item)}
               >
-                {item.video && !failedVideos.has(item.id) ? (
-                  <>
-                    <video
-                      src={item.video}
-                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      muted
-                      autoPlay
-                      loop
-                      playsInline
-                      preload="metadata"
-                      controls={false}
-                      onError={() => setFailedVideos(prev => new Set(prev).add(item.id))}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
-                  </>
+                {item.id === 1 ? (
+                  <div className="absolute inset-0">
+                    {paintCorrectionImages.map((src, idx) => {
+                      const isNear =
+                        idx === paintCorrectionPreviewIndex ||
+                        idx === (paintCorrectionPreviewIndex + 1) % paintCorrectionImages.length;
+                      if (!isNear) return null;
+                      return (
+                        <OptimizedImage
+                          key={src}
+                          src={src}
+                          alt="Paint Correction"
+                          className={`absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-opacity duration-700 ${paintCorrectionPreviewIndex === idx ? "opacity-100" : "opacity-0"}`}
+                          style={{ filter: "brightness(1.1) contrast(1.1)" }}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      );
+                    })}
+                  </div>
+                ) : item.thumbnail ? (
+                  <OptimizedImage
+                    src={item.thumbnail}
+                    alt={item.title}
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    style={{ filter: "brightness(1.15) contrast(1.15)" }}
+                    loading="lazy"
+                    decoding="async"
+                  />
                 ) : item.images && item.images.length > 0 ? (
-                  <>
-                    {item.thumbnail?.endsWith('.mov') || item.thumbnail?.endsWith('.mp4') ? (
-                      <video
-                        src={item.thumbnail}
-                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                        muted
-                        autoPlay
-                        loop
-                        playsInline
-                        preload="metadata"
-                        controls={false}
-                      />
-                    ) : item.id === 1 ? (
-                      <div className="absolute inset-0">
-                        {paintCorrectionImages.map((src, idx) => (
-                          <img
-                            key={src}
-                            src={src}
-                            alt="Paint Correction"
-                            className={`absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-opacity duration-700 ${paintCorrectionPreviewIndex === idx ? 'opacity-100' : 'opacity-0'}`}
-                            style={{ filter: 'brightness(1.1) contrast(1.1)' }}
-                            loading="lazy"
-                            decoding="async"
-                          />
-                        ))}
-                      </div>
-                    ) : (
-                      <img
-                        src={item.thumbnail || (typeof item.images[0] === 'string' ? item.images[0] : item.images[0].src)}
-                        alt={item.title}
-                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                        style={{ filter: 'brightness(1.15) contrast(1.15)' }}
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-                  </>
+                  <OptimizedImage
+                    src={typeof item.images[0] === "string" ? item.images[0] : item.images[0].src}
+                    alt={item.title}
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    style={{ filter: "brightness(1.15) contrast(1.15)" }}
+                    loading="lazy"
+                    decoding="async"
+                  />
                 ) : (
-                  <>
-                    <div
-                      className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-80 group-hover:scale-105 transition-transform duration-700`}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-                  </>
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-80 group-hover:scale-105 transition-transform duration-700`}
+                  />
                 )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
                 <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                   {item.beforeAfter ? (
                     <span className="inline-block px-3 py-1 bg-[#00E5FF] text-black font-black text-xs uppercase tracking-widest rounded mb-3 opacity-85">
@@ -1705,7 +1657,7 @@ export default function Home() {
           >
             {selectedGalleryItem.images && selectedGalleryItem.images.length > 0 ? (
               <>
-                <img
+                <OptimizedImage
                   src={typeof selectedGalleryItem.images[currentImageIndex] === 'string' ? selectedGalleryItem.images[currentImageIndex] : selectedGalleryItem.images[currentImageIndex].src}
                   alt={`${selectedGalleryItem.title} - Image ${currentImageIndex + 1}`}
                   className={`${isFullscreen ? 'w-full h-full' : 'w-full h-full'} object-contain ${!isFullscreen && 'rounded-xl'} transition-opacity duration-200`}
@@ -2236,12 +2188,13 @@ export default function Home() {
               className="group flex flex-col items-center gap-3 hover:opacity-100 transition-all"
               aria-label="APEX WEB WORX"
             >
-              <img
-                src={`${import.meta.env.BASE_URL}images/apex-webworx-logo.png`}
+              <OptimizedImage
+                src={imageUrl("apex-webworx-logo.png")}
                 loading="lazy"
                 decoding="async"
                 alt="APEX WEB WORX"
                 className="h-16 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity"
+                noBlur
               />
               <p className="text-gray-500 text-xs font-medium uppercase tracking-widest group-hover:text-white transition-colors">
                 Designed and developed by <span className="text-potential font-bold">APEX WEB WORX</span>
