@@ -899,15 +899,13 @@
     }
   }
 
-  /* Ambient page-wide neon bubbles — soft background layer */
+  /* Ambient page bubbles — in document flow so they scroll with the page */
   .page-bubbles {
-    position: fixed;
+    position: absolute;
     inset: 0;
-    /* Above section backgrounds, below nav (z-50) and dialogs */
-    z-index: 15;
+    z-index: 0;
     pointer-events: none;
     overflow: hidden;
-    mix-blend-mode: screen;
     opacity: 0.35;
   }
 
@@ -961,10 +959,9 @@
     }
   }
 
-  /* Phones: skip mix-blend (often washes out on OLED) + stronger presence */
+  /* Phones: stronger bubble presence */
   @media (max-width: 640px) {
     .page-bubbles {
-      mix-blend-mode: normal;
       opacity: 0.85;
     }
     .page-bubble {
@@ -1017,16 +1014,24 @@
     border-color: rgba(212, 175, 55, 0.35);
   }
 
+  .apex-page {
+    background-color: #050505;
+    background-image:
+      radial-gradient(ellipse 85% 55% at 8% -8%, rgba(255, 26, 216, 0.08), transparent 52%),
+      radial-gradient(ellipse 65% 45% at 92% 18%, rgba(157, 0, 255, 0.04), transparent 48%),
+      radial-gradient(ellipse 50% 40% at 50% 80%, rgba(255, 26, 216, 0.03), transparent 55%);
+    background-attachment: scroll;
+  }
+
   /* ── Tunnel hero (reference storyboard) ── */
   .apex-hero {
     position: relative;
-    isolation: isolate;
+    z-index: 0;
     min-height: 90svh;
     min-height: 90dvh;
     display: flex;
     align-items: stretch;
     overflow-x: hidden;
-    overflow-y: visible;
     background: #050505;
     color: #fff;
   }

@@ -774,16 +774,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-['Mulish'] selection:bg-[#FF1AD8] selection:text-white">
-      {/* Soft global pink wash over black */}
-      <div
-        className="pointer-events-none fixed inset-0 z-0"
-        aria-hidden="true"
-        style={{
-          background:
-            "radial-gradient(ellipse 85% 55% at 8% -8%, rgba(255,26,216,0.08), transparent 52%), radial-gradient(ellipse 65% 45% at 92% 18%, rgba(157,0,255,0.04), transparent 48%), radial-gradient(ellipse 50% 40% at 50% 80%, rgba(255,26,216,0.03), transparent 55%)",
-        }}
-      />
+    <div className="min-h-screen bg-[#050505] text-white font-['Mulish'] selection:bg-[#FF1AD8] selection:text-white apex-page">
       <div className="relative z-10 overflow-x-hidden">
       {/* Ambient neon bubbles — inside content stack so they stay above section BGs */}
       <div className="page-bubbles" aria-hidden="true">
@@ -950,7 +941,7 @@ export default function Home() {
       />
       <HeroDip />
       {/* Services Section */}
-      <section id="services" className="py-24 relative bg-[#050505] overflow-x-hidden overflow-y-visible">
+      <section id="services" className="py-24 relative bg-[#050505] overflow-x-hidden">
         {/* Minimal atmosphere — kept off the top seam so it matches the hero/footer black */}
         <div className="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
           <div className="absolute top-[28%] left-[-10%] w-[42rem] h-[42rem] rounded-full bg-[#FF1AD8]/[0.04] blur-[120px]" />
@@ -1087,7 +1078,7 @@ export default function Home() {
       <HeroDip />
 
       {/* How It Works */}
-      <section id="how" className="py-20 sm:py-24 relative section-pink-wash overflow-x-hidden overflow-y-visible">
+      <section id="how" className="py-20 sm:py-24 relative section-pink-wash overflow-x-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-14">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
@@ -1119,7 +1110,7 @@ export default function Home() {
       <HeroDip />
 
       {/* About Section */}
-      <section id="about" className="py-24 relative section-pink-wash overflow-x-hidden overflow-y-visible">
+      <section id="about" className="py-24 relative section-pink-wash overflow-x-hidden">
         {/* Soap Bubbles in About Section */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
           <div className="soap-bubble absolute bottom-[5%] left-[5%] w-12 h-12" style={{ animationDuration: '16s', animationDelay: '0s' }} />
@@ -1276,7 +1267,7 @@ export default function Home() {
       <HeroDip />
 
       {/* Before/After Slider Section */}
-      <section id="before-after" className="py-20 sm:py-24 relative section-pink-wash overflow-x-hidden overflow-y-visible">
+      <section id="before-after" className="py-20 sm:py-24 relative section-pink-wash overflow-x-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-10 sm:mb-16">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
@@ -1411,7 +1402,7 @@ export default function Home() {
       <HeroDip />
 
       {/* Gallery Section */}
-      <section id="gallery" className="py-24 relative section-pink-wash overflow-x-hidden overflow-y-visible">
+      <section id="gallery" className="py-24 relative section-pink-wash overflow-x-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-end mb-10 sm:mb-16 gap-6">
             <div className="max-w-2xl">
@@ -1611,7 +1602,7 @@ export default function Home() {
       )}
 
       {/* Testimonials */}
-      <section id="testimonials" className="py-24 relative section-pink-wash overflow-x-hidden overflow-y-visible">
+      <section id="testimonials" className="py-24 relative section-pink-wash overflow-x-hidden">
         <div className="absolute right-0 bottom-0 w-[600px] h-[600px] bg-[#00E5FF]/10 rounded-full mix-blend-screen filter blur-[150px]" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -1655,7 +1646,7 @@ export default function Home() {
       <HeroDip />
 
       {/* Google Reviews Showcase */}
-      <section id="reviews" className="py-24 relative section-pink-wash overflow-x-hidden overflow-y-visible">
+      <section id="reviews" className="py-24 relative section-pink-wash overflow-x-hidden">
         <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-[#FF1AD8]/10 rounded-full mix-blend-screen filter blur-[120px] -translate-y-1/2" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -1724,7 +1715,7 @@ export default function Home() {
       <HeroDip />
 
       {/* Service Area */}
-      <section id="area" className="py-20 sm:py-24 relative section-pink-wash overflow-x-hidden overflow-y-visible">
+      <section id="area" className="py-20 sm:py-24 relative section-pink-wash overflow-x-hidden">
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#00E5FF]/10 rounded-full mix-blend-screen filter blur-[120px]" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-12">
@@ -1792,7 +1783,7 @@ export default function Home() {
       <HeroDip />
 
       {/* FAQ Section */}
-      <section id="faq" className="py-20 sm:py-24 relative section-pink-wash overflow-x-hidden overflow-y-visible">
+      <section id="faq" className="py-20 sm:py-24 relative section-pink-wash overflow-x-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
@@ -1871,7 +1862,7 @@ export default function Home() {
       <HeroDip />
 
       {/* CTA Section */}
-      <section id="cta" className="py-24 relative section-pink-wash overflow-x-hidden overflow-y-visible">
+      <section id="cta" className="py-24 relative section-pink-wash overflow-x-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative rounded-3xl overflow-hidden bg-[#111] border border-white/10 p-10 md:p-20 text-center">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-full bg-gradient-to-b from-[#FF1AD8]/20 to-[#00E5FF]/20 blur-3xl" />
