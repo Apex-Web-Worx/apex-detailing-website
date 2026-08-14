@@ -1128,13 +1128,13 @@
     container-type: size;
   }
 
-  /* Show the full front-facing photo (contain), not a cropped 3/4 plate. */
+  /* 70% zoom-in from contain so the Camaro fills more of the hero. */
   .apex-hero-plate {
     position: absolute;
-    width: min(100cqw, calc(100cqh * 1536 / 1024));
-    height: min(100cqh, calc(100cqw * 1024 / 1536));
+    width: min(170cqw, calc(170cqh * 1536 / 1024));
+    height: min(170cqh, calc(170cqw * 1024 / 1536));
     left: 50%;
-    top: 50%;
+    top: 52%;
     transform: translate(-50%, -50%);
   }
 
@@ -1336,10 +1336,10 @@
     }
 
     .apex-hero-plate {
-      width: min(100cqw, calc(100cqh * 1536 / 1024));
-      height: min(100cqh, calc(100cqw * 1024 / 1536));
+      width: min(170cqw, calc(170cqh * 1536 / 1024));
+      height: min(170cqh, calc(170cqw * 1024 / 1536));
       left: 50%;
-      top: 54%;
+      top: 58%;
       transform: translate(-50%, -50%);
     }
 

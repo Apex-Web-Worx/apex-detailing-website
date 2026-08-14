@@ -7,8 +7,7 @@ type Props = {
 };
 
 /**
- * 8 independent SVG <path> hex frames locked to the photographic plate
- * (1536×1024). Frame 1 = deepest/back. Frame 8 = closest/front.
+ * Outer SVG hex frames only (inner/middle rings omitted so the grille stays clear).
  * Geometry is static. Only opacity + glow change.
  */
 export default function TunnelFrames({ clockMs, reduced }: Props) {
@@ -17,14 +16,17 @@ export default function TunnelFrames({ clockMs, reduced }: Props) {
   const glowId = `tunGlow-${uid}`;
 
   const frames = useMemo(() => {
-    // Front-facing plate: tunnel vanishing point at image center
+    // Skip inner rings so they do not sit on the grille
     const cx = 768;
     const cy = 500;
-    return Array.from({ length: FRAME_COUNT }, (_, i) => {
+    const innerSkip = 3;
+    return Array.from({ length: FRAME_COUNT - innerSkip }, (_, j) => {
+      const i = j + innerSkip;
       const t = i / (FRAME_COUNT - 1);
       const rx = 70 + t * 360;
       const ry = rx * 0.68;
       return {
+        i,
         d: hexPath(cx, cy, rx, ry),
         stroke: 1.6 + t * 1.8,
       };
@@ -53,16 +55,16 @@ export default function TunnelFrames({ clockMs, reduced }: Props) {
           </filter>
         </defs>
         <g filter={`url(#${glowId})`}>
-          {frames.map((f, i) => (
+          {frames.map((f) => (
             <path
-              key={i}
-              className={`tunnel-frame frame-${i + 1}`}
+              key={f.i}
+              className={`tunnel-frame frame-${f.i + 1}`}
               d={f.d}
               fill="none"
               stroke={`url(#${gradId})`}
               strokeWidth={f.stroke}
               strokeLinejoin="round"
-              opacity={frameOpacity(clockMs, i, reduced)}
+              opacity={frameOpacity(clockMs, f.i, reduced)}
             />
           ))}
         </g>
