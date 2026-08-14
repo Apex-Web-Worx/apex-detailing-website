@@ -16,7 +16,7 @@ export default function ServicesPage() {
       {services.length === 0 ? (
         <EmptyState title="No services" body="Services will appear from the public catalog." />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
           {services.map((s) => (
             <AdminCard key={s.id} hover={false} className="p-5">
               <div className="flex items-start justify-between gap-3">

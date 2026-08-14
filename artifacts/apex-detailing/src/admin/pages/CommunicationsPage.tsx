@@ -88,7 +88,7 @@ export default function CommunicationsPage() {
   };
 
   return (
-    <div className="space-y-4 max-w-3xl">
+    <div className="w-full space-y-4">
       <h2 className="text-xl md:text-2xl font-bold">Communications</h2>
       <div className="grid grid-cols-2 rounded-xl border border-white/10 overflow-hidden">
         <button
@@ -108,7 +108,7 @@ export default function CommunicationsPage() {
       </div>
 
       {tab === "inbox" && (
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
           {ready.length === 0 ? (
             <EmptyState title="No pickup notifications yet" body="Mark a vehicle ready for pickup to see it here." />
           ) : (
@@ -136,6 +136,7 @@ export default function CommunicationsPage() {
               Save review link
             </PrimaryButton>
           </AdminCard>
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
           {templates.map((tpl) => (
             <AdminCard key={tpl.key} hover={false} className="p-5 space-y-3">
               <h3 className="font-bold">{tpl.name}</h3>
@@ -185,6 +186,7 @@ export default function CommunicationsPage() {
               </GhostButton>
             </AdminCard>
           ))}
+          </div>
           {note && <p className="text-sm text-emerald-300">{note}</p>}
         </div>
       )}

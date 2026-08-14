@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "wouter";
+import { cn } from "@/lib/utils";
 
 const ADMIN_MANIFEST = "/admin.webmanifest";
 const SITE_MANIFEST = "/manifest.webmanifest";
@@ -57,9 +58,9 @@ export default function PwaManifestSwitch() {
 }
 
 /** Shown on admin login — points to the real HTML install page. */
-export function AdminPwaInstallHint() {
+export function AdminPwaInstallHint({ className }: { className?: string }) {
   return (
-    <div className="mt-5 rounded-xl border border-white/10 bg-white/[0.03] p-4 text-left">
+    <div className={cn("mt-5 rounded-xl border border-white/10 bg-[#111111] p-4 text-left", className)}>
       <p className="text-sm font-semibold text-white mb-1">Add Admin to Home Screen</p>
       <p className="text-xs text-gray-400 mb-3 leading-relaxed">
         Do not add the homepage. Open the install page, tap Enable, then Share → Add to Home

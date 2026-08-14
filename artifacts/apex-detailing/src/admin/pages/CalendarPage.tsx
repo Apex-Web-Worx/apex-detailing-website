@@ -45,7 +45,7 @@ export default function CalendarPage() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="w-full space-y-4">
       <div className="flex items-center justify-between gap-3">
         <h2 className="text-xl md:text-2xl font-bold">Calendar</h2>
         <div className="flex items-center gap-2 shrink-0">
@@ -57,6 +57,7 @@ export default function CalendarPage() {
           </GhostButton>
         </div>
       </div>
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1.15fr)_minmax(22rem,0.85fr)] gap-4 items-start">
       <MonthCalendar
         month={month}
         onMonthChange={setMonth}
@@ -108,6 +109,7 @@ export default function CalendarPage() {
             ))}
           </div>
         )}
+      </div>
       </div>
     </div>
   );

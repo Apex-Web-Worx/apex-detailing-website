@@ -103,7 +103,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
       {navOpen && (
         <button
           type="button"
-          className="fixed inset-0 z-[45] bg-black/60"
+          className="fixed inset-0 z-[45] bg-black/60 lg:hidden"
           aria-label="Close menu"
           onClick={() => setNavOpen(false)}
         />
@@ -111,8 +111,8 @@ export default function AdminShell({ children }: { children: ReactNode }) {
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 w-[min(18rem,86vw)] flex flex-col border-r border-white/10 bg-[#0B0B0B] transition-transform duration-200 ease-out pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]",
-          navOpen ? "translate-x-0" : "-translate-x-full",
+          "fixed inset-y-0 left-0 z-50 w-[min(18rem,86vw)] lg:w-72 flex flex-col border-r border-white/10 bg-[#0B0B0B] transition-transform duration-200 ease-out pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]",
+          navOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         )}
       >
         <div className="px-5 pt-5 pb-4 border-b border-white/10 flex items-start justify-between gap-3">
@@ -129,7 +129,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
           <button
             type="button"
             onClick={() => setNavOpen(false)}
-            className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-[#9CA3AF] hover:text-white hover:bg-white/5 shrink-0"
+            className="lg:hidden w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-[#9CA3AF] hover:text-white hover:bg-white/5 shrink-0"
             aria-label="Close menu"
           >
             <X className="w-5 h-5" />
@@ -178,12 +178,12 @@ export default function AdminShell({ children }: { children: ReactNode }) {
         </div>
       </aside>
 
-      <div className="min-w-0">
+      <div className="min-w-0 lg:pl-72">
         <header className="sticky top-0 z-30 border-b border-white/10 bg-[#050505]/95 backdrop-blur pt-[env(safe-area-inset-top)]">
           <div className="h-14 md:h-16 px-3 md:px-6 flex items-center gap-2">
             <button
               type="button"
-              className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-white hover:bg-white/5 touch-manipulation"
+              className="lg:hidden w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-white hover:bg-white/5 touch-manipulation"
               onClick={() => setNavOpen(true)}
               aria-label="Open menu"
             >
@@ -192,7 +192,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
             <h1 className="text-base md:text-lg font-bold text-white truncate">{title}</h1>
 
             <div className="hidden md:flex flex-1 justify-center px-6">
-              <div className="relative w-full max-w-md">
+              <div className="relative w-full max-w-2xl">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
                 <input
                   value={searchQuery}
@@ -262,7 +262,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
           )}
         </header>
 
-        <main className="px-3 md:px-6 py-4 md:py-6 pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-6">
+        <main className="px-3 md:px-6 lg:px-8 py-4 md:py-6 pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-8">
           {children}
         </main>
       </div>

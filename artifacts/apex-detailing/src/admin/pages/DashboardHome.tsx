@@ -101,7 +101,7 @@ export default function DashboardHome() {
     .slice(0, 8);
 
   return (
-    <div className="max-w-7xl mx-auto space-y-4">
+    <div className="w-full space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <h2 className="text-xl md:text-2xl font-bold">
           {greetingForNow()}, {ADMIN_FIRST}
@@ -161,6 +161,7 @@ export default function DashboardHome() {
         </AdminCard>
       )}
 
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 items-start">
       <AdminCard hover={false} className="p-4 md:p-5">
         <div className="flex items-center justify-between gap-2 mb-3">
           <h3 className="text-base font-bold">Reviews</h3>
@@ -282,6 +283,7 @@ export default function DashboardHome() {
           </div>
         )}
       </AdminCard>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:items-stretch">
         <div className="flex flex-col gap-4 min-h-0">

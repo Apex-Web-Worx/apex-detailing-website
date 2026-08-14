@@ -101,7 +101,7 @@ export default function VehiclesPage() {
       {filtered.length === 0 ? (
         <EmptyState title="No vehicles" body="Vehicles are collected from the vehicle field on bookings." />
       ) : (
-        <div className="space-y-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
           {filtered.map((v) => (
             <Link key={v.key} href={`/admin/vehicles/${encodeURIComponent(v.key)}`}>
               <AdminCard className="p-4">

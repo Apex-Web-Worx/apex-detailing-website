@@ -146,7 +146,7 @@ export default function ReviewsPage() {
   };
 
   return (
-    <div className="max-w-3xl space-y-4">
+    <div className="w-full space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2">
@@ -214,7 +214,7 @@ export default function ReviewsPage() {
           body="Jobs show here after you start detailing. Send the Google review from this page or the dashboard when you want. Nothing is sent automatically."
         />
       ) : (
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
           {visible.map((item) => {
             const busy = busyId === item.bookingId;
             return (

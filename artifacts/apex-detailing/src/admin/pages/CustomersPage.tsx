@@ -112,7 +112,7 @@ export default function CustomersPage() {
       {filtered.length === 0 ? (
         <EmptyState title="No customers" body="Customers appear here from booking records." />
       ) : (
-        <div className="space-y-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
           {filtered.map((c) => (
             <Link key={c.key} href={`/admin/customers/${encodeURIComponent(c.key)}`}>
               <AdminCard className="p-4">

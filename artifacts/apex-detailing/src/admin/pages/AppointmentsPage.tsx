@@ -111,7 +111,7 @@ export default function AppointmentsPage() {
   const visible = view === "calendar" ? items.filter((item) => item.date === selectedDate) : items;
 
   return (
-    <div className="max-w-7xl mx-auto space-y-4">
+    <div className="w-full space-y-4">
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between gap-3">
           <h2 className="text-xl md:text-2xl font-bold">Appointments</h2>
