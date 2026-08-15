@@ -2410,11 +2410,14 @@
 
   .apex-hero-title {
     margin: 0 0 24px;
-    /* max-content: gradient background-clip must match full glyph width or TRUE POTENTIAL clips */
+    /*
+     * Gradient + background-clip paints only inside this box.
+     * Any max-width narrower than the glyphs clips TRUE POTENTIAL mid-word.
+     */
     width: max-content;
-    max-width: min(860px, 58vw);
+    max-width: none;
     font-family: "Michroma", "Mulish", sans-serif;
-    font-size: clamp(56px, 4.1vw, 78px);
+    font-size: clamp(50px, 3.8vw, 70px);
     line-height: 0.9;
     font-weight: 400;
     letter-spacing: -0.02em;
@@ -2428,7 +2431,7 @@
   .apex-hero-title-line {
     display: block;
     width: max-content;
-    max-width: 100%;
+    max-width: none;
     color: #fff;
   }
 
