@@ -24,15 +24,26 @@ export default function HeroCopy({
         <span>{t("hero.badge")}</span>
       </div>
       <h1 className="apex-hero-title">
-        {t("hero.title1")}
-        <br />
-        <span className="apex-hero-title-grad">{t("hero.title2")}</span>
+        <span className="apex-hero-title-mobile">
+          {t("hero.title1")}
+          <br />
+          <span className="apex-hero-title-grad">{t("hero.title2")}</span>
+        </span>
+        <span className="apex-hero-title-desktop">
+          {t("hero.desk1")}
+          <br />
+          {t("hero.desk2")}
+          <br />
+          <span className="apex-hero-title-grad">{t("hero.desk3")}</span>
+        </span>
       </h1>
       <p className="apex-hero-sub">
         <span className="apex-hero-sub-lead">{t("hero.subtitleLead")}</span>
+        <br className="apex-hero-title-br" />
         {t("hero.subtitleRest")}
-        <span className="text-potential font-bold"> Nixa Ozark Springfield, MO</span>
-        {t("hero.subtitleEnd")}
+        <br className="apex-hero-title-br" />
+        <span className="text-potential font-bold">Nixa Ozark Springfield, MO</span>
+        <span className="apex-hero-sub-end">{t("hero.subtitleEnd")}</span>
       </p>
       <div className="apex-hero-ctas">
         <a href={bookingUrl()} onClick={goBookNow} className="btn-cyber btn-cyber-lg group">
