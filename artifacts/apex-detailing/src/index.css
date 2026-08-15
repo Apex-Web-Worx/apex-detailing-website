@@ -2353,7 +2353,7 @@
     z-index: 4;
     pointer-events: none;
     background:
-      linear-gradient(90deg, #050505 0%, #050505 46%, rgba(5, 5, 5, 0.55) 50%, transparent 58%);
+      linear-gradient(90deg, #050505 0%, #050505 48%, rgba(5, 5, 5, 0.55) 52%, transparent 60%);
   }
 
   .apex-hero-shell {
