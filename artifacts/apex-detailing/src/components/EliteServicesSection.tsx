@@ -1,15 +1,19 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useReducedMotion } from "framer-motion";
 import {
+  AppWindow,
   Calendar,
   Car,
   CheckCircle2,
   ChevronRight,
+  CircleDot,
   createLucideIcon,
+  DoorOpen,
   Droplets,
   Info,
   Shield,
   Sparkles,
+  SprayCan,
   Star,
   Wand2,
   Wind,
@@ -63,6 +67,62 @@ const HeadlightRestoreIcon = createLucideIcon("HeadlightRestore", [
   ["path", { d: "M16.6 16.6 20.5 18.4", key: "ray-bot" }],
 ]);
 
+/** Clay bar block — feature bullets (More Packages). */
+const ClayBarIcon = createLucideIcon("ClayBar", [
+  ["rect", { width: "16", height: "7", x: "4", y: "8.5", rx: "2.2", key: "bar" }],
+  ["path", { d: "M8 8.5v7M12 8.5v7M16 8.5v7", key: "grooves" }],
+]);
+
+/** Shield with shine — paint protection feature. */
+const ShieldShineIcon = createLucideIcon("ShieldShine", [
+  [
+    "path",
+    {
+      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+      key: "shield",
+    },
+  ],
+  ["path", { d: "M12 9.2v3.2M10.4 10.8h3.2", key: "shine" }],
+]);
+
+/** Droplet + shield — water/dirt repellent feature. */
+const WaterRepelIcon = createLucideIcon("WaterRepel", [
+  [
+    "path",
+    {
+      d: "M8.5 14.5a3.5 3.5 0 0 0 7 0c0-2.6-3.5-6.6-3.5-6.6S8.5 11.9 8.5 14.5z",
+      key: "drop",
+    },
+  ],
+  [
+    "path",
+    {
+      d: "M19.2 11.2V8.4a.6.6 0 0 0-.4-.56c-1.15-.4-2.4-1.15-3.2-1.95",
+      key: "shield-r",
+    },
+  ],
+  [
+    "path",
+    {
+      d: "M4.8 11.2V8.4a.6.6 0 0 1 .4-.56c1.15-.4 2.4-1.15 3.2-1.95",
+      key: "shield-l",
+    },
+  ],
+]);
+
+/** Shield + sun — UV protection feature. */
+const UvProtectIcon = createLucideIcon("UvProtect", [
+  [
+    "path",
+    {
+      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+      key: "shield",
+    },
+  ],
+  ["circle", { cx: "12", cy: "12.2", r: "2.1", key: "sun" }],
+  ["path", { d: "M12 8.4v1.1M12 15v1.1M8.9 9.1l.8.8M14.3 14.5l.8.8M8.4 12.2h1.1M14.5 12.2h1.1M8.9 15.3l.8-.8M14.3 9.9l.8-.8", key: "rays" }],
+]);
+
 type FeaturedPkg = {
   pkg: "full" | "interior" | "express";
   price: string;
@@ -108,12 +168,34 @@ type MoreService = {
   pkg: string;
   pricing: string;
   Icon: LucideIcon;
+  featIcons: LucideIcon[];
 };
 
 const MORE_SERVICES: MoreService[] = [
-  { id: "exterior-detailing", pkg: "exterior", pricing: "$150", Icon: ExteriorDetailIcon },
-  { id: "wash-clay-wax", pkg: "wax", pricing: "$250", Icon: WashClayWaxIcon },
-  { id: "headlight-restoration", pkg: "headlight", pricing: "$125", Icon: HeadlightRestoreIcon },
+  {
+    id: "exterior-detailing",
+    pkg: "exterior",
+    pricing: "$150",
+    Icon: ExteriorDetailIcon,
+    // Detailed Hand Wash / Windows / Wheels / Door jambs / Spray sealant
+    featIcons: [Droplets, AppWindow, CircleDot, DoorOpen, SprayCan],
+  },
+  {
+    id: "wash-clay-wax",
+    pkg: "wax",
+    pricing: "$250",
+    Icon: WashClayWaxIcon,
+    // Hand wash / Clay bar / Wax / Paint protection / Water & dirt repellent
+    featIcons: [Droplets, ClayBarIcon, Sparkles, ShieldShineIcon, WaterRepelIcon],
+  },
+  {
+    id: "headlight-restoration",
+    pkg: "headlight",
+    pricing: "$125",
+    Icon: HeadlightRestoreIcon,
+    // Safety / Oxidation removal / UV protection
+    featIcons: [HeadlightRestoreIcon, Sparkles, UvProtectIcon],
+  },
 ];
 
 export default function EliteServicesSection({
@@ -282,12 +364,15 @@ export default function EliteServicesSection({
                     )}
                     <p className="elite-card__desc">{t(`pkg.${service.pkg}.desc`)}</p>
                     <ul className="elite-card__feats">
-                      {feats.map((feature) => (
-                        <li key={feature}>
-                          <CheckCircle2 className="elite-card__feat-icon" aria-hidden="true" strokeWidth={2.2} />
-                          <span>{feature}</span>
-                        </li>
-                      ))}
+                      {feats.map((feature, featIndex) => {
+                        const FeatIcon = service.featIcons[featIndex] ?? Sparkles;
+                        return (
+                          <li key={feature}>
+                            <FeatIcon className="elite-card__feat-icon" aria-hidden="true" strokeWidth={2.2} />
+                            <span>{feature}</span>
+                          </li>
+                        );
+                      })}
                     </ul>
                     <a
                       href={bookingUrl()}
