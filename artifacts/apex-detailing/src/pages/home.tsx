@@ -734,9 +734,9 @@ export default function Home() {
       <HeroDip />
 
       {/* How It Works */}
-      <section id="how" className="py-20 sm:py-24 relative bg-[#050505] section-pink-wash apex-cv">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-14">
+      <section id="how" className="apex-how pt-6 pb-14 sm:pt-8 sm:pb-16 relative bg-[#050505] section-pink-wash apex-cv">
+        <div className="container mx-auto px-4 sm:px-5 lg:px-8 relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-7 sm:mb-9">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
               {t("how.kicker")}
             </h2>
@@ -747,17 +747,32 @@ export default function Home() {
               </span>
             </h3>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 max-w-5xl mx-auto w-full">
             {[
-              { step: "01", title: t("how.1.title"), desc: t("how.1.desc"), icon: <Clock className="w-7 h-7 text-[#00E5FF]" /> },
-              { step: "02", title: t("how.2.title"), desc: t("how.2.desc"), icon: <Sparkles className="w-7 h-7 text-[#FF1AD8]" /> },
-              { step: "03", title: t("how.3.title"), desc: t("how.3.desc"), icon: <Car className="w-7 h-7 text-[#00E5FF]" /> },
+              {
+                step: "01",
+                title: t("how.1.title"),
+                desc: t("how.1.desc"),
+                icon: <Clock className="apex-how__icon text-[#00E5FF]" strokeWidth={1.75} aria-hidden="true" />,
+              },
+              {
+                step: "02",
+                title: t("how.2.title"),
+                desc: t("how.2.desc"),
+                icon: <Sparkles className="apex-how__icon text-[#FF1AD8]" strokeWidth={1.75} aria-hidden="true" />,
+              },
+              {
+                step: "03",
+                title: t("how.3.title"),
+                desc: t("how.3.desc"),
+                icon: <Car className="apex-how__icon text-[#00E5FF]" strokeWidth={1.75} aria-hidden="true" />,
+              },
             ].map((s) => (
-              <div key={s.step} className="relative p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-white/20 transition-colors">
-                <div className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] mb-4">{s.step}</div>
-                <div className="mb-4">{s.icon}</div>
-                <h4 className="text-xl font-black uppercase tracking-tight mb-2">{s.title}</h4>
-                <p className="text-gray-400 text-sm leading-relaxed">{s.desc}</p>
+              <div key={s.step} className="apex-how__card">
+                <div className="apex-how__num">{s.step}</div>
+                <div className="apex-how__icon-wrap">{s.icon}</div>
+                <h4 className="apex-how__title">{s.title}</h4>
+                <p className="apex-how__desc">{s.desc}</p>
               </div>
             ))}
           </div>

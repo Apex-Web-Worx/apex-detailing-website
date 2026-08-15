@@ -3973,3 +3973,93 @@
     font-size: clamp(32px, 8.2vw, 36px) !important;
   }
 }
+
+/* ── How It Works (Three Simple Steps) — polish only ── */
+.apex-how {
+  overflow-x: clip;
+  /* Pull section up toward the neon divider above */
+  margin-top: -0.75rem;
+}
+
+.apex-how__card {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  padding: 1.75rem 1.5rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition:
+    transform 280ms ease,
+    border-color 280ms ease,
+    box-shadow 280ms ease;
+}
+
+@media (min-width: 640px) {
+  .apex-how__card {
+    padding: 2rem;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .apex-how__card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(157, 0, 255, 0.45);
+    box-shadow:
+      0 0 0 1px rgba(0, 229, 255, 0.12),
+      0 0 22px rgba(157, 0, 255, 0.22),
+      0 0 28px rgba(0, 229, 255, 0.1);
+  }
+}
+
+.apex-how__num {
+  margin: 0 0 1rem;
+  font-size: 3rem;
+  line-height: 1;
+  font-weight: 900;
+  background-image: linear-gradient(90deg, #ff1ad8, #9d00ff, #00e5ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.apex-how__icon-wrap {
+  margin: 0 0 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.apex-how__icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  flex-shrink: 0;
+}
+
+.apex-how__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.apex-how__desc {
+  margin: 0;
+  max-width: 100%;
+  color: rgba(156, 163, 175, 1);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 767px) {
+  .apex-how__card {
+    padding: 1.5rem 1.15rem;
+  }
+
+  .apex-how__num {
+    font-size: 2.75rem;
+  }
+}
