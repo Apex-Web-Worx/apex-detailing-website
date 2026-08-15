@@ -1099,33 +1099,6 @@
   .apex-tunnel {
     position: absolute;
     inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    mix-blend-mode: screen;
-  }
-
-  .apex-tunnel-line {
-    fill: none;
-    stroke: #ff1ad8;
-    filter: drop-shadow(0 0 2px rgba(255, 26, 216, 0.85));
-    animation: apex-tunnel-line-flash 2.2s ease-in-out infinite;
-  }
-
-  @keyframes apex-tunnel-line-flash {
-    0%,
-    100% {
-      opacity: 0.2;
-    }
-    50% {
-      opacity: 1;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .apex-tunnel-line {
-      animation: none;
-      opacity: 0.45;
-    }
   }
 
   .apex-tunnel-svg {
