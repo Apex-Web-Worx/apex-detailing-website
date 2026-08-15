@@ -97,12 +97,21 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(
     ref,
   ) {
     const resolved = withBase(src);
-    const webp = webpSrc ? withBase(webpSrc) : toWebpPath(resolved);
-    const webpSm = toSmWebpPath(resolved);
-    const jpgSm = toSmJpgPath(resolved);
-    const lqip = noBlur ? null : toLqipPath(resolved);
+    // Camera .jpeg dumps often have no .sm / .webp siblings — don't invent 404s.
+    const hasDerivatives = !/\.jpeg$/i.test(stripQuery(resolved));
+    const webp = hasDerivatives
+      ? webpSrc
+        ? withBase(webpSrc)
+        : toWebpPath(resolved)
+      : webpSrc
+        ? withBase(webpSrc)
+        : null;
+    const webpSm = hasDerivatives ? toSmWebpPath(resolved) : null;
+    const jpgSm = hasDerivatives ? toSmJpgPath(resolved) : null;
+    const lqip = noBlur || !hasDerivatives ? null : toLqipPath(resolved);
 
     const [loaded, setLoaded] = useState(false);
+    const [useOriginal, setUseOriginal] = useState(false);
     const fit = objectFitFromClass(className);
 
     const handleLoad = (e: SyntheticEvent<HTMLImageElement>) => {
@@ -110,6 +119,10 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(
       onLoad?.(e);
     };
     const handleError = (e: SyntheticEvent<HTMLImageElement>) => {
+      if (!useOriginal) {
+        setUseOriginal(true);
+        return;
+      }
       setLoaded(true);
       onError?.(e);
     };
@@ -123,13 +136,13 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(
         : undefined;
 
     // Prefer the small JPEG as default src so slow phones never start a 1400px download first
-    const imgSrc = jpgSm ?? resolved;
+    const imgSrc = useOriginal ? resolved : (jpgSm ?? resolved);
 
     const img = (
       <img
         ref={ref}
         src={imgSrc}
-        srcSet={jpgSrcSet}
+        srcSet={useOriginal ? undefined : jpgSrcSet}
         alt={alt ?? ""}
         className={lqip ? undefined : className}
         style={
@@ -154,7 +167,7 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(
       />
     );
 
-    const pictured = webp ? (
+    const pictured = webp && !useOriginal ? (
       <picture className={lqip ? "contents" : undefined}>
         {webpSrcSet ? (
           <source srcSet={webpSrcSet} type="image/webp" sizes={sizes} />
