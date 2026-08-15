@@ -1649,20 +1649,22 @@
   }
 
   @media (min-width: 1024px) {
-    /* Full-bleed shell so wide screens can use more left-column room for the title. */
     .apex-hero-shell {
       max-width: none;
+      align-items: center;
     }
 
     .apex-hero-copy {
       max-width: 560px;
+      /* Nudge the left column ~20px right without redesigning the hero. */
+      margin-left: 1.25rem;
     }
 
     .apex-hero-title {
       width: max-content;
-      max-width: calc(46vw - 4.5rem);
-      /* Keep UNLEASH / YOUR CAR'S / TRUE POTENTIAL — size up without entering the tunnel. */
-      font-size: clamp(46px, 3.15vw, 52px);
+      /* Keep TRUE POTENTIAL clear of the tunnel after the right shift. */
+      max-width: calc(46vw - 6.25rem);
+      font-size: clamp(44px, 3.05vw, 50px);
       line-height: 0.9;
       letter-spacing: -0.045em;
       text-wrap: unset;
@@ -1686,9 +1688,17 @@
       white-space: nowrap;
     }
 
+    .apex-hero-ctas {
+      flex-wrap: nowrap;
+    }
+
+    .apex-hero-explore {
+      flex-basis: 100%;
+    }
+
     @media (min-width: 1440px) {
       .apex-hero-title {
-        font-size: clamp(52px, 3.4vw, 58px);
+        font-size: clamp(50px, 3.3vw, 56px);
       }
     }
 
