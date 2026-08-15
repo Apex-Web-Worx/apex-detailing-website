@@ -21,7 +21,7 @@ function RouteFallback() {
 function BootOnBook() {
   const [location] = useLocation();
   useEffect(() => {
-    if (location === "/book" || location.startsWith("/book?")) {
+    if (location === "/book" || location.startsWith("/book?") || location.endsWith("/book")) {
       forceDismissSplash();
     }
   }, [location]);
