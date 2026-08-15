@@ -933,6 +933,354 @@
     }
   }
 
+  /* ── Before & After transformations ── */
+  .apex-ba {
+    padding: 4.5rem 0 5rem;
+    overflow: hidden;
+  }
+
+  .apex-ba__particles {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .apex-ba__particles span {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: rgba(196, 181, 253, 0.5);
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
+    opacity: 0.3;
+  }
+
+  .apex-ba__particles span:nth-child(1) { top: 16%; left: 10%; }
+  .apex-ba__particles span:nth-child(2) { top: 24%; right: 14%; background: rgba(0, 229, 255, 0.45); }
+  .apex-ba__particles span:nth-child(3) { top: 48%; left: 6%; width: 3px; height: 3px; opacity: 0.22; }
+  .apex-ba__particles span:nth-child(4) { bottom: 28%; right: 10%; }
+  .apex-ba__particles span:nth-child(5) { bottom: 18%; left: 22%; background: rgba(255, 26, 216, 0.35); }
+  .apex-ba__particles span:nth-child(6) { top: 36%; right: 28%; opacity: 0.18; }
+
+  .apex-ba__header {
+    text-align: center;
+    max-width: 40rem;
+    margin: 0 auto 1.75rem;
+  }
+
+  .apex-ba__kicker {
+    margin: 0 0 0.55rem;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #ff1ad8;
+  }
+
+  .apex-ba__title {
+    margin: 0;
+    font-size: clamp(1.85rem, 3.6vw, 2.75rem);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    line-height: 1.1;
+    color: #fff;
+  }
+
+  .apex-ba__title-accent {
+    background-image: linear-gradient(100deg, #ff1ad8 0%, #9d00ff 48%, #00e5ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .apex-ba__stage {
+    width: min(1080px, 100%);
+    margin: 0 auto;
+  }
+
+  .apex-ba__compare {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 1.15rem;
+    cursor: col-resize;
+    touch-action: pan-y;
+    background: #0a0a0c;
+    border: 1px solid rgba(168, 85, 247, 0.28);
+    box-shadow:
+      0 18px 48px rgba(0, 0, 0, 0.45),
+      0 0 36px rgba(157, 0, 255, 0.12),
+      0 0 24px rgba(59, 130, 246, 0.06);
+    user-select: none;
+  }
+
+  .apex-ba__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 220ms ease;
+    pointer-events: none;
+  }
+
+  .apex-ba__before-clip {
+    position: absolute;
+    inset: 0 auto 0 0;
+    overflow: hidden;
+    height: 100%;
+    transition: opacity 220ms ease;
+    pointer-events: none;
+  }
+
+  .apex-ba__img--before {
+    max-width: none;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .apex-ba__handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 4;
+    width: 0;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  .apex-ba__handle-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    transform: translateX(-50%);
+    background: linear-gradient(180deg, rgba(255, 26, 216, 0.15), #a855f7 45%, rgba(0, 229, 255, 0.25));
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.55);
+  }
+
+  .apex-ba__handle-knob {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    transform: translate(-50%, -50%);
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: linear-gradient(135deg, #ff1ad8 0%, #9d00ff 48%, #00e5ff 100%);
+    box-shadow:
+      0 0 0 4px rgba(5, 5, 5, 0.35),
+      0 0 22px rgba(255, 26, 216, 0.45),
+      0 0 28px rgba(0, 229, 255, 0.2);
+    transition: box-shadow 280ms ease, transform 280ms ease;
+  }
+
+  .apex-ba__handle.is-dragging .apex-ba__handle-knob,
+  .apex-ba.is-visible .apex-ba__handle-knob {
+    box-shadow:
+      0 0 0 4px rgba(5, 5, 5, 0.35),
+      0 0 28px rgba(255, 26, 216, 0.55),
+      0 0 34px rgba(0, 229, 255, 0.28);
+  }
+
+  .apex-ba__handle-icon {
+    width: 1.15rem;
+    height: 1.15rem;
+    color: #fff;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+  }
+
+  .apex-ba__label {
+    position: absolute;
+    top: 0.85rem;
+    z-index: 5;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #fff;
+    pointer-events: none;
+    transition: opacity 220ms ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .apex-ba__label--before {
+    left: 0.85rem;
+    background: rgba(8, 8, 10, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .apex-ba__label--after {
+    right: 0.85rem;
+    background: rgba(59, 40, 90, 0.55);
+    border: 1px solid rgba(168, 85, 247, 0.35);
+  }
+
+  .apex-ba__meta {
+    text-align: center;
+    margin: 1.25rem auto 0;
+    max-width: 34rem;
+  }
+
+  .apex-ba__service {
+    margin: 0 0 0.45rem;
+    font-family: "Michroma", "Mulish", sans-serif;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background-image: linear-gradient(100deg, #ff1ad8 0%, #9d00ff 48%, #00e5ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .apex-ba__desc {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: rgba(186, 192, 202, 0.92);
+  }
+
+  .apex-ba__controls {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.35rem;
+  }
+
+  .apex-ba__nav-btn {
+    min-height: 2.6rem;
+    padding: 0.55rem 1.15rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(12, 12, 14, 0.78);
+    color: rgba(226, 232, 240, 0.88);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    backdrop-filter: blur(8px);
+    transition: border-color 220ms ease, color 220ms ease, background 220ms ease;
+  }
+
+  .apex-ba__nav-btn:hover {
+    border-color: rgba(196, 181, 253, 0.4);
+    color: #fff;
+    background: rgba(18, 14, 28, 0.9);
+  }
+
+  .apex-ba__dots {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 1.15rem;
+  }
+
+  .apex-ba__dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 999px;
+    border: none;
+    padding: 0;
+    background: rgba(148, 163, 184, 0.45);
+    transition: width 220ms ease, background 220ms ease, box-shadow 220ms ease;
+  }
+
+  .apex-ba__dot.is-active {
+    width: 1.65rem;
+    background: linear-gradient(100deg, #ff1ad8, #9d00ff, #00e5ff);
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.45);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .apex-ba:not(.is-visible) .apex-ba__header,
+    .apex-ba:not(.is-visible) .apex-ba__stage {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+
+    .apex-ba.is-visible .apex-ba__header,
+    .apex-ba.is-visible .apex-ba__stage {
+      animation: apex-ba-rise 650ms ease both;
+    }
+
+    .apex-ba.is-visible .apex-ba__stage {
+      animation-delay: 90ms;
+    }
+
+    .apex-ba.is-visible .apex-ba__handle-knob {
+      animation: apex-ba-handle-glow 2.8s ease-in-out 0.5s infinite;
+    }
+  }
+
+  @keyframes apex-ba-rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes apex-ba-handle-glow {
+    0%, 100% {
+      box-shadow:
+        0 0 0 4px rgba(5, 5, 5, 0.35),
+        0 0 18px rgba(255, 26, 216, 0.4),
+        0 0 22px rgba(0, 229, 255, 0.18);
+    }
+    50% {
+      box-shadow:
+        0 0 0 4px rgba(5, 5, 5, 0.35),
+        0 0 28px rgba(255, 26, 216, 0.62),
+        0 0 34px rgba(0, 229, 255, 0.3);
+    }
+  }
+
+  @media (max-width: 699px) {
+    .apex-ba {
+      padding: 3.5rem 0 4rem;
+    }
+
+    .apex-ba__stage {
+      width: calc(100% - 0.25rem);
+    }
+
+    .apex-ba__compare {
+      border-radius: 0.95rem;
+    }
+
+    .apex-ba__handle-knob {
+      width: 46px;
+      height: 46px;
+    }
+
+    .apex-ba__label {
+      top: 0.65rem;
+      font-size: 0.6rem;
+      padding: 0.3rem 0.55rem;
+    }
+
+    .apex-ba__label--before { left: 0.65rem; }
+    .apex-ba__label--after { right: 0.65rem; }
+  }
+
   .surface-card {
     background: var(--surface-card);
     border: 1px solid rgba(255, 255, 255, 0.1);

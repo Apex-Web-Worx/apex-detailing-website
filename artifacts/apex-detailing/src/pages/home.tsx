@@ -15,6 +15,7 @@ import {
   Phone,
   Mail,
   CheckCircle2,
+  ChevronsLeftRight,
   Clock,
   Award,
   ExternalLink,
@@ -220,10 +221,8 @@ export default function Home() {
   const [sliderPosition, setSliderPosition] = useState(50);
   const [isDraggingSlider, setIsDraggingSlider] = useState(false);
   const [currentSliderIndex, setCurrentSliderIndex] = useState(0);
-  const [isAnimatingSlider, setIsAnimatingSlider] = useState(true);
-  const [sliderDirection, setSliderDirection] = useState<'forward' | 'backward'>('forward');
   const [sliderFading, setSliderFading] = useState(false);
-  const [sliderCycleComplete, setSliderCycleComplete] = useState(false);
+  const [baVisible, setBaVisible] = useState(false);
   const [paintCorrectionPreviewIndex, setPaintCorrectionPreviewIndex] = useState(0);
   const [openFaq, setOpenFaq] = useState<string | null>(null);
   const [activeFaqCategory, setActiveFaqCategory] = useState<"General" | "Paint Correction">("General");
@@ -385,58 +384,77 @@ export default function Home() {
     "Rogersville", "Strafford", "Willard", "Sparta", "Highlandville",
   ];
 
-  const beforeAfterPairs: Array<{ title: string; before: string; after: string }> = [
+  const beforeAfterPairs: Array<{ title: string; descKey: string; before: string; after: string }> = [
     {
       title: "Interior Restoration",
+      descKey: "ba.desc.interior",
       before: imageUrl("interior-before-1.jpg"),
       after: imageUrl("interior-after-1.jpg"),
     },
     {
       title: "Interior Restoration",
+      descKey: "ba.desc.interior",
       before: imageUrl("interior-before-2.jpg"),
       after: imageUrl("interior-after-2.jpg"),
     },
     {
       title: "Interior Restoration",
+      descKey: "ba.desc.interior",
       before: imageUrl("interior-before-3.jpg"),
       after: imageUrl("interior-after-3.jpg"),
     },
     {
       title: "Interior Restoration",
+      descKey: "ba.desc.interior",
       before: imageUrl("interior-before-7.jpg"),
       after: imageUrl("interior-after-7.jpg"),
     },
     {
       title: "Exterior Detail",
+      descKey: "ba.desc.exterior",
       before: imageUrl("exterior-before-1.jpg"),
       after: imageUrl("exterior-after-1.jpg"),
     },
     {
       title: "Exterior Detail",
+      descKey: "ba.desc.exterior",
       before: imageUrl("exterior-before-2.jpg"),
       after: imageUrl("exterior-after-2.jpg"),
     },
     {
       title: "Headlights Restoration",
+      descKey: "ba.desc.headlights",
       before: imageUrl("headlights-before-1.jpg"),
       after: imageUrl("headlights-after-1.jpg"),
     },
     {
       title: "Headlights Restoration",
+      descKey: "ba.desc.headlights",
       before: imageUrl("headlights-before-2.jpg"),
       after: imageUrl("headlights-after-2.jpg"),
     },
     {
       title: "Headlights Restoration",
+      descKey: "ba.desc.headlights",
       before: imageUrl("headlights-before-3.jpg"),
       after: imageUrl("headlights-after-3.jpg"),
     },
     {
       title: "Paint Correction",
+      descKey: "ba.desc.paint",
       before: imageUrl("ba/paint-correction-before.jpg"),
       after: imageUrl("ba/paint-correction-after.jpg"),
     },
   ];
+
+  const goToBaSlide = (index: number) => {
+    setSliderFading(true);
+    setTimeout(() => {
+      setCurrentSliderIndex(index);
+      setSliderPosition(50);
+      setSliderFading(false);
+    }, 220);
+  };
 
   const handleSliderDrag = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
     const container = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
@@ -455,7 +473,7 @@ export default function Home() {
     `${import.meta.env.BASE_URL}images/hero-4.jpg`,
   ];
 
-  // Auto-rotate images
+  // Auto-rotate about images
   useEffect(() => {
     const timer = setInterval(() => {
       setAboutImageIdx((prev) => (prev + 1) % aboutImages.length);
@@ -463,75 +481,27 @@ export default function Home() {
     return () => clearInterval(timer);
   }, [aboutImages.length]);
 
-  // Auto-animate slider
-  useEffect(() => {
-    if (!isAnimatingSlider || isDraggingSlider) return;
-    
-    const interval = setInterval(() => {
-      setSliderPosition((prev) => {
-        let newPos = prev;
-        if (sliderDirection === 'forward') {
-          newPos = prev + 0.5;
-          if (newPos >= 100) {
-            setSliderDirection('backward');
-            return 100;
-          }
-        } else {
-          newPos = prev - 0.5;
-          if (newPos <= 0) {
-            setSliderDirection('forward');
-            return 0;
-          }
-        }
-        return newPos;
-      });
-    }, 32);
-    
-    return () => clearInterval(interval);
-  }, [isAnimatingSlider, isDraggingSlider, sliderDirection]);
-
-  // Auto-switch slider after one complete animation cycle (20 seconds), but only once through all comparisons
-  useEffect(() => {
-    if (!isAnimatingSlider || isDraggingSlider || sliderCycleComplete) return;
-    
-    const switchTimer = setInterval(() => {
-      setSliderFading(true);
-      setTimeout(() => {
-        setCurrentSliderIndex((prev) => {
-          const nextIndex = prev + 1;
-          if (nextIndex >= beforeAfterPairs.length) {
-            setSliderCycleComplete(true);
-            setIsAnimatingSlider(false); // Stop animation when cycle completes
-            return prev; // Stay on last image
-          }
-          return nextIndex;
-        });
-        setSliderPosition(50);
-        setSliderDirection('forward');
-        setSliderFading(false);
-      }, 300);
-    }, 20000); // Switch every 20 seconds (one complete cycle)
-    
-    return () => clearInterval(switchTimer);
-  }, [isAnimatingSlider, isDraggingSlider, sliderCycleComplete, beforeAfterPairs.length]);
-
-
+  // Before/After section enter animation only — slider stays user-controlled
   useEffect(() => {
     const el = document.getElementById("before-after");
     if (!el) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) {
+      setBaVisible(true);
+      return;
+    }
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (!entry.isIntersecting) {
-          setIsAnimatingSlider(false);
-        } else if (!sliderCycleComplete) {
-          setIsAnimatingSlider(true);
+        if (entry?.isIntersecting) {
+          setBaVisible(true);
+          io.disconnect();
         }
       },
-      { threshold: 0.12 },
+      { threshold: 0.14, rootMargin: "0px 0px -6% 0px" },
     );
     io.observe(el);
     return () => io.disconnect();
-  }, [sliderCycleComplete]);
+  }, []);
 
   // Auto-rotate gallery images when lightbox is open
   useEffect(() => {
@@ -1035,37 +1005,30 @@ export default function Home() {
       <HeroDip />
 
       {/* Before/After Slider Section */}
-      <section id="before-after" className="py-20 sm:py-24 relative bg-[#050505] section-pink-wash apex-cv">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-10 sm:mb-16">
-            <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
-              {t("ba.kicker")}
-            </h2>
-            <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
-              {t("ba.title")}{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-                {t("ba.titleAccent")}
-              </span>
-            </h3>
-          </div>
+      <section
+        id="before-after"
+        className={`apex-ba relative bg-[#050505] section-pink-wash apex-cv${baVisible ? " is-visible" : ""}`}
+      >
+        <div className="apex-ba__particles" aria-hidden="true">
+          <span /><span /><span /><span /><span /><span />
+        </div>
 
-          <div className="max-w-4xl mx-auto">
-            {/* Slider */}
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <header className="apex-ba__header">
+            <h2 className="apex-ba__kicker">{t("ba.kicker")}</h2>
+            <h3 className="apex-ba__title font-display">
+              {t("ba.title")}{" "}
+              <span className="apex-ba__title-accent">{t("ba.titleAccent")}</span>
+            </h3>
+          </header>
+
+          <div className="apex-ba__stage">
             <div
-              className="relative aspect-[4/3] rounded-3xl overflow-hidden cursor-col-resize bg-black/50 border border-white/10 group [touch-action:pan-y]"
+              className="apex-ba__compare"
               onMouseMove={isDraggingSlider ? handleSliderDrag : undefined}
-              onMouseDown={() => {
-                setIsDraggingSlider(true);
-                setIsAnimatingSlider(false);
-              }}
-              onMouseUp={() => {
-                setIsDraggingSlider(false);
-                setIsAnimatingSlider(true);
-              }}
-              onMouseLeave={() => {
-                setIsDraggingSlider(false);
-                setIsAnimatingSlider(true);
-              }}
+              onMouseDown={() => setIsDraggingSlider(true)}
+              onMouseUp={() => setIsDraggingSlider(false)}
+              onMouseLeave={() => setIsDraggingSlider(false)}
               onTouchStart={(e) => {
                 sliderTouchRef.current = {
                   x: e.touches[0].clientX,
@@ -1076,7 +1039,6 @@ export default function Home() {
               onTouchEnd={() => {
                 sliderTouchRef.current = null;
                 setIsDraggingSlider(false);
-                setIsAnimatingSlider(true);
               }}
               onTouchMove={(e) => {
                 const start = sliderTouchRef.current;
@@ -1088,96 +1050,92 @@ export default function Home() {
                   if (dx <= 8) return;
                   start.dragging = true;
                   setIsDraggingSlider(true);
-                  setIsAnimatingSlider(false);
                 }
                 handleSliderDrag(e);
               }}
               onClick={handleSliderDrag}
             >
-              {/* After Image (Background) */}
               <OptimizedImage
                 src={beforeAfterPairs[currentSliderIndex].after}
                 alt="After"
-                className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
+                className="apex-ba__img apex-ba__img--after"
                 style={{ opacity: sliderFading ? 0 : 1 }}
                 loading="lazy"
                 decoding="async"
               />
 
-              {/* Before Image (Overlay) */}
               <div
-                className="absolute inset-0 overflow-hidden transition-opacity duration-300"
+                className="apex-ba__before-clip"
                 style={{ width: `${sliderPosition}%`, opacity: sliderFading ? 0 : 1 }}
               >
                 <OptimizedImage
                   src={beforeAfterPairs[currentSliderIndex].before}
                   alt="Before"
-                  className="w-screen h-full object-cover"
+                  className="apex-ba__img apex-ba__img--before"
                   style={{ width: `${100 / (sliderPosition / 100)}%` }}
                   loading="lazy"
                   decoding="async"
                 />
               </div>
 
-              {/* Handle */}
               <div
-                className="absolute top-0 bottom-0 w-1 bg-gradient-to-b from-[#FF1AD8] to-[#00E5FF] cursor-col-resize"
+                className={`apex-ba__handle${isDraggingSlider ? " is-dragging" : ""}`}
                 style={{ left: `${sliderPosition}%` }}
               >
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 rounded-full flex items-center justify-center transition-all">
-                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14M16 5v14" />
-                  </svg>
-                </div>
+                <span className="apex-ba__handle-line" />
+                <span className="apex-ba__handle-knob" aria-hidden="true">
+                  <ChevronsLeftRight className="apex-ba__handle-icon" strokeWidth={2.2} />
+                </span>
               </div>
 
-              {/* Labels */}
-              <div 
-                className="absolute top-2 left-2 sm:top-4 sm:left-4 text-white font-black uppercase text-xs sm:text-sm tracking-wider bg-black/50 px-2 py-1 sm:px-3 sm:py-2 rounded-lg backdrop-blur-sm transition-opacity duration-300"
-                style={{ opacity: sliderPosition > 15 ? 1 : 0, pointerEvents: 'none' }}
+              <span
+                className="apex-ba__label apex-ba__label--before"
+                style={{ opacity: sliderPosition > 12 ? 1 : 0 }}
               >
-                Before
-              </div>
-              <div 
-                className="absolute top-2 right-2 sm:top-4 sm:right-4 text-white font-black uppercase text-xs sm:text-sm tracking-wider bg-black/50 px-2 py-1 sm:px-3 sm:py-2 rounded-lg backdrop-blur-sm transition-opacity duration-300"
-                style={{ opacity: sliderPosition < 85 ? 1 : 0, pointerEvents: 'none' }}
+                {t("ba.before")}
+              </span>
+              <span
+                className="apex-ba__label apex-ba__label--after"
+                style={{ opacity: sliderPosition < 88 ? 1 : 0 }}
               >
-                After
-              </div>
-
-              {/* Title */}
-              <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 text-white font-black uppercase text-center text-xs sm:text-base md:text-lg tracking-wider bg-gradient-to-r from-[#FF1AD8]/80 to-[#00E5FF]/80 px-2 sm:px-4 sm:px-6 py-2 sm:py-3 rounded-lg backdrop-blur-sm">
-                {beforeAfterPairs[currentSliderIndex].title}
-              </div>
+                {t("ba.after")}
+              </span>
             </div>
 
-            {/* Navigation Buttons */}
-            <div className="flex justify-center gap-4 mt-8">
+            <div className="apex-ba__meta">
+              <h4 className="apex-ba__service">{beforeAfterPairs[currentSliderIndex].title}</h4>
+              <p className="apex-ba__desc">{t(beforeAfterPairs[currentSliderIndex].descKey)}</p>
+            </div>
+
+            <div className="apex-ba__controls">
               <button
-                onClick={() => setCurrentSliderIndex((prev) => (prev - 1 + beforeAfterPairs.length) % beforeAfterPairs.length)}
-                className="px-6 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#00E5FF] hover:text-white transition-all font-bold text-sm"
+                type="button"
+                className="apex-ba__nav-btn"
+                onClick={() =>
+                  goToBaSlide((currentSliderIndex - 1 + beforeAfterPairs.length) % beforeAfterPairs.length)
+                }
               >
-                ← Previous
+                ← {t("ba.prev")}
               </button>
               <button
-                onClick={() => setCurrentSliderIndex((prev) => (prev + 1) % beforeAfterPairs.length)}
-                className="px-6 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#00E5FF] hover:text-white transition-all font-bold text-sm"
+                type="button"
+                className="apex-ba__nav-btn"
+                onClick={() => goToBaSlide((currentSliderIndex + 1) % beforeAfterPairs.length)}
               >
-                Next →
+                {t("ba.next")} →
               </button>
             </div>
 
-            {/* Indicators */}
-            <div className="flex justify-center gap-2 mt-6">
-              {beforeAfterPairs.map((_, idx) => (
+            <div className="apex-ba__dots" role="tablist" aria-label="Before and after slides">
+              {beforeAfterPairs.map((pair, idx) => (
                 <button
-                  key={idx}
-                  onClick={() => setCurrentSliderIndex(idx)}
-                  className={`w-2 h-2 rounded-full transition-all ${
-                    idx === currentSliderIndex
-                      ? "bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] w-8"
-                      : "bg-white/30 hover:bg-white/50"
-                  }`}
+                  key={`${pair.title}-${idx}`}
+                  type="button"
+                  role="tab"
+                  aria-selected={idx === currentSliderIndex}
+                  aria-label={`${pair.title} ${idx + 1}`}
+                  className={`apex-ba__dot${idx === currentSliderIndex ? " is-active" : ""}`}
+                  onClick={() => goToBaSlide(idx)}
                 />
               ))}
             </div>
