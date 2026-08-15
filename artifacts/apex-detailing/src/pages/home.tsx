@@ -1218,7 +1218,7 @@ export default function Home() {
                     <OptimizedImage
                       src={imageUrl("owner-michail.jpg")}
                       alt="Michail Gurov, Founder of Apex Detailing"
-                      className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-2 border-white/20"
+                      className="relative block w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-2 border-white/20 overflow-hidden"
                       loading="lazy"
                       decoding="async"
                     />

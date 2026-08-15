@@ -189,7 +189,13 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(
         className={className}
         style={{
           ...style,
-          // Ensure absolute LQIP/photo children are positioned inside this box
+          // Span is inline — width/height (w-20 h-20) are ignored unless we box it
+          display:
+            style?.display ??
+            (className && /\b(flex|inline-flex|grid|inline-grid|contents)\b/.test(className)
+              ? undefined
+              : "block"),
+          overflow: style?.overflow ?? "hidden",
           position:
             style?.position ??
             (className && /\b(absolute|fixed|relative|sticky)\b/.test(className)
