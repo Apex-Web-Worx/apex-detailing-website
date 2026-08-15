@@ -1333,6 +1333,10 @@
     text-wrap: balance;
   }
 
+  .apex-hero-title-br {
+    display: none;
+  }
+
   .apex-hero-title-grad {
     background-image: linear-gradient(90deg, var(--brand-magenta), var(--brand-purple), var(--brand-cyan));
     -webkit-background-clip: text;
@@ -1636,6 +1640,64 @@
     .apex-hero-dip {
       height: 3.75rem;
       margin: 0;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .apex-hero {
+      min-height: 78svh;
+      min-height: 78dvh;
+    }
+
+    .apex-hero-plate {
+      top: 46%;
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    .apex-hero-shell {
+      padding: clamp(5.25rem, 9vh, 6.5rem) clamp(1.25rem, 4vw, 2.5rem) clamp(1.1rem, 3vh, 1.75rem);
+    }
+
+    .apex-hero-copy {
+      max-width: min(36rem, 44vw);
+      gap: 0.95rem;
+    }
+
+    .apex-hero-title {
+      font-size: clamp(2.35rem, 1.9vw + 0.9rem, 3.1rem);
+      line-height: 0.94;
+      text-wrap: unset;
+    }
+
+    .apex-hero-title-l1 {
+      white-space: nowrap;
+    }
+
+    .apex-hero-title-br {
+      display: block;
+    }
+
+    .apex-hero-blend {
+      z-index: 5;
+      height: 6.5rem;
+    }
+
+    .apex-hero-trust {
+      opacity: 1;
+    }
+
+    .apex-hero-trust-item {
+      color: #fff;
+      font-weight: 800;
+      text-shadow: 0 1px 10px rgba(5, 5, 5, 0.9);
+    }
+
+    .apex-hero-trust-item:has(.gold) {
+      color: #f5d98a;
+    }
+
+    .apex-seam-shallow {
+      height: 3.9rem;
     }
   }
 }

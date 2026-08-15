@@ -16,6 +16,10 @@ export default function HeroCopy({
   onExplore,
 }: Props) {
   const { t } = useLanguage();
+  const title2 = t("hero.title2");
+  const title2Break = title2.lastIndexOf(" ");
+  const title2Lead = title2Break > 0 ? title2.slice(0, title2Break) : "";
+  const title2Last = title2Break > 0 ? title2.slice(title2Break + 1) : title2;
 
   return (
     <div className="apex-hero-copy">
@@ -24,9 +28,14 @@ export default function HeroCopy({
         <span>{t("hero.badge")}</span>
       </div>
       <h1 className="apex-hero-title">
-        {t("hero.title1")}
+        <span className="apex-hero-title-l1">{t("hero.title1")}</span>
         <br />
-        <span className="apex-hero-title-grad">{t("hero.title2")}</span>
+        <span className="apex-hero-title-grad">
+          {title2Lead}
+          {title2Lead ? " " : null}
+          <br className="apex-hero-title-br" />
+          {title2Last}
+        </span>
       </h1>
       <p className="apex-hero-sub">
         <span className="apex-hero-sub-lead">{t("hero.subtitleLead")}</span>
