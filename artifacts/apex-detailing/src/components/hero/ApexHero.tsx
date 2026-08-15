@@ -6,7 +6,6 @@ type Props = {
   bookingHref: string;
   giftHref: string;
   reviewsHref: string;
-  onBook: (e: React.MouseEvent) => void;
   onExplore: (e: React.MouseEvent) => void;
 };
 
@@ -18,7 +17,6 @@ export default function ApexHero({
   bookingHref,
   giftHref,
   reviewsHref,
-  onBook,
   onExplore,
 }: Props) {
   const reduce = !!useReducedMotion();
@@ -83,7 +81,6 @@ export default function ApexHero({
           bookingHref={bookingHref}
           giftHref={giftHref}
           reviewsHref={reviewsHref}
-          onBook={onBook}
           onExplore={onExplore}
         />
       </div>

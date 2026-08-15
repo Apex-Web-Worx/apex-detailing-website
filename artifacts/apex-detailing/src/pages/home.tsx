@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from "react";
-import { Link, useLocation } from "wouter";
+import { Link } from "wouter";
 import {
   Menu,
   X,
@@ -302,7 +302,6 @@ function AddonsSection() {
 
 export default function Home() {
   const { t, list } = useLanguage();
-  const [, setLocation] = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
@@ -780,10 +779,6 @@ export default function Home() {
     setMapChooserOpen(true);
   };
 
-  const goToBooking = () => {
-    setLocation(BOOKING_LINK);
-  };
-
   const openGoogleMaps = () => {
     window.open("https://www.google.com/maps/search/1114+E+Lakota+St,+65714+Nixa,+MO", "_blank", "noopener,noreferrer");
     setMapChooserOpen(false);
@@ -872,16 +867,12 @@ export default function Home() {
                   </a>
                 );
               })}
-              <a
+              <Link
                 href={BOOKING_LINK}
-                onClick={(e) => {
-                  e.preventDefault();
-                  goToBooking();
-                }}
                 className="btn-cyber btn-cyber-sm whitespace-nowrap shrink-0"
               >
                 <span>{t("nav.book")}</span>
-              </a>
+              </Link>
             </div>
 
             <div className="md:hidden flex items-center">
@@ -898,7 +889,9 @@ export default function Home() {
 
         <div
           className={`md:hidden fixed left-0 right-0 w-full bg-[#0a0a0a] border-b border-white/10 transition-all duration-300 ease-in-out overflow-hidden z-40 top-[calc(5rem+env(safe-area-inset-top))] ${
-            mobileMenuOpen ? "max-h-[500px] opacity-100 py-4" : "max-h-0 opacity-0 py-0"
+            mobileMenuOpen
+              ? "max-h-[500px] opacity-100 py-4 pointer-events-auto"
+              : "max-h-0 opacity-0 py-0 pointer-events-none invisible"
           }`}
         >
           <div className="flex flex-col space-y-4 px-6">
@@ -926,16 +919,13 @@ export default function Home() {
                 </a>
               );
             })}
-            <a
+            <Link
               href={BOOKING_LINK}
-              onClick={(e) => {
-                e.preventDefault();
-                goToBooking();
-              }}
+              onClick={() => setMobileMenuOpen(false)}
               className="btn-cyber btn-cyber-block mt-4"
             >
               <span>{t("nav.book")}</span>
-            </a>
+            </Link>
           </div>
         </div>
       </nav>
@@ -944,10 +934,6 @@ export default function Home() {
         bookingHref={BOOKING_LINK}
         giftHref={`${import.meta.env.BASE_URL}gift-cards`}
         reviewsHref={GOOGLE_REVIEWS_LINK}
-        onBook={(e) => {
-          e.preventDefault();
-          goToBooking();
-        }}
         onExplore={(e) => {
           e.preventDefault();
           scrollToSection("services");
@@ -1004,7 +990,7 @@ export default function Home() {
             {services.map((service, index) => (
               <div
                 key={service.id}
-                className={`group relative p-[1px] rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2 ${
+                className={`group relative p-[1px] rounded-2xl overflow-hidden transition-all duration-500 [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-2 ${
                   index === services.length - 1 ? "md:col-span-2 lg:col-span-1" : ""
                 }`}
               >
@@ -1950,17 +1936,13 @@ export default function Home() {
                   <span className="font-black text-potential">{t("cta.important")}</span>{t("cta.note")}
                 </p>
               </div>
-              <a
+              <Link
                 href={BOOKING_LINK}
-                onClick={(e) => {
-                  e.preventDefault();
-                  goToBooking();
-                }}
                 className="btn-cyber btn-cyber-xl group"
               >
                 <span>{t("cta.book")}</span>
                 <ChevronRight className="w-6 h-6" />
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -2191,17 +2173,13 @@ export default function Home() {
           <Phone className="w-4 h-4 text-[#00E5FF]" />
           {t("nav.call")}
         </a>
-        <a
+        <Link
           href={BOOKING_LINK}
-          onClick={(e) => {
-            e.preventDefault();
-            goToBooking();
-          }}
           className="btn-cyber btn-cyber-sm btn-cyber-block"
         >
           <span>{t("nav.book")}</span>
           <ChevronRight className="w-4 h-4" />
-        </a>
+        </Link>
       </div>
       {/* Spacer so sticky bar doesn't overlap content on mobile */}
       <div className="md:hidden h-[calc(4.75rem+env(safe-area-inset-bottom))]" aria-hidden="true" />

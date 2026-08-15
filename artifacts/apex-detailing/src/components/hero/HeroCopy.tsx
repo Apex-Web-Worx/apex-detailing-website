@@ -1,11 +1,11 @@
 import { Award, ChevronRight, MapPin, Shield, Star } from "lucide-react";
+import { Link } from "wouter";
 import { useLanguage } from "@/i18n/LanguageProvider";
 
 type Props = {
   bookingHref: string;
   giftHref: string;
   reviewsHref: string;
-  onBook: (e: React.MouseEvent) => void;
   onExplore: (e: React.MouseEvent) => void;
 };
 
@@ -13,7 +13,6 @@ export default function HeroCopy({
   bookingHref,
   giftHref,
   reviewsHref,
-  onBook,
   onExplore,
 }: Props) {
   const { t } = useLanguage();
@@ -36,10 +35,10 @@ export default function HeroCopy({
         {t("hero.subtitleEnd")}
       </p>
       <div className="apex-hero-ctas">
-        <a href={bookingHref} onClick={onBook} className="btn-cyber btn-cyber-lg group">
+        <Link href={bookingHref} className="btn-cyber btn-cyber-lg group">
           <span>{t("hero.book")}</span>
           <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-        </a>
+        </Link>
         <a href={giftHref} className="btn-cyber btn-cyber-outline btn-cyber-lg group">
           <span>{t("hero.gift")}</span>
           <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />

@@ -98,6 +98,9 @@
     overflow-x: clip;
     overscroll-behavior-y: auto;
   }
+  a, button {
+    touch-action: manipulation;
+  }
 }
 
 @keyframes logo-shine {
@@ -501,14 +504,17 @@
     flex-shrink: 0;
   }
 
-  .btn-cyber:hover {
-    transform: translateY(-1px) scale(1.015);
-  }
+  /* Phones treat :hover as a sticky first tap — that eats Book Now / card clicks. */
+  @media (hover: hover) and (pointer: fine) {
+    .btn-cyber:hover {
+      transform: translateY(-1px) scale(1.015);
+    }
 
-  .btn-cyber:hover::before {
-    animation:
-      cyber-border-sweep 0.85s linear infinite,
-      cyber-border-pulse 0.85s ease-in-out infinite;
+    .btn-cyber:hover::before {
+      animation:
+        cyber-border-sweep 0.85s linear infinite,
+        cyber-border-pulse 0.85s ease-in-out infinite;
+    }
   }
 
   .btn-cyber:active {
@@ -924,13 +930,14 @@
   .page-bubbles {
     position: absolute;
     inset: 0;
-    z-index: 20;
+    z-index: 1;
     pointer-events: none;
     overflow: hidden;
     opacity: 0.7;
   }
 
   .page-bubble {
+    pointer-events: none;
     position: absolute;
     left: var(--x, 50%);
     bottom: var(--start, 8%);

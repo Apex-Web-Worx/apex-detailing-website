@@ -447,10 +447,13 @@
         var heroReady = false;
         var minTimeDone = false;
         var dismissed = false;
+        var path = (window.location.pathname || "/").replace(/\/$/, "") || "/";
+        var isHome = path === "" || path === "/";
         var longSplash =
-          window.matchMedia("(max-width: 1023px)").matches ||
-          /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent || "");
-        var minHoldMs = longSplash ? 6500 : 2500;
+          isHome &&
+          (window.matchMedia("(max-width: 1023px)").matches ||
+            /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent || ""));
+        var minHoldMs = isHome ? (longSplash ? 6500 : 2500) : 0;
 
         document.documentElement.classList.add("is-booting");
 
@@ -467,6 +470,11 @@
         }
 
         (function warmHero() {
+          if (!isHome) {
+            heroReady = true;
+            dismiss();
+            return;
+          }
           var hero = new Image();
           hero.decoding = "async";
           function done() {

@@ -121,6 +121,9 @@ export default function BookingPage() {
   vehiclePhotosRef.current = vehiclePhotos;
 
   useEffect(() => {
+    document.documentElement.classList.remove("is-booting");
+    const splash = document.getElementById("app-loading");
+    if (splash?.parentNode) splash.parentNode.removeChild(splash);
     return () => revokePickedPhotos(vehiclePhotosRef.current);
   }, []);
 
@@ -377,7 +380,7 @@ function ServiceStep({
             <button
               key={s.id}
               onClick={() => onSelect(s)}
-              className={`relative flex h-full min-h-[17.5rem] flex-col text-left rounded-2xl border overflow-hidden transition group hover:-translate-y-0.5 hover:shadow-2xl ${
+              className={`relative flex h-full min-h-[17.5rem] flex-col text-left rounded-2xl border overflow-hidden transition [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-2xl ${
                 isSelected
                   ? "border-[#00E5FF] bg-[#00E5FF]/10"
                   : "border-white/10 bg-white/[0.02] hover:border-[#00E5FF]/40"
@@ -388,7 +391,7 @@ function ServiceStep({
                   <OptimizedImage
                     src={imageUrl(photo)}
                     alt={t(`pkg.${pkg}.photoAlt`)}
-                    className="absolute inset-0 block h-full w-full object-cover"
+                    className="pointer-events-none absolute inset-0 block h-full w-full object-cover"
                     sizes="(max-width: 768px) 100vw, 50vw"
                     loading="lazy"
                   />
@@ -462,7 +465,7 @@ function ServiceStep({
               </p>
 
               <div className="mt-auto flex items-center justify-end pt-1">
-                <span className="text-[#00E5FF] font-bold text-xs flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
+                <span className="text-[#00E5FF] font-bold text-xs flex items-center gap-1">
                   {t("book.select")} <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </div>
