@@ -1340,6 +1340,15 @@
     color: transparent;
   }
 
+  .apex-hero-title-desktop {
+    display: none;
+  }
+
+  .apex-hero-title-line {
+    display: block;
+    white-space: nowrap;
+  }
+
   .apex-hero-sub {
     margin: 0;
     max-width: 34rem;
@@ -1636,6 +1645,93 @@
     .apex-hero-dip {
       height: 3.75rem;
       margin: 0;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .apex-hero-shell {
+      max-width: none;
+      align-items: center;
+    }
+
+    .apex-hero-copy {
+      max-width: 560px;
+      /* Nudge the left column ~20px right without redesigning the hero. */
+      margin-left: 1.25rem;
+    }
+
+    .apex-hero-title {
+      width: max-content;
+      /* Keep TRUE POTENTIAL clear of the tunnel after the right shift. */
+      max-width: calc(46vw - 6.25rem);
+      font-size: clamp(44px, 3.05vw, 50px);
+      line-height: 0.9;
+      letter-spacing: -0.045em;
+      text-wrap: unset;
+      overflow: visible;
+    }
+
+    .apex-hero-title-mobile {
+      display: none;
+    }
+
+    .apex-hero-title-desktop {
+      display: block;
+      width: max-content;
+      max-width: 100%;
+    }
+
+    .apex-hero-title-line {
+      display: block;
+      width: max-content;
+      max-width: none;
+      white-space: nowrap;
+    }
+
+    .apex-hero-ctas {
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.85rem 1rem;
+    }
+
+    .apex-hero-ctas .btn-cyber {
+      box-sizing: border-box;
+      flex: 0 0 auto;
+      min-width: 250px;
+      width: auto;
+      height: 58px;
+      min-height: 58px;
+      padding: 0 28px;
+      white-space: nowrap;
+      font-size: 0.9375rem;
+      letter-spacing: 0.125em;
+      line-height: 1;
+    }
+
+    .apex-hero-ctas .btn-cyber > span {
+      white-space: nowrap;
+    }
+
+    .apex-hero-explore {
+      flex-basis: 100%;
+    }
+
+    @media (min-width: 1440px) {
+      .apex-hero-title {
+        font-size: clamp(50px, 3.3vw, 56px);
+      }
+    }
+
+    @media (min-width: 1600px) {
+      .apex-hero-title {
+        font-size: clamp(56px, 3.5vw, 66px);
+      }
+    }
+
+    @media (min-width: 1920px) {
+      .apex-hero-title {
+        font-size: clamp(68px, 3.55vw, 82px);
+      }
     }
   }
 }
