@@ -1,16 +1,22 @@
+import { lazy, Suspense } from "react";
 import { Route, Switch, Router } from "wouter";
 import Home from "@/pages/home";
-import BookingPage from "@/pages/booking";
-import ManagePage from "@/pages/manage";
-import AdminPage from "@/pages/admin";
-import GiftCardsPage from "@/pages/gift-cards";
-import PrivacyPage from "@/pages/privacy";
-import TermsPage from "@/pages/terms";
-import NotFound from "@/pages/not-found";
-import VideoTemplate from "@/components/video/VideoTemplate";
 import PwaManifestSwitch from "@/components/PwaManifestSwitch";
-import ApexContentPage from "@/pages/ApexContentPage";
 import { LanguageProvider } from "@/i18n/LanguageProvider";
+
+const BookingPage = lazy(() => import("@/pages/booking"));
+const ManagePage = lazy(() => import("@/pages/manage"));
+const AdminPage = lazy(() => import("@/pages/admin"));
+const GiftCardsPage = lazy(() => import("@/pages/gift-cards"));
+const PrivacyPage = lazy(() => import("@/pages/privacy"));
+const TermsPage = lazy(() => import("@/pages/terms"));
+const NotFound = lazy(() => import("@/pages/not-found"));
+const VideoTemplate = lazy(() => import("@/components/video/VideoTemplate"));
+const ApexContentPage = lazy(() => import("@/pages/ApexContentPage"));
+
+function RouteFallback() {
+  return <div className="min-h-dvh bg-[#050505]" />;
+}
 
 function App() {
   const base = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
@@ -29,6 +35,7 @@ function App() {
           </linearGradient>
         </defs>
       </svg>
+      <Suspense fallback={<RouteFallback />}>
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/book" component={BookingPage} />
@@ -44,6 +51,7 @@ function App() {
         <Route path="/blog/:slug" component={ApexContentPage} />
         <Route component={NotFound} />
       </Switch>
+      </Suspense>
       </LanguageProvider>
     </Router>
   );

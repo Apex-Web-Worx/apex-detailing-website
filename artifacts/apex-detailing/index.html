@@ -147,11 +147,10 @@
       })();
     </script>
     <link rel="preload" as="image" href="/images/logo-splash.webp" type="image/webp" fetchpriority="high" />
-    <link rel="preload" as="image" href="/images/hero-2.sm.webp" type="image/webp" fetchpriority="high" />
-    <link rel="preload" as="image" href="/images/hero-2.lqip.webp" type="image/webp" fetchpriority="high" />
+    <link rel="preload" as="image" href="/images/hero-tunnel-scene.sm.webp" type="image/webp" fetchpriority="high" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Mulish:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -240,7 +239,7 @@
       }
       #app-loading .logo-loader.is-ready {
         opacity: 1;
-        animation: logo-blink 1.4s ease-in-out infinite;
+        animation: logo-blink 1.85s ease-in-out infinite;
       }
       /* Full-page bubble field */
       #app-loading .loader-field {
@@ -322,7 +321,7 @@
         }
         #app-loading .logo-loader.is-ready {
           filter: drop-shadow(0 0 10px rgba(255, 26, 216, 0.5));
-          animation-duration: 1.6s;
+          animation-duration: 2s;
         }
         #app-loading .loader-bubble {
           border-width: 1px;
@@ -407,7 +406,7 @@
         if (field) {
           var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
           var mobile = window.matchMedia("(max-width: 640px)").matches;
-          var count = reduce ? 8 : mobile ? 48 : 56;
+          var count = reduce ? 6 : mobile ? 16 : 22;
           var frag = document.createDocumentFragment();
           for (var i = 0; i < count; i++) {
             var el = document.createElement("span");
@@ -440,28 +439,45 @@
           field.appendChild(frag);
         }
 
-        // Keep splash until shell is ready (logo + fonts + React) — do NOT wait on photos.
+        // Cover the real phone wait (~6s) with the logo, then lift once the tunnel is in.
         var splash = document.getElementById("app-loading");
         var logo = document.getElementById("splash-logo");
         var logoReady = false;
         var appReady = false;
-        var fontsReady = false;
+        var heroReady = false;
         var minTimeDone = false;
         var dismissed = false;
+        var longSplash =
+          window.matchMedia("(max-width: 1023px)").matches ||
+          /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent || "");
+        var minHoldMs = longSplash ? 6500 : 2500;
 
         document.documentElement.classList.add("is-booting");
 
         function dismiss() {
           if (dismissed || !splash) return;
-          if (!logoReady || !appReady || !fontsReady || !minTimeDone) return;
+          if (!logoReady || !appReady || !heroReady || !minTimeDone) return;
           dismissed = true;
           document.documentElement.classList.remove("is-booting");
           splash.classList.add("is-done");
           splash.setAttribute("aria-busy", "false");
           window.setTimeout(function () {
             if (splash && splash.parentNode) splash.parentNode.removeChild(splash);
-          }, 480);
+          }, 520);
         }
+
+        (function warmHero() {
+          var hero = new Image();
+          hero.decoding = "async";
+          function done() {
+            heroReady = true;
+            dismiss();
+          }
+          hero.onload = done;
+          hero.onerror = done;
+          hero.src = "/images/hero-tunnel-scene.sm.webp";
+          if (hero.complete && hero.naturalWidth > 0) done();
+        })();
 
         function markLogoReady() {
           logoReady = true;
@@ -480,31 +496,19 @@
           logoReady = true;
         }
 
-        if (document.fonts && document.fonts.ready) {
-          document.fonts.ready.then(function () {
-            fontsReady = true;
-            dismiss();
-          }).catch(function () {
-            fontsReady = true;
-            dismiss();
-          });
-        } else {
-          fontsReady = true;
-        }
-
         window.setTimeout(function () {
           minTimeDone = true;
           dismiss();
-        }, 700);
+        }, minHoldMs);
 
         window.setTimeout(function () {
           logoReady = true;
           appReady = true;
-          fontsReady = true;
+          heroReady = true;
           minTimeDone = true;
           if (logo) logo.classList.add("is-ready");
           dismiss();
-        }, 5000);
+        }, 8500);
 
         window.__APEX_MARK_APP_READY__ = function () {
           appReady = true;
