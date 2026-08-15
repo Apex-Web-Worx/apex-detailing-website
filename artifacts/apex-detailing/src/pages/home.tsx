@@ -1090,7 +1090,7 @@ export default function Home() {
       <HeroDip />
 
       {/* How It Works */}
-      <section id="how" className="py-20 sm:py-24 relative section-pink-wash">
+      <section id="how" className="py-20 sm:py-24 relative bg-[#050505] section-pink-wash">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-14">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
@@ -1122,7 +1122,7 @@ export default function Home() {
       <HeroDip />
 
       {/* About Section */}
-      <section id="about" className="py-24 relative section-pink-wash">
+      <section id="about" className="py-24 relative bg-[#050505] section-pink-wash">
         {/* Soap Bubbles in About Section */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
           <div className="soap-bubble absolute bottom-[5%] left-[5%] w-12 h-12" style={{ animationDuration: '16s', animationDelay: '0s' }} />
@@ -1279,7 +1279,7 @@ export default function Home() {
       <HeroDip />
 
       {/* Before/After Slider Section */}
-      <section id="before-after" className="py-20 sm:py-24 relative section-pink-wash">
+      <section id="before-after" className="py-20 sm:py-24 relative bg-[#050505] section-pink-wash">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-10 sm:mb-16">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
@@ -1431,7 +1431,7 @@ export default function Home() {
       <HeroDip />
 
       {/* Gallery Section */}
-      <section id="gallery" className="py-24 relative section-pink-wash">
+      <section id="gallery" className="py-24 relative bg-[#050505] section-pink-wash">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-end mb-10 sm:mb-16 gap-6">
             <div className="max-w-2xl">
@@ -1649,7 +1649,7 @@ export default function Home() {
       )}
 
       {/* Testimonials */}
-      <section id="testimonials" className="py-24 relative section-pink-wash">
+      <section id="testimonials" className="py-24 relative bg-[#050505] section-pink-wash">
         <div className="absolute right-0 bottom-0 w-[600px] h-[600px] bg-[#00E5FF]/10 rounded-full mix-blend-screen filter blur-[150px]" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -1693,7 +1693,7 @@ export default function Home() {
       <HeroDip />
 
       {/* Google Reviews Showcase */}
-      <section id="reviews" className="py-24 relative section-pink-wash">
+      <section id="reviews" className="py-24 relative bg-[#050505] section-pink-wash">
         <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-[#FF1AD8]/10 rounded-full mix-blend-screen filter blur-[120px] -translate-y-1/2" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -1762,7 +1762,7 @@ export default function Home() {
       <HeroDip />
 
       {/* Service Area */}
-      <section id="area" className="py-20 sm:py-24 relative section-pink-wash">
+      <section id="area" className="py-20 sm:py-24 relative bg-[#050505] section-pink-wash">
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#00E5FF]/10 rounded-full mix-blend-screen filter blur-[120px]" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-12">
@@ -1830,7 +1830,7 @@ export default function Home() {
       <HeroDip />
 
       {/* FAQ Section */}
-      <section id="faq" className="py-20 sm:py-24 relative section-pink-wash">
+      <section id="faq" className="py-20 sm:py-24 relative bg-[#050505] section-pink-wash">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
@@ -1909,7 +1909,7 @@ export default function Home() {
       <HeroDip />
 
       {/* CTA Section */}
-      <section id="cta" className="py-24 relative section-pink-wash">
+      <section id="cta" className="py-24 relative bg-[#050505] section-pink-wash">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative rounded-3xl overflow-hidden bg-[#111] border border-white/10 p-10 md:p-20 text-center">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-full bg-gradient-to-b from-[#FF1AD8]/20 to-[#00E5FF]/20 blur-3xl" />
