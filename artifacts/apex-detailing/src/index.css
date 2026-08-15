@@ -1468,10 +1468,10 @@
 
     /* Zoom the plate so outer hex frames bleed off the sides; car stays centered. */
     .apex-hero-plate {
-      width: calc(100cqh * 1536 / 1024 * 1.55);
-      height: calc(100cqh * 1.55);
+      width: calc(100cqh * 1536 / 1024 * 1.88);
+      height: calc(100cqh * 1.88);
       left: 50%;
-      top: 54%;
+      top: 56%;
       transform: translate(-50%, -50%);
     }
 
@@ -1482,8 +1482,8 @@
       z-index: 3;
       pointer-events: none;
       background:
-        linear-gradient(180deg, rgba(5, 5, 5, 0.5) 0%, transparent 22%, transparent 58%, #050505 100%),
-        radial-gradient(ellipse 85% 70% at 50% 58%, transparent 28%, rgba(5, 5, 5, 0.42) 100%);
+        linear-gradient(180deg, rgba(5, 5, 5, 0.35) 0%, transparent 18%, transparent 52%, #050505 100%),
+        radial-gradient(ellipse 80% 65% at 50% 56%, transparent 22%, rgba(5, 5, 5, 0.5) 100%);
     }
 
     .apex-hero-wash,
