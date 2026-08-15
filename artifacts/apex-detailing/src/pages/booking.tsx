@@ -20,7 +20,8 @@ import {
 import VehiclePhotoPicker from "@/components/VehiclePhotoPicker";
 import LanguageToggle from "@/components/LanguageToggle";
 import { useLanguage } from "@/i18n/LanguageProvider";
-import { packageDescKey, packageTitleKey, BOOKING_SLUG_TO_PKG } from "@/i18n/packageMap";
+import { packageDescKey, packageTitleKey, BOOKING_SLUG_TO_PKG, PKG_PHOTO } from "@/i18n/packageMap";
+import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
 import {
   revokePickedPhotos,
   uploadBookingPhotos,
@@ -370,16 +371,34 @@ function ServiceStep({
           const iconMeta = SERVICE_ICONS[s.slug];
           const Icon = iconMeta?.icon;
           const badge = SERVICE_BADGES[s.slug];
+          const pkg = BOOKING_SLUG_TO_PKG[s.slug];
+          const photo = pkg ? PKG_PHOTO[pkg] : undefined;
           return (
             <button
               key={s.id}
               onClick={() => onSelect(s)}
-              className={`relative flex h-full min-h-[17.5rem] flex-col text-left p-6 rounded-2xl border transition group hover:-translate-y-0.5 hover:shadow-2xl ${
+              className={`relative flex h-full min-h-[17.5rem] flex-col text-left rounded-2xl border overflow-hidden transition group hover:-translate-y-0.5 hover:shadow-2xl ${
                 isSelected
                   ? "border-[#00E5FF] bg-[#00E5FF]/10"
                   : "border-white/10 bg-white/[0.02] hover:border-[#00E5FF]/40"
               }`}
             >
+              {photo && (
+                <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden">
+                  <OptimizedImage
+                    src={imageUrl(photo)}
+                    alt={t(`pkg.${pkg}.photoAlt`)}
+                    className="absolute inset-0 block h-full w-full object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    loading="lazy"
+                  />
+                  <div
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/70 to-transparent"
+                    aria-hidden="true"
+                  />
+                </div>
+              )}
+              <div className="flex flex-1 flex-col p-6">
               <div className="flex items-start gap-3 mb-3">
                 {Icon && (
                   <span className="shrink-0 p-2 rounded-lg bg-white/5 inline-flex items-center justify-center">
@@ -446,6 +465,7 @@ function ServiceStep({
                 <span className="text-[#00E5FF] font-bold text-xs flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
                   {t("book.select")} <ArrowRight className="w-3.5 h-3.5" />
                 </span>
+              </div>
               </div>
             </button>
           );

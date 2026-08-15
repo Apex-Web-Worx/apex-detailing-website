@@ -1,3 +1,10 @@
+/** Finished-example photos shown on Full / Interior / Express cards. */
+export const PKG_PHOTO: Record<string, string> = {
+  full: "pkg-full.jpg",
+  interior: "pkg-interior.jpg",
+  express: "pkg-express.jpg",
+};
+
 /** Maps booking API slugs to homepage package copy keys. */
 export const BOOKING_SLUG_TO_PKG: Record<string, string> = {
   "apex-full-detailing": "full",

@@ -28,6 +28,7 @@ import HeroDip from "@/components/hero/HeroDip";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
 import GalleryVideoThumb from "@/components/GalleryVideoThumb";
+import { PKG_PHOTO } from "@/i18n/packageMap";
 
 const BOOKING_LINK = "/book";
 const INSTAGRAM_LINK = "https://www.instagram.com/apexdetailing_sf";
@@ -1008,7 +1009,7 @@ export default function Home() {
                 }`}
               >
                 <span className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-[#00E5FF]/10 opacity-60 group-hover:opacity-100 transition-all duration-500" />
-                <div className="relative h-full bg-[#080808] p-6 sm:p-8 rounded-2xl flex flex-col z-10 transition-all duration-500 overflow-hidden border border-white/10 group-hover:border-[#00E5FF]/35">
+                <div className="relative h-full bg-[#080808] rounded-2xl flex flex-col z-10 transition-all duration-500 overflow-hidden border border-white/10 group-hover:border-[#00E5FF]/35">
                   <div
                     className="pointer-events-none absolute inset-0 z-0"
                     aria-hidden="true"
@@ -1017,10 +1018,30 @@ export default function Home() {
                         "radial-gradient(ellipse 80% 55% at 0% 0%, rgba(255,255,255,0.04), transparent 55%)",
                     }}
                   />
-                  <div className="relative z-10 mb-6 p-4 rounded-xl bg-white/5 border border-white/10 inline-flex w-fit group-hover:scale-110 group-hover:border-[#00E5FF]/30 transition-all duration-500">
-                    {service.icon}
-                  </div>
-                  <h4 className="relative z-10 text-2xl font-black mb-2 text-white group-hover:text-[#00E5FF] transition-colors duration-300 flex items-center flex-wrap gap-2">
+                  {PKG_PHOTO[service.pkg] ? (
+                    <div className="relative z-10 aspect-[16/9] w-full shrink-0 overflow-hidden">
+                      <OptimizedImage
+                        src={imageUrl(PKG_PHOTO[service.pkg])}
+                        alt={t(`pkg.${service.pkg}.photoAlt`)}
+                        className="absolute inset-0 block h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        loading={index < 3 ? "eager" : "lazy"}
+                      />
+                      <div
+                        className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#080808] to-transparent"
+                        aria-hidden="true"
+                      />
+                      <div className="absolute left-4 bottom-3 p-2.5 rounded-xl bg-black/55 border border-white/15 backdrop-blur-sm">
+                        {service.icon}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="relative z-10 mx-6 sm:mx-8 mt-6 sm:mt-8 mb-0 p-4 rounded-xl bg-white/5 border border-white/10 inline-flex w-fit group-hover:scale-110 group-hover:border-[#00E5FF]/30 transition-all duration-500">
+                      {service.icon}
+                    </div>
+                  )}
+                  <div className="relative z-10 flex flex-1 flex-col px-6 sm:px-8 pb-6 sm:pb-8 pt-5">
+                  <h4 className="text-2xl font-black mb-2 text-white group-hover:text-[#00E5FF] transition-colors duration-300 flex items-center flex-wrap gap-2">
                     {t(`pkg.${service.pkg}.title`)}
                     {service.id === "interior-detailing" && (
                       <span className="badge-gold inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider">
@@ -1038,7 +1059,7 @@ export default function Home() {
                       </span>
                     )}
                   </h4>
-                  <div className="relative z-10 mb-4">
+                  <div className="mb-4">
                     {!/call/i.test(service.pricing) && (
                       <p className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-0.5">
                         {t("services.startingAt")}
@@ -1049,13 +1070,13 @@ export default function Home() {
                     </p>
                   </div>
                   {list(`pkg.${service.pkg}.price`).length > 0 && (
-                    <div className="relative z-10 mb-4 text-sm text-gray-300 bg-white/[0.03] border border-white/10 p-3 rounded-lg">
+                    <div className="mb-4 text-sm text-gray-300 bg-white/[0.03] border border-white/10 p-3 rounded-lg">
                       {list(`pkg.${service.pkg}.price`).map((detail, i) => (
                         <p key={i} className="text-xs mb-1">{detail}</p>
                       ))}
                     </div>
                   )}
-                  <p className="relative z-10 text-gray-400 mb-6 flex-grow">
+                  <p className="text-gray-400 mb-6 flex-grow">
                     {t(`pkg.${service.pkg}.desc`)}
                     {service.pkg === "express" && (
                       <>
@@ -1064,7 +1085,7 @@ export default function Home() {
                       </>
                     )}
                   </p>
-                  <ul className="relative z-10 space-y-2 mb-8">
+                  <ul className="space-y-2 mb-8">
                     {list(`pkg.${service.pkg}.feat`).map((feature, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-gray-300 font-medium">
                         <CheckCircle2 className="w-4 h-4 text-[#00E5FF] mt-0.5 shrink-0" />
@@ -1074,11 +1095,12 @@ export default function Home() {
                   </ul>
                   <Link
                     href={BOOKING_LINK}
-                    className="btn-cyber btn-cyber-sm relative z-10 mt-auto self-start"
+                    className="btn-cyber btn-cyber-sm mt-auto self-start"
                   >
                     <span>{t("services.book")}</span>
                     <ChevronRight className="w-4 h-4" />
                   </Link>
+                  </div>
                 </div>
               </div>
             ))}

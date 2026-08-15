@@ -232,6 +232,13 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "addons.interior": "Interior Addons",
     "addons.exterior": "Exterior Addons",
 
+    "pkg.full.photoAlt":
+      "Finished full detail — glossy exterior and a clean cabin",
+    "pkg.interior.photoAlt":
+      "Finished interior detail — steamed seats and vacuumed carpets",
+    "pkg.express.photoAlt":
+      "Finished express interior refresh — wiped dash and clean mats",
+
     "pkg.full.title": "Apex Full Detailing",
     "pkg.full.desc":
       "The ultimate package! Includes interior and exterior detailed cleaning and protection. Get your vehicle looking showroom fresh inside and out. Add-ons available to customize your package.",
@@ -594,6 +601,13 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
 
     "addons.interior": "Допы для салона",
     "addons.exterior": "Допы для кузова",
+
+    "pkg.full.photoAlt":
+      "Готовый полный детейлинг — блеск кузова и чистый салон",
+    "pkg.interior.photoAlt":
+      "Готовый детейлинг салона — чистые сиденья и ковры",
+    "pkg.express.photoAlt":
+      "Готовый экспресс-салон — протёртый пластик и чистые коврики",
 
     "pkg.full.title": "Полный детейлинг Apex",
     "pkg.full.desc":
