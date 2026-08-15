@@ -2542,19 +2542,19 @@
 
     .apex-hero-title {
       width: max-content;
-      max-width: min(860px, 58vw);
+      max-width: none;
     }
   }
 
-  /* Mid desktop: slightly smaller type so full TRUE POTENTIAL fits toward the Camaro */
+  /* Mid desktop: slightly smaller type; never re-introduce a clipping max-width */
   @media (min-width: 1024px) and (max-width: 1439px) {
     .apex-hero-copy {
       width: min(52%, 760px);
     }
 
     .apex-hero-title {
-      font-size: clamp(52px, 3.9vw, 68px);
-      max-width: min(820px, 60vw);
+      font-size: clamp(48px, 3.6vw, 62px);
+      max-width: none;
     }
   }
 
