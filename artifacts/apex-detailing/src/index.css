@@ -1340,6 +1340,15 @@
     color: transparent;
   }
 
+  .apex-hero-title-desktop {
+    display: none;
+  }
+
+  .apex-hero-title-line {
+    display: block;
+    white-space: nowrap;
+  }
+
   .apex-hero-sub {
     margin: 0;
     max-width: 34rem;
@@ -1636,6 +1645,46 @@
     .apex-hero-dip {
       height: 3.75rem;
       margin: 0;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .apex-hero-shell {
+      z-index: 12;
+    }
+
+    .apex-hero-copy {
+      max-width: 37.5rem;
+    }
+
+    .apex-hero-title {
+      max-width: 37.5rem;
+      font-size: clamp(58px, 5vw, 82px);
+      line-height: 0.92;
+      letter-spacing: -0.02em;
+      text-wrap: unset;
+    }
+
+    .apex-hero-title-mobile {
+      display: none;
+    }
+
+    .apex-hero-title-desktop {
+      display: block;
+    }
+
+    .apex-hero-trust {
+      position: relative;
+      z-index: 12;
+      opacity: 0.92;
+    }
+
+    .apex-hero-trust-item {
+      color: #ffffff;
+    }
+
+    .apex-hero-blend {
+      z-index: 5;
     }
   }
 }
