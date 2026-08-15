@@ -1,7 +1,6 @@
 import { useReducedMotion } from "framer-motion";
 import { imageUrl } from "@/components/OptimizedImage";
 import HeroCopy from "./HeroCopy";
-import TunnelFrames from "./TunnelFrames";
 
 type Props = {
   bookingHref: string;
@@ -56,7 +55,6 @@ export default function ApexHero({
               draggable={false}
             />
           </picture>
-          <TunnelFrames />
           <div className="apex-hero-lights" aria-hidden="true">
             <span className="apex-hl-spot apex-hl-spot-l">
               <span className="apex-hl-sheen" />
