@@ -447,8 +447,10 @@
         var heroReady = false;
         var minTimeDone = false;
         var dismissed = false;
-        var mobile = window.matchMedia("(max-width: 640px)").matches;
-        var minHoldMs = mobile ? 6200 : 2200;
+        var longSplash =
+          window.matchMedia("(max-width: 1023px)").matches ||
+          /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent || "");
+        var minHoldMs = longSplash ? 6500 : 2500;
 
         document.documentElement.classList.add("is-booting");
 
