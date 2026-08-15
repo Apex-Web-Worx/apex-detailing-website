@@ -4063,3 +4063,199 @@
     font-size: 2.75rem;
   }
 }
+
+/* ── Google Reviews showcase — polish only ── */
+.apex-reviews {
+  overflow-x: clip;
+}
+
+.apex-reviews__stats {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+  margin: 0 auto;
+  max-width: 56rem;
+}
+
+@media (min-width: 480px) {
+  .apex-reviews__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) {
+  .apex-reviews__stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+.apex-reviews__stat {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  padding: 1.35rem 1rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .apex-reviews__stat {
+    padding: 1.75rem 1.25rem;
+  }
+}
+
+.apex-reviews__stat-value {
+  margin: 0 0 0.4rem;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  background-image: linear-gradient(90deg, #ff1ad8, #9d00ff, #00e5ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.apex-reviews__stat-label {
+  margin: 0 0 0.35rem;
+  color: rgba(229, 231, 235, 0.92);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.apex-reviews__stat-desc {
+  margin: 0;
+  color: rgba(107, 114, 128, 1);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.apex-reviews__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .apex-reviews__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .apex-reviews__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.apex-reviews__card {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-height: 15.5rem;
+  padding: 1.25rem 1.15rem;
+  border-radius: 1rem;
+  background: #0a0a0a;
+  border: 1px solid rgba(140, 120, 170, 0.22);
+  transition:
+    transform 280ms ease,
+    border-color 280ms ease,
+    box-shadow 280ms ease;
+}
+
+@media (min-width: 640px) {
+  .apex-reviews__card {
+    padding: 1.5rem;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .apex-reviews__card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(157, 0, 255, 0.42);
+    box-shadow:
+      0 0 0 1px rgba(0, 229, 255, 0.1),
+      0 0 20px rgba(157, 0, 255, 0.18),
+      0 0 26px rgba(0, 229, 255, 0.08);
+  }
+}
+
+.apex-reviews__name {
+  margin: 0 0 0.35rem;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.apex-reviews__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.65rem;
+  color: rgba(156, 163, 175, 0.95);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.apex-reviews__g {
+  width: 0.95rem;
+  height: 0.95rem;
+  flex-shrink: 0;
+}
+
+.apex-reviews__stars {
+  display: flex;
+  gap: 0.15rem;
+  margin: 0 0 0.75rem;
+}
+
+.apex-reviews__text {
+  margin: 0;
+  color: rgba(209, 213, 219, 0.95);
+  font-size: 0.875rem;
+  line-height: 1.55;
+  overflow-wrap: break-word;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  overflow: hidden;
+}
+
+.apex-reviews__text.is-open {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
+.apex-reviews__more {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  align-self: flex-start;
+  background: none;
+  border: 0;
+  color: #ff1ad8;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.apex-reviews__more:hover {
+  color: #00e5ff;
+}
