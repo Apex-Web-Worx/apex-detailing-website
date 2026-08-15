@@ -2534,7 +2534,7 @@
   /* Mid desktop: keep full TRUE POTENTIAL visible without breaking the 3-line structure */
   @media (min-width: 1024px) and (max-width: 1439px) {
     .apex-hero-copy {
-      width: min(54%, 760px);
+      width: min(58%, 760px);
     }
 
     .apex-hero-title {
