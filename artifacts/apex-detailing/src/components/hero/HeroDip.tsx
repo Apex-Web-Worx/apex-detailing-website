@@ -1,16 +1,13 @@
 import { useId } from "react";
 
 /** Magenta-to-cyan dip + ripple on the join between two page blocks. */
-export default function HeroDip({ shallow = false }: { shallow?: boolean }) {
+export default function HeroDip() {
   const uid = useId().replace(/:/g, "");
   const gradId = `dipGrad-${uid}`;
   const glowId = `dipGlow-${uid}`;
-  const dipPath = shallow
-    ? "M0 2 H380 L460 58 H540 L620 2 H1000"
-    : "M0 2 H380 L460 72 H540 L620 2 H1000";
 
   return (
-    <div className={shallow ? "apex-seam apex-seam-shallow" : "apex-seam"} aria-hidden="true">
+    <div className="apex-seam" aria-hidden="true">
       <div className="apex-hero-ripple" />
       <svg className="apex-hero-dip-line" viewBox="0 0 1000 110" preserveAspectRatio="none">
         <defs>
@@ -28,7 +25,7 @@ export default function HeroDip({ shallow = false }: { shallow?: boolean }) {
           </filter>
         </defs>
         <path
-          d={dipPath}
+          d="M0 2 H380 L460 72 H540 L620 2 H1000"
           fill="none"
           stroke={`url(#${gradId})`}
           strokeWidth="2.6"

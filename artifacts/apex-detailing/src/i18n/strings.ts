@@ -26,7 +26,7 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "hero.google": "on Google",
     "hero.reviewsAria": "See our Google reviews",
     "hero.guarantee": "Satisfaction Guaranteed",
-    "hero.googleStars": "5.0★ on Google",
+    "hero.googleStars": "5.0+ on Google",
     "hero.shop": "Shop-Based · Nixa, MO",
     "hero.alt": "Apex Detailing freshly detailed vehicle",
 

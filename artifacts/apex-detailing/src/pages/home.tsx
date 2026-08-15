@@ -838,7 +838,7 @@ export default function Home() {
               <span className="brand-logo-nav__sheen" aria-hidden="true" />
             </div>
 
-            <div className="hidden md:flex items-center gap-2 lg:gap-2.5 min-w-0">
+            <div className="hidden md:flex items-center gap-2.5 lg:gap-3.5 min-w-0">
               <LanguageToggle className="shrink-0" />
               <a
                 href="tel:417-527-6165"
@@ -946,7 +946,7 @@ export default function Home() {
           scrollToSection("services");
         }}
       />
-      <HeroDip shallow />
+      <HeroDip />
       {/* Services Section */}
       <section id="services" className="py-24 relative bg-[#050505] apex-cv">
         {/* Minimal atmosphere — kept off the top seam so it matches the hero/footer black */}
