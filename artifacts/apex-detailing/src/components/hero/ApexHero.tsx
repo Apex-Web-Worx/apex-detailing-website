@@ -55,6 +55,7 @@ export default function ApexHero({
               draggable={false}
             />
           </picture>
+          <div className="apex-hero-tunnel-flash" aria-hidden="true" />
           <div className="apex-hero-lights" aria-hidden="true">
             <span className="apex-hl-spot apex-hl-spot-l">
               <span className="apex-hl-sheen" />
