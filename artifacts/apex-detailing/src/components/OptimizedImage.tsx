@@ -86,7 +86,7 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(
       alt,
       className,
       style,
-      sizes = "(max-width: 768px) 100vw, min(1400px, 100vw)",
+      sizes = "(max-width: 1023px) 85vw, min(900px, 50vw)",
       loading = "lazy",
       decoding = "async",
       noBlur = false,
@@ -128,7 +128,7 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(
     };
 
     const webpSrcSet =
-      webp && webpSm ? `${webpSm} 720w, ${webp} 1400w` : webp || undefined;
+      webp && webpSm ? `${webpSm} 720w, ${webp} 1100w` : webp || undefined;
 
     const jpgSrcSet =
       jpgSm && /\.(jpe?g)$/i.test(stripQuery(resolved))

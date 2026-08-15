@@ -104,6 +104,29 @@
   a, button {
     touch-action: manipulation;
   }
+  .apex-cv {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 720px;
+  }
+
+  @media (max-width: 1023px) {
+    .soap-bubble {
+      display: none;
+    }
+    .btn-cyber::before {
+      animation: none;
+      background: linear-gradient(90deg, #FF1AD8 0%, #9D00FF 50%, #00E5FF 100%);
+    }
+    .brand-logo-nav__sheen {
+      display: none;
+    }
+    .brand-logo-nav__mark {
+      animation: brand-logo-enter 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .page-bubbles {
+      opacity: 0.5;
+    }
+  }
 }
 
 @keyframes logo-shine {

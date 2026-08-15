@@ -333,7 +333,7 @@ export default function Home() {
     if (reduce) return [];
     const mobile = window.matchMedia("(max-width: 640px)").matches;
     // Keep enough density on phones — prior 8×tiny bubbles were nearly invisible
-    const count = mobile ? 16 : 18;
+    const count = mobile ? 6 : 12;
     return Array.from({ length: count }, (_, i) => {
       const tone = Math.random();
       return {
@@ -755,11 +755,16 @@ export default function Home() {
   ];
 
   useEffect(() => {
-    const paintCorrectionTimer = setInterval(() => {
-      setPaintCorrectionPreviewIndex((prev) => (prev + 1) % paintCorrectionImages.length);
-    }, 3500);
-
-    return () => clearInterval(paintCorrectionTimer);
+    let paintCorrectionTimer: number | undefined;
+    const start = window.setTimeout(() => {
+      paintCorrectionTimer = window.setInterval(() => {
+        setPaintCorrectionPreviewIndex((prev) => (prev + 1) % paintCorrectionImages.length);
+      }, 3500);
+    }, 5000);
+    return () => {
+      window.clearTimeout(start);
+      if (paintCorrectionTimer) window.clearInterval(paintCorrectionTimer);
+    };
   }, [paintCorrectionImages.length]);
 
 
@@ -943,7 +948,7 @@ export default function Home() {
       />
       <HeroDip />
       {/* Services Section */}
-      <section id="services" className="py-24 relative bg-[#050505]">
+      <section id="services" className="py-24 relative bg-[#050505] apex-cv">
         {/* Minimal atmosphere — kept off the top seam so it matches the hero/footer black */}
         <div className="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
           <div className="absolute top-[28%] left-[-10%] w-[42rem] h-[42rem] rounded-full bg-[#FF1AD8]/[0.04] blur-[120px]" />
@@ -1012,7 +1017,7 @@ export default function Home() {
                         src={imageUrl(PKG_PHOTO[service.pkg])}
                         alt={t(`pkg.${service.pkg}.photoAlt`)}
                         className="absolute inset-0 block h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        sizes="(max-width: 1023px) 85vw, 380px"
                         loading="lazy"
                       />
                       <div
@@ -1102,7 +1107,7 @@ export default function Home() {
       <HeroDip />
 
       {/* How It Works */}
-      <section id="how" className="py-20 sm:py-24 relative bg-[#050505] section-pink-wash">
+      <section id="how" className="py-20 sm:py-24 relative bg-[#050505] section-pink-wash apex-cv">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-14">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
@@ -1134,7 +1139,7 @@ export default function Home() {
       <HeroDip />
 
       {/* About Section */}
-      <section id="about" className="py-24 relative bg-[#050505] section-pink-wash">
+      <section id="about" className="py-24 relative bg-[#050505] section-pink-wash apex-cv">
         {/* Soap Bubbles in About Section */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
           <div className="soap-bubble absolute bottom-[5%] left-[5%] w-12 h-12" style={{ animationDuration: '16s', animationDelay: '0s' }} />
@@ -1291,7 +1296,7 @@ export default function Home() {
       <HeroDip />
 
       {/* Before/After Slider Section */}
-      <section id="before-after" className="py-20 sm:py-24 relative bg-[#050505] section-pink-wash">
+      <section id="before-after" className="py-20 sm:py-24 relative bg-[#050505] section-pink-wash apex-cv">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-10 sm:mb-16">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
@@ -1443,7 +1448,7 @@ export default function Home() {
       <HeroDip />
 
       {/* Gallery Section */}
-      <section id="gallery" className="py-24 relative bg-[#050505] section-pink-wash">
+      <section id="gallery" className="py-24 relative bg-[#050505] section-pink-wash apex-cv">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-end mb-10 sm:mb-16 gap-6">
             <div className="max-w-2xl">
@@ -1661,7 +1666,7 @@ export default function Home() {
       )}
 
       {/* Testimonials */}
-      <section id="testimonials" className="py-24 relative bg-[#050505] section-pink-wash">
+      <section id="testimonials" className="py-24 relative bg-[#050505] section-pink-wash apex-cv">
         <div className="absolute right-0 bottom-0 w-[600px] h-[600px] bg-[#00E5FF]/10 rounded-full mix-blend-screen filter blur-[150px]" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -1705,7 +1710,7 @@ export default function Home() {
       <HeroDip />
 
       {/* Google Reviews Showcase */}
-      <section id="reviews" className="py-24 relative bg-[#050505] section-pink-wash">
+      <section id="reviews" className="py-24 relative bg-[#050505] section-pink-wash apex-cv">
         <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-[#FF1AD8]/10 rounded-full mix-blend-screen filter blur-[120px] -translate-y-1/2" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -1774,7 +1779,7 @@ export default function Home() {
       <HeroDip />
 
       {/* Service Area */}
-      <section id="area" className="py-20 sm:py-24 relative bg-[#050505] section-pink-wash">
+      <section id="area" className="py-20 sm:py-24 relative bg-[#050505] section-pink-wash apex-cv">
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#00E5FF]/10 rounded-full mix-blend-screen filter blur-[120px]" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-12">
@@ -1842,7 +1847,7 @@ export default function Home() {
       <HeroDip />
 
       {/* FAQ Section */}
-      <section id="faq" className="py-20 sm:py-24 relative bg-[#050505] section-pink-wash">
+      <section id="faq" className="py-20 sm:py-24 relative bg-[#050505] section-pink-wash apex-cv">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
@@ -1921,7 +1926,7 @@ export default function Home() {
       <HeroDip />
 
       {/* CTA Section */}
-      <section id="cta" className="py-24 relative bg-[#050505] section-pink-wash">
+      <section id="cta" className="py-24 relative bg-[#050505] section-pink-wash apex-cv">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative rounded-3xl overflow-hidden bg-[#111] border border-white/10 p-10 md:p-20 text-center">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-full bg-gradient-to-b from-[#FF1AD8]/20 to-[#00E5FF]/20 blur-3xl" />
@@ -1954,7 +1959,7 @@ export default function Home() {
       <HeroDip />
 
       {/* Footer */}
-      <footer id="contact" className="relative bg-[#050505] pt-20 pb-10">
+      <footer id="contact" className="relative bg-[#050505] pt-20 pb-10 apex-cv">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12 sm:mb-16">
             <div className="col-span-1 md:col-span-2 lg:col-span-1">

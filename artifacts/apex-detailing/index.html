@@ -150,7 +150,9 @@
     <link rel="preload" as="image" href="/images/hero-tunnel-scene.sm.webp" type="image/webp" fetchpriority="high" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Mulish:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Michroma&family=Mulish:wght@400;700;800&display=swap" />
+    <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Mulish:wght@400;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Michroma&family=Mulish:wght@400;700;800&display=swap" rel="stylesheet" /></noscript>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -415,7 +417,7 @@
         if (field) {
           var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
           var mobile = window.matchMedia("(max-width: 640px)").matches;
-          var count = reduce ? 6 : mobile ? 16 : 22;
+          var count = reduce ? 4 : mobile ? 6 : 12;
           var frag = document.createDocumentFragment();
           for (var i = 0; i < count; i++) {
             var el = document.createElement("span");
@@ -448,7 +450,7 @@
           field.appendChild(frag);
         }
 
-        // Cover the real phone wait (~6s) with the logo, then lift once the tunnel is in.
+        // Cover the first paint, then lift — keep it short on phones.
         var splash = document.getElementById("app-loading");
         var logo = document.getElementById("splash-logo");
         var logoReady = false;
@@ -462,7 +464,7 @@
           isHome &&
           (window.matchMedia("(max-width: 1023px)").matches ||
             /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent || ""));
-        var minHoldMs = isHome ? (longSplash ? 6500 : 2500) : 0;
+        var minHoldMs = isHome ? (longSplash ? 1200 : 600) : 0;
 
         document.documentElement.classList.add("is-booting");
 
@@ -537,7 +539,7 @@
           minTimeDone = true;
           if (logo) logo.classList.add("is-ready");
           dismiss();
-        }, 8500);
+        }, 2500);
 
         window.__APEX_MARK_APP_READY__ = function () {
           appReady = true;

@@ -8,7 +8,7 @@ type Props = {
   className?: string;
 };
 
-/** Looping gallery card video — plays only while on screen so phones stay scrollable. */
+/** Looping gallery card video — attach src only when on screen. */
 export default function GalleryVideoThumb({ src, poster, alt, className }: Props) {
   const ref = useRef<HTMLVideoElement>(null);
   const [failed, setFailed] = useState(false);
@@ -19,13 +19,15 @@ export default function GalleryVideoThumb({ src, poster, alt, className }: Props
 
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.3) {
+        const on = entry.isIntersecting && entry.intersectionRatio >= 0.35;
+        if (on) {
+          if (!el.getAttribute("src")) el.src = src;
           void el.play().catch(() => undefined);
         } else {
           el.pause();
         }
       },
-      { threshold: [0, 0.3, 0.6] },
+      { threshold: [0, 0.35, 0.6], rootMargin: "80px 0px" },
     );
     io.observe(el);
     return () => io.disconnect();
@@ -48,13 +50,12 @@ export default function GalleryVideoThumb({ src, poster, alt, className }: Props
   return (
     <video
       ref={ref}
-      src={src}
       poster={poster}
       className={className}
       muted
       loop
       playsInline
-      preload="metadata"
+      preload="none"
       controls={false}
       onError={() => setFailed(true)}
     />

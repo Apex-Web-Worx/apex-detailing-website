@@ -1,10 +1,11 @@
 import { lazy, Suspense, useEffect } from "react";
 import { Route, Switch, Router, useLocation } from "wouter";
-import Home from "@/pages/home";
-import BookingPage from "@/pages/booking";
 import PwaManifestSwitch from "@/components/PwaManifestSwitch";
 import { LanguageProvider } from "@/i18n/LanguageProvider";
 import { forceDismissSplash } from "@/lib/bootSplash";
+
+const Home = lazy(() => import("@/pages/home"));
+const BookingPage = lazy(() => import("@/pages/booking"));
 const ManagePage = lazy(() => import("@/pages/manage"));
 const AdminPage = lazy(() => import("@/pages/admin"));
 const GiftCardsPage = lazy(() => import("@/pages/gift-cards"));

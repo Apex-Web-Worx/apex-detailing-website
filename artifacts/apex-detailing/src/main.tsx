@@ -24,9 +24,12 @@ createRoot(document.getElementById("root")!).render(
 requestAnimationFrame(() => {
   requestAnimationFrame(() => {
     markAppReady();
-    void queryClient.prefetchQuery({
-      queryKey: getListServicesQueryKey(),
-      queryFn: () => listServices(),
-    });
+    const path = (window.location.pathname || "/").replace(/\/$/, "") || "/";
+    if (path === "/book") {
+      void queryClient.prefetchQuery({
+        queryKey: getListServicesQueryKey(),
+        queryFn: () => listServices(),
+      });
+    }
   });
 });
