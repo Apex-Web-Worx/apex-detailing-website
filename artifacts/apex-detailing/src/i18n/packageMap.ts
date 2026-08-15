@@ -1,8 +1,13 @@
-/** Finished-example photos shown on Full / Interior / Express cards. */
+/** Finished-example photos shown on every package card. */
 export const PKG_PHOTO: Record<string, string> = {
   full: "pkg-full.jpg",
   interior: "pkg-interior.jpg",
   express: "pkg-express.jpg",
+  exterior: "pkg-exterior.jpg",
+  wax: "pkg-wax.jpg",
+  headlight: "pkg-headlight.jpg",
+  ceramic: "pkg-ceramic.jpg",
+  paint: "pkg-paint.jpg",
 };
 
 /** Maps booking API slugs to homepage package copy keys. */

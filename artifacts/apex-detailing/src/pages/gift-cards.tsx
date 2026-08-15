@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link } from "wouter";
 import LanguageToggle from "@/components/LanguageToggle";
 import { useLanguage } from "@/i18n/LanguageProvider";
+import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
+import { PKG_PHOTO } from "@/i18n/packageMap";
 import {
   ArrowLeft,
   ChevronRight,
@@ -28,6 +30,7 @@ interface Package {
   badge?: string;
   icon: typeof Wand2;
   accent: "purple" | "blue" | "gradient";
+  photoPkg: keyof typeof PKG_PHOTO;
 }
 
 const PACKAGES: Package[] = [
@@ -44,6 +47,7 @@ const PACKAGES: Package[] = [
     ],
     icon: Droplets,
     accent: "purple",
+    photoPkg: "express",
   },
   {
     id: "detailer",
@@ -58,6 +62,7 @@ const PACKAGES: Package[] = [
     ],
     icon: Sparkles,
     accent: "blue",
+    photoPkg: "interior",
   },
   {
     id: "showroom",
@@ -73,6 +78,7 @@ const PACKAGES: Package[] = [
     badge: "Most Popular",
     icon: Wand2,
     accent: "gradient",
+    photoPkg: "full",
   },
 ];
 
@@ -252,12 +258,12 @@ export default function GiftCardsPage() {
                   href={buildSquareUrl(pkg.amount)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`group relative flex flex-col p-6 sm:p-7 rounded-2xl border transition hover:-translate-y-1 hover:shadow-2xl border-white/10 bg-white/[0.02] hover:border-[#00E5FF]/40 ${
+                  className={`group relative flex flex-col overflow-hidden rounded-2xl border transition hover:-translate-y-1 hover:shadow-2xl border-white/10 bg-white/[0.02] hover:border-[#00E5FF]/40 ${
                     isPopular ? "ring-1 ring-[#E8C547]/35" : ""
                   }`}
                 >
                   {pkg.badge && (
-                    <span className="badge-gold absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider whitespace-nowrap">
+                    <span className="badge-gold absolute -top-3 left-1/2 -translate-x-1/2 z-20 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider whitespace-nowrap">
                       <Star
                         className="w-3 h-3 inline mr-1 -mt-0.5"
                         fill="currentColor"
@@ -266,6 +272,21 @@ export default function GiftCardsPage() {
                     </span>
                   )}
 
+                  <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden">
+                    <OptimizedImage
+                      src={imageUrl(PKG_PHOTO[pkg.photoPkg])}
+                      alt=""
+                      className="absolute inset-0 block h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      loading="lazy"
+                    />
+                    <div
+                      className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#0d0d0d] to-transparent"
+                      aria-hidden="true"
+                    />
+                  </div>
+
+                  <div className="flex flex-1 flex-col p-6 sm:p-7">
                   <div className="flex items-center justify-between mb-4">
                     <div className="p-3 rounded-xl bg-white/5 inline-flex">
                       <Icon
@@ -316,6 +337,7 @@ export default function GiftCardsPage() {
                   <p className="text-[10px] text-gray-500 text-center mt-2">
                     Enter ${pkg.amount} on the secure Square checkout
                   </p>
+                  </div>
                 </a>
               );
             })}

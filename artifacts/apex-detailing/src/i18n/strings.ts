@@ -233,11 +233,21 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "addons.exterior": "Exterior Addons",
 
     "pkg.full.photoAlt":
-      "Finished full detail — glossy exterior and a clean cabin",
+      "Finished full detail in the hex-lit garage — glossy exterior and a clean cabin",
     "pkg.interior.photoAlt":
-      "Finished interior detail — steamed seats and vacuumed carpets",
+      "Finished interior detail in the hex-lit garage — steamed seats and vacuumed carpets",
     "pkg.express.photoAlt":
-      "Finished express interior refresh — wiped dash and clean mats",
+      "Finished express interior refresh in the hex-lit garage — wiped dash and clean mats",
+    "pkg.exterior.photoAlt":
+      "Finished exterior detail in the hex-lit garage — glossy paint and dressed wheels",
+    "pkg.wax.photoAlt":
+      "Finished wash, clay, and wax in the hex-lit garage",
+    "pkg.headlight.photoAlt":
+      "Restored crystal-clear headlight in the hex-lit garage",
+    "pkg.ceramic.photoAlt":
+      "Ceramic-coated paint with hexagon light reflections in the garage",
+    "pkg.paint.photoAlt":
+      "Paint correction result — swirl-free gloss under hexagon lights",
 
     "pkg.full.title": "Apex Full Detailing",
     "pkg.full.desc":
@@ -603,11 +613,21 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "addons.exterior": "Допы для кузова",
 
     "pkg.full.photoAlt":
-      "Готовый полный детейлинг — блеск кузова и чистый салон",
+      "Готовый полный детейлинг в гараже с шестиугольным светом — блеск кузова и чистый салон",
     "pkg.interior.photoAlt":
-      "Готовый детейлинг салона — чистые сиденья и ковры",
+      "Готовый детейлинг салона в гараже с шестиугольным светом — чистые сиденья и ковры",
     "pkg.express.photoAlt":
-      "Готовый экспресс-салон — протёртый пластик и чистые коврики",
+      "Готовый экспресс-салон в гараже с шестиугольным светом — протёртый пластик и чистые коврики",
+    "pkg.exterior.photoAlt":
+      "Готовый детейлинг кузова в гараже с шестиугольным светом",
+    "pkg.wax.photoAlt":
+      "Мойка, глина и воск в гараже с шестиугольным светом",
+    "pkg.headlight.photoAlt":
+      "Восстановленная фара в гараже с шестиугольным светом",
+    "pkg.ceramic.photoAlt":
+      "Керамическое покрытие с отражением шестиугольников",
+    "pkg.paint.photoAlt":
+      "Коррекция ЛКП — зеркальный блеск под шестиугольным светом",
 
     "pkg.full.title": "Полный детейлинг Apex",
     "pkg.full.desc":
