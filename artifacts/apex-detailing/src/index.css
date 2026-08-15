@@ -3739,3 +3739,195 @@
   background-color: #ff2ad4;
   color: #ffffff;
 }
+
+/*
+ * ═══════════════════════════════════════════════════════════════════════════
+ * MOBILE HERO v2 — UNLAYERED (must win over @layer utilities desktop rules)
+ * Desktop (min-width: 1024px) is intentionally untouched below.
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+@media (max-width: 1023px) {
+  .apex-hero[data-mobile-hero="stack-v2"] {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    min-height: unset !important;
+    height: auto !important;
+    padding-top: calc(4.15rem + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(5.75rem + env(safe-area-inset-bottom, 0px));
+    overflow-x: clip;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-stage {
+    position: relative !important;
+    inset: auto !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    order: 1;
+    width: 100% !important;
+    height: 36vh !important;
+    min-height: 240px !important;
+    max-height: 340px !important;
+    overflow: hidden;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-plate {
+    width: calc(100% * 1.5 * 1536 / 1024) !important;
+    height: 150% !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-scene {
+    object-fit: cover !important;
+    object-position: center 42% !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-wash,
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-blend {
+    display: none !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-shell {
+    position: relative !important;
+    order: 2;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0.75rem 20px 1.75rem !important;
+    padding-left: max(20px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(20px, env(safe-area-inset-right, 0px)) !important;
+    background: #050505 !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-copy {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-badge {
+    margin: 0 auto 12px !important;
+    justify-content: center;
+  }
+
+  /* Kill desktop max-content / 50–70px type on phones */
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-title {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 0 12px !important;
+    padding-inline: 4px !important;
+    font-size: clamp(30px, 8.2vw, 38px) !important;
+    line-height: 0.92 !important;
+    letter-spacing: -0.035em !important;
+    text-align: center !important;
+    overflow: visible !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-title-line {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+    overflow: visible !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-title-line--3 {
+    font-size: 0.76em !important;
+    letter-spacing: -0.05em !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-sub,
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-explore,
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-trust {
+    display: flex !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-sub {
+    display: block !important;
+    max-width: 100% !important;
+    margin: 0 0 14px !important;
+    font-size: 0.88rem !important;
+    line-height: 1.5 !important;
+    text-align: center !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-ctas {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 0.65rem !important;
+    margin: 0 0 14px !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-ctas .btn-cyber {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    justify-content: center !important;
+    min-height: 3rem !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-explore {
+    display: inline-flex !important;
+    justify-content: center !important;
+    margin: 0 auto 14px !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-rating {
+    display: inline-flex !important;
+    justify-content: center !important;
+    margin: 0 auto 14px !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-trust {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0.6rem !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding-top: 0.85rem !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-trust-line {
+    display: none !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-title {
+    font-size: clamp(28px, 7.8vw, 34px) !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-title-line--3 {
+    font-size: 0.74em !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-stage {
+    height: 34vh !important;
+    min-height: 220px !important;
+    max-height: 300px !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-shell {
+    padding-left: max(16px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(16px, env(safe-area-inset-right, 0px)) !important;
+  }
+}
+
+@media (min-width: 391px) and (max-width: 480px) {
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-title {
+    font-size: clamp(32px, 8.2vw, 36px) !important;
+  }
+}
