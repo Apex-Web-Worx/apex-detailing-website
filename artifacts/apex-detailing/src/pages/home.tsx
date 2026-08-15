@@ -225,7 +225,9 @@ export default function Home() {
   const [baVisible, setBaVisible] = useState(true);
   const [paintCorrectionPreviewIndex, setPaintCorrectionPreviewIndex] = useState(0);
   const [openFaq, setOpenFaq] = useState<string | null>(null);
-  const [activeFaqCategory, setActiveFaqCategory] = useState<"General" | "Paint Correction">("General");
+  const [activeFaqCategory, setActiveFaqCategory] = useState<
+    "general" | "paint" | "ceramic"
+  >("general");
   const [legalModal, setLegalModal] = useState<"privacy" | "terms" | null>(null);
   const sliderTouchRef = useRef<{ x: number; y: number; dragging: boolean } | null>(null);
 
@@ -251,132 +253,36 @@ export default function Home() {
     });
   }, []);
 
-  const faqs: Array<{ q: string; a: string; category: string }> = [
-    {
-      q: "Where are you located?",
-      a: "Our shop is at 1114 E Lakota St in Nixa, MO. We proudly serve customers from Nixa, Ozark, Springfield, and the surrounding Ozarks communities.",
-      category: "General",
-    },
-    {
-      q: "How long does a detail take?",
-      a: "Most interior or exterior details take 2–4 hours. Full details usually run 4–6 hours — and sometimes up to 10 hours for heavily soiled vehicles. Ceramic coatings or paint correction can take a full day depending on vehicle condition.",
-      category: "General",
-    },
-    {
-      q: "How do I book an appointment?",
-      a: "Click any 'Book Your Detail' button to use our online booking — pick your service, day, and time in under a minute. You can also call us directly at 417-527-6165. All scheduling needs to happen before your visit.",
-      category: "General",
-    },
-    {
-      q: "What payment methods do you accept?",
-      a: "We accept cash, Square (all major credit/debit cards), Venmo, and Zelle. Digital gift cards are also available year-round through our Square store.",
-      category: "General",
-    },
-    {
-      q: "What if my vehicle is in really rough shape?",
-      a: "No problem — we handle heavy pet hair, deep stains, and serious build-up. Heavily soiled interiors may require a Full Interior Detail rather than the Express service. Final pricing is confirmed at inspection.",
-      category: "General",
-    },
-    {
-      q: "Do you offer gift cards?",
-      a: "Yes — digital gift cards are available through our Square store. They're a perfect gift for any car owner.",
-      category: "General",
-    },
-    {
-      q: "What is paint correction?",
-      a: "Paint correction is a professional process that removes imperfections from your vehicle's paint by machine polishing the clear coat. Over time, your paint can develop swirl marks, light scratches, oxidation, water spots, holograms, fading or dullness, and surface contamination. The goal is to restore clarity, depth, and gloss while making your paint look significantly cleaner and newer. Before any correction begins, your vehicle goes through proper preparation which may include a hand wash, iron decontamination, clay bar treatment, and paint inspection to ensure the paint is clean and safe to polish.",
-      category: "Paint Correction",
-    },
-    {
-      q: "What is a 1-Step Paint Correction?",
-      a: "A 1-step correction is ideal for vehicles with light imperfections. This process includes a light cutting polish that removes minor swirl marks, improves gloss and shine, reduces light scratches, and enhances paint clarity. A 1-step correction typically removes 50–70% of paint defects depending on paint condition and hardness. Best for newer vehicles, light swirl marks, vehicles that already have decent paint condition, and owners wanting a noticeable improvement without heavy correction.",
-      category: "Paint Correction",
-    },
-    {
-      q: "What is a 2-Step Paint Correction?",
-      a: "A 2-step correction is a more aggressive restoration process for vehicles with heavier imperfections. Step 1 uses a heavy compound that removes deeper scratches, corrects oxidation, eliminates heavier swirl marks, and removes deeper paint defects. Step 2 uses a finishing polish that refines the paint, restores gloss, removes haze from compounding, and creates a deep mirror-like finish. A 2-step correction can remove 70–90%+ of paint defects depending on paint thickness and condition. Best for older vehicles, heavily neglected paint, deep swirls and scratches, and vehicles needing major restoration. Some scratches may be too deep to remove safely if they've gone through the clear coat.",
-      category: "Paint Correction",
-    },
-    {
-      q: "Why does pricing vary?",
-      a: "Every vehicle is different. Pricing depends on vehicle size, paint condition, level of contamination, time needed for preparation, and whether your vehicle needs a 1-step or 2-step correction. Heavily contaminated vehicles require additional prep time before polishing can safely begin.",
-      category: "Paint Correction",
-    },
-    {
-      q: "Do I need paint protection after correction?",
-      a: "Yes — protection is highly recommended after paint correction. Once the paint is polished, adding protection helps preserve the results and keeps your vehicle cleaner longer. Our paint sealant provides 6–8 months of protection against dirt buildup, water spots, UV exposure, road grime, and minor surface wear, while adding extra gloss and making future washes easier.",
-      category: "Paint Correction",
-    },
-    {
-      q: "Can you apply ceramic coating after correction?",
-      a: "Yes. Ceramic coating is a premium option for longer-term protection and durability. Benefits include longer-lasting protection, strong water beading, easier maintenance, UV protection, and enhanced gloss.",
-      category: "Paint Correction",
-    },
-    {
-      q: "How long does paint correction take?",
-      a: "Most paint correction services take anywhere from 1 full day to multiple days, depending on the vehicle size and paint condition.",
-      category: "Paint Correction",
-    },
-    {
-      q: "Will paint correction remove all scratches?",
-      a: "Not always. Paint correction can remove many imperfections, but scratches that are too deep may require wet sanding, touch-up paint, or may be unsafe to fully remove.",
-      category: "Paint Correction",
-    },
-    {
-      q: "What is ceramic coating?",
-      a: "Ceramic coating is a premium protective layer that bonds to your vehicle's paint, providing long-lasting protection while enhancing gloss and making maintenance easier.",
-      category: "Ceramic Coating",
-    },
-    {
-      q: "Why should I ceramic coat my vehicle?",
-      a: "Deep, mirror-like shine. Protection from UV rays and oxidation. Helps resist stains and contaminants. Makes washing easier. Keeps your vehicle cleaner longer. Preserves your paint's appearance.",
-      category: "Ceramic Coating",
-    },
-    {
-      q: "What's included in the ceramic coating package?",
-      a: "Full hand wash, iron decontamination treatment, clay bar treatment, paint polishing for maximum gloss, paint preparation and panel wipe, professional ceramic coating application, and final quality inspection.",
-      category: "Ceramic Coating",
-    },
-    {
-      q: "Does a brand-new vehicle need paint polishing?",
-      a: "Yes. Even new vehicles often have light swirl marks, dealership wash scratches, and minor imperfections. Proper paint preparation ensures the best possible finish before the coating is applied.",
-      category: "Ceramic Coating",
-    },
-    {
-      q: "How long does the ceramic coating process take?",
-      a: "Most ceramic coating services take 1-2 days, depending on the size of the vehicle and the amount of paint correction needed.",
-      category: "Ceramic Coating",
-    },
-    {
-      q: "How long will ceramic coating last?",
-      a: "With proper maintenance and safe washing methods, ceramic coating can provide years of protection and shine.",
-      category: "Ceramic Coating",
-    },
-    {
-      q: "Will ceramic coating prevent scratches?",
-      a: "Ceramic coating is not scratch-proof, but it helps protect against minor wash-induced swirl marks and everyday wear.",
-      category: "Ceramic Coating",
-    },
-    {
-      q: "Does ceramic coating eliminate the need to wash my car?",
-      a: "No, but it makes cleaning much easier. Dirt, mud, and road grime don't stick as easily, helping your vehicle stay cleaner for longer.",
-      category: "Ceramic Coating",
-    },
-    {
-      q: "Can ceramic coating be applied to windows and wheels?",
-      a: "Yes! Exterior glass and wheels can also be protected, making them easier to clean and maintain.",
-      category: "Ceramic Coating",
-    },
-    {
-      q: "How should I maintain my ceramic-coated vehicle?",
-      a: "We recommend regular hand washes using pH-neutral soap and avoiding automatic car washes with brushes to maximize the life of the coating.",
-      category: "Ceramic Coating",
-    },
-    {
-      q: "Is ceramic coating worth it?",
-      a: "Absolutely! Ceramic coating is one of the best ways to protect your investment, reduce maintenance, and keep your vehicle looking its best for years.",
-      category: "Ceramic Coating",
-    },
+  const faqs: Array<{
+    qKey: string;
+    aKey: string;
+    category: "general" | "paint" | "ceramic";
+  }> = [
+    { qKey: "faq.g0.q", aKey: "faq.g0.a", category: "general" },
+    { qKey: "faq.g1.q", aKey: "faq.g1.a", category: "general" },
+    { qKey: "faq.g2.q", aKey: "faq.g2.a", category: "general" },
+    { qKey: "faq.g3.q", aKey: "faq.g3.a", category: "general" },
+    { qKey: "faq.g4.q", aKey: "faq.g4.a", category: "general" },
+    { qKey: "faq.g5.q", aKey: "faq.g5.a", category: "general" },
+    { qKey: "faq.p0.q", aKey: "faq.p0.a", category: "paint" },
+    { qKey: "faq.p1.q", aKey: "faq.p1.a", category: "paint" },
+    { qKey: "faq.p2.q", aKey: "faq.p2.a", category: "paint" },
+    { qKey: "faq.p3.q", aKey: "faq.p3.a", category: "paint" },
+    { qKey: "faq.p4.q", aKey: "faq.p4.a", category: "paint" },
+    { qKey: "faq.p5.q", aKey: "faq.p5.a", category: "paint" },
+    { qKey: "faq.p6.q", aKey: "faq.p6.a", category: "paint" },
+    { qKey: "faq.p7.q", aKey: "faq.p7.a", category: "paint" },
+    { qKey: "faq.c0.q", aKey: "faq.c0.a", category: "ceramic" },
+    { qKey: "faq.c1.q", aKey: "faq.c1.a", category: "ceramic" },
+    { qKey: "faq.c2.q", aKey: "faq.c2.a", category: "ceramic" },
+    { qKey: "faq.c3.q", aKey: "faq.c3.a", category: "ceramic" },
+    { qKey: "faq.c4.q", aKey: "faq.c4.a", category: "ceramic" },
+    { qKey: "faq.c5.q", aKey: "faq.c5.a", category: "ceramic" },
+    { qKey: "faq.c6.q", aKey: "faq.c6.a", category: "ceramic" },
+    { qKey: "faq.c7.q", aKey: "faq.c7.a", category: "ceramic" },
+    { qKey: "faq.c8.q", aKey: "faq.c8.a", category: "ceramic" },
+    { qKey: "faq.c9.q", aKey: "faq.c9.a", category: "ceramic" },
+    { qKey: "faq.c10.q", aKey: "faq.c10.a", category: "ceramic" },
   ];
 
   const serviceCities = [
@@ -1564,20 +1470,26 @@ export default function Home() {
 
           {/* Category pills */}
           <div className="flex items-center justify-center gap-3 mb-10">
-            {(["General", "Paint Correction", "Ceramic Coating"] as const).map((cat) => (
+            {(
+              [
+                { id: "general", labelKey: "faq.general" },
+                { id: "paint", labelKey: "faq.paint" },
+                { id: "ceramic", labelKey: "faq.ceramic" },
+              ] as const
+            ).map((cat) => (
               <button
-                key={cat}
+                key={cat.id}
                 onClick={() => {
-                  setActiveFaqCategory(cat);
+                  setActiveFaqCategory(cat.id);
                   setOpenFaq(null);
                 }}
                 className={`px-5 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all duration-300 border ${
-                  activeFaqCategory === cat
+                  activeFaqCategory === cat.id
                     ? "bg-[#FF1AD8] text-white border-transparent shadow-[0_0_14px_rgba(255,26,216,0.35)]"
                     : "bg-white/5 text-gray-400 border-white/10 hover:border-white/30 hover:text-white"
                 }`}
               >
-                {cat === "General" ? t("faq.general") : cat === "Paint Correction" ? t("faq.paint") : t("faq.ceramic")}
+                {t(cat.labelKey)}
               </button>
             ))}
           </div>
@@ -1600,7 +1512,7 @@ export default function Home() {
                       className="w-full flex items-center justify-between gap-4 p-5 text-left"
                       aria-expanded={isOpen}
                     >
-                      <span className="font-bold text-white text-base sm:text-lg">{faq.q}</span>
+                      <span className="font-bold text-white text-base sm:text-lg">{t(faq.qKey)}</span>
                       <ChevronRight
                         className={`w-5 h-5 shrink-0 text-[#00E5FF] transition-transform duration-300 ${
                           isOpen ? "rotate-90" : ""
@@ -1614,7 +1526,7 @@ export default function Home() {
                     >
                       <div className="overflow-hidden">
                         <p className="px-5 pb-5 text-gray-300 text-sm sm:text-base leading-relaxed">
-                          {faq.a}
+                          {t(faq.aKey)}
                         </p>
                       </div>
                     </div>

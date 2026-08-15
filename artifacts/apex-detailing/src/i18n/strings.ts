@@ -108,6 +108,84 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "faq.paint": "Paint Correction",
     "faq.ceramic": "Ceramic Coating",
 
+    "faq.g0.q": "Where are you located?",
+    "faq.g0.a":
+      "Our shop is at 1114 E Lakota St in Nixa, MO. We proudly serve customers from Nixa, Ozark, Springfield, and the surrounding Ozarks communities.",
+    "faq.g1.q": "How long does a detail take?",
+    "faq.g1.a":
+      "Most interior or exterior details take 2–4 hours. Full details usually run 4–6 hours — and sometimes up to 10 hours for heavily soiled vehicles. Ceramic coatings or paint correction can take a full day depending on vehicle condition.",
+    "faq.g2.q": "How do I book an appointment?",
+    "faq.g2.a":
+      "Click any 'Book Your Detail' button to use our online booking — pick your service, day, and time in under a minute. You can also call us directly at 417-527-6165. All scheduling needs to happen before your visit.",
+    "faq.g3.q": "What payment methods do you accept?",
+    "faq.g3.a":
+      "We accept cash, Square (all major credit/debit cards), Venmo, and Zelle. Digital gift cards are also available year-round through our Square store.",
+    "faq.g4.q": "What if my vehicle is in really rough shape?",
+    "faq.g4.a":
+      "No problem — we handle heavy pet hair, deep stains, and serious build-up. Heavily soiled interiors may require a Full Interior Detail rather than the Express service. Final pricing is confirmed at inspection.",
+    "faq.g5.q": "Do you offer gift cards?",
+    "faq.g5.a":
+      "Yes — digital gift cards are available through our Square store. They're a perfect gift for any car owner.",
+
+    "faq.p0.q": "What is paint correction?",
+    "faq.p0.a":
+      "Paint correction is a professional process that removes imperfections from your vehicle's paint by machine polishing the clear coat. Over time, your paint can develop swirl marks, light scratches, oxidation, water spots, holograms, fading or dullness, and surface contamination. The goal is to restore clarity, depth, and gloss while making your paint look significantly cleaner and newer. Before any correction begins, your vehicle goes through proper preparation which may include a hand wash, iron decontamination, clay bar treatment, and paint inspection to ensure the paint is clean and safe to polish.",
+    "faq.p1.q": "What is a 1-Step Paint Correction?",
+    "faq.p1.a":
+      "A 1-step correction is ideal for vehicles with light imperfections. This process includes a light cutting polish that removes minor swirl marks, improves gloss and shine, reduces light scratches, and enhances paint clarity. A 1-step correction typically removes 50–70% of paint defects depending on paint condition and hardness. Best for newer vehicles, light swirl marks, vehicles that already have decent paint condition, and owners wanting a noticeable improvement without heavy correction.",
+    "faq.p2.q": "What is a 2-Step Paint Correction?",
+    "faq.p2.a":
+      "A 2-step correction is a more aggressive restoration process for vehicles with heavier imperfections. Step 1 uses a heavy compound that removes deeper scratches, corrects oxidation, eliminates heavier swirl marks, and removes deeper paint defects. Step 2 uses a finishing polish that refines the paint, restores gloss, removes haze from compounding, and creates a deep mirror-like finish. A 2-step correction can remove 70–90%+ of paint defects depending on paint thickness and condition. Best for older vehicles, heavily neglected paint, deep swirls and scratches, and vehicles needing major restoration. Some scratches may be too deep to remove safely if they've gone through the clear coat.",
+    "faq.p3.q": "Why does pricing vary?",
+    "faq.p3.a":
+      "Every vehicle is different. Pricing depends on vehicle size, paint condition, level of contamination, time needed for preparation, and whether your vehicle needs a 1-step or 2-step correction. Heavily contaminated vehicles require additional prep time before polishing can safely begin.",
+    "faq.p4.q": "Do I need paint protection after correction?",
+    "faq.p4.a":
+      "Yes — protection is highly recommended after paint correction. Once the paint is polished, adding protection helps preserve the results and keeps your vehicle cleaner longer. Our paint sealant provides 6–8 months of protection against dirt buildup, water spots, UV exposure, road grime, and minor surface wear, while adding extra gloss and making future washes easier.",
+    "faq.p5.q": "Can you apply ceramic coating after correction?",
+    "faq.p5.a":
+      "Yes. Ceramic coating is a premium option for longer-term protection and durability. Benefits include longer-lasting protection, strong water beading, easier maintenance, UV protection, and enhanced gloss.",
+    "faq.p6.q": "How long does paint correction take?",
+    "faq.p6.a":
+      "Most paint correction services take anywhere from 1 full day to multiple days, depending on the vehicle size and paint condition.",
+    "faq.p7.q": "Will paint correction remove all scratches?",
+    "faq.p7.a":
+      "Not always. Paint correction can remove many imperfections, but scratches that are too deep may require wet sanding, touch-up paint, or may be unsafe to fully remove.",
+
+    "faq.c0.q": "What is ceramic coating?",
+    "faq.c0.a":
+      "Ceramic coating is a premium protective layer that bonds to your vehicle's paint, providing long-lasting protection while enhancing gloss and making maintenance easier.",
+    "faq.c1.q": "Why should I ceramic coat my vehicle?",
+    "faq.c1.a":
+      "Deep, mirror-like shine. Protection from UV rays and oxidation. Helps resist stains and contaminants. Makes washing easier. Keeps your vehicle cleaner longer. Preserves your paint's appearance.",
+    "faq.c2.q": "What's included in the ceramic coating package?",
+    "faq.c2.a":
+      "Full hand wash, iron decontamination treatment, clay bar treatment, paint polishing for maximum gloss, paint preparation and panel wipe, professional ceramic coating application, and final quality inspection.",
+    "faq.c3.q": "Does a brand-new vehicle need paint polishing?",
+    "faq.c3.a":
+      "Yes. Even new vehicles often have light swirl marks, dealership wash scratches, and minor imperfections. Proper paint preparation ensures the best possible finish before the coating is applied.",
+    "faq.c4.q": "How long does the ceramic coating process take?",
+    "faq.c4.a":
+      "Most ceramic coating services take 1-2 days, depending on the size of the vehicle and the amount of paint correction needed.",
+    "faq.c5.q": "How long will ceramic coating last?",
+    "faq.c5.a":
+      "With proper maintenance and safe washing methods, ceramic coating can provide years of protection and shine.",
+    "faq.c6.q": "Will ceramic coating prevent scratches?",
+    "faq.c6.a":
+      "Ceramic coating is not scratch-proof, but it helps protect against minor wash-induced swirl marks and everyday wear.",
+    "faq.c7.q": "Does ceramic coating eliminate the need to wash my car?",
+    "faq.c7.a":
+      "No, but it makes cleaning much easier. Dirt, mud, and road grime don't stick as easily, helping your vehicle stay cleaner for longer.",
+    "faq.c8.q": "Can ceramic coating be applied to windows and wheels?",
+    "faq.c8.a":
+      "Yes! Exterior glass and wheels can also be protected, making them easier to clean and maintain.",
+    "faq.c9.q": "How should I maintain my ceramic-coated vehicle?",
+    "faq.c9.a":
+      "We recommend regular hand washes using pH-neutral soap and avoiding automatic car washes with brushes to maximize the life of the coating.",
+    "faq.c10.q": "Is ceramic coating worth it?",
+    "faq.c10.a":
+      "Absolutely! Ceramic coating is one of the best ways to protect your investment, reduce maintenance, and keep your vehicle looking its best for years.",
+
     "cta.titleLead": "Experience the",
     "cta.titleApex": "Apex",
     "cta.titleEnd": "Difference?",
@@ -531,6 +609,84 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "faq.general": "Общее",
     "faq.paint": "Коррекция ЛКП",
     "faq.ceramic": "Керамика",
+
+    "faq.g0.q": "Где вы находитесь?",
+    "faq.g0.a":
+      "Наш цех — 1114 E Lakota St, Nixa, MO. Мы обслуживаем клиентов из Никсы, Озарка, Спрингфилда и окрестностей.",
+    "faq.g1.q": "Сколько длится детейлинг?",
+    "faq.g1.a":
+      "Большинство работ по салону или кузову занимают 2–4 часа. Полный детейлинг обычно 4–6 часов, а при сильных загрязнениях — до 10 часов. Керамика или коррекция ЛКП могут занять целый день в зависимости от состояния авто.",
+    "faq.g2.q": "Как записаться?",
+    "faq.g2.a":
+      "Нажмите любую кнопку «Записаться на детейлинг» и выберите услугу, день и время онлайн за минуту. Можно также позвонить: 417-527-6165. Запись нужна до визита.",
+    "faq.g3.q": "Какие способы оплаты вы принимаете?",
+    "faq.g3.a":
+      "Наличные, Square (все основные карты), Venmo и Zelle. Цифровые подарочные карты доступны круглый год в нашем магазине Square.",
+    "faq.g4.q": "А если авто в очень плохом состоянии?",
+    "faq.g4.a":
+      "Без проблем — работаем с сильной шерстью животных, глубокими пятнами и серьёзными загрязнениями. Для сильно загрязнённого салона чаще нужен полный детейлинг, а не Express. Итоговая цена подтверждается после осмотра.",
+    "faq.g5.q": "Есть ли подарочные карты?",
+    "faq.g5.a":
+      "Да — цифровые подарочные карты доступны в нашем магазине Square. Отличный подарок для любого автовладельца.",
+
+    "faq.p0.q": "Что такое коррекция ЛКП?",
+    "faq.p0.a":
+      "Коррекция ЛКП — профессиональный процесс удаления дефектов краски машинной полировкой лака. Со временем появляются голограммы, лёгкие царапины, окисление, водяные пятна, выгорание и загрязнения поверхности. Цель — вернуть прозрачность, глубину и блеск, чтобы ЛКП выглядело заметно чище и новее. Перед коррекцией авто проходит подготовку: ручная мойка, деконтаминация железа, глина и осмотр ЛКП, чтобы поверхность была чистой и безопасной для полировки.",
+    "faq.p1.q": "Что такое одношаговая коррекция (1-Step)?",
+    "faq.p1.a":
+      "Одношаговая коррекция подходит для лёгких дефектов. Включает лёгкую абразивную полировку: убирает мелкие голограммы, усиливает блеск, снижает лёгкие царапины и улучшает прозрачность ЛКП. Обычно убирает 50–70% дефектов в зависимости от состояния и твёрдости лака. Лучше всего для новых авто, лёгких голограмм, относительно хорошего ЛКП и владельцев, которым нужен заметный результат без тяжёлой коррекции.",
+    "faq.p2.q": "Что такое двухшаговая коррекция (2-Step)?",
+    "faq.p2.a":
+      "Двухшаговая коррекция — более агрессивное восстановление для сильных дефектов. Шаг 1: тяжёлый компаунд убирает более глубокие царапины, окисление и тяжёлые голограммы. Шаг 2: финишная полировка выравнивает поверхность, возвращает блеск, убирает дымку после компаунда и даёт зеркальный финиш. Может убрать 70–90%+ дефектов в зависимости от толщины и состояния лака. Подходит для старых авто, сильно запущенного ЛКП, глубоких голограмм и царапин. Некоторые царапины могут быть слишком глубокими для безопасного полного удаления, если они прошли лак.",
+    "faq.p3.q": "Почему цена может отличаться?",
+    "faq.p3.a":
+      "Каждый автомобиль разный. Цена зависит от размера, состояния ЛКП, степени загрязнения, времени на подготовку и того, нужна ли 1- или 2-шаговая коррекция. Сильно загрязнённые авто требуют дополнительной подготовки перед безопасной полировкой.",
+    "faq.p4.q": "Нужна ли защита после коррекции?",
+    "faq.p4.a":
+      "Да — защита после коррекции очень рекомендуется. После полировки защита сохраняет результат и помогает авто дольше оставаться чистым. Наш силант даёт 6–8 месяцев защиты от грязи, водяных пятен, УФ, дорожных загрязнений и мелкого износа, добавляет блеск и упрощает последующие мойки.",
+    "faq.p5.q": "Можно ли нанести керамику после коррекции?",
+    "faq.p5.a":
+      "Да. Керамическое покрытие — премиум-вариант для долговременной защиты. Плюсы: более долгая защита, сильный гидрофобный эффект, проще уход, защита от УФ и усиленный блеск.",
+    "faq.p6.q": "Сколько длится коррекция ЛКП?",
+    "faq.p6.a":
+      "Обычно от одного полного дня до нескольких дней — в зависимости от размера авто и состояния ЛКП.",
+    "faq.p7.q": "Уберёт ли коррекция все царапины?",
+    "faq.p7.a":
+      "Не всегда. Коррекция убирает многие дефекты, но слишком глубокие царапины могут потребовать мокрой шлифовки, подкраски или быть небезопасными для полного удаления.",
+
+    "faq.c0.q": "Что такое керамическое покрытие?",
+    "faq.c0.a":
+      "Керамика — премиум-защитный слой, который связывается с ЛКП, даёт долговременную защиту, усиливает блеск и упрощает уход.",
+    "faq.c1.q": "Зачем керамировать авто?",
+    "faq.c1.a":
+      "Глубокий зеркальный блеск. Защита от УФ и окисления. Лучше сопротивляется пятнам и загрязнениям. Проще мыть. Авто дольше остаётся чистым. Сохраняет внешний вид ЛКП.",
+    "faq.c2.q": "Что входит в пакет керамики?",
+    "faq.c2.a":
+      "Полная ручная мойка, деконтаминация железа, обработка глиной, полировка для максимального блеска, подготовка и обезжиривание панелей, профессиональное нанесение керамики и финальный контроль качества.",
+    "faq.c3.q": "Нужна ли полировка новому авто?",
+    "faq.c3.a":
+      "Да. Даже у новых авто часто есть лёгкие голограммы, царапины от дилерской мойки и мелкие дефекты. Правильная подготовка ЛКП даёт лучший результат перед нанесением покрытия.",
+    "faq.c4.q": "Сколько длится процесс керамики?",
+    "faq.c4.a":
+      "Обычно 1–2 дня — в зависимости от размера авто и объёма необходимой коррекции ЛКП.",
+    "faq.c5.q": "Как долго держится керамика?",
+    "faq.c5.a":
+      "При правильном уходе и безопасной мойке керамика даёт годы защиты и блеска.",
+    "faq.c6.q": "Защищает ли керамика от царапин?",
+    "faq.c6.a":
+      "Керамика не делает авто неуязвимым к царапинам, но помогает от мелких голограмм от мойки и повседневного износа.",
+    "faq.c7.q": "Можно ли не мыть авто после керамики?",
+    "faq.c7.a":
+      "Нет, но мыть становится заметно проще. Грязь и реагенты меньше липнут, поэтому авто дольше выглядит чистым.",
+    "faq.c8.q": "Можно ли керамировать стёкла и диски?",
+    "faq.c8.a":
+      "Да! Наружные стёкла и диски тоже можно защитить — их будет проще чистить и поддерживать.",
+    "faq.c9.q": "Как ухаживать за авто с керамикой?",
+    "faq.c9.a":
+      "Рекомендуем регулярную ручную мойку pH-нейтральным шампунем и избегать автоматических моек со щётками — так покрытие прослужит дольше.",
+    "faq.c10.q": "Стоит ли керамика своих денег?",
+    "faq.c10.a":
+      "Однозначно! Это один из лучших способов защитить вложение, снизить уход и долгие годы сохранять отличный вид авто.",
 
     "cta.titleLead": "Ощутите",
     "cta.titleApex": "Apex",
