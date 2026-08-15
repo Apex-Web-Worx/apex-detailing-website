@@ -1,9 +1,12 @@
-/** Second-outermost photo hex — flat-top, measured from hero-tunnel-scene.jpg */
+/**
+ * The hex ring that stays on-screen in the mobile crop
+ * (second ring in from the photo edge — top bar at y≈237).
+ */
 function markedHexPath() {
-  const cx = 768;
-  const cy = 518;
-  const rx = 670;
-  const ry = 430;
+  const cx = 767;
+  const cy = 528;
+  const rx = 523;
+  const ry = 336;
   const pts: string[] = [];
   for (let k = 0; k < 6; k++) {
     const a = (Math.PI / 3) * k;
@@ -13,10 +16,12 @@ function markedHexPath() {
 }
 
 export default function MarkedHexFlash() {
+  const d = markedHexPath();
   return (
     <div className="apex-marked-hex" aria-hidden="true">
       <svg viewBox="0 0 1536 1024" preserveAspectRatio="none">
-        <path d={markedHexPath()} />
+        <path className="apex-marked-hex-glow" d={d} />
+        <path className="apex-marked-hex-core" d={d} />
       </svg>
     </div>
   );
