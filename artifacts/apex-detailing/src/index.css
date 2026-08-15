@@ -2667,23 +2667,22 @@
       inset: auto;
       left: auto;
       width: 100%;
-      /* Keep the tunnel visual premium but short enough that both CTAs clear the sticky bar */
-      height: 38vh;
-      min-height: 260px;
-      max-height: 380px;
+      /* Match the photo’s landscape ratio — avoids a tall crop that looks “zoomed” */
+      height: clamp(270px, calc(100vw * 1024 / 1536 * 1.14), 360px);
+      min-height: 270px;
+      max-height: 360px;
       order: 1;
       overflow: hidden;
-      /* Required for aspect-locked plate via cqh */
       container-type: size;
     }
 
     /*
-     * Aspect-locked plate (same 1536/1024 math as desktop) so headlight %
-     * overlays stay on the lamp cores. Never use object-fit: cover here.
+     * Same cover math as desktop (no extra zoom). Aspect-locked + fill keeps
+     * headlight overlays on the lamps without stretching the Camaro.
      */
     .apex-hero-plate {
-      width: calc(100cqh * 1536 / 1024 * 1.62);
-      height: calc(100cqh * 1.62);
+      width: max(100cqw, calc(100cqh * 1536 / 1024));
+      height: max(100cqh, calc(100cqw * 1024 / 1536));
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
@@ -2876,8 +2875,8 @@
     }
 
     .apex-hero-stage {
-      height: 36vh;
-      min-height: 250px;
+      height: clamp(260px, calc(100vw * 1024 / 1536 * 1.1), 340px);
+      min-height: 260px;
       max-height: 340px;
     }
   }
@@ -3771,17 +3770,17 @@
     left: auto !important;
     order: 1;
     width: 100% !important;
-    height: 36vh !important;
-    min-height: 240px !important;
-    max-height: 340px !important;
+    /* Landscape frame matching the tunnel photo — not a tall zoomed crop */
+    height: clamp(270px, calc(100vw * 1024 / 1536 * 1.14), 360px) !important;
+    min-height: 270px !important;
+    max-height: 360px !important;
     overflow: hidden;
     container-type: size !important;
   }
 
   .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-plate {
-    /* Aspect-locked to the photo so desktop headlight % still hit the lamps */
-    width: calc(100cqh * 1536 / 1024 * 1.62) !important;
-    height: calc(100cqh * 1.62) !important;
+    width: max(100cqw, calc(100cqh * 1536 / 1024)) !important;
+    height: max(100cqh, calc(100cqw * 1024 / 1536)) !important;
     left: 50% !important;
     top: 50% !important;
     transform: translate(-50%, -50%) !important;
@@ -3958,9 +3957,9 @@
   }
 
   .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-stage {
-    height: 34vh !important;
-    min-height: 220px !important;
-    max-height: 300px !important;
+    height: clamp(260px, calc(100vw * 1024 / 1536 * 1.1), 340px) !important;
+    min-height: 260px !important;
+    max-height: 340px !important;
   }
 
   .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-shell {
