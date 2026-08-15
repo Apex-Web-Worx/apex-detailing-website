@@ -71,8 +71,6 @@ const MORE_SERVICES: MoreService[] = [
   { id: "exterior-detailing", pkg: "exterior", pricing: "$150", Icon: Car },
   { id: "wash-clay-wax", pkg: "wax", pricing: "$250", Icon: Sparkles },
   { id: "headlight-restoration", pkg: "headlight", pricing: "$125", Icon: CheckCircle2 },
-  { id: "ceramic-coating", pkg: "ceramic", pricing: "Call for Quote", Icon: Shield },
-  { id: "paint-correction", pkg: "paint", pricing: "$300+", Icon: Sparkles },
 ];
 
 export default function EliteServicesSection({
@@ -148,7 +146,7 @@ export default function EliteServicesSection({
                     src={imageUrl(PKG_PHOTO[card.pkg])}
                     alt={t(`pkg.${card.pkg}.photoAlt`)}
                     className="elite-card__img"
-                    sizes="(max-width: 767px) 92vw, (max-width: 1023px) 46vw, 420px"
+                    sizes="(max-width: 699px) calc(100vw - 32px), (max-width: 1099px) 46vw, 420px"
                     loading="lazy"
                   />
                   <div className="elite-card__media-shade" aria-hidden="true" />
@@ -207,38 +205,59 @@ export default function EliteServicesSection({
 
         <div className="elite-more">
           <h3 className="elite-more__title">{t("services.moreTitle")}</h3>
-          <div className="elite-more__grid">
-            {MORE_SERVICES.map((service) => (
-              <div key={service.id} className="elite-more__card">
-                {PKG_PHOTO[service.pkg] ? (
-                  <div className="elite-more__media">
+          <div className="elite-services__grid elite-more__grid">
+            {MORE_SERVICES.map((service, index) => {
+              const feats = list(`pkg.${service.pkg}.feat`).slice(0, 5);
+              return (
+                <article
+                  key={service.id}
+                  className={`elite-card${anim}`}
+                  style={{ ["--elite-delay" as string]: `${180 + index * 80}ms` }}
+                >
+                  <div className="elite-card__media">
                     <OptimizedImage
                       src={imageUrl(PKG_PHOTO[service.pkg])}
                       alt={t(`pkg.${service.pkg}.photoAlt`)}
-                      className="elite-more__img"
-                      sizes="(max-width: 767px) 92vw, 280px"
+                      className="elite-card__img"
+                      sizes="(max-width: 699px) calc(100vw - 32px), (max-width: 1099px) 46vw, 420px"
                       loading="lazy"
                     />
+                    <div className="elite-card__media-shade" aria-hidden="true" />
+                    <div className="elite-card__icon-wrap" aria-hidden="true">
+                      <service.Icon className="elite-card__icon" strokeWidth={2} />
+                    </div>
                   </div>
-                ) : null}
-                <div className="elite-more__body">
-                  <div className="elite-more__icon" aria-hidden="true">
-                    <service.Icon className="w-5 h-5" />
+                  <div className="elite-card__body">
+                    <h3 className="elite-card__name">{t(`pkg.${service.pkg}.title`)}</h3>
+                    {!/call/i.test(service.pricing) ? (
+                      <>
+                        <p className="elite-card__starting">{t("services.startingAt")}</p>
+                        <p className="elite-card__price">{service.pricing}</p>
+                      </>
+                    ) : (
+                      <p className="elite-card__price elite-card__price--quote">{t("services.callQuote")}</p>
+                    )}
+                    <p className="elite-card__desc">{t(`pkg.${service.pkg}.desc`)}</p>
+                    <ul className="elite-card__feats">
+                      {feats.map((feature) => (
+                        <li key={feature}>
+                          <CheckCircle2 className="elite-card__feat-icon" aria-hidden="true" strokeWidth={2.2} />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <a
+                      href={bookingUrl()}
+                      onClick={goBookNow}
+                      className="btn-cyber elite-card__cta"
+                    >
+                      <span>{t("services.viewDetails")}</span>
+                      <ChevronRight className="w-4 h-4" />
+                    </a>
                   </div>
-                  <h4>{t(`pkg.${service.pkg}.title`)}</h4>
-                  <p className="elite-more__price">
-                    {/call/i.test(service.pricing)
-                      ? t("services.callQuote")
-                      : `${t("services.startingAt")} ${service.pricing}`}
-                  </p>
-                  <p>{t(`pkg.${service.pkg}.desc`)}</p>
-                  <a href={bookingUrl()} onClick={goBookNow} className="btn-cyber btn-cyber-sm">
-                    <span>{t("services.book")}</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </a>
-                </div>
-              </div>
-            ))}
+                </article>
+              );
+            })}
           </div>
         </div>
 
