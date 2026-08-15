@@ -15,8 +15,10 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "nav.menu": "Toggle menu",
 
     "hero.badge": "Nixa Ozark Springfield, MO Premium Detailing",
-    "hero.title1": "Unleash Your",
-    "hero.title2": "Car's True Potential",
+    "hero.title1": "Unleash",
+    /* NBSP keeps "YOUR CAR'S" / "TRUE POTENTIAL" from wrapping mid-phrase */
+    "hero.title2": "Your Car's",
+    "hero.title3": "True Potential",
     "hero.subtitleLead": "Premium auto detailing, ceramic coating, and paint correction",
     "hero.subtitleRest": " services serving",
     "hero.subtitleEnd": ". We bring the showroom shine to your vehicle.",
@@ -40,11 +42,17 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
       " The price ranges listed below are standard for the majority of vehicles. The final cost will depend on the condition of your vehicle and any additional services you request. For a more accurate estimate, please contact us directly.",
     "services.startingAt": "Starting at",
     "services.book": "Book Now",
+    "services.viewDetails": "View Details",
+    "services.readyTitle": "Ready to give your car the care it deserves?",
+    "services.readySub": "Book your service today and experience the Apex difference.",
+    "services.moreTitle": "More Packages",
     "services.mostBooked": "Most Booked",
     "services.bestValue": "Best Value",
     "services.express": "Express",
+    "services.premiumProtection": "Premium Protection",
     "services.callQuote": "Call for Quote",
     "addons.optional": "Optional Services (Extra Charges Apply)",
+    "addons.customize": "Customize Your Detail",
 
     "how.kicker": "How It Works",
     "how.title": "Three Simple",
@@ -57,7 +65,8 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "how.3.desc": "Step into a like-new vehicle and enjoy long-lasting protection and shine.",
 
     "about.kicker": "About Us",
-    "about.title": "Welcome to",
+    "about.title": "Welcome to Apex",
+    "about.titleAccent": "Detailing",
     "about.p1":
       "Where passion, precision, and purpose come together to serve you with excellence. Serving the Nixa Ozark Springfield, MO areas, we specialize in high-quality car detailing that restores beauty, protects value, and reflects the pride you have in your vehicle.",
     "about.p2a": "Our dedication to quality and customer satisfaction has helped us become ",
@@ -74,11 +83,14 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
       '"Whatever you do, work at it with all your heart, as working for the Lord, not for men. Colossians 3:23 (NIV)"',
     "about.p4":
       "Apex Detailing was founded by Michail, who is known for his meticulous nature and commitment to perfection. What started as a personal passion for detailing has grown into a trusted service grounded in faith, excellence, and care.",
-    "about.p5":
-      "At Apex, we use only premium-grade chemicals and professional techniques to ensure every vehicle gets the attention it deserves — inside and out. Whether it's a deep interior clean, paint correction, or exterior protection, our goal is to go above and beyond your expectations.",
+    "about.p5a": "At Apex, we use only ",
+    "about.p5b": "premium-grade products",
+    "about.p5c":
+      " and professional techniques to ensure every vehicle gets the attention it deserves — inside and out. Whether it's a deep interior clean, paint correction, or exterior protection, our goal is to go above and beyond your expectations.",
     "about.p6": "Experience the Apex difference — where faith fuels our service and quality drives every detail.",
-    "about.meet": "Meet your detailer",
+    "about.meet": "Meet Your Detailer",
     "about.role": "Founder & Detailing Specialist",
+    "about.founderTag": "Precision • Care • Integrity",
     "about.rated": "5-Star Rated",
     "about.perk1.title": "Premium Products",
     "about.perk1.desc": "Professional-grade chemicals only",
@@ -86,7 +98,7 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "about.perk2.desc": "Peace of mind for your investment",
     "about.perk3.title": "Flexible Scheduling",
     "about.perk3.desc": "Book easily online anytime",
-    "about.perk4.title": "Expert Team",
+    "about.perk4.title": "Expert Technicians",
     "about.perk4.desc": "Certified professionals on staff",
 
     "faq.kicker": "FAQ",
@@ -96,16 +108,18 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "faq.paint": "Paint Correction",
     "faq.ceramic": "Ceramic Coating",
 
-    "cta.title1": "Ready to Experience",
-    "cta.title2": "The Apex Difference?",
-    "cta.sub": "Book your appointment today.",
-    "cta.important": "Important:",
-    "cta.note":
-      " All scheduling needs to be done prior to your visit. We appreciate your understanding and encourage you to book ahead to secure your preferred time.",
+    "cta.titleLead": "Experience the",
+    "cta.titleApex": "Apex",
+    "cta.titleEnd": "Difference?",
+    "cta.sub":
+      "Ready to transform your vehicle? Book your detail and experience the Apex difference.",
+    "cta.important": "Important",
+    "cta.noteLine1": "Appointments must be scheduled in advance.",
+    "cta.noteLine2": "Book ahead to secure your preferred date and time.",
     "cta.book": "BOOK APPOINTMENT NOW",
 
     "footer.blurb":
-      "Prestige vehicle detailing and ceramic coating services. Expert craftsmanship, exceptional results.",
+      "Premium vehicle detailing, paint correction, and ceramic coating in Nixa, Ozark & Springfield, MO.",
     "footer.links": "Quick Links",
     "footer.services": "Services",
     "footer.contact": "Contact",
@@ -131,6 +145,9 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "book.step.confirm": "Confirm",
     "book.choose": "Choose your service",
     "book.chooseSub": "Pick the package that fits your vehicle. You can always upgrade in person.",
+    "book.chooseSubMobile": "Tap a service to select it, then press Continue — or tap the card again.",
+    "book.selected": "Selected",
+    "book.tapAgain": "Tap again to continue",
     "book.loadingServices": "Loading services…",
     "book.loadFail": "Couldn't load services. Try again.",
     "book.questions": "Questions? Call",
@@ -187,6 +204,14 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "ba.kicker": "See the Difference",
     "ba.title": "Before & After",
     "ba.titleAccent": "Transformations",
+    "ba.before": "Before",
+    "ba.after": "After",
+    "ba.prev": "Previous",
+    "ba.next": "Next",
+    "ba.desc.interior": "Deep clean restored. Stains lifted. Cabin freshness renewed.",
+    "ba.desc.exterior": "Paint revived. Contaminants removed. Gloss brought back.",
+    "ba.desc.headlights": "Oxidation removed. Clarity restored. Nighttime visibility improved.",
+    "ba.desc.paint": "Swirls corrected. Depth restored. Mirror gloss revealed.",
     "testimonials.kicker": "Testimonials",
     "testimonials.title": "Client",
     "testimonials.titleAccent": "Reactions",
@@ -252,6 +277,8 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.full.title": "Apex Full Detailing",
     "pkg.full.desc":
       "The ultimate package! Includes interior and exterior detailed cleaning and protection. Get your vehicle looking showroom fresh inside and out. Add-ons available to customize your package.",
+    "pkg.full.cardDesc":
+      "The ultimate package! Includes interior and exterior detailing, paint protection, and professional results that make your vehicle look showroom fresh.",
     "pkg.full.price.0": "Coupe / Sedan: $300-$400",
     "pkg.full.price.1": "Truck / Jeep / 2-Row SUV: $350 – $450",
     "pkg.full.price.2": "Minivan / 3-Row SUV: $350 – $500",
@@ -264,8 +291,15 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.interior.title": "Apex Interior Detailing",
     "pkg.interior.desc":
       "Comprehensive interior cleaning that transforms every surface. From carpets to leather to air vents. Add-ons available to customize your package.",
+    "pkg.interior.cardDesc":
+      "Deep interior cleaning that transforms every surface. From carpets to leather to air vents. Add-ons available to customize your package.",
     "pkg.interior.price.0": "2-Row: $200 – $300",
     "pkg.interior.price.1": "3-Row: $250 – $350",
+    "pkg.interior.cardFeat.0": "Deep Cabin Cleaning",
+    "pkg.interior.cardFeat.1": "Stain Removal",
+    "pkg.interior.cardFeat.2": "Leather Care & Conditioning",
+    "pkg.interior.cardFeat.3": "Odor Elimination",
+    "pkg.interior.cardFeat.4": "Steam Sanitization",
     "pkg.interior.feat.0": "Air vents cleaned",
     "pkg.interior.feat.1": "Free air fresheners",
     "pkg.interior.feat.2": "Steam cleaning of center console and door panels",
@@ -283,10 +317,17 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.express.title": "Apex Express Interior Detailing",
     "pkg.express.desc":
       "A fast, high-quality interior refresh designed to keep your vehicle clean, fresh, and presentable—without the time commitment of a full detail. This service includes a thorough vacuum, wipe-down of all interior surfaces, floor mats cleaned, interior glass polished, and a light refresh of high-touch areas. Perfect for well-maintained vehicles or as a maintenance service between full details.",
+    "pkg.express.cardDesc":
+      "A fast, high-quality interior refresh designed to keep your vehicle clean, fresh, and presentable — perfect for busy lifestyles.",
     "pkg.express.warn":
       "This service is intended only to maintain a semi-clean vehicle. Heavily soiled interiors, stains, excessive pet hair, or deep cleaning needs may require a Full Interior Detail. Final service type will be confirmed upon inspection.",
     "pkg.express.price.0": "2-Row: $100–$150",
     "pkg.express.price.1": "3-Row: $150–$200",
+    "pkg.express.cardFeat.0": "Vacuum Interior",
+    "pkg.express.cardFeat.1": "Wipe Down Surfaces",
+    "pkg.express.cardFeat.2": "Clean Floor Mats",
+    "pkg.express.cardFeat.3": "Interior Glass Polished",
+    "pkg.express.cardFeat.4": "Light Touch Refresh",
     "pkg.express.feat.0": "Thorough Vacuum",
     "pkg.express.feat.1": "Interior Surfaces Wiped Down",
     "pkg.express.feat.2": "Floor Mats Cleaned",
@@ -323,11 +364,15 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.headlight.feat.2": "UV Protection Applied",
 
     "pkg.ceramic.title": "Apex Ceramic Coating",
+    "pkg.ceramic.cardDesc":
+      "Long-lasting ceramic protection that enhances gloss, repels water, and helps protect your vehicle’s paint from environmental contaminants.",
     "pkg.ceramic.desc":
-      "Ultimate protection and extreme gloss for your vehicle's paint. Lasts for years, making maintenance washes a breeze.",
-    "pkg.ceramic.feat.0": "Up to 5 Years Protection",
-    "pkg.ceramic.feat.1": "Extreme Hydrophobics",
-    "pkg.ceramic.feat.2": "Scratch Resistance",
+      "Long-lasting ceramic protection that enhances gloss, repels water, and helps protect your vehicle’s paint from environmental contaminants.",
+    "pkg.ceramic.feat.0": "Professional Paint Decontamination",
+    "pkg.ceramic.feat.1": "9H Ceramic Coating Application",
+    "pkg.ceramic.feat.2": "Hydrophobic Protection",
+    "pkg.ceramic.feat.3": "UV & Chemical Resistance",
+    "pkg.ceramic.feat.4": "Long-Lasting Gloss & Durability",
 
     "pkg.paint.title": "Apex Paint Correction",
     "pkg.paint.desc":
@@ -396,7 +441,8 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
 
     "hero.badge": "Никса · Озарк · Спрингфилд, Миссури — премиум детейлинг",
     "hero.title1": "Раскройте",
-    "hero.title2": "настоящий потенциал авто",
+    "hero.title2": "настоящий",
+    "hero.title3": "потенциал авто",
     "hero.subtitleLead": "Премиум детейлинг, керамическое покрытие и коррекция ЛКП",
     "hero.subtitleRest": " для",
     "hero.subtitleEnd": ". Мы возвращаем автомобилю салонный блеск.",
@@ -420,11 +466,17 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
       " Указанные диапазоны — ориентир для большинства авто. Итог зависит от состояния машины и доп. услуг. Для точной оценки свяжитесь с нами.",
     "services.startingAt": "От",
     "services.book": "Записаться",
+    "services.viewDetails": "Подробнее",
+    "services.readyTitle": "Готовы дать авто уход, которого оно заслуживает?",
+    "services.readySub": "Запишитесь сегодня и почувствуйте разницу Apex.",
+    "services.moreTitle": "Другие пакеты",
     "services.mostBooked": "Чаще всего",
     "services.bestValue": "Выгода",
     "services.express": "Экспресс",
+    "services.premiumProtection": "Премиум-защита",
     "services.callQuote": "Цена по запросу",
     "addons.optional": "Дополнительно (за отдельную плату)",
+    "addons.customize": "Настройте свой детейлинг",
 
     "how.kicker": "Как это работает",
     "how.title": "Три простых",
@@ -437,7 +489,8 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "how.3.desc": "Садитесь в как новую машину — блеск и защита надолго.",
 
     "about.kicker": "О нас",
-    "about.title": "Добро пожаловать в",
+    "about.title": "Добро пожаловать в Apex",
+    "about.titleAccent": "Детейлинг",
     "about.p1":
       "Страсть, точность и смысл — чтобы служить вам с высоким качеством. Мы работаем в Никсе, Озарке и Спрингфилде и возвращаем красоту авто, защищаем его ценность и гордость владельца.",
     "about.p2a": "Благодаря качеству и заботе о клиентах мы стали ",
@@ -454,11 +507,14 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
       "«И всё, что вы делаете, делайте от души, как для Господа, а не для человеков. Колоссянам 3:23»",
     "about.p4":
       "Apex Detailing основал Михаил — известный вниманием к деталям и стремлением к идеалу. Личное увлечение выросло в доверенный сервис на вере, качестве и заботе.",
-    "about.p5":
-      "Мы используем премиальную химию и профессиональные методы — салон, коррекция ЛКП, защита кузова. Цель — превзойти ожидания.",
+    "about.p5a": "Мы используем только ",
+    "about.p5b": "премиум-продукты",
+    "about.p5c":
+      " и профессиональные методы — салон, коррекция ЛКП, защита кузова. Цель — превзойти ожидания.",
     "about.p6": "Почувствуйте разницу Apex — вера питает сервис, качество ведёт каждую деталь.",
     "about.meet": "Ваш детейлер",
     "about.role": "Основатель и специалист",
+    "about.founderTag": "Точность • Забота • Честность",
     "about.rated": "Оценка 5 звёзд",
     "about.perk1.title": "Премиум-химия",
     "about.perk1.desc": "Только профессиональные составы",
@@ -466,7 +522,7 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "about.perk2.desc": "Спокойствие за ваш автомобиль",
     "about.perk3.title": "Удобная запись",
     "about.perk3.desc": "Онлайн в любое время",
-    "about.perk4.title": "Опыт",
+    "about.perk4.title": "Опытные мастера",
     "about.perk4.desc": "Сертифицированные специалисты",
 
     "faq.kicker": "FAQ",
@@ -476,16 +532,18 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "faq.paint": "Коррекция ЛКП",
     "faq.ceramic": "Керамика",
 
-    "cta.title1": "Готовы увидеть",
-    "cta.title2": "разницу Apex?",
-    "cta.sub": "Запишитесь сегодня.",
-    "cta.important": "Важно:",
-    "cta.note":
-      " Запись нужна до визита. Бронируйте заранее, чтобы закрепить удобное время.",
+    "cta.titleLead": "Ощутите",
+    "cta.titleApex": "Apex",
+    "cta.titleEnd": "на себе?",
+    "cta.sub":
+      "Готовы преобразить авто? Запишитесь на детейлинг и почувствуйте разницу Apex.",
+    "cta.important": "Важно",
+    "cta.noteLine1": "Запись нужна заранее.",
+    "cta.noteLine2": "Бронируйте заранее, чтобы закрепить удобную дату и время.",
     "cta.book": "ЗАПИСАТЬСЯ СЕЙЧАС",
 
     "footer.blurb":
-      "Премиум детейлинг и керамика. Мастерство и результат.",
+      "Премиум детейлинг, коррекция ЛКП и керамика в Никсе, Озарке и Спрингфилде, MO.",
     "footer.links": "Навигация",
     "footer.services": "Услуги",
     "footer.contact": "Контакты",
@@ -511,6 +569,9 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "book.step.confirm": "Подтверждение",
     "book.choose": "Выберите услугу",
     "book.chooseSub": "Подберите пакет под ваш автомобиль. На месте можно усилить услугу.",
+    "book.chooseSubMobile": "Нажмите услугу, чтобы выбрать, затем «Далее» — или нажмите карточку ещё раз.",
+    "book.selected": "Выбрано",
+    "book.tapAgain": "Нажмите ещё раз",
     "book.loadingServices": "Загружаем услуги…",
     "book.loadFail": "Не удалось загрузить услуги. Попробуйте снова.",
     "book.questions": "Вопросы? Звоните",
@@ -567,6 +628,14 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "ba.kicker": "Разница наглядно",
     "ba.title": "До и после",
     "ba.titleAccent": "преображение",
+    "ba.before": "До",
+    "ba.after": "После",
+    "ba.prev": "Назад",
+    "ba.next": "Далее",
+    "ba.desc.interior": "Глубокая чистка. Пятна убраны. Салон снова свежий.",
+    "ba.desc.exterior": "ЛКП оживлено. Загрязнения сняты. Блеск возвращён.",
+    "ba.desc.headlights": "Окисление снято. Прозрачность восстановлена. Видимость ночью лучше.",
+    "ba.desc.paint": "Голограммы убраны. Глубина цвета. Зеркальный блеск.",
     "testimonials.kicker": "Отзывы",
     "testimonials.title": "Реакция",
     "testimonials.titleAccent": "клиентов",
@@ -632,6 +701,8 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.full.title": "Полный детейлинг Apex",
     "pkg.full.desc":
       "Максимальный пакет: чистка и защита салона и кузова. Авто как из салона — внутри и снаружи. Можно добавить опции.",
+    "pkg.full.cardDesc":
+      "Максимальный пакет: детейлинг кузова и салона, защита ЛКП и результат уровня шоурума.",
     "pkg.full.price.0": "Купе / седан: $300–$400",
     "pkg.full.price.1": "Пикап / Jeep / 2 ряда: $350 – $450",
     "pkg.full.price.2": "Минивэн / 3 ряда: $350 – $500",
@@ -644,8 +715,15 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.interior.title": "Детейлинг салона Apex",
     "pkg.interior.desc":
       "Полная чистка салона: ковры, кожа, дефлекторы. Можно добавить опции.",
+    "pkg.interior.cardDesc":
+      "Глубокая чистка салона — от ковров и кожи до дефлекторов. Можно добавить опции под ваш пакет.",
     "pkg.interior.price.0": "2 ряда: $200 – $300",
     "pkg.interior.price.1": "3 ряда: $250 – $350",
+    "pkg.interior.cardFeat.0": "Глубокая чистка салона",
+    "pkg.interior.cardFeat.1": "Удаление пятен",
+    "pkg.interior.cardFeat.2": "Уход за кожей",
+    "pkg.interior.cardFeat.3": "Устранение запахов",
+    "pkg.interior.cardFeat.4": "Паровая санация",
     "pkg.interior.feat.0": "Чистка дефлекторов",
     "pkg.interior.feat.1": "Бесплатный освежитель",
     "pkg.interior.feat.2": "Паровая чистка консоли и дверных карт",
@@ -662,11 +740,18 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
 
     "pkg.express.title": "Экспресс-салон Apex",
     "pkg.express.desc":
-      "Быстрое качественное освежение салона — без полного детейлинга. Пылесос, протирка поверхностей, коврики, стёкла внутри и лёгкое обновление зон частого касания. Для ухоженных авто или как поддержка между полными услугами.",
+      "Быстрое освежение салона: пылесос, протирка, коврики, стёкла и зоны частого касания. Для ухоженных авто или между полными детейлингами.",
+    "pkg.express.cardDesc":
+      "Быстрое качественное освежение салона — чисто, свежо и презентабельно, идеально для занятого ритма.",
     "pkg.express.warn":
-      "Только для относительно чистого салона. Сильные загрязнения, пятна, шерсть или глубокая чистка — нужен полный детейлинг салона. Итог подтверждаем после осмотра.",
+      "Услуга для поддержания относительно чистого салона. Сильные загрязнения, пятна, шерсть животных или глубокая чистка требуют полного детейлинга салона. Итоговый тип услуги подтверждаем после осмотра.",
     "pkg.express.price.0": "2 ряда: $100–$150",
     "pkg.express.price.1": "3 ряда: $150–$200",
+    "pkg.express.cardFeat.0": "Пылесос салона",
+    "pkg.express.cardFeat.1": "Протирка поверхностей",
+    "pkg.express.cardFeat.2": "Чистка ковриков",
+    "pkg.express.cardFeat.3": "Полировка стёкол внутри",
+    "pkg.express.cardFeat.4": "Лёгкое освежение",
     "pkg.express.feat.0": "Тщательный пылесос",
     "pkg.express.feat.1": "Протирка поверхностей салона",
     "pkg.express.feat.2": "Чистка ковриков",
@@ -703,11 +788,15 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.headlight.feat.2": "УФ-защита",
 
     "pkg.ceramic.title": "Керамика Apex",
+    "pkg.ceramic.cardDesc":
+      "Долговечная керамическая защита: усиливает блеск, отталкивает воду и помогает защитить ЛКП от внешних загрязнений.",
     "pkg.ceramic.desc":
-      "Максимальная защита и глубокий блеск ЛКП. Держится годы — мойка становится проще.",
-    "pkg.ceramic.feat.0": "Защита до 5 лет",
-    "pkg.ceramic.feat.1": "Сильный гидрофоб",
-    "pkg.ceramic.feat.2": "Стойкость к царапинам",
+      "Долговечная керамическая защита: усиливает блеск, отталкивает воду и помогает защитить ЛКП от внешних загрязнений.",
+    "pkg.ceramic.feat.0": "Профессиональная деконтаминация ЛКП",
+    "pkg.ceramic.feat.1": "Нанесение керамики 9H",
+    "pkg.ceramic.feat.2": "Гидрофобная защита",
+    "pkg.ceramic.feat.3": "Устойчивость к УФ и химии",
+    "pkg.ceramic.feat.4": "Долговечный блеск и стойкость",
 
     "pkg.paint.title": "Коррекция ЛКП Apex",
     "pkg.paint.desc":
