@@ -239,7 +239,7 @@
       }
       #app-loading .logo-loader.is-ready {
         opacity: 1;
-        animation: logo-blink 1.4s ease-in-out infinite;
+        animation: logo-blink 1.85s ease-in-out infinite;
       }
       /* Full-page bubble field */
       #app-loading .loader-field {
@@ -321,7 +321,7 @@
         }
         #app-loading .logo-loader.is-ready {
           filter: drop-shadow(0 0 10px rgba(255, 26, 216, 0.5));
-          animation-duration: 1.6s;
+          animation-duration: 2s;
         }
         #app-loading .loader-bubble {
           border-width: 1px;
@@ -439,30 +439,43 @@
           field.appendChild(frag);
         }
 
-        // Keep splash until the logo has played and React has painted.
-        // Do not wait on Google Fonts or hero photos — those stall phones.
+        // Cover the real phone wait (~6s) with the logo, then lift once the tunnel is in.
         var splash = document.getElementById("app-loading");
         var logo = document.getElementById("splash-logo");
         var logoReady = false;
         var appReady = false;
+        var heroReady = false;
         var minTimeDone = false;
         var dismissed = false;
         var mobile = window.matchMedia("(max-width: 640px)").matches;
-        var minHoldMs = mobile ? 2200 : 1600;
+        var minHoldMs = mobile ? 6200 : 2200;
 
         document.documentElement.classList.add("is-booting");
 
         function dismiss() {
           if (dismissed || !splash) return;
-          if (!logoReady || !appReady || !minTimeDone) return;
+          if (!logoReady || !appReady || !heroReady || !minTimeDone) return;
           dismissed = true;
           document.documentElement.classList.remove("is-booting");
           splash.classList.add("is-done");
           splash.setAttribute("aria-busy", "false");
           window.setTimeout(function () {
             if (splash && splash.parentNode) splash.parentNode.removeChild(splash);
-          }, 480);
+          }, 520);
         }
+
+        (function warmHero() {
+          var hero = new Image();
+          hero.decoding = "async";
+          function done() {
+            heroReady = true;
+            dismiss();
+          }
+          hero.onload = done;
+          hero.onerror = done;
+          hero.src = "/images/hero-tunnel-scene.sm.webp";
+          if (hero.complete && hero.naturalWidth > 0) done();
+        })();
 
         function markLogoReady() {
           logoReady = true;
@@ -489,10 +502,11 @@
         window.setTimeout(function () {
           logoReady = true;
           appReady = true;
+          heroReady = true;
           minTimeDone = true;
           if (logo) logo.classList.add("is-ready");
           dismiss();
-        }, 7000);
+        }, 8500);
 
         window.__APEX_MARK_APP_READY__ = function () {
           appReady = true;
