@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
-import { useReducedMotion } from "framer-motion";
+import { type ReactNode } from "react";
 import {
   AppWindow,
   Calendar,
@@ -219,31 +218,11 @@ export default function EliteServicesSection({
   addons?: ReactNode;
 }) {
   const { t, list } = useLanguage();
-  const reduce = !!useReducedMotion();
-  const rootRef = useRef<HTMLElement>(null);
-  const [visible, setVisible] = useState(reduce);
-
-  useEffect(() => {
-    if (reduce) return;
-    const el = rootRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
-          setVisible(true);
-          io.disconnect();
-        }
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, [reduce]);
-
-  const anim = reduce || visible ? " is-animated" : "";
+  /* Always animated — IO + opacity:0 left services blank on some mobile browsers. */
+  const anim = " is-animated";
 
   return (
-    <section id="services" ref={rootRef} className="elite-services apex-cv">
+    <section id="services" className="elite-services">
       <div className="elite-services__atmosphere" aria-hidden="true">
         <span className="elite-services__glow elite-services__glow--pink" />
         <span className="elite-services__glow elite-services__glow--blue" />

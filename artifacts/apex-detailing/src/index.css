@@ -101,12 +101,12 @@
   .apex-page {
     overflow-x: clip;
   }
+  /*
+   * Do not use content-visibility here. Safari/iOS often leaves those
+   * sections unpainted while the fixed nav still shows (blank page body).
+   */
   a, button {
     touch-action: manipulation;
-  }
-  .apex-cv {
-    content-visibility: auto;
-    contain-intrinsic-size: 1px 720px;
   }
 
   @media (max-width: 1023px) {
@@ -2605,12 +2605,14 @@
       max-height: 45vh;
       order: 1;
       overflow: hidden;
+      /* Avoid container-type:size + cqh — can resolve to 0 on some WebKit phones. */
+      container-type: normal;
     }
 
     /* Zoom the plate so outer hex frames bleed off the sides; car stays centered. */
     .apex-hero-plate {
-      width: calc(100cqh * 1536 / 1024 * 1.88);
-      height: calc(100cqh * 1.88);
+      width: calc(100% * 1.88 * 1536 / 1024);
+      height: 188%;
       left: 50%;
       top: 56%;
       transform: translate(-50%, -50%);

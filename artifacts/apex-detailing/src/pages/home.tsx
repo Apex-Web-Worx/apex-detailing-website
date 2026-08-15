@@ -222,7 +222,7 @@ export default function Home() {
   const [isDraggingSlider, setIsDraggingSlider] = useState(false);
   const [currentSliderIndex, setCurrentSliderIndex] = useState(0);
   const [sliderFading, setSliderFading] = useState(false);
-  const [baVisible, setBaVisible] = useState(false);
+  const [baVisible, setBaVisible] = useState(true);
   const [paintCorrectionPreviewIndex, setPaintCorrectionPreviewIndex] = useState(0);
   const [openFaq, setOpenFaq] = useState<string | null>(null);
   const [activeFaqCategory, setActiveFaqCategory] = useState<"General" | "Paint Correction">("General");
@@ -481,7 +481,7 @@ export default function Home() {
     return () => clearInterval(timer);
   }, [aboutImages.length]);
 
-  // Before/After section enter animation only — slider stays user-controlled
+  // Before/After enter animation — start visible so mobile never stays opacity:0
   useEffect(() => {
     const el = document.getElementById("before-after");
     if (!el) return;
@@ -497,10 +497,14 @@ export default function Home() {
           io.disconnect();
         }
       },
-      { threshold: 0.14, rootMargin: "0px 0px -6% 0px" },
+      { threshold: 0.05, rootMargin: "80px 0px 80px 0px" },
     );
     io.observe(el);
-    return () => io.disconnect();
+    const fallback = window.setTimeout(() => setBaVisible(true), 600);
+    return () => {
+      io.disconnect();
+      window.clearTimeout(fallback);
+    };
   }, []);
 
   // Auto-rotate gallery images when lightbox is open
