@@ -1649,18 +1649,22 @@
   }
 
   @media (min-width: 1024px) {
+    /* Full-bleed shell so wide screens can use more left-column room for the title. */
+    .apex-hero-shell {
+      max-width: none;
+    }
+
     .apex-hero-copy {
-      /* Stay inside the left black column (stage starts at 46vw). */
-      max-width: min(560px, calc(46vw - 5rem));
+      max-width: 560px;
     }
 
     .apex-hero-title {
-      width: 100%;
-      max-width: 100%;
-      /* Michroma + TRUE POTENTIAL must stay left of the tunnel at 1280–1920. */
-      font-size: 40px;
-      line-height: 0.92;
-      letter-spacing: -0.03em;
+      width: max-content;
+      max-width: calc(46vw - 4.5rem);
+      /* Keep UNLEASH / YOUR CAR'S / TRUE POTENTIAL — size up without entering the tunnel. */
+      font-size: clamp(46px, 3.15vw, 52px);
+      line-height: 0.9;
+      letter-spacing: -0.045em;
       text-wrap: unset;
       overflow: visible;
     }
@@ -1671,7 +1675,8 @@
 
     .apex-hero-title-desktop {
       display: block;
-      width: 100%;
+      width: max-content;
+      max-width: 100%;
     }
 
     .apex-hero-title-line {
@@ -1679,6 +1684,24 @@
       width: max-content;
       max-width: none;
       white-space: nowrap;
+    }
+
+    @media (min-width: 1440px) {
+      .apex-hero-title {
+        font-size: clamp(52px, 3.4vw, 58px);
+      }
+    }
+
+    @media (min-width: 1600px) {
+      .apex-hero-title {
+        font-size: clamp(56px, 3.5vw, 66px);
+      }
+    }
+
+    @media (min-width: 1920px) {
+      .apex-hero-title {
+        font-size: clamp(68px, 3.55vw, 82px);
+      }
     }
   }
 }
