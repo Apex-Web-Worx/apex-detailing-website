@@ -22,25 +22,24 @@ export default function HeldAppointmentRow({
     <button
       type="button"
       onClick={() => void startHold(hold.id)}
-      className="h-11 px-3 rounded-xl bg-[#FF2AD4] text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 hover:bg-[#ff4adc] touch-manipulation whitespace-nowrap shrink-0"
+      className="h-11 px-3 rounded-xl bg-[#FF2AD4] text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 hover:bg-[#ff4adc] touch-manipulation whitespace-nowrap w-full md:w-auto"
     >
       <Play className="w-3.5 h-3.5" /> Start detailing
     </button>
   ) : null;
 
-  const icons = (
-    <div className="flex flex-row items-center gap-1.5 shrink-0 ml-auto">
-      {startButton}
+  const sideIcons = (
+    <>
       {hold.phone ? (
         <a
           href={`tel:${hold.phone}`}
-          className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-[#23B9FF] hover:bg-white/5 touch-manipulation"
+          className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-[#23B9FF] hover:bg-white/5 touch-manipulation shrink-0"
           aria-label={`Call ${name}`}
         >
           <Phone className="w-4 h-4" />
         </a>
       ) : null}
-      <div className="relative">
+      <div className="relative shrink-0">
         <button
           type="button"
           onClick={() => setMenu((v) => !v)}
@@ -76,32 +75,33 @@ export default function HeldAppointmentRow({
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 
   return (
     <div className="rounded-2xl border border-white/10 bg-[#111111] px-3 py-3 md:px-4 hover:bg-[#161616] transition duration-200">
-      <div className="md:hidden">
-        <div className="flex items-start gap-3">
+      <div className="md:hidden space-y-3">
+        <div className="flex items-start gap-2">
           <button
             type="button"
             onClick={() => openEditBlockedDate(hold)}
-            className="flex-1 min-w-0 text-left touch-manipulation"
+            className="min-w-0 flex-1 text-left touch-manipulation"
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="text-sm font-bold text-white shrink-0">All day</span>
               <StatusBadge status={status} />
             </div>
-            <p className="mt-0.5 font-semibold text-white leading-snug">{holdServiceLabel(hold)}</p>
-            <p className="mt-0.5 text-sm text-[#9CA3AF] truncate">
+            <p className="mt-1 font-semibold text-white leading-snug break-words">{holdServiceLabel(hold)}</p>
+            <p className="mt-0.5 text-sm text-[#9CA3AF] leading-snug break-words">
               {[name, vehicle].filter(Boolean).join(" · ")}
             </p>
             <p className="mt-0.5 text-xs text-[#9CA3AF]">
               {formatDateShort(hold.date)} · All day
             </p>
           </button>
-          {icons}
+          <div className="flex shrink-0 items-start gap-1.5">{sideIcons}</div>
         </div>
+        {startButton ? <div className="w-full">{startButton}</div> : null}
       </div>
 
       <div className="hidden md:flex md:items-center md:gap-3">
@@ -126,7 +126,10 @@ export default function HeldAppointmentRow({
             </p>
           </div>
         </button>
-        {icons}
+        <div className="flex flex-row items-center gap-1.5 shrink-0 ml-auto">
+          {startButton}
+          {sideIcons}
+        </div>
       </div>
     </div>
   );

@@ -17,12 +17,16 @@ export function AdminSelect({
   onChange,
   options,
   className,
+  compact = false,
+  menuAlign = "left",
   "aria-label": ariaLabel,
 }: {
   value: string;
   onChange: (value: string) => void;
   options: AdminSelectOption[];
   className?: string;
+  compact?: boolean;
+  menuAlign?: "left" | "right";
   "aria-label"?: string;
 }) {
   const [open, setOpen] = useState(false);
@@ -53,7 +57,11 @@ export function AdminSelect({
         aria-expanded={open}
         aria-haspopup="listbox"
         onClick={() => setOpen((current) => !current)}
-        className={cn(fieldClass, "flex items-center justify-between gap-2 text-left")}
+        className={cn(
+          fieldClass,
+          "flex items-center justify-between gap-2 text-left",
+          compact && "h-10 py-0 text-sm",
+        )}
       >
         <span className="truncate">{selected?.label ?? ""}</span>
         <ChevronDown
@@ -66,7 +74,11 @@ export function AdminSelect({
       {open && (
         <ul
           role="listbox"
-          className="absolute z-40 mt-1 w-full max-h-60 overflow-y-auto rounded-xl border border-white/10 bg-[#111111] py-1 shadow-[0_16px_40px_rgba(0,0,0,0.65)]"
+          className={cn(
+            "absolute z-40 mt-1 max-h-60 min-w-full overflow-y-auto rounded-xl border border-white/10 bg-[#111111] py-1 shadow-[0_16px_40px_rgba(0,0,0,0.65)]",
+            compact && "w-max max-w-[min(18rem,calc(100vw-1.5rem))]",
+            menuAlign === "right" ? "right-0" : "left-0",
+          )}
         >
           {options.map((option) => {
             const isActive = option.value === value;
