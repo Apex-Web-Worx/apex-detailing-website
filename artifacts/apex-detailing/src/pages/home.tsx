@@ -9,11 +9,11 @@ import {
   Car,
   Sparkles,
   Droplets,
+  Info,
   Instagram,
   Facebook,
   MapPin,
   Phone,
-  Mail,
   CheckCircle2,
   ChevronsLeftRight,
   Clock,
@@ -1072,7 +1072,7 @@ export default function Home() {
                   src={beforeAfterPairs[currentSliderIndex].before}
                   alt="Before"
                   className="apex-ba__img apex-ba__img--before"
-                  style={{ width: `${100 / (sliderPosition / 100)}%` }}
+                  style={{ width: `${100 / (Math.max(sliderPosition, 0.01) / 100)}%` }}
                   loading="lazy"
                   decoding="async"
                 />
@@ -1623,28 +1623,35 @@ export default function Home() {
       <HeroDip />
 
       {/* CTA Section */}
-      <section id="cta" className="py-24 relative bg-[#050505] section-pink-wash apex-cv">
+      <section id="cta" className="apex-cta relative bg-[#050505] section-pink-wash apex-cv">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative rounded-3xl overflow-hidden bg-[#111] border border-white/10 p-10 md:p-20 text-center">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-full bg-gradient-to-b from-[#FF1AD8]/20 to-[#00E5FF]/20 blur-3xl" />
+          <div className="apex-cta__panel">
+            <div className="apex-cta__glow" aria-hidden="true" />
 
-            <div className="relative z-10 max-w-3xl mx-auto">
-              <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tight mb-6 font-display">
-                {t("cta.title1")} <br />
-                {t("cta.title2")}
+            <div className="apex-cta__inner">
+              <h2 className="apex-cta__title font-display">
+                <span className="apex-cta__title-line">
+                  {t("cta.titleLead")}{" "}
+                  <span className="apex-cta__title-apex">{t("cta.titleApex")}</span>
+                </span>
+                <span className="apex-cta__title-line">{t("cta.titleEnd")}</span>
               </h2>
-              <p className="text-xl text-gray-400 mb-10 font-medium">
-                {t("cta.sub")}
-              </p>
-              <div className="mb-8 p-6 rounded-xl bg-white/5 border border-[#00E5FF]/30 backdrop-blur-sm max-w-2xl">
-                <p className="text-gray-300 text-sm leading-relaxed">
-                  <span className="font-black text-potential">{t("cta.important")}</span>{t("cta.note")}
-                </p>
-              </div>
+
+              <p className="apex-cta__sub">{t("cta.sub")}</p>
+
+              <aside className="apex-cta__notice" aria-label={t("cta.important")}>
+                <Info className="apex-cta__notice-icon" aria-hidden="true" strokeWidth={2.2} />
+                <div className="apex-cta__notice-copy">
+                  <p className="apex-cta__notice-label">{t("cta.important")}</p>
+                  <p className="apex-cta__notice-text">{t("cta.noteLine1")}</p>
+                  <p className="apex-cta__notice-text">{t("cta.noteLine2")}</p>
+                </div>
+              </aside>
+
               <a
                 href={bookingUrl()}
                 onClick={goBookNow}
-                className="btn-cyber btn-cyber-xl group"
+                className="btn-cyber btn-cyber-xl apex-cta__btn group"
               >
                 <span>{t("cta.book")}</span>
                 <ChevronRight className="w-6 h-6" />
@@ -1656,11 +1663,11 @@ export default function Home() {
       <HeroDip />
 
       {/* Footer */}
-      <footer id="contact" className="relative bg-[#050505] pt-20 pb-10 apex-cv">
+      <footer id="contact" className="apex-footer relative bg-[#050505] apex-cv">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12 sm:mb-16">
-            <div className="col-span-1 md:col-span-2 lg:col-span-1">
-              <div className="flex items-center mb-6">
+          <div className="apex-footer__grid">
+            <div className="apex-footer__brand">
+              <div className="apex-footer__logo">
                 <BrandLogo
                   variant="footer"
                   className="relative z-10 h-20 w-auto max-w-[10rem] object-contain opacity-100"
@@ -1669,15 +1676,13 @@ export default function Home() {
                   }}
                 />
               </div>
-              <p className="text-gray-400 mb-6 font-medium">
-                {t("footer.blurb")}
-              </p>
-              <div className="flex gap-4">
+              <p className="apex-footer__blurb">{t("footer.blurb")}</p>
+              <div className="apex-footer__social">
                 <a
                   href={INSTAGRAM_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-gradient-to-tr hover:from-[#FF1AD8] hover:to-[#00E5FF] transition-all"
+                  className="apex-footer__social-btn"
                   aria-label="Instagram"
                 >
                   <Instagram className="w-5 h-5" />
@@ -1686,7 +1691,7 @@ export default function Home() {
                   href={FACEBOOK_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#00E5FF] transition-all"
+                  className="apex-footer__social-btn"
                   aria-label="Facebook"
                 >
                   <Facebook className="w-5 h-5" />
@@ -1695,7 +1700,7 @@ export default function Home() {
                   href={GOOGLE_REVIEWS_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#EA4335] transition-all"
+                  className="apex-footer__social-btn"
                   aria-label="Google Reviews"
                 >
                   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -1708,9 +1713,9 @@ export default function Home() {
               </div>
             </div>
 
-            <div>
-              <h4 className="font-black text-lg uppercase tracking-wider mb-6">{t("footer.links")}</h4>
-              <ul className="space-y-3 font-medium text-gray-400">
+            <div className="apex-footer__col">
+              <h4 className="apex-footer__heading">{t("footer.links")}</h4>
+              <ul className="apex-footer__list">
                 {NAV_ITEMS.map((item) => {
                   const href =
                     item.kind === "path"
@@ -1725,9 +1730,9 @@ export default function Home() {
                           e.preventDefault();
                           scrollToSection(item.id);
                         }}
-                        className="hover:text-white hover:translate-x-1 transition-all flex items-center gap-2"
+                        className="apex-footer__link"
                       >
-                        <ChevronRight className="w-3 h-3 text-[#00E5FF]" /> {t(`nav.${item.id}`)}
+                        <ChevronRight className="w-3 h-3 apex-footer__chevron" /> {t(`nav.${item.id}`)}
                       </a>
                     </li>
                   );
@@ -1735,102 +1740,64 @@ export default function Home() {
               </ul>
             </div>
 
-            <div>
-              <h4 className="font-black text-lg uppercase tracking-wider mb-6">{t("footer.services")}</h4>
-              <ul className="space-y-3 font-medium text-gray-400">
+            <div className="apex-footer__col">
+              <h4 className="apex-footer__heading">{t("footer.services")}</h4>
+              <ul className="apex-footer__list">
                 {services.map((service) => (
-                  <li
-                    key={service.id}
-                    className="hover:text-white transition-colors cursor-pointer flex items-center gap-2"
-                  >
-                    <ChevronRight className="w-3 h-3 text-[#FF1AD8]" /> {t(`pkg.${service.pkg}.title`)}
+                  <li key={service.id}>
+                    <a href={bookingUrl()} onClick={goBookNow} className="apex-footer__link">
+                      <ChevronRight className="w-3 h-3 apex-footer__chevron apex-footer__chevron--pink" />{" "}
+                      {t(`pkg.${service.pkg}.title`)}
+                    </a>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div>
-              <h4 className="font-black text-lg uppercase tracking-wider mb-6">{t("footer.contact")}</h4>
-              <ul className="space-y-4 text-gray-400">
-                <li className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-[#00E5FF] shrink-0 mt-0.5" />
+            <div className="apex-footer__col apex-footer__col--contact">
+              <h4 className="apex-footer__heading">{t("footer.contact")}</h4>
+              <ul className="apex-footer__contact">
+                <li className="apex-footer__contact-row">
+                  <MapPin className="apex-footer__contact-icon apex-footer__contact-icon--cyan" />
                   <a
                     href="https://www.google.com/maps/search/1114+E+Lakota+St,+65714+Nixa,+MO"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hidden md:block hover:text-[#00E5FF] transition-colors cursor-pointer text-left"
+                    className="hidden md:block apex-footer__contact-text"
                   >
                     <span>Located in the Nixa<br />1114 E Lakota St, 65714</span>
                   </a>
                   <button
                     onClick={openMapChooser}
-                    className="md:hidden hover:text-[#00E5FF] transition-colors cursor-pointer text-left"
+                    className="md:hidden apex-footer__contact-text text-left"
                   >
                     <span>Located in the Nixa<br />1114 E Lakota St, 65714</span>
                   </button>
                 </li>
-                <li className="flex items-center gap-3 hover:text-white transition-colors cursor-pointer">
-                  <Phone className="w-5 h-5 text-[#FF1AD8]" />
-                  <a href="tel:417-527-6165" className="hover:text-[#00E5FF] transition-colors">417-527-6165</a>
+                <li className="apex-footer__contact-row">
+                  <Phone className="apex-footer__contact-icon apex-footer__contact-icon--pink" />
+                  <a href="tel:417-527-6165" className="apex-footer__phone">
+                    417-527-6165
+                  </a>
                 </li>
-                <li className="flex items-start gap-3">
-                  <Clock className="w-5 h-5 text-[#FF1AD8] shrink-0 mt-0.5" />
-                  <div className="text-sm">
-                    <p className="text-white font-bold">{t("footer.monSat")}</p>
-                    <p className="text-gray-400">{t("footer.hoursTime")}</p>
-                    <p className="text-gray-500 mt-1">{t("footer.closedSun")}</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3 group cursor-pointer">
-                  <Mail className="w-5 h-5 text-[#00E5FF] shrink-0 mt-0.5" />
-                  <div className="flex flex-col">
-                    <span className="md:group-hover:hidden block md:block">{t("footer.social")}</span>
-                    <div className="flex md:hidden group-hover:flex gap-3 pt-2">
-                      <a
-                        href={INSTAGRAM_LINK}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-white/10 hover:bg-gradient-to-r hover:from-[#FF1AD8] hover:to-[#00E5FF] transition-all transform hover:scale-110"
-                        title="Instagram"
-                      >
-                        <Instagram className="w-5 h-5 text-white" />
-                      </a>
-                      <a
-                        href={FACEBOOK_LINK}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-white/10 hover:bg-gradient-to-r hover:from-[#FF1AD8] hover:to-[#00E5FF] transition-all transform hover:scale-110"
-                        title="Facebook"
-                      >
-                        <Facebook className="w-5 h-5 text-white" />
-                      </a>
-                      <a
-                        href={GOOGLE_REVIEWS_LINK}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-white/10 hover:bg-[#EA4335] transition-all transform hover:scale-110"
-                        title="Google Reviews"
-                      >
-                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                        </svg>
-                      </a>
-                    </div>
+                <li className="apex-footer__contact-row">
+                  <Clock className="apex-footer__contact-icon apex-footer__contact-icon--pink" />
+                  <div className="apex-footer__hours">
+                    <p className="apex-footer__hours-days">{t("footer.monSat")}</p>
+                    <p>{t("footer.hoursTime")}</p>
+                    <p className="apex-footer__hours-closed">{t("footer.closedSun")}</p>
                   </div>
                 </li>
               </ul>
             </div>
           </div>
 
-          <div className="py-6 border-t border-white/10 flex flex-col items-center justify-center gap-3 text-center">
+          <div className="apex-footer__credit">
             <a
               href="https://www.apexwebworx.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex flex-col items-center gap-3 hover:opacity-100 transition-all"
+              className="apex-footer__credit-link group"
               aria-label="APEX WEB WORX"
             >
               <OptimizedImage
@@ -1838,29 +1805,30 @@ export default function Home() {
                 loading="lazy"
                 decoding="async"
                 alt="APEX WEB WORX"
-                className="h-16 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity"
+                className="apex-footer__credit-logo"
                 noBlur
               />
-              <p className="text-gray-500 text-xs font-medium uppercase tracking-widest group-hover:text-white transition-colors">
-                Designed and developed by <span className="text-potential font-bold">APEX WEB WORX</span>
+              <p className="apex-footer__credit-text">
+                {t("footer.designed")}{" "}
+                <span className="text-potential font-bold">APEX WEB WORX</span>
               </p>
             </a>
           </div>
 
-          <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
-            <p className="text-gray-500 text-sm font-medium">
+          <div className="apex-footer__legal">
+            <p className="apex-footer__copy">
               &copy; {new Date().getFullYear()} {t("footer.rights")}
             </p>
-            <div className="flex flex-wrap justify-center md:justify-end gap-4 sm:gap-6 text-sm text-gray-500 font-medium">
+            <div className="apex-footer__legal-links">
               <button
                 onClick={() => setLegalModal("privacy")}
-                className="hover:text-white cursor-pointer transition-colors"
+                className="apex-footer__legal-btn"
               >
                 {t("footer.privacy")}
               </button>
               <button
                 onClick={() => setLegalModal("terms")}
-                className="hover:text-white cursor-pointer transition-colors"
+                className="apex-footer__legal-btn"
               >
                 {t("footer.terms")}
               </button>

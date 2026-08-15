@@ -1281,6 +1281,462 @@
     .apex-ba__label--after { right: 0.65rem; }
   }
 
+  /* ── Final CTA ── */
+  .apex-cta {
+    padding: 3.75rem 0 3.25rem;
+    overflow: visible;
+  }
+
+  .apex-cta__panel {
+    position: relative;
+    overflow: visible;
+    border-radius: 1.35rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #0d0d0f;
+    padding: 3.5rem 1.5rem 2.75rem;
+    text-align: center;
+  }
+
+  .apex-cta__glow {
+    position: absolute;
+    left: 50%;
+    top: 12%;
+    z-index: 0;
+    width: min(34rem, 80%);
+    height: 14rem;
+    transform: translateX(-50%);
+    pointer-events: none;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba(255, 26, 216, 0.12), rgba(0, 229, 255, 0.06) 45%, transparent 72%);
+    filter: blur(28px);
+    opacity: 0.85;
+  }
+
+  .apex-cta__inner {
+    position: relative;
+    z-index: 1;
+    width: min(820px, 100%);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .apex-cta__title {
+    margin: 0;
+    max-width: 820px;
+    font-size: clamp(1.85rem, 4.2vw, 3rem);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    line-height: 1.12;
+    color: #fff;
+  }
+
+  .apex-cta__title-line {
+    display: block;
+  }
+
+  .apex-cta__title-apex {
+    background-image: linear-gradient(100deg, #ff1ad8 0%, #9d00ff 48%, #00e5ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .apex-cta__sub {
+    margin: 1.35rem 0 0;
+    max-width: 34rem;
+    font-size: clamp(0.98rem, 1.5vw, 1.12rem);
+    line-height: 1.6;
+    color: rgba(186, 198, 214, 0.92);
+    font-weight: 500;
+  }
+
+  .apex-cta__notice {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    width: min(28rem, 100%);
+    margin: 1.9rem auto 0;
+    padding: 0.9rem 1rem;
+    text-align: left;
+    border-radius: 12px;
+    border: 1px solid rgba(168, 85, 247, 0.28);
+    background: rgba(12, 10, 18, 0.72);
+    box-shadow: 0 0 18px rgba(157, 0, 255, 0.08);
+    backdrop-filter: blur(8px);
+  }
+
+  .apex-cta__notice-icon {
+    flex-shrink: 0;
+    width: 1.05rem;
+    height: 1.05rem;
+    margin-top: 0.12rem;
+    color: #c4b5fd;
+    filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.4));
+  }
+
+  .apex-cta__notice-label {
+    margin: 0 0 0.25rem;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #c4b5fd;
+  }
+
+  .apex-cta__notice-text {
+    margin: 0;
+    font-size: 0.86rem;
+    line-height: 1.45;
+    color: rgba(209, 213, 219, 0.9);
+  }
+
+  .apex-cta__notice-text + .apex-cta__notice-text {
+    margin-top: 0.2rem;
+  }
+
+  .apex-cta__btn {
+    margin-top: 1.65rem;
+    transition: transform 220ms ease, filter 220ms ease, box-shadow 220ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .apex-cta__btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .apex-cta {
+      padding: 4.5rem 0 3.5rem;
+    }
+
+    .apex-cta__panel {
+      padding: 4.25rem 2.5rem 3rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .apex-cta {
+      padding: 5.5rem 0 3.75rem;
+    }
+
+    .apex-cta__panel {
+      padding: 4.75rem 3rem 3.15rem;
+    }
+
+    .apex-cta__sub {
+      margin-top: 1.45rem;
+    }
+
+    .apex-cta__notice {
+      margin-top: 2rem;
+    }
+
+    .apex-cta__btn {
+      margin-top: 1.75rem;
+    }
+  }
+
+  @media (max-width: 699px) {
+    .apex-cta {
+      padding: 3.25rem 0 2.75rem;
+    }
+
+    .apex-cta__panel {
+      padding: 3rem 1.1rem 2.35rem;
+    }
+
+    .apex-cta__btn {
+      width: 100%;
+      min-height: 48px;
+    }
+
+    .apex-cta__notice {
+      width: 100%;
+    }
+  }
+
+  /* ── Footer ── */
+  .apex-footer {
+    padding: 4.5rem 0 2.5rem;
+  }
+
+  .apex-footer__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.35rem;
+    margin-bottom: 2.75rem;
+  }
+
+  .apex-footer__logo {
+    margin-bottom: 1.15rem;
+  }
+
+  .apex-footer__blurb {
+    margin: 0 0 1.25rem;
+    max-width: 22rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: rgba(156, 163, 175, 0.95);
+    font-weight: 500;
+  }
+
+  .apex-footer__social {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .apex-footer__social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(226, 232, 240, 0.88);
+    transition: border-color 220ms ease, color 220ms ease, box-shadow 220ms ease, background 220ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .apex-footer__social-btn:hover {
+      border-color: rgba(168, 85, 247, 0.55);
+      color: #fff;
+      background: rgba(18, 12, 28, 0.9);
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.22);
+    }
+  }
+
+  .apex-footer__heading {
+    margin: 0 0 1.1rem;
+    font-size: 0.95rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+  .apex-footer__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .apex-footer__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: rgba(156, 163, 175, 0.95);
+    font-size: 0.92rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 200ms ease, transform 200ms ease;
+  }
+
+  .apex-footer__chevron {
+    color: #00e5ff;
+  }
+
+  .apex-footer__chevron--pink {
+    color: #ff1ad8;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .apex-footer__link:hover {
+      color: #fff;
+      transform: translateX(2px);
+    }
+  }
+
+  .apex-footer__col--contact .apex-footer__heading {
+    letter-spacing: 0.14em;
+  }
+
+  .apex-footer__contact {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .apex-footer__contact-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    color: rgba(156, 163, 175, 0.95);
+    font-size: 0.92rem;
+  }
+
+  .apex-footer__contact-icon {
+    width: 1.15rem;
+    height: 1.15rem;
+    margin-top: 0.15rem;
+    flex-shrink: 0;
+  }
+
+  .apex-footer__contact-icon--cyan {
+    color: #00e5ff;
+  }
+
+  .apex-footer__contact-icon--pink {
+    color: #ff1ad8;
+  }
+
+  .apex-footer__contact-text {
+    color: inherit;
+    text-decoration: none;
+    transition: color 200ms ease;
+  }
+
+  .apex-footer__contact-text:hover {
+    color: #00e5ff;
+  }
+
+  .apex-footer__phone {
+    color: rgba(241, 245, 249, 0.96);
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: color 200ms ease;
+  }
+
+  .apex-footer__phone:hover {
+    color: #00e5ff;
+  }
+
+  .apex-footer__hours {
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+
+  .apex-footer__hours-days {
+    margin: 0;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .apex-footer__hours-closed {
+    margin: 0.25rem 0 0;
+    color: rgba(107, 114, 128, 0.95);
+  }
+
+  .apex-footer__credit {
+    padding: 1.5rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: center;
+  }
+
+  .apex-footer__credit-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+  }
+
+  .apex-footer__credit-logo {
+    height: 4rem;
+    width: auto;
+    object-fit: contain;
+    opacity: 0.7;
+    transition: opacity 200ms ease;
+  }
+
+  .apex-footer__credit-link:hover .apex-footer__credit-logo {
+    opacity: 1;
+  }
+
+  .apex-footer__credit-text {
+    margin: 0;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(107, 114, 128, 0.95);
+    transition: color 200ms ease;
+  }
+
+  .apex-footer__credit-link:hover .apex-footer__credit-text {
+    color: #fff;
+  }
+
+  .apex-footer__legal {
+    padding-top: 1.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .apex-footer__copy {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(107, 114, 128, 0.95);
+  }
+
+  .apex-footer__legal-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem 1.5rem;
+  }
+
+  .apex-footer__legal-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(107, 114, 128, 0.95);
+    cursor: pointer;
+    transition: color 200ms ease;
+  }
+
+  .apex-footer__legal-btn:hover {
+    color: #fff;
+  }
+
+  @media (min-width: 768px) {
+    .apex-footer__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2.5rem;
+    }
+
+    .apex-footer__legal {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: left;
+    }
+
+    .apex-footer__legal-links {
+      justify-content: flex-end;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .apex-footer {
+      padding: 5rem 0 2.75rem;
+    }
+
+    .apex-footer__grid {
+      grid-template-columns: 1.2fr 0.9fr 1fr 1fr;
+      gap: 2.75rem;
+    }
+  }
+
   .surface-card {
     background: var(--surface-card);
     border: 1px solid rgba(255, 255, 255, 0.1);

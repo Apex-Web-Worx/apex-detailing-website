@@ -106,16 +106,18 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "faq.paint": "Paint Correction",
     "faq.ceramic": "Ceramic Coating",
 
-    "cta.title1": "Ready to Experience",
-    "cta.title2": "The Apex Difference?",
-    "cta.sub": "Book your appointment today.",
-    "cta.important": "Important:",
-    "cta.note":
-      " All scheduling needs to be done prior to your visit. We appreciate your understanding and encourage you to book ahead to secure your preferred time.",
+    "cta.titleLead": "Experience the",
+    "cta.titleApex": "Apex",
+    "cta.titleEnd": "Difference?",
+    "cta.sub":
+      "Ready to transform your vehicle? Book your detail and experience the Apex difference.",
+    "cta.important": "Important",
+    "cta.noteLine1": "Appointments must be scheduled in advance.",
+    "cta.noteLine2": "Book ahead to secure your preferred date and time.",
     "cta.book": "BOOK APPOINTMENT NOW",
 
     "footer.blurb":
-      "Prestige vehicle detailing and ceramic coating services. Expert craftsmanship, exceptional results.",
+      "Premium vehicle detailing, paint correction, and ceramic coating in Nixa, Ozark & Springfield, MO.",
     "footer.links": "Quick Links",
     "footer.services": "Services",
     "footer.contact": "Contact",
@@ -524,16 +526,18 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "faq.paint": "Коррекция ЛКП",
     "faq.ceramic": "Керамика",
 
-    "cta.title1": "Готовы увидеть",
-    "cta.title2": "разницу Apex?",
-    "cta.sub": "Запишитесь сегодня.",
-    "cta.important": "Важно:",
-    "cta.note":
-      " Запись нужна до визита. Бронируйте заранее, чтобы закрепить удобное время.",
+    "cta.titleLead": "Ощутите",
+    "cta.titleApex": "Apex",
+    "cta.titleEnd": "на себе?",
+    "cta.sub":
+      "Готовы преобразить авто? Запишитесь на детейлинг и почувствуйте разницу Apex.",
+    "cta.important": "Важно",
+    "cta.noteLine1": "Запись нужна заранее.",
+    "cta.noteLine2": "Бронируйте заранее, чтобы закрепить удобную дату и время.",
     "cta.book": "ЗАПИСАТЬСЯ СЕЙЧАС",
 
     "footer.blurb":
-      "Премиум детейлинг и керамика. Мастерство и результат.",
+      "Премиум детейлинг, коррекция ЛКП и керамика в Никсе, Озарке и Спрингфилде, MO.",
     "footer.links": "Навигация",
     "footer.services": "Услуги",
     "footer.contact": "Контакты",
