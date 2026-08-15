@@ -23,7 +23,8 @@ import {
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import LanguageToggle from "@/components/LanguageToggle";
-import { ApexHero, HeroDip } from "@/components/hero";
+import ApexHero from "@/components/hero/ApexHero";
+import HeroDip from "@/components/hero/HeroDip";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
 import GalleryVideoThumb from "@/components/GalleryVideoThumb";

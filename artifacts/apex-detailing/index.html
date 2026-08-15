@@ -147,11 +147,10 @@
       })();
     </script>
     <link rel="preload" as="image" href="/images/logo-splash.webp" type="image/webp" fetchpriority="high" />
-    <link rel="preload" as="image" href="/images/hero-2.sm.webp" type="image/webp" fetchpriority="high" />
-    <link rel="preload" as="image" href="/images/hero-2.lqip.webp" type="image/webp" fetchpriority="high" />
+    <link rel="preload" as="image" href="/images/hero-tunnel-scene.sm.webp" type="image/webp" fetchpriority="high" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Mulish:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -407,7 +406,7 @@
         if (field) {
           var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
           var mobile = window.matchMedia("(max-width: 640px)").matches;
-          var count = reduce ? 8 : mobile ? 48 : 56;
+          var count = reduce ? 6 : mobile ? 16 : 22;
           var frag = document.createDocumentFragment();
           for (var i = 0; i < count; i++) {
             var el = document.createElement("span");
@@ -440,20 +439,22 @@
           field.appendChild(frag);
         }
 
-        // Keep splash until shell is ready (logo + fonts + React) — do NOT wait on photos.
+        // Keep splash until the logo has played and React has painted.
+        // Do not wait on Google Fonts or hero photos — those stall phones.
         var splash = document.getElementById("app-loading");
         var logo = document.getElementById("splash-logo");
         var logoReady = false;
         var appReady = false;
-        var fontsReady = false;
         var minTimeDone = false;
         var dismissed = false;
+        var mobile = window.matchMedia("(max-width: 640px)").matches;
+        var minHoldMs = mobile ? 2200 : 1600;
 
         document.documentElement.classList.add("is-booting");
 
         function dismiss() {
           if (dismissed || !splash) return;
-          if (!logoReady || !appReady || !fontsReady || !minTimeDone) return;
+          if (!logoReady || !appReady || !minTimeDone) return;
           dismissed = true;
           document.documentElement.classList.remove("is-booting");
           splash.classList.add("is-done");
@@ -480,31 +481,18 @@
           logoReady = true;
         }
 
-        if (document.fonts && document.fonts.ready) {
-          document.fonts.ready.then(function () {
-            fontsReady = true;
-            dismiss();
-          }).catch(function () {
-            fontsReady = true;
-            dismiss();
-          });
-        } else {
-          fontsReady = true;
-        }
-
         window.setTimeout(function () {
           minTimeDone = true;
           dismiss();
-        }, 700);
+        }, minHoldMs);
 
         window.setTimeout(function () {
           logoReady = true;
           appReady = true;
-          fontsReady = true;
           minTimeDone = true;
           if (logo) logo.classList.add("is-ready");
           dismiss();
-        }, 5000);
+        }, 7000);
 
         window.__APEX_MARK_APP_READY__ = function () {
           appReady = true;

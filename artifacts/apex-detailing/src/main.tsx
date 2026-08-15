@@ -22,11 +22,6 @@ createRoot(document.getElementById("root")!).render(
 
 requestAnimationFrame(() => {
   requestAnimationFrame(() => {
-    const finish = () => markAppReady();
-    if (document.fonts?.ready) {
-      document.fonts.ready.then(finish).catch(finish);
-    } else {
-      finish();
-    }
+    markAppReady();
   });
 });
