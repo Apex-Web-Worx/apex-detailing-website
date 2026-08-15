@@ -2285,10 +2285,30 @@
 }
 
 @media (min-width: 1100px) {
-  .elite-services__grid,
-  .elite-more__grid {
+  .elite-services__grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 22px;
+  }
+
+  .elite-more__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .elite-more__grid .elite-card__media {
+    height: 200px;
+  }
+
+  .elite-more__grid .elite-card__name {
+    font-size: 1.15rem;
+  }
+
+  .elite-more__grid .elite-card__price {
+    font-size: 1.65rem;
+  }
+
+  .elite-more__grid .elite-card__body {
+    padding: 18px;
   }
 
   .elite-card__media {

@@ -169,6 +169,10 @@ type MoreService = {
   pricing: string;
   Icon: LucideIcon;
   featIcons: LucideIcon[];
+  badgeKey?: "services.premiumProtection";
+  BadgeIcon?: LucideIcon;
+  /** Prefer shorter card copy when present. */
+  descKey?: string;
 };
 
 const MORE_SERVICES: MoreService[] = [
@@ -177,8 +181,8 @@ const MORE_SERVICES: MoreService[] = [
     pkg: "exterior",
     pricing: "$150",
     Icon: ExteriorDetailIcon,
-    // Detailed Hand Wash / Windows / Wheels / Door jambs / Spray sealant
-    featIcons: [Droplets, AppWindow, CircleDot, DoorOpen, SprayCan],
+    // Hand wash / Windows / Wheels / Door jambs / Spray sealant
+    featIcons: [Car, AppWindow, CircleDot, DoorOpen, SprayCan],
   },
   {
     id: "wash-clay-wax",
@@ -195,6 +199,17 @@ const MORE_SERVICES: MoreService[] = [
     Icon: HeadlightRestoreIcon,
     // Safety / Oxidation removal / UV protection
     featIcons: [HeadlightRestoreIcon, Sparkles, UvProtectIcon],
+  },
+  {
+    id: "ceramic-coating",
+    pkg: "ceramic",
+    pricing: "$600",
+    Icon: Shield,
+    badgeKey: "services.premiumProtection",
+    BadgeIcon: Shield,
+    descKey: "pkg.ceramic.cardDesc",
+    // Decontamination / 9H coat / Hydrophobic / UV / Gloss
+    featIcons: [Sparkles, Shield, WaterRepelIcon, UvProtectIcon, ShieldShineIcon],
   },
 ];
 
@@ -344,13 +359,19 @@ export default function EliteServicesSection({
                       src={imageUrl(PKG_PHOTO[service.pkg])}
                       alt={t(`pkg.${service.pkg}.photoAlt`)}
                       className="elite-card__img"
-                      sizes="(max-width: 699px) calc(100vw - 32px), (max-width: 1099px) 46vw, 420px"
+                      sizes="(max-width: 699px) calc(100vw - 32px), (max-width: 1099px) 46vw, 320px"
                       loading="lazy"
                     />
                     <div className="elite-card__media-shade" aria-hidden="true" />
                     <div className="elite-card__icon-wrap" aria-hidden="true">
                       <service.Icon className="elite-card__icon" strokeWidth={2} />
                     </div>
+                    {service.badgeKey && service.BadgeIcon ? (
+                      <span className="elite-card__badge">
+                        <service.BadgeIcon className="elite-card__badge-icon" />
+                        {t(service.badgeKey)}
+                      </span>
+                    ) : null}
                   </div>
                   <div className="elite-card__body">
                     <h3 className="elite-card__name">{t(`pkg.${service.pkg}.title`)}</h3>
@@ -362,7 +383,9 @@ export default function EliteServicesSection({
                     ) : (
                       <p className="elite-card__price elite-card__price--quote">{t("services.callQuote")}</p>
                     )}
-                    <p className="elite-card__desc">{t(`pkg.${service.pkg}.desc`)}</p>
+                    <p className="elite-card__desc">
+                      {t(service.descKey ?? `pkg.${service.pkg}.desc`)}
+                    </p>
                     <ul className="elite-card__feats">
                       {feats.map((feature, featIndex) => {
                         const FeatIcon = service.featIcons[featIndex] ?? Sparkles;

@@ -47,6 +47,7 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "services.mostBooked": "Most Booked",
     "services.bestValue": "Best Value",
     "services.express": "Express",
+    "services.premiumProtection": "Premium Protection",
     "services.callQuote": "Call for Quote",
     "addons.optional": "Optional Services (Extra Charges Apply)",
     "addons.customize": "Customize Your Detail",
@@ -344,11 +345,15 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.headlight.feat.2": "UV Protection Applied",
 
     "pkg.ceramic.title": "Apex Ceramic Coating",
+    "pkg.ceramic.cardDesc":
+      "Long-lasting ceramic protection that enhances gloss, repels water, and helps protect your vehicle’s paint from environmental contaminants.",
     "pkg.ceramic.desc":
-      "Ultimate protection and extreme gloss for your vehicle's paint. Lasts for years, making maintenance washes a breeze.",
-    "pkg.ceramic.feat.0": "Up to 5 Years Protection",
-    "pkg.ceramic.feat.1": "Extreme Hydrophobics",
-    "pkg.ceramic.feat.2": "Scratch Resistance",
+      "Long-lasting ceramic protection that enhances gloss, repels water, and helps protect your vehicle’s paint from environmental contaminants.",
+    "pkg.ceramic.feat.0": "Professional Paint Decontamination",
+    "pkg.ceramic.feat.1": "9H Ceramic Coating Application",
+    "pkg.ceramic.feat.2": "Hydrophobic Protection",
+    "pkg.ceramic.feat.3": "UV & Chemical Resistance",
+    "pkg.ceramic.feat.4": "Long-Lasting Gloss & Durability",
 
     "pkg.paint.title": "Apex Paint Correction",
     "pkg.paint.desc":
@@ -448,6 +453,7 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "services.mostBooked": "Чаще всего",
     "services.bestValue": "Выгода",
     "services.express": "Экспресс",
+    "services.premiumProtection": "Премиум-защита",
     "services.callQuote": "Цена по запросу",
     "addons.optional": "Дополнительно (за отдельную плату)",
     "addons.customize": "Настройте свой детейлинг",
@@ -745,11 +751,15 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.headlight.feat.2": "УФ-защита",
 
     "pkg.ceramic.title": "Керамика Apex",
+    "pkg.ceramic.cardDesc":
+      "Долговечная керамическая защита: усиливает блеск, отталкивает воду и помогает защитить ЛКП от внешних загрязнений.",
     "pkg.ceramic.desc":
-      "Максимальная защита и глубокий блеск ЛКП. Держится годы — мойка становится проще.",
-    "pkg.ceramic.feat.0": "Защита до 5 лет",
-    "pkg.ceramic.feat.1": "Сильный гидрофоб",
-    "pkg.ceramic.feat.2": "Стойкость к царапинам",
+      "Долговечная керамическая защита: усиливает блеск, отталкивает воду и помогает защитить ЛКП от внешних загрязнений.",
+    "pkg.ceramic.feat.0": "Профессиональная деконтаминация ЛКП",
+    "pkg.ceramic.feat.1": "Нанесение керамики 9H",
+    "pkg.ceramic.feat.2": "Гидрофобная защита",
+    "pkg.ceramic.feat.3": "Устойчивость к УФ и химии",
+    "pkg.ceramic.feat.4": "Долговечный блеск и стойкость",
 
     "pkg.paint.title": "Коррекция ЛКП Apex",
     "pkg.paint.desc":
