@@ -7,7 +7,7 @@ export default function LanguageToggle({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "inline-flex items-center rounded-full border border-white/15 bg-black/40 p-0.5",
+        "inline-grid w-max grid-cols-2 self-center rounded-full border border-white/15 bg-black/40 p-0.5",
         className,
       )}
       role="group"
@@ -17,7 +17,7 @@ export default function LanguageToggle({ className }: { className?: string }) {
         type="button"
         onClick={() => setLang("en")}
         className={cn(
-          "min-h-8 px-2.5 rounded-full text-[11px] font-black tracking-wider uppercase transition",
+          "inline-flex h-9 w-11 items-center justify-center rounded-full text-[11px] font-black tracking-wider uppercase transition",
           lang === "en" ? "bg-[#FF2AD4] text-white" : "text-gray-400 hover:text-white",
         )}
         aria-pressed={lang === "en"}
@@ -28,7 +28,7 @@ export default function LanguageToggle({ className }: { className?: string }) {
         type="button"
         onClick={() => setLang("ru")}
         className={cn(
-          "min-h-8 px-2.5 rounded-full text-[11px] font-black tracking-wider uppercase transition",
+          "inline-flex h-9 w-11 items-center justify-center rounded-full text-[11px] font-black tracking-wider uppercase transition",
           lang === "ru" ? "bg-[#FF2AD4] text-white" : "text-gray-400 hover:text-white",
         )}
         aria-pressed={lang === "ru"}
