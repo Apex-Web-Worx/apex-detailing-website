@@ -1649,20 +1649,20 @@
   }
 
   @media (min-width: 1024px) {
-    .apex-hero-shell {
-      z-index: 12;
-    }
-
     .apex-hero-copy {
-      max-width: 37.5rem;
+      /* Stay inside the left black column (stage starts at 46vw). */
+      max-width: min(560px, calc(46vw - 5rem));
     }
 
     .apex-hero-title {
-      max-width: 37.5rem;
-      font-size: clamp(58px, 5vw, 82px);
+      width: 100%;
+      max-width: 100%;
+      /* Michroma + TRUE POTENTIAL must stay left of the tunnel at 1280–1920. */
+      font-size: 40px;
       line-height: 0.92;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
       text-wrap: unset;
+      overflow: visible;
     }
 
     .apex-hero-title-mobile {
@@ -1671,20 +1671,14 @@
 
     .apex-hero-title-desktop {
       display: block;
+      width: 100%;
     }
 
-    .apex-hero-trust {
-      position: relative;
-      z-index: 12;
-      opacity: 0.92;
-    }
-
-    .apex-hero-trust-item {
-      color: #ffffff;
-    }
-
-    .apex-hero-blend {
-      z-index: 5;
+    .apex-hero-title-line {
+      display: block;
+      width: max-content;
+      max-width: none;
+      white-space: nowrap;
     }
   }
 }
