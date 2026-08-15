@@ -88,6 +88,15 @@ export default function HeroCopy({
           <span>{t("hero.shop")}</span>
         </div>
       </div>
+      <p className="apex-hero-trust-line">
+        <Shield strokeWidth={2.4} aria-hidden="true" />
+        <span>{t("hero.guarantee")}</span>
+        <span className="apex-hero-trust-sep" aria-hidden="true">
+          ·
+        </span>
+        <MapPin strokeWidth={2.4} aria-hidden="true" />
+        <span>{t("hero.shop")}</span>
+      </p>
     </div>
   );
 }

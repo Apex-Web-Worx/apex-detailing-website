@@ -814,10 +814,10 @@ export default function Home() {
       </div>
       {/* Navigation */}
       <nav
-        className={`fixed top-0 w-full z-50 overflow-visible transition-all duration-300 ${
+        className={`apex-site-nav fixed top-0 w-full z-50 overflow-visible transition-all duration-300 ${
           isScrolled
-            ? "bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/10 py-3"
-            : "bg-transparent py-5"
+            ? "bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/10 py-3 max-md:pt-[max(0.65rem,env(safe-area-inset-top))]"
+            : "bg-transparent py-5 max-md:pt-[max(0.75rem,env(safe-area-inset-top))]"
         }`}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -895,7 +895,7 @@ export default function Home() {
         </div>
 
         <div
-          className={`md:hidden fixed top-20 left-0 right-0 w-full bg-[#0a0a0a] border-b border-white/10 transition-all duration-300 ease-in-out overflow-hidden z-40 ${
+          className={`md:hidden fixed left-0 right-0 w-full bg-[#0a0a0a] border-b border-white/10 transition-all duration-300 ease-in-out overflow-hidden z-40 top-[calc(5rem+env(safe-area-inset-top))] ${
             mobileMenuOpen ? "max-h-[500px] opacity-100 py-4" : "max-h-0 opacity-0 py-0"
           }`}
         >
@@ -2159,7 +2159,7 @@ export default function Home() {
       </footer>
 
       {/* Sticky Mobile Action Bar */}
-      <div className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#0a0a0a]/95 backdrop-blur-md border-t border-white/10 px-3 py-2 grid grid-cols-2 gap-2 shadow-[0_-4px_20px_rgba(0,0,0,0.5)]">
+      <div className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#050505]/95 backdrop-blur-md border-t border-white/10 px-3 py-2 grid grid-cols-2 gap-2 shadow-[0_-4px_20px_rgba(0,0,0,0.5)] [padding-left:max(0.75rem,env(safe-area-inset-left))] [padding-right:max(0.75rem,env(safe-area-inset-right))] [padding-bottom:max(0.5rem,env(safe-area-inset-bottom))]">
         <a
           href="tel:417-527-6165"
           className="flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-white/10 border border-white/15 font-bold text-sm text-white"
@@ -2181,7 +2181,7 @@ export default function Home() {
         </a>
       </div>
       {/* Spacer so sticky bar doesn't overlap content on mobile */}
-      <div className="md:hidden h-20" aria-hidden="true" />
+      <div className="md:hidden h-[calc(4.75rem+env(safe-area-inset-bottom))]" aria-hidden="true" />
 
       {/* Legal Modal: Privacy / Terms */}
       {legalModal && (
