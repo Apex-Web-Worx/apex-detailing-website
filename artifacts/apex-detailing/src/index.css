@@ -2375,10 +2375,11 @@
 
   .apex-hero-copy {
     width: 48%;
-    max-width: 720px;
+    max-width: 760px;
     display: flex;
     flex-direction: column;
     gap: 0;
+    overflow: visible;
   }
 
   .apex-hero-badge {
@@ -2409,9 +2410,9 @@
   .apex-hero-title {
     margin: 0 0 24px;
     width: 100%;
-    max-width: 720px;
+    max-width: 760px;
     font-family: "Michroma", "Mulish", sans-serif;
-    font-size: clamp(64px, 5vw, 92px);
+    font-size: clamp(60px, 4.5vw, 82px);
     line-height: 0.9;
     font-weight: 400;
     letter-spacing: -0.02em;
@@ -2419,6 +2420,7 @@
     text-wrap: unset;
     overflow-wrap: normal;
     word-break: normal;
+    overflow: visible;
   }
 
   .apex-hero-title-line {
@@ -2525,18 +2527,19 @@
 
     .apex-hero-copy {
       width: 48%;
-      max-width: 720px;
+      max-width: 760px;
     }
   }
 
-  /* Mid desktop: slightly tighter type if needed; never re-enable mid-phrase wrap */
+  /* Mid desktop: keep full TRUE POTENTIAL visible without breaking the 3-line structure */
   @media (min-width: 1024px) and (max-width: 1439px) {
     .apex-hero-copy {
-      width: min(52%, 720px);
+      width: min(54%, 760px);
     }
 
     .apex-hero-title {
-      font-size: clamp(52px, 4.8vw, 72px);
+      font-size: clamp(56px, 4.5vw, 72px);
+      max-width: 760px;
     }
   }
 
