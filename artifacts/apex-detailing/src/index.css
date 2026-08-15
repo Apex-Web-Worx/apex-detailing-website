@@ -1096,6 +1096,46 @@
     mix-blend-mode: screen;
   }
 
+  .apex-marked-hex {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+
+  .apex-marked-hex svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .apex-marked-hex path {
+    fill: none;
+    stroke: #ff1ad8;
+    stroke-width: 2.6;
+    stroke-linejoin: miter;
+    filter: drop-shadow(0 0 1.5px rgba(255, 26, 216, 0.9));
+    animation: apex-marked-hex-flash 2.1s ease-in-out infinite;
+  }
+
+  @keyframes apex-marked-hex-flash {
+    0%,
+    100% {
+      opacity: 0.15;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apex-marked-hex path {
+      animation: none;
+      opacity: 0.4;
+    }
+  }
+
   .apex-tunnel {
     position: absolute;
     inset: 0;
