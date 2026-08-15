@@ -1,5 +1,6 @@
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { getListServicesQueryKey, listServices } from "@workspace/api-client-react";
 import App from "./App";
 import "./index.css";
 import { markAppReady } from "./lib/bootSplash";
@@ -23,5 +24,9 @@ createRoot(document.getElementById("root")!).render(
 requestAnimationFrame(() => {
   requestAnimationFrame(() => {
     markAppReady();
+    void queryClient.prefetchQuery({
+      queryKey: getListServicesQueryKey(),
+      queryFn: () => listServices(),
+    });
   });
 });

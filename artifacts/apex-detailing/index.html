@@ -469,6 +469,19 @@
           }, 520);
         }
 
+        function forceDismiss() {
+          logoReady = true;
+          appReady = true;
+          heroReady = true;
+          minTimeDone = true;
+          if (logo) logo.classList.add("is-ready");
+          dismiss();
+        }
+        window.__APEX_FORCE_DISMISS_SPLASH__ = forceDismiss;
+        document.addEventListener("pointerdown", forceDismiss, { once: true, capture: true });
+        document.addEventListener("touchstart", forceDismiss, { once: true, capture: true });
+        document.addEventListener("keydown", forceDismiss, { once: true, capture: true });
+
         (function warmHero() {
           if (!isHome) {
             heroReady = true;

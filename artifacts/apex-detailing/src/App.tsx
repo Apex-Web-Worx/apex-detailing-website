@@ -1,10 +1,10 @@
-import { lazy, Suspense } from "react";
-import { Route, Switch, Router } from "wouter";
+import { lazy, Suspense, useEffect } from "react";
+import { Route, Switch, Router, useLocation } from "wouter";
 import Home from "@/pages/home";
+import BookingPage from "@/pages/booking";
 import PwaManifestSwitch from "@/components/PwaManifestSwitch";
 import { LanguageProvider } from "@/i18n/LanguageProvider";
-
-const BookingPage = lazy(() => import("@/pages/booking"));
+import { forceDismissSplash } from "@/lib/bootSplash";
 const ManagePage = lazy(() => import("@/pages/manage"));
 const AdminPage = lazy(() => import("@/pages/admin"));
 const GiftCardsPage = lazy(() => import("@/pages/gift-cards"));
@@ -18,12 +18,23 @@ function RouteFallback() {
   return <div className="min-h-dvh bg-[#050505]" />;
 }
 
+function BootOnBook() {
+  const [location] = useLocation();
+  useEffect(() => {
+    if (location === "/book" || location.startsWith("/book?")) {
+      forceDismissSplash();
+    }
+  }, [location]);
+  return null;
+}
+
 function App() {
   const base = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
 
   return (
     <Router base={base}>
       <LanguageProvider>
+      <BootOnBook />
       <PwaManifestSwitch />
       {/* Shared stroke gradient for cyber button icons */}
       <svg width="0" height="0" aria-hidden="true" className="absolute">

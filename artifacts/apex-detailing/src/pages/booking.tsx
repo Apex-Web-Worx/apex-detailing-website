@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from "react";
+import { forceDismissSplash } from "@/lib/bootSplash";
 import { Link } from "wouter";
 import {
   useListServices,
@@ -121,9 +122,7 @@ export default function BookingPage() {
   vehiclePhotosRef.current = vehiclePhotos;
 
   useEffect(() => {
-    document.documentElement.classList.remove("is-booting");
-    const splash = document.getElementById("app-loading");
-    if (splash?.parentNode) splash.parentNode.removeChild(splash);
+    forceDismissSplash();
     return () => revokePickedPhotos(vehiclePhotosRef.current);
   }, []);
 
@@ -357,6 +356,11 @@ function ServiceStep({
 }) {
   const { t } = useLanguage();
   const { data, isLoading, error } = useListServices();
+  const [showPhotos, setShowPhotos] = useState(false);
+  useEffect(() => {
+    const id = window.setTimeout(() => setShowPhotos(true), 450);
+    return () => window.clearTimeout(id);
+  }, []);
 
   return (
     <section>
@@ -380,21 +384,24 @@ function ServiceStep({
             <button
               key={s.id}
               onClick={() => onSelect(s)}
-              className={`relative flex h-full min-h-[17.5rem] flex-col text-left rounded-2xl border overflow-hidden transition [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-2xl ${
+              className={`relative flex h-full min-h-[17.5rem] flex-col text-left rounded-2xl border overflow-hidden transition [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-2xl [@media(hover:hover)_and_(pointer:fine)]:hover:border-[#00E5FF]/40 ${
                 isSelected
                   ? "border-[#00E5FF] bg-[#00E5FF]/10"
-                  : "border-white/10 bg-white/[0.02] hover:border-[#00E5FF]/40"
+                  : "border-white/10 bg-white/[0.02]"
               }`}
             >
               {photo && (
-                <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden">
+                <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden bg-[#111]">
+                  {showPhotos && (
                   <OptimizedImage
                     src={imageUrl(photo)}
                     alt={t(`pkg.${pkg}.photoAlt`)}
                     className="pointer-events-none absolute inset-0 block h-full w-full object-cover"
                     sizes="(max-width: 768px) 100vw, 50vw"
                     loading="lazy"
+                    noBlur
                   />
+                  )}
                   <div
                     className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/70 to-transparent"
                     aria-hidden="true"

@@ -1011,7 +1011,7 @@ export default function Home() {
                         alt={t(`pkg.${service.pkg}.photoAlt`)}
                         className="absolute inset-0 block h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        loading={index < 3 ? "eager" : "lazy"}
+                        loading="lazy"
                       />
                       <div
                         className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#080808] to-transparent"

@@ -16,6 +16,19 @@ export function markAppReady() {
   bootApi().__APEX_MARK_APP_READY__?.();
 }
 
+/** Drop the splash immediately so Book Now is tappable while media still loads. */
+export function forceDismissSplash() {
+  const force = (window as Window & { __APEX_FORCE_DISMISS_SPLASH__?: () => void })
+    .__APEX_FORCE_DISMISS_SPLASH__;
+  if (force) {
+    force();
+    return;
+  }
+  document.documentElement.classList.remove("is-booting");
+  const splash = document.getElementById("app-loading");
+  if (splash?.parentNode) splash.parentNode.removeChild(splash);
+}
+
 /** @deprecated Photos use LQIP and no longer gate the splash. */
 export function markContentReady() {
   bootApi().__APEX_MARK_CONTENT_READY__?.();
