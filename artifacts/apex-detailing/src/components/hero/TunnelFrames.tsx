@@ -1,36 +1,25 @@
-import { useId, useMemo } from "react";
-import { FRAME_COUNT, frameOpacity, hexPath } from "./heroTiming";
-
-type Props = {
-  clockMs: number;
-  reduced: boolean;
-};
+import { useMemo } from "react";
+import { hexPath } from "./heroTiming";
 
 /**
- * Outer SVG hex frames only (inner/middle rings omitted so the grille stays clear).
- * Geometry is static. Only opacity + glow change.
+ * Thin hex strokes only — sit on the photo tunnel rings and pulse one color.
+ * Inner rings are skipped so nothing covers the grille.
  */
-export default function TunnelFrames({ clockMs, reduced }: Props) {
-  const uid = useId().replace(/:/g, "");
-  const gradId = `tunGrad-${uid}`;
-  const glowId = `tunGlow-${uid}`;
-
+export default function TunnelFrames() {
   const frames = useMemo(() => {
-    // Skip inner rings so they do not sit on the grille
     const cx = 768;
-    const cy = 500;
-    const innerSkip = 3;
-    return Array.from({ length: FRAME_COUNT - innerSkip }, (_, j) => {
-      const i = j + innerSkip;
-      const t = i / (FRAME_COUNT - 1);
-      const rx = 70 + t * 360;
-      const ry = rx * 0.68;
-      return {
-        i,
-        d: hexPath(cx, cy, rx, ry),
-        stroke: 1.6 + t * 1.8,
-      };
-    });
+    const cy = 498;
+    return [
+      { rx: 355, ry: 232, sw: 2.1 },
+      { rx: 455, ry: 298, sw: 2.25 },
+      { rx: 570, ry: 374, sw: 2.4 },
+      { rx: 700, ry: 458, sw: 2.55 },
+      { rx: 850, ry: 556, sw: 2.7 },
+    ].map((f, i) => ({
+      i,
+      d: hexPath(cx, cy, f.rx, f.ry),
+      sw: f.sw,
+    }));
   }, []);
 
   return (
@@ -40,34 +29,17 @@ export default function TunnelFrames({ clockMs, reduced }: Props) {
         viewBox="0 0 1536 1024"
         preserveAspectRatio="none"
       >
-        <defs>
-          <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#FF2AD4" />
-            <stop offset="48%" stopColor="#8A52FF" />
-            <stop offset="100%" stopColor="#23B9FF" />
-          </linearGradient>
-          <filter id={glowId} x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="3.2" result="b" />
-            <feMerge>
-              <feMergeNode in="b" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-        <g filter={`url(#${glowId})`}>
-          {frames.map((f) => (
-            <path
-              key={f.i}
-              className={`tunnel-frame frame-${f.i + 1}`}
-              d={f.d}
-              fill="none"
-              stroke={`url(#${gradId})`}
-              strokeWidth={f.stroke}
-              strokeLinejoin="round"
-              opacity={frameOpacity(clockMs, f.i, reduced)}
-            />
-          ))}
-        </g>
+        {frames.map((f) => (
+          <path
+            key={f.i}
+            className="apex-tunnel-line"
+            d={f.d}
+            fill="none"
+            stroke="#FF1AD8"
+            strokeWidth={f.sw}
+            strokeLinejoin="miter"
+          />
+        ))}
       </svg>
     </div>
   );
