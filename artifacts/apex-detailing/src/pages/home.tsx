@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Link, useLocation } from "wouter";
 import {
   Menu,
@@ -26,6 +26,7 @@ import LanguageToggle from "@/components/LanguageToggle";
 import { ApexHero, HeroDip } from "@/components/hero";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
+import GalleryVideoThumb from "@/components/GalleryVideoThumb";
 
 const BOOKING_LINK = "/book";
 const INSTAGRAM_LINK = "https://www.instagram.com/apexdetailing_sf";
@@ -145,8 +146,8 @@ const gallery = [
     imageUrl("gallery/paint-correction/IMG_1969.jpeg"),
     imageUrl("gallery/paint-correction/IMG_1970.jpeg"),
   ], currentImageIndex: 0 },
-  { id: 2, title: "Ceramic Coating", beforeAfter: true, color: "from-[#FF1AD8] to-purple-900", thumbnail: imageUrl("ceramic-3.jpg") },
-  { id: 3, title: "Interior Restoration", beforeAfter: true, color: "from-blue-900 to-indigo-900", thumbnail: imageUrl("interior-restoration-thumbnail.jpg"), images: [
+  { id: 2, title: "Ceramic Coating", beforeAfter: true, color: "from-[#FF1AD8] to-purple-900", thumbnail: imageUrl("ceramic-3.jpg"), video: imageUrl("videos/ceramic-demo.mp4") },
+  { id: 3, title: "Interior Restoration", beforeAfter: true, color: "from-blue-900 to-indigo-900", thumbnail: imageUrl("interior-restoration-thumbnail.jpg"), video: imageUrl("interior-restoration-video.mp4"), images: [
     { src: imageUrl("interior-before-1.jpg"), label: "Before" },
     { src: imageUrl("interior-after-1.jpg"), label: "After" },
     { src: imageUrl("interior-before-2.jpg"), label: "Before" },
@@ -162,13 +163,13 @@ const gallery = [
     { src: imageUrl("interior-before-7.jpg"), label: "Before" },
     { src: imageUrl("interior-after-7.jpg"), label: "After" },
   ], currentImageIndex: 0 },
-  { id: 4, title: "Exterior Detail", beforeAfter: true, color: "from-purple-900 to-black", thumbnail: imageUrl("exterior-detail-thumbnail.jpg"), images: [
+  { id: 4, title: "Exterior Detail", beforeAfter: true, color: "from-purple-900 to-black", thumbnail: imageUrl("exterior-detail-thumbnail.jpg"), video: imageUrl("exterior-detail-video.mov"), images: [
     { src: imageUrl("exterior-before-1.jpg"), label: "Before" },
     { src: imageUrl("exterior-after-1.jpg"), label: "After" },
     { src: imageUrl("exterior-before-2.jpg"), label: "Before" },
     { src: imageUrl("exterior-after-2.jpg"), label: "After" },
   ], currentImageIndex: 0 },
-  { id: 5, title: "Headlights Restoration", beforeAfter: true, color: "from-cyan-900 to-blue-600", thumbnail: imageUrl("headlights-restoration-thumbnail.jpg"), images: [
+  { id: 5, title: "Headlights Restoration", beforeAfter: true, color: "from-cyan-900 to-blue-600", thumbnail: imageUrl("headlights-restoration-thumbnail.jpg"), video: imageUrl("headlights-video.mp4"), images: [
     { src: imageUrl("headlights-before-1.jpg"), label: "Before" },
     { src: imageUrl("headlights-after-1.jpg"), label: "After" },
     { src: imageUrl("headlights-before-2.jpg"), label: "Before" },
@@ -322,6 +323,7 @@ export default function Home() {
   const [openFaq, setOpenFaq] = useState<string | null>(null);
   const [activeFaqCategory, setActiveFaqCategory] = useState<"General" | "Paint Correction">("General");
   const [legalModal, setLegalModal] = useState<"privacy" | "terms" | null>(null);
+  const sliderTouchRef = useRef<{ x: number; y: number; dragging: boolean } | null>(null);
 
   const pageBubbles = useMemo(() => {
     if (typeof window === "undefined") return [];
@@ -329,7 +331,7 @@ export default function Home() {
     if (reduce) return [];
     const mobile = window.matchMedia("(max-width: 640px)").matches;
     // Keep enough density on phones — prior 8×tiny bubbles were nearly invisible
-    const count = mobile ? 22 : 14;
+    const count = mobile ? 8 : 12;
     return Array.from({ length: count }, (_, i) => {
       const tone = Math.random();
       return {
@@ -578,7 +580,7 @@ export default function Home() {
         }
         return newPos;
       });
-    }, 16);
+    }, 32);
     
     return () => clearInterval(interval);
   }, [isAnimatingSlider, isDraggingSlider, sliderDirection]);
@@ -608,6 +610,23 @@ export default function Home() {
     return () => clearInterval(switchTimer);
   }, [isAnimatingSlider, isDraggingSlider, sliderCycleComplete, beforeAfterPairs.length]);
 
+
+  useEffect(() => {
+    const el = document.getElementById("before-after");
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          setIsAnimatingSlider(false);
+        } else if (!sliderCycleComplete) {
+          setIsAnimatingSlider(true);
+        }
+      },
+      { threshold: 0.12 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [sliderCycleComplete]);
 
   // Auto-rotate gallery images when lightbox is open
   useEffect(() => {
@@ -775,7 +794,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-['Mulish'] selection:bg-[#FF1AD8] selection:text-white apex-page">
-      <div className="relative z-10 overflow-x-hidden">
+      <div className="relative z-10">
       {/* Ambient neon bubbles — inside content stack so they stay above section BGs */}
       <div className="page-bubbles" aria-hidden="true">
         {pageBubbles.map((b) => (
@@ -934,7 +953,7 @@ export default function Home() {
       />
       <HeroDip />
       {/* Services Section */}
-      <section id="services" className="py-24 relative bg-[#050505] overflow-x-hidden">
+      <section id="services" className="py-24 relative bg-[#050505]">
         {/* Minimal atmosphere — kept off the top seam so it matches the hero/footer black */}
         <div className="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
           <div className="absolute top-[28%] left-[-10%] w-[42rem] h-[42rem] rounded-full bg-[#FF1AD8]/[0.04] blur-[120px]" />
@@ -1071,7 +1090,7 @@ export default function Home() {
       <HeroDip />
 
       {/* How It Works */}
-      <section id="how" className="py-20 sm:py-24 relative section-pink-wash overflow-x-hidden">
+      <section id="how" className="py-20 sm:py-24 relative section-pink-wash">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-14">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
@@ -1103,7 +1122,7 @@ export default function Home() {
       <HeroDip />
 
       {/* About Section */}
-      <section id="about" className="py-24 relative section-pink-wash overflow-x-hidden">
+      <section id="about" className="py-24 relative section-pink-wash">
         {/* Soap Bubbles in About Section */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
           <div className="soap-bubble absolute bottom-[5%] left-[5%] w-12 h-12" style={{ animationDuration: '16s', animationDelay: '0s' }} />
@@ -1260,7 +1279,7 @@ export default function Home() {
       <HeroDip />
 
       {/* Before/After Slider Section */}
-      <section id="before-after" className="py-20 sm:py-24 relative section-pink-wash overflow-x-hidden">
+      <section id="before-after" className="py-20 sm:py-24 relative section-pink-wash">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-10 sm:mb-16">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
@@ -1277,7 +1296,7 @@ export default function Home() {
           <div className="max-w-4xl mx-auto">
             {/* Slider */}
             <div
-              className="relative aspect-[4/3] rounded-3xl overflow-hidden cursor-col-resize bg-black/50 border border-white/10 group"
+              className="relative aspect-[4/3] rounded-3xl overflow-hidden cursor-col-resize bg-black/50 border border-white/10 group [touch-action:pan-y]"
               onMouseMove={isDraggingSlider ? handleSliderDrag : undefined}
               onMouseDown={() => {
                 setIsDraggingSlider(true);
@@ -1291,15 +1310,32 @@ export default function Home() {
                 setIsDraggingSlider(false);
                 setIsAnimatingSlider(true);
               }}
-              onTouchStart={() => {
-                setIsDraggingSlider(true);
-                setIsAnimatingSlider(false);
+              onTouchStart={(e) => {
+                sliderTouchRef.current = {
+                  x: e.touches[0].clientX,
+                  y: e.touches[0].clientY,
+                  dragging: false,
+                };
               }}
               onTouchEnd={() => {
+                sliderTouchRef.current = null;
                 setIsDraggingSlider(false);
                 setIsAnimatingSlider(true);
               }}
-              onTouchMove={isDraggingSlider ? handleSliderDrag : undefined}
+              onTouchMove={(e) => {
+                const start = sliderTouchRef.current;
+                if (!start) return;
+                const dx = Math.abs(e.touches[0].clientX - start.x);
+                const dy = Math.abs(e.touches[0].clientY - start.y);
+                if (!start.dragging) {
+                  if (dy > dx && dy > 8) return;
+                  if (dx <= 8) return;
+                  start.dragging = true;
+                  setIsDraggingSlider(true);
+                  setIsAnimatingSlider(false);
+                }
+                handleSliderDrag(e);
+              }}
               onClick={handleSliderDrag}
             >
               {/* After Image (Background) */}
@@ -1395,7 +1431,7 @@ export default function Home() {
       <HeroDip />
 
       {/* Gallery Section */}
-      <section id="gallery" className="py-24 relative section-pink-wash overflow-x-hidden">
+      <section id="gallery" className="py-24 relative section-pink-wash">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-end mb-10 sm:mb-16 gap-6">
             <div className="max-w-2xl">
@@ -1418,7 +1454,14 @@ export default function Home() {
                 className="group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer w-full"
                 onClick={() => handleGalleryItemClick(item)}
               >
-                {item.id === 1 ? (
+                {"video" in item && item.video ? (
+                  <GalleryVideoThumb
+                    src={item.video}
+                    poster={item.thumbnail}
+                    alt={item.title}
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                ) : item.id === 1 ? (
                   <div className="absolute inset-0">
                     {paintCorrectionImages.map((src, idx) => {
                       const isNear =
@@ -1530,7 +1573,18 @@ export default function Home() {
               }
             }}
           >
-            {selectedGalleryItem.images && selectedGalleryItem.images.length > 0 ? (
+            {"video" in selectedGalleryItem && selectedGalleryItem.video && !selectedGalleryItem.images ? (
+              <video
+                src={selectedGalleryItem.video}
+                className={`${isFullscreen ? "w-full h-full" : "w-full max-h-[80vh]"} object-contain ${!isFullscreen && "rounded-xl"}`}
+                controls
+                playsInline
+                muted
+                autoPlay
+                loop
+                poster={"thumbnail" in selectedGalleryItem ? selectedGalleryItem.thumbnail : undefined}
+              />
+            ) : selectedGalleryItem.images && selectedGalleryItem.images.length > 0 ? (
               <>
                 <OptimizedImage
                   src={typeof selectedGalleryItem.images[currentImageIndex] === 'string' ? selectedGalleryItem.images[currentImageIndex] : selectedGalleryItem.images[currentImageIndex].src}
@@ -1595,7 +1649,7 @@ export default function Home() {
       )}
 
       {/* Testimonials */}
-      <section id="testimonials" className="py-24 relative section-pink-wash overflow-x-hidden">
+      <section id="testimonials" className="py-24 relative section-pink-wash">
         <div className="absolute right-0 bottom-0 w-[600px] h-[600px] bg-[#00E5FF]/10 rounded-full mix-blend-screen filter blur-[150px]" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -1639,7 +1693,7 @@ export default function Home() {
       <HeroDip />
 
       {/* Google Reviews Showcase */}
-      <section id="reviews" className="py-24 relative section-pink-wash overflow-x-hidden">
+      <section id="reviews" className="py-24 relative section-pink-wash">
         <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-[#FF1AD8]/10 rounded-full mix-blend-screen filter blur-[120px] -translate-y-1/2" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -1708,7 +1762,7 @@ export default function Home() {
       <HeroDip />
 
       {/* Service Area */}
-      <section id="area" className="py-20 sm:py-24 relative section-pink-wash overflow-x-hidden">
+      <section id="area" className="py-20 sm:py-24 relative section-pink-wash">
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#00E5FF]/10 rounded-full mix-blend-screen filter blur-[120px]" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-12">
@@ -1776,7 +1830,7 @@ export default function Home() {
       <HeroDip />
 
       {/* FAQ Section */}
-      <section id="faq" className="py-20 sm:py-24 relative section-pink-wash overflow-x-hidden">
+      <section id="faq" className="py-20 sm:py-24 relative section-pink-wash">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
@@ -1855,7 +1909,7 @@ export default function Home() {
       <HeroDip />
 
       {/* CTA Section */}
-      <section id="cta" className="py-24 relative section-pink-wash overflow-x-hidden">
+      <section id="cta" className="py-24 relative section-pink-wash">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative rounded-3xl overflow-hidden bg-[#111] border border-white/10 p-10 md:p-20 text-center">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-full bg-gradient-to-b from-[#FF1AD8]/20 to-[#00E5FF]/20 blur-3xl" />

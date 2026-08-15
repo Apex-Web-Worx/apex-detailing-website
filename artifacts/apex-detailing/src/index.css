@@ -90,8 +90,13 @@
   * {
     @apply border-border;
   }
+  html {
+    overflow-x: clip;
+  }
   body {
     @apply font-sans antialiased bg-background text-foreground;
+    overflow-x: clip;
+    overscroll-behavior-y: auto;
   }
 }
 
@@ -919,7 +924,6 @@
     border-radius: 50%;
     border: 1px solid rgba(255, 255, 255, 0.22);
     opacity: 0;
-    will-change: transform, opacity;
     animation: page-bubble-rise var(--dur, 14s) linear infinite;
     animation-delay: var(--delay, 0s);
     background:
@@ -962,7 +966,7 @@
   /* Phones: stronger bubble presence */
   @media (max-width: 640px) {
     .page-bubbles {
-      opacity: 0.85;
+      opacity: 0.55;
     }
     .page-bubble {
       border-color: rgba(255, 255, 255, 0.28);
