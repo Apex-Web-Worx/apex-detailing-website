@@ -454,7 +454,7 @@ function ServiceStep({
   };
 
   return (
-    <section>
+    <section className={twoTapUi && selected ? "pb-28" : undefined}>
       <h1 className="text-3xl sm:text-4xl font-black mb-2 font-display">{t("book.choose")}</h1>
       <p className="text-gray-300 mb-8">
         {twoTapUi ? t("book.chooseSubMobile") : t("book.chooseSub")}
@@ -588,18 +588,23 @@ function ServiceStep({
       </div>
 
       {twoTapUi && selected && (
-        <div className="sticky bottom-4 z-20 mt-6">
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onContinue();
-            }}
-            className="btn-cyber btn-cyber-lg btn-cyber-block w-full min-h-12"
-          >
-            <span>{t("book.continue")}</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
+        <div
+          className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#0a0a0a]/95 backdrop-blur-md"
+          style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
+        >
+          <div className="mx-auto max-w-5xl px-4 pt-3">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onContinue();
+              }}
+              className="btn-cyber btn-cyber-lg btn-cyber-block w-full min-h-12"
+            >
+              <span>{t("book.continue")}</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       )}
     </section>
