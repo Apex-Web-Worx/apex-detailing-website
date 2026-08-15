@@ -1953,7 +1953,7 @@
   padding: 0;
   display: grid;
   gap: 0.45rem;
-  flex: 1;
+  align-content: start;
 }
 
 .elite-card__feats li {
