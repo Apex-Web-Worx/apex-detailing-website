@@ -63,7 +63,8 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "how.3.desc": "Step into a like-new vehicle and enjoy long-lasting protection and shine.",
 
     "about.kicker": "About Us",
-    "about.title": "Welcome to",
+    "about.title": "Welcome to Apex",
+    "about.titleAccent": "Detailing",
     "about.p1":
       "Where passion, precision, and purpose come together to serve you with excellence. Serving the Nixa Ozark Springfield, MO areas, we specialize in high-quality car detailing that restores beauty, protects value, and reflects the pride you have in your vehicle.",
     "about.p2a": "Our dedication to quality and customer satisfaction has helped us become ",
@@ -80,11 +81,14 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
       '"Whatever you do, work at it with all your heart, as working for the Lord, not for men. Colossians 3:23 (NIV)"',
     "about.p4":
       "Apex Detailing was founded by Michail, who is known for his meticulous nature and commitment to perfection. What started as a personal passion for detailing has grown into a trusted service grounded in faith, excellence, and care.",
-    "about.p5":
-      "At Apex, we use only premium-grade chemicals and professional techniques to ensure every vehicle gets the attention it deserves — inside and out. Whether it's a deep interior clean, paint correction, or exterior protection, our goal is to go above and beyond your expectations.",
+    "about.p5a": "At Apex, we use only ",
+    "about.p5b": "premium-grade products",
+    "about.p5c":
+      " and professional techniques to ensure every vehicle gets the attention it deserves — inside and out. Whether it's a deep interior clean, paint correction, or exterior protection, our goal is to go above and beyond your expectations.",
     "about.p6": "Experience the Apex difference — where faith fuels our service and quality drives every detail.",
-    "about.meet": "Meet your detailer",
+    "about.meet": "Meet Your Detailer",
     "about.role": "Founder & Detailing Specialist",
+    "about.founderTag": "Precision • Care • Integrity",
     "about.rated": "5-Star Rated",
     "about.perk1.title": "Premium Products",
     "about.perk1.desc": "Professional-grade chemicals only",
@@ -92,7 +96,7 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "about.perk2.desc": "Peace of mind for your investment",
     "about.perk3.title": "Flexible Scheduling",
     "about.perk3.desc": "Book easily online anytime",
-    "about.perk4.title": "Expert Team",
+    "about.perk4.title": "Expert Technicians",
     "about.perk4.desc": "Certified professionals on staff",
 
     "faq.kicker": "FAQ",
@@ -469,7 +473,8 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "how.3.desc": "Садитесь в как новую машину — блеск и защита надолго.",
 
     "about.kicker": "О нас",
-    "about.title": "Добро пожаловать в",
+    "about.title": "Добро пожаловать в Apex",
+    "about.titleAccent": "Детейлинг",
     "about.p1":
       "Страсть, точность и смысл — чтобы служить вам с высоким качеством. Мы работаем в Никсе, Озарке и Спрингфилде и возвращаем красоту авто, защищаем его ценность и гордость владельца.",
     "about.p2a": "Благодаря качеству и заботе о клиентах мы стали ",
@@ -486,11 +491,14 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
       "«И всё, что вы делаете, делайте от души, как для Господа, а не для человеков. Колоссянам 3:23»",
     "about.p4":
       "Apex Detailing основал Михаил — известный вниманием к деталям и стремлением к идеалу. Личное увлечение выросло в доверенный сервис на вере, качестве и заботе.",
-    "about.p5":
-      "Мы используем премиальную химию и профессиональные методы — салон, коррекция ЛКП, защита кузова. Цель — превзойти ожидания.",
+    "about.p5a": "Мы используем только ",
+    "about.p5b": "премиум-продукты",
+    "about.p5c":
+      " и профессиональные методы — салон, коррекция ЛКП, защита кузова. Цель — превзойти ожидания.",
     "about.p6": "Почувствуйте разницу Apex — вера питает сервис, качество ведёт каждую деталь.",
     "about.meet": "Ваш детейлер",
     "about.role": "Основатель и специалист",
+    "about.founderTag": "Точность • Забота • Честность",
     "about.rated": "Оценка 5 звёзд",
     "about.perk1.title": "Премиум-химия",
     "about.perk1.desc": "Только профессиональные составы",
@@ -498,7 +506,7 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "about.perk2.desc": "Спокойствие за ваш автомобиль",
     "about.perk3.title": "Удобная запись",
     "about.perk3.desc": "Онлайн в любое время",
-    "about.perk4.title": "Опыт",
+    "about.perk4.title": "Опытные мастера",
     "about.perk4.desc": "Сертифицированные специалисты",
 
     "faq.kicker": "FAQ",

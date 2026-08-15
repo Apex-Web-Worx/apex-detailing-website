@@ -886,22 +886,22 @@ export default function Home() {
       <HeroDip />
 
       {/* About Section */}
-      <section id="about" className="py-24 relative bg-[#050505] section-pink-wash apex-cv">
-        {/* Soap Bubbles in About Section */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-          <div className="soap-bubble absolute bottom-[5%] left-[5%] w-12 h-12" style={{ animationDuration: '16s', animationDelay: '0s' }} />
-          <div className="soap-bubble absolute bottom-[10%] right-[10%] w-16 h-16" style={{ animationDuration: '18s', animationDelay: '1s' }} />
-          <div className="soap-bubble absolute bottom-[8%] left-[15%] w-20 h-20" style={{ animationDuration: '20s', animationDelay: '2s' }} />
-          <div className="soap-bubble absolute bottom-[15%] right-[5%] w-14 h-14" style={{ animationDuration: '17s', animationDelay: '0.5s' }} />
-          <div className="soap-bubble absolute bottom-[3%] left-[40%] w-10 h-10" style={{ animationDuration: '19s', animationDelay: '1.5s' }} />
+      <section id="about" className="apex-about relative bg-[#050505] section-pink-wash apex-cv">
+        <div className="apex-about__particles" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
         </div>
-        <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-[#FF1AD8]/10 rounded-full mix-blend-screen filter blur-[120px] -translate-y-1/2 -translate-x-1/2" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-            <div className="order-2 lg:order-1 relative">
-              <div className="aspect-[4/5] rounded-2xl overflow-hidden relative group">
-                {/* Image container with smooth transitions */}
+          <div className="apex-about__grid">
+            <div className="apex-about__media order-2 lg:order-1 relative">
+              <div className="apex-about__photo aspect-[4/5] rounded-2xl overflow-hidden relative group">
                 {aboutImages.map((img, idx) => (
                   <OptimizedImage
                     key={idx}
@@ -915,8 +915,8 @@ export default function Home() {
                     decoding="async"
                   />
                 ))}
-                <div 
-                  className="absolute inset-0 bg-gradient-to-tr from-[#FF1AD8]/30 to-[#00E5FF]/30 group-hover:from-[#FF1AD8]/50 group-hover:to-[#00E5FF]/50 z-10 transition-all duration-700"
+                <div
+                  className="absolute inset-0 bg-gradient-to-tr from-[#FF1AD8]/25 to-[#00E5FF]/25 group-hover:from-[#FF1AD8]/40 group-hover:to-[#00E5FF]/40 z-10 transition-all duration-700"
                 />
                 <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black to-transparent z-20">
                   <div className="inline-flex items-center gap-3 bg-black/60 backdrop-blur-md px-6 py-3 rounded-xl border border-[#D4AF37]/30">
@@ -939,102 +939,94 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-gradient-to-br from-[#FF1AD8] to-[#00E5FF] rounded-2xl -z-10 blur-xl opacity-50" />
             </div>
 
-            <div className="order-1 lg:order-2">
-              <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
-                {t("about.kicker")}
-              </h2>
-              <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight mb-6 sm:mb-8 leading-tight font-display">
-                {t("about.title")}{" "}
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-                  Apex Detailing
-                </span>
+            <div className="apex-about__copy order-1 lg:order-2">
+              <h2 className="apex-about__kicker">{t("about.kicker")}</h2>
+              <h3 className="apex-about__title font-display">
+                <span className="apex-about__title-main">{t("about.title")}</span>{" "}
+                <span className="apex-about__title-accent">{t("about.titleAccent")}</span>
               </h3>
 
-              <div className="space-y-5 sm:space-y-6 text-gray-400 text-base sm:text-lg mb-8 sm:mb-10">
+              <div className="apex-about__body">
+                <p>{t("about.p1")}</p>
                 <p>
-                  {t("about.p1")}
-                </p>
-                <p>
-                  {t("about.p2a")}<strong className="text-gold">{t("about.p2b")}</strong>{t("about.p2c")}
-                </p>
-                <p className="italic">
-                  {t("about.p3a")}<span className="text-potential font-semibold">{t("about.p3b")}</span>{t("about.p3c")}<span className="text-potential font-semibold">{t("about.p3d")}</span>{t("about.p3e")}<span className="text-potential font-semibold">{t("about.p3f")}</span>{t("about.p3g")}
-                </p>
-                <p className="italic text-[#FF1AD8] text-sm mt-4">
-                  {t("about.verse")}
+                  {t("about.p2a")}
+                  <strong className="apex-about__trust apex-about__trust--gold">{t("about.p2b")}</strong>
+                  {t("about.p2c")}
                 </p>
                 <p>
-                  {t("about.p4")}
+                  {t("about.p3a")}
+                  <span className="apex-about__trust">{t("about.p3b")}</span>
+                  {t("about.p3c")}
+                  <span className="apex-about__trust">{t("about.p3d")}</span>
+                  {t("about.p3e")}
+                  <span className="apex-about__trust">{t("about.p3f")}</span>
+                  {t("about.p3g")}
                 </p>
+                <p className="apex-about__verse">{t("about.verse")}</p>
+                <p>{t("about.p4")}</p>
                 <p>
-                  {t("about.p5")}
+                  {t("about.p5a")}
+                  <span className="apex-about__trust">{t("about.p5b")}</span>
+                  {t("about.p5c")}
                 </p>
-                <p>
-                  <strong className="text-white">{t("about.p6")}</strong>
+                <p className="apex-about__closer">
+                  <strong>{t("about.p6")}</strong>
                 </p>
-                <div className="mt-8 flex items-center gap-5 p-5 rounded-2xl bg-white/[0.03] border border-white/10">
-                  <div className="relative shrink-0">
-                    <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-[#FF1AD8] to-[#00E5FF] blur-md opacity-60" />
+
+                <div className="apex-about__founder">
+                  <div className="apex-about__founder-photo">
                     <OptimizedImage
                       src={imageUrl("owner-michail.jpg")}
                       alt="Michail Gurov, Founder of Apex Detailing"
-                      className="relative block w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-2 border-white/20 overflow-hidden"
+                      className="apex-about__founder-img"
                       loading="lazy"
                       decoding="async"
                     />
                   </div>
-                  <div>
-                    <p className="text-xs uppercase tracking-wider text-gray-500 font-bold mb-1">
-                      {t("about.meet")}
-                    </p>
-                    <p className="text-white font-black text-lg sm:text-xl leading-tight">
-                      Michail Gurov
-                    </p>
-                    <p className="text-[#FF1AD8] font-bold text-sm">
-                      {t("about.role")}
-                    </p>
+                  <div className="apex-about__founder-copy">
+                    <p className="apex-about__founder-eyebrow">{t("about.meet")}</p>
+                    <p className="apex-about__founder-name">Michail Gurov</p>
+                    <p className="apex-about__founder-role">{t("about.role")}</p>
+                    <p className="apex-about__founder-tag">{t("about.founderTag")}</p>
                   </div>
                 </div>
               </div>
 
-              <div className="border-t border-white/10 pt-6 mt-8">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              <div className="apex-about__perks">
                 {[
                   {
                     title: t("about.perk1.title"),
                     desc: t("about.perk1.desc"),
-                    icon: <Shield className="text-[#FF1AD8]" />,
+                    icon: <Sparkles className="apex-about__perk-icon" strokeWidth={2} />,
                   },
                   {
                     title: t("about.perk2.title"),
                     desc: t("about.perk2.desc"),
-                    icon: <Award className="text-[#E8C547]" />,
+                    icon: <Shield className="apex-about__perk-icon" strokeWidth={2} />,
                   },
                   {
                     title: t("about.perk3.title"),
                     desc: t("about.perk3.desc"),
-                    icon: <Clock className="text-[#FF1AD8]" />,
+                    icon: <Clock className="apex-about__perk-icon" strokeWidth={2} />,
                   },
                   {
                     title: t("about.perk4.title"),
                     desc: t("about.perk4.desc"),
-                    icon: <Sparkles className="text-[#00E5FF]" />,
+                    icon: <Award className="apex-about__perk-icon" strokeWidth={2} />,
                   },
                 ].map((item, i) => (
-                  <div key={i} className="flex gap-4">
-                    <div className="shrink-0 w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+                  <div key={i} className="apex-about__perk">
+                    <div className="apex-about__perk-icon-wrap" aria-hidden="true">
                       {item.icon}
                     </div>
                     <div>
-                      <h5 className="font-bold text-white mb-1">{item.title}</h5>
-                      <p className="text-sm text-gray-400 leading-snug">{item.desc}</p>
+                      <h5 className="apex-about__perk-title">{item.title}</h5>
+                      <p className="apex-about__perk-desc">{item.desc}</p>
                     </div>
                   </div>
                 ))}
-                </div>
               </div>
             </div>
           </div>
