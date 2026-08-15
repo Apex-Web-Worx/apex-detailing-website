@@ -14,6 +14,7 @@ import {
 import BrandLogo from "@/components/BrandLogo";
 import LanguageToggle from "@/components/LanguageToggle";
 import { useLanguage } from "@/i18n/LanguageProvider";
+import { bookingUrl, goBookNow } from "@/lib/openBooking";
 
 const CONTENT_ENDPOINT =
   "https://apex-seo-ai.vercel.app/api/public/content";
@@ -292,9 +293,9 @@ function SiteNavigation() {
                 <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
-            <Link href={BOOKING_LINK} className="btn-cyber btn-cyber-sm whitespace-nowrap shrink-0">
+            <a href={bookingUrl()} onClick={goBookNow} className="btn-cyber btn-cyber-sm whitespace-nowrap shrink-0">
               <span>{t("nav.book")}</span>
-            </Link>
+            </a>
           </div>
 
           <div className="flex items-center gap-2 md:hidden">
@@ -341,13 +342,13 @@ function SiteNavigation() {
               {t(`nav.${link.id}`)}
             </a>
           ))}
-          <Link
-            href={BOOKING_LINK}
-            onClick={() => setMobileMenuOpen(false)}
+          <a
+            href={bookingUrl()}
+            onClick={goBookNow}
             className="btn-cyber btn-cyber-block mt-4"
           >
             <span>{t("nav.book")}</span>
-          </Link>
+          </a>
         </div>
       </div>
     </nav>
@@ -641,10 +642,10 @@ function BlogPost({ post }: { post: ContentPost }) {
           <p className="mb-5 text-lg font-semibold text-gray-300">
             Ready to protect and refresh your vehicle?
           </p>
-          <Link href={BOOKING_LINK} className="btn-cyber btn-cyber-lg">
+          <a href={bookingUrl()} onClick={goBookNow} className="btn-cyber btn-cyber-lg">
             <span>Book now</span>
             <ChevronRight className="h-5 w-5" />
-          </Link>
+          </a>
         </div>
       </article>
     </main>

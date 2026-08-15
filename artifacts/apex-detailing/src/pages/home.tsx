@@ -29,6 +29,7 @@ import { useLanguage } from "@/i18n/LanguageProvider";
 import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
 import GalleryVideoThumb from "@/components/GalleryVideoThumb";
 import { PKG_PHOTO } from "@/i18n/packageMap";
+import { bookingUrl, goBookNow } from "@/lib/openBooking";
 
 const BOOKING_LINK = "/book";
 const INSTAGRAM_LINK = "https://www.instagram.com/apexdetailing_sf";
@@ -867,12 +868,13 @@ export default function Home() {
                   </a>
                 );
               })}
-              <Link
-                href={BOOKING_LINK}
+              <a
+                href={bookingUrl()}
+                onClick={goBookNow}
                 className="btn-cyber btn-cyber-sm whitespace-nowrap shrink-0"
               >
                 <span>{t("nav.book")}</span>
-              </Link>
+              </a>
             </div>
 
             <div className="md:hidden flex items-center">
@@ -919,13 +921,13 @@ export default function Home() {
                 </a>
               );
             })}
-            <Link
-              href={BOOKING_LINK}
-              onClick={() => setMobileMenuOpen(false)}
+            <a
+              href={bookingUrl()}
+              onClick={goBookNow}
               className="btn-cyber btn-cyber-block mt-4"
             >
               <span>{t("nav.book")}</span>
-            </Link>
+            </a>
           </div>
         </div>
       </nav>
@@ -1079,13 +1081,14 @@ export default function Home() {
                       </li>
                     ))}
                   </ul>
-                  <Link
-                    href={BOOKING_LINK}
+                  <a
+                    href={bookingUrl()}
+                    onClick={goBookNow}
                     className="btn-cyber btn-cyber-sm mt-auto self-start"
                   >
                     <span>{t("services.book")}</span>
                     <ChevronRight className="w-4 h-4" />
-                  </Link>
+                  </a>
                   </div>
                 </div>
               </div>
@@ -1936,13 +1939,14 @@ export default function Home() {
                   <span className="font-black text-potential">{t("cta.important")}</span>{t("cta.note")}
                 </p>
               </div>
-              <Link
-                href={BOOKING_LINK}
+              <a
+                href={bookingUrl()}
+                onClick={goBookNow}
                 className="btn-cyber btn-cyber-xl group"
               >
                 <span>{t("cta.book")}</span>
                 <ChevronRight className="w-6 h-6" />
-              </Link>
+              </a>
             </div>
           </div>
         </div>
@@ -2173,13 +2177,14 @@ export default function Home() {
           <Phone className="w-4 h-4 text-[#00E5FF]" />
           {t("nav.call")}
         </a>
-        <Link
-          href={BOOKING_LINK}
+        <a
+          href={bookingUrl()}
+          onClick={goBookNow}
           className="btn-cyber btn-cyber-sm btn-cyber-block"
         >
           <span>{t("nav.book")}</span>
           <ChevronRight className="w-4 h-4" />
-        </Link>
+        </a>
       </div>
       {/* Spacer so sticky bar doesn't overlap content on mobile */}
       <div className="md:hidden h-[calc(4.75rem+env(safe-area-inset-bottom))]" aria-hidden="true" />

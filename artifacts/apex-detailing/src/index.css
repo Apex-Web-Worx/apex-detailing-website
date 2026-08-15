@@ -91,12 +91,15 @@
     @apply border-border;
   }
   html {
-    overflow-x: clip;
+    overflow-x: visible;
   }
   body {
     @apply font-sans antialiased bg-background text-foreground;
-    overflow-x: clip;
+    overflow-x: visible;
     overscroll-behavior-y: auto;
+  }
+  .apex-page {
+    overflow-x: clip;
   }
   a, button {
     touch-action: manipulation;

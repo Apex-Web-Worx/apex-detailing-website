@@ -402,6 +402,15 @@
     <div id="root"></div>
     <script>
       (function () {
+        var path = (window.location.pathname || "/").replace(/\/$/, "") || "/";
+        var isBook = path === "/book" || path.slice(-5) === "/book";
+        if (isBook) {
+          document.documentElement.classList.remove("is-booting");
+          var bootSplash = document.getElementById("app-loading");
+          if (bootSplash && bootSplash.parentNode) bootSplash.parentNode.removeChild(bootSplash);
+          return;
+        }
+
         var field = document.getElementById("loader-field");
         if (field) {
           var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -463,10 +472,9 @@
           dismissed = true;
           document.documentElement.classList.remove("is-booting");
           splash.classList.add("is-done");
+          splash.style.pointerEvents = "none";
           splash.setAttribute("aria-busy", "false");
-          window.setTimeout(function () {
-            if (splash && splash.parentNode) splash.parentNode.removeChild(splash);
-          }, 520);
+          if (splash.parentNode) splash.parentNode.removeChild(splash);
         }
 
         function forceDismiss() {

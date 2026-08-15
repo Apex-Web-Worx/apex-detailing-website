@@ -123,6 +123,9 @@ export default function BookingPage() {
 
   useEffect(() => {
     forceDismissSplash();
+    document.documentElement.style.overflow = "";
+    document.body.style.overflow = "";
+    document.documentElement.classList.remove("is-booting");
     return () => revokePickedPhotos(vehiclePhotosRef.current);
   }, []);
 
@@ -356,11 +359,9 @@ function ServiceStep({
 }) {
   const { t } = useLanguage();
   const { data, isLoading, error } = useListServices();
-  const [showPhotos, setShowPhotos] = useState(false);
-  useEffect(() => {
-    const id = window.setTimeout(() => setShowPhotos(true), 450);
-    return () => window.clearTimeout(id);
-  }, []);
+  const phone =
+    typeof window !== "undefined" &&
+    window.matchMedia("(max-width: 1023px)").matches;
 
   return (
     <section>
@@ -383,16 +384,20 @@ function ServiceStep({
           return (
             <button
               key={s.id}
+              type="button"
               onClick={() => onSelect(s)}
-              className={`relative flex h-full min-h-[17.5rem] flex-col text-left rounded-2xl border overflow-hidden transition [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-2xl [@media(hover:hover)_and_(pointer:fine)]:hover:border-[#00E5FF]/40 ${
+              onTouchEnd={(e) => {
+                e.preventDefault();
+                onSelect(s);
+              }}
+              className={`relative flex h-full min-h-[12rem] flex-col text-left rounded-2xl border overflow-hidden transition [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-2xl [@media(hover:hover)_and_(pointer:fine)]:hover:border-[#00E5FF]/40 ${
                 isSelected
                   ? "border-[#00E5FF] bg-[#00E5FF]/10"
                   : "border-white/10 bg-white/[0.02]"
               }`}
             >
-              {photo && (
+              {photo && !phone && (
                 <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden bg-[#111]">
-                  {showPhotos && (
                   <OptimizedImage
                     src={imageUrl(photo)}
                     alt={t(`pkg.${pkg}.photoAlt`)}
@@ -401,7 +406,6 @@ function ServiceStep({
                     loading="lazy"
                     noBlur
                   />
-                  )}
                   <div
                     className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/70 to-transparent"
                     aria-hidden="true"
@@ -602,7 +606,14 @@ function DateTimeStep({
               return (
                 <button
                   key={d.date}
+                  type="button"
                   onClick={() => {
+                    setPickedDate(d.date);
+                    setPickedTime(null);
+                  }}
+                  onTouchEnd={(e) => {
+                    if (disabled) return;
+                    e.preventDefault();
                     setPickedDate(d.date);
                     setPickedTime(null);
                   }}
@@ -650,7 +661,13 @@ function DateTimeStep({
               return (
                 <button
                   key={slot.time}
+                  type="button"
                   onClick={() => setPickedTime(slot.time)}
+                  onTouchEnd={(e) => {
+                    if (!slot.available) return;
+                    e.preventDefault();
+                    setPickedTime(slot.time);
+                  }}
                   disabled={!slot.available}
                   className={`py-4 rounded-xl font-bold transition ${
                     isPicked
