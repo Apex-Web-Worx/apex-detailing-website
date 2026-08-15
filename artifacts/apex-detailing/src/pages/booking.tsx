@@ -1,4 +1,11 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import {
+  useState,
+  useMemo,
+  useEffect,
+  useRef,
+  type MouseEvent as ReactMouseEvent,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 import { forceDismissSplash } from "@/lib/bootSplash";
 import { Link } from "wouter";
 import {
@@ -349,6 +356,30 @@ export default function BookingPage() {
   );
 }
 
+/** True when this interaction should use two-tap confirm (phones / touch). */
+function isTwoTapInteraction(e?: ReactMouseEvent | ReactPointerEvent): boolean {
+  if (typeof window === "undefined") return false;
+  const ne = e?.nativeEvent as
+    | (Event & {
+        pointerType?: string;
+        sourceCapabilities?: { firesTouchEvents?: boolean };
+      })
+    | undefined;
+  if (ne?.pointerType === "touch" || ne?.pointerType === "pen") return true;
+  if (ne?.sourceCapabilities?.firesTouchEvents) return true;
+  if (window.matchMedia("(max-width: 1023px)").matches) return true;
+  if (window.matchMedia("(hover: none), (pointer: coarse)").matches) return true;
+  return false;
+}
+
+function readTwoTapUi(): boolean {
+  if (typeof window === "undefined") return false;
+  return (
+    window.matchMedia("(max-width: 1023px)").matches ||
+    window.matchMedia("(hover: none), (pointer: coarse)").matches
+  );
+}
+
 /* ---------- Service step ---------- */
 function ServiceStep({
   selected,
@@ -361,37 +392,64 @@ function ServiceStep({
 }) {
   const { t } = useLanguage();
   const { data, isLoading, error } = useListServices();
-  const [isPhone, setIsPhone] = useState(false);
-  const [highlightedId, setHighlightedId] = useState<number | null>(selected?.id ?? null);
+  // Sync init so the first paint / first tap is not treated as desktop.
+  const [twoTapUi, setTwoTapUi] = useState(readTwoTapUi);
+  const [highlightedId, setHighlightedId] = useState<number | null>(
+    selected?.id != null ? Number(selected.id) : null,
+  );
+  // Refs survive re-renders and ignore ghost double-clicks from one physical tap.
+  const pendingIdRef = useRef<number | null>(
+    selected?.id != null ? Number(selected.id) : null,
+  );
+  const armedAtRef = useRef<number>(0);
 
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 1023px)");
-    const sync = () => setIsPhone(mq.matches);
+    const sync = () => setTwoTapUi(readTwoTapUi());
     sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
+    const mqs = [
+      window.matchMedia("(max-width: 1023px)"),
+      window.matchMedia("(hover: none), (pointer: coarse)"),
+    ];
+    mqs.forEach((mq) => mq.addEventListener("change", sync));
+    return () => mqs.forEach((mq) => mq.removeEventListener("change", sync));
   }, []);
 
   useEffect(() => {
-    setHighlightedId(selected?.id ?? null);
+    const id = selected?.id != null ? Number(selected.id) : null;
+    setHighlightedId(id);
+    pendingIdRef.current = id;
+    if (id != null) armedAtRef.current = Date.now();
   }, [selected?.id]);
 
-  const handleServiceTap = (s: Service) => {
-    // Desktop / fine pointer: one click selects and advances.
-    if (!isPhone) {
+  const handleServiceTap = (s: Service, e: ReactMouseEvent) => {
+    const id = Number(s.id);
+    const twoTap = isTwoTapInteraction(e);
+
+    // Mouse / trackpad desktop: one click selects and advances.
+    if (!twoTap) {
+      pendingIdRef.current = null;
+      armedAtRef.current = 0;
       onPick(s);
       onContinue();
       return;
     }
 
-    // Phone: first tap highlights + selects; second tap on same card continues.
-    if (highlightedId === s.id) {
+    const pending = pendingIdRef.current;
+    const elapsed = Date.now() - armedAtRef.current;
+    // Same card + enough time since arming = intentional second tap.
+    // Ignore <320ms repeats (ghost click / touch+click from one finger press).
+    if (pending != null && pending === id && elapsed >= 320) {
+      pendingIdRef.current = null;
+      armedAtRef.current = 0;
       onPick(s);
       onContinue();
       return;
     }
 
-    setHighlightedId(s.id);
+    // First tap (or switch to another package): arm + highlight only.
+    pendingIdRef.current = id;
+    armedAtRef.current = Date.now();
+    setHighlightedId(id);
     onPick(s);
   };
 
@@ -399,7 +457,7 @@ function ServiceStep({
     <section>
       <h1 className="text-3xl sm:text-4xl font-black mb-2 font-display">{t("book.choose")}</h1>
       <p className="text-gray-300 mb-8">
-        {isPhone ? t("book.chooseSubMobile") : t("book.chooseSub")}
+        {twoTapUi ? t("book.chooseSubMobile") : t("book.chooseSub")}
       </p>
 
       {isLoading && <Loading label={t("book.loadingServices")} />}
@@ -407,7 +465,8 @@ function ServiceStep({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
         {data?.map((s) => {
-          const isSelected = highlightedId === s.id || selected?.id === s.id;
+          const id = Number(s.id);
+          const isSelected = highlightedId === id || Number(selected?.id) === id;
           const iconMeta = SERVICE_ICONS[s.slug];
           const Icon = iconMeta?.icon;
           const badge = SERVICE_BADGES[s.slug];
@@ -418,8 +477,8 @@ function ServiceStep({
               key={s.id}
               type="button"
               aria-pressed={isSelected}
-              onClick={() => handleServiceTap(s)}
-              className={`relative flex h-full min-h-[12rem] flex-col text-left rounded-2xl border overflow-hidden transition touch-manipulation [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-2xl [@media(hover:hover)_and_(pointer:fine)]:hover:border-[#00E5FF]/40 ${
+              onClick={(e) => handleServiceTap(s, e)}
+              className={`relative flex h-full min-h-[12rem] flex-col text-left rounded-2xl border overflow-hidden transition touch-manipulation select-none [-webkit-tap-highlight-color:transparent] [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-2xl [@media(hover:hover)_and_(pointer:fine)]:hover:border-[#00E5FF]/40 ${
                 isSelected
                   ? "border-[#FF1AD8] bg-[#FF1AD8]/10 shadow-[0_0_24px_rgba(255,26,216,0.22)] ring-1 ring-[#FF1AD8]/50"
                   : "border-white/10 bg-white/[0.02]"
@@ -431,7 +490,7 @@ function ServiceStep({
                   {t("book.selected")}
                 </span>
               )}
-              {photo && !isPhone && (
+              {photo && !twoTapUi && (
                 <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden bg-[#111]">
                   <OptimizedImage
                     src={imageUrl(photo)}
@@ -515,10 +574,10 @@ function ServiceStep({
               <div className="mt-auto flex items-center justify-end pt-1">
                 <span
                   className={`font-bold text-xs flex items-center gap-1 ${
-                    isSelected && isPhone ? "text-[#FF1AD8]" : "text-[#00E5FF]"
+                    isSelected && twoTapUi ? "text-[#FF1AD8]" : "text-[#00E5FF]"
                   }`}
                 >
-                  {isSelected && isPhone ? t("book.tapAgain") : t("book.select")}{" "}
+                  {isSelected && twoTapUi ? t("book.tapAgain") : t("book.select")}{" "}
                   <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </div>
@@ -528,11 +587,14 @@ function ServiceStep({
         })}
       </div>
 
-      {isPhone && selected && (
+      {twoTapUi && selected && (
         <div className="sticky bottom-4 z-20 mt-6">
           <button
             type="button"
-            onClick={onContinue}
+            onClick={(e) => {
+              e.stopPropagation();
+              onContinue();
+            }}
             className="btn-cyber btn-cyber-lg btn-cyber-block w-full min-h-12"
           >
             <span>{t("book.continue")}</span>
