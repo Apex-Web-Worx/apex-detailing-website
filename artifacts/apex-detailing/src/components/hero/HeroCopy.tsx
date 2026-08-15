@@ -24,9 +24,9 @@ export default function HeroCopy({
         <span>{t("hero.badge")}</span>
       </div>
       <h1 className="apex-hero-title">
-        {t("hero.title1")}
-        <br />
-        <span className="apex-hero-title-grad">{t("hero.title2")}</span>
+        <span className="apex-hero-title-line">{t("hero.title1")}</span>
+        <span className="apex-hero-title-line apex-hero-title-grad">{t("hero.title2")}</span>
+        <span className="apex-hero-title-line apex-hero-title-grad">{t("hero.title3")}</span>
       </h1>
       <p className="apex-hero-sub">
         <span className="apex-hero-sub-lead">{t("hero.subtitleLead")}</span>
@@ -43,15 +43,15 @@ export default function HeroCopy({
           <span>{t("hero.gift")}</span>
           <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
         </a>
-        <a
-          href={`${import.meta.env.BASE_URL}#services`}
-          onClick={onExplore}
-          className="apex-hero-explore group"
-        >
-          {t("hero.explore")}
-          <ChevronRight className="w-4 h-4 opacity-60 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100" />
-        </a>
       </div>
+      <a
+        href={`${import.meta.env.BASE_URL}#services`}
+        onClick={onExplore}
+        className="apex-hero-explore group"
+      >
+        {t("hero.explore")}
+        <ChevronRight className="w-4 h-4 opacity-60 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100" />
+      </a>
       <a
         href={reviewsHref}
         target="_blank"

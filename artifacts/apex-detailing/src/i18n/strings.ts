@@ -15,8 +15,9 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "nav.menu": "Toggle menu",
 
     "hero.badge": "Nixa Ozark Springfield, MO Premium Detailing",
-    "hero.title1": "Unleash Your",
-    "hero.title2": "Car's True Potential",
+    "hero.title1": "Unleash",
+    "hero.title2": "Your Car's",
+    "hero.title3": "True Potential",
     "hero.subtitleLead": "Premium auto detailing, ceramic coating, and paint correction",
     "hero.subtitleRest": " services serving",
     "hero.subtitleEnd": ". We bring the showroom shine to your vehicle.",
@@ -439,7 +440,8 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
 
     "hero.badge": "Никса · Озарк · Спрингфилд, Миссури — премиум детейлинг",
     "hero.title1": "Раскройте",
-    "hero.title2": "настоящий потенциал авто",
+    "hero.title2": "настоящий",
+    "hero.title3": "потенциал авто",
     "hero.subtitleLead": "Премиум детейлинг, керамическое покрытие и коррекция ЛКП",
     "hero.subtitleRest": " для",
     "hero.subtitleEnd": ". Мы возвращаем автомобилю салонный блеск.",
