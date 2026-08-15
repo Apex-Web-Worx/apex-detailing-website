@@ -1131,10 +1131,12 @@
   }
 
   .apex-hl-spot {
-    width: 3.6%;
-    height: 4%;
+    width: 2.55%;
+    height: 2.85%;
     border-radius: 50%;
     transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.42) 0%, transparent 72%);
+    box-shadow: 0 0 10px 2px rgba(255, 250, 235, 0.55);
   }
 
   /* Measured from hero-tunnel-scene.jpg headlight cores */
@@ -1142,9 +1144,11 @@
   .apex-hl-spot-r { left: 62.88%; top: 59.3%; }
 
   .apex-hl-brow {
-    width: 5.2%;
-    height: 1.1%;
+    width: 3.85%;
+    height: 0.78%;
     border-radius: 999px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+    box-shadow: 0 0 7px 1px rgba(255, 250, 235, 0.4);
   }
 
   .apex-hl-brow-l {
@@ -1160,43 +1164,65 @@
   }
 
   .apex-hl-drl {
-    width: 0.9%;
-    height: 6%;
+    width: 0.62%;
+    height: 4.35%;
     border-radius: 999px;
     transform: translate(-50%, -50%);
+    background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.32), transparent);
+    box-shadow: 0 0 6px 1px rgba(255, 250, 235, 0.38);
   }
 
   .apex-hl-drl-l { left: 33.7%; top: 62.2%; }
   .apex-hl-drl-r { left: 66.3%; top: 62.2%; }
 
-  /* Same sweep as .brand-logo-nav__sheen, white only */
+  /* Tight, brighter tick across the lamp glass — not a wide wash */
   .apex-hl-sheen {
     position: absolute;
-    inset: -30% -80%;
+    inset: -8% -18%;
     background: linear-gradient(
       105deg,
-      transparent 30%,
-      rgba(255, 255, 255, 0.12) 42%,
-      rgba(255, 255, 255, 0.95) 50%,
-      rgba(255, 255, 255, 0.18) 58%,
-      transparent 72%
+      transparent 40%,
+      rgba(255, 255, 255, 0.55) 47%,
+      #fff 50%,
+      rgba(210, 235, 255, 0.85) 53%,
+      transparent 60%
     );
-    background-size: 260% 100%;
+    background-size: 160% 100%;
     background-repeat: no-repeat;
-    background-position: 140% 0;
+    background-position: 90% 0;
     opacity: 0;
+    filter: brightness(1.45);
+  }
+
+  @keyframes apex-hl-sheen-loop {
+    0%,
+    62% {
+      background-position: 85% 0;
+      opacity: 0;
+    }
+    68% {
+      opacity: 1;
+    }
+    84% {
+      background-position: -85% 0;
+      opacity: 1;
+    }
+    100% {
+      background-position: -85% 0;
+      opacity: 0;
+    }
   }
 
   .apex-hero.is-shining .apex-hl-spot-l .apex-hl-sheen,
   .apex-hero.is-shining .apex-hl-brow-l .apex-hl-sheen,
   .apex-hero.is-shining .apex-hl-drl-l .apex-hl-sheen {
-    animation: brand-logo-sheen-loop 5.2s ease-in-out 1.2s infinite;
+    animation: apex-hl-sheen-loop 4.6s ease-in-out 1.2s infinite;
   }
 
   .apex-hero.is-shining .apex-hl-spot-r .apex-hl-sheen,
   .apex-hero.is-shining .apex-hl-brow-r .apex-hl-sheen,
   .apex-hero.is-shining .apex-hl-drl-r .apex-hl-sheen {
-    animation: brand-logo-sheen-loop 5.2s ease-in-out 1.45s infinite;
+    animation: apex-hl-sheen-loop 4.6s ease-in-out 1.4s infinite;
   }
 
   @media (prefers-reduced-motion: reduce) {
