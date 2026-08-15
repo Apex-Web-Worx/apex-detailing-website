@@ -40,6 +40,10 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
       " The price ranges listed below are standard for the majority of vehicles. The final cost will depend on the condition of your vehicle and any additional services you request. For a more accurate estimate, please contact us directly.",
     "services.startingAt": "Starting at",
     "services.book": "Book Now",
+    "services.viewDetails": "View Details",
+    "services.readyTitle": "Ready to give your car the care it deserves?",
+    "services.readySub": "Book your service today and experience the Apex difference.",
+    "services.moreTitle": "More Packages",
     "services.mostBooked": "Most Booked",
     "services.bestValue": "Best Value",
     "services.express": "Express",
@@ -252,6 +256,8 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.full.title": "Apex Full Detailing",
     "pkg.full.desc":
       "The ultimate package! Includes interior and exterior detailed cleaning and protection. Get your vehicle looking showroom fresh inside and out. Add-ons available to customize your package.",
+    "pkg.full.cardDesc":
+      "The ultimate package! Includes interior and exterior detailing, paint protection, and professional results that make your vehicle look showroom fresh.",
     "pkg.full.price.0": "Coupe / Sedan: $300-$400",
     "pkg.full.price.1": "Truck / Jeep / 2-Row SUV: $350 – $450",
     "pkg.full.price.2": "Minivan / 3-Row SUV: $350 – $500",
@@ -264,8 +270,15 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.interior.title": "Apex Interior Detailing",
     "pkg.interior.desc":
       "Comprehensive interior cleaning that transforms every surface. From carpets to leather to air vents. Add-ons available to customize your package.",
+    "pkg.interior.cardDesc":
+      "Deep interior cleaning that transforms every surface. From carpets to leather to air vents. Add-ons available to customize your package.",
     "pkg.interior.price.0": "2-Row: $200 – $300",
     "pkg.interior.price.1": "3-Row: $250 – $350",
+    "pkg.interior.cardFeat.0": "Deep Cabin Cleaning",
+    "pkg.interior.cardFeat.1": "Stain Removal",
+    "pkg.interior.cardFeat.2": "Leather Care & Conditioning",
+    "pkg.interior.cardFeat.3": "Odor Elimination",
+    "pkg.interior.cardFeat.4": "Steam Sanitization",
     "pkg.interior.feat.0": "Air vents cleaned",
     "pkg.interior.feat.1": "Free air fresheners",
     "pkg.interior.feat.2": "Steam cleaning of center console and door panels",
@@ -283,10 +296,17 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.express.title": "Apex Express Interior Detailing",
     "pkg.express.desc":
       "A fast, high-quality interior refresh designed to keep your vehicle clean, fresh, and presentable—without the time commitment of a full detail. This service includes a thorough vacuum, wipe-down of all interior surfaces, floor mats cleaned, interior glass polished, and a light refresh of high-touch areas. Perfect for well-maintained vehicles or as a maintenance service between full details.",
+    "pkg.express.cardDesc":
+      "A fast, high-quality interior refresh designed to keep your vehicle clean, fresh, and presentable — perfect for busy lifestyles.",
     "pkg.express.warn":
       "This service is intended only to maintain a semi-clean vehicle. Heavily soiled interiors, stains, excessive pet hair, or deep cleaning needs may require a Full Interior Detail. Final service type will be confirmed upon inspection.",
     "pkg.express.price.0": "2-Row: $100–$150",
     "pkg.express.price.1": "3-Row: $150–$200",
+    "pkg.express.cardFeat.0": "Vacuum Interior",
+    "pkg.express.cardFeat.1": "Wipe Down Surfaces",
+    "pkg.express.cardFeat.2": "Clean Floor Mats",
+    "pkg.express.cardFeat.3": "Interior Glass Polished",
+    "pkg.express.cardFeat.4": "Light Touch Refresh",
     "pkg.express.feat.0": "Thorough Vacuum",
     "pkg.express.feat.1": "Interior Surfaces Wiped Down",
     "pkg.express.feat.2": "Floor Mats Cleaned",
@@ -420,6 +440,10 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
       " Указанные диапазоны — ориентир для большинства авто. Итог зависит от состояния машины и доп. услуг. Для точной оценки свяжитесь с нами.",
     "services.startingAt": "От",
     "services.book": "Записаться",
+    "services.viewDetails": "Подробнее",
+    "services.readyTitle": "Готовы дать авто уход, которого оно заслуживает?",
+    "services.readySub": "Запишитесь сегодня и почувствуйте разницу Apex.",
+    "services.moreTitle": "Другие пакеты",
     "services.mostBooked": "Чаще всего",
     "services.bestValue": "Выгода",
     "services.express": "Экспресс",
@@ -632,6 +656,8 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.full.title": "Полный детейлинг Apex",
     "pkg.full.desc":
       "Максимальный пакет: чистка и защита салона и кузова. Авто как из салона — внутри и снаружи. Можно добавить опции.",
+    "pkg.full.cardDesc":
+      "Максимальный пакет: детейлинг кузова и салона, защита ЛКП и результат уровня шоурума.",
     "pkg.full.price.0": "Купе / седан: $300–$400",
     "pkg.full.price.1": "Пикап / Jeep / 2 ряда: $350 – $450",
     "pkg.full.price.2": "Минивэн / 3 ряда: $350 – $500",
@@ -644,8 +670,15 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.interior.title": "Детейлинг салона Apex",
     "pkg.interior.desc":
       "Полная чистка салона: ковры, кожа, дефлекторы. Можно добавить опции.",
+    "pkg.interior.cardDesc":
+      "Глубокая чистка салона — от ковров и кожи до дефлекторов. Можно добавить опции под ваш пакет.",
     "pkg.interior.price.0": "2 ряда: $200 – $300",
     "pkg.interior.price.1": "3 ряда: $250 – $350",
+    "pkg.interior.cardFeat.0": "Глубокая чистка салона",
+    "pkg.interior.cardFeat.1": "Удаление пятен",
+    "pkg.interior.cardFeat.2": "Уход за кожей",
+    "pkg.interior.cardFeat.3": "Устранение запахов",
+    "pkg.interior.cardFeat.4": "Паровая санация",
     "pkg.interior.feat.0": "Чистка дефлекторов",
     "pkg.interior.feat.1": "Бесплатный освежитель",
     "pkg.interior.feat.2": "Паровая чистка консоли и дверных карт",
@@ -662,11 +695,18 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
 
     "pkg.express.title": "Экспресс-салон Apex",
     "pkg.express.desc":
-      "Быстрое качественное освежение салона — без полного детейлинга. Пылесос, протирка поверхностей, коврики, стёкла внутри и лёгкое обновление зон частого касания. Для ухоженных авто или как поддержка между полными услугами.",
+      "Быстрое освежение салона: пылесос, протирка, коврики, стёкла и зоны частого касания. Для ухоженных авто или между полными детейлингами.",
+    "pkg.express.cardDesc":
+      "Быстрое качественное освежение салона — чисто, свежо и презентабельно, идеально для занятого ритма.",
     "pkg.express.warn":
-      "Только для относительно чистого салона. Сильные загрязнения, пятна, шерсть или глубокая чистка — нужен полный детейлинг салона. Итог подтверждаем после осмотра.",
+      "Услуга для поддержания относительно чистого салона. Сильные загрязнения, пятна, шерсть животных или глубокая чистка требуют полного детейлинга салона. Итоговый тип услуги подтверждаем после осмотра.",
     "pkg.express.price.0": "2 ряда: $100–$150",
     "pkg.express.price.1": "3 ряда: $150–$200",
+    "pkg.express.cardFeat.0": "Пылесос салона",
+    "pkg.express.cardFeat.1": "Протирка поверхностей",
+    "pkg.express.cardFeat.2": "Чистка ковриков",
+    "pkg.express.cardFeat.3": "Полировка стёкол внутри",
+    "pkg.express.cardFeat.4": "Лёгкое освежение",
     "pkg.express.feat.0": "Тщательный пылесос",
     "pkg.express.feat.1": "Протирка поверхностей салона",
     "pkg.express.feat.2": "Чистка ковриков",
