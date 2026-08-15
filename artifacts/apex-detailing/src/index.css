@@ -2673,21 +2673,25 @@
       max-height: 380px;
       order: 1;
       overflow: hidden;
-      container-type: normal;
+      /* Required for aspect-locked plate via cqh */
+      container-type: size;
     }
 
-    /* Keep Camaro centered; moderate zoom so the car stays readable */
+    /*
+     * Aspect-locked plate (same 1536/1024 math as desktop) so headlight %
+     * overlays stay on the lamp cores. Never use object-fit: cover here.
+     */
     .apex-hero-plate {
-      width: calc(100% * 1.55 * 1536 / 1024);
-      height: 155%;
+      width: calc(100cqh * 1536 / 1024 * 1.62);
+      height: calc(100cqh * 1.62);
       left: 50%;
-      top: 52%;
+      top: 50%;
       transform: translate(-50%, -50%);
     }
 
     .apex-hero-scene {
-      object-fit: cover;
-      object-position: center 45%;
+      object-fit: fill;
+      object-position: center center;
     }
 
     .apex-hero-stage::after {
@@ -3771,19 +3775,58 @@
     min-height: 240px !important;
     max-height: 340px !important;
     overflow: hidden;
+    container-type: size !important;
   }
 
   .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-plate {
-    width: calc(100% * 1.5 * 1536 / 1024) !important;
-    height: 150% !important;
+    /* Aspect-locked to the photo so desktop headlight % still hit the lamps */
+    width: calc(100cqh * 1536 / 1024 * 1.62) !important;
+    height: calc(100cqh * 1.62) !important;
     left: 50% !important;
     top: 50% !important;
     transform: translate(-50%, -50%) !important;
   }
 
   .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-scene {
-    object-fit: cover !important;
-    object-position: center 42% !important;
+    object-fit: fill !important;
+    object-position: center center !important;
+  }
+
+  /* Keep desktop-measured lamp cores; slightly larger glow on the short stage */
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hl-spot-l {
+    left: 36.95% !important;
+    top: 59.4% !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hl-spot-r {
+    left: 62.88% !important;
+    top: 59.3% !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hl-brow-l {
+    left: 35.6% !important;
+    top: 56.8% !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hl-brow-r {
+    left: 64.4% !important;
+    top: 56.8% !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hl-drl-l {
+    left: 33.7% !important;
+    top: 62.2% !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hl-drl-r {
+    left: 66.3% !important;
+    top: 62.2% !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hl-spot {
+    width: 3.2% !important;
+    height: 3.6% !important;
+    box-shadow: 0 0 14px 3px rgba(255, 250, 235, 0.75) !important;
   }
 
   .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-wash,
