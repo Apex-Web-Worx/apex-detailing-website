@@ -5,6 +5,7 @@ import {
   Car,
   CheckCircle2,
   ChevronRight,
+  createLucideIcon,
   Droplets,
   Info,
   Shield,
@@ -19,6 +20,48 @@ import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { PKG_PHOTO } from "@/i18n/packageMap";
 import { bookingUrl, goBookNow } from "@/lib/openBooking";
+
+/** Car silhouette + shine — exterior detailing (More Packages only). */
+const ExteriorDetailIcon = createLucideIcon("ExteriorDetail", [
+  [
+    "path",
+    {
+      d: "M3.5 15.5h17v-2.4l-1.7-4.6A2.2 2.2 0 0 0 16.7 7H7.3a2.2 2.2 0 0 0-2.1 1.5L3.5 13.1z",
+      key: "body",
+    },
+  ],
+  ["path", { d: "M3.5 13.2h17", key: "belt" }],
+  ["path", { d: "M7.2 7.4 8.6 11h6.8l1.4-3.6", key: "glass" }],
+  ["circle", { cx: "7.2", cy: "17.2", r: "1.35", key: "wheel-l" }],
+  ["circle", { cx: "16.8", cy: "17.2", r: "1.35", key: "wheel-r" }],
+  ["path", { d: "M18.2 3.2v2.6M16.9 4.5h2.6", key: "shine-lg" }],
+  ["path", { d: "M14.4 2.8v1.6M13.6 3.6h1.6", key: "shine-sm" }],
+]);
+
+/** Polishing pad + handle + shine — wash / clay / wax (More Packages only). */
+const WashClayWaxIcon = createLucideIcon("WashClayWax", [
+  ["circle", { cx: "10.5", cy: "13.5", r: "5.2", key: "pad" }],
+  ["circle", { cx: "10.5", cy: "13.5", r: "2.1", key: "pad-inner" }],
+  ["path", { d: "M14.4 9.6 19.2 4.8", key: "handle" }],
+  ["path", { d: "M17.6 3.2h2.8v2.8", key: "handle-tip" }],
+  ["path", { d: "M5.2 6.2v2.4M4 7.4h2.4", key: "shine-a" }],
+  ["path", { d: "M7.8 3.6v1.6M7 4.4h1.6", key: "shine-b" }],
+]);
+
+/** Automotive headlight lens + rays — headlight restoration (More Packages only). */
+const HeadlightRestoreIcon = createLucideIcon("HeadlightRestore", [
+  [
+    "path",
+    {
+      d: "M4.5 8.2c0-1.4 1-2.5 2.3-2.7l5.2-.8c1.8-.3 3.5.9 3.8 2.7l.9 5.8c.2 1.5-.8 2.9-2.3 3.2l-5.4 1.1c-1.5.3-3-.7-3.3-2.2z",
+      key: "housing",
+    },
+  ],
+  ["ellipse", { cx: "10.2", cy: "12", rx: "3.1", ry: "3.4", key: "lens" }],
+  ["path", { d: "M16.6 7.4 20.5 5.6", key: "ray-top" }],
+  ["path", { d: "M17.2 12h4.2", key: "ray-mid" }],
+  ["path", { d: "M16.6 16.6 20.5 18.4", key: "ray-bot" }],
+]);
 
 type FeaturedPkg = {
   pkg: "full" | "interior" | "express";
@@ -68,9 +111,9 @@ type MoreService = {
 };
 
 const MORE_SERVICES: MoreService[] = [
-  { id: "exterior-detailing", pkg: "exterior", pricing: "$150", Icon: Car },
-  { id: "wash-clay-wax", pkg: "wax", pricing: "$250", Icon: Sparkles },
-  { id: "headlight-restoration", pkg: "headlight", pricing: "$125", Icon: CheckCircle2 },
+  { id: "exterior-detailing", pkg: "exterior", pricing: "$150", Icon: ExteriorDetailIcon },
+  { id: "wash-clay-wax", pkg: "wax", pricing: "$250", Icon: WashClayWaxIcon },
+  { id: "headlight-restoration", pkg: "headlight", pricing: "$125", Icon: HeadlightRestoreIcon },
 ];
 
 export default function EliteServicesSection({
