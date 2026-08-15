@@ -111,47 +111,46 @@ export default function AppointmentsPage() {
   const visible = view === "calendar" ? items.filter((item) => item.date === selectedDate) : items;
 
   return (
-    <div className="w-full space-y-4">
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-between gap-3">
-          <h2 className="text-xl md:text-2xl font-bold">Appointments</h2>
-          <div className="flex items-center gap-2 shrink-0">
-            <GhostButton type="button" onClick={() => void refetch()} disabled={isRefreshing} className="px-3">
-              <RefreshCw className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`} /> Refresh
-            </GhostButton>
-            <GhostButton type="button" onClick={() => openBlockDate()} className="px-3">
-              Block
-            </GhostButton>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 rounded-xl border border-white/10 overflow-hidden md:inline-grid md:w-72">
+    <div className="w-full space-y-3">
+      <div className="flex items-center gap-2">
+        <h2 className="hidden md:block text-xl md:text-2xl font-bold mr-auto">Appointments</h2>
+        <div className="grid grid-cols-2 rounded-xl border border-white/10 overflow-hidden w-[10.5rem] md:w-72 shrink-0">
           <button
             type="button"
             onClick={() => setView("list")}
-            className={`min-h-11 text-sm touch-manipulation ${view === "list" ? "bg-[#111111] text-white" : "text-[#9CA3AF]"}`}
+            className={`min-h-10 text-xs md:text-sm touch-manipulation ${view === "list" ? "bg-[#111111] text-white" : "text-[#9CA3AF]"}`}
           >
             List
           </button>
           <button
             type="button"
             onClick={() => setView("calendar")}
-            className={`min-h-11 text-sm touch-manipulation ${view === "calendar" ? "bg-[#111111] text-white" : "text-[#9CA3AF]"}`}
+            className={`min-h-10 text-xs md:text-sm touch-manipulation ${view === "calendar" ? "bg-[#111111] text-white" : "text-[#9CA3AF]"}`}
           >
             Calendar
           </button>
         </div>
+        <div className="ml-auto flex items-center gap-2 shrink-0">
+          <GhostButton type="button" onClick={() => void refetch()} disabled={isRefreshing} className="px-3">
+            <RefreshCw className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`} />
+            <span className="hidden sm:inline">Refresh</span>
+          </GhostButton>
+          <GhostButton type="button" onClick={() => openBlockDate()} className="px-3">
+            Block
+          </GhostButton>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap gap-2">
+      <div className="flex flex-col gap-2">
         <input
           type="search"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search appointments"
-          className={`${fieldClass} sm:max-w-sm`}
+          className={`${fieldClass} h-10 py-0 text-sm`}
           aria-label="Search appointments"
         />
-        <div className="sm:max-w-xs w-full">
+        <div className="grid grid-cols-3 gap-2">
           <AdminDatePicker
             value={filterDate}
             onChange={setFilterDate}
@@ -159,35 +158,38 @@ export default function AppointmentsPage() {
             blockedDates={blockedDates}
             compact
           />
+          <AdminSelect
+            value={filterService}
+            onChange={setFilterService}
+            aria-label="Filter by service"
+            compact
+            className="min-w-0"
+            options={[
+              { value: "", label: "All services" },
+              ...serviceOptions.map((s) => ({ value: s, label: s })),
+            ]}
+          />
+          <AdminSelect
+            value={filterStatus}
+            onChange={(value) => setFilterStatus(value as DisplayStatus | "")}
+            aria-label="Filter by status"
+            compact
+            menuAlign="right"
+            className="min-w-0"
+            options={[
+              { value: "", label: "Upcoming" },
+              { value: "confirmed", label: "Confirmed" },
+              { value: "in_progress", label: "In progress" },
+              { value: "ready_for_pickup", label: "Ready for pickup" },
+              { value: "completed", label: "Completed" },
+              { value: "cancelled", label: "Cancelled" },
+            ]}
+          />
         </div>
-        <AdminSelect
-          value={filterService}
-          onChange={setFilterService}
-          aria-label="Filter by service"
-          className="lg:w-52"
-          options={[
-            { value: "", label: "All services" },
-            ...serviceOptions.map((s) => ({ value: s, label: s })),
-          ]}
-        />
-        <AdminSelect
-          value={filterStatus}
-          onChange={(value) => setFilterStatus(value as DisplayStatus | "")}
-          aria-label="Filter by status"
-          className="lg:w-52"
-          options={[
-            { value: "", label: "Upcoming" },
-            { value: "confirmed", label: "Confirmed" },
-            { value: "in_progress", label: "In progress" },
-            { value: "ready_for_pickup", label: "Ready for pickup" },
-            { value: "completed", label: "Completed" },
-            { value: "cancelled", label: "Cancelled" },
-          ]}
-        />
         {(filterDate || filterService || filterStatus) && (
           <GhostButton
             type="button"
-            className="h-10"
+            className="h-10 self-start"
             onClick={() => {
               setFilterDate("");
               setFilterService("");

@@ -64,17 +64,16 @@ export default function AppointmentRow({
     </StatusAction>
   ) : null;
 
-  const icons = (
-    <div className="flex flex-row items-center gap-1.5 shrink-0 ml-auto">
-      {primaryAction}
+  const sideIcons = (
+    <>
       <a
         href={`tel:${booking.phone}`}
-        className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-[#23B9FF] hover:bg-white/5 touch-manipulation"
+        className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-[#23B9FF] hover:bg-white/5 touch-manipulation shrink-0"
         aria-label={`Call ${booking.customerName}`}
       >
         <Phone className="w-4 h-4" />
       </a>
-      <div className="relative">
+      <div className="relative shrink-0">
         <button
           type="button"
           onClick={() => setMenu((v) => !v)}
@@ -228,11 +227,11 @@ export default function AppointmentRow({
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 
   const photo = photoIds[0] ? (
-    <div className="w-12 h-12 rounded-xl overflow-hidden border border-white/10 shrink-0">
+    <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl overflow-hidden border border-white/10 shrink-0">
       <AdminBookingPhoto
         token={token}
         bookingId={booking.id}
@@ -244,35 +243,34 @@ export default function AppointmentRow({
 
   return (
     <div className="rounded-2xl border border-white/10 bg-[#111111] px-3 py-3 md:px-4 hover:bg-[#161616] transition duration-200">
-      <div className="md:hidden">
-        <div className="flex items-start gap-3">
-          <button type="button" onClick={onView} className="flex-1 min-w-0 text-left touch-manipulation">
-            <div className="flex items-start gap-3">
-              {photo}
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-white shrink-0">{time}</span>
-                  <StatusBadge status={status} />
-                </div>
-                {showTimer ? (
-                  <div className="mt-1">
-                    <DetailTimer booking={booking} size="sm" />
-                  </div>
-                ) : null}
-                <p className="mt-0.5 font-semibold text-white leading-snug">{booking.serviceName}</p>
-                <p className="mt-0.5 text-sm text-[#9CA3AF] truncate">
-                  {booking.customerName} · {booking.vehicle}
-                </p>
-                <p className="mt-0.5 text-xs text-[#9CA3AF]">
-                  {date} · {formatDuration(booking.serviceDurationMinutes)}
-                </p>
-                <CustomerPhotoBadge count={photoCount} />
-                {preview ? <p className="mt-1 text-xs text-[#9CA3AF]/80 truncate">{preview}</p> : null}
+      <div className="md:hidden space-y-3">
+        <div className="flex items-start gap-2">
+          <button type="button" onClick={onView} className="flex min-w-0 flex-1 items-start gap-2.5 text-left touch-manipulation">
+            {photo}
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-sm font-bold text-white shrink-0">{time}</span>
+                <StatusBadge status={status} />
               </div>
+              {showTimer ? (
+                <div className="mt-1">
+                  <DetailTimer booking={booking} size="sm" />
+                </div>
+              ) : null}
+              <p className="mt-1 font-semibold text-white leading-snug break-words">{booking.serviceName}</p>
+              <p className="mt-0.5 text-sm text-[#9CA3AF] leading-snug break-words">
+                {booking.customerName} · {booking.vehicle}
+              </p>
+              <p className="mt-0.5 text-xs text-[#9CA3AF]">
+                {date} · {formatDuration(booking.serviceDurationMinutes)}
+              </p>
+              <CustomerPhotoBadge count={photoCount} />
+              {preview ? <p className="mt-1 text-xs text-[#9CA3AF]/80 leading-snug">{preview}</p> : null}
             </div>
           </button>
-          {icons}
+          <div className="flex shrink-0 items-start gap-1.5">{sideIcons}</div>
         </div>
+        {primaryAction ? <div className="w-full">{primaryAction}</div> : null}
       </div>
 
       <div className="hidden md:flex md:items-center md:gap-3">
@@ -301,7 +299,10 @@ export default function AppointmentRow({
             </p>
           </div>
         </button>
-        {icons}
+        <div className="flex flex-row items-center gap-1.5 shrink-0 ml-auto">
+          {primaryAction}
+          {sideIcons}
+        </div>
       </div>
     </div>
   );
@@ -318,7 +319,7 @@ function StatusAction({
     <button
       type="button"
       onClick={onClick}
-      className="h-11 px-3 rounded-xl bg-[#FF2AD4] text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 hover:bg-[#ff4adc] touch-manipulation whitespace-nowrap shrink-0"
+      className="h-11 px-3 rounded-xl bg-[#FF2AD4] text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 hover:bg-[#ff4adc] touch-manipulation whitespace-nowrap w-full md:w-auto"
     >
       {children}
     </button>

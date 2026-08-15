@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { BlockedDate, Booking } from "@workspace/api-client-react";
 import { formatDateShort, todayDateString } from "@/lib/format";
@@ -26,6 +26,7 @@ export default function AdminDatePicker({
   disableBlocked = false,
   required = false,
   compact = false,
+  className,
 }: {
   value: string;
   onChange: (date: string) => void;
@@ -37,14 +38,32 @@ export default function AdminDatePicker({
   disableBlocked?: boolean;
   required?: boolean;
   compact?: boolean;
+  className?: string;
 }) {
   const today = todayDateString();
   const [month, setMonth] = useState(() => (value || minDate || today).slice(0, 7));
   const [open, setOpen] = useState(!compact);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (value) setMonth(value.slice(0, 7));
   }, [value]);
+
+  useEffect(() => {
+    if (!compact || !open) return;
+    const onDoc = (event: MouseEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", onDoc);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDoc);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [compact, open]);
 
   const blockedByDate = useMemo(
     () => new Map(blockedDates.map((row) => [row.date, row])),
@@ -211,17 +230,17 @@ export default function AdminDatePicker({
   if (!compact) return calendar;
 
   return (
-    <div className="relative">
+    <div ref={rootRef} className="relative min-w-0">
       <button
         type="button"
         onClick={() => setOpen((current) => !current)}
-        className={cn(fieldClass, "text-left")}
+        className={cn(fieldClass, "h-10 py-0 text-sm text-left truncate", className)}
         aria-expanded={open}
       >
-        {value ? formatDateShort(value) : "Pick a date"}
+        {value ? formatDateShort(value) : "Date"}
       </button>
       {open ? (
-        <div className="absolute z-30 mt-2 w-[min(100%,22rem)] rounded-2xl border border-white/10 bg-[#111111] p-3 shadow-[0_16px_40px_rgba(0,0,0,0.65)]">
+        <div className="absolute z-30 mt-2 left-0 w-[min(22rem,calc(100vw-1.5rem))] rounded-2xl border border-white/10 bg-[#111111] p-3 shadow-[0_16px_40px_rgba(0,0,0,0.65)]">
           {calendar}
         </div>
       ) : null}
