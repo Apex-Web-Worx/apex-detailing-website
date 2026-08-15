@@ -243,7 +243,7 @@ export default function BookingPage() {
         ) : step === "service" ? (
           <ServiceStep
             selected={service}
-            onSelect={(s) => {
+            onPick={(s) => {
               // Clear any previously-picked slot when the service changes,
               // since service-specific availability (e.g. Friday Express
               // only) means the prior slot may no longer be valid.
@@ -252,8 +252,8 @@ export default function BookingPage() {
                 setTime(null);
               }
               setService(s);
-              setStep("datetime");
             }}
+            onContinue={() => setStep("datetime")}
           />
         ) : step === "datetime" ? (
           <DateTimeStep
@@ -352,22 +352,54 @@ export default function BookingPage() {
 /* ---------- Service step ---------- */
 function ServiceStep({
   selected,
-  onSelect,
+  onPick,
+  onContinue,
 }: {
   selected: Service | null;
-  onSelect: (s: Service) => void;
+  onPick: (s: Service) => void;
+  onContinue: () => void;
 }) {
   const { t } = useLanguage();
   const { data, isLoading, error } = useListServices();
-  const phone =
-    typeof window !== "undefined" &&
-    window.matchMedia("(max-width: 1023px)").matches;
+  const [isPhone, setIsPhone] = useState(false);
+  const [highlightedId, setHighlightedId] = useState<number | null>(selected?.id ?? null);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 1023px)");
+    const sync = () => setIsPhone(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  useEffect(() => {
+    setHighlightedId(selected?.id ?? null);
+  }, [selected?.id]);
+
+  const handleServiceTap = (s: Service) => {
+    // Desktop / fine pointer: one click selects and advances.
+    if (!isPhone) {
+      onPick(s);
+      onContinue();
+      return;
+    }
+
+    // Phone: first tap highlights + selects; second tap on same card continues.
+    if (highlightedId === s.id) {
+      onPick(s);
+      onContinue();
+      return;
+    }
+
+    setHighlightedId(s.id);
+    onPick(s);
+  };
 
   return (
     <section>
       <h1 className="text-3xl sm:text-4xl font-black mb-2 font-display">{t("book.choose")}</h1>
       <p className="text-gray-300 mb-8">
-        {t("book.chooseSub")}
+        {isPhone ? t("book.chooseSubMobile") : t("book.chooseSub")}
       </p>
 
       {isLoading && <Loading label={t("book.loadingServices")} />}
@@ -375,7 +407,7 @@ function ServiceStep({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
         {data?.map((s) => {
-          const isSelected = selected?.id === s.id;
+          const isSelected = highlightedId === s.id || selected?.id === s.id;
           const iconMeta = SERVICE_ICONS[s.slug];
           const Icon = iconMeta?.icon;
           const badge = SERVICE_BADGES[s.slug];
@@ -385,18 +417,21 @@ function ServiceStep({
             <button
               key={s.id}
               type="button"
-              onClick={() => onSelect(s)}
-              onTouchEnd={(e) => {
-                e.preventDefault();
-                onSelect(s);
-              }}
-              className={`relative flex h-full min-h-[12rem] flex-col text-left rounded-2xl border overflow-hidden transition [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-2xl [@media(hover:hover)_and_(pointer:fine)]:hover:border-[#00E5FF]/40 ${
+              aria-pressed={isSelected}
+              onClick={() => handleServiceTap(s)}
+              className={`relative flex h-full min-h-[12rem] flex-col text-left rounded-2xl border overflow-hidden transition touch-manipulation [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-2xl [@media(hover:hover)_and_(pointer:fine)]:hover:border-[#00E5FF]/40 ${
                 isSelected
-                  ? "border-[#00E5FF] bg-[#00E5FF]/10"
+                  ? "border-[#FF1AD8] bg-[#FF1AD8]/10 shadow-[0_0_24px_rgba(255,26,216,0.22)] ring-1 ring-[#FF1AD8]/50"
                   : "border-white/10 bg-white/[0.02]"
               }`}
             >
-              {photo && !phone && (
+              {isSelected && (
+                <span className="absolute top-3 right-3 z-10 inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white shadow-lg">
+                  <Check className="w-3 h-3" />
+                  {t("book.selected")}
+                </span>
+              )}
+              {photo && !isPhone && (
                 <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden bg-[#111]">
                   <OptimizedImage
                     src={imageUrl(photo)}
@@ -415,11 +450,13 @@ function ServiceStep({
               <div className="flex flex-1 flex-col p-6">
               <div className="flex items-start gap-3 mb-3">
                 {Icon && (
-                  <span className="shrink-0 p-2 rounded-lg bg-white/5 inline-flex items-center justify-center">
+                  <span className={`shrink-0 p-2 rounded-lg inline-flex items-center justify-center ${
+                    isSelected ? "bg-[#FF1AD8]/15 border border-[#FF1AD8]/40" : "bg-white/5"
+                  }`}>
                     <Icon className={`w-5 h-5 ${iconMeta.color}`} />
                   </span>
                 )}
-                <div className="min-w-0 flex-1">
+                <div className="min-w-0 flex-1 pr-16">
                   <h3 className="text-lg font-bold text-white leading-snug">
                     {packageTitleKey(s.slug) ? t(packageTitleKey(s.slug)!) : s.name}
                   </h3>
@@ -476,8 +513,13 @@ function ServiceStep({
               </p>
 
               <div className="mt-auto flex items-center justify-end pt-1">
-                <span className="text-[#00E5FF] font-bold text-xs flex items-center gap-1">
-                  {t("book.select")} <ArrowRight className="w-3.5 h-3.5" />
+                <span
+                  className={`font-bold text-xs flex items-center gap-1 ${
+                    isSelected && isPhone ? "text-[#FF1AD8]" : "text-[#00E5FF]"
+                  }`}
+                >
+                  {isSelected && isPhone ? t("book.tapAgain") : t("book.select")}{" "}
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </div>
               </div>
@@ -485,6 +527,19 @@ function ServiceStep({
           );
         })}
       </div>
+
+      {isPhone && selected && (
+        <div className="sticky bottom-4 z-20 mt-6">
+          <button
+            type="button"
+            onClick={onContinue}
+            className="btn-cyber btn-cyber-lg btn-cyber-block w-full min-h-12"
+          >
+            <span>{t("book.continue")}</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      )}
     </section>
   );
 }
