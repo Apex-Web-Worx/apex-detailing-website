@@ -332,17 +332,17 @@ export default function Home() {
     if (reduce) return [];
     const mobile = window.matchMedia("(max-width: 640px)").matches;
     // Keep enough density on phones — prior 8×tiny bubbles were nearly invisible
-    const count = mobile ? 8 : 12;
+    const count = mobile ? 16 : 18;
     return Array.from({ length: count }, (_, i) => {
       const tone = Math.random();
       return {
         id: i,
         x: Math.random() * 100,
         start: -5 + Math.random() * 95,
-        size: mobile ? 10 + Math.random() * 18 : 8 + Math.random() * 14,
-        drift: (Math.random() - 0.5) * (mobile ? 90 : 110),
-        dur: (mobile ? 10 : 11) + Math.random() * (mobile ? 10 : 12),
-        delay: -Math.random() * (mobile ? 12 : 14),
+        size: mobile ? 14 + Math.random() * 22 : 10 + Math.random() * 16,
+        drift: (Math.random() - 0.5) * (mobile ? 80 : 100),
+        dur: (mobile ? 11 : 12) + Math.random() * (mobile ? 10 : 12),
+        delay: -Math.random() * (mobile ? 14 : 16),
         tone: tone < 0.34 ? "pink" : tone < 0.68 ? "cyan" : "",
       };
     });

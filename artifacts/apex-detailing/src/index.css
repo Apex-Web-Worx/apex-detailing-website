@@ -924,10 +924,10 @@
   .page-bubbles {
     position: absolute;
     inset: 0;
-    z-index: 0;
+    z-index: 20;
     pointer-events: none;
     overflow: hidden;
-    opacity: 0.35;
+    opacity: 0.7;
   }
 
   .page-bubble {
@@ -982,7 +982,7 @@
   /* Phones: stronger bubble presence */
   @media (max-width: 640px) {
     .page-bubbles {
-      opacity: 0.55;
+      opacity: 0.85;
     }
     .page-bubble {
       border-color: rgba(255, 255, 255, 0.28);
