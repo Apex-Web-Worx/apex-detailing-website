@@ -24,9 +24,16 @@ export default function HeroCopy({
         <span>{t("hero.badge")}</span>
       </div>
       <h1 className="apex-hero-title">
-        <span className="apex-hero-title-line">{t("hero.title1")}</span>
-        <span className="apex-hero-title-line apex-hero-title-grad">{t("hero.title2")}</span>
-        <span className="apex-hero-title-line apex-hero-title-grad">{t("hero.title3")}</span>
+        {/* Exactly 3 desktop lines — never one block/word per line */}
+        <span className="apex-hero-title-line apex-hero-title-line--1">
+          {t("hero.title1")}
+        </span>
+        <span className="apex-hero-title-line apex-hero-title-line--2">
+          {t("hero.title2")}
+        </span>
+        <span className="apex-hero-title-line apex-hero-title-line--3 apex-hero-title-grad">
+          {t("hero.title3")}
+        </span>
       </h1>
       <p className="apex-hero-sub">
         <span className="apex-hero-sub-lead">{t("hero.subtitleLead")}</span>

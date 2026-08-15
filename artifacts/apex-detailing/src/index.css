@@ -2409,17 +2409,21 @@
   .apex-hero-title {
     margin: 0 0 24px;
     width: 100%;
-    max-width: 700px;
+    max-width: 720px;
     font-family: "Michroma", "Mulish", sans-serif;
-    font-size: clamp(64px, 5vw, 90px);
+    font-size: clamp(64px, 5vw, 92px);
     line-height: 0.9;
     font-weight: 400;
     letter-spacing: -0.02em;
     text-transform: uppercase;
+    text-wrap: unset;
+    overflow-wrap: normal;
+    word-break: normal;
   }
 
   .apex-hero-title-line {
     display: block;
+    color: #fff;
   }
 
   .apex-hero-title-grad {
@@ -2513,55 +2517,37 @@
     filter: drop-shadow(0 0 7px rgba(232, 197, 71, 0.7));
   }
 
-  /* Desktop ≥1200: keep the 3-line headline from wrapping into 5 lines */
-  @media (min-width: 1200px) {
+  /* Desktop/laptop: each of the 3 title lines stays on ONE line */
+  @media (min-width: 1024px) {
     .apex-hero-title-line {
       white-space: nowrap;
     }
+
+    .apex-hero-copy {
+      width: 48%;
+      max-width: 720px;
+    }
   }
 
-  /* Mid desktop: slightly tighter type so YOUR CAR'S / TRUE POTENTIAL stay one line */
-  @media (min-width: 1200px) and (max-width: 1439px) {
+  /* Mid desktop: slightly tighter type if needed; never re-enable mid-phrase wrap */
+  @media (min-width: 1024px) and (max-width: 1439px) {
     .apex-hero-copy {
       width: min(52%, 720px);
     }
 
     .apex-hero-title {
-      font-size: clamp(56px, 4.6vw, 72px);
-    }
-
-    .apex-hero-stage {
-      left: 46%;
+      font-size: clamp(52px, 4.8vw, 72px);
     }
   }
 
-  /* Tablet / small laptop between mobile stack and full desktop */
   @media (min-width: 1024px) and (max-width: 1199px) {
     .apex-hero-shell {
       padding-left: 32px;
       padding-right: 32px;
     }
 
-    .apex-hero-copy {
-      width: min(50%, 560px);
-      max-width: 560px;
-    }
-
-    .apex-hero-title {
-      font-size: clamp(48px, 5.2vw, 64px);
-      max-width: 100%;
-    }
-
-    .apex-hero-title-line {
-      white-space: normal;
-    }
-
     .apex-hero-ctas {
       flex-wrap: wrap;
-    }
-
-    .apex-hero-stage {
-      left: 46%;
     }
   }
 
