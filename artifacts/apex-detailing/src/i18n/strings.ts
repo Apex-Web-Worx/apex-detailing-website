@@ -49,6 +49,7 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "services.express": "Express",
     "services.callQuote": "Call for Quote",
     "addons.optional": "Optional Services (Extra Charges Apply)",
+    "addons.customize": "Customize Your Detail",
 
     "how.kicker": "How It Works",
     "how.title": "Three Simple",
@@ -449,6 +450,7 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "services.express": "Экспресс",
     "services.callQuote": "Цена по запросу",
     "addons.optional": "Дополнительно (за отдельную плату)",
+    "addons.customize": "Настройте свой детейлинг",
 
     "how.kicker": "Как это работает",
     "how.title": "Три простых",

@@ -26,6 +26,7 @@ import LanguageToggle from "@/components/LanguageToggle";
 import ApexHero from "@/components/hero/ApexHero";
 import HeroDip from "@/components/hero/HeroDip";
 import EliteServicesSection from "@/components/EliteServicesSection";
+import AddonsSection from "@/components/AddonsSection";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
 import GalleryVideoThumb from "@/components/GalleryVideoThumb";
@@ -47,44 +48,6 @@ const NAV_ITEMS = [
   { id: "journal", kind: "path" as const, path: "blog" },
   { id: "gift", kind: "path" as const, path: "gift-cards" },
 ];
-
-const AddonCard = ({ addon }: { addon: { id: string; price: string } }) => {
-  const { t } = useLanguage();
-  const [isExpanded, setIsExpanded] = useState(false);
-  const name = t(`addon.${addon.id}.name`);
-  const description = t(`addon.${addon.id}.desc`);
-  return (
-    <div
-      className="relative overflow-hidden p-4 rounded-lg bg-[#080808] border border-white/10 hover:border-[#00E5FF]/40 transition-all cursor-pointer group"
-      onMouseEnter={() => setIsExpanded(true)}
-      onMouseLeave={() => setIsExpanded(false)}
-    >
-      <div
-        className="pointer-events-none absolute inset-0"
-        aria-hidden="true"
-        style={{
-          background:
-            "radial-gradient(ellipse 90% 70% at 0% 0%, rgba(255,255,255,0.04), transparent 55%)",
-        }}
-      />
-      <h4 className="relative z-10 text-base font-bold text-white mb-1 group-hover:text-[#00E5FF] transition-colors duration-300">{name}</h4>
-      <p className="relative z-10 text-potential font-bold text-sm">{addon.price}</p>
-      {description && (
-        <div 
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsExpanded(!isExpanded);
-          }}
-          className={`relative z-10 overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-96' : 'max-h-0'}`}
-        >
-          <p className="text-gray-300 text-xs mt-3 leading-relaxed">
-            {description}
-          </p>
-        </div>
-      )}
-    </div>
-  );
-};
 
 const services = [
   {
@@ -240,67 +203,6 @@ const googleReviews = [
     text: "Apex got my car looking better than ever, and this isn't the first time I've gotten it detailed. The owner is very detail oriented and made my car shine inside and out. Turn around time was great and my car was ready in time for my visitors.",
   },
 ];
-
-function AddonsSection() {
-  const { t } = useLanguage();
-
-  const interiorAddons = [
-    { id: "pet-hair", price: "$0 – $100" },
-    { id: "deep-shampooing", price: "$120+" },
-    { id: "plastic-uv", price: "$60" },
-  ];
-
-  const exteriorAddons = [
-    { id: "exterior-detailing", price: "Sedan: $150 | SUV: $200" },
-    { id: "wash-clay-wax", price: "Sedan: $250 | SUV: $300–$350" },
-    { id: "dress-exterior", price: "$45" },
-    { id: "clay-bar", price: "$55+" },
-    { id: "headlight", price: "$125" },
-    { id: "engine-bay", price: "$60+" },
-  ];
-
-  return (
-    <div className="mt-24 pt-16 border-t border-white/10">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Interior Addons */}
-        <div>
-          <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4 font-display">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-              {t("addons.interior")}
-            </span>
-          </h3>
-          <p className="text-gray-400 text-sm mb-6">
-            {t("addons.optional")}
-          </p>
-          
-          <div className="space-y-4">
-            {interiorAddons.map(addon => (
-              <AddonCard key={addon.id} addon={addon} />
-            ))}
-          </div>
-        </div>
-
-        {/* Exterior Addons */}
-        <div>
-          <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4 font-display">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-              {t("addons.exterior")}
-            </span>
-          </h3>
-          <p className="text-gray-400 text-sm mb-6">
-            {t("addons.optional")}
-          </p>
-          
-          <div className="space-y-4">
-            {exteriorAddons.map(addon => (
-              <AddonCard key={addon.id} addon={addon} />
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default function Home() {
   const { t, list } = useLanguage();
