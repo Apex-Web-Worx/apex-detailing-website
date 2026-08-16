@@ -35,21 +35,6 @@ const ClayBarIcon = createLucideIcon("AddonClayBar", [
   ["path", { d: "M18.5 4.2v2M17.5 5.2h2", key: "shine" }],
 ]);
 
-/** Automotive headlight + rays. */
-const HeadlightIcon = createLucideIcon("AddonHeadlight", [
-  [
-    "path",
-    {
-      d: "M4.5 8.2c0-1.4 1-2.5 2.3-2.7l5.2-.8c1.8-.3 3.5.9 3.8 2.7l.9 5.8c.2 1.5-.8 2.9-2.3 3.2l-5.4 1.1c-1.5.3-3-.7-3.3-2.2z",
-      key: "housing",
-    },
-  ],
-  ["ellipse", { cx: "10.2", cy: "12", rx: "3.1", ry: "3.4", key: "lens" }],
-  ["path", { d: "M16.6 7.4 20.5 5.6", key: "ray-top" }],
-  ["path", { d: "M17.2 12h4.2", key: "ray-mid" }],
-  ["path", { d: "M16.6 16.6 20.5 18.4", key: "ray-bot" }],
-]);
-
 type AddonDef = {
   id: string;
   price: string;
