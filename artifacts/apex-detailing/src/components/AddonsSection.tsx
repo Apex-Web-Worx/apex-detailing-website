@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  Car,
   Cog,
   createLucideIcon,
   Droplets,
@@ -36,19 +35,6 @@ const ClayBarIcon = createLucideIcon("AddonClayBar", [
   ["path", { d: "M18.5 4.2v2M17.5 5.2h2", key: "shine" }],
 ]);
 
-/** Droplets + sparkle — wash / clay / wax. */
-const WashSparkleIcon = createLucideIcon("AddonWashSparkle", [
-  [
-    "path",
-    {
-      d: "M8 14.5a2.6 2.6 0 0 0 5.2 0c0-2-2.6-5-2.6-5S8 12.5 8 14.5z",
-      key: "drop",
-    },
-  ],
-  ["path", { d: "M16.5 5.5v3M15 7h3", key: "spark-lg" }],
-  ["path", { d: "M19.2 9.2v1.8M18.3 10.1h1.8", key: "spark-sm" }],
-]);
-
 /** Automotive headlight + rays. */
 const HeadlightIcon = createLucideIcon("AddonHeadlight", [
   [
@@ -77,8 +63,6 @@ const INTERIOR_ADDONS: AddonDef[] = [
 ];
 
 const EXTERIOR_ADDONS: AddonDef[] = [
-  { id: "exterior-detailing", price: "Sedan: $150 | SUV: $200", Icon: Car },
-  { id: "wash-clay-wax", price: "Sedan: $250 | SUV: $300–$350", Icon: WashSparkleIcon },
   { id: "dress-exterior", price: "$45", Icon: SprayCan },
   { id: "clay-bar", price: "$55+", Icon: ClayBarIcon },
   { id: "headlight", price: "$125", Icon: HeadlightIcon },
