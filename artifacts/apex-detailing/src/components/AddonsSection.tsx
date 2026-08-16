@@ -66,7 +66,7 @@ const EXTERIOR_ADDONS: AddonDef[] = [
   { id: "dress-exterior", price: "$45", Icon: SprayCan },
   { id: "clay-bar", price: "$55+", Icon: ClayBarIcon },
   { id: "headlight", price: "$125", Icon: HeadlightIcon },
-  { id: "engine-bay", price: "$60+", Icon: Cog },
+  { id: "engine-bay", price: "$80", Icon: Cog },
 ];
 
 function AddonCard({ addon }: { addon: AddonDef }) {
