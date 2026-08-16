@@ -26,7 +26,12 @@ export default function ApexHero({
   const shine = !reduce;
 
   return (
-    <section id="home" className={`apex-hero${shine ? " is-shining" : ""}`}>
+    <section
+      id="home"
+      data-mobile-hero="stack-v2"
+      className={`apex-hero${shine ? " is-shining" : ""}`}
+    >
+      {/* Mobile: stage is first in document order; desktop CSS pulls it to the right pane */}
       <div className="apex-hero-stage" aria-hidden="true">
         <div className="apex-hero-plate">
           <picture>
