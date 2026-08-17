@@ -1,4 +1,4 @@
-import { formatDuration, formatPrice } from "@/lib/format";
+import { formatDuration, formatPrice, isQuoteOnlyService } from "@/lib/format";
 import { useAdmin } from "../context";
 import ServiceRulesPanel from "../components/ServiceRulesPanel";
 import { AdminCard, EmptyState } from "../components/ui";
@@ -28,7 +28,9 @@ export default function ServicesPage() {
               <p className="text-sm text-[#9CA3AF] mt-2">{s.description}</p>
               <div className="flex gap-4 mt-4 text-sm">
                 <span>{formatDuration(s.durationMinutes)}</span>
-                <span className="font-semibold">{formatPrice(s.priceCents)} starting</span>
+                <span className="font-semibold">
+                  {isQuoteOnlyService(s) ? "Call for Quote" : `${formatPrice(s.priceCents)} starting`}
+                </span>
               </div>
             </AdminCard>
           ))}

@@ -22,6 +22,7 @@ import {
   formatDateTimeLong,
   formatPrice,
   formatDuration,
+  isQuoteOnlyService,
   todayDateString,
   addDaysToDateString,
 } from "@/lib/format";
@@ -541,7 +542,11 @@ function ServiceStep({
               </div>
 
               <div className="flex items-baseline gap-2 mb-3 flex-wrap">
-                {s.priceCents > 0 ? (
+                {isQuoteOnlyService(s) ? (
+                  <span className="text-base font-black text-[#00E5FF]">
+                    {t("services.callQuote")}
+                  </span>
+                ) : (
                   <>
                     <span className="text-xs uppercase tracking-wider text-gray-500 font-semibold">
                       {t("services.startingAt")}
@@ -550,10 +555,6 @@ function ServiceStep({
                       {formatPrice(s.priceCents)}
                     </span>
                   </>
-                ) : (
-                  <span className="text-base font-black text-[#00E5FF]">
-                    {t("services.callQuote")}
-                  </span>
                 )}
                 <span className="text-xs text-gray-500 flex items-center gap-1">
                   <Clock className="w-3 h-3" />
