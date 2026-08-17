@@ -2,6 +2,17 @@ export function formatPrice(cents: number): string {
   return `$${(cents / 100).toFixed(0)}`;
 }
 
+/** Ceramic coating is custom-quoted — never show a dollar starting price. */
+export const QUOTE_ONLY_SLUGS = new Set(["apex-ceramic-coating"]);
+
+export function isQuoteOnlyService(service: {
+  slug?: string;
+  priceCents?: number;
+}): boolean {
+  if (service.slug && QUOTE_ONLY_SLUGS.has(service.slug)) return true;
+  return (service.priceCents ?? 0) <= 0;
+}
+
 export function formatDuration(minutes: number): string {
   if (minutes < 60) return `${minutes} min`;
   const hours = minutes / 60;

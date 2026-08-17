@@ -45,7 +45,9 @@ export default function PaymentsPage() {
                     <p className="text-sm text-[#9CA3AF] truncate">{b.serviceName} · {bookingShopDate(b)}</p>
                   </div>
                   <StatusBadge status={displayStatus(b)} />
-                  <span className="font-semibold">{formatPrice(b.servicePriceCents)}</span>
+                  <span className="font-semibold">
+                    {b.servicePriceCents > 0 ? formatPrice(b.servicePriceCents) : "Call for Quote"}
+                  </span>
                 </div>
               </AdminCard>
             </button>

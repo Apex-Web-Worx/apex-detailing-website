@@ -202,7 +202,7 @@ const MORE_SERVICES: MoreService[] = [
   {
     id: "ceramic-coating",
     pkg: "ceramic",
-    pricing: "$600",
+    pricing: "Call for Quote",
     Icon: Shield,
     badgeKey: "services.premiumProtection",
     BadgeIcon: Shield,
