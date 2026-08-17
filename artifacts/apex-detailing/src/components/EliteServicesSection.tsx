@@ -207,8 +207,8 @@ const MORE_SERVICES: MoreService[] = [
     badgeKey: "services.premiumProtection",
     BadgeIcon: Shield,
     descKey: "pkg.ceramic.cardDesc",
-    // Decontamination / 9H coat / Hydrophobic / UV / Gloss
-    featIcons: [Sparkles, Shield, WaterRepelIcon, UvProtectIcon, ShieldShineIcon],
+    // Paint correction / decon / 9H / hydrophobic / UV / gloss
+    featIcons: [Wand2, Sparkles, Shield, WaterRepelIcon, UvProtectIcon, ShieldShineIcon],
   },
 ];
 
@@ -326,7 +326,10 @@ export default function EliteServicesSection({
           <h3 className="elite-more__title">{t("services.moreTitle")}</h3>
           <div className="elite-services__grid elite-more__grid">
             {MORE_SERVICES.map((service, index) => {
-              const feats = list(`pkg.${service.pkg}.feat`).slice(0, 5);
+              const feats = list(`pkg.${service.pkg}.feat`).slice(
+                0,
+                service.pkg === "ceramic" ? 6 : 5,
+              );
               return (
                 <article
                   key={service.id}

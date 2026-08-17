@@ -452,11 +452,12 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
       "Long-lasting ceramic protection that enhances gloss, repels water, and helps protect your vehicle’s paint from environmental contaminants.",
     "pkg.ceramic.desc":
       "Long-lasting ceramic protection that enhances gloss, repels water, and helps protect your vehicle’s paint from environmental contaminants.",
-    "pkg.ceramic.feat.0": "Professional Paint Decontamination",
-    "pkg.ceramic.feat.1": "9H Ceramic Coating Application",
-    "pkg.ceramic.feat.2": "Hydrophobic Protection",
-    "pkg.ceramic.feat.3": "UV & Chemical Resistance",
-    "pkg.ceramic.feat.4": "Long-Lasting Gloss & Durability",
+    "pkg.ceramic.feat.0": "1-Step or 2-Step Paint Correction — needed so coating bonds to swirl-free paint",
+    "pkg.ceramic.feat.1": "Professional Paint Decontamination",
+    "pkg.ceramic.feat.2": "9H Ceramic Coating Application",
+    "pkg.ceramic.feat.3": "Hydrophobic Protection",
+    "pkg.ceramic.feat.4": "UV & Chemical Resistance",
+    "pkg.ceramic.feat.5": "Long-Lasting Gloss & Durability",
 
     "pkg.paint.title": "Apex Paint Correction",
     "pkg.paint.desc":
@@ -960,11 +961,12 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
       "Долговечная керамическая защита: усиливает блеск, отталкивает воду и помогает защитить ЛКП от внешних загрязнений.",
     "pkg.ceramic.desc":
       "Долговечная керамическая защита: усиливает блеск, отталкивает воду и помогает защитить ЛКП от внешних загрязнений.",
-    "pkg.ceramic.feat.0": "Профессиональная деконтаминация ЛКП",
-    "pkg.ceramic.feat.1": "Нанесение керамики 9H",
-    "pkg.ceramic.feat.2": "Гидрофобная защита",
-    "pkg.ceramic.feat.3": "Устойчивость к УФ и химии",
-    "pkg.ceramic.feat.4": "Долговечный блеск и стойкость",
+    "pkg.ceramic.feat.0": "1-этапная или 2-этапная коррекция ЛКП — чтобы керамика легла на ровную поверхность без кругов",
+    "pkg.ceramic.feat.1": "Профессиональная деконтаминация ЛКП",
+    "pkg.ceramic.feat.2": "Нанесение керамики 9H",
+    "pkg.ceramic.feat.3": "Гидрофобная защита",
+    "pkg.ceramic.feat.4": "Устойчивость к УФ и химии",
+    "pkg.ceramic.feat.5": "Долговечный блеск и стойкость",
 
     "pkg.paint.title": "Коррекция ЛКП Apex",
     "pkg.paint.desc":
