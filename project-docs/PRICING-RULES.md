@@ -52,9 +52,10 @@ All prices are **starting at** amounts. Final pricing is confirmed upon vehicle 
 - Fixed price, no vehicle size tiers
 
 ### 7. Apex Ceramic Coating
-**Call for Quote** | Duration: 10 hours
-- Custom-quoted based on vehicle size, paint condition, and whether paint correction is needed first
-- Frontend shows "Call for quote" when `priceCents === 0`
+**Starting at $900** | Duration: 10 hours
+- Starting price shown on the site and booking picker
+- Final price depends on vehicle size, paint condition, and whether extra correction is needed
+- Must be booked 3+ days in advance
 
 ### 8. Apex Paint Correction
 **Starting at $300+** | Duration: 8 hours
