@@ -8,7 +8,9 @@ export const OWNER_EMAIL = "apexdetailing.net@gmail.com";
 // Additional recipients CC'd on every owner-facing notification (new
 // booking, reschedule, cancellation). Customer-facing emails are not
 // affected.
-export const OWNER_CC_EMAILS = ["gurova.krista@gmail.com"];
+export const OWNER_CC_EMAILS: string[] = [];
+// Never send to these addresses (To or Cc), even if they appear on a booking.
+const EMAIL_SUPPRESSED = new Set(["gurova.krista@gmail.com"]);
 export const FROM_NAME = "Apex Detailing";
 export const SHOP_PHONE = "(417) 527-6165";
 export const SHOP_ADDRESS = "1114 E Lakota St, Nixa, MO 65714";
@@ -135,6 +137,14 @@ function buildRawMessage(args: {
   return `${headers}\r\n${body}`;
 }
 
+function normalizeEmail(email: string): string {
+  return email.trim().toLowerCase();
+}
+
+function isEmailSuppressed(email: string): boolean {
+  return EMAIL_SUPPRESSED.has(normalizeEmail(email));
+}
+
 async function sendViaGmail(args: {
   to: string;
   cc?: string[];
@@ -143,11 +153,17 @@ async function sendViaGmail(args: {
   html: string;
   text: string;
 }): Promise<string | null> {
+  if (isEmailSuppressed(args.to)) {
+    console.log(`[email] suppressed send to ${args.to}`);
+    return null;
+  }
+
+  const cc = (args.cc ?? []).filter((c) => !isEmailSuppressed(c));
   const raw = buildRawMessage({
     fromName: FROM_NAME,
     fromEmail: OWNER_EMAIL,
     to: args.to,
-    cc: args.cc,
+    cc,
     replyTo: args.replyTo,
     subject: args.subject,
     html: args.html,

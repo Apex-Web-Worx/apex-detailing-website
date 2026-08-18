@@ -105,7 +105,7 @@ Three-step exterior treatment:
 ---
 
 ### 7. Apex Ceramic Coating
-**Duration:** 10 hours | **Price:** Call for Quote | Badge: "3-Day Notice"
+**Duration:** 10 hours | **Starting at:** $900 | Badge: "3-Day Notice"
 
 Ultimate paint protection:
 - Up to 5 Years Protection

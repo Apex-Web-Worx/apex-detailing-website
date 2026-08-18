@@ -29,8 +29,8 @@ const MON_THRU_SAT_NON_FRI = [1, 2, 3, 4, 6]; // 0=Sun..6=Sat
 // New "Apex" elite catalog (replaces the prior 6-service list).
 // priceCents represents the "starting at" price shown on the booking
 // service-picker. A value of 0 is treated as "Call for quote" by the
-// frontend (currently only Ceramic Coating). Final pricing is always
-// confirmed in person and may vary by vehicle size / condition.
+// frontend. Final pricing is always confirmed in person and may vary
+// by vehicle size / condition.
 const seeds = [
   {
     slug: "apex-full-detailing",
@@ -92,8 +92,7 @@ const seeds = [
     description:
       "Ultimate protection and extreme gloss for your vehicle's paint. Lasts for years, making maintenance washes a breeze. Up to 5 years of protection, extreme hydrophobics, scratch resistance.",
     durationMinutes: 600,
-    // Custom-quoted — frontend shows "Call for quote" when priceCents === 0.
-    priceCents: 0,
+    priceCents: 90000,
     sortOrder: 70,
   },
   {
