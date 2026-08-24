@@ -79,7 +79,7 @@ Comprehensive exterior cleaning:
 ---
 
 ### 5. Apex Wash, Clay & Wax
-**Duration:** 3 hours | **Starting at:** $250
+**Duration:** 3 hours | **Starting at:** $300
 
 Three-step exterior treatment:
 - Thorough Hand Wash
@@ -89,8 +89,8 @@ Three-step exterior treatment:
 - Water & Dirt Repellent
 
 **Vehicle Pricing:**
-- Sedan: $250
-- SUV / Truck: $300–$350
+- Sedan: $300
+- SUV / Truck: $400
 
 ---
 

@@ -74,7 +74,7 @@ const seeds = [
     description:
       "Thorough hand wash, clay bar treatment to remove embedded contaminants, and a protective wax coating to enhance shine, protect the paint, and repel water and dirt.",
     durationMinutes: 180,
-    priceCents: 25000,
+    priceCents: 30000,
     sortOrder: 50,
   },
   {

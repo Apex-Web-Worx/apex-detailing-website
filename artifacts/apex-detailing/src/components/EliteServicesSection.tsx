@@ -187,7 +187,7 @@ const MORE_SERVICES: MoreService[] = [
   {
     id: "wash-clay-wax",
     pkg: "wax",
-    pricing: "$250",
+    pricing: "$300",
     Icon: WashClayWaxIcon,
     // Hand wash / Clay bar / Wax / Paint protection / Water & dirt repellent
     featIcons: [Droplets, ClayBarIcon, Sparkles, ShieldShineIcon, WaterRepelIcon],

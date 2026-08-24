@@ -41,12 +41,12 @@ All prices are **starting at** amounts. Final pricing is confirmed upon vehicle 
 | SUV / Truck | $200 – $250 |
 
 ### 5. Apex Wash, Clay & Wax
-**Starting at $250** | Duration: 3 hours
+**Starting at $300** | Duration: 3 hours
 
 | Vehicle Type | Price |
 |-------------|-------|
-| Sedan | $250 |
-| SUV / Truck | $300 – $350 |
+| Sedan | $300 |
+| SUV / Truck | $400 |
 
 ### 6. Apex Headlight Restoration
 **$125** | Duration: 1.5 hours

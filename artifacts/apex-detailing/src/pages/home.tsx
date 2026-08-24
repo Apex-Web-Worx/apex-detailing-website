@@ -79,7 +79,7 @@ const services = [
     id: "wash-clay-wax",
     pkg: "wax",
     icon: <Sparkles className="w-10 h-10 text-[#FF1AD8]" />,
-    pricing: "$250",
+    pricing: "$300",
   },
   {
     id: "headlight-restoration",
