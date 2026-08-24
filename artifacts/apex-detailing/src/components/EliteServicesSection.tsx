@@ -150,7 +150,7 @@ const FEATURED: FeaturedPkg[] = [
     BadgeIcon: Star,
     Icon: Droplets,
     featPrefix: "pkg.interior.cardFeat",
-    featIcons: [Sparkles, Droplets, Shield, Wind, Zap],
+    featIcons: [Sparkles, Droplets, Shield, Wind, Zap, Car, AppWindow],
   },
   {
     pkg: "express",
