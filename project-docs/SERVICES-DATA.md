@@ -40,7 +40,7 @@ Comprehensive interior cleaning:
 **Vehicle Pricing:**
 - Standard: $200
 - SUV / Jeep: $250
-- 3-row: $300
+- 3-row: $300–$350
 
 ---
 
