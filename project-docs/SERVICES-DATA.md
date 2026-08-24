@@ -74,7 +74,7 @@ Comprehensive exterior cleaning:
 
 **Vehicle Pricing:**
 - Sedan: $150
-- SUV: $200–$250
+- SUV / Truck: $200–$250
 
 ---
 
@@ -90,7 +90,7 @@ Three-step exterior treatment:
 
 **Vehicle Pricing:**
 - Sedan: $250
-- SUV: $300–$350
+- SUV / Truck: $300–$350
 
 ---
 
