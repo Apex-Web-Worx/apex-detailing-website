@@ -16,10 +16,11 @@ All prices are **starting at** amounts. Final pricing is confirmed upon vehicle 
 ### 2. Apex Interior Detailing
 **Starting at $200** | Duration: 6 hours
 
-| Vehicle Type | Price Range |
-|-------------|-------------|
-| 2-Row (sedan, coupe, small SUV) | $200 – $300 |
-| 3-Row (minivan, large SUV) | $250 – $350 |
+| Vehicle Type | Price |
+|-------------|-------|
+| Standard | $200 |
+| SUV / Jeep | $250 |
+| 3-row vehicles | $300 – $350 |
 
 ### 3. Apex Express Interior Detailing
 **Starting at $100** | Duration: 1.5 hours
@@ -52,9 +53,10 @@ All prices are **starting at** amounts. Final pricing is confirmed upon vehicle 
 - Fixed price, no vehicle size tiers
 
 ### 7. Apex Ceramic Coating
-**Call for Quote** | Duration: 10 hours
-- Custom-quoted based on vehicle size, paint condition, and whether paint correction is needed first
-- Frontend shows "Call for quote" when `priceCents === 0`
+**Starting at $900** | Duration: 10 hours
+- Starting price shown on the site and booking picker
+- Final price depends on vehicle size, paint condition, and whether extra correction is needed
+- Must be booked 3+ days in advance
 
 ### 8. Apex Paint Correction
 **Starting at $300+** | Duration: 8 hours

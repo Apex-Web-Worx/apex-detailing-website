@@ -38,8 +38,9 @@ Comprehensive interior cleaning:
 - Steam-cleaning of brake and gas pedals
 
 **Vehicle Pricing:**
-- 2-Row: $200–$300
-- 3-Row: $250–$350
+- Standard: $200
+- SUV / Jeep: $250
+- 3-row: $300–$350
 
 ---
 
@@ -105,7 +106,7 @@ Three-step exterior treatment:
 ---
 
 ### 7. Apex Ceramic Coating
-**Duration:** 10 hours | **Price:** Call for Quote | Badge: "3-Day Notice"
+**Duration:** 10 hours | **Starting at:** $900 | Badge: "3-Day Notice"
 
 Ultimate paint protection:
 - Up to 5 Years Protection
