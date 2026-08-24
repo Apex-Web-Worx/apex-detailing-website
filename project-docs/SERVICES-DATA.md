@@ -38,8 +38,9 @@ Comprehensive interior cleaning:
 - Steam-cleaning of brake and gas pedals
 
 **Vehicle Pricing:**
-- 2-Row: $200–$300
-- 3-Row: $250–$350
+- Standard: $200
+- SUV / Jeep: $250
+- 3-row: $300
 
 ---
 

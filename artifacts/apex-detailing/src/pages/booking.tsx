@@ -29,6 +29,7 @@ import VehiclePhotoPicker from "@/components/VehiclePhotoPicker";
 import LanguageToggle from "@/components/LanguageToggle";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { packageDescKey, packageTitleKey, BOOKING_SLUG_TO_PKG, PKG_PHOTO } from "@/i18n/packageMap";
+import PriceTiers from "@/components/PriceTiers";
 import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
 import {
   revokePickedPhotos,
@@ -540,7 +541,7 @@ function ServiceStep({
                 </div>
               </div>
 
-              <div className="flex items-baseline gap-2 mb-3 flex-wrap">
+              <div className="flex items-baseline gap-2 mb-2 flex-wrap">
                 {s.priceCents > 0 ? (
                   <>
                     <span className="text-xs uppercase tracking-wider text-gray-500 font-semibold">
@@ -560,6 +561,7 @@ function ServiceStep({
                   {formatDuration(s.durationMinutes)}
                 </span>
               </div>
+              <PriceTiers pkg={BOOKING_SLUG_TO_PKG[s.slug] ?? ""} className="mb-3" />
 
               <p className="text-sm text-gray-300 mb-4 leading-relaxed flex-1">
                 {packageDescKey(s.slug) ? t(packageDescKey(s.slug)!) : s.description}

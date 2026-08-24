@@ -16,10 +16,11 @@ All prices are **starting at** amounts. Final pricing is confirmed upon vehicle 
 ### 2. Apex Interior Detailing
 **Starting at $200** | Duration: 6 hours
 
-| Vehicle Type | Price Range |
-|-------------|-------------|
-| 2-Row (sedan, coupe, small SUV) | $200 – $300 |
-| 3-Row (minivan, large SUV) | $250 – $350 |
+| Vehicle Type | Price |
+|-------------|-------|
+| Standard | $200 |
+| SUV / Jeep | $250 |
+| 3-row vehicles | $300 |
 
 ### 3. Apex Express Interior Detailing
 **Starting at $100** | Duration: 1.5 hours

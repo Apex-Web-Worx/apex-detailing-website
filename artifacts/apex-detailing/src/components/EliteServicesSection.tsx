@@ -20,6 +20,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
+import PriceTiers from "@/components/PriceTiers";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { PKG_PHOTO } from "@/i18n/packageMap";
 import { bookingUrl, goBookNow } from "@/lib/openBooking";
@@ -282,6 +283,7 @@ export default function EliteServicesSection({
                   <h3 className="elite-card__name">{t(`pkg.${card.pkg}.title`)}</h3>
                   <p className="elite-card__starting">{t("services.startingAt")}</p>
                   <p className="elite-card__price">{card.price}</p>
+                  <PriceTiers pkg={card.pkg} />
                   <p className="elite-card__desc">{t(`pkg.${card.pkg}.cardDesc`)}</p>
                   <ul className="elite-card__feats">
                     {feats.map((feature, i) => {
@@ -361,6 +363,7 @@ export default function EliteServicesSection({
                       <>
                         <p className="elite-card__starting">{t("services.startingAt")}</p>
                         <p className="elite-card__price">{service.pricing}</p>
+                        <PriceTiers pkg={service.pkg} />
                       </>
                     ) : (
                       <p className="elite-card__price elite-card__price--quote">{t("services.callQuote")}</p>
