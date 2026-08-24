@@ -9,12 +9,13 @@ import {
   Car,
   Sparkles,
   Droplets,
+  Info,
   Instagram,
   Facebook,
   MapPin,
   Phone,
-  Mail,
   CheckCircle2,
+  ChevronsLeftRight,
   Clock,
   Award,
   ExternalLink,
@@ -25,6 +26,8 @@ import BrandLogo from "@/components/BrandLogo";
 import LanguageToggle from "@/components/LanguageToggle";
 import ApexHero from "@/components/hero/ApexHero";
 import HeroDip from "@/components/hero/HeroDip";
+import EliteServicesSection from "@/components/EliteServicesSection";
+import AddonsSection from "@/components/AddonsSection";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
 import GalleryVideoThumb from "@/components/GalleryVideoThumb";
@@ -46,44 +49,6 @@ const NAV_ITEMS = [
   { id: "journal", kind: "path" as const, path: "blog" },
   { id: "gift", kind: "path" as const, path: "gift-cards" },
 ];
-
-const AddonCard = ({ addon }: { addon: { id: string; price: string } }) => {
-  const { t } = useLanguage();
-  const [isExpanded, setIsExpanded] = useState(false);
-  const name = t(`addon.${addon.id}.name`);
-  const description = t(`addon.${addon.id}.desc`);
-  return (
-    <div
-      className="relative overflow-hidden p-4 rounded-lg bg-[#080808] border border-white/10 hover:border-[#00E5FF]/40 transition-all cursor-pointer group"
-      onMouseEnter={() => setIsExpanded(true)}
-      onMouseLeave={() => setIsExpanded(false)}
-    >
-      <div
-        className="pointer-events-none absolute inset-0"
-        aria-hidden="true"
-        style={{
-          background:
-            "radial-gradient(ellipse 90% 70% at 0% 0%, rgba(255,255,255,0.04), transparent 55%)",
-        }}
-      />
-      <h4 className="relative z-10 text-base font-bold text-white mb-1 group-hover:text-[#00E5FF] transition-colors duration-300">{name}</h4>
-      <p className="relative z-10 text-potential font-bold text-sm">{addon.price}</p>
-      {description && (
-        <div 
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsExpanded(!isExpanded);
-          }}
-          className={`relative z-10 overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-96' : 'max-h-0'}`}
-        >
-          <p className="text-gray-300 text-xs mt-3 leading-relaxed">
-            {description}
-          </p>
-        </div>
-      )}
-    </div>
-  );
-};
 
 const services = [
   {
@@ -114,7 +79,7 @@ const services = [
     id: "wash-clay-wax",
     pkg: "wax",
     icon: <Sparkles className="w-10 h-10 text-[#FF1AD8]" />,
-    pricing: "$250",
+    pricing: "$300",
   },
   {
     id: "headlight-restoration",
@@ -126,7 +91,7 @@ const services = [
     id: "ceramic-coating",
     pkg: "ceramic",
     icon: <Shield className="w-10 h-10 text-[#00E5FF]" />,
-    pricing: "Call for Quote",
+    pricing: "$900",
   },
   {
     id: "paint-correction",
@@ -205,104 +170,38 @@ const googleReviews = [
   {
     name: "David Sallee",
     rating: 5,
-    date: "Google Review",
     text: "Misha's waxing was fantastic and very, very reasonable. I would recommend him to anyone. Made my BMW X5 look like brand new. Also did extra treatment on wheels at no charge. Misha was very professional and he knows his stuff on detailing. Great young man and father of three.",
   },
   {
-    name: "larry perkins",
+    name: "Larry Perkins",
     rating: 5,
-    date: "Google Review",
     text: "Apex Detailing detailed and waxed our work vehicles, including two F-250s, a Honda Accord, an Odyssey, and a GMC Yukon. We were thrilled with the results - every vehicle looked brand new. We'll definitely be bringing our personal vehicles to Apex too.",
   },
   {
     name: "Mark Coble",
     rating: 5,
-    date: "Google Review",
     text: "Apex Detailing made our Honda look like the day it was new! We are very satisfied with the quality of workmanship and would highly recommend Apex for anyone looking to restore their vehicle's appearance to showroom condition.",
   },
   {
     name: "Darrell Coad",
     rating: 5,
-    date: "Google Review",
     text: "Mikhail with Apex Detailing did the exterior of my truck and when I went to pick it up I could not believe how great my truck looked, like brand new. He is a Christian and such a delightful person, I give him top of the scale performance, will definitely be going back.",
   },
   {
     name: "Zach Maddox",
     rating: 5,
-    date: "Google Review",
     text: "Apex did a great job detailing our SUV. Very professional and reasonably priced.",
   },
   {
     name: "Nicolle Mckeag",
     rating: 5,
-    date: "Google Review",
     text: "Apex got my car looking better than ever, and this isn't the first time I've gotten it detailed. The owner is very detail oriented and made my car shine inside and out. Turn around time was great and my car was ready in time for my visitors.",
   },
 ];
 
-function AddonsSection() {
-  const { t } = useLanguage();
-
-  const interiorAddons = [
-    { id: "pet-hair", price: "$0 – $100" },
-    { id: "deep-shampooing", price: "$120+" },
-    { id: "plastic-uv", price: "$60" },
-  ];
-
-  const exteriorAddons = [
-    { id: "exterior-detailing", price: "Sedan: $150 | SUV: $200" },
-    { id: "wash-clay-wax", price: "Sedan: $250 | SUV: $300–$350" },
-    { id: "dress-exterior", price: "$45" },
-    { id: "clay-bar", price: "$55+" },
-    { id: "headlight", price: "$125" },
-    { id: "engine-bay", price: "$60+" },
-  ];
-
-  return (
-    <div className="mt-24 pt-16 border-t border-white/10">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Interior Addons */}
-        <div>
-          <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4 font-display">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-              {t("addons.interior")}
-            </span>
-          </h3>
-          <p className="text-gray-400 text-sm mb-6">
-            {t("addons.optional")}
-          </p>
-          
-          <div className="space-y-4">
-            {interiorAddons.map(addon => (
-              <AddonCard key={addon.id} addon={addon} />
-            ))}
-          </div>
-        </div>
-
-        {/* Exterior Addons */}
-        <div>
-          <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4 font-display">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-              {t("addons.exterior")}
-            </span>
-          </h3>
-          <p className="text-gray-400 text-sm mb-6">
-            {t("addons.optional")}
-          </p>
-          
-          <div className="space-y-4">
-            {exteriorAddons.map(addon => (
-              <AddonCard key={addon.id} addon={addon} />
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function Home() {
   const { t, list } = useLanguage();
+  const [expandedReview, setExpandedReview] = useState<number | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
@@ -317,13 +216,13 @@ export default function Home() {
   const [sliderPosition, setSliderPosition] = useState(50);
   const [isDraggingSlider, setIsDraggingSlider] = useState(false);
   const [currentSliderIndex, setCurrentSliderIndex] = useState(0);
-  const [isAnimatingSlider, setIsAnimatingSlider] = useState(true);
-  const [sliderDirection, setSliderDirection] = useState<'forward' | 'backward'>('forward');
   const [sliderFading, setSliderFading] = useState(false);
-  const [sliderCycleComplete, setSliderCycleComplete] = useState(false);
+  const [baVisible, setBaVisible] = useState(true);
   const [paintCorrectionPreviewIndex, setPaintCorrectionPreviewIndex] = useState(0);
   const [openFaq, setOpenFaq] = useState<string | null>(null);
-  const [activeFaqCategory, setActiveFaqCategory] = useState<"General" | "Paint Correction">("General");
+  const [activeFaqCategory, setActiveFaqCategory] = useState<
+    "general" | "paint" | "ceramic"
+  >("general");
   const [legalModal, setLegalModal] = useState<"privacy" | "terms" | null>(null);
   const sliderTouchRef = useRef<{ x: number; y: number; dragging: boolean } | null>(null);
 
@@ -349,132 +248,36 @@ export default function Home() {
     });
   }, []);
 
-  const faqs: Array<{ q: string; a: string; category: string }> = [
-    {
-      q: "Where are you located?",
-      a: "Our shop is at 1114 E Lakota St in Nixa, MO. We proudly serve customers from Nixa, Ozark, Springfield, and the surrounding Ozarks communities.",
-      category: "General",
-    },
-    {
-      q: "How long does a detail take?",
-      a: "Most interior or exterior details take 2–4 hours. Full details usually run 4–6 hours — and sometimes up to 10 hours for heavily soiled vehicles. Ceramic coatings or paint correction can take a full day depending on vehicle condition.",
-      category: "General",
-    },
-    {
-      q: "How do I book an appointment?",
-      a: "Click any 'Book Your Detail' button to use our online booking — pick your service, day, and time in under a minute. You can also call us directly at 417-527-6165. All scheduling needs to happen before your visit.",
-      category: "General",
-    },
-    {
-      q: "What payment methods do you accept?",
-      a: "We accept cash, Square (all major credit/debit cards), Venmo, and Zelle. Digital gift cards are also available year-round through our Square store.",
-      category: "General",
-    },
-    {
-      q: "What if my vehicle is in really rough shape?",
-      a: "No problem — we handle heavy pet hair, deep stains, and serious build-up. Heavily soiled interiors may require a Full Interior Detail rather than the Express service. Final pricing is confirmed at inspection.",
-      category: "General",
-    },
-    {
-      q: "Do you offer gift cards?",
-      a: "Yes — digital gift cards are available through our Square store. They're a perfect gift for any car owner.",
-      category: "General",
-    },
-    {
-      q: "What is paint correction?",
-      a: "Paint correction is a professional process that removes imperfections from your vehicle's paint by machine polishing the clear coat. Over time, your paint can develop swirl marks, light scratches, oxidation, water spots, holograms, fading or dullness, and surface contamination. The goal is to restore clarity, depth, and gloss while making your paint look significantly cleaner and newer. Before any correction begins, your vehicle goes through proper preparation which may include a hand wash, iron decontamination, clay bar treatment, and paint inspection to ensure the paint is clean and safe to polish.",
-      category: "Paint Correction",
-    },
-    {
-      q: "What is a 1-Step Paint Correction?",
-      a: "A 1-step correction is ideal for vehicles with light imperfections. This process includes a light cutting polish that removes minor swirl marks, improves gloss and shine, reduces light scratches, and enhances paint clarity. A 1-step correction typically removes 50–70% of paint defects depending on paint condition and hardness. Best for newer vehicles, light swirl marks, vehicles that already have decent paint condition, and owners wanting a noticeable improvement without heavy correction.",
-      category: "Paint Correction",
-    },
-    {
-      q: "What is a 2-Step Paint Correction?",
-      a: "A 2-step correction is a more aggressive restoration process for vehicles with heavier imperfections. Step 1 uses a heavy compound that removes deeper scratches, corrects oxidation, eliminates heavier swirl marks, and removes deeper paint defects. Step 2 uses a finishing polish that refines the paint, restores gloss, removes haze from compounding, and creates a deep mirror-like finish. A 2-step correction can remove 70–90%+ of paint defects depending on paint thickness and condition. Best for older vehicles, heavily neglected paint, deep swirls and scratches, and vehicles needing major restoration. Some scratches may be too deep to remove safely if they've gone through the clear coat.",
-      category: "Paint Correction",
-    },
-    {
-      q: "Why does pricing vary?",
-      a: "Every vehicle is different. Pricing depends on vehicle size, paint condition, level of contamination, time needed for preparation, and whether your vehicle needs a 1-step or 2-step correction. Heavily contaminated vehicles require additional prep time before polishing can safely begin.",
-      category: "Paint Correction",
-    },
-    {
-      q: "Do I need paint protection after correction?",
-      a: "Yes — protection is highly recommended after paint correction. Once the paint is polished, adding protection helps preserve the results and keeps your vehicle cleaner longer. Our paint sealant provides 6–8 months of protection against dirt buildup, water spots, UV exposure, road grime, and minor surface wear, while adding extra gloss and making future washes easier.",
-      category: "Paint Correction",
-    },
-    {
-      q: "Can you apply ceramic coating after correction?",
-      a: "Yes. Ceramic coating is a premium option for longer-term protection and durability. Benefits include longer-lasting protection, strong water beading, easier maintenance, UV protection, and enhanced gloss.",
-      category: "Paint Correction",
-    },
-    {
-      q: "How long does paint correction take?",
-      a: "Most paint correction services take anywhere from 1 full day to multiple days, depending on the vehicle size and paint condition.",
-      category: "Paint Correction",
-    },
-    {
-      q: "Will paint correction remove all scratches?",
-      a: "Not always. Paint correction can remove many imperfections, but scratches that are too deep may require wet sanding, touch-up paint, or may be unsafe to fully remove.",
-      category: "Paint Correction",
-    },
-    {
-      q: "What is ceramic coating?",
-      a: "Ceramic coating is a premium protective layer that bonds to your vehicle's paint, providing long-lasting protection while enhancing gloss and making maintenance easier.",
-      category: "Ceramic Coating",
-    },
-    {
-      q: "Why should I ceramic coat my vehicle?",
-      a: "Deep, mirror-like shine. Protection from UV rays and oxidation. Helps resist stains and contaminants. Makes washing easier. Keeps your vehicle cleaner longer. Preserves your paint's appearance.",
-      category: "Ceramic Coating",
-    },
-    {
-      q: "What's included in the ceramic coating package?",
-      a: "Full hand wash, iron decontamination treatment, clay bar treatment, paint polishing for maximum gloss, paint preparation and panel wipe, professional ceramic coating application, and final quality inspection.",
-      category: "Ceramic Coating",
-    },
-    {
-      q: "Does a brand-new vehicle need paint polishing?",
-      a: "Yes. Even new vehicles often have light swirl marks, dealership wash scratches, and minor imperfections. Proper paint preparation ensures the best possible finish before the coating is applied.",
-      category: "Ceramic Coating",
-    },
-    {
-      q: "How long does the ceramic coating process take?",
-      a: "Most ceramic coating services take 1-2 days, depending on the size of the vehicle and the amount of paint correction needed.",
-      category: "Ceramic Coating",
-    },
-    {
-      q: "How long will ceramic coating last?",
-      a: "With proper maintenance and safe washing methods, ceramic coating can provide years of protection and shine.",
-      category: "Ceramic Coating",
-    },
-    {
-      q: "Will ceramic coating prevent scratches?",
-      a: "Ceramic coating is not scratch-proof, but it helps protect against minor wash-induced swirl marks and everyday wear.",
-      category: "Ceramic Coating",
-    },
-    {
-      q: "Does ceramic coating eliminate the need to wash my car?",
-      a: "No, but it makes cleaning much easier. Dirt, mud, and road grime don't stick as easily, helping your vehicle stay cleaner for longer.",
-      category: "Ceramic Coating",
-    },
-    {
-      q: "Can ceramic coating be applied to windows and wheels?",
-      a: "Yes! Exterior glass and wheels can also be protected, making them easier to clean and maintain.",
-      category: "Ceramic Coating",
-    },
-    {
-      q: "How should I maintain my ceramic-coated vehicle?",
-      a: "We recommend regular hand washes using pH-neutral soap and avoiding automatic car washes with brushes to maximize the life of the coating.",
-      category: "Ceramic Coating",
-    },
-    {
-      q: "Is ceramic coating worth it?",
-      a: "Absolutely! Ceramic coating is one of the best ways to protect your investment, reduce maintenance, and keep your vehicle looking its best for years.",
-      category: "Ceramic Coating",
-    },
+  const faqs: Array<{
+    qKey: string;
+    aKey: string;
+    category: "general" | "paint" | "ceramic";
+  }> = [
+    { qKey: "faq.g0.q", aKey: "faq.g0.a", category: "general" },
+    { qKey: "faq.g1.q", aKey: "faq.g1.a", category: "general" },
+    { qKey: "faq.g2.q", aKey: "faq.g2.a", category: "general" },
+    { qKey: "faq.g3.q", aKey: "faq.g3.a", category: "general" },
+    { qKey: "faq.g4.q", aKey: "faq.g4.a", category: "general" },
+    { qKey: "faq.g5.q", aKey: "faq.g5.a", category: "general" },
+    { qKey: "faq.p0.q", aKey: "faq.p0.a", category: "paint" },
+    { qKey: "faq.p1.q", aKey: "faq.p1.a", category: "paint" },
+    { qKey: "faq.p2.q", aKey: "faq.p2.a", category: "paint" },
+    { qKey: "faq.p3.q", aKey: "faq.p3.a", category: "paint" },
+    { qKey: "faq.p4.q", aKey: "faq.p4.a", category: "paint" },
+    { qKey: "faq.p5.q", aKey: "faq.p5.a", category: "paint" },
+    { qKey: "faq.p6.q", aKey: "faq.p6.a", category: "paint" },
+    { qKey: "faq.p7.q", aKey: "faq.p7.a", category: "paint" },
+    { qKey: "faq.c0.q", aKey: "faq.c0.a", category: "ceramic" },
+    { qKey: "faq.c1.q", aKey: "faq.c1.a", category: "ceramic" },
+    { qKey: "faq.c2.q", aKey: "faq.c2.a", category: "ceramic" },
+    { qKey: "faq.c3.q", aKey: "faq.c3.a", category: "ceramic" },
+    { qKey: "faq.c4.q", aKey: "faq.c4.a", category: "ceramic" },
+    { qKey: "faq.c5.q", aKey: "faq.c5.a", category: "ceramic" },
+    { qKey: "faq.c6.q", aKey: "faq.c6.a", category: "ceramic" },
+    { qKey: "faq.c7.q", aKey: "faq.c7.a", category: "ceramic" },
+    { qKey: "faq.c8.q", aKey: "faq.c8.a", category: "ceramic" },
+    { qKey: "faq.c9.q", aKey: "faq.c9.a", category: "ceramic" },
+    { qKey: "faq.c10.q", aKey: "faq.c10.a", category: "ceramic" },
   ];
 
   const serviceCities = [
@@ -482,58 +285,77 @@ export default function Home() {
     "Rogersville", "Strafford", "Willard", "Sparta", "Highlandville",
   ];
 
-  const beforeAfterPairs: Array<{ title: string; before: string; after: string }> = [
+  const beforeAfterPairs: Array<{ title: string; descKey: string; before: string; after: string }> = [
     {
       title: "Interior Restoration",
+      descKey: "ba.desc.interior",
       before: imageUrl("interior-before-1.jpg"),
       after: imageUrl("interior-after-1.jpg"),
     },
     {
       title: "Interior Restoration",
+      descKey: "ba.desc.interior",
       before: imageUrl("interior-before-2.jpg"),
       after: imageUrl("interior-after-2.jpg"),
     },
     {
       title: "Interior Restoration",
+      descKey: "ba.desc.interior",
       before: imageUrl("interior-before-3.jpg"),
       after: imageUrl("interior-after-3.jpg"),
     },
     {
       title: "Interior Restoration",
+      descKey: "ba.desc.interior",
       before: imageUrl("interior-before-7.jpg"),
       after: imageUrl("interior-after-7.jpg"),
     },
     {
       title: "Exterior Detail",
+      descKey: "ba.desc.exterior",
       before: imageUrl("exterior-before-1.jpg"),
       after: imageUrl("exterior-after-1.jpg"),
     },
     {
       title: "Exterior Detail",
+      descKey: "ba.desc.exterior",
       before: imageUrl("exterior-before-2.jpg"),
       after: imageUrl("exterior-after-2.jpg"),
     },
     {
       title: "Headlights Restoration",
+      descKey: "ba.desc.headlights",
       before: imageUrl("headlights-before-1.jpg"),
       after: imageUrl("headlights-after-1.jpg"),
     },
     {
       title: "Headlights Restoration",
+      descKey: "ba.desc.headlights",
       before: imageUrl("headlights-before-2.jpg"),
       after: imageUrl("headlights-after-2.jpg"),
     },
     {
       title: "Headlights Restoration",
+      descKey: "ba.desc.headlights",
       before: imageUrl("headlights-before-3.jpg"),
       after: imageUrl("headlights-after-3.jpg"),
     },
     {
       title: "Paint Correction",
+      descKey: "ba.desc.paint",
       before: imageUrl("ba/paint-correction-before.jpg"),
       after: imageUrl("ba/paint-correction-after.jpg"),
     },
   ];
+
+  const goToBaSlide = (index: number) => {
+    setSliderFading(true);
+    setTimeout(() => {
+      setCurrentSliderIndex(index);
+      setSliderPosition(50);
+      setSliderFading(false);
+    }, 220);
+  };
 
   const handleSliderDrag = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
     const container = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
@@ -552,7 +374,7 @@ export default function Home() {
     `${import.meta.env.BASE_URL}images/hero-4.jpg`,
   ];
 
-  // Auto-rotate images
+  // Auto-rotate about images
   useEffect(() => {
     const timer = setInterval(() => {
       setAboutImageIdx((prev) => (prev + 1) % aboutImages.length);
@@ -560,75 +382,31 @@ export default function Home() {
     return () => clearInterval(timer);
   }, [aboutImages.length]);
 
-  // Auto-animate slider
-  useEffect(() => {
-    if (!isAnimatingSlider || isDraggingSlider) return;
-    
-    const interval = setInterval(() => {
-      setSliderPosition((prev) => {
-        let newPos = prev;
-        if (sliderDirection === 'forward') {
-          newPos = prev + 0.5;
-          if (newPos >= 100) {
-            setSliderDirection('backward');
-            return 100;
-          }
-        } else {
-          newPos = prev - 0.5;
-          if (newPos <= 0) {
-            setSliderDirection('forward');
-            return 0;
-          }
-        }
-        return newPos;
-      });
-    }, 32);
-    
-    return () => clearInterval(interval);
-  }, [isAnimatingSlider, isDraggingSlider, sliderDirection]);
-
-  // Auto-switch slider after one complete animation cycle (20 seconds), but only once through all comparisons
-  useEffect(() => {
-    if (!isAnimatingSlider || isDraggingSlider || sliderCycleComplete) return;
-    
-    const switchTimer = setInterval(() => {
-      setSliderFading(true);
-      setTimeout(() => {
-        setCurrentSliderIndex((prev) => {
-          const nextIndex = prev + 1;
-          if (nextIndex >= beforeAfterPairs.length) {
-            setSliderCycleComplete(true);
-            setIsAnimatingSlider(false); // Stop animation when cycle completes
-            return prev; // Stay on last image
-          }
-          return nextIndex;
-        });
-        setSliderPosition(50);
-        setSliderDirection('forward');
-        setSliderFading(false);
-      }, 300);
-    }, 20000); // Switch every 20 seconds (one complete cycle)
-    
-    return () => clearInterval(switchTimer);
-  }, [isAnimatingSlider, isDraggingSlider, sliderCycleComplete, beforeAfterPairs.length]);
-
-
+  // Before/After enter animation — start visible so mobile never stays opacity:0
   useEffect(() => {
     const el = document.getElementById("before-after");
     if (!el) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) {
+      setBaVisible(true);
+      return;
+    }
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (!entry.isIntersecting) {
-          setIsAnimatingSlider(false);
-        } else if (!sliderCycleComplete) {
-          setIsAnimatingSlider(true);
+        if (entry?.isIntersecting) {
+          setBaVisible(true);
+          io.disconnect();
         }
       },
-      { threshold: 0.12 },
+      { threshold: 0.05, rootMargin: "80px 0px 80px 0px" },
     );
     io.observe(el);
-    return () => io.disconnect();
-  }, [sliderCycleComplete]);
+    const fallback = window.setTimeout(() => setBaVisible(true), 600);
+    return () => {
+      io.disconnect();
+      window.clearTimeout(fallback);
+    };
+  }, []);
 
   // Auto-rotate gallery images when lightbox is open
   useEffect(() => {
@@ -947,169 +725,13 @@ export default function Home() {
         }}
       />
       <HeroDip />
-      {/* Services Section */}
-      <section id="services" className="py-24 relative bg-[#050505] apex-cv">
-        {/* Minimal atmosphere — kept off the top seam so it matches the hero/footer black */}
-        <div className="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
-          <div className="absolute top-[28%] left-[-10%] w-[42rem] h-[42rem] rounded-full bg-[#FF1AD8]/[0.04] blur-[120px]" />
-          <div className="absolute top-[48%] right-[-15%] w-[36rem] h-[36rem] rounded-full bg-[#00E5FF]/[0.04] blur-[140px]" />
-          <div className="absolute bottom-[-10%] left-[30%] w-[28rem] h-[28rem] rounded-full bg-[#9D00FF]/[0.04] blur-[110px]" />
-        </div>
-        {/* Soap Bubbles in Services Section Background */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-          <div className="soap-bubble absolute bottom-[5%] left-[5%] w-12 h-12" style={{ animationDuration: '16s', animationDelay: '0s' }} />
-          <div className="soap-bubble absolute bottom-[10%] right-[10%] w-16 h-16" style={{ animationDuration: '18s', animationDelay: '1s' }} />
-          <div className="soap-bubble absolute bottom-[8%] left-[15%] w-20 h-20" style={{ animationDuration: '20s', animationDelay: '2s' }} />
-          <div className="soap-bubble absolute bottom-[15%] right-[5%] w-14 h-14" style={{ animationDuration: '17s', animationDelay: '0.5s' }} />
-          <div className="soap-bubble absolute bottom-[3%] left-[40%] w-10 h-10" style={{ animationDuration: '19s', animationDelay: '1.5s' }} />
-        </div>
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-sm font-bold tracking-widest text-potential uppercase mb-3">
-              {t("services.kicker")}
-            </h2>
-            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-6 font-display">
-              {t("services.title")}{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-                {t("services.titleAccent")}
-              </span>
-            </h3>
-            <p className="text-gray-400 text-lg">
-              {t("services.intro")}
-            </p>
-          </div>
-
-          <div className="mb-12 p-6 rounded-xl bg-[#080808] border border-white/10 backdrop-blur-sm max-w-3xl mx-auto relative overflow-hidden">
-            <div
-              className="pointer-events-none absolute inset-0"
-              aria-hidden="true"
-              style={{
-                background:
-                  "radial-gradient(ellipse 80% 60% at 0% 50%, rgba(255,26,216,0.10), transparent 60%)",
-              }}
-            />
-            <p className="relative z-10 text-gray-300 text-sm leading-relaxed">
-              <span className="font-black text-[#FF1AD8]">{t("services.pricingNoteLabel")}</span>{t("services.pricingNote")}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            {services.map((service, index) => (
-              <div
-                key={service.id}
-                className={`group relative p-[1px] rounded-2xl overflow-hidden transition-all duration-500 [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-2 ${
-                  index === services.length - 1 ? "md:col-span-2 lg:col-span-1" : ""
-                }`}
-              >
-                <span className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-[#00E5FF]/10 opacity-60 group-hover:opacity-100 transition-all duration-500" />
-                <div className="relative h-full bg-[#080808] rounded-2xl flex flex-col z-10 transition-all duration-500 overflow-hidden border border-white/10 group-hover:border-[#00E5FF]/35">
-                  <div
-                    className="pointer-events-none absolute inset-0 z-0"
-                    aria-hidden="true"
-                    style={{
-                      background:
-                        "radial-gradient(ellipse 80% 55% at 0% 0%, rgba(255,255,255,0.04), transparent 55%)",
-                    }}
-                  />
-                  {PKG_PHOTO[service.pkg] ? (
-                    <div className="relative z-10 aspect-[16/9] w-full shrink-0 overflow-hidden">
-                      <OptimizedImage
-                        src={imageUrl(PKG_PHOTO[service.pkg])}
-                        alt={t(`pkg.${service.pkg}.photoAlt`)}
-                        className="absolute inset-0 block h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                        sizes="(max-width: 1023px) 85vw, 380px"
-                        loading="lazy"
-                      />
-                      <div
-                        className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#080808] to-transparent"
-                        aria-hidden="true"
-                      />
-                      <div className="absolute left-4 bottom-3 p-2.5 rounded-xl bg-black/55 border border-white/15 backdrop-blur-sm">
-                        {service.icon}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="relative z-10 mx-6 sm:mx-8 mt-6 sm:mt-8 mb-0 p-4 rounded-xl bg-white/5 border border-white/10 inline-flex w-fit group-hover:scale-110 group-hover:border-[#00E5FF]/30 transition-all duration-500">
-                      {service.icon}
-                    </div>
-                  )}
-                  <div className="relative z-10 flex flex-1 flex-col px-6 sm:px-8 pb-6 sm:pb-8 pt-5">
-                  <h4 className="text-2xl font-black mb-2 text-white group-hover:text-[#00E5FF] transition-colors duration-300 flex items-center flex-wrap gap-2">
-                    {t(`pkg.${service.pkg}.title`)}
-                    {service.id === "interior-detailing" && (
-                      <span className="badge-gold inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider">
-                        <Star className="w-3 h-3" fill="currentColor" /> {t("services.mostBooked")}
-                      </span>
-                    )}
-                    {service.id === "full-detailing" && (
-                      <span className="badge-gold inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider">
-                        {t("services.bestValue")}
-                      </span>
-                    )}
-                    {service.id === "apex-express-interior-detailing" && (
-                      <span className="badge-gold inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider">
-                        <Zap className="w-3 h-3" /> {t("services.express")}
-                      </span>
-                    )}
-                  </h4>
-                  <div className="mb-4">
-                    {!/call/i.test(service.pricing) && (
-                      <p className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-0.5">
-                        {t("services.startingAt")}
-                      </p>
-                    )}
-                    <p className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-                      {/call/i.test(service.pricing) ? t("services.callQuote") : service.pricing}
-                    </p>
-                  </div>
-                  {list(`pkg.${service.pkg}.price`).length > 0 && (
-                    <div className="mb-4 text-sm text-gray-300 bg-white/[0.03] border border-white/10 p-3 rounded-lg">
-                      {list(`pkg.${service.pkg}.price`).map((detail, i) => (
-                        <p key={i} className="text-xs mb-1">{detail}</p>
-                      ))}
-                    </div>
-                  )}
-                  <p className="text-gray-400 mb-6 flex-grow">
-                    {t(`pkg.${service.pkg}.desc`)}
-                    {service.pkg === "express" && (
-                      <>
-                        {" "}
-                        <span className="text-[#FFA500] font-bold">{t("pkg.express.warn")}</span>
-                      </>
-                    )}
-                  </p>
-                  <ul className="space-y-2 mb-8">
-                    {list(`pkg.${service.pkg}.feat`).map((feature, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-gray-300 font-medium">
-                        <CheckCircle2 className="w-4 h-4 text-[#00E5FF] mt-0.5 shrink-0" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  <a
-                    href={bookingUrl()}
-                    onClick={goBookNow}
-                    className="btn-cyber btn-cyber-sm mt-auto self-start"
-                  >
-                    <span>{t("services.book")}</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </a>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Addons Section - Two Column Layout */}
-          <AddonsSection />
-        </div>
-      </section>
+      <EliteServicesSection addons={<AddonsSection />} />
       <HeroDip />
 
       {/* How It Works */}
-      <section id="how" className="py-20 sm:py-24 relative bg-[#050505] section-pink-wash apex-cv">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-14">
+      <section id="how" className="apex-how pt-6 pb-14 sm:pt-8 sm:pb-16 relative bg-[#050505] section-pink-wash apex-cv">
+        <div className="container mx-auto px-4 sm:px-5 lg:px-8 relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-7 sm:mb-9">
             <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
               {t("how.kicker")}
             </h2>
@@ -1120,17 +742,32 @@ export default function Home() {
               </span>
             </h3>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 max-w-5xl mx-auto w-full">
             {[
-              { step: "01", title: t("how.1.title"), desc: t("how.1.desc"), icon: <Clock className="w-7 h-7 text-[#00E5FF]" /> },
-              { step: "02", title: t("how.2.title"), desc: t("how.2.desc"), icon: <Sparkles className="w-7 h-7 text-[#FF1AD8]" /> },
-              { step: "03", title: t("how.3.title"), desc: t("how.3.desc"), icon: <Car className="w-7 h-7 text-[#00E5FF]" /> },
+              {
+                step: "01",
+                title: t("how.1.title"),
+                desc: t("how.1.desc"),
+                icon: <Clock className="apex-how__icon text-[#00E5FF]" strokeWidth={1.75} aria-hidden="true" />,
+              },
+              {
+                step: "02",
+                title: t("how.2.title"),
+                desc: t("how.2.desc"),
+                icon: <Sparkles className="apex-how__icon text-[#FF1AD8]" strokeWidth={1.75} aria-hidden="true" />,
+              },
+              {
+                step: "03",
+                title: t("how.3.title"),
+                desc: t("how.3.desc"),
+                icon: <Car className="apex-how__icon text-[#00E5FF]" strokeWidth={1.75} aria-hidden="true" />,
+              },
             ].map((s) => (
-              <div key={s.step} className="relative p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-white/20 transition-colors">
-                <div className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] mb-4">{s.step}</div>
-                <div className="mb-4">{s.icon}</div>
-                <h4 className="text-xl font-black uppercase tracking-tight mb-2">{s.title}</h4>
-                <p className="text-gray-400 text-sm leading-relaxed">{s.desc}</p>
+              <div key={s.step} className="apex-how__card">
+                <div className="apex-how__num">{s.step}</div>
+                <div className="apex-how__icon-wrap">{s.icon}</div>
+                <h4 className="apex-how__title">{s.title}</h4>
+                <p className="apex-how__desc">{s.desc}</p>
               </div>
             ))}
           </div>
@@ -1139,22 +776,22 @@ export default function Home() {
       <HeroDip />
 
       {/* About Section */}
-      <section id="about" className="py-24 relative bg-[#050505] section-pink-wash apex-cv">
-        {/* Soap Bubbles in About Section */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-          <div className="soap-bubble absolute bottom-[5%] left-[5%] w-12 h-12" style={{ animationDuration: '16s', animationDelay: '0s' }} />
-          <div className="soap-bubble absolute bottom-[10%] right-[10%] w-16 h-16" style={{ animationDuration: '18s', animationDelay: '1s' }} />
-          <div className="soap-bubble absolute bottom-[8%] left-[15%] w-20 h-20" style={{ animationDuration: '20s', animationDelay: '2s' }} />
-          <div className="soap-bubble absolute bottom-[15%] right-[5%] w-14 h-14" style={{ animationDuration: '17s', animationDelay: '0.5s' }} />
-          <div className="soap-bubble absolute bottom-[3%] left-[40%] w-10 h-10" style={{ animationDuration: '19s', animationDelay: '1.5s' }} />
+      <section id="about" className="apex-about relative bg-[#050505] section-pink-wash apex-cv">
+        <div className="apex-about__particles" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
         </div>
-        <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-[#FF1AD8]/10 rounded-full mix-blend-screen filter blur-[120px] -translate-y-1/2 -translate-x-1/2" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-            <div className="order-2 lg:order-1 relative">
-              <div className="aspect-[4/5] rounded-2xl overflow-hidden relative group">
-                {/* Image container with smooth transitions */}
+          <div className="apex-about__grid">
+            <div className="apex-about__media order-2 lg:order-1 relative">
+              <div className="apex-about__photo aspect-[4/5] rounded-2xl overflow-hidden relative group">
                 {aboutImages.map((img, idx) => (
                   <OptimizedImage
                     key={idx}
@@ -1168,8 +805,8 @@ export default function Home() {
                     decoding="async"
                   />
                 ))}
-                <div 
-                  className="absolute inset-0 bg-gradient-to-tr from-[#FF1AD8]/30 to-[#00E5FF]/30 group-hover:from-[#FF1AD8]/50 group-hover:to-[#00E5FF]/50 z-10 transition-all duration-700"
+                <div
+                  className="absolute inset-0 bg-gradient-to-tr from-[#FF1AD8]/25 to-[#00E5FF]/25 group-hover:from-[#FF1AD8]/40 group-hover:to-[#00E5FF]/40 z-10 transition-all duration-700"
                 />
                 <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black to-transparent z-20">
                   <div className="inline-flex items-center gap-3 bg-black/60 backdrop-blur-md px-6 py-3 rounded-xl border border-[#D4AF37]/30">
@@ -1192,102 +829,94 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-gradient-to-br from-[#FF1AD8] to-[#00E5FF] rounded-2xl -z-10 blur-xl opacity-50" />
             </div>
 
-            <div className="order-1 lg:order-2">
-              <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
-                {t("about.kicker")}
-              </h2>
-              <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight mb-6 sm:mb-8 leading-tight font-display">
-                {t("about.title")}{" "}
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-                  Apex Detailing
-                </span>
+            <div className="apex-about__copy order-1 lg:order-2">
+              <h2 className="apex-about__kicker">{t("about.kicker")}</h2>
+              <h3 className="apex-about__title font-display">
+                <span className="apex-about__title-main">{t("about.title")}</span>{" "}
+                <span className="apex-about__title-accent">{t("about.titleAccent")}</span>
               </h3>
 
-              <div className="space-y-5 sm:space-y-6 text-gray-400 text-base sm:text-lg mb-8 sm:mb-10">
+              <div className="apex-about__body">
+                <p>{t("about.p1")}</p>
                 <p>
-                  {t("about.p1")}
-                </p>
-                <p>
-                  {t("about.p2a")}<strong className="text-gold">{t("about.p2b")}</strong>{t("about.p2c")}
-                </p>
-                <p className="italic">
-                  {t("about.p3a")}<span className="text-potential font-semibold">{t("about.p3b")}</span>{t("about.p3c")}<span className="text-potential font-semibold">{t("about.p3d")}</span>{t("about.p3e")}<span className="text-potential font-semibold">{t("about.p3f")}</span>{t("about.p3g")}
-                </p>
-                <p className="italic text-[#FF1AD8] text-sm mt-4">
-                  {t("about.verse")}
+                  {t("about.p2a")}
+                  <strong className="apex-about__trust apex-about__trust--gold">{t("about.p2b")}</strong>
+                  {t("about.p2c")}
                 </p>
                 <p>
-                  {t("about.p4")}
+                  {t("about.p3a")}
+                  <span className="apex-about__trust">{t("about.p3b")}</span>
+                  {t("about.p3c")}
+                  <span className="apex-about__trust">{t("about.p3d")}</span>
+                  {t("about.p3e")}
+                  <span className="apex-about__trust">{t("about.p3f")}</span>
+                  {t("about.p3g")}
                 </p>
+                <p className="apex-about__verse">{t("about.verse")}</p>
+                <p>{t("about.p4")}</p>
                 <p>
-                  {t("about.p5")}
+                  {t("about.p5a")}
+                  <span className="apex-about__trust">{t("about.p5b")}</span>
+                  {t("about.p5c")}
                 </p>
-                <p>
-                  <strong className="text-white">{t("about.p6")}</strong>
+                <p className="apex-about__closer">
+                  <strong>{t("about.p6")}</strong>
                 </p>
-                <div className="mt-8 flex items-center gap-5 p-5 rounded-2xl bg-white/[0.03] border border-white/10">
-                  <div className="relative shrink-0">
-                    <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-[#FF1AD8] to-[#00E5FF] blur-md opacity-60" />
+
+                <div className="apex-about__founder">
+                  <div className="apex-about__founder-photo">
                     <OptimizedImage
                       src={imageUrl("owner-michail.jpg")}
                       alt="Michail Gurov, Founder of Apex Detailing"
-                      className="relative block w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-2 border-white/20 overflow-hidden"
+                      className="apex-about__founder-img"
                       loading="lazy"
                       decoding="async"
                     />
                   </div>
-                  <div>
-                    <p className="text-xs uppercase tracking-wider text-gray-500 font-bold mb-1">
-                      {t("about.meet")}
-                    </p>
-                    <p className="text-white font-black text-lg sm:text-xl leading-tight">
-                      Michail Gurov
-                    </p>
-                    <p className="text-[#FF1AD8] font-bold text-sm">
-                      {t("about.role")}
-                    </p>
+                  <div className="apex-about__founder-copy">
+                    <p className="apex-about__founder-eyebrow">{t("about.meet")}</p>
+                    <p className="apex-about__founder-name">Michail Gurov</p>
+                    <p className="apex-about__founder-role">{t("about.role")}</p>
+                    <p className="apex-about__founder-tag">{t("about.founderTag")}</p>
                   </div>
                 </div>
               </div>
 
-              <div className="border-t border-white/10 pt-6 mt-8">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              <div className="apex-about__perks">
                 {[
                   {
                     title: t("about.perk1.title"),
                     desc: t("about.perk1.desc"),
-                    icon: <Shield className="text-[#FF1AD8]" />,
+                    icon: <Sparkles className="apex-about__perk-icon" strokeWidth={2} />,
                   },
                   {
                     title: t("about.perk2.title"),
                     desc: t("about.perk2.desc"),
-                    icon: <Award className="text-[#E8C547]" />,
+                    icon: <Shield className="apex-about__perk-icon" strokeWidth={2} />,
                   },
                   {
                     title: t("about.perk3.title"),
                     desc: t("about.perk3.desc"),
-                    icon: <Clock className="text-[#FF1AD8]" />,
+                    icon: <Clock className="apex-about__perk-icon" strokeWidth={2} />,
                   },
                   {
                     title: t("about.perk4.title"),
                     desc: t("about.perk4.desc"),
-                    icon: <Sparkles className="text-[#00E5FF]" />,
+                    icon: <Award className="apex-about__perk-icon" strokeWidth={2} />,
                   },
                 ].map((item, i) => (
-                  <div key={i} className="flex gap-4">
-                    <div className="shrink-0 w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+                  <div key={i} className="apex-about__perk">
+                    <div className="apex-about__perk-icon-wrap" aria-hidden="true">
                       {item.icon}
                     </div>
                     <div>
-                      <h5 className="font-bold text-white mb-1">{item.title}</h5>
-                      <p className="text-sm text-gray-400 leading-snug">{item.desc}</p>
+                      <h5 className="apex-about__perk-title">{item.title}</h5>
+                      <p className="apex-about__perk-desc">{item.desc}</p>
                     </div>
                   </div>
                 ))}
-                </div>
               </div>
             </div>
           </div>
@@ -1296,37 +925,30 @@ export default function Home() {
       <HeroDip />
 
       {/* Before/After Slider Section */}
-      <section id="before-after" className="py-20 sm:py-24 relative bg-[#050505] section-pink-wash apex-cv">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-10 sm:mb-16">
-            <h2 className="text-sm font-bold tracking-widest text-[#FF1AD8] uppercase mb-3">
-              {t("ba.kicker")}
-            </h2>
-            <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight font-display">
-              {t("ba.title")}{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
-                {t("ba.titleAccent")}
-              </span>
-            </h3>
-          </div>
+      <section
+        id="before-after"
+        className={`apex-ba relative bg-[#050505] section-pink-wash apex-cv${baVisible ? " is-visible" : ""}`}
+      >
+        <div className="apex-ba__particles" aria-hidden="true">
+          <span /><span /><span /><span /><span /><span />
+        </div>
 
-          <div className="max-w-4xl mx-auto">
-            {/* Slider */}
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <header className="apex-ba__header">
+            <h2 className="apex-ba__kicker">{t("ba.kicker")}</h2>
+            <h3 className="apex-ba__title font-display">
+              {t("ba.title")}{" "}
+              <span className="apex-ba__title-accent">{t("ba.titleAccent")}</span>
+            </h3>
+          </header>
+
+          <div className="apex-ba__stage">
             <div
-              className="relative aspect-[4/3] rounded-3xl overflow-hidden cursor-col-resize bg-black/50 border border-white/10 group [touch-action:pan-y]"
+              className="apex-ba__compare"
               onMouseMove={isDraggingSlider ? handleSliderDrag : undefined}
-              onMouseDown={() => {
-                setIsDraggingSlider(true);
-                setIsAnimatingSlider(false);
-              }}
-              onMouseUp={() => {
-                setIsDraggingSlider(false);
-                setIsAnimatingSlider(true);
-              }}
-              onMouseLeave={() => {
-                setIsDraggingSlider(false);
-                setIsAnimatingSlider(true);
-              }}
+              onMouseDown={() => setIsDraggingSlider(true)}
+              onMouseUp={() => setIsDraggingSlider(false)}
+              onMouseLeave={() => setIsDraggingSlider(false)}
               onTouchStart={(e) => {
                 sliderTouchRef.current = {
                   x: e.touches[0].clientX,
@@ -1337,7 +959,6 @@ export default function Home() {
               onTouchEnd={() => {
                 sliderTouchRef.current = null;
                 setIsDraggingSlider(false);
-                setIsAnimatingSlider(true);
               }}
               onTouchMove={(e) => {
                 const start = sliderTouchRef.current;
@@ -1349,96 +970,92 @@ export default function Home() {
                   if (dx <= 8) return;
                   start.dragging = true;
                   setIsDraggingSlider(true);
-                  setIsAnimatingSlider(false);
                 }
                 handleSliderDrag(e);
               }}
               onClick={handleSliderDrag}
             >
-              {/* After Image (Background) */}
               <OptimizedImage
                 src={beforeAfterPairs[currentSliderIndex].after}
                 alt="After"
-                className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
+                className="apex-ba__img apex-ba__img--after"
                 style={{ opacity: sliderFading ? 0 : 1 }}
                 loading="lazy"
                 decoding="async"
               />
 
-              {/* Before Image (Overlay) */}
               <div
-                className="absolute inset-0 overflow-hidden transition-opacity duration-300"
+                className="apex-ba__before-clip"
                 style={{ width: `${sliderPosition}%`, opacity: sliderFading ? 0 : 1 }}
               >
                 <OptimizedImage
                   src={beforeAfterPairs[currentSliderIndex].before}
                   alt="Before"
-                  className="w-screen h-full object-cover"
-                  style={{ width: `${100 / (sliderPosition / 100)}%` }}
+                  className="apex-ba__img apex-ba__img--before"
+                  style={{ width: `${100 / (Math.max(sliderPosition, 0.01) / 100)}%` }}
                   loading="lazy"
                   decoding="async"
                 />
               </div>
 
-              {/* Handle */}
               <div
-                className="absolute top-0 bottom-0 w-1 bg-gradient-to-b from-[#FF1AD8] to-[#00E5FF] cursor-col-resize"
+                className={`apex-ba__handle${isDraggingSlider ? " is-dragging" : ""}`}
                 style={{ left: `${sliderPosition}%` }}
               >
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 rounded-full flex items-center justify-center transition-all">
-                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14M16 5v14" />
-                  </svg>
-                </div>
+                <span className="apex-ba__handle-line" />
+                <span className="apex-ba__handle-knob" aria-hidden="true">
+                  <ChevronsLeftRight className="apex-ba__handle-icon" strokeWidth={2.2} />
+                </span>
               </div>
 
-              {/* Labels */}
-              <div 
-                className="absolute top-2 left-2 sm:top-4 sm:left-4 text-white font-black uppercase text-xs sm:text-sm tracking-wider bg-black/50 px-2 py-1 sm:px-3 sm:py-2 rounded-lg backdrop-blur-sm transition-opacity duration-300"
-                style={{ opacity: sliderPosition > 15 ? 1 : 0, pointerEvents: 'none' }}
+              <span
+                className="apex-ba__label apex-ba__label--before"
+                style={{ opacity: sliderPosition > 12 ? 1 : 0 }}
               >
-                Before
-              </div>
-              <div 
-                className="absolute top-2 right-2 sm:top-4 sm:right-4 text-white font-black uppercase text-xs sm:text-sm tracking-wider bg-black/50 px-2 py-1 sm:px-3 sm:py-2 rounded-lg backdrop-blur-sm transition-opacity duration-300"
-                style={{ opacity: sliderPosition < 85 ? 1 : 0, pointerEvents: 'none' }}
+                {t("ba.before")}
+              </span>
+              <span
+                className="apex-ba__label apex-ba__label--after"
+                style={{ opacity: sliderPosition < 88 ? 1 : 0 }}
               >
-                After
-              </div>
-
-              {/* Title */}
-              <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 text-white font-black uppercase text-center text-xs sm:text-base md:text-lg tracking-wider bg-gradient-to-r from-[#FF1AD8]/80 to-[#00E5FF]/80 px-2 sm:px-4 sm:px-6 py-2 sm:py-3 rounded-lg backdrop-blur-sm">
-                {beforeAfterPairs[currentSliderIndex].title}
-              </div>
+                {t("ba.after")}
+              </span>
             </div>
 
-            {/* Navigation Buttons */}
-            <div className="flex justify-center gap-4 mt-8">
+            <div className="apex-ba__meta">
+              <h4 className="apex-ba__service">{beforeAfterPairs[currentSliderIndex].title}</h4>
+              <p className="apex-ba__desc">{t(beforeAfterPairs[currentSliderIndex].descKey)}</p>
+            </div>
+
+            <div className="apex-ba__controls">
               <button
-                onClick={() => setCurrentSliderIndex((prev) => (prev - 1 + beforeAfterPairs.length) % beforeAfterPairs.length)}
-                className="px-6 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#00E5FF] hover:text-white transition-all font-bold text-sm"
+                type="button"
+                className="apex-ba__nav-btn"
+                onClick={() =>
+                  goToBaSlide((currentSliderIndex - 1 + beforeAfterPairs.length) % beforeAfterPairs.length)
+                }
               >
-                ← Previous
+                ← {t("ba.prev")}
               </button>
               <button
-                onClick={() => setCurrentSliderIndex((prev) => (prev + 1) % beforeAfterPairs.length)}
-                className="px-6 py-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#00E5FF] hover:text-white transition-all font-bold text-sm"
+                type="button"
+                className="apex-ba__nav-btn"
+                onClick={() => goToBaSlide((currentSliderIndex + 1) % beforeAfterPairs.length)}
               >
-                Next →
+                {t("ba.next")} →
               </button>
             </div>
 
-            {/* Indicators */}
-            <div className="flex justify-center gap-2 mt-6">
-              {beforeAfterPairs.map((_, idx) => (
+            <div className="apex-ba__dots" role="tablist" aria-label="Before and after slides">
+              {beforeAfterPairs.map((pair, idx) => (
                 <button
-                  key={idx}
-                  onClick={() => setCurrentSliderIndex(idx)}
-                  className={`w-2 h-2 rounded-full transition-all ${
-                    idx === currentSliderIndex
-                      ? "bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] w-8"
-                      : "bg-white/30 hover:bg-white/50"
-                  }`}
+                  key={`${pair.title}-${idx}`}
+                  type="button"
+                  role="tab"
+                  aria-selected={idx === currentSliderIndex}
+                  aria-label={`${pair.title} ${idx + 1}`}
+                  className={`apex-ba__dot${idx === currentSliderIndex ? " is-active" : ""}`}
+                  onClick={() => goToBaSlide(idx)}
                 />
               ))}
             </div>
@@ -1710,69 +1327,80 @@ export default function Home() {
       <HeroDip />
 
       {/* Google Reviews Showcase */}
-      <section id="reviews" className="py-24 relative bg-[#050505] section-pink-wash apex-cv">
-        <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-[#FF1AD8]/10 rounded-full mix-blend-screen filter blur-[120px] -translate-y-1/2" />
+      <section id="reviews" className="apex-reviews py-16 sm:py-20 md:py-24 relative bg-[#050505] section-pink-wash apex-cv">
+        <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-[#FF1AD8]/10 rounded-full mix-blend-screen filter blur-[120px] -translate-y-1/2 pointer-events-none" aria-hidden="true" />
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-3xl mx-auto text-center mb-20">
+        <div className="container mx-auto px-4 sm:px-5 lg:px-8 relative z-10">
+          <div className="max-w-3xl mx-auto text-center mb-10 sm:mb-12 md:mb-14">
             <h2 className="text-sm font-bold tracking-widest text-potential uppercase mb-3">
               {t("reviews.kicker")}
             </h2>
-            <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-6 font-display">
+            <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight mb-4 sm:mb-6 font-display">
               {t("reviews.title")}{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF]">
                 {t("reviews.titleAccent")}
               </span>
             </h3>
-            <p className="text-gray-400 text-lg mb-8">
+            <p className="text-gray-400 text-base sm:text-lg mb-8 sm:mb-10">
               {t("reviews.sub")}
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div className="apex-reviews__stats">
               {[
-                { rating: "5.0", reviews: t("reviews.excellent"), description: t("reviews.rating") },
-                { rating: "100%", reviews: t("reviews.positive"), description: t("reviews.customerRating") },
-                { rating: "5h", reviews: t("reviews.response"), description: t("reviews.supportTime") },
-              ].map((stat, i) => (
-                <div key={i} className="text-center p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:border-white/20 transition-colors">
-                  <p className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] mb-2">
-                    {stat.rating}
-                  </p>
-                  <p className="text-gray-300 font-bold mb-2">{stat.reviews}</p>
-                  <p className="text-gray-500 text-sm uppercase tracking-wider">{stat.description}</p>
+                { value: t("reviews.stat1.value"), label: t("reviews.stat1.label"), desc: t("reviews.stat1.desc") },
+                { value: t("reviews.stat2.value"), label: t("reviews.stat2.label"), desc: t("reviews.stat2.desc") },
+                { value: t("reviews.stat3.value"), label: t("reviews.stat3.label"), desc: t("reviews.stat3.desc") },
+              ].map((stat) => (
+                <div key={stat.desc} className="apex-reviews__stat">
+                  <p className="apex-reviews__stat-value">{stat.value}</p>
+                  <p className="apex-reviews__stat-label">{stat.label}</p>
+                  <p className="apex-reviews__stat-desc">{stat.desc}</p>
                 </div>
               ))}
             </div>
-
           </div>
 
-          {/* Reviews Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {googleReviews.map((review, i) => (
-              <div
-                key={i}
-                className="p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all duration-300 hover:bg-white/10"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1">
-                    <h5 className="font-bold text-white text-lg">{review.name}</h5>
-                    <p className="text-xs text-gray-500 mt-1">{review.date}</p>
+          <div className="apex-reviews__grid">
+            {googleReviews.map((review, i) => {
+              const long = review.text.length > 155;
+              const open = expandedReview === i;
+              return (
+                <article key={review.name} className="apex-reviews__card">
+                  <h5 className="apex-reviews__name">{review.name}</h5>
+                  <p className="apex-reviews__badge">
+                    <svg className="apex-reviews__g" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+                    </svg>
+                    <span>{t("reviews.badge")}</span>
+                  </p>
+                  <div className="apex-reviews__stars" aria-label={`${review.rating} out of 5 stars`}>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        className={`w-4 h-4 ${star <= review.rating ? "text-[#E8C547]" : "text-gray-600"}`}
+                        fill={star <= review.rating ? "currentColor" : "none"}
+                      />
+                    ))}
                   </div>
-                </div>
-
-                <div className="flex gap-1 mb-4">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star
-                      key={star}
-                      className={`w-4 h-4 ${star <= review.rating ? "text-[#E8C547]" : "text-gray-600"}`}
-                      fill={star <= review.rating ? "currentColor" : "none"}
-                    />
-                  ))}
-                </div>
-
-                <p className="text-gray-300 text-sm leading-relaxed">{review.text}</p>
-              </div>
-            ))}
+                  <p className={`apex-reviews__text${open ? " is-open" : ""}`}>
+                    &ldquo;{review.text}&rdquo;
+                  </p>
+                  {long ? (
+                    <button
+                      type="button"
+                      className="apex-reviews__more"
+                      onClick={() => setExpandedReview(open ? null : i)}
+                    >
+                      {open ? t("reviews.readLess") : t("reviews.readMore")}
+                      <span aria-hidden="true"> →</span>
+                    </button>
+                  ) : null}
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -1863,20 +1491,26 @@ export default function Home() {
 
           {/* Category pills */}
           <div className="flex items-center justify-center gap-3 mb-10">
-            {(["General", "Paint Correction", "Ceramic Coating"] as const).map((cat) => (
+            {(
+              [
+                { id: "general", labelKey: "faq.general" },
+                { id: "paint", labelKey: "faq.paint" },
+                { id: "ceramic", labelKey: "faq.ceramic" },
+              ] as const
+            ).map((cat) => (
               <button
-                key={cat}
+                key={cat.id}
                 onClick={() => {
-                  setActiveFaqCategory(cat);
+                  setActiveFaqCategory(cat.id);
                   setOpenFaq(null);
                 }}
                 className={`px-5 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all duration-300 border ${
-                  activeFaqCategory === cat
+                  activeFaqCategory === cat.id
                     ? "bg-[#FF1AD8] text-white border-transparent shadow-[0_0_14px_rgba(255,26,216,0.35)]"
                     : "bg-white/5 text-gray-400 border-white/10 hover:border-white/30 hover:text-white"
                 }`}
               >
-                {cat === "General" ? t("faq.general") : cat === "Paint Correction" ? t("faq.paint") : t("faq.ceramic")}
+                {t(cat.labelKey)}
               </button>
             ))}
           </div>
@@ -1899,7 +1533,7 @@ export default function Home() {
                       className="w-full flex items-center justify-between gap-4 p-5 text-left"
                       aria-expanded={isOpen}
                     >
-                      <span className="font-bold text-white text-base sm:text-lg">{faq.q}</span>
+                      <span className="font-bold text-white text-base sm:text-lg">{t(faq.qKey)}</span>
                       <ChevronRight
                         className={`w-5 h-5 shrink-0 text-[#00E5FF] transition-transform duration-300 ${
                           isOpen ? "rotate-90" : ""
@@ -1913,7 +1547,7 @@ export default function Home() {
                     >
                       <div className="overflow-hidden">
                         <p className="px-5 pb-5 text-gray-300 text-sm sm:text-base leading-relaxed">
-                          {faq.a}
+                          {t(faq.aKey)}
                         </p>
                       </div>
                     </div>
@@ -1926,28 +1560,35 @@ export default function Home() {
       <HeroDip />
 
       {/* CTA Section */}
-      <section id="cta" className="py-24 relative bg-[#050505] section-pink-wash apex-cv">
+      <section id="cta" className="apex-cta relative bg-[#050505] section-pink-wash apex-cv">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative rounded-3xl overflow-hidden bg-[#111] border border-white/10 p-10 md:p-20 text-center">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-full bg-gradient-to-b from-[#FF1AD8]/20 to-[#00E5FF]/20 blur-3xl" />
+          <div className="apex-cta__panel">
+            <div className="apex-cta__glow" aria-hidden="true" />
 
-            <div className="relative z-10 max-w-3xl mx-auto">
-              <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tight mb-6 font-display">
-                {t("cta.title1")} <br />
-                {t("cta.title2")}
+            <div className="apex-cta__inner">
+              <h2 className="apex-cta__title font-display">
+                <span className="apex-cta__title-line">
+                  {t("cta.titleLead")}{" "}
+                  <span className="apex-cta__title-apex">{t("cta.titleApex")}</span>
+                </span>
+                <span className="apex-cta__title-line">{t("cta.titleEnd")}</span>
               </h2>
-              <p className="text-xl text-gray-400 mb-10 font-medium">
-                {t("cta.sub")}
-              </p>
-              <div className="mb-8 p-6 rounded-xl bg-white/5 border border-[#00E5FF]/30 backdrop-blur-sm max-w-2xl">
-                <p className="text-gray-300 text-sm leading-relaxed">
-                  <span className="font-black text-potential">{t("cta.important")}</span>{t("cta.note")}
-                </p>
-              </div>
+
+              <p className="apex-cta__sub">{t("cta.sub")}</p>
+
+              <aside className="apex-cta__notice" aria-label={t("cta.important")}>
+                <Info className="apex-cta__notice-icon" aria-hidden="true" strokeWidth={2.2} />
+                <div className="apex-cta__notice-copy">
+                  <p className="apex-cta__notice-label">{t("cta.important")}</p>
+                  <p className="apex-cta__notice-text">{t("cta.noteLine1")}</p>
+                  <p className="apex-cta__notice-text">{t("cta.noteLine2")}</p>
+                </div>
+              </aside>
+
               <a
                 href={bookingUrl()}
                 onClick={goBookNow}
-                className="btn-cyber btn-cyber-xl group"
+                className="btn-cyber btn-cyber-xl apex-cta__btn group"
               >
                 <span>{t("cta.book")}</span>
                 <ChevronRight className="w-6 h-6" />
@@ -1959,11 +1600,11 @@ export default function Home() {
       <HeroDip />
 
       {/* Footer */}
-      <footer id="contact" className="relative bg-[#050505] pt-20 pb-10 apex-cv">
+      <footer id="contact" className="apex-footer relative bg-[#050505] apex-cv">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12 sm:mb-16">
-            <div className="col-span-1 md:col-span-2 lg:col-span-1">
-              <div className="flex items-center mb-6">
+          <div className="apex-footer__grid">
+            <div className="apex-footer__brand">
+              <div className="apex-footer__logo">
                 <BrandLogo
                   variant="footer"
                   className="relative z-10 h-20 w-auto max-w-[10rem] object-contain opacity-100"
@@ -1972,15 +1613,13 @@ export default function Home() {
                   }}
                 />
               </div>
-              <p className="text-gray-400 mb-6 font-medium">
-                {t("footer.blurb")}
-              </p>
-              <div className="flex gap-4">
+              <p className="apex-footer__blurb">{t("footer.blurb")}</p>
+              <div className="apex-footer__social">
                 <a
                   href={INSTAGRAM_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-gradient-to-tr hover:from-[#FF1AD8] hover:to-[#00E5FF] transition-all"
+                  className="apex-footer__social-btn"
                   aria-label="Instagram"
                 >
                   <Instagram className="w-5 h-5" />
@@ -1989,7 +1628,7 @@ export default function Home() {
                   href={FACEBOOK_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#00E5FF] transition-all"
+                  className="apex-footer__social-btn"
                   aria-label="Facebook"
                 >
                   <Facebook className="w-5 h-5" />
@@ -1998,7 +1637,7 @@ export default function Home() {
                   href={GOOGLE_REVIEWS_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#EA4335] transition-all"
+                  className="apex-footer__social-btn"
                   aria-label="Google Reviews"
                 >
                   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -2011,9 +1650,9 @@ export default function Home() {
               </div>
             </div>
 
-            <div>
-              <h4 className="font-black text-lg uppercase tracking-wider mb-6">{t("footer.links")}</h4>
-              <ul className="space-y-3 font-medium text-gray-400">
+            <div className="apex-footer__col">
+              <h4 className="apex-footer__heading">{t("footer.links")}</h4>
+              <ul className="apex-footer__list">
                 {NAV_ITEMS.map((item) => {
                   const href =
                     item.kind === "path"
@@ -2028,9 +1667,9 @@ export default function Home() {
                           e.preventDefault();
                           scrollToSection(item.id);
                         }}
-                        className="hover:text-white hover:translate-x-1 transition-all flex items-center gap-2"
+                        className="apex-footer__link"
                       >
-                        <ChevronRight className="w-3 h-3 text-[#00E5FF]" /> {t(`nav.${item.id}`)}
+                        <ChevronRight className="w-3 h-3 apex-footer__chevron" /> {t(`nav.${item.id}`)}
                       </a>
                     </li>
                   );
@@ -2038,102 +1677,64 @@ export default function Home() {
               </ul>
             </div>
 
-            <div>
-              <h4 className="font-black text-lg uppercase tracking-wider mb-6">{t("footer.services")}</h4>
-              <ul className="space-y-3 font-medium text-gray-400">
+            <div className="apex-footer__col">
+              <h4 className="apex-footer__heading">{t("footer.services")}</h4>
+              <ul className="apex-footer__list">
                 {services.map((service) => (
-                  <li
-                    key={service.id}
-                    className="hover:text-white transition-colors cursor-pointer flex items-center gap-2"
-                  >
-                    <ChevronRight className="w-3 h-3 text-[#FF1AD8]" /> {t(`pkg.${service.pkg}.title`)}
+                  <li key={service.id}>
+                    <a href={bookingUrl()} onClick={goBookNow} className="apex-footer__link">
+                      <ChevronRight className="w-3 h-3 apex-footer__chevron apex-footer__chevron--pink" />{" "}
+                      {t(`pkg.${service.pkg}.title`)}
+                    </a>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div>
-              <h4 className="font-black text-lg uppercase tracking-wider mb-6">{t("footer.contact")}</h4>
-              <ul className="space-y-4 text-gray-400">
-                <li className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-[#00E5FF] shrink-0 mt-0.5" />
+            <div className="apex-footer__col apex-footer__col--contact">
+              <h4 className="apex-footer__heading">{t("footer.contact")}</h4>
+              <ul className="apex-footer__contact">
+                <li className="apex-footer__contact-row">
+                  <MapPin className="apex-footer__contact-icon apex-footer__contact-icon--cyan" />
                   <a
                     href="https://www.google.com/maps/search/1114+E+Lakota+St,+65714+Nixa,+MO"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hidden md:block hover:text-[#00E5FF] transition-colors cursor-pointer text-left"
+                    className="hidden md:block apex-footer__contact-text"
                   >
                     <span>Located in the Nixa<br />1114 E Lakota St, 65714</span>
                   </a>
                   <button
                     onClick={openMapChooser}
-                    className="md:hidden hover:text-[#00E5FF] transition-colors cursor-pointer text-left"
+                    className="md:hidden apex-footer__contact-text text-left"
                   >
                     <span>Located in the Nixa<br />1114 E Lakota St, 65714</span>
                   </button>
                 </li>
-                <li className="flex items-center gap-3 hover:text-white transition-colors cursor-pointer">
-                  <Phone className="w-5 h-5 text-[#FF1AD8]" />
-                  <a href="tel:417-527-6165" className="hover:text-[#00E5FF] transition-colors">417-527-6165</a>
+                <li className="apex-footer__contact-row">
+                  <Phone className="apex-footer__contact-icon apex-footer__contact-icon--pink" />
+                  <a href="tel:417-527-6165" className="apex-footer__phone">
+                    417-527-6165
+                  </a>
                 </li>
-                <li className="flex items-start gap-3">
-                  <Clock className="w-5 h-5 text-[#FF1AD8] shrink-0 mt-0.5" />
-                  <div className="text-sm">
-                    <p className="text-white font-bold">{t("footer.monSat")}</p>
-                    <p className="text-gray-400">{t("footer.hoursTime")}</p>
-                    <p className="text-gray-500 mt-1">{t("footer.closedSun")}</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3 group cursor-pointer">
-                  <Mail className="w-5 h-5 text-[#00E5FF] shrink-0 mt-0.5" />
-                  <div className="flex flex-col">
-                    <span className="md:group-hover:hidden block md:block">{t("footer.social")}</span>
-                    <div className="flex md:hidden group-hover:flex gap-3 pt-2">
-                      <a
-                        href={INSTAGRAM_LINK}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-white/10 hover:bg-gradient-to-r hover:from-[#FF1AD8] hover:to-[#00E5FF] transition-all transform hover:scale-110"
-                        title="Instagram"
-                      >
-                        <Instagram className="w-5 h-5 text-white" />
-                      </a>
-                      <a
-                        href={FACEBOOK_LINK}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-white/10 hover:bg-gradient-to-r hover:from-[#FF1AD8] hover:to-[#00E5FF] transition-all transform hover:scale-110"
-                        title="Facebook"
-                      >
-                        <Facebook className="w-5 h-5 text-white" />
-                      </a>
-                      <a
-                        href={GOOGLE_REVIEWS_LINK}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-white/10 hover:bg-[#EA4335] transition-all transform hover:scale-110"
-                        title="Google Reviews"
-                      >
-                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                        </svg>
-                      </a>
-                    </div>
+                <li className="apex-footer__contact-row">
+                  <Clock className="apex-footer__contact-icon apex-footer__contact-icon--pink" />
+                  <div className="apex-footer__hours">
+                    <p className="apex-footer__hours-days">{t("footer.monSat")}</p>
+                    <p>{t("footer.hoursTime")}</p>
+                    <p className="apex-footer__hours-closed">{t("footer.closedSun")}</p>
                   </div>
                 </li>
               </ul>
             </div>
           </div>
 
-          <div className="py-6 border-t border-white/10 flex flex-col items-center justify-center gap-3 text-center">
+          <div className="apex-footer__credit">
             <a
               href="https://www.apexwebworx.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex flex-col items-center gap-3 hover:opacity-100 transition-all"
+              className="apex-footer__credit-link group"
               aria-label="APEX WEB WORX"
             >
               <OptimizedImage
@@ -2141,29 +1742,30 @@ export default function Home() {
                 loading="lazy"
                 decoding="async"
                 alt="APEX WEB WORX"
-                className="h-16 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity"
+                className="apex-footer__credit-logo"
                 noBlur
               />
-              <p className="text-gray-500 text-xs font-medium uppercase tracking-widest group-hover:text-white transition-colors">
-                Designed and developed by <span className="text-potential font-bold">APEX WEB WORX</span>
+              <p className="apex-footer__credit-text">
+                {t("footer.designed")}{" "}
+                <span className="text-potential font-bold">APEX WEB WORX</span>
               </p>
             </a>
           </div>
 
-          <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
-            <p className="text-gray-500 text-sm font-medium">
+          <div className="apex-footer__legal">
+            <p className="apex-footer__copy">
               &copy; {new Date().getFullYear()} {t("footer.rights")}
             </p>
-            <div className="flex flex-wrap justify-center md:justify-end gap-4 sm:gap-6 text-sm text-gray-500 font-medium">
+            <div className="apex-footer__legal-links">
               <button
                 onClick={() => setLegalModal("privacy")}
-                className="hover:text-white cursor-pointer transition-colors"
+                className="apex-footer__legal-btn"
               >
                 {t("footer.privacy")}
               </button>
               <button
                 onClick={() => setLegalModal("terms")}
-                className="hover:text-white cursor-pointer transition-colors"
+                className="apex-footer__legal-btn"
               >
                 {t("footer.terms")}
               </button>
