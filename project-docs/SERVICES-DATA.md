@@ -23,6 +23,13 @@ The ultimate package combining interior and exterior detailing. Includes:
 **Duration:** 6 hours | **Starting at:** $200 | Badge: "Most Booked"
 
 Comprehensive interior cleaning:
+- Deep Cabin Cleaning
+- Stain Removal
+- Leather Care & Conditioning
+- Odor Elimination
+- Steam Sanitization
+- Seats shampooed and cleaned
+- Interior glass cleaned
 - Air vents cleaned
 - Free air fresheners
 - Steam cleaning of center console and door panels
