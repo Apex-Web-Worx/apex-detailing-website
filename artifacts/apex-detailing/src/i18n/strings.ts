@@ -15,8 +15,10 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "nav.menu": "Toggle menu",
 
     "hero.badge": "Nixa Ozark Springfield, MO Premium Detailing",
-    "hero.title1": "Unleash Your",
-    "hero.title2": "Car's True Potential",
+    "hero.title1": "Unleash",
+    /* NBSP keeps "YOUR CAR'S" / "TRUE POTENTIAL" from wrapping mid-phrase */
+    "hero.title2": "Your Car's",
+    "hero.title3": "True Potential",
     "hero.subtitleLead": "Premium auto detailing, ceramic coating, and paint correction",
     "hero.subtitleRest": " services serving",
     "hero.subtitleEnd": ". We bring the showroom shine to your vehicle.",
@@ -37,27 +39,35 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
       "We offer comprehensive detailing solutions tailored to protect your investment and keep your vehicle looking immaculate.",
     "services.pricingNoteLabel": "Pricing Note:",
     "services.pricingNote":
-      " The price ranges listed below are standard for the majority of vehicles. The final cost will depend on the condition of your vehicle and any additional services you request. For a more accurate estimate, please contact us directly.",
+      " Prices below are starting amounts by vehicle type. Final cost depends on condition and any add-ons. For a more accurate estimate, please contact us.",
     "services.startingAt": "Starting at",
+    "services.priceByVehicle": "Price by vehicle",
     "services.book": "Book Now",
+    "services.viewDetails": "View Details",
+    "services.readyTitle": "Ready to give your car the care it deserves?",
+    "services.readySub": "Book your service today and experience the Apex difference.",
+    "services.moreTitle": "More Packages",
     "services.mostBooked": "Most Booked",
     "services.bestValue": "Best Value",
     "services.express": "Express",
+    "services.premiumProtection": "Premium Protection",
     "services.callQuote": "Call for Quote",
     "addons.optional": "Optional Services (Extra Charges Apply)",
+    "addons.customize": "Customize Your Detail",
 
     "how.kicker": "How It Works",
     "how.title": "Three Simple",
     "how.titleAccent": "Steps",
     "how.1.title": "Book Online",
-    "how.1.desc": "Pick your service, day, and time in under 2 minutes — right here on our site.",
+    "how.1.desc": "Choose your service, date, and time in under 2 minutes.",
     "how.2.title": "We Detail",
-    "how.2.desc": "Drop your car off at our shop. We handle every surface with care, from paint to upholstery.",
+    "how.2.desc": "Drop off your vehicle and let us handle every detail.",
     "how.3.title": "Drive Happy",
-    "how.3.desc": "Step into a like-new vehicle and enjoy long-lasting protection and shine.",
+    "how.3.desc": "Pick up a refreshed vehicle ready to shine.",
 
     "about.kicker": "About Us",
-    "about.title": "Welcome to",
+    "about.title": "Welcome to Apex",
+    "about.titleAccent": "Detailing",
     "about.p1":
       "Where passion, precision, and purpose come together to serve you with excellence. Serving the Nixa Ozark Springfield, MO areas, we specialize in high-quality car detailing that restores beauty, protects value, and reflects the pride you have in your vehicle.",
     "about.p2a": "Our dedication to quality and customer satisfaction has helped us become ",
@@ -74,11 +84,14 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
       '"Whatever you do, work at it with all your heart, as working for the Lord, not for men. Colossians 3:23 (NIV)"',
     "about.p4":
       "Apex Detailing was founded by Michail, who is known for his meticulous nature and commitment to perfection. What started as a personal passion for detailing has grown into a trusted service grounded in faith, excellence, and care.",
-    "about.p5":
-      "At Apex, we use only premium-grade chemicals and professional techniques to ensure every vehicle gets the attention it deserves — inside and out. Whether it's a deep interior clean, paint correction, or exterior protection, our goal is to go above and beyond your expectations.",
+    "about.p5a": "At Apex, we use only ",
+    "about.p5b": "premium-grade products",
+    "about.p5c":
+      " and professional techniques to ensure every vehicle gets the attention it deserves — inside and out. Whether it's a deep interior clean, paint correction, or exterior protection, our goal is to go above and beyond your expectations.",
     "about.p6": "Experience the Apex difference — where faith fuels our service and quality drives every detail.",
-    "about.meet": "Meet your detailer",
+    "about.meet": "Meet Your Detailer",
     "about.role": "Founder & Detailing Specialist",
+    "about.founderTag": "Precision • Care • Integrity",
     "about.rated": "5-Star Rated",
     "about.perk1.title": "Premium Products",
     "about.perk1.desc": "Professional-grade chemicals only",
@@ -86,7 +99,7 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "about.perk2.desc": "Peace of mind for your investment",
     "about.perk3.title": "Flexible Scheduling",
     "about.perk3.desc": "Book easily online anytime",
-    "about.perk4.title": "Expert Team",
+    "about.perk4.title": "Expert Technicians",
     "about.perk4.desc": "Certified professionals on staff",
 
     "faq.kicker": "FAQ",
@@ -96,16 +109,96 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "faq.paint": "Paint Correction",
     "faq.ceramic": "Ceramic Coating",
 
-    "cta.title1": "Ready to Experience",
-    "cta.title2": "The Apex Difference?",
-    "cta.sub": "Book your appointment today.",
-    "cta.important": "Important:",
-    "cta.note":
-      " All scheduling needs to be done prior to your visit. We appreciate your understanding and encourage you to book ahead to secure your preferred time.",
+    "faq.g0.q": "Where are you located?",
+    "faq.g0.a":
+      "Our shop is at 1114 E Lakota St in Nixa, MO. We proudly serve customers from Nixa, Ozark, Springfield, and the surrounding Ozarks communities.",
+    "faq.g1.q": "How long does a detail take?",
+    "faq.g1.a":
+      "Most interior or exterior details take 2–4 hours. Full details usually run 4–6 hours — and sometimes up to 10 hours for heavily soiled vehicles. Ceramic coatings or paint correction can take a full day depending on vehicle condition.",
+    "faq.g2.q": "How do I book an appointment?",
+    "faq.g2.a":
+      "Click any 'Book Your Detail' button to use our online booking — pick your service, day, and time in under a minute. You can also call us directly at 417-527-6165. All scheduling needs to happen before your visit.",
+    "faq.g3.q": "What payment methods do you accept?",
+    "faq.g3.a":
+      "We accept cash, Square (all major credit/debit cards), Venmo, and Zelle. Digital gift cards are also available year-round through our Square store.",
+    "faq.g4.q": "What if my vehicle is in really rough shape?",
+    "faq.g4.a":
+      "No problem — we handle heavy pet hair, deep stains, and serious build-up. Heavily soiled interiors may require a Full Interior Detail rather than the Express service. Final pricing is confirmed at inspection.",
+    "faq.g5.q": "Do you offer gift cards?",
+    "faq.g5.a":
+      "Yes — digital gift cards are available through our Square store. They're a perfect gift for any car owner.",
+
+    "faq.p0.q": "What is paint correction?",
+    "faq.p0.a":
+      "Paint correction is a professional process that removes imperfections from your vehicle's paint by machine polishing the clear coat. Over time, your paint can develop swirl marks, light scratches, oxidation, water spots, holograms, fading or dullness, and surface contamination. The goal is to restore clarity, depth, and gloss while making your paint look significantly cleaner and newer. Before any correction begins, your vehicle goes through proper preparation which may include a hand wash, iron decontamination, clay bar treatment, and paint inspection to ensure the paint is clean and safe to polish.",
+    "faq.p1.q": "What is a 1-Step Paint Correction?",
+    "faq.p1.a":
+      "A 1-step correction is ideal for vehicles with light imperfections. This process includes a light cutting polish that removes minor swirl marks, improves gloss and shine, reduces light scratches, and enhances paint clarity. A 1-step correction typically removes 50–70% of paint defects depending on paint condition and hardness. Best for newer vehicles, light swirl marks, vehicles that already have decent paint condition, and owners wanting a noticeable improvement without heavy correction.",
+    "faq.p2.q": "What is a 2-Step Paint Correction?",
+    "faq.p2.a":
+      "A 2-step correction is a more aggressive restoration process for vehicles with heavier imperfections. Step 1 uses a heavy compound that removes deeper scratches, corrects oxidation, eliminates heavier swirl marks, and removes deeper paint defects. Step 2 uses a finishing polish that refines the paint, restores gloss, removes haze from compounding, and creates a deep mirror-like finish. A 2-step correction can remove 70–90%+ of paint defects depending on paint thickness and condition. Best for older vehicles, heavily neglected paint, deep swirls and scratches, and vehicles needing major restoration. Some scratches may be too deep to remove safely if they've gone through the clear coat.",
+    "faq.p3.q": "Why does pricing vary?",
+    "faq.p3.a":
+      "Every vehicle is different. Pricing depends on vehicle size, paint condition, level of contamination, time needed for preparation, and whether your vehicle needs a 1-step or 2-step correction. Heavily contaminated vehicles require additional prep time before polishing can safely begin.",
+    "faq.p4.q": "Do I need paint protection after correction?",
+    "faq.p4.a":
+      "Yes — protection is highly recommended after paint correction. Once the paint is polished, adding protection helps preserve the results and keeps your vehicle cleaner longer. Our paint sealant provides 6–8 months of protection against dirt buildup, water spots, UV exposure, road grime, and minor surface wear, while adding extra gloss and making future washes easier.",
+    "faq.p5.q": "Can you apply ceramic coating after correction?",
+    "faq.p5.a":
+      "Yes. Ceramic coating is a premium option for longer-term protection and durability. Benefits include longer-lasting protection, strong water beading, easier maintenance, UV protection, and enhanced gloss.",
+    "faq.p6.q": "How long does paint correction take?",
+    "faq.p6.a":
+      "Most paint correction services take anywhere from 1 full day to multiple days, depending on the vehicle size and paint condition.",
+    "faq.p7.q": "Will paint correction remove all scratches?",
+    "faq.p7.a":
+      "Not always. Paint correction can remove many imperfections, but scratches that are too deep may require wet sanding, touch-up paint, or may be unsafe to fully remove.",
+
+    "faq.c0.q": "What is ceramic coating?",
+    "faq.c0.a":
+      "Ceramic coating is a premium protective layer that bonds to your vehicle's paint, providing long-lasting protection while enhancing gloss and making maintenance easier.",
+    "faq.c1.q": "Why should I ceramic coat my vehicle?",
+    "faq.c1.a":
+      "Deep, mirror-like shine. Protection from UV rays and oxidation. Helps resist stains and contaminants. Makes washing easier. Keeps your vehicle cleaner longer. Preserves your paint's appearance.",
+    "faq.c2.q": "What's included in the ceramic coating package?",
+    "faq.c2.a":
+      "Full hand wash, iron decontamination treatment, clay bar treatment, paint polishing for maximum gloss, paint preparation and panel wipe, professional ceramic coating application, and final quality inspection.",
+    "faq.c3.q": "Does a brand-new vehicle need paint polishing?",
+    "faq.c3.a":
+      "Yes. Even new vehicles often have light swirl marks, dealership wash scratches, and minor imperfections. Proper paint preparation ensures the best possible finish before the coating is applied.",
+    "faq.c4.q": "How long does the ceramic coating process take?",
+    "faq.c4.a":
+      "Most ceramic coating services take 1-2 days, depending on the size of the vehicle and the amount of paint correction needed.",
+    "faq.c5.q": "How long will ceramic coating last?",
+    "faq.c5.a":
+      "With proper maintenance and safe washing methods, ceramic coating can provide years of protection and shine.",
+    "faq.c6.q": "Will ceramic coating prevent scratches?",
+    "faq.c6.a":
+      "Ceramic coating is not scratch-proof, but it helps protect against minor wash-induced swirl marks and everyday wear.",
+    "faq.c7.q": "Does ceramic coating eliminate the need to wash my car?",
+    "faq.c7.a":
+      "No, but it makes cleaning much easier. Dirt, mud, and road grime don't stick as easily, helping your vehicle stay cleaner for longer.",
+    "faq.c8.q": "Can ceramic coating be applied to windows and wheels?",
+    "faq.c8.a":
+      "Yes! Exterior glass and wheels can also be protected, making them easier to clean and maintain.",
+    "faq.c9.q": "How should I maintain my ceramic-coated vehicle?",
+    "faq.c9.a":
+      "We recommend regular hand washes using pH-neutral soap and avoiding automatic car washes with brushes to maximize the life of the coating.",
+    "faq.c10.q": "Is ceramic coating worth it?",
+    "faq.c10.a":
+      "Absolutely! Ceramic coating is one of the best ways to protect your investment, reduce maintenance, and keep your vehicle looking its best for years.",
+
+    "cta.titleLead": "Experience the",
+    "cta.titleApex": "Apex",
+    "cta.titleEnd": "Difference?",
+    "cta.sub":
+      "Ready to transform your vehicle? Book your detail and experience the Apex difference.",
+    "cta.important": "Important",
+    "cta.noteLine1": "Appointments must be scheduled in advance.",
+    "cta.noteLine2": "Book ahead to secure your preferred date and time.",
     "cta.book": "BOOK APPOINTMENT NOW",
 
     "footer.blurb":
-      "Prestige vehicle detailing and ceramic coating services. Expert craftsmanship, exceptional results.",
+      "Premium vehicle detailing, paint correction, and ceramic coating in Nixa, Ozark & Springfield, MO.",
     "footer.links": "Quick Links",
     "footer.services": "Services",
     "footer.contact": "Contact",
@@ -131,6 +224,9 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "book.step.confirm": "Confirm",
     "book.choose": "Choose your service",
     "book.chooseSub": "Pick the package that fits your vehicle. You can always upgrade in person.",
+    "book.chooseSubMobile": "Tap a service to select it, then press Continue — or tap the card again.",
+    "book.selected": "Selected",
+    "book.tapAgain": "Tap again to continue",
     "book.loadingServices": "Loading services…",
     "book.loadFail": "Couldn't load services. Try again.",
     "book.questions": "Questions? Call",
@@ -187,6 +283,14 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "ba.kicker": "See the Difference",
     "ba.title": "Before & After",
     "ba.titleAccent": "Transformations",
+    "ba.before": "Before",
+    "ba.after": "After",
+    "ba.prev": "Previous",
+    "ba.next": "Next",
+    "ba.desc.interior": "Deep clean restored. Stains lifted. Cabin freshness renewed.",
+    "ba.desc.exterior": "Paint revived. Contaminants removed. Gloss brought back.",
+    "ba.desc.headlights": "Oxidation removed. Clarity restored. Nighttime visibility improved.",
+    "ba.desc.paint": "Swirls corrected. Depth restored. Mirror gloss revealed.",
     "testimonials.kicker": "Testimonials",
     "testimonials.title": "Client",
     "testimonials.titleAccent": "Reactions",
@@ -195,12 +299,18 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "reviews.titleAccent": "Happy Customers",
     "reviews.sub":
       "See what our clients are saying about Apex Detailing. We maintain a 5-star rating across all platforms.",
-    "reviews.excellent": "Excellent",
-    "reviews.rating": "Rating",
-    "reviews.positive": "Positive",
-    "reviews.customerRating": "Customer Rating",
-    "reviews.response": "Response",
-    "reviews.supportTime": "Support Time",
+    "reviews.stat1.value": "5.0",
+    "reviews.stat1.label": "★★★★★",
+    "reviews.stat1.desc": "Google Rating",
+    "reviews.stat2.value": "100%",
+    "reviews.stat2.label": "Satisfaction Goal",
+    "reviews.stat2.desc": "On Every Detail",
+    "reviews.stat3.value": "APEX",
+    "reviews.stat3.label": "Premium Detailing",
+    "reviews.stat3.desc": "Nixa • Ozark • Springfield",
+    "reviews.badge": "Google Review",
+    "reviews.readMore": "Read more",
+    "reviews.readLess": "Show less",
     "area.kicker": "Service Area",
     "area.title": "Serving the",
     "area.titleAccent": "Ozarks",
@@ -252,9 +362,17 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.full.title": "Apex Full Detailing",
     "pkg.full.desc":
       "The ultimate package! Includes interior and exterior detailed cleaning and protection. Get your vehicle looking showroom fresh inside and out. Add-ons available to customize your package.",
-    "pkg.full.price.0": "Coupe / Sedan: $300-$400",
-    "pkg.full.price.1": "Truck / Jeep / 2-Row SUV: $350 – $450",
-    "pkg.full.price.2": "Minivan / 3-Row SUV: $350 – $500",
+    "pkg.full.cardDesc":
+      "The ultimate package! Includes interior and exterior detailing, paint protection, and professional results that make your vehicle look showroom fresh.",
+    "pkg.full.price.0": "Coupe / Sedan: $300–$400",
+    "pkg.full.price.1": "Truck / Jeep / 2-Row SUV: $350–$450",
+    "pkg.full.price.2": "Minivan / 3-Row SUV: $350–$500",
+    "pkg.full.tier.0.label": "Coupe / Sedan",
+    "pkg.full.tier.0.amount": "$300–$400",
+    "pkg.full.tier.1.label": "Truck / Jeep / 2-row SUV",
+    "pkg.full.tier.1.amount": "$350–$450",
+    "pkg.full.tier.2.label": "Minivan / 3-row SUV",
+    "pkg.full.tier.2.amount": "$350–$500",
     "pkg.full.feat.0": "Complete Exterior Detailing",
     "pkg.full.feat.1": "Complete Interior Detailing",
     "pkg.full.feat.2": "Paint Protection",
@@ -264,8 +382,22 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.interior.title": "Apex Interior Detailing",
     "pkg.interior.desc":
       "Comprehensive interior cleaning that transforms every surface. From carpets to leather to air vents. Add-ons available to customize your package.",
-    "pkg.interior.price.0": "2-Row: $200 – $300",
-    "pkg.interior.price.1": "3-Row: $250 – $350",
+    "pkg.interior.cardDesc":
+      "Deep interior cleaning that transforms every surface. From carpets to leather to air vents. Add-ons available to customize your package.",
+    "pkg.interior.price.0": "Standard: $200",
+    "pkg.interior.price.1": "SUV / Jeep: $250",
+    "pkg.interior.price.2": "3-row: $300–$350",
+    "pkg.interior.tier.0.label": "Standard",
+    "pkg.interior.tier.0.amount": "$200",
+    "pkg.interior.tier.1.label": "SUV / Jeep",
+    "pkg.interior.tier.1.amount": "$250",
+    "pkg.interior.tier.2.label": "3-row",
+    "pkg.interior.tier.2.amount": "$300–$350",
+    "pkg.interior.cardFeat.0": "Deep Cabin Cleaning",
+    "pkg.interior.cardFeat.1": "Stain Removal",
+    "pkg.interior.cardFeat.2": "Leather Care & Conditioning",
+    "pkg.interior.cardFeat.3": "Odor Elimination",
+    "pkg.interior.cardFeat.4": "Steam Sanitization",
     "pkg.interior.feat.0": "Air vents cleaned",
     "pkg.interior.feat.1": "Free air fresheners",
     "pkg.interior.feat.2": "Steam cleaning of center console and door panels",
@@ -283,10 +415,21 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.express.title": "Apex Express Interior Detailing",
     "pkg.express.desc":
       "A fast, high-quality interior refresh designed to keep your vehicle clean, fresh, and presentable—without the time commitment of a full detail. This service includes a thorough vacuum, wipe-down of all interior surfaces, floor mats cleaned, interior glass polished, and a light refresh of high-touch areas. Perfect for well-maintained vehicles or as a maintenance service between full details.",
+    "pkg.express.cardDesc":
+      "A fast, high-quality interior refresh designed to keep your vehicle clean, fresh, and presentable — perfect for busy lifestyles.",
     "pkg.express.warn":
       "This service is intended only to maintain a semi-clean vehicle. Heavily soiled interiors, stains, excessive pet hair, or deep cleaning needs may require a Full Interior Detail. Final service type will be confirmed upon inspection.",
-    "pkg.express.price.0": "2-Row: $100–$150",
-    "pkg.express.price.1": "3-Row: $150–$200",
+    "pkg.express.price.0": "Standard: $100–$150",
+    "pkg.express.price.1": "3-row: $150–$200",
+    "pkg.express.tier.0.label": "Standard",
+    "pkg.express.tier.0.amount": "$100–$150",
+    "pkg.express.tier.1.label": "3-row",
+    "pkg.express.tier.1.amount": "$150–$200",
+    "pkg.express.cardFeat.0": "Vacuum Interior",
+    "pkg.express.cardFeat.1": "Wipe Down Surfaces",
+    "pkg.express.cardFeat.2": "Clean Floor Mats",
+    "pkg.express.cardFeat.3": "Interior Glass Polished",
+    "pkg.express.cardFeat.4": "Light Touch Refresh",
     "pkg.express.feat.0": "Thorough Vacuum",
     "pkg.express.feat.1": "Interior Surfaces Wiped Down",
     "pkg.express.feat.2": "Floor Mats Cleaned",
@@ -297,7 +440,11 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.exterior.desc":
       "Comprehensive exterior cleaning and protection to make your car turn heads everywhere you go. Includes detailed hand wash, exterior windows and mirrors cleaning, wheels and tires cleaned, polished, and dressed, door jambs wiped down, and spray sealant for 1-month protection.",
     "pkg.exterior.price.0": "Sedan: $150",
-    "pkg.exterior.price.1": "SUV: $200–$250",
+    "pkg.exterior.price.1": "SUV / Truck: $200–$250",
+    "pkg.exterior.tier.0.label": "Sedan",
+    "pkg.exterior.tier.0.amount": "$150",
+    "pkg.exterior.tier.1.label": "SUV / Truck",
+    "pkg.exterior.tier.1.amount": "$200–$250",
     "pkg.exterior.feat.0": "Detailed Hand Wash",
     "pkg.exterior.feat.1": "Windows & Mirrors Cleaned",
     "pkg.exterior.feat.2": "Wheels & Tires Detailed",
@@ -307,8 +454,12 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.wax.title": "Apex Wash, Clay & Wax",
     "pkg.wax.desc":
       "First, the vehicle receives a thorough hand wash to remove dirt, dust, and road grime. Next, a clay bar treatment is used to safely remove embedded contaminants such as tar, brake dust, and industrial fallout that normal washing cannot remove. Finally, a protective wax coating is applied to enhance shine, protect the paint, and help repel water and dirt.",
-    "pkg.wax.price.0": "Sedan: $250",
-    "pkg.wax.price.1": "SUV: $300–$350",
+    "pkg.wax.price.0": "Sedan: $300",
+    "pkg.wax.price.1": "SUV / Truck: $400",
+    "pkg.wax.tier.0.label": "Sedan",
+    "pkg.wax.tier.0.amount": "$300",
+    "pkg.wax.tier.1.label": "SUV / Truck",
+    "pkg.wax.tier.1.amount": "$400",
     "pkg.wax.feat.0": "Thorough Hand Wash",
     "pkg.wax.feat.1": "Clay Bar Treatment",
     "pkg.wax.feat.2": "Professional Wax Coating",
@@ -323,11 +474,16 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.headlight.feat.2": "UV Protection Applied",
 
     "pkg.ceramic.title": "Apex Ceramic Coating",
+    "pkg.ceramic.cardDesc":
+      "Long-lasting ceramic protection that enhances gloss, repels water, and helps protect your vehicle’s paint from environmental contaminants.",
     "pkg.ceramic.desc":
-      "Ultimate protection and extreme gloss for your vehicle's paint. Lasts for years, making maintenance washes a breeze.",
-    "pkg.ceramic.feat.0": "Up to 5 Years Protection",
-    "pkg.ceramic.feat.1": "Extreme Hydrophobics",
-    "pkg.ceramic.feat.2": "Scratch Resistance",
+      "Long-lasting ceramic protection that enhances gloss, repels water, and helps protect your vehicle’s paint from environmental contaminants.",
+    "pkg.ceramic.feat.0": "1-Step or 2-Step Paint Correction — needed so coating bonds to swirl-free paint",
+    "pkg.ceramic.feat.1": "Professional Paint Decontamination",
+    "pkg.ceramic.feat.2": "9H Ceramic Coating Application",
+    "pkg.ceramic.feat.3": "Hydrophobic Protection",
+    "pkg.ceramic.feat.4": "UV & Chemical Resistance",
+    "pkg.ceramic.feat.5": "Long-Lasting Gloss & Durability",
 
     "pkg.paint.title": "Apex Paint Correction",
     "pkg.paint.desc":
@@ -396,7 +552,8 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
 
     "hero.badge": "Никса · Озарк · Спрингфилд, Миссури — премиум детейлинг",
     "hero.title1": "Раскройте",
-    "hero.title2": "настоящий потенциал авто",
+    "hero.title2": "настоящий",
+    "hero.title3": "потенциал авто",
     "hero.subtitleLead": "Премиум детейлинг, керамическое покрытие и коррекция ЛКП",
     "hero.subtitleRest": " для",
     "hero.subtitleEnd": ". Мы возвращаем автомобилю салонный блеск.",
@@ -417,27 +574,35 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
       "Комплексный детейлинг, чтобы защитить ваш автомобиль и сохранить безупречный вид.",
     "services.pricingNoteLabel": "О цене:",
     "services.pricingNote":
-      " Указанные диапазоны — ориентир для большинства авто. Итог зависит от состояния машины и доп. услуг. Для точной оценки свяжитесь с нами.",
+      " Цены ниже — стартовые по типу авто. Итог зависит от состояния машины и доп. услуг. Для точной оценки свяжитесь с нами.",
     "services.startingAt": "От",
+    "services.priceByVehicle": "Цена по типу авто",
     "services.book": "Записаться",
+    "services.viewDetails": "Подробнее",
+    "services.readyTitle": "Готовы дать авто уход, которого оно заслуживает?",
+    "services.readySub": "Запишитесь сегодня и почувствуйте разницу Apex.",
+    "services.moreTitle": "Другие пакеты",
     "services.mostBooked": "Чаще всего",
     "services.bestValue": "Выгода",
     "services.express": "Экспресс",
+    "services.premiumProtection": "Премиум-защита",
     "services.callQuote": "Цена по запросу",
     "addons.optional": "Дополнительно (за отдельную плату)",
+    "addons.customize": "Настройте свой детейлинг",
 
     "how.kicker": "Как это работает",
     "how.title": "Три простых",
     "how.titleAccent": "шага",
     "how.1.title": "Запись онлайн",
-    "how.1.desc": "Выберите услугу, день и время за пару минут — прямо на сайте.",
+    "how.1.desc": "Выберите услугу, дату и время меньше чем за 2 минуты.",
     "how.2.title": "Мы делаем детейлинг",
-    "how.2.desc": "Оставляете авто в студии. Мы бережно обрабатываем кузов и салон.",
+    "how.2.desc": "Оставьте автомобиль — мы берём на себя каждую деталь.",
     "how.3.title": "Уезжаете довольными",
-    "how.3.desc": "Садитесь в как новую машину — блеск и защита надолго.",
+    "how.3.desc": "Заберите обновлённое авто, готовое сиять.",
 
     "about.kicker": "О нас",
-    "about.title": "Добро пожаловать в",
+    "about.title": "Добро пожаловать в Apex",
+    "about.titleAccent": "Детейлинг",
     "about.p1":
       "Страсть, точность и смысл — чтобы служить вам с высоким качеством. Мы работаем в Никсе, Озарке и Спрингфилде и возвращаем красоту авто, защищаем его ценность и гордость владельца.",
     "about.p2a": "Благодаря качеству и заботе о клиентах мы стали ",
@@ -454,11 +619,14 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
       "«И всё, что вы делаете, делайте от души, как для Господа, а не для человеков. Колоссянам 3:23»",
     "about.p4":
       "Apex Detailing основал Михаил — известный вниманием к деталям и стремлением к идеалу. Личное увлечение выросло в доверенный сервис на вере, качестве и заботе.",
-    "about.p5":
-      "Мы используем премиальную химию и профессиональные методы — салон, коррекция ЛКП, защита кузова. Цель — превзойти ожидания.",
+    "about.p5a": "Мы используем только ",
+    "about.p5b": "премиум-продукты",
+    "about.p5c":
+      " и профессиональные методы — салон, коррекция ЛКП, защита кузова. Цель — превзойти ожидания.",
     "about.p6": "Почувствуйте разницу Apex — вера питает сервис, качество ведёт каждую деталь.",
     "about.meet": "Ваш детейлер",
     "about.role": "Основатель и специалист",
+    "about.founderTag": "Точность • Забота • Честность",
     "about.rated": "Оценка 5 звёзд",
     "about.perk1.title": "Премиум-химия",
     "about.perk1.desc": "Только профессиональные составы",
@@ -466,7 +634,7 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "about.perk2.desc": "Спокойствие за ваш автомобиль",
     "about.perk3.title": "Удобная запись",
     "about.perk3.desc": "Онлайн в любое время",
-    "about.perk4.title": "Опыт",
+    "about.perk4.title": "Опытные мастера",
     "about.perk4.desc": "Сертифицированные специалисты",
 
     "faq.kicker": "FAQ",
@@ -476,16 +644,96 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "faq.paint": "Коррекция ЛКП",
     "faq.ceramic": "Керамика",
 
-    "cta.title1": "Готовы увидеть",
-    "cta.title2": "разницу Apex?",
-    "cta.sub": "Запишитесь сегодня.",
-    "cta.important": "Важно:",
-    "cta.note":
-      " Запись нужна до визита. Бронируйте заранее, чтобы закрепить удобное время.",
+    "faq.g0.q": "Где вы находитесь?",
+    "faq.g0.a":
+      "Наш цех — 1114 E Lakota St, Nixa, MO. Мы обслуживаем клиентов из Никсы, Озарка, Спрингфилда и окрестностей.",
+    "faq.g1.q": "Сколько длится детейлинг?",
+    "faq.g1.a":
+      "Большинство работ по салону или кузову занимают 2–4 часа. Полный детейлинг обычно 4–6 часов, а при сильных загрязнениях — до 10 часов. Керамика или коррекция ЛКП могут занять целый день в зависимости от состояния авто.",
+    "faq.g2.q": "Как записаться?",
+    "faq.g2.a":
+      "Нажмите любую кнопку «Записаться на детейлинг» и выберите услугу, день и время онлайн за минуту. Можно также позвонить: 417-527-6165. Запись нужна до визита.",
+    "faq.g3.q": "Какие способы оплаты вы принимаете?",
+    "faq.g3.a":
+      "Наличные, Square (все основные карты), Venmo и Zelle. Цифровые подарочные карты доступны круглый год в нашем магазине Square.",
+    "faq.g4.q": "А если авто в очень плохом состоянии?",
+    "faq.g4.a":
+      "Без проблем — работаем с сильной шерстью животных, глубокими пятнами и серьёзными загрязнениями. Для сильно загрязнённого салона чаще нужен полный детейлинг, а не Express. Итоговая цена подтверждается после осмотра.",
+    "faq.g5.q": "Есть ли подарочные карты?",
+    "faq.g5.a":
+      "Да — цифровые подарочные карты доступны в нашем магазине Square. Отличный подарок для любого автовладельца.",
+
+    "faq.p0.q": "Что такое коррекция ЛКП?",
+    "faq.p0.a":
+      "Коррекция ЛКП — профессиональный процесс удаления дефектов краски машинной полировкой лака. Со временем появляются голограммы, лёгкие царапины, окисление, водяные пятна, выгорание и загрязнения поверхности. Цель — вернуть прозрачность, глубину и блеск, чтобы ЛКП выглядело заметно чище и новее. Перед коррекцией авто проходит подготовку: ручная мойка, деконтаминация железа, глина и осмотр ЛКП, чтобы поверхность была чистой и безопасной для полировки.",
+    "faq.p1.q": "Что такое одношаговая коррекция (1-Step)?",
+    "faq.p1.a":
+      "Одношаговая коррекция подходит для лёгких дефектов. Включает лёгкую абразивную полировку: убирает мелкие голограммы, усиливает блеск, снижает лёгкие царапины и улучшает прозрачность ЛКП. Обычно убирает 50–70% дефектов в зависимости от состояния и твёрдости лака. Лучше всего для новых авто, лёгких голограмм, относительно хорошего ЛКП и владельцев, которым нужен заметный результат без тяжёлой коррекции.",
+    "faq.p2.q": "Что такое двухшаговая коррекция (2-Step)?",
+    "faq.p2.a":
+      "Двухшаговая коррекция — более агрессивное восстановление для сильных дефектов. Шаг 1: тяжёлый компаунд убирает более глубокие царапины, окисление и тяжёлые голограммы. Шаг 2: финишная полировка выравнивает поверхность, возвращает блеск, убирает дымку после компаунда и даёт зеркальный финиш. Может убрать 70–90%+ дефектов в зависимости от толщины и состояния лака. Подходит для старых авто, сильно запущенного ЛКП, глубоких голограмм и царапин. Некоторые царапины могут быть слишком глубокими для безопасного полного удаления, если они прошли лак.",
+    "faq.p3.q": "Почему цена может отличаться?",
+    "faq.p3.a":
+      "Каждый автомобиль разный. Цена зависит от размера, состояния ЛКП, степени загрязнения, времени на подготовку и того, нужна ли 1- или 2-шаговая коррекция. Сильно загрязнённые авто требуют дополнительной подготовки перед безопасной полировкой.",
+    "faq.p4.q": "Нужна ли защита после коррекции?",
+    "faq.p4.a":
+      "Да — защита после коррекции очень рекомендуется. После полировки защита сохраняет результат и помогает авто дольше оставаться чистым. Наш силант даёт 6–8 месяцев защиты от грязи, водяных пятен, УФ, дорожных загрязнений и мелкого износа, добавляет блеск и упрощает последующие мойки.",
+    "faq.p5.q": "Можно ли нанести керамику после коррекции?",
+    "faq.p5.a":
+      "Да. Керамическое покрытие — премиум-вариант для долговременной защиты. Плюсы: более долгая защита, сильный гидрофобный эффект, проще уход, защита от УФ и усиленный блеск.",
+    "faq.p6.q": "Сколько длится коррекция ЛКП?",
+    "faq.p6.a":
+      "Обычно от одного полного дня до нескольких дней — в зависимости от размера авто и состояния ЛКП.",
+    "faq.p7.q": "Уберёт ли коррекция все царапины?",
+    "faq.p7.a":
+      "Не всегда. Коррекция убирает многие дефекты, но слишком глубокие царапины могут потребовать мокрой шлифовки, подкраски или быть небезопасными для полного удаления.",
+
+    "faq.c0.q": "Что такое керамическое покрытие?",
+    "faq.c0.a":
+      "Керамика — премиум-защитный слой, который связывается с ЛКП, даёт долговременную защиту, усиливает блеск и упрощает уход.",
+    "faq.c1.q": "Зачем керамировать авто?",
+    "faq.c1.a":
+      "Глубокий зеркальный блеск. Защита от УФ и окисления. Лучше сопротивляется пятнам и загрязнениям. Проще мыть. Авто дольше остаётся чистым. Сохраняет внешний вид ЛКП.",
+    "faq.c2.q": "Что входит в пакет керамики?",
+    "faq.c2.a":
+      "Полная ручная мойка, деконтаминация железа, обработка глиной, полировка для максимального блеска, подготовка и обезжиривание панелей, профессиональное нанесение керамики и финальный контроль качества.",
+    "faq.c3.q": "Нужна ли полировка новому авто?",
+    "faq.c3.a":
+      "Да. Даже у новых авто часто есть лёгкие голограммы, царапины от дилерской мойки и мелкие дефекты. Правильная подготовка ЛКП даёт лучший результат перед нанесением покрытия.",
+    "faq.c4.q": "Сколько длится процесс керамики?",
+    "faq.c4.a":
+      "Обычно 1–2 дня — в зависимости от размера авто и объёма необходимой коррекции ЛКП.",
+    "faq.c5.q": "Как долго держится керамика?",
+    "faq.c5.a":
+      "При правильном уходе и безопасной мойке керамика даёт годы защиты и блеска.",
+    "faq.c6.q": "Защищает ли керамика от царапин?",
+    "faq.c6.a":
+      "Керамика не делает авто неуязвимым к царапинам, но помогает от мелких голограмм от мойки и повседневного износа.",
+    "faq.c7.q": "Можно ли не мыть авто после керамики?",
+    "faq.c7.a":
+      "Нет, но мыть становится заметно проще. Грязь и реагенты меньше липнут, поэтому авто дольше выглядит чистым.",
+    "faq.c8.q": "Можно ли керамировать стёкла и диски?",
+    "faq.c8.a":
+      "Да! Наружные стёкла и диски тоже можно защитить — их будет проще чистить и поддерживать.",
+    "faq.c9.q": "Как ухаживать за авто с керамикой?",
+    "faq.c9.a":
+      "Рекомендуем регулярную ручную мойку pH-нейтральным шампунем и избегать автоматических моек со щётками — так покрытие прослужит дольше.",
+    "faq.c10.q": "Стоит ли керамика своих денег?",
+    "faq.c10.a":
+      "Однозначно! Это один из лучших способов защитить вложение, снизить уход и долгие годы сохранять отличный вид авто.",
+
+    "cta.titleLead": "Ощутите",
+    "cta.titleApex": "Apex",
+    "cta.titleEnd": "на себе?",
+    "cta.sub":
+      "Готовы преобразить авто? Запишитесь на детейлинг и почувствуйте разницу Apex.",
+    "cta.important": "Важно",
+    "cta.noteLine1": "Запись нужна заранее.",
+    "cta.noteLine2": "Бронируйте заранее, чтобы закрепить удобную дату и время.",
     "cta.book": "ЗАПИСАТЬСЯ СЕЙЧАС",
 
     "footer.blurb":
-      "Премиум детейлинг и керамика. Мастерство и результат.",
+      "Премиум детейлинг, коррекция ЛКП и керамика в Никсе, Озарке и Спрингфилде, MO.",
     "footer.links": "Навигация",
     "footer.services": "Услуги",
     "footer.contact": "Контакты",
@@ -511,6 +759,9 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "book.step.confirm": "Подтверждение",
     "book.choose": "Выберите услугу",
     "book.chooseSub": "Подберите пакет под ваш автомобиль. На месте можно усилить услугу.",
+    "book.chooseSubMobile": "Нажмите услугу, чтобы выбрать, затем «Далее» — или нажмите карточку ещё раз.",
+    "book.selected": "Выбрано",
+    "book.tapAgain": "Нажмите ещё раз",
     "book.loadingServices": "Загружаем услуги…",
     "book.loadFail": "Не удалось загрузить услуги. Попробуйте снова.",
     "book.questions": "Вопросы? Звоните",
@@ -567,6 +818,14 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "ba.kicker": "Разница наглядно",
     "ba.title": "До и после",
     "ba.titleAccent": "преображение",
+    "ba.before": "До",
+    "ba.after": "После",
+    "ba.prev": "Назад",
+    "ba.next": "Далее",
+    "ba.desc.interior": "Глубокая чистка. Пятна убраны. Салон снова свежий.",
+    "ba.desc.exterior": "ЛКП оживлено. Загрязнения сняты. Блеск возвращён.",
+    "ba.desc.headlights": "Окисление снято. Прозрачность восстановлена. Видимость ночью лучше.",
+    "ba.desc.paint": "Голограммы убраны. Глубина цвета. Зеркальный блеск.",
     "testimonials.kicker": "Отзывы",
     "testimonials.title": "Реакция",
     "testimonials.titleAccent": "клиентов",
@@ -575,12 +834,18 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "reviews.titleAccent": "наши клиенты",
     "reviews.sub":
       "Что говорят о Apex Detailing. Мы держим оценку 5 звёзд на всех площадках.",
-    "reviews.excellent": "Отлично",
-    "reviews.rating": "Оценка",
-    "reviews.positive": "Положительно",
-    "reviews.customerRating": "Рейтинг клиентов",
-    "reviews.response": "Ответ",
-    "reviews.supportTime": "Время ответа",
+    "reviews.stat1.value": "5.0",
+    "reviews.stat1.label": "★★★★★",
+    "reviews.stat1.desc": "Оценка Google",
+    "reviews.stat2.value": "100%",
+    "reviews.stat2.label": "Цель — довольный клиент",
+    "reviews.stat2.desc": "На каждом детейлинге",
+    "reviews.stat3.value": "APEX",
+    "reviews.stat3.label": "Премиум-детейлинг",
+    "reviews.stat3.desc": "Никса • Озарк • Спрингфилд",
+    "reviews.badge": "Отзыв Google",
+    "reviews.readMore": "Читать далее",
+    "reviews.readLess": "Свернуть",
     "area.kicker": "Зона обслуживания",
     "area.title": "Работаем в",
     "area.titleAccent": "Озарке",
@@ -632,9 +897,17 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.full.title": "Полный детейлинг Apex",
     "pkg.full.desc":
       "Максимальный пакет: чистка и защита салона и кузова. Авто как из салона — внутри и снаружи. Можно добавить опции.",
+    "pkg.full.cardDesc":
+      "Максимальный пакет: детейлинг кузова и салона, защита ЛКП и результат уровня шоурума.",
     "pkg.full.price.0": "Купе / седан: $300–$400",
-    "pkg.full.price.1": "Пикап / Jeep / 2 ряда: $350 – $450",
-    "pkg.full.price.2": "Минивэн / 3 ряда: $350 – $500",
+    "pkg.full.price.1": "Пикап / Jeep / 2 ряда: $350–$450",
+    "pkg.full.price.2": "Минивэн / 3 ряда: $350–$500",
+    "pkg.full.tier.0.label": "Купе / седан",
+    "pkg.full.tier.0.amount": "$300–$400",
+    "pkg.full.tier.1.label": "Пикап / Jeep / 2 ряда",
+    "pkg.full.tier.1.amount": "$350–$450",
+    "pkg.full.tier.2.label": "Минивэн / 3 ряда",
+    "pkg.full.tier.2.amount": "$350–$500",
     "pkg.full.feat.0": "Полный детейлинг кузова",
     "pkg.full.feat.1": "Полный детейлинг салона",
     "pkg.full.feat.2": "Защита ЛКП",
@@ -644,8 +917,22 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.interior.title": "Детейлинг салона Apex",
     "pkg.interior.desc":
       "Полная чистка салона: ковры, кожа, дефлекторы. Можно добавить опции.",
-    "pkg.interior.price.0": "2 ряда: $200 – $300",
-    "pkg.interior.price.1": "3 ряда: $250 – $350",
+    "pkg.interior.cardDesc":
+      "Глубокая чистка салона — от ковров и кожи до дефлекторов. Можно добавить опции под ваш пакет.",
+    "pkg.interior.price.0": "Стандарт: $200",
+    "pkg.interior.price.1": "SUV / Jeep: $250",
+    "pkg.interior.price.2": "3 ряда: $300–$350",
+    "pkg.interior.tier.0.label": "Стандарт",
+    "pkg.interior.tier.0.amount": "$200",
+    "pkg.interior.tier.1.label": "SUV / Jeep",
+    "pkg.interior.tier.1.amount": "$250",
+    "pkg.interior.tier.2.label": "3 ряда",
+    "pkg.interior.tier.2.amount": "$300–$350",
+    "pkg.interior.cardFeat.0": "Глубокая чистка салона",
+    "pkg.interior.cardFeat.1": "Удаление пятен",
+    "pkg.interior.cardFeat.2": "Уход за кожей",
+    "pkg.interior.cardFeat.3": "Устранение запахов",
+    "pkg.interior.cardFeat.4": "Паровая санация",
     "pkg.interior.feat.0": "Чистка дефлекторов",
     "pkg.interior.feat.1": "Бесплатный освежитель",
     "pkg.interior.feat.2": "Паровая чистка консоли и дверных карт",
@@ -662,11 +949,22 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
 
     "pkg.express.title": "Экспресс-салон Apex",
     "pkg.express.desc":
-      "Быстрое качественное освежение салона — без полного детейлинга. Пылесос, протирка поверхностей, коврики, стёкла внутри и лёгкое обновление зон частого касания. Для ухоженных авто или как поддержка между полными услугами.",
+      "Быстрое освежение салона: пылесос, протирка, коврики, стёкла и зоны частого касания. Для ухоженных авто или между полными детейлингами.",
+    "pkg.express.cardDesc":
+      "Быстрое качественное освежение салона — чисто, свежо и презентабельно, идеально для занятого ритма.",
     "pkg.express.warn":
-      "Только для относительно чистого салона. Сильные загрязнения, пятна, шерсть или глубокая чистка — нужен полный детейлинг салона. Итог подтверждаем после осмотра.",
-    "pkg.express.price.0": "2 ряда: $100–$150",
+      "Услуга для поддержания относительно чистого салона. Сильные загрязнения, пятна, шерсть животных или глубокая чистка требуют полного детейлинга салона. Итоговый тип услуги подтверждаем после осмотра.",
+    "pkg.express.price.0": "Стандарт: $100–$150",
     "pkg.express.price.1": "3 ряда: $150–$200",
+    "pkg.express.tier.0.label": "Стандарт",
+    "pkg.express.tier.0.amount": "$100–$150",
+    "pkg.express.tier.1.label": "3 ряда",
+    "pkg.express.tier.1.amount": "$150–$200",
+    "pkg.express.cardFeat.0": "Пылесос салона",
+    "pkg.express.cardFeat.1": "Протирка поверхностей",
+    "pkg.express.cardFeat.2": "Чистка ковриков",
+    "pkg.express.cardFeat.3": "Полировка стёкол внутри",
+    "pkg.express.cardFeat.4": "Лёгкое освежение",
     "pkg.express.feat.0": "Тщательный пылесос",
     "pkg.express.feat.1": "Протирка поверхностей салона",
     "pkg.express.feat.2": "Чистка ковриков",
@@ -677,7 +975,11 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.exterior.desc":
       "Чистка и защита кузова, чтобы авто собирало взгляды. Ручная мойка, стёкла и зеркала снаружи, диски и шины (чистка, полировка, чернение), проёмы дверей и спрей-силант на 1 месяц.",
     "pkg.exterior.price.0": "Седан: $150",
-    "pkg.exterior.price.1": "SUV: $200–$250",
+    "pkg.exterior.price.1": "SUV / Truck: $200–$250",
+    "pkg.exterior.tier.0.label": "Седан",
+    "pkg.exterior.tier.0.amount": "$150",
+    "pkg.exterior.tier.1.label": "SUV / Truck",
+    "pkg.exterior.tier.1.amount": "$200–$250",
     "pkg.exterior.feat.0": "Детальная ручная мойка",
     "pkg.exterior.feat.1": "Стёкла и зеркала",
     "pkg.exterior.feat.2": "Диски и шины",
@@ -687,8 +989,12 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.wax.title": "Мойка, глина и воск Apex",
     "pkg.wax.desc":
       "Сначала ручная мойка от пыли и дорожной грязи. Затем глина снимает въевшиеся загрязнения — гудрон, тормозную пыль, промышленный налёт, которые обычная мойка не берёт. В конце защитный воск: блеск, защита ЛКП, вода и грязь скатываются.",
-    "pkg.wax.price.0": "Седан: $250",
-    "pkg.wax.price.1": "SUV: $300–$350",
+    "pkg.wax.price.0": "Седан: $300",
+    "pkg.wax.price.1": "SUV / Truck: $400",
+    "pkg.wax.tier.0.label": "Седан",
+    "pkg.wax.tier.0.amount": "$300",
+    "pkg.wax.tier.1.label": "SUV / Truck",
+    "pkg.wax.tier.1.amount": "$400",
     "pkg.wax.feat.0": "Тщательная ручная мойка",
     "pkg.wax.feat.1": "Обработка глиной",
     "pkg.wax.feat.2": "Профессиональный воск",
@@ -703,11 +1009,16 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.headlight.feat.2": "УФ-защита",
 
     "pkg.ceramic.title": "Керамика Apex",
+    "pkg.ceramic.cardDesc":
+      "Долговечная керамическая защита: усиливает блеск, отталкивает воду и помогает защитить ЛКП от внешних загрязнений.",
     "pkg.ceramic.desc":
-      "Максимальная защита и глубокий блеск ЛКП. Держится годы — мойка становится проще.",
-    "pkg.ceramic.feat.0": "Защита до 5 лет",
-    "pkg.ceramic.feat.1": "Сильный гидрофоб",
-    "pkg.ceramic.feat.2": "Стойкость к царапинам",
+      "Долговечная керамическая защита: усиливает блеск, отталкивает воду и помогает защитить ЛКП от внешних загрязнений.",
+    "pkg.ceramic.feat.0": "1-этапная или 2-этапная коррекция ЛКП — чтобы керамика легла на ровную поверхность без кругов",
+    "pkg.ceramic.feat.1": "Профессиональная деконтаминация ЛКП",
+    "pkg.ceramic.feat.2": "Нанесение керамики 9H",
+    "pkg.ceramic.feat.3": "Гидрофобная защита",
+    "pkg.ceramic.feat.4": "Устойчивость к УФ и химии",
+    "pkg.ceramic.feat.5": "Долговечный блеск и стойкость",
 
     "pkg.paint.title": "Коррекция ЛКП Apex",
     "pkg.paint.desc":

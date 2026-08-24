@@ -5,7 +5,7 @@
 - **Provider:** Gmail / Google Mail (via Replit Connectors)
 - **From:** apexdetailing.net@gmail.com
 - **Reply-To:** Customer email (for owner notifications) or owner email (for customer emails)
-- **CC:** gurova.krista@gmail.com (owner-facing emails only)
+- **CC:** none (additional owner CC recipients disabled)
 - **Format:** HTML with plain-text fallback
 - **Design:** Dark theme matching the website aesthetic
 
