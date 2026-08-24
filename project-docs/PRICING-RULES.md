@@ -18,9 +18,9 @@ All prices are **starting at** amounts. Final pricing is confirmed upon vehicle 
 
 | Vehicle Type | Price |
 |-------------|-------|
-| Standard | $200 |
-| SUV / Jeep | $250 |
-| 3-row vehicles | $300 – $350 |
+| Standard | $200 – $300 |
+| SUV / Jeep | $250 – $400 |
+| 3-row vehicles | $300 – $450 |
 
 ### 3. Apex Express Interior Detailing
 **Starting at $100** | Duration: 1.5 hours
