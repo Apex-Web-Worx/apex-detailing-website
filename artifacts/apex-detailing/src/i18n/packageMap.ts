@@ -32,3 +32,23 @@ export function packageDescKey(slug: string): string | null {
   return pkg ? `pkg.${pkg}.desc` : null;
 }
 
+export type PackagePriceTier = { label: string; amount: string };
+
+/** Vehicle-size price rows from `pkg.{name}.tier.{n}.label` / `.amount`. */
+export function packagePriceTiers(
+  t: (key: string) => string,
+  pkg: string | undefined,
+): PackagePriceTier[] {
+  if (!pkg) return [];
+  const rows: PackagePriceTier[] = [];
+  for (let i = 0; i < 8; i++) {
+    const labelKey = `pkg.${pkg}.tier.${i}.label`;
+    const amountKey = `pkg.${pkg}.tier.${i}.amount`;
+    const label = t(labelKey);
+    const amount = t(amountKey);
+    if (label === labelKey || amount === amountKey) break;
+    rows.push({ label, amount });
+  }
+  return rows;
+}
+
