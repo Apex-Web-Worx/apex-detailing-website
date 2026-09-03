@@ -124,7 +124,10 @@ export default function CerakoteCert({
           noBlur
         />
       </div>
-      <p className="cerakote-card__label">{t("cerakote.cardSub")}</p>
+      <p className="cerakote-card__label">
+        <span>{t("cerakote.cardLine1")}</span>
+        <span>{t("cerakote.cardLine2")}</span>
+      </p>
     </div>
   );
 }
