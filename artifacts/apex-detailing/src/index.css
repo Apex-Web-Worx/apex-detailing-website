@@ -3124,6 +3124,10 @@
   background: #0a0a0e;
 }
 
+.elite-card__media--ceramic {
+  height: 260px;
+}
+
 .elite-card__img {
   position: absolute;
   inset: 0;
@@ -3133,8 +3137,9 @@
   transition: transform 320ms ease;
 }
 
-.elite-card__img--ceramic {
-  object-position: 75% 0%;
+.elite-card__img--ceramic,
+.elite-card__img--ceramic img {
+  object-position: 72% 8%;
 }
 
 .elite-card__media-shade {

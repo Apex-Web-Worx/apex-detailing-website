@@ -338,13 +338,14 @@ export default function EliteServicesSection({
                   className={`elite-card${anim}`}
                   style={{ ["--elite-delay" as string]: `${180 + index * 80}ms` }}
                 >
-                  <div className="elite-card__media">
+                  <div className={`elite-card__media${service.pkg === "ceramic" ? " elite-card__media--ceramic" : ""}`}>
                     <OptimizedImage
                       src={imageUrl(PKG_PHOTO[service.pkg])}
                       alt={t(`pkg.${service.pkg}.photoAlt`)}
                       className={`elite-card__img${service.pkg === "ceramic" ? " elite-card__img--ceramic" : ""}`}
                       sizes="(max-width: 699px) calc(100vw - 32px), (max-width: 1099px) 46vw, 320px"
                       loading="lazy"
+                      noBlur={service.pkg === "ceramic"}
                     />
                     <div className="elite-card__media-shade" aria-hidden="true" />
                     <div className="elite-card__icon-wrap" aria-hidden="true">
