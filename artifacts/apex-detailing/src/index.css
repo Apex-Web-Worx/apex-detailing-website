@@ -3377,6 +3377,16 @@
   display: block;
 }
 
+.cerakote-card__label {
+  margin: 0;
+  color: rgba(156, 163, 175, 0.95);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 .cerakote-strip {
   display: grid;
   justify-items: center;

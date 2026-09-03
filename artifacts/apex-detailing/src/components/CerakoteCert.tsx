@@ -122,6 +122,7 @@ export default function CerakoteCert({
         loading="lazy"
         noBlur
       />
+      <p className="cerakote-card__label">{t("cerakote.cardSub")}</p>
     </div>
   );
 }
