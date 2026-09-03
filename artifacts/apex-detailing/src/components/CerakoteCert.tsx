@@ -108,20 +108,22 @@ export default function CerakoteCert({
       className={`cerakote-card${className ? ` ${className}` : ""}`}
       aria-label={t("cerakote.cardAria")}
     >
-      <OptimizedImage
-        src={imageUrl("cerakote/cerakote-wordmark-orange.png")}
-        alt={t("cerakote.wordmarkAlt")}
-        className="cerakote-card__wordmark"
-        loading="lazy"
-        noBlur
-      />
-      <OptimizedImage
-        src={imageUrl("cerakote/cerakote-proteam-badge.png")}
-        alt={t("cerakote.badgeAlt")}
-        className="cerakote-card__badge"
-        loading="lazy"
-        noBlur
-      />
+      <div className="cerakote-card__logos">
+        <OptimizedImage
+          src={imageUrl("cerakote/cerakote-wordmark-orange.png")}
+          alt={t("cerakote.wordmarkAlt")}
+          className="cerakote-card__wordmark"
+          loading="lazy"
+          noBlur
+        />
+        <OptimizedImage
+          src={imageUrl("cerakote/cerakote-proteam-badge.png")}
+          alt={t("cerakote.badgeAlt")}
+          className="cerakote-card__badge"
+          loading="lazy"
+          noBlur
+        />
+      </div>
       <p className="cerakote-card__label">{t("cerakote.cardSub")}</p>
     </div>
   );

@@ -343,7 +343,7 @@ export default function EliteServicesSection({
                     <OptimizedImage
                       src={imageUrl(PKG_PHOTO[service.pkg])}
                       alt={t(`pkg.${service.pkg}.photoAlt`)}
-                      className="elite-card__img"
+                      className={`elite-card__img${service.pkg === "ceramic" ? " elite-card__img--ceramic" : ""}`}
                       sizes="(max-width: 699px) calc(100vw - 32px), (max-width: 1099px) 46vw, 320px"
                       loading="lazy"
                     />
