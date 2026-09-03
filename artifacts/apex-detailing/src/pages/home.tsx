@@ -604,17 +604,20 @@ export default function Home() {
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
-            <div
-              className="brand-logo-nav relative z-10 flex items-center cursor-pointer shrink-0"
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              aria-label="Back to top"
-            >
-              <BrandLogo
-                variant="nav"
-                priority
-                className="brand-logo-nav__mark h-14 md:h-16 lg:h-[4.25rem] w-auto max-w-[7.5rem] md:max-w-[9.5rem] object-contain opacity-100"
-              />
-              <span className="brand-logo-nav__sheen" aria-hidden="true" />
+            <div className="flex items-center gap-2 md:gap-2.5 shrink-0 min-w-0">
+              <div
+                className="brand-logo-nav relative z-10 flex items-center cursor-pointer shrink-0"
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                aria-label="Back to top"
+              >
+                <BrandLogo
+                  variant="nav"
+                  priority
+                  className="brand-logo-nav__mark h-14 md:h-16 lg:h-[4.25rem] w-auto max-w-[7.5rem] md:max-w-[9.5rem] object-contain opacity-100"
+                />
+                <span className="brand-logo-nav__sheen" aria-hidden="true" />
+              </div>
+              <CerakoteCert variant="nav" />
             </div>
 
             <div className="hidden md:flex items-center gap-2.5 lg:gap-3.5 min-w-0">

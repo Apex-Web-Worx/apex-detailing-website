@@ -69,6 +69,7 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "cerakote.stripLine": "Official Cerakote Ceramic Coatings · Pro Team Authorized Applicator",
     "cerakote.footerAria": "Official Cerakote applicator",
     "cerakote.footerLabel": "Official Cerakote applicator",
+    "cerakote.navAria": "Cerakote Ceramic Coatings partner",
 
     "how.kicker": "How It Works",
     "how.title": "Three Simple",
@@ -621,6 +622,7 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "cerakote.stripLine": "Официальный Cerakote Ceramic Coatings · авторизованный аппликатор Pro Team",
     "cerakote.footerAria": "Официальный аппликатор Cerakote",
     "cerakote.footerLabel": "Официальный аппликатор Cerakote",
+    "cerakote.navAria": "Партнёр Cerakote Ceramic Coatings",
 
     "how.kicker": "Как это работает",
     "how.title": "Три простых",

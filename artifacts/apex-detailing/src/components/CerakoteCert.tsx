@@ -1,7 +1,7 @@
 import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
 import { useLanguage } from "@/i18n/LanguageProvider";
 
-type Variant = "card" | "about" | "strip" | "footer";
+type Variant = "card" | "about" | "strip" | "footer" | "nav";
 
 export default function CerakoteCert({
   variant = "card",
@@ -11,6 +11,24 @@ export default function CerakoteCert({
   className?: string;
 }) {
   const { t } = useLanguage();
+
+  if (variant === "nav") {
+    return (
+      <span
+        className={`cerakote-nav${className ? ` ${className}` : ""}`}
+        aria-label={t("cerakote.navAria")}
+      >
+        <span className="cerakote-nav__divider" aria-hidden="true" />
+        <OptimizedImage
+          src={imageUrl("cerakote/cerakote-wordmark-white.png")}
+          alt={t("cerakote.wordmarkAlt")}
+          className="cerakote-nav__wordmark"
+          loading="eager"
+          noBlur
+        />
+      </span>
+    );
+  }
 
   if (variant === "footer") {
     return (

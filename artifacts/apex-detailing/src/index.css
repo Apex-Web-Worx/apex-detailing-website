@@ -3277,6 +3277,53 @@
 }
 
 /* Cerakote certification — proof marks, not competing hero branding */
+.cerakote-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.cerakote-nav__divider {
+  width: 1px;
+  height: 2rem;
+  background: rgba(255, 255, 255, 0.12);
+  flex-shrink: 0;
+}
+
+.cerakote-nav__wordmark {
+  height: 1.05rem;
+  width: auto;
+  max-width: 4.75rem;
+  object-fit: contain;
+  display: block;
+  opacity: 0.82;
+}
+
+@media (min-width: 768px) {
+  .cerakote-nav {
+    gap: 0.65rem;
+  }
+
+  .cerakote-nav__divider {
+    height: 2.35rem;
+  }
+
+  .cerakote-nav__wordmark {
+    height: 1.25rem;
+    max-width: 5.75rem;
+    opacity: 0.88;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cerakote-nav__wordmark {
+    height: 1.35rem;
+    max-width: 6.25rem;
+  }
+}
+
 .cerakote-card {
   display: flex;
   align-items: center;
