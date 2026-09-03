@@ -18,14 +18,6 @@ export default function CerakoteCert({
         className={`cerakote-footer${className ? ` ${className}` : ""}`}
         aria-label={t("cerakote.footerAria")}
       >
-        <p className="cerakote-footer__label">{t("cerakote.footerLabel")}</p>
-        <OptimizedImage
-          src={imageUrl("cerakote/cerakote-wordmark-orange.png")}
-          alt={t("cerakote.wordmarkAlt")}
-          className="cerakote-footer__wordmark"
-          loading="lazy"
-          noBlur
-        />
         <OptimizedImage
           src={imageUrl("cerakote/cerakote-proteam-badge.png")}
           alt={t("cerakote.badgeAlt")}
