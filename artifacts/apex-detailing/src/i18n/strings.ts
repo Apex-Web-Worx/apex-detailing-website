@@ -55,6 +55,19 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "addons.optional": "Optional Services (Extra Charges Apply)",
     "addons.customize": "Customize Your Detail",
 
+    "cerakote.badgeAlt": "Cerakote Ceramic Coatings Pro Team Authorized Applicator",
+    "cerakote.wordmarkAlt": "Cerakote Ceramic Coatings",
+    "cerakote.cardAria": "Cerakote certification",
+    "cerakote.cardLabel": "Official Cerakote Pro Team",
+    "cerakote.cardSub": "Authorized Applicator",
+    "cerakote.aboutAria": "Cerakote credentials",
+    "cerakote.aboutEyebrow": "Certified applicator",
+    "cerakote.aboutTitle": "Cerakote Pro Team",
+    "cerakote.aboutText":
+      "Michail is an official Cerakote Ceramic Coatings Pro Team Authorized Applicator — trained for professional ceramic coating application.",
+    "cerakote.stripAria": "Cerakote partner credentials",
+    "cerakote.stripLine": "Official Cerakote Ceramic Coatings · Pro Team Authorized Applicator",
+
     "how.kicker": "How It Works",
     "how.title": "Three Simple",
     "how.titleAccent": "Steps",
@@ -96,7 +109,7 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "about.perk1.title": "Premium Products",
     "about.perk1.desc": "Professional-grade chemicals only",
     "about.perk2.title": "Insured & Certified",
-    "about.perk2.desc": "Peace of mind for your investment",
+    "about.perk2.desc": "Cerakote Pro Team authorized applicator",
     "about.perk3.title": "Flexible Scheduling",
     "about.perk3.desc": "Book easily online anytime",
     "about.perk4.title": "Expert Technicians",
@@ -477,9 +490,9 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
 
     "pkg.ceramic.title": "Apex Ceramic Coating",
     "pkg.ceramic.cardDesc":
-      "Long-lasting ceramic protection that enhances gloss, repels water, and helps protect your vehicle’s paint from environmental contaminants.",
+      "Official Cerakote ceramic protection that enhances gloss, repels water, and helps protect your vehicle’s paint from environmental contaminants.",
     "pkg.ceramic.desc":
-      "Long-lasting ceramic protection that enhances gloss, repels water, and helps protect your vehicle’s paint from environmental contaminants.",
+      "Official Cerakote ceramic protection that enhances gloss, repels water, and helps protect your vehicle’s paint from environmental contaminants.",
     "pkg.ceramic.feat.0": "1-Step or 2-Step Paint Correction — needed so coating bonds to swirl-free paint",
     "pkg.ceramic.feat.1": "Professional Paint Decontamination",
     "pkg.ceramic.feat.2": "9H Ceramic Coating Application",
@@ -592,6 +605,19 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "addons.optional": "Дополнительно (за отдельную плату)",
     "addons.customize": "Настройте свой детейлинг",
 
+    "cerakote.badgeAlt": "Cerakote Ceramic Coatings — авторизованный аппликатор Pro Team",
+    "cerakote.wordmarkAlt": "Cerakote Ceramic Coatings",
+    "cerakote.cardAria": "Сертификация Cerakote",
+    "cerakote.cardLabel": "Официальный Cerakote Pro Team",
+    "cerakote.cardSub": "Авторизованный аппликатор",
+    "cerakote.aboutAria": "Квалификация Cerakote",
+    "cerakote.aboutEyebrow": "Сертифицированный аппликатор",
+    "cerakote.aboutTitle": "Cerakote Pro Team",
+    "cerakote.aboutText":
+      "Михаил — официальный авторизованный аппликатор Cerakote Ceramic Coatings Pro Team, обученный профессиональному нанесению керамики.",
+    "cerakote.stripAria": "Партнёрство Cerakote",
+    "cerakote.stripLine": "Официальный Cerakote Ceramic Coatings · авторизованный аппликатор Pro Team",
+
     "how.kicker": "Как это работает",
     "how.title": "Три простых",
     "how.titleAccent": "шага",
@@ -633,7 +659,7 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "about.perk1.title": "Премиум-химия",
     "about.perk1.desc": "Только профессиональные составы",
     "about.perk2.title": "Страховка и сертификация",
-    "about.perk2.desc": "Спокойствие за ваш автомобиль",
+    "about.perk2.desc": "Авторизованный аппликатор Cerakote Pro Team",
     "about.perk3.title": "Удобная запись",
     "about.perk3.desc": "Онлайн в любое время",
     "about.perk4.title": "Опытные мастера",
@@ -1014,9 +1040,9 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
 
     "pkg.ceramic.title": "Керамика Apex",
     "pkg.ceramic.cardDesc":
-      "Долговечная керамическая защита: усиливает блеск, отталкивает воду и помогает защитить ЛКП от внешних загрязнений.",
+      "Официальная керамика Cerakote: усиливает блеск, отталкивает воду и помогает защитить ЛКП от внешних загрязнений.",
     "pkg.ceramic.desc":
-      "Долговечная керамическая защита: усиливает блеск, отталкивает воду и помогает защитить ЛКП от внешних загрязнений.",
+      "Официальная керамика Cerakote: усиливает блеск, отталкивает воду и помогает защитить ЛКП от внешних загрязнений.",
     "pkg.ceramic.feat.0": "1-этапная или 2-этапная коррекция ЛКП — чтобы керамика легла на ровную поверхность без кругов",
     "pkg.ceramic.feat.1": "Профессиональная деконтаминация ЛКП",
     "pkg.ceramic.feat.2": "Нанесение керамики 9H",

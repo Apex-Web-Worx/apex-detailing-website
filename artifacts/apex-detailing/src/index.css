@@ -3276,6 +3276,158 @@
   margin-top: 0.05rem;
 }
 
+/* Cerakote certification — proof marks, not competing hero branding */
+.cerakote-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 0.95rem;
+  padding: 0.55rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cerakote-card__badge {
+  width: auto;
+  height: 2.65rem;
+  flex-shrink: 0;
+  object-fit: contain;
+  display: block;
+}
+
+.cerakote-card__text {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+  margin: 0;
+}
+
+.cerakote-card__label {
+  color: rgba(229, 231, 235, 0.95);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+}
+
+.cerakote-card__sub {
+  color: rgba(156, 163, 175, 0.95);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cerakote-strip {
+  display: grid;
+  justify-items: center;
+  gap: 0.85rem;
+  max-width: 42rem;
+  margin: 2rem auto 0;
+  padding: 1.15rem 1.25rem 1.05rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cerakote-strip__wordmark {
+  height: 2.1rem;
+  width: auto;
+  max-width: min(100%, 16rem);
+  object-fit: contain;
+  display: block;
+}
+
+.cerakote-strip__badge {
+  height: 3.4rem;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.cerakote-strip__copy {
+  margin: 0;
+  text-align: center;
+  color: rgba(156, 163, 175, 0.95);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+
+.cerakote-about {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cerakote-about__badge {
+  width: auto;
+  height: 4.25rem;
+  flex-shrink: 0;
+  object-fit: contain;
+  display: block;
+}
+
+.cerakote-about__copy {
+  min-width: 0;
+}
+
+.cerakote-about__eyebrow {
+  margin: 0 0 0.2rem;
+  color: #f58220;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.cerakote-about__title {
+  margin: 0 0 0.35rem;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+}
+
+.cerakote-about__text {
+  margin: 0;
+  color: rgba(186, 192, 202, 0.95);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+@media (min-width: 1100px) {
+  .elite-more__grid .cerakote-card__badge {
+    height: 2.35rem;
+  }
+
+  .elite-more__grid .cerakote-card__label {
+    font-size: 0.72rem;
+  }
+
+  .elite-more__grid .cerakote-card__sub {
+    font-size: 0.66rem;
+  }
+}
+
+@media (max-width: 699px) {
+  .cerakote-about {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cerakote-about__badge {
+    height: 3.75rem;
+  }
+
+  .cerakote-strip__badge {
+    height: 3rem;
+  }
+}
+
 .elite-card__desc {
   margin: 0 0 0.9rem;
   color: rgba(203, 213, 225, 0.88);

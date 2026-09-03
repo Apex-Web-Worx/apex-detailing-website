@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
 import PriceTiers from "@/components/PriceTiers";
+import CerakoteCert from "@/components/CerakoteCert";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { PKG_PHOTO } from "@/i18n/packageMap";
 import { bookingUrl, goBookNow } from "@/lib/openBooking";
@@ -371,6 +372,7 @@ export default function EliteServicesSection({
                     <p className="elite-card__desc">
                       {t(service.descKey ?? `pkg.${service.pkg}.desc`)}
                     </p>
+                    {service.pkg === "ceramic" ? <CerakoteCert variant="card" /> : null}
                     <ul className="elite-card__feats">
                       {feats.map((feature, featIndex) => {
                         const FeatIcon = service.featIcons[featIndex] ?? Sparkles;
@@ -396,6 +398,8 @@ export default function EliteServicesSection({
             })}
           </div>
         </div>
+
+        <CerakoteCert variant="strip" />
 
         {addons}
       </div>

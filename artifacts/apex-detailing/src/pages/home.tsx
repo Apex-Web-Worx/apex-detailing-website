@@ -28,6 +28,7 @@ import ApexHero from "@/components/hero/ApexHero";
 import HeroDip from "@/components/hero/HeroDip";
 import EliteServicesSection from "@/components/EliteServicesSection";
 import AddonsSection from "@/components/AddonsSection";
+import CerakoteCert from "@/components/CerakoteCert";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
 import GalleryVideoThumb from "@/components/GalleryVideoThumb";
@@ -882,6 +883,8 @@ export default function Home() {
                     <p className="apex-about__founder-tag">{t("about.founderTag")}</p>
                   </div>
                 </div>
+
+                <CerakoteCert variant="about" />
               </div>
 
               <div className="apex-about__perks">
