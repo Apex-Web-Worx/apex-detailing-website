@@ -3318,6 +3318,18 @@
   opacity: 0.9;
 }
 
+.cerakote-nav__copy {
+  display: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: rgba(156, 163, 175, 0.95);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
 @media (min-width: 768px) {
   .cerakote-nav {
     gap: 0.65rem;
@@ -3336,6 +3348,11 @@
     height: 1.1rem;
     max-width: 5.6rem;
   }
+
+  .cerakote-nav__copy {
+    display: inline;
+    font-size: 0.72rem;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -3347,6 +3364,11 @@
   .cerakote-nav__badge {
     height: 1.26rem;
     max-width: 6.25rem;
+  }
+
+  .cerakote-nav__copy {
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
   }
 }
 

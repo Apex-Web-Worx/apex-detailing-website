@@ -35,6 +35,9 @@ export default function CerakoteCert({
             noBlur
           />
         </span>
+        <span className="cerakote-nav__copy">
+          {t("cerakote.cardLabel")} {t("cerakote.cardSub")}
+        </span>
       </span>
     );
   }
