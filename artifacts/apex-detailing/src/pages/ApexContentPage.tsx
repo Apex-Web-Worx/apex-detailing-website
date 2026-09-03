@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import LanguageToggle from "@/components/LanguageToggle";
+import CerakoteCert from "@/components/CerakoteCert";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { bookingUrl, goBookNow } from "@/lib/openBooking";
 

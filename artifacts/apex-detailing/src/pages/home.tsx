@@ -1651,6 +1651,7 @@ export default function Home() {
                   </svg>
                 </a>
               </div>
+              <CerakoteCert variant="footer" />
             </div>
 
             <div className="apex-footer__col">

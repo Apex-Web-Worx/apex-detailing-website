@@ -67,6 +67,8 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
       "Michail is an official Cerakote Ceramic Coatings Pro Team Authorized Applicator — trained for professional ceramic coating application.",
     "cerakote.stripAria": "Cerakote partner credentials",
     "cerakote.stripLine": "Official Cerakote Ceramic Coatings · Pro Team Authorized Applicator",
+    "cerakote.footerAria": "Official Cerakote applicator",
+    "cerakote.footerLabel": "Official Cerakote applicator",
 
     "how.kicker": "How It Works",
     "how.title": "Three Simple",
@@ -617,6 +619,8 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
       "Михаил — официальный авторизованный аппликатор Cerakote Ceramic Coatings Pro Team, обученный профессиональному нанесению керамики.",
     "cerakote.stripAria": "Партнёрство Cerakote",
     "cerakote.stripLine": "Официальный Cerakote Ceramic Coatings · авторизованный аппликатор Pro Team",
+    "cerakote.footerAria": "Официальный аппликатор Cerakote",
+    "cerakote.footerLabel": "Официальный аппликатор Cerakote",
 
     "how.kicker": "Как это работает",
     "how.title": "Три простых",

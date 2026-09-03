@@ -1,7 +1,7 @@
 import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
 import { useLanguage } from "@/i18n/LanguageProvider";
 
-type Variant = "card" | "about" | "strip";
+type Variant = "card" | "about" | "strip" | "footer";
 
 export default function CerakoteCert({
   variant = "card",
@@ -11,6 +11,31 @@ export default function CerakoteCert({
   className?: string;
 }) {
   const { t } = useLanguage();
+
+  if (variant === "footer") {
+    return (
+      <aside
+        className={`cerakote-footer${className ? ` ${className}` : ""}`}
+        aria-label={t("cerakote.footerAria")}
+      >
+        <p className="cerakote-footer__label">{t("cerakote.footerLabel")}</p>
+        <OptimizedImage
+          src={imageUrl("cerakote/cerakote-wordmark-orange.png")}
+          alt={t("cerakote.wordmarkAlt")}
+          className="cerakote-footer__wordmark"
+          loading="lazy"
+          noBlur
+        />
+        <OptimizedImage
+          src={imageUrl("cerakote/cerakote-proteam-badge.png")}
+          alt={t("cerakote.badgeAlt")}
+          className="cerakote-footer__badge"
+          loading="lazy"
+          noBlur
+        />
+      </aside>
+    );
+  }
 
   if (variant === "strip") {
     return (
