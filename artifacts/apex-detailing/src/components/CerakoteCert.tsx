@@ -21,7 +21,7 @@ export default function CerakoteCert({
         <span className="cerakote-nav__divider" aria-hidden="true" />
         <span className="cerakote-nav__logos">
           <OptimizedImage
-            src={imageUrl("cerakote/cerakote-wordmark-white.png")}
+            src={imageUrl("cerakote/cerakote-wordmark-orange.png")}
             alt={t("cerakote.wordmarkAlt")}
             className="cerakote-nav__wordmark"
             loading="eager"
@@ -34,9 +34,6 @@ export default function CerakoteCert({
             loading="eager"
             noBlur
           />
-        </span>
-        <span className="cerakote-nav__copy">
-          {t("cerakote.cardLabel")} {t("cerakote.cardSub")}
         </span>
       </span>
     );

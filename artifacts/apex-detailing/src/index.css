@@ -3280,7 +3280,7 @@
 .cerakote-nav {
   display: flex;
   align-items: center;
-  gap: 0.7rem;
+  gap: 0.9rem;
   flex-shrink: 0;
   pointer-events: none;
 }
@@ -3296,80 +3296,58 @@
   display: flex;
   align-items: center;
   flex-direction: row;
-  gap: 0.35rem;
+  gap: 0.55rem;
   min-width: 0;
   flex-shrink: 0;
 }
 
 .cerakote-nav__wordmark {
-  height: 1.25rem;
+  height: 1.5rem;
   width: auto;
-  max-width: 5.5rem;
+  max-width: 6.2rem;
   object-fit: contain;
   display: block;
   opacity: 0.9;
 }
 
 .cerakote-nav__badge {
-  height: 1.08rem;
+  height: 1.45rem;
   width: auto;
-  max-width: 5.6rem;
+  max-width: 6.2rem;
   object-fit: contain;
   display: block;
   opacity: 0.9;
 }
 
-.cerakote-nav__copy {
-  display: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: rgba(156, 163, 175, 0.95);
-  font-size: 0.66rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-}
-
 @media (min-width: 768px) {
   .cerakote-nav {
-    gap: 0.8rem;
+    gap: 1rem;
   }
 
   .cerakote-nav__divider {
-    height: 2.65rem;
+    height: 3rem;
   }
 
   .cerakote-nav__wordmark {
-    height: 1.55rem;
-    max-width: 6.25rem;
+    height: 1.95rem;
+    max-width: 7.2rem;
   }
 
   .cerakote-nav__badge {
-    height: 1.32rem;
-    max-width: 6.25rem;
-  }
-
-  .cerakote-nav__copy {
-    display: inline;
-    font-size: 0.7rem;
+    height: 1.85rem;
+    max-width: 7.2rem;
   }
 }
 
 @media (min-width: 1024px) {
   .cerakote-nav__wordmark {
-    height: 1.75rem;
-    max-width: 6.9rem;
+    height: 2.2rem;
+    max-width: 7.9rem;
   }
 
   .cerakote-nav__badge {
-    height: 1.48rem;
-    max-width: 6.9rem;
-  }
-
-  .cerakote-nav__copy {
-    font-size: 0.74rem;
-    letter-spacing: 0.015em;
+    height: 2.1rem;
+    max-width: 7.9rem;
   }
 }
 
