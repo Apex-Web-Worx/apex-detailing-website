@@ -3380,12 +3380,11 @@
 .cerakote-card__label {
   margin: 0;
   color: rgba(156, 163, 175, 0.95);
-  font-size: 0.66rem;
+  font-size: 0.56rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
-  white-space: normal;
-  line-height: 1.35;
+  white-space: nowrap;
 }
 
 .cerakote-strip {
