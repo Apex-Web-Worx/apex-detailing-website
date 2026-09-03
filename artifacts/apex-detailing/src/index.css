@@ -3361,35 +3361,20 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+.cerakote-card__wordmark {
+  width: auto;
+  height: 1.65rem;
+  flex-shrink: 0;
+  object-fit: contain;
+  display: block;
+}
+
 .cerakote-card__badge {
   width: auto;
   height: 2.65rem;
   flex-shrink: 0;
   object-fit: contain;
   display: block;
-}
-
-.cerakote-card__text {
-  display: grid;
-  gap: 0.1rem;
-  min-width: 0;
-  margin: 0;
-}
-
-.cerakote-card__label {
-  color: rgba(229, 231, 235, 0.95);
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  line-height: 1.25;
-}
-
-.cerakote-card__sub {
-  color: rgba(156, 163, 175, 0.95);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
 }
 
 .cerakote-strip {

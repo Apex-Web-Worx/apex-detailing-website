@@ -399,8 +399,6 @@ export default function EliteServicesSection({
           </div>
         </div>
 
-        <CerakoteCert variant="strip" />
-
         {addons}
       </div>
     </section>
