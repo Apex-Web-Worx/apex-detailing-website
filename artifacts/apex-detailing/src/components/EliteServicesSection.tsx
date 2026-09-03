@@ -206,8 +206,7 @@ const MORE_SERVICES: MoreService[] = [
     pkg: "ceramic",
     pricing: "$900",
     Icon: Shield,
-    badgeKey: "services.premiumProtection",
-    BadgeIcon: Shield,
+    
     descKey: "pkg.ceramic.cardDesc",
     // Paint correction / decon / 9H / hydrophobic / UV / gloss
     featIcons: [Wand2, Sparkles, Shield, WaterRepelIcon, UvProtectIcon, ShieldShineIcon],
