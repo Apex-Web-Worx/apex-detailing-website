@@ -1,0 +1,105 @@
+import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
+import { useLanguage } from "@/i18n/LanguageProvider";
+
+type Variant = "card" | "about" | "strip" | "footer";
+
+export default function CerakoteCert({
+  variant = "card",
+  className = "",
+}: {
+  variant?: Variant;
+  className?: string;
+}) {
+  const { t } = useLanguage();
+
+  if (variant === "footer") {
+    return (
+      <aside
+        className={`cerakote-footer${className ? ` ${className}` : ""}`}
+        aria-label={t("cerakote.footerAria")}
+      >
+        <p className="cerakote-footer__label">{t("cerakote.footerLabel")}</p>
+        <OptimizedImage
+          src={imageUrl("cerakote/cerakote-wordmark-orange.png")}
+          alt={t("cerakote.wordmarkAlt")}
+          className="cerakote-footer__wordmark"
+          loading="lazy"
+          noBlur
+        />
+        <OptimizedImage
+          src={imageUrl("cerakote/cerakote-proteam-badge.png")}
+          alt={t("cerakote.badgeAlt")}
+          className="cerakote-footer__badge"
+          loading="lazy"
+          noBlur
+        />
+      </aside>
+    );
+  }
+
+  if (variant === "strip") {
+    return (
+      <aside
+        className={`cerakote-strip${className ? ` ${className}` : ""}`}
+        aria-label={t("cerakote.stripAria")}
+      >
+        <OptimizedImage
+          src={imageUrl("cerakote/cerakote-wordmark-orange.png")}
+          alt={t("cerakote.wordmarkAlt")}
+          className="cerakote-strip__wordmark"
+          loading="lazy"
+          noBlur
+        />
+        <OptimizedImage
+          src={imageUrl("cerakote/cerakote-proteam-badge.png")}
+          alt={t("cerakote.badgeAlt")}
+          className="cerakote-strip__badge"
+          loading="lazy"
+          noBlur
+        />
+        <p className="cerakote-strip__copy">{t("cerakote.stripLine")}</p>
+      </aside>
+    );
+  }
+
+  if (variant === "about") {
+    return (
+      <aside
+        className={`cerakote-about${className ? ` ${className}` : ""}`}
+        aria-label={t("cerakote.aboutAria")}
+      >
+        <OptimizedImage
+          src={imageUrl("cerakote/cerakote-proteam-badge.png")}
+          alt={t("cerakote.badgeAlt")}
+          className="cerakote-about__badge"
+          loading="lazy"
+          noBlur
+        />
+        <div className="cerakote-about__copy">
+          <p className="cerakote-about__eyebrow">{t("cerakote.aboutEyebrow")}</p>
+          <p className="cerakote-about__title">{t("cerakote.aboutTitle")}</p>
+          <p className="cerakote-about__text">{t("cerakote.aboutText")}</p>
+        </div>
+      </aside>
+    );
+  }
+
+  return (
+    <div
+      className={`cerakote-card${className ? ` ${className}` : ""}`}
+      aria-label={t("cerakote.cardAria")}
+    >
+      <OptimizedImage
+        src={imageUrl("cerakote/cerakote-proteam-badge.png")}
+        alt={t("cerakote.badgeAlt")}
+        className="cerakote-card__badge"
+        loading="lazy"
+        noBlur
+      />
+      <p className="cerakote-card__text">
+        <span className="cerakote-card__label">{t("cerakote.cardLabel")}</span>
+        <span className="cerakote-card__sub">{t("cerakote.cardSub")}</span>
+      </p>
+    </div>
+  );
+}

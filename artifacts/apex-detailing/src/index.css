@@ -101,12 +101,12 @@
   .apex-page {
     overflow-x: clip;
   }
+  /*
+   * Do not use content-visibility here. Safari/iOS often leaves those
+   * sections unpainted while the fixed nav still shows (blank page body).
+   */
   a, button {
     touch-action: manipulation;
-  }
-  .apex-cv {
-    content-visibility: auto;
-    contain-intrinsic-size: 1px 720px;
   }
 
   @media (max-width: 1023px) {
@@ -655,6 +655,1088 @@
     );
   }
 
+  /* ── About Us refinements ── */
+  .apex-about {
+    padding: 7.5rem 0 5.5rem;
+    overflow: hidden;
+  }
+
+  .apex-about__particles {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .apex-about__particles span {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(196, 181, 253, 0.55);
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.35);
+    opacity: 0.35;
+  }
+
+  .apex-about__particles span:nth-child(1) { top: 18%; left: 8%; }
+  .apex-about__particles span:nth-child(2) { top: 28%; left: 22%; width: 2px; height: 2px; opacity: 0.25; }
+  .apex-about__particles span:nth-child(3) { top: 42%; right: 12%; background: rgba(0, 229, 255, 0.45); }
+  .apex-about__particles span:nth-child(4) { top: 58%; left: 14%; width: 2px; height: 2px; }
+  .apex-about__particles span:nth-child(5) { top: 68%; right: 18%; opacity: 0.22; }
+  .apex-about__particles span:nth-child(6) { bottom: 22%; left: 40%; background: rgba(255, 26, 216, 0.4); }
+  .apex-about__particles span:nth-child(7) { top: 22%; right: 28%; width: 2px; height: 2px; opacity: 0.2; }
+  .apex-about__particles span:nth-child(8) { bottom: 30%; right: 8%; }
+
+  .apex-about__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .apex-about__kicker {
+    margin: 0 0 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #ff1ad8;
+  }
+
+  .apex-about__title {
+    margin: 0 0 1.75rem;
+    font-size: clamp(2rem, 4.2vw, 3.15rem);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    line-height: 1.08;
+    color: #fff;
+  }
+
+  .apex-about__title-accent {
+    background-image: linear-gradient(100deg, #ff1ad8 0%, #9d00ff 48%, #00e5ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .apex-about__body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.35rem;
+    margin-bottom: 1.75rem;
+    color: rgba(186, 192, 202, 0.95);
+    font-size: 1.02rem;
+    line-height: 1.75;
+  }
+
+  .apex-about__trust {
+    font-weight: 700;
+    background-image: linear-gradient(100deg, #ff1ad8 0%, #9d00ff 55%, #00e5ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .apex-about__trust--gold {
+    background-image: none;
+    color: #e8c547;
+    text-shadow: 0 0 18px rgba(232, 197, 71, 0.25);
+  }
+
+  .apex-about__verse {
+    margin: 0.15rem 0 0;
+    font-size: 0.9rem;
+    font-style: italic;
+    line-height: 1.65;
+    color: rgba(255, 77, 227, 0.88);
+  }
+
+  .apex-about__closer strong {
+    color: #fff;
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+  }
+
+  .apex-about__founder {
+    display: flex;
+    align-items: center;
+    gap: 1.15rem;
+    margin-top: 0.85rem;
+    padding: 1.35rem 1.4rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(168, 85, 247, 0.28);
+    background:
+      linear-gradient(135deg, rgba(255, 26, 216, 0.06), transparent 45%),
+      linear-gradient(225deg, rgba(0, 229, 255, 0.05), transparent 40%),
+      rgba(10, 10, 12, 0.92);
+    box-shadow: 0 0 28px rgba(157, 0, 255, 0.1);
+  }
+
+  .apex-about__founder-photo {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .apex-about__founder-photo::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ff1ad8, #9d00ff, #00e5ff);
+    opacity: 0.75;
+    filter: blur(0.5px);
+  }
+
+  .apex-about__founder-img {
+    position: relative;
+    display: block;
+    width: 5.5rem;
+    height: 5.5rem;
+    border-radius: 999px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.18);
+    background: #111;
+  }
+
+  .apex-about__founder-eyebrow {
+    margin: 0 0 0.35rem;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(196, 181, 253, 0.85);
+  }
+
+  .apex-about__founder-name {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 900;
+    line-height: 1.2;
+    color: #fff;
+  }
+
+  .apex-about__founder-role {
+    margin: 0.25rem 0 0;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #ff1ad8;
+  }
+
+  .apex-about__founder-tag {
+    margin: 0.45rem 0 0;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: rgba(156, 163, 175, 0.95);
+  }
+
+  .apex-about__perks {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .apex-about__perk {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.85rem 0.95rem;
+    border-radius: 12px;
+    border: 1px solid #222;
+    background: rgba(8, 8, 8, 0.92);
+    transition: border-color 250ms ease, box-shadow 250ms ease, transform 250ms ease;
+  }
+
+  .apex-about__perk-icon-wrap {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.15rem;
+    height: 2.15rem;
+    border-radius: 0.65rem;
+    border: 1px solid rgba(168, 85, 247, 0.28);
+    background: rgba(12, 10, 18, 0.9);
+  }
+
+  .apex-about__perk-icon {
+    width: 1rem;
+    height: 1rem;
+    color: #c4b5fd;
+    filter: drop-shadow(0 0 5px rgba(168, 85, 247, 0.35));
+  }
+
+  .apex-about__perk-title {
+    margin: 0 0 0.2rem;
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.25;
+  }
+
+  .apex-about__perk-desc {
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: rgba(156, 163, 175, 0.95);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .apex-about__perk:hover {
+      transform: translateY(-2px);
+      border-color: rgba(196, 181, 253, 0.4);
+      box-shadow: 0 0 18px rgba(168, 85, 247, 0.1);
+    }
+  }
+
+  @media (min-width: 640px) {
+    .apex-about__perks {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.85rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .apex-about {
+      padding: 8.5rem 0 6rem;
+    }
+
+    .apex-about__grid {
+      grid-template-columns: minmax(0, 0.4fr) minmax(0, 0.6fr);
+      gap: 3.25rem;
+      align-items: start;
+    }
+
+    .apex-about__body {
+      font-size: 1.05rem;
+      gap: 1.45rem;
+    }
+
+    .apex-about__founder-img {
+      width: 6rem;
+      height: 6rem;
+    }
+  }
+
+  @media (max-width: 639px) {
+    .apex-about {
+      padding: 6.5rem 0 4.5rem;
+    }
+
+    .apex-about__founder {
+      align-items: flex-start;
+    }
+  }
+
+  /* ── Before & After transformations ── */
+  .apex-ba {
+    padding: 4.5rem 0 5rem;
+    overflow: hidden;
+  }
+
+  .apex-ba__particles {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .apex-ba__particles span {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: rgba(196, 181, 253, 0.5);
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
+    opacity: 0.3;
+  }
+
+  .apex-ba__particles span:nth-child(1) { top: 16%; left: 10%; }
+  .apex-ba__particles span:nth-child(2) { top: 24%; right: 14%; background: rgba(0, 229, 255, 0.45); }
+  .apex-ba__particles span:nth-child(3) { top: 48%; left: 6%; width: 3px; height: 3px; opacity: 0.22; }
+  .apex-ba__particles span:nth-child(4) { bottom: 28%; right: 10%; }
+  .apex-ba__particles span:nth-child(5) { bottom: 18%; left: 22%; background: rgba(255, 26, 216, 0.35); }
+  .apex-ba__particles span:nth-child(6) { top: 36%; right: 28%; opacity: 0.18; }
+
+  .apex-ba__header {
+    text-align: center;
+    max-width: 40rem;
+    margin: 0 auto 1.75rem;
+  }
+
+  .apex-ba__kicker {
+    margin: 0 0 0.55rem;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #ff1ad8;
+  }
+
+  .apex-ba__title {
+    margin: 0;
+    font-size: clamp(1.85rem, 3.6vw, 2.75rem);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    line-height: 1.1;
+    color: #fff;
+  }
+
+  .apex-ba__title-accent {
+    background-image: linear-gradient(100deg, #ff1ad8 0%, #9d00ff 48%, #00e5ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .apex-ba__stage {
+    width: min(1080px, 100%);
+    margin: 0 auto;
+  }
+
+  .apex-ba__compare {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 1.15rem;
+    cursor: col-resize;
+    touch-action: pan-y;
+    background: #0a0a0c;
+    border: 1px solid rgba(168, 85, 247, 0.28);
+    box-shadow:
+      0 18px 48px rgba(0, 0, 0, 0.45),
+      0 0 36px rgba(157, 0, 255, 0.12),
+      0 0 24px rgba(59, 130, 246, 0.06);
+    user-select: none;
+  }
+
+  .apex-ba__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 220ms ease;
+    pointer-events: none;
+  }
+
+  .apex-ba__before-clip {
+    position: absolute;
+    inset: 0 auto 0 0;
+    overflow: hidden;
+    height: 100%;
+    transition: opacity 220ms ease;
+    pointer-events: none;
+  }
+
+  .apex-ba__img--before {
+    max-width: none;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .apex-ba__handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 4;
+    width: 0;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  .apex-ba__handle-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    transform: translateX(-50%);
+    background: linear-gradient(180deg, rgba(255, 26, 216, 0.15), #a855f7 45%, rgba(0, 229, 255, 0.25));
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.55);
+  }
+
+  .apex-ba__handle-knob {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    transform: translate(-50%, -50%);
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: linear-gradient(135deg, #ff1ad8 0%, #9d00ff 48%, #00e5ff 100%);
+    box-shadow:
+      0 0 0 4px rgba(5, 5, 5, 0.35),
+      0 0 22px rgba(255, 26, 216, 0.45),
+      0 0 28px rgba(0, 229, 255, 0.2);
+    transition: box-shadow 280ms ease, transform 280ms ease;
+  }
+
+  .apex-ba__handle.is-dragging .apex-ba__handle-knob,
+  .apex-ba.is-visible .apex-ba__handle-knob {
+    box-shadow:
+      0 0 0 4px rgba(5, 5, 5, 0.35),
+      0 0 28px rgba(255, 26, 216, 0.55),
+      0 0 34px rgba(0, 229, 255, 0.28);
+  }
+
+  .apex-ba__handle-icon {
+    width: 1.15rem;
+    height: 1.15rem;
+    color: #fff;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+  }
+
+  .apex-ba__label {
+    position: absolute;
+    top: 0.85rem;
+    z-index: 5;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #fff;
+    pointer-events: none;
+    transition: opacity 220ms ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .apex-ba__label--before {
+    left: 0.85rem;
+    background: rgba(8, 8, 10, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .apex-ba__label--after {
+    right: 0.85rem;
+    background: rgba(59, 40, 90, 0.55);
+    border: 1px solid rgba(168, 85, 247, 0.35);
+  }
+
+  .apex-ba__meta {
+    text-align: center;
+    margin: 1.25rem auto 0;
+    max-width: 34rem;
+  }
+
+  .apex-ba__service {
+    margin: 0 0 0.45rem;
+    font-family: "Michroma", "Mulish", sans-serif;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background-image: linear-gradient(100deg, #ff1ad8 0%, #9d00ff 48%, #00e5ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .apex-ba__desc {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: rgba(186, 192, 202, 0.92);
+  }
+
+  .apex-ba__controls {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.35rem;
+  }
+
+  .apex-ba__nav-btn {
+    min-height: 2.6rem;
+    padding: 0.55rem 1.15rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(12, 12, 14, 0.78);
+    color: rgba(226, 232, 240, 0.88);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    backdrop-filter: blur(8px);
+    transition: border-color 220ms ease, color 220ms ease, background 220ms ease;
+  }
+
+  .apex-ba__nav-btn:hover {
+    border-color: rgba(196, 181, 253, 0.4);
+    color: #fff;
+    background: rgba(18, 14, 28, 0.9);
+  }
+
+  .apex-ba__dots {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 1.15rem;
+  }
+
+  .apex-ba__dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 999px;
+    border: none;
+    padding: 0;
+    background: rgba(148, 163, 184, 0.45);
+    transition: width 220ms ease, background 220ms ease, box-shadow 220ms ease;
+  }
+
+  .apex-ba__dot.is-active {
+    width: 1.65rem;
+    background: linear-gradient(100deg, #ff1ad8, #9d00ff, #00e5ff);
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.45);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .apex-ba:not(.is-visible) .apex-ba__header,
+    .apex-ba:not(.is-visible) .apex-ba__stage {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+
+    .apex-ba.is-visible .apex-ba__header,
+    .apex-ba.is-visible .apex-ba__stage {
+      animation: apex-ba-rise 650ms ease both;
+    }
+
+    .apex-ba.is-visible .apex-ba__stage {
+      animation-delay: 90ms;
+    }
+
+    .apex-ba.is-visible .apex-ba__handle-knob {
+      animation: apex-ba-handle-glow 2.8s ease-in-out 0.5s infinite;
+    }
+  }
+
+  @keyframes apex-ba-rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes apex-ba-handle-glow {
+    0%, 100% {
+      box-shadow:
+        0 0 0 4px rgba(5, 5, 5, 0.35),
+        0 0 18px rgba(255, 26, 216, 0.4),
+        0 0 22px rgba(0, 229, 255, 0.18);
+    }
+    50% {
+      box-shadow:
+        0 0 0 4px rgba(5, 5, 5, 0.35),
+        0 0 28px rgba(255, 26, 216, 0.62),
+        0 0 34px rgba(0, 229, 255, 0.3);
+    }
+  }
+
+  @media (max-width: 699px) {
+    .apex-ba {
+      padding: 3.5rem 0 4rem;
+    }
+
+    .apex-ba__stage {
+      width: calc(100% - 0.25rem);
+    }
+
+    .apex-ba__compare {
+      border-radius: 0.95rem;
+    }
+
+    .apex-ba__handle-knob {
+      width: 46px;
+      height: 46px;
+    }
+
+    .apex-ba__label {
+      top: 0.65rem;
+      font-size: 0.6rem;
+      padding: 0.3rem 0.55rem;
+    }
+
+    .apex-ba__label--before { left: 0.65rem; }
+    .apex-ba__label--after { right: 0.65rem; }
+  }
+
+  /* ── Final CTA ── */
+  .apex-cta {
+    padding: 3.75rem 0 3.25rem;
+    overflow: visible;
+  }
+
+  .apex-cta__panel {
+    position: relative;
+    overflow: visible;
+    border-radius: 1.35rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #0d0d0f;
+    padding: 3.5rem 1.5rem 2.75rem;
+    text-align: center;
+  }
+
+  .apex-cta__glow {
+    position: absolute;
+    left: 50%;
+    top: 12%;
+    z-index: 0;
+    width: min(34rem, 80%);
+    height: 14rem;
+    transform: translateX(-50%);
+    pointer-events: none;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba(255, 26, 216, 0.12), rgba(0, 229, 255, 0.06) 45%, transparent 72%);
+    filter: blur(28px);
+    opacity: 0.85;
+  }
+
+  .apex-cta__inner {
+    position: relative;
+    z-index: 1;
+    width: min(820px, 100%);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .apex-cta__title {
+    margin: 0;
+    max-width: 820px;
+    font-size: clamp(1.85rem, 4.2vw, 3rem);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    line-height: 1.12;
+    color: #fff;
+  }
+
+  .apex-cta__title-line {
+    display: block;
+  }
+
+  .apex-cta__title-apex {
+    background-image: linear-gradient(100deg, #ff1ad8 0%, #9d00ff 48%, #00e5ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .apex-cta__sub {
+    margin: 1.35rem 0 0;
+    max-width: 34rem;
+    font-size: clamp(0.98rem, 1.5vw, 1.12rem);
+    line-height: 1.6;
+    color: rgba(186, 198, 214, 0.92);
+    font-weight: 500;
+  }
+
+  .apex-cta__notice {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    width: min(28rem, 100%);
+    margin: 1.9rem auto 0;
+    padding: 0.9rem 1rem;
+    text-align: left;
+    border-radius: 12px;
+    border: 1px solid rgba(168, 85, 247, 0.28);
+    background: rgba(12, 10, 18, 0.72);
+    box-shadow: 0 0 18px rgba(157, 0, 255, 0.08);
+    backdrop-filter: blur(8px);
+  }
+
+  .apex-cta__notice-icon {
+    flex-shrink: 0;
+    width: 1.05rem;
+    height: 1.05rem;
+    margin-top: 0.12rem;
+    color: #c4b5fd;
+    filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.4));
+  }
+
+  .apex-cta__notice-label {
+    margin: 0 0 0.25rem;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #c4b5fd;
+  }
+
+  .apex-cta__notice-text {
+    margin: 0;
+    font-size: 0.86rem;
+    line-height: 1.45;
+    color: rgba(209, 213, 219, 0.9);
+  }
+
+  .apex-cta__notice-text + .apex-cta__notice-text {
+    margin-top: 0.2rem;
+  }
+
+  .apex-cta__btn {
+    margin-top: 1.65rem;
+    transition: transform 220ms ease, filter 220ms ease, box-shadow 220ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .apex-cta__btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .apex-cta {
+      padding: 4.5rem 0 3.5rem;
+    }
+
+    .apex-cta__panel {
+      padding: 4.25rem 2.5rem 3rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .apex-cta {
+      padding: 5.5rem 0 3.75rem;
+    }
+
+    .apex-cta__panel {
+      padding: 4.75rem 3rem 3.15rem;
+    }
+
+    .apex-cta__sub {
+      margin-top: 1.45rem;
+    }
+
+    .apex-cta__notice {
+      margin-top: 2rem;
+    }
+
+    .apex-cta__btn {
+      margin-top: 1.75rem;
+    }
+  }
+
+  @media (max-width: 699px) {
+    .apex-cta {
+      padding: 3.25rem 0 2.75rem;
+    }
+
+    .apex-cta__panel {
+      padding: 3rem 1.1rem 2.35rem;
+    }
+
+    .apex-cta__btn {
+      width: 100%;
+      min-height: 48px;
+    }
+
+    .apex-cta__notice {
+      width: 100%;
+    }
+  }
+
+  /* ── Footer ── */
+  .apex-footer {
+    padding: 4.5rem 0 2.5rem;
+  }
+
+  .apex-footer__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.35rem;
+    margin-bottom: 2.75rem;
+  }
+
+  .apex-footer__logo {
+    margin-bottom: 1.15rem;
+  }
+
+  .apex-footer__blurb {
+    margin: 0 0 1.25rem;
+    max-width: 22rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: rgba(156, 163, 175, 0.95);
+    font-weight: 500;
+  }
+
+  .apex-footer__social {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .apex-footer__social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(226, 232, 240, 0.88);
+    transition: border-color 220ms ease, color 220ms ease, box-shadow 220ms ease, background 220ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .apex-footer__social-btn:hover {
+      border-color: rgba(168, 85, 247, 0.55);
+      color: #fff;
+      background: rgba(18, 12, 28, 0.9);
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.22);
+    }
+  }
+
+  .apex-footer__heading {
+    margin: 0 0 1.1rem;
+    font-size: 0.95rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+  .apex-footer__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .apex-footer__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: rgba(156, 163, 175, 0.95);
+    font-size: 0.92rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 200ms ease, transform 200ms ease;
+  }
+
+  .apex-footer__chevron {
+    color: #00e5ff;
+  }
+
+  .apex-footer__chevron--pink {
+    color: #ff1ad8;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .apex-footer__link:hover {
+      color: #fff;
+      transform: translateX(2px);
+    }
+  }
+
+  .apex-footer__col--contact .apex-footer__heading {
+    letter-spacing: 0.14em;
+  }
+
+  .apex-footer__contact {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .apex-footer__contact-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    color: rgba(156, 163, 175, 0.95);
+    font-size: 0.92rem;
+  }
+
+  .apex-footer__contact-icon {
+    width: 1.15rem;
+    height: 1.15rem;
+    margin-top: 0.15rem;
+    flex-shrink: 0;
+  }
+
+  .apex-footer__contact-icon--cyan {
+    color: #00e5ff;
+  }
+
+  .apex-footer__contact-icon--pink {
+    color: #ff1ad8;
+  }
+
+  .apex-footer__contact-text {
+    color: inherit;
+    text-decoration: none;
+    transition: color 200ms ease;
+  }
+
+  .apex-footer__contact-text:hover {
+    color: #00e5ff;
+  }
+
+  .apex-footer__phone {
+    color: rgba(241, 245, 249, 0.96);
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: color 200ms ease;
+  }
+
+  .apex-footer__phone:hover {
+    color: #00e5ff;
+  }
+
+  .apex-footer__hours {
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+
+  .apex-footer__hours-days {
+    margin: 0;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .apex-footer__hours-closed {
+    margin: 0.25rem 0 0;
+    color: rgba(107, 114, 128, 0.95);
+  }
+
+  .apex-footer__credit {
+    padding: 1.5rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: center;
+  }
+
+  .apex-footer__credit-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+  }
+
+  .apex-footer__credit-logo {
+    height: 4rem;
+    width: auto;
+    object-fit: contain;
+    opacity: 0.7;
+    transition: opacity 200ms ease;
+  }
+
+  .apex-footer__credit-link:hover .apex-footer__credit-logo {
+    opacity: 1;
+  }
+
+  .apex-footer__credit-text {
+    margin: 0;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(107, 114, 128, 0.95);
+    transition: color 200ms ease;
+  }
+
+  .apex-footer__credit-link:hover .apex-footer__credit-text {
+    color: #fff;
+  }
+
+  .apex-footer__legal {
+    padding-top: 1.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .apex-footer__copy {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(107, 114, 128, 0.95);
+  }
+
+  .apex-footer__legal-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem 1.5rem;
+  }
+
+  .apex-footer__legal-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(107, 114, 128, 0.95);
+    cursor: pointer;
+    transition: color 200ms ease;
+  }
+
+  .apex-footer__legal-btn:hover {
+    color: #fff;
+  }
+
+  @media (min-width: 768px) {
+    .apex-footer__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2.5rem;
+    }
+
+    .apex-footer__legal {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: left;
+    }
+
+    .apex-footer__legal-links {
+      justify-content: flex-end;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .apex-footer {
+      padding: 5rem 0 2.75rem;
+    }
+
+    .apex-footer__grid {
+      grid-template-columns: 1.2fr 0.9fr 1fr 1fr;
+      gap: 2.75rem;
+    }
+  }
+
   .surface-card {
     background: var(--surface-card);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1076,8 +2158,8 @@
   .apex-hero {
     position: relative;
     z-index: 0;
-    min-height: 90svh;
-    min-height: 90dvh;
+    min-height: 100svh;
+    min-height: 100dvh;
     display: flex;
     align-items: stretch;
     overflow-x: hidden;
@@ -1090,7 +2172,7 @@
     top: 0;
     right: 0;
     bottom: 0;
-    left: 46%;
+    left: 48%;
     z-index: 0;
     pointer-events: none;
     overflow: hidden;
@@ -1103,7 +2185,7 @@
     position: absolute;
     width: max(100cqw, calc(100cqh * 1536 / 1024));
     height: max(100cqh, calc(100cqw * 1024 / 1536));
-    left: 58%;
+    left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
   }
@@ -1271,19 +2353,20 @@
     z-index: 4;
     pointer-events: none;
     background:
-      linear-gradient(90deg, #050505 0%, #050505 46%, rgba(5, 5, 5, 0.55) 50%, transparent 58%);
+      linear-gradient(90deg, #050505 0%, #050505 48%, rgba(5, 5, 5, 0.55) 52%, transparent 60%);
   }
 
   .apex-hero-shell {
     position: relative;
     z-index: 10;
     width: 100%;
-    max-width: 80rem;
+    max-width: 1600px;
     margin: 0 auto;
-    padding: clamp(5.5rem, 12vh, 7.5rem) clamp(1.25rem, 4vw, 2.5rem) clamp(2rem, 6vh, 3.5rem);
+    padding: clamp(5.5rem, 11vh, 7rem) 40px clamp(1.75rem, 4vh, 2.75rem);
     display: flex;
     align-items: center;
     pointer-events: none;
+    overflow: visible;
   }
 
   .apex-hero-shell a,
@@ -1292,10 +2375,12 @@
   }
 
   .apex-hero-copy {
-    max-width: min(34rem, 40vw);
+    width: 48%;
+    max-width: 760px;
     display: flex;
     flex-direction: column;
-    gap: 1.1rem;
+    gap: 0;
+    overflow: visible;
   }
 
   .apex-hero-badge {
@@ -1303,6 +2388,7 @@
     align-items: center;
     gap: 0.55rem;
     width: fit-content;
+    margin: 0 0 24px;
     padding: 0.35rem 0.85rem;
     border-radius: 999px;
     border: 1px solid rgba(255, 26, 216, 0.35);
@@ -1323,14 +2409,30 @@
   }
 
   .apex-hero-title {
-    margin: 0;
+    margin: 0 0 24px;
+    /*
+     * Gradient + background-clip paints only inside this box.
+     * Any max-width narrower than the glyphs clips TRUE POTENTIAL mid-word.
+     */
+    width: max-content;
+    max-width: none;
     font-family: "Michroma", "Mulish", sans-serif;
-    font-size: clamp(2.35rem, 5.2vw, 4.5rem);
-    line-height: 0.92;
+    font-size: clamp(50px, 3.8vw, 70px);
+    line-height: 0.9;
     font-weight: 400;
-    letter-spacing: -0.05em;
+    letter-spacing: -0.02em;
     text-transform: uppercase;
-    text-wrap: balance;
+    text-wrap: unset;
+    overflow-wrap: normal;
+    word-break: normal;
+    overflow: visible;
+  }
+
+  .apex-hero-title-line {
+    display: block;
+    width: max-content;
+    max-width: none;
+    color: #fff;
   }
 
   .apex-hero-title-grad {
@@ -1341,8 +2443,8 @@
   }
 
   .apex-hero-sub {
-    margin: 0;
-    max-width: 34rem;
+    margin: 0 0 28px;
+    max-width: 560px;
     color: rgba(229, 231, 235, 0.9);
     font-size: clamp(0.95rem, 1.5vw, 1.1rem);
     line-height: 1.55;
@@ -1352,16 +2454,18 @@
 
   .apex-hero-ctas {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
     gap: 0.75rem 1rem;
-    margin-top: 0.25rem;
+    margin: 0 0 18px;
   }
 
   .apex-hero-explore {
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
+    width: fit-content;
+    margin: 0 0 24px;
     color: rgba(255, 255, 255, 0.85);
     font-size: 0.85rem;
     font-weight: 700;
@@ -1378,9 +2482,9 @@
     align-items: center;
     gap: 0.45rem;
     width: fit-content;
+    margin: 0 0 28px;
     text-decoration: none;
     color: inherit;
-    margin-top: 0.15rem;
   }
 
   .apex-hero-stars { display: inline-flex; gap: 0.1rem; }
@@ -1389,7 +2493,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 1rem 1.75rem;
-    margin-top: 0.5rem;
+    margin: 0;
     padding-top: 1rem;
     border-top: 1px solid rgba(255, 255, 255, 0.22);
   }
@@ -1420,6 +2524,49 @@
   .apex-hero-trust-icon.gold {
     color: #e8c547;
     filter: drop-shadow(0 0 7px rgba(232, 197, 71, 0.7));
+  }
+
+  /* Desktop/laptop: each of the 3 title lines stays on ONE line */
+  @media (min-width: 1024px) {
+    .apex-hero-title-line {
+      white-space: nowrap;
+      width: max-content;
+      max-width: none;
+    }
+
+    .apex-hero-copy {
+      width: 48%;
+      max-width: 760px;
+      overflow: visible;
+    }
+
+    .apex-hero-title {
+      width: max-content;
+      max-width: none;
+    }
+  }
+
+  /* Mid desktop: slightly smaller type; never re-introduce a clipping max-width */
+  @media (min-width: 1024px) and (max-width: 1439px) {
+    .apex-hero-copy {
+      width: min(52%, 760px);
+    }
+
+    .apex-hero-title {
+      font-size: clamp(48px, 3.6vw, 62px);
+      max-width: none;
+    }
+  }
+
+  @media (min-width: 1024px) and (max-width: 1199px) {
+    .apex-hero-shell {
+      padding-left: 32px;
+      padding-right: 32px;
+    }
+
+    .apex-hero-ctas {
+      flex-wrap: wrap;
+    }
   }
 
   .apex-hero-blend {
@@ -1503,6 +2650,8 @@
       display: flex;
       flex-direction: column;
       padding-top: calc(4.15rem + env(safe-area-inset-top, 0px));
+      /* Room for fixed CALL / BOOK NOW bar so hero CTAs stay tappable */
+      padding-bottom: calc(5.75rem + env(safe-area-inset-bottom, 0px));
       min-height: unset;
       overflow-x: clip;
     }
@@ -1518,20 +2667,30 @@
       inset: auto;
       left: auto;
       width: 100%;
-      height: clamp(38vh, 42vh, 45vh);
-      min-height: 38vh;
-      max-height: 45vh;
+      /* Match the photo’s landscape ratio — avoids a tall crop that looks “zoomed” */
+      height: clamp(270px, calc(100vw * 1024 / 1536 * 1.14), 360px);
+      min-height: 270px;
+      max-height: 360px;
       order: 1;
       overflow: hidden;
+      container-type: size;
     }
 
-    /* Zoom the plate so outer hex frames bleed off the sides; car stays centered. */
+    /*
+     * Same cover math as desktop (no extra zoom). Aspect-locked + fill keeps
+     * headlight overlays on the lamps without stretching the Camaro.
+     */
     .apex-hero-plate {
-      width: calc(100cqh * 1536 / 1024 * 1.88);
-      height: calc(100cqh * 1.88);
+      width: max(100cqw, calc(100cqh * 1536 / 1024));
+      height: max(100cqh, calc(100cqw * 1024 / 1536));
       left: 50%;
-      top: 56%;
+      top: 50%;
       transform: translate(-50%, -50%);
+    }
+
+    .apex-hero-scene {
+      object-fit: fill;
+      object-position: center center;
     }
 
     .apex-hero-stage::after {
@@ -1541,8 +2700,8 @@
       z-index: 3;
       pointer-events: none;
       background:
-        linear-gradient(180deg, rgba(5, 5, 5, 0.35) 0%, transparent 18%, transparent 52%, #050505 100%),
-        radial-gradient(ellipse 80% 65% at 50% 56%, transparent 22%, rgba(5, 5, 5, 0.5) 100%);
+        linear-gradient(180deg, rgba(5, 5, 5, 0.3) 0%, transparent 16%, transparent 58%, #050505 100%),
+        radial-gradient(ellipse 80% 65% at 50% 56%, transparent 22%, rgba(5, 5, 5, 0.45) 100%);
     }
 
     .apex-hero-wash,
@@ -1552,91 +2711,1240 @@
 
     .apex-hero-shell {
       order: 2;
+      width: 100%;
+      max-width: none;
       background: #050505;
-      padding: 0.7rem 1.15rem 0.35rem;
-      padding-left: max(1.15rem, env(safe-area-inset-left, 0px));
-      padding-right: max(1.15rem, env(safe-area-inset-right, 0px));
-      align-items: center;
+      padding: 0.65rem 20px 1.5rem;
+      padding-left: max(20px, env(safe-area-inset-left, 0px));
+      padding-right: max(20px, env(safe-area-inset-right, 0px));
+      align-items: stretch;
       justify-content: flex-start;
+      overflow: visible;
     }
 
     .apex-hero-copy {
-      max-width: 36rem;
       width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
       align-items: center;
       text-align: center;
-      gap: 0.7rem;
+      gap: 0;
+      overflow: visible;
     }
 
+    .apex-hero-badge {
+      margin: 0 0 10px;
+      max-width: 100%;
+      justify-content: center;
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      padding: 0.3rem 0.7rem;
+      text-wrap: balance;
+    }
+
+    /*
+     * Mobile headline: override desktop max-content / large type.
+     * Michroma "TRUE POTENTIAL" is ~11.9× font-size wide — on a 375px
+     * phone that caps the third line near 28–30px. Lines 1–2 can read
+     * larger; line 3 scales down so nothing clips or scrolls horizontally.
+     */
     .apex-hero-title {
-      font-size: clamp(3rem, calc(3rem + 0.091 * (100vw - 20rem)), 3.625rem);
-      letter-spacing: -0.04em;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      margin: 0 0 12px;
+      padding-inline: 0;
+      font-size: clamp(32px, 9vw, 40px);
+      line-height: 0.9;
+      letter-spacing: -0.035em;
+      text-align: center;
+      overflow: visible;
+      overflow-wrap: normal;
+      word-break: normal;
+    }
+
+    .apex-hero-title-line {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      white-space: nowrap;
+      overflow: visible;
+      text-align: center;
+    }
+
+    /* Keep UNLEASH / YOUR CAR'S / TRUE POTENTIAL as exactly 3 lines */
+    .apex-hero-title-line--3 {
+      font-size: 0.78em;
+      letter-spacing: -0.045em;
+    }
+
+    .apex-hero-sub {
+      display: block;
+      margin: 0 0 14px;
+      max-width: 100%;
+      font-size: 0.9rem;
+      line-height: 1.5;
       text-align: center;
     }
 
     .apex-hero-ctas {
+      display: flex;
       flex-direction: column;
+      flex-wrap: nowrap;
       align-items: stretch;
       width: 100%;
-      max-width: none;
-      gap: 0.55rem;
-      margin-top: 0.1rem;
+      max-width: 100%;
+      gap: 0.65rem;
+      margin: 0 0 14px;
     }
 
     .apex-hero-ctas .btn-cyber {
       width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
       justify-content: center;
+      min-height: 3rem;
     }
 
-    .apex-hero-sub,
-    .apex-hero-explore,
-    .apex-hero-trust {
-      display: none;
+    .apex-hero-explore {
+      display: inline-flex;
+      justify-content: center;
+      margin: 0 0 16px;
+      width: auto;
     }
 
     .apex-hero-rating {
       display: inline-flex;
       justify-content: center;
-      margin-inline: auto;
-      margin-top: 0.05rem;
+      flex-wrap: wrap;
+      margin: 0 0 14px;
+      max-width: 100%;
+    }
+
+    .apex-hero-trust {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-wrap: nowrap;
+      gap: 0.65rem;
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      padding-top: 0.85rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .apex-hero-trust-item {
+      justify-content: center;
+      font-size: 0.82rem;
+      text-align: center;
     }
 
     .apex-hero-trust-line {
-      display: inline-flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 0.35rem 0.55rem;
-      margin: 0;
-      padding: 0 0 0.15rem;
-      color: rgba(255, 255, 255, 0.88);
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .apex-hero-trust-line svg {
-      width: 0.85rem;
-      height: 0.85rem;
-      color: #ff4de3;
-      flex-shrink: 0;
-    }
-
-    .apex-hero-trust-line .gold {
-      color: #e8c547;
-    }
-
-    .apex-hero-trust-sep {
-      opacity: 0.35;
-      font-weight: 400;
+      display: none;
     }
 
     .apex-seam,
     .apex-hero-dip {
-      height: 3.75rem;
+      height: 3.25rem;
       margin: 0;
     }
+  }
+
+  /* Narrow phones (iPhone SE / 375) — keep TRUE POTENTIAL fully visible */
+  @media (max-width: 390px) {
+    .apex-hero-shell {
+      padding-left: max(16px, env(safe-area-inset-left, 0px));
+      padding-right: max(16px, env(safe-area-inset-right, 0px));
+    }
+
+    .apex-hero-title {
+      font-size: clamp(30px, 8.4vw, 34px);
+      letter-spacing: -0.04em;
+    }
+
+    .apex-hero-title-line--3 {
+      font-size: 0.76em;
+      letter-spacing: -0.05em;
+    }
+
+    .apex-hero-badge {
+      font-size: 0.52rem;
+      letter-spacing: 0.08em;
+    }
+
+    .apex-hero-stage {
+      height: clamp(260px, calc(100vw * 1024 / 1536 * 1.1), 340px);
+      min-height: 260px;
+      max-height: 340px;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .apex-hero-title {
+      font-size: clamp(28px, 8vw, 32px);
+      letter-spacing: -0.045em;
+    }
+
+    .apex-hero-title-line--3 {
+      font-size: 0.74em;
+    }
+  }
+
+  /* Larger phones — bump type carefully; third line still constrained */
+  @media (min-width: 391px) and (max-width: 480px) {
+    .apex-hero-title {
+      font-size: clamp(34px, 8.6vw, 38px);
+    }
+
+    .apex-hero-title-line--3 {
+      font-size: 0.78em;
+    }
+  }
+
+  @media (min-width: 481px) and (max-width: 1023px) {
+    .apex-hero-title {
+      /* Content width allows a single size for all 3 lines */
+      font-size: clamp(36px, 6.2vw, 52px);
+      letter-spacing: -0.03em;
+    }
+
+    .apex-hero-title-line--3 {
+      font-size: 1em;
+      letter-spacing: inherit;
+    }
+
+    .apex-hero-trust {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem 1.25rem;
+    }
+  }
+}
+
+/* ── Elite Services section ── */
+.elite-services {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  padding: clamp(2.75rem, 5vw, 4.5rem) 0 clamp(3.5rem, 6vw, 5.5rem);
+  background: #050505;
+  color: #fff;
+}
+
+.elite-services__atmosphere {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.elite-services__glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(140px);
+}
+
+.elite-services__glow--pink {
+  left: -10%;
+  top: 12%;
+  width: 34rem;
+  height: 34rem;
+  background: rgba(168, 85, 247, 0.045);
+}
+
+.elite-services__glow--blue {
+  right: -12%;
+  top: 36%;
+  width: 30rem;
+  height: 30rem;
+  background: rgba(59, 130, 246, 0.04);
+}
+
+.elite-services__glow--floor {
+  left: 22%;
+  bottom: -20%;
+  width: 38rem;
+  height: 16rem;
+  background: rgba(236, 72, 153, 0.035);
+  filter: blur(110px);
+}
+
+.elite-services__hex {
+  position: absolute;
+  inset: 0;
+  opacity: 0.022;
+  background-image:
+    linear-gradient(30deg, rgba(255, 255, 255, 0.35) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, 0.35) 87.5%, rgba(255, 255, 255, 0.35)),
+    linear-gradient(150deg, rgba(255, 255, 255, 0.35) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, 0.35) 87.5%, rgba(255, 255, 255, 0.35)),
+    linear-gradient(30deg, rgba(255, 255, 255, 0.35) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, 0.35) 87.5%, rgba(255, 255, 255, 0.35)),
+    linear-gradient(150deg, rgba(255, 255, 255, 0.35) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, 0.35) 87.5%, rgba(255, 255, 255, 0.35)),
+    linear-gradient(60deg, rgba(157, 0, 255, 0.14) 25%, transparent 25.5%, transparent 75%, rgba(157, 0, 255, 0.14) 75%, rgba(157, 0, 255, 0.14)),
+    linear-gradient(60deg, rgba(0, 229, 255, 0.1) 25%, transparent 25.5%, transparent 75%, rgba(0, 229, 255, 0.1) 75%, rgba(0, 229, 255, 0.1));
+  background-size: 42px 72px;
+  background-position: 0 0, 0 0, 21px 36px, 21px 36px, 0 0, 21px 36px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, transparent 35%, #000 100%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, transparent 35%, #000 100%);
+}
+
+.elite-services__inner {
+  position: relative;
+  z-index: 1;
+  width: calc(100% - 80px);
+  max-width: 1350px;
+  margin: 0 auto;
+}
+
+.elite-services__header {
+  text-align: center;
+  margin: 0 auto 1.65rem;
+}
+
+.elite-services__kicker {
+  margin: 0 0 0.65rem;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(196, 181, 253, 0.78);
+}
+
+.elite-services__title {
+  margin: 0 0 1rem;
+  font-family: "Michroma", "Mulish", sans-serif;
+  font-size: clamp(2.75rem, 4.2vw, 3.75rem);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  line-height: 1.05;
+  color: #fff;
+}
+
+.elite-services__title-grad {
+  background-image: linear-gradient(100deg, #ec4899 0%, #a855f7 48%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.elite-services__intro {
+  margin: 0 auto;
+  max-width: 650px;
+  color: rgba(226, 232, 240, 0.84);
+  font-size: clamp(1rem, 1.35vw, 1.125rem);
+  line-height: 1.65;
+}
+
+.elite-services__note {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto 2.15rem;
+  padding: 18px 22px;
+  border-radius: 14px;
+  border: 1px solid rgba(168, 85, 247, 0.28);
+  background: rgba(12, 10, 18, 0.72);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.06);
+  backdrop-filter: blur(8px);
+}
+
+.elite-services__note-icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  color: #c4b5fd;
+  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.35));
+}
+
+.elite-services__note p {
+  margin: 0;
+  color: rgba(209, 213, 219, 0.9);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  text-align: left;
+}
+
+.elite-services__note-label {
+  font-weight: 800;
+  color: #c4b5fd;
+  margin-right: 0.25rem;
+}
+
+.elite-services__grid,
+.elite-more__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.elite-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(165deg, rgba(14, 12, 20, 0.96), rgba(8, 8, 10, 0.98));
+  border: 1px solid rgba(168, 85, 247, 0.26);
+  box-shadow:
+    0 0 0 1px rgba(236, 72, 153, 0.04) inset,
+    0 14px 32px rgba(0, 0, 0, 0.4),
+    0 0 24px rgba(168, 85, 247, 0.06),
+    0 0 16px rgba(59, 130, 246, 0.04);
+  transition: transform 280ms ease, box-shadow 280ms ease, border-color 280ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .elite-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(196, 181, 253, 0.4);
+    box-shadow:
+      0 0 0 1px rgba(59, 130, 246, 0.08) inset,
+      0 18px 40px rgba(0, 0, 0, 0.46),
+      0 0 28px rgba(168, 85, 247, 0.12),
+      0 0 18px rgba(59, 130, 246, 0.08);
+  }
+
+  .elite-card:hover .elite-card__img {
+    transform: scale(1.03);
+  }
+}
+
+.elite-card__media {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #0a0a0e;
+}
+
+.elite-card__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 320ms ease;
+}
+
+.elite-card__media-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(5, 5, 5, 0.05) 0%, transparent 35%, rgba(5, 5, 5, 0.82) 100%),
+    radial-gradient(ellipse 70% 60% at 50% 20%, transparent 40%, rgba(5, 5, 5, 0.3) 100%);
+}
+
+.elite-card__icon-wrap {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  display: inline-flex;
+  padding: 0.6rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(0, 0, 0, 0.52);
+  backdrop-filter: blur(6px);
+}
+
+.elite-card__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #c4b5fd;
+}
+
+.elite-card__badge {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f5d98a;
+  background: rgba(20, 14, 4, 0.82);
+  border: 1px solid rgba(232, 197, 71, 0.45);
+  box-shadow: 0 0 10px rgba(232, 197, 71, 0.16);
+}
+
+.elite-card__badge-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.elite-card__body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  height: 100%;
+  padding: 21px;
+}
+
+.elite-card__name {
+  margin: 0 0 0.65rem;
+  font-size: 1.3125rem;
+  font-weight: 900;
+  line-height: 1.25;
+  color: #fff;
+}
+
+.elite-card__starting {
+  margin: 0;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(156, 163, 175, 0.95);
+}
+
+.elite-card__price {
+  margin: 0.2rem 0 0.75rem;
+  font-size: 1.875rem;
+  font-weight: 900;
+  line-height: 1;
+  background-image: linear-gradient(100deg, #ec4899 0%, #a855f7 45%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.elite-card__price:has(+ .apex-price-tiers) {
+  margin-bottom: 0.1rem;
+}
+
+.elite-card__price--quote {
+  font-size: 1.35rem;
+  margin-top: 0.35rem;
+}
+
+.apex-price-tiers {
+  list-style: none;
+  margin: 0.15rem 0 0.85rem;
+  padding: 0.45rem 0 0;
+  display: grid;
+  gap: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.apex-price-tiers li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.32rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.apex-price-tiers li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.apex-price-tiers__label {
+  min-width: 0;
+  color: rgba(156, 163, 175, 0.95);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+
+.apex-price-tiers__amount {
+  flex-shrink: 0;
+  font-size: 0.84rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+  background-image: linear-gradient(100deg, #ec4899 0%, #a855f7 50%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.elite-card__price + .apex-price-tiers {
+  margin-top: 0.05rem;
+}
+
+/* Cerakote certification — proof marks, not competing hero branding */
+.cerakote-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 0.95rem;
+  padding: 0.55rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cerakote-card__badge {
+  width: auto;
+  height: 2.65rem;
+  flex-shrink: 0;
+  object-fit: contain;
+  display: block;
+}
+
+.cerakote-card__text {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+  margin: 0;
+}
+
+.cerakote-card__label {
+  color: rgba(229, 231, 235, 0.95);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+}
+
+.cerakote-card__sub {
+  color: rgba(156, 163, 175, 0.95);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cerakote-strip {
+  display: grid;
+  justify-items: center;
+  gap: 0.85rem;
+  max-width: 42rem;
+  margin: 2rem auto 0;
+  padding: 1.15rem 1.25rem 1.05rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cerakote-strip__wordmark {
+  height: 2.1rem;
+  width: auto;
+  max-width: min(100%, 16rem);
+  object-fit: contain;
+  display: block;
+}
+
+.cerakote-strip__badge {
+  height: 3.4rem;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.cerakote-strip__copy {
+  margin: 0;
+  text-align: center;
+  color: rgba(156, 163, 175, 0.95);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+
+.cerakote-about {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cerakote-about__badge {
+  width: auto;
+  height: 4.25rem;
+  flex-shrink: 0;
+  object-fit: contain;
+  display: block;
+}
+
+.cerakote-about__copy {
+  min-width: 0;
+}
+
+.cerakote-about__eyebrow {
+  margin: 0 0 0.2rem;
+  color: #f58220;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.cerakote-about__title {
+  margin: 0 0 0.35rem;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+}
+
+.cerakote-about__text {
+  margin: 0;
+  color: rgba(186, 192, 202, 0.95);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.cerakote-footer {
+  display: grid;
+  justify-items: start;
+  gap: 0.55rem;
+  margin-top: 1.35rem;
+  padding-top: 1.15rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  max-width: 15rem;
+}
+
+.cerakote-footer__label {
+  margin: 0;
+  color: rgba(156, 163, 175, 0.9);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.cerakote-footer__wordmark {
+  height: 1.85rem;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+  opacity: 0.92;
+}
+
+.cerakote-footer__badge {
+  height: 2.75rem;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  opacity: 0.95;
+}
+
+@media (min-width: 1100px) {
+  .elite-more__grid .cerakote-card__badge {
+    height: 2.35rem;
+  }
+
+  .elite-more__grid .cerakote-card__label {
+    font-size: 0.72rem;
+  }
+
+  .elite-more__grid .cerakote-card__sub {
+    font-size: 0.66rem;
+  }
+}
+
+@media (max-width: 699px) {
+  .cerakote-about {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cerakote-about__badge {
+    height: 3.75rem;
+  }
+
+  .cerakote-strip__badge {
+    height: 3rem;
+  }
+}
+
+.elite-card__desc {
+  margin: 0 0 0.9rem;
+  color: rgba(203, 213, 225, 0.88);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+.elite-card__feats {
+  list-style: none;
+  margin: 0 0 1.1rem;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+  align-content: start;
+}
+
+.elite-card__feats li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  color: rgba(229, 231, 235, 0.92);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.elite-card__feat-icon {
+  width: 0.95rem;
+  height: 0.95rem;
+  margin-top: 0.12rem;
+  flex-shrink: 0;
+  color: #c4b5fd;
+  filter: drop-shadow(0 0 5px rgba(168, 85, 247, 0.35));
+}
+
+.elite-card__cta {
+  margin-top: auto;
+  width: 100%;
+  min-height: 50px;
+  height: 50px;
+  padding: 0 1.25rem;
+  white-space: nowrap;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+}
+
+.elite-ready {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-items: stretch;
+  max-width: 900px;
+  margin: 2.35rem auto 0;
+  padding: 1.4rem 1.5rem;
+  border-radius: 14px;
+  border: 1px solid rgba(168, 85, 247, 0.28);
+  background:
+    linear-gradient(135deg, rgba(236, 72, 153, 0.07), transparent 45%),
+    linear-gradient(225deg, rgba(59, 130, 246, 0.06), transparent 40%),
+    rgba(10, 10, 12, 0.92);
+  box-shadow: 0 0 28px rgba(168, 85, 247, 0.08);
+}
+
+.elite-ready__copy {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+}
+
+.elite-ready__icon {
+  width: 1.6rem;
+  height: 1.6rem;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  color: #c4b5fd;
+  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.4));
+}
+
+.elite-ready__title {
+  margin: 0 0 0.35rem;
+  font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+
+.elite-ready__sub {
+  margin: 0;
+  color: rgba(186, 192, 202, 0.95);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.elite-ready__btn {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.elite-more {
+  margin-top: 3.25rem;
+  padding-top: 2.35rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.elite-more__title {
+  margin: 0 0 1.35rem;
+  text-align: center;
+  font-family: "Michroma", "Mulish", sans-serif;
+  font-size: clamp(1.25rem, 2.5vw, 1.65rem);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+/* ── Premium Add-ons configurator ── */
+.apex-addons {
+  position: relative;
+  margin-top: 3.25rem;
+  padding-top: 2.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.apex-addons__glow {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  z-index: 0;
+  width: min(42rem, 70%);
+  height: 18rem;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  border-radius: 50%;
+  background: rgba(157, 0, 255, 0.05);
+  filter: blur(90px);
+}
+
+.apex-addons__header {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  margin: 0 auto 2rem;
+  max-width: 36rem;
+}
+
+.apex-addons__eyebrow {
+  margin: 0 0 0.65rem;
+  font-family: "Michroma", "Mulish", sans-serif;
+  font-size: clamp(0.78rem, 1.4vw, 0.92rem);
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  background-image: linear-gradient(100deg, #ff1ad8 0%, #9d00ff 48%, #00e5ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.apex-addons__optional {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: rgba(156, 163, 175, 0.95);
+}
+
+.apex-addons__columns {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+.apex-addons__divider {
+  display: none;
+}
+
+.apex-addons__col-title {
+  margin: 0 0 1.15rem;
+  font-family: "Michroma", "Mulish", sans-serif;
+  font-size: clamp(1.15rem, 2.2vw, 1.55rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.apex-addons__col-title span {
+  background-image: linear-gradient(100deg, #ff1ad8 0%, #9d00ff 48%, #00e5ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.apex-addons__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.apex-addon-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  min-height: 80px;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #222;
+  background: #080808;
+  cursor: pointer;
+  transition:
+    transform 280ms ease,
+    border-color 280ms ease,
+    box-shadow 280ms ease;
+}
+
+.apex-addon-card__icon-wrap {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 0.65rem;
+  border: 1px solid rgba(168, 85, 247, 0.28);
+  background: rgba(12, 10, 18, 0.9);
+  transition: border-color 280ms ease, box-shadow 280ms ease;
+}
+
+.apex-addon-card__icon {
+  width: 1rem;
+  height: 1rem;
+  color: #c4b5fd;
+  filter: drop-shadow(0 0 5px rgba(168, 85, 247, 0.35));
+  transition: color 280ms ease, filter 280ms ease;
+}
+
+.apex-addon-card__copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.apex-addon-card__name {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.3;
+  color: #fff;
+}
+
+.apex-addon-card__price {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.35;
+  background-image: linear-gradient(100deg, #ff1ad8 0%, #9d00ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.apex-addon-card__desc {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 280ms ease;
+}
+
+.apex-addon-card__desc.is-open {
+  max-height: 16rem;
+}
+
+.apex-addon-card__desc p {
+  margin: 0.7rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: rgba(209, 213, 219, 0.88);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .apex-addon-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(196, 181, 253, 0.42);
+    box-shadow: 0 0 22px rgba(168, 85, 247, 0.12);
+  }
+
+  .apex-addon-card:hover .apex-addon-card__icon-wrap {
+    border-color: rgba(196, 181, 253, 0.5);
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.18);
+  }
+
+  .apex-addon-card:hover .apex-addon-card__icon {
+    color: #e9d5ff;
+    filter: drop-shadow(0 0 7px rgba(236, 72, 153, 0.45));
+  }
+}
+
+@media (min-width: 768px) {
+  .apex-addons__columns {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+  }
+
+  .apex-addons__divider {
+    display: block;
+    width: 1px;
+    align-self: stretch;
+    min-height: 12rem;
+    margin-top: 3.25rem;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(157, 0, 255, 0.35) 45%,
+      rgba(255, 26, 216, 0.2) 55%,
+      transparent 100%
+    );
+  }
+}
+
+@media (min-width: 700px) {
+  .elite-services__grid,
+  .elite-more__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .elite-card__media {
+    height: 210px;
+  }
+
+  .elite-ready {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.5rem 1.75rem;
+  }
+
+  .elite-ready__btn {
+    width: auto;
+    min-width: 12.5rem;
+    flex-shrink: 0;
+  }
+}
+
+@media (min-width: 1100px) {
+  .elite-services__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+  }
+
+  .elite-more__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .elite-more__grid .elite-card__media {
+    height: 200px;
+  }
+
+  .elite-more__grid .elite-card__name {
+    font-size: 1.15rem;
+  }
+
+  .elite-more__grid .elite-card__price {
+    font-size: 1.65rem;
+  }
+
+  .elite-more__grid .apex-price-tiers__label {
+    font-size: 0.7rem;
+  }
+
+  .elite-more__grid .apex-price-tiers__amount {
+    font-size: 0.76rem;
+  }
+
+  .elite-more__grid .elite-card__body {
+    padding: 18px;
+  }
+
+  .elite-card__media {
+    height: 240px;
+  }
+
+  .elite-card__name {
+    font-size: 1.375rem;
+  }
+
+  .elite-card__price {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 699px) {
+  .elite-services__inner {
+    width: calc(100% - 32px);
+  }
+
+  .elite-services__title {
+    font-size: clamp(2rem, 9vw, 2.5rem);
+  }
+
+  .elite-services__kicker {
+    font-size: 12px;
+  }
+
+  .elite-services__note {
+    max-width: none;
+    padding: 16px 18px;
+  }
+
+  .elite-card__media {
+    height: 200px;
+  }
+
+  .elite-card__body {
+    padding: 18px;
+  }
+
+  .elite-card__name {
+    font-size: 1.2rem;
+  }
+
+  .elite-card__price {
+    font-size: 1.65rem;
+  }
+}
+
+@media (min-width: 700px) and (max-width: 1099px) {
+  .elite-services__inner {
+    width: calc(100% - 48px);
+  }
+
+  .elite-services__title {
+    font-size: clamp(2.4rem, 4.5vw, 3rem);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .elite-services__header.is-animated,
+  .elite-services__note.is-animated,
+  .elite-card.is-animated,
+  .elite-ready.is-animated {
+    animation: elite-rise 650ms ease both;
+  }
+
+  .elite-services__header:not(.is-animated),
+  .elite-services__note:not(.is-animated),
+  .elite-card:not(.is-animated),
+  .elite-ready:not(.is-animated) {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .elite-services__note.is-animated {
+    animation-delay: 80ms;
+  }
+
+  .elite-card.is-animated {
+    animation-delay: var(--elite-delay, 0ms);
+  }
+
+  .elite-ready.is-animated {
+    animation-delay: 280ms;
+  }
+}
+
+@keyframes elite-rise {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elite-card,
+  .elite-card__img {
+    transition: none !important;
   }
 }
 
@@ -1681,4 +3989,521 @@
 .apex-admin option:focus {
   background-color: #ff2ad4;
   color: #ffffff;
+}
+
+/*
+ * ═══════════════════════════════════════════════════════════════════════════
+ * MOBILE HERO v2 — UNLAYERED (must win over @layer utilities desktop rules)
+ * Desktop (min-width: 1024px) is intentionally untouched below.
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+@media (max-width: 1023px) {
+  .apex-hero[data-mobile-hero="stack-v2"] {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    min-height: unset !important;
+    height: auto !important;
+    padding-top: calc(4.15rem + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(5.75rem + env(safe-area-inset-bottom, 0px));
+    overflow-x: clip;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-stage {
+    position: relative !important;
+    inset: auto !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    order: 1;
+    width: 100% !important;
+    /* Landscape frame matching the tunnel photo — not a tall zoomed crop */
+    height: clamp(270px, calc(100vw * 1024 / 1536 * 1.14), 360px) !important;
+    min-height: 270px !important;
+    max-height: 360px !important;
+    overflow: hidden;
+    container-type: size !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-plate {
+    width: max(100cqw, calc(100cqh * 1536 / 1024)) !important;
+    height: max(100cqh, calc(100cqw * 1024 / 1536)) !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-scene {
+    object-fit: fill !important;
+    object-position: center center !important;
+  }
+
+  /* Keep desktop-measured lamp cores; slightly larger glow on the short stage */
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hl-spot-l {
+    left: 36.95% !important;
+    top: 59.4% !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hl-spot-r {
+    left: 62.88% !important;
+    top: 59.3% !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hl-brow-l {
+    left: 35.6% !important;
+    top: 56.8% !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hl-brow-r {
+    left: 64.4% !important;
+    top: 56.8% !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hl-drl-l {
+    left: 33.7% !important;
+    top: 62.2% !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hl-drl-r {
+    left: 66.3% !important;
+    top: 62.2% !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hl-spot {
+    width: 3.2% !important;
+    height: 3.6% !important;
+    box-shadow: 0 0 14px 3px rgba(255, 250, 235, 0.75) !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-wash,
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-blend {
+    display: none !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-shell {
+    position: relative !important;
+    order: 2;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0.75rem 20px 1.75rem !important;
+    padding-left: max(20px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(20px, env(safe-area-inset-right, 0px)) !important;
+    background: #050505 !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-copy {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-badge {
+    margin: 0 auto 12px !important;
+    justify-content: center;
+  }
+
+  /* Kill desktop max-content / 50–70px type on phones */
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-title {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 0 12px !important;
+    padding-inline: 4px !important;
+    font-size: clamp(30px, 8.2vw, 38px) !important;
+    line-height: 0.92 !important;
+    letter-spacing: -0.035em !important;
+    text-align: center !important;
+    overflow: visible !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-title-line {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+    overflow: visible !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-title-line--3 {
+    font-size: 0.76em !important;
+    letter-spacing: -0.05em !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-sub,
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-explore,
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-trust {
+    display: flex !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-sub {
+    display: block !important;
+    max-width: 100% !important;
+    margin: 0 0 14px !important;
+    font-size: 0.88rem !important;
+    line-height: 1.5 !important;
+    text-align: center !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-ctas {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 0.65rem !important;
+    margin: 0 0 14px !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-ctas .btn-cyber {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    justify-content: center !important;
+    min-height: 3rem !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-explore {
+    display: inline-flex !important;
+    justify-content: center !important;
+    margin: 0 auto 14px !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-rating {
+    display: inline-flex !important;
+    justify-content: center !important;
+    margin: 0 auto 14px !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-trust {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0.6rem !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding-top: 0.85rem !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-trust-line {
+    display: none !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-title {
+    font-size: clamp(28px, 7.8vw, 34px) !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-title-line--3 {
+    font-size: 0.74em !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-stage {
+    height: clamp(260px, calc(100vw * 1024 / 1536 * 1.1), 340px) !important;
+    min-height: 260px !important;
+    max-height: 340px !important;
+  }
+
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-shell {
+    padding-left: max(16px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(16px, env(safe-area-inset-right, 0px)) !important;
+  }
+}
+
+@media (min-width: 391px) and (max-width: 480px) {
+  .apex-hero[data-mobile-hero="stack-v2"] .apex-hero-title {
+    font-size: clamp(32px, 8.2vw, 36px) !important;
+  }
+}
+
+/* ── How It Works (Three Simple Steps) — polish only ── */
+.apex-how {
+  overflow-x: clip;
+  /* Pull section up toward the neon divider above */
+  margin-top: -0.75rem;
+}
+
+.apex-how__card {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  padding: 1.75rem 1.5rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition:
+    transform 280ms ease,
+    border-color 280ms ease,
+    box-shadow 280ms ease;
+}
+
+@media (min-width: 640px) {
+  .apex-how__card {
+    padding: 2rem;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .apex-how__card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(157, 0, 255, 0.45);
+    box-shadow:
+      0 0 0 1px rgba(0, 229, 255, 0.12),
+      0 0 22px rgba(157, 0, 255, 0.22),
+      0 0 28px rgba(0, 229, 255, 0.1);
+  }
+}
+
+.apex-how__num {
+  margin: 0 0 1rem;
+  font-size: 3rem;
+  line-height: 1;
+  font-weight: 900;
+  background-image: linear-gradient(90deg, #ff1ad8, #9d00ff, #00e5ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.apex-how__icon-wrap {
+  margin: 0 0 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.apex-how__icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  flex-shrink: 0;
+}
+
+.apex-how__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.apex-how__desc {
+  margin: 0;
+  max-width: 100%;
+  color: rgba(156, 163, 175, 1);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 767px) {
+  .apex-how__card {
+    padding: 1.5rem 1.15rem;
+  }
+
+  .apex-how__num {
+    font-size: 2.75rem;
+  }
+}
+
+/* ── Google Reviews showcase — polish only ── */
+.apex-reviews {
+  overflow-x: clip;
+}
+
+.apex-reviews__stats {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+  margin: 0 auto;
+  max-width: 56rem;
+}
+
+@media (min-width: 480px) {
+  .apex-reviews__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) {
+  .apex-reviews__stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+.apex-reviews__stat {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  padding: 1.35rem 1rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .apex-reviews__stat {
+    padding: 1.75rem 1.25rem;
+  }
+}
+
+.apex-reviews__stat-value {
+  margin: 0 0 0.4rem;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  background-image: linear-gradient(90deg, #ff1ad8, #9d00ff, #00e5ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.apex-reviews__stat-label {
+  margin: 0 0 0.35rem;
+  color: rgba(229, 231, 235, 0.92);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.apex-reviews__stat-desc {
+  margin: 0;
+  color: rgba(107, 114, 128, 1);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.apex-reviews__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .apex-reviews__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .apex-reviews__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.apex-reviews__card {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-height: 15.5rem;
+  padding: 1.25rem 1.15rem;
+  border-radius: 1rem;
+  background: #0a0a0a;
+  border: 1px solid rgba(140, 120, 170, 0.22);
+  transition:
+    transform 280ms ease,
+    border-color 280ms ease,
+    box-shadow 280ms ease;
+}
+
+@media (min-width: 640px) {
+  .apex-reviews__card {
+    padding: 1.5rem;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .apex-reviews__card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(157, 0, 255, 0.42);
+    box-shadow:
+      0 0 0 1px rgba(0, 229, 255, 0.1),
+      0 0 20px rgba(157, 0, 255, 0.18),
+      0 0 26px rgba(0, 229, 255, 0.08);
+  }
+}
+
+.apex-reviews__name {
+  margin: 0 0 0.35rem;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.apex-reviews__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.65rem;
+  color: rgba(156, 163, 175, 0.95);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.apex-reviews__g {
+  width: 0.95rem;
+  height: 0.95rem;
+  flex-shrink: 0;
+}
+
+.apex-reviews__stars {
+  display: flex;
+  gap: 0.15rem;
+  margin: 0 0 0.75rem;
+}
+
+.apex-reviews__text {
+  margin: 0;
+  color: rgba(209, 213, 219, 0.95);
+  font-size: 0.875rem;
+  line-height: 1.55;
+  overflow-wrap: break-word;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  overflow: hidden;
+}
+
+.apex-reviews__text.is-open {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
+.apex-reviews__more {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  align-self: flex-start;
+  background: none;
+  border: 0;
+  color: #ff1ad8;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.apex-reviews__more:hover {
+  color: #00e5ff;
 }
