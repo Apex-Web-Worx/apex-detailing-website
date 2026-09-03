@@ -3317,6 +3317,8 @@
   object-fit: contain;
   display: block;
   opacity: 0.9;
+  /* Trial: make any dark/black parts read as white on the header background */
+  filter: brightness(0) invert(1);
 }
 
 @media (min-width: 768px) {
