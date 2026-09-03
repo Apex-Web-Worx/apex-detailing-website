@@ -3292,13 +3292,28 @@
   flex-shrink: 0;
 }
 
+.cerakote-nav__logos {
+  display: grid;
+  justify-items: start;
+  gap: 0.15rem;
+}
+
 .cerakote-nav__wordmark {
-  height: 1.05rem;
+  height: 0.95rem;
   width: auto;
-  max-width: 4.75rem;
+  max-width: 4.5rem;
   object-fit: contain;
   display: block;
-  opacity: 0.82;
+  opacity: 0.86;
+}
+
+.cerakote-nav__badge {
+  height: 0.78rem;
+  width: auto;
+  max-width: 4.5rem;
+  object-fit: contain;
+  display: block;
+  opacity: 0.9;
 }
 
 @media (min-width: 768px) {
@@ -3311,16 +3326,25 @@
   }
 
   .cerakote-nav__wordmark {
-    height: 1.25rem;
-    max-width: 5.75rem;
-    opacity: 0.88;
+    height: 1.08rem;
+    max-width: 5rem;
+  }
+
+  .cerakote-nav__badge {
+    height: 0.88rem;
+    max-width: 5rem;
   }
 }
 
 @media (min-width: 1024px) {
   .cerakote-nav__wordmark {
-    height: 1.35rem;
-    max-width: 6.25rem;
+    height: 1.15rem;
+    max-width: 5.4rem;
+  }
+
+  .cerakote-nav__badge {
+    height: 0.96rem;
+    max-width: 5.4rem;
   }
 }
 

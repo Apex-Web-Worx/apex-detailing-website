@@ -19,13 +19,22 @@ export default function CerakoteCert({
         aria-label={t("cerakote.navAria")}
       >
         <span className="cerakote-nav__divider" aria-hidden="true" />
-        <OptimizedImage
-          src={imageUrl("cerakote/cerakote-wordmark-white.png")}
-          alt={t("cerakote.wordmarkAlt")}
-          className="cerakote-nav__wordmark"
-          loading="eager"
-          noBlur
-        />
+        <span className="cerakote-nav__logos">
+          <OptimizedImage
+            src={imageUrl("cerakote/cerakote-wordmark-white.png")}
+            alt={t("cerakote.wordmarkAlt")}
+            className="cerakote-nav__wordmark"
+            loading="eager"
+            noBlur
+          />
+          <OptimizedImage
+            src={imageUrl("cerakote/cerakote-proteam-badge.png")}
+            alt={t("cerakote.badgeAlt")}
+            className="cerakote-nav__badge"
+            loading="eager"
+            noBlur
+          />
+        </span>
       </span>
     );
   }
