@@ -3311,9 +3311,9 @@
 }
 
 .cerakote-nav__badge {
-  height: 1.45rem;
+  height: 1.95rem;
   width: auto;
-  max-width: 6.2rem;
+  max-width: 8.2rem;
   object-fit: contain;
   display: block;
   opacity: 0.9;
@@ -3334,8 +3334,8 @@
   }
 
   .cerakote-nav__badge {
-    height: 1.85rem;
-    max-width: 7.2rem;
+    height: 2.55rem;
+    max-width: 9.0rem;
   }
 }
 
@@ -3346,8 +3346,8 @@
   }
 
   .cerakote-nav__badge {
-    height: 2.1rem;
-    max-width: 7.9rem;
+    height: 3.0rem;
+    max-width: 10.5rem;
   }
 }
 
