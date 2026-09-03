@@ -28,7 +28,7 @@ export default function CerakoteCert({
             noBlur
           />
           <OptimizedImage
-            src={imageUrl("cerakote/cerakote-proteam-badge-white.png")}
+            src={imageUrl("cerakote/cerakote-proteam-badge.png")}
             alt={t("cerakote.badgeAlt")}
             className="cerakote-nav__badge"
             loading="eager"
