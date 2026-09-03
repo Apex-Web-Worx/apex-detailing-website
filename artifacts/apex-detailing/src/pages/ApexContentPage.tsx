@@ -427,6 +427,7 @@ function SiteFooter() {
                 <span className="font-bold text-white">G</span>
               </a>
             </div>
+            <CerakoteCert variant="footer" />
           </div>
 
           <div>
