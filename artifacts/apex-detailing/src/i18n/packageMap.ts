@@ -6,7 +6,7 @@ export const PKG_PHOTO: Record<string, string> = {
   exterior: "pkg-exterior.jpg",
   wax: "pkg-wax.jpg",
   headlight: "pkg-headlight.jpg",
-  ceramic: "pkg-ceramic.jpg",
+  ceramic: "ceramic-bmw-proteam.jpg",
   paint: "pkg-paint.jpg",
 };
 
