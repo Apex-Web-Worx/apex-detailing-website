@@ -18,6 +18,7 @@ import {
   markCompleted,
   markInProgress,
   markReadyAndNotify,
+  stopDetailingTimer,
   renderVehicleReadyPreview,
   retryReviewRequest,
   seedNotificationDefaults,
@@ -26,6 +27,7 @@ import {
   skipReviewRequest,
   unskipReviewRequest,
 } from "../lib/pickup-workflow";
+import { listRecentInboundSms, sendSampleInboundForward } from "../lib/inbound-sms";
 import {
   DEFAULT_VEHICLE_READY_EMAIL,
   DEFAULT_VEHICLE_READY_SMS,
@@ -134,6 +136,19 @@ router.get("/admin/communications", requireAdmin, async (req, res) => {
   res.status(400).json({ message: "email or bookingId is required" });
 });
 
+router.get("/admin/inbound-sms", requireAdmin, async (_req, res) => {
+  res.json(await listRecentInboundSms());
+});
+
+router.post("/admin/inbound-sms/sample", requireAdmin, async (_req, res) => {
+  const result = await sendSampleInboundForward();
+  if (!result.ok) {
+    res.status(502).json({ message: result.error ?? "Failed to send sample SMS" });
+    return;
+  }
+  res.json({ ok: true });
+});
+
 router.get("/admin/bookings/:id/timeline", requireAdmin, async (req, res) => {
   const id = Number(req.params.id);
   if (!Number.isFinite(id)) {
@@ -190,6 +205,31 @@ router.post("/admin/bookings/:id/in-progress", requireAdmin, async (req, res) =>
   const updated = await markInProgress(id);
   if (!updated) {
     res.status(404).json({ message: "Booking not found" });
+    return;
+  }
+  res.json(updated);
+});
+
+router.post("/admin/bookings/:id/stop-timer", requireAdmin, async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isFinite(id)) {
+    res.status(400).json({ message: "Invalid id" });
+    return;
+  }
+  const updated = await stopDetailingTimer(id);
+  if (!updated) {
+    const [existing] = await db.select().from(bookingsTable).where(eq(bookingsTable.id, id));
+    if (!existing) {
+      res.status(404).json({ message: "Booking not found" });
+      return;
+    }
+    // Already stopped / not running — treat as success so a stale UI click
+    // after auto-heal does not show an error alert.
+    if (existing.status === "confirmed" && !existing.inProgressAt) {
+      res.json(existing);
+      return;
+    }
+    res.status(400).json({ message: "Only in-progress jobs can stop the timer." });
     return;
   }
   res.json(updated);

@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { Link } from "wouter";
 import type { Booking } from "@workspace/api-client-react";
-import { MoreHorizontal, Phone, Check, Play } from "lucide-react";
+import { MoreHorizontal, Phone, Check, Play, Square } from "lucide-react";
 import { formatDateShort, formatDuration, formatTime12h } from "@/lib/format";
 import {
   displayStatus,
@@ -33,7 +33,7 @@ export default function AppointmentRow({
   onEdit?: () => void;
   onCancel?: () => void;
 }) {
-  const { token, openReadyModal, startBooking, completeBooking, sendReviewRequest, skipReviewRequest, unskipReviewRequest } = useAdmin();
+  const { token, openReadyModal, startBooking, stopTimer, completeBooking, sendReviewRequest, skipReviewRequest, unskipReviewRequest } = useAdmin();
   const photosQuery = useAdminBookingPhotoIndex(token);
   const photoIds = photoIdsForBooking(photosQuery.data, booking.id);
   const photoCount = photoIds.length;
@@ -44,6 +44,7 @@ export default function AppointmentRow({
   const ready = canMarkReady(booking);
   const canStart = canStartJob(booking);
   const canComplete = canMarkCompleted(booking);
+  const canStop = status === "in_progress";
   const date = bookingShopDate(booking);
   const time = formatTime12h(bookingShopTime(booking));
   const showTimer =
@@ -64,9 +65,20 @@ export default function AppointmentRow({
     </StatusAction>
   ) : null;
 
+  const stopAction = canStop ? (
+    <button
+      type="button"
+      onClick={() => void stopTimer(booking.id)}
+      className="h-11 px-3 rounded-xl border border-white/15 bg-white/5 text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 hover:bg-white/10 touch-manipulation whitespace-nowrap shrink-0"
+    >
+      <Square className="w-3.5 h-3.5" /> Stop timer
+    </button>
+  ) : null;
+
   const icons = (
     <div className="flex flex-row items-center gap-1.5 shrink-0 ml-auto">
       {primaryAction}
+      {stopAction}
       <a
         href={`tel:${booking.phone}`}
         className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-[#23B9FF] hover:bg-white/5 touch-manipulation"
@@ -105,6 +117,18 @@ export default function AppointmentRow({
                 }}
               >
                 Start detailing
+              </button>
+            ) : null}
+            {canStop ? (
+              <button
+                type="button"
+                className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
+                onClick={() => {
+                  setMenu(false);
+                  void stopTimer(booking.id);
+                }}
+              >
+                Stop timer
               </button>
             ) : null}
             {ready ? (
