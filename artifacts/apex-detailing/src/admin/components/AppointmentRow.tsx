@@ -16,7 +16,6 @@ import { StatusBadge } from "./ui";
 import { useAdmin } from "../context";
 import {
   AdminBookingPhoto,
-  CustomerPhotoBadge,
   photoIdsForBooking,
   useAdminBookingPhotoIndex,
 } from "./CustomerPhotos";
@@ -309,7 +308,6 @@ export default function AppointmentRow({
               {photoCount ? ` · ${photoCount} photo${photoCount === 1 ? "" : "s"}` : ""}
               {preview ? ` · ${preview}` : ""}
             </p>
-            <CustomerPhotoBadge count={photoCount} className="md:hidden mt-1" />
           </div>
         </button>
         {actions}
