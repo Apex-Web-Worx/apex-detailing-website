@@ -113,10 +113,12 @@ export default function AppointmentsPage() {
 
   return (
     <div className="w-full space-y-4">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-xl md:text-2xl font-bold">Appointments</h2>
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="grid grid-cols-2 rounded-xl border border-white/10 overflow-hidden w-full sm:w-56">
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="text-xl md:text-2xl font-bold">Appointments</h2>
+        </div>
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
+          <div className="col-span-2 grid grid-cols-2 rounded-xl border border-white/10 overflow-hidden sm:w-56">
             <button
               type="button"
               onClick={() => setView("list")}
@@ -132,22 +134,22 @@ export default function AppointmentsPage() {
               Calendar
             </button>
           </div>
-          <GhostButton type="button" onClick={() => void refetch()} disabled={isRefreshing} className="px-3">
+          <GhostButton type="button" onClick={() => void refetch()} disabled={isRefreshing} className="min-h-11 px-3">
             <RefreshCw className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`} /> Refresh
           </GhostButton>
-          <GhostButton type="button" onClick={() => openBlockDate()} className="px-3">
+          <GhostButton type="button" onClick={() => openBlockDate()} className="min-h-11 px-3">
             Block
           </GhostButton>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_12rem_12rem_auto] gap-2 items-center">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_12rem_12rem_auto] gap-2 items-stretch">
         <input
           type="search"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search appointments"
-          className={fieldClass}
+          className={`${fieldClass} min-h-11`}
           aria-label="Search appointments"
         />
         <AdminDatePicker
@@ -173,7 +175,7 @@ export default function AppointmentsPage() {
         {(filterDate || filterStatus) && (
           <GhostButton
             type="button"
-            className="h-11"
+            className="min-h-11 w-full sm:w-auto"
             onClick={() => {
               setFilterDate("");
               setFilterStatus("");

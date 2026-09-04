@@ -94,16 +94,16 @@ export default function DashboardHome() {
         <h2 className="text-xl md:text-2xl font-bold">
           {greetingForNow()}, {ADMIN_FIRST}
         </h2>
-        <div className="flex flex-wrap gap-2">
-          <GhostButton type="button" onClick={() => void refetch()} disabled={isRefreshing} className="px-3">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 w-full sm:w-auto">
+          <GhostButton type="button" onClick={() => void refetch()} disabled={isRefreshing} className="px-3 w-full sm:w-auto">
             <RefreshCw className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`} /> Refresh
           </GhostButton>
-          <GhostButton type="button" onClick={() => openBlockDate()} className="px-3">
+          <GhostButton type="button" onClick={() => openBlockDate()} className="px-3 w-full sm:w-auto">
             <CalendarOff className="w-4 h-4" /> Block
           </GhostButton>
           <Link
             href="/book"
-            className="inline-flex items-center justify-center gap-2 min-h-11 h-11 px-4 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold transition duration-200 hover:bg-[#ff4adc] touch-manipulation"
+            className="inline-flex items-center justify-center gap-2 min-h-11 h-11 px-4 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold transition duration-200 hover:bg-[#ff4adc] touch-manipulation w-full sm:w-auto"
           >
             <Plus className="w-4 h-4" /> New Appointment
           </Link>
@@ -171,7 +171,7 @@ export default function DashboardHome() {
                 <div className="flex flex-wrap gap-2 shrink-0">
                   <PrimaryButton
                     type="button"
-                    className="h-10 text-xs px-3"
+                    className="min-h-11 h-11 text-xs px-3"
                     disabled={reviewBusyId === item.bookingId}
                     onClick={() => {
                       setReviewBusyId(item.bookingId);
@@ -197,7 +197,7 @@ export default function DashboardHome() {
                   </PrimaryButton>
                   <GhostButton
                     type="button"
-                    className="h-10 text-xs px-3"
+                    className="min-h-11 h-11 text-xs px-3"
                     disabled={reviewBusyId === item.bookingId}
                     onClick={() => {
                       setReviewBusyId(item.bookingId);

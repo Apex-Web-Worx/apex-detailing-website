@@ -227,11 +227,11 @@ export default function ReadyForPickupModal({
           </div>
         )}
 
-        <div className="flex justify-end gap-2">
-          <GhostButton type="button" onClick={onClose}>
+        <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
+          <GhostButton type="button" onClick={onClose} className="w-full sm:w-auto min-h-12">
             Cancel
           </GhostButton>
-          <PrimaryButton type="button" disabled={submitting} onClick={submit} className="min-h-12">
+          <PrimaryButton type="button" disabled={submitting} onClick={submit} className="w-full sm:w-auto min-h-12">
             {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
             {resend ? "Resend notification" : "Mark ready & send"}
           </PrimaryButton>

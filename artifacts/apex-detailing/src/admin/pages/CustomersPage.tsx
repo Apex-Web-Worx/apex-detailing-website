@@ -59,12 +59,15 @@ export default function CustomersPage() {
     return (
       <div className="space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <Link href="/admin/customers" className="text-sm text-[#9CA3AF] hover:text-white">
+          <Link
+            href="/admin/customers"
+            className="inline-flex items-center min-h-11 text-sm text-[#9CA3AF] hover:text-white touch-manipulation"
+          >
             ← Customers
           </Link>
           <GhostButton
             type="button"
-            className="h-11 text-red-400 border-red-500/30 hover:bg-red-500/10"
+            className="min-h-11 h-11 text-red-400 border-red-500/30 hover:bg-red-500/10"
             disabled={deleting}
             onClick={() => void deleteClient()}
           >

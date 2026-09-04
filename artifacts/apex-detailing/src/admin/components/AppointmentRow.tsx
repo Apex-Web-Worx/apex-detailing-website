@@ -83,7 +83,7 @@ export default function AppointmentRow({
     <button
       type="button"
       onClick={() => void stopTimer(booking.id)}
-      className="h-11 px-3 rounded-xl border border-white/15 bg-white/5 text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 hover:bg-white/10 touch-manipulation whitespace-nowrap shrink-0"
+      className="min-h-11 h-11 px-3 rounded-xl border border-white/15 bg-white/5 text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 hover:bg-white/10 touch-manipulation whitespace-nowrap flex-1 md:flex-none"
     >
       <Square className="w-3.5 h-3.5" /> Stop timer
     </button>
@@ -247,17 +247,17 @@ export default function AppointmentRow({
   ) : null;
 
   const actions = (
-    <div className="flex flex-row flex-wrap items-center justify-end gap-1.5 shrink-0">
+    <div className="flex w-full md:w-auto flex-row items-center gap-1.5 shrink-0">
       {primaryAction}
       {stopAction}
       <a
         href={`tel:${booking.phone}`}
-        className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-[#23B9FF] hover:bg-white/5 touch-manipulation"
+        className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-[#23B9FF] hover:bg-white/5 touch-manipulation shrink-0"
         aria-label={`Call ${booking.customerName}`}
       >
         <Phone className="w-4 h-4" />
       </a>
-      <div className="relative" ref={menuRef}>
+      <div className="relative shrink-0" ref={menuRef}>
         <button
           type="button"
           onClick={() => setMenu((v) => !v)}
@@ -292,13 +292,16 @@ export default function AppointmentRow({
           className="flex items-start md:items-center gap-3 min-w-0 flex-1 text-left touch-manipulation"
         >
           {photo}
-          <div className="shrink-0 w-[4.5rem]">
+          <div className="shrink-0">
             <p className="text-sm font-bold text-white tabular-nums leading-none">{time}</p>
-            <div className="mt-1.5">
+            <div className="mt-1.5 hidden md:block">
               <StatusBadge status={status} />
             </div>
           </div>
           <div className="min-w-0 flex-1">
+            <div className="mb-1 md:hidden">
+              <StatusBadge status={status} />
+            </div>
             <p className="font-semibold text-white leading-snug truncate">{booking.serviceName}</p>
             <p className="mt-0.5 text-sm text-[#9CA3AF] truncate">
               {booking.customerName} · {booking.vehicle}
@@ -327,7 +330,7 @@ function StatusAction({
     <button
       type="button"
       onClick={onClick}
-      className="h-11 px-3 rounded-xl bg-[#FF2AD4] text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 hover:bg-[#ff4adc] touch-manipulation whitespace-nowrap shrink-0"
+      className="min-h-11 h-11 px-3 rounded-xl bg-[#FF2AD4] text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 hover:bg-[#ff4adc] touch-manipulation whitespace-nowrap flex-1 md:flex-none"
     >
       {children}
     </button>

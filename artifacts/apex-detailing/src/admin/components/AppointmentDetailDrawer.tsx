@@ -413,7 +413,7 @@ export default function AppointmentDetailDrawer() {
                   </button>
                 </div>
               )}
-              <GhostButton type="button" className="h-10 text-xs" onClick={() => openReadyModal(detail, true)}>
+              <GhostButton type="button" className="min-h-11 h-11 text-xs" onClick={() => openReadyModal(detail, true)}>
                 Resend notification
               </GhostButton>
             </section>
@@ -440,7 +440,7 @@ export default function AppointmentDetailDrawer() {
               {status !== "confirmed" && !reviewSkipped ? (
                 <GhostButton
                   type="button"
-                  className="h-10 text-xs w-full"
+                  className="min-h-11 h-11 text-xs w-full"
                   disabled={busy || Boolean(reviewSent)}
                   onClick={() => void sendReview()}
                 >
@@ -450,7 +450,7 @@ export default function AppointmentDetailDrawer() {
               {reviewSkipped ? (
                 <GhostButton
                   type="button"
-                  className="h-10 text-xs w-full"
+                  className="min-h-11 h-11 text-xs w-full"
                   disabled={busy}
                   onClick={() => void allowReview()}
                 >
@@ -459,7 +459,7 @@ export default function AppointmentDetailDrawer() {
               ) : !reviewSent ? (
                 <GhostButton
                   type="button"
-                  className="h-10 text-xs w-full"
+                  className="min-h-11 h-11 text-xs w-full"
                   disabled={busy}
                   onClick={() => void skipReview()}
                 >
@@ -569,10 +569,10 @@ export default function AppointmentDetailDrawer() {
             </a>
           </div>
           {canAct && (
-            <div className="flex gap-2">
+            <div className="grid grid-cols-2 gap-2">
               <GhostButton
                 type="button"
-                className="flex-1"
+                className="min-h-12 w-full"
                 onClick={() => {
                   setEditing(detail);
                 }}
@@ -581,7 +581,7 @@ export default function AppointmentDetailDrawer() {
               </GhostButton>
               <GhostButton
                 type="button"
-                className="flex-1 text-red-400 border-red-500/20 hover:bg-red-500/10"
+                className="min-h-12 w-full text-red-400 border-red-500/20 hover:bg-red-500/10"
                 onClick={() => cancelBooking(detail.id)}
               >
                 Cancel
@@ -591,7 +591,7 @@ export default function AppointmentDetailDrawer() {
           {(status === "in_progress" || status === "ready_for_pickup") && (
             <GhostButton
               type="button"
-              className="w-full text-red-400 border-red-500/20 hover:bg-red-500/10"
+              className="w-full min-h-12 text-red-400 border-red-500/20 hover:bg-red-500/10"
               onClick={() => cancelBooking(detail.id)}
             >
               Cancel appointment

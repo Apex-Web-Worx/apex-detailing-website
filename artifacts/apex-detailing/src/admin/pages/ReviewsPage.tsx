@@ -176,7 +176,7 @@ export default function ReviewsPage() {
         )}
       </AdminCard>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
         {(
           [
             ["action", `Needs send (${counts.action})`],
@@ -241,7 +241,7 @@ export default function ReviewsPage() {
                   {item.reviewStatus !== "sent" && item.reviewStatus !== "skipped" ? (
                     <PrimaryButton
                       type="button"
-                      className="h-10 text-xs px-3"
+                      className="min-h-11 h-11 text-xs px-3"
                       disabled={busy}
                       onClick={() =>
                         void run(item.bookingId, async () => {
@@ -258,7 +258,7 @@ export default function ReviewsPage() {
                   {item.reviewStatus === "failed" ? (
                     <GhostButton
                       type="button"
-                      className="h-10 text-xs px-3"
+                      className="min-h-11 h-11 text-xs px-3"
                       disabled={busy}
                       onClick={() =>
                         void run(item.bookingId, async () => {
@@ -273,7 +273,7 @@ export default function ReviewsPage() {
                   {item.reviewStatus === "skipped" ? (
                     <GhostButton
                       type="button"
-                      className="h-10 text-xs px-3"
+                      className="min-h-11 h-11 text-xs px-3"
                       disabled={busy}
                       onClick={() =>
                         void run(item.bookingId, async () => {
@@ -287,7 +287,7 @@ export default function ReviewsPage() {
                   ) : item.reviewStatus !== "sent" ? (
                     <GhostButton
                       type="button"
-                      className="h-10 text-xs px-3"
+                      className="min-h-11 h-11 text-xs px-3"
                       disabled={busy}
                       onClick={() =>
                         void run(item.bookingId, async () => {
@@ -301,7 +301,7 @@ export default function ReviewsPage() {
                   ) : null}
                   <GhostButton
                     type="button"
-                    className="h-10 text-xs px-3"
+                    className="min-h-11 h-11 text-xs px-3"
                     onClick={() => openAppointment(item.bookingId)}
                   >
                     View appointment
