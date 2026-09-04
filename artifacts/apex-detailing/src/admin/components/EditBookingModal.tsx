@@ -22,7 +22,7 @@ import {
   formatTime12h,
   todayDateString,
 } from "@/lib/format";
-import { scheduledAtToShopDate, scheduledAtToShopTime } from "../utils";
+import { parseScheduledAt, scheduledAtToShopDate, scheduledAtToShopTime } from "../utils";
 import { fieldClass, PrimaryButton } from "./ui";
 
 export default function EditBookingModal({
@@ -72,7 +72,7 @@ export default function EditBookingModal({
           <button
             onClick={onClose}
             aria-label="Close"
-            className="w-9 h-9 flex items-center justify-center rounded-lg text-[#9CA3AF] hover:text-white hover:bg-white/5"
+            className="w-11 h-11 flex items-center justify-center rounded-xl text-[#9CA3AF] hover:text-white hover:bg-white/5 touch-manipulation"
           >
             <XIcon className="w-5 h-5" />
           </button>
@@ -225,8 +225,8 @@ function DetailsTab({
       <p className="text-xs text-[#9CA3AF]">
         Saving updates the booking record and re-syncs the Google Calendar event. The customer is not emailed.
       </p>
-      <div className="flex justify-end gap-3 pt-2">
-        <PrimaryButton type="submit" disabled={!dirty || submitting}>
+      <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-2">
+        <PrimaryButton type="submit" disabled={!dirty || submitting} className="w-full sm:w-auto min-h-12">
           {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
           <span>Save changes</span>
         </PrimaryButton>
@@ -253,10 +253,10 @@ function RescheduleTab({
   token: string;
   onSaved: () => void;
 }) {
-  const scheduledIso =
-    typeof booking.scheduledAt === "string"
-      ? booking.scheduledAt
-      : new Date(booking.scheduledAt as unknown as string).toISOString();
+  const scheduledDate = parseScheduledAt(
+    booking.scheduledAt as unknown as string | Date | number | null,
+  );
+  const scheduledIso = scheduledDate?.toISOString() ?? "";
   const currentDate = scheduledAtToShopDate(scheduledIso);
   const currentTime = scheduledAtToShopTime(scheduledIso);
   const today = todayDateString();
@@ -340,14 +340,14 @@ function RescheduleTab({
             <button
               onClick={goPrev}
               disabled={windowStart === today}
-              className="w-8 h-8 rounded-lg border border-white/10 hover:bg-white/5 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+              className="w-11 h-11 rounded-xl border border-white/10 hover:bg-white/5 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center touch-manipulation"
               aria-label="Previous"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={goNext}
-              className="w-8 h-8 rounded-lg border border-white/10 hover:bg-white/5 flex items-center justify-center"
+              className="w-11 h-11 rounded-xl border border-white/10 hover:bg-white/5 flex items-center justify-center touch-manipulation"
               aria-label="Next"
             >
               <ChevronRight className="w-4 h-4" />
@@ -433,8 +433,12 @@ function RescheduleTab({
       <p className="text-xs text-[#9CA3AF] mb-4">
         Confirming sends the customer the standard reschedule email and moves the Google Calendar event.
       </p>
-      <div className="flex justify-end gap-3">
-        <PrimaryButton onClick={submit} disabled={!pickedDate || !pickedTime || isCurrentSlot || submitting}>
+      <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
+        <PrimaryButton
+          onClick={submit}
+          disabled={!pickedDate || !pickedTime || isCurrentSlot || submitting}
+          className="w-full sm:w-auto min-h-12"
+        >
           {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
           <span>{isCurrentSlot ? "Pick a different time" : "Confirm new time"}</span>
         </PrimaryButton>
