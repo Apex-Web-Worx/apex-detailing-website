@@ -365,6 +365,45 @@ export async function markInProgress(bookingId: number) {
   return updated;
 }
 
+/**
+ * Put a job back to Confirmed (step 1 / Start) and clear the detailing timer
+ * + pickup workflow fields. Does NOT send any customer SMS/email.
+ * Customer, vehicle, schedule, and notes are left unchanged.
+ */
+export async function resetWorkflowToStart(bookingId: number) {
+  const [booking] = await db.select().from(bookingsTable).where(eq(bookingsTable.id, bookingId));
+  if (!booking) return { error: "not_found" as const };
+  if (booking.status === "cancelled") return { error: "cancelled" as const };
+
+  await cancelScheduledReviews(bookingId, "Workflow reset by admin — no customer notify");
+
+  const now = new Date();
+  const [updated] = await db
+    .update(bookingsTable)
+    .set({
+      status: "confirmed",
+      inProgressAt: null,
+      readyAt: null,
+      pickupAt: null,
+      completedAt: null,
+      detailDurationMinutes: null,
+    })
+    .where(eq(bookingsTable.id, bookingId))
+    .returning();
+  if (!updated) return { error: "not_found" as const };
+
+  await logEvent({
+    bookingId,
+    actor: "admin",
+    action: "workflow_reset",
+    status: "confirmed",
+    detail: "Reset to Confirmed / Start — timer cleared, no customer messages",
+    occurredAt: now,
+  });
+
+  return { booking: updated };
+}
+
 /** Auto-start only if scheduled time is within this window (not ancient jobs). */
 const AUTO_START_WINDOW_MS = 2 * 60 * 60 * 1000;
 

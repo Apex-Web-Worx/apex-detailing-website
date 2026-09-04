@@ -18,6 +18,7 @@ import {
   markCompleted,
   markInProgress,
   markReadyAndNotify,
+  resetWorkflowToStart,
   stopDetailingTimer,
   renderVehicleReadyPreview,
   retryReviewRequest,
@@ -233,6 +234,28 @@ router.post("/admin/bookings/:id/stop-timer", requireAdmin, async (req, res) => 
     return;
   }
   res.json(updated);
+});
+
+router.post("/admin/bookings/:id/reset-to-start", requireAdmin, async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isFinite(id)) {
+    res.status(400).json({ message: "Invalid id" });
+    return;
+  }
+  const result = await resetWorkflowToStart(id);
+  if ("error" in result) {
+    if (result.error === "not_found") {
+      res.status(404).json({ message: "Booking not found" });
+      return;
+    }
+    if (result.error === "cancelled") {
+      res.status(400).json({ message: "Cannot reset a cancelled booking." });
+      return;
+    }
+    res.status(400).json({ message: "Could not reset booking." });
+    return;
+  }
+  res.json(result.booking);
 });
 
 router.post("/admin/bookings/:id/ready-for-pickup", requireAdmin, async (req, res) => {

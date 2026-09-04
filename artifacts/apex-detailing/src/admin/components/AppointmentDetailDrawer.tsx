@@ -55,6 +55,7 @@ export default function AppointmentDetailDrawer() {
     openReadyModal,
     startBooking,
     stopTimer,
+    resetToStart,
     completeBooking,
     sendReviewRequest,
     skipReviewRequest,
@@ -352,6 +353,30 @@ export default function AppointmentDetailDrawer() {
                   done={false}
                 />
               </ol>
+              {status !== "confirmed" ? (
+                <GhostButton
+                  type="button"
+                  className="mt-3 w-full h-11 text-xs"
+                  disabled={busy}
+                  onClick={async () => {
+                    if (
+                      !confirm(
+                        "Reset this appointment to Confirmed / Start? This clears the timer and pickup status. No messages will be sent to the customer.",
+                      )
+                    ) {
+                      return;
+                    }
+                    setBusy(true);
+                    try {
+                      await resetToStart(detail.id);
+                    } finally {
+                      setBusy(false);
+                    }
+                  }}
+                >
+                  Reset to Start (clear timer, no messages)
+                </GhostButton>
+              ) : null}
             </section>
           ) : null}
 

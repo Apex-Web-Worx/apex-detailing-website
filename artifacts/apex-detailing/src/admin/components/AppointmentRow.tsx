@@ -14,7 +14,6 @@ import {
 } from "../utils";
 import { StatusBadge } from "./ui";
 import { useAdmin } from "../context";
-import DetailTimer from "./DetailTimer";
 import {
   AdminBookingPhoto,
   CustomerPhotoBadge,
@@ -47,9 +46,8 @@ export default function AppointmentRow({
   const canStop = status === "in_progress";
   const date = bookingShopDate(booking);
   const time = formatTime12h(bookingShopTime(booking));
-  const showTimer =
-    (status === "in_progress" || status === "ready_for_pickup" || status === "completed") &&
-    (booking.inProgressAt || booking.detailDurationMinutes != null);
+  // Detailing timers belong on the appointment detail drawer (and completed
+  // history), not on the main list / dashboard rows.
 
   const primaryAction = canStart ? (
     <StatusAction onClick={() => void startBooking(booking.id)}>
@@ -278,11 +276,6 @@ export default function AppointmentRow({
                   <span className="text-sm font-bold text-white shrink-0">{time}</span>
                   <StatusBadge status={status} />
                 </div>
-                {showTimer ? (
-                  <div className="mt-1">
-                    <DetailTimer booking={booking} size="sm" />
-                  </div>
-                ) : null}
                 <p className="mt-0.5 font-semibold text-white leading-snug">{booking.serviceName}</p>
                 <p className="mt-0.5 text-sm text-[#9CA3AF] truncate">
                   {booking.customerName} · {booking.vehicle}
@@ -309,11 +302,6 @@ export default function AppointmentRow({
             </div>
           </div>
           <div className="min-w-0">
-            {showTimer ? (
-              <div className="mb-1">
-                <DetailTimer booking={booking} size="sm" />
-              </div>
-            ) : null}
             <p className="font-semibold text-white leading-snug truncate">{booking.serviceName}</p>
             <p className="mt-0.5 text-sm text-[#9CA3AF] truncate">
               {booking.customerName} · {booking.vehicle}
