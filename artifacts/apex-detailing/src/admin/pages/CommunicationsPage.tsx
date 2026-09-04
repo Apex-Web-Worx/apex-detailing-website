@@ -44,8 +44,29 @@ export default function CommunicationsPage() {
   const [saving, setSaving] = useState(false);
   const [note, setNote] = useState<string | null>(null);
   const [inbound, setInbound] = useState<InboundRow[]>([]);
+  const [sampleBusy, setSampleBusy] = useState(false);
 
   const ready = bookings.filter((b) => displayStatus(b) === "ready_for_pickup" || b.readyAt);
+
+  const sendSample = async () => {
+    setSampleBusy(true);
+    setNote(null);
+    try {
+      const res = await fetch("/api/admin/inbound-sms/sample", {
+        method: "POST",
+        headers: { "x-admin-token": token },
+      });
+      if (!res.ok) {
+        const json = (await res.json().catch(() => null)) as { message?: string } | null;
+        throw new Error(json?.message ?? `Send failed (${res.status})`);
+      }
+      setNote("Sample reply sent to your phone.");
+    } catch (e) {
+      setNote(e instanceof Error ? e.message : "Send failed");
+    } finally {
+      setSampleBusy(false);
+    }
+  };
 
   useEffect(() => {
     fetch("/api/admin/notification-templates", { headers: { "x-admin-token": token } })
@@ -127,10 +148,23 @@ export default function CommunicationsPage() {
       {tab === "inbox" && (
         <div className="space-y-6">
           <section className="space-y-3">
-            <h3 className="text-sm font-semibold text-white">Customer SMS replies</h3>
-            <p className="text-xs text-[#9CA3AF]">
-              When a client texts your Twilio number, the message is forwarded to your phone and listed here.
-            </p>
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div className="space-y-1 min-w-0">
+                <h3 className="text-sm font-semibold text-white">Customer SMS replies</h3>
+                <p className="text-xs text-[#9CA3AF]">
+                  When a client texts your Twilio number, the message is forwarded to your phone and listed here.
+                </p>
+              </div>
+              <PrimaryButton
+                type="button"
+                className="h-10 text-xs shrink-0"
+                disabled={sampleBusy}
+                onClick={() => void sendSample()}
+              >
+                {sampleBusy ? "Sending…" : "Send sample to my phone"}
+              </PrimaryButton>
+            </div>
+            {note && tab === "inbox" ? <p className="text-sm text-emerald-300">{note}</p> : null}
             {inbound.length === 0 ? (
               <EmptyState
                 title="No customer replies yet"

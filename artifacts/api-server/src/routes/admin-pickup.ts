@@ -27,7 +27,7 @@ import {
   skipReviewRequest,
   unskipReviewRequest,
 } from "../lib/pickup-workflow";
-import { listRecentInboundSms } from "../lib/inbound-sms";
+import { listRecentInboundSms, sendSampleInboundForward } from "../lib/inbound-sms";
 import {
   DEFAULT_VEHICLE_READY_EMAIL,
   DEFAULT_VEHICLE_READY_SMS,
@@ -138,6 +138,15 @@ router.get("/admin/communications", requireAdmin, async (req, res) => {
 
 router.get("/admin/inbound-sms", requireAdmin, async (_req, res) => {
   res.json(await listRecentInboundSms());
+});
+
+router.post("/admin/inbound-sms/sample", requireAdmin, async (_req, res) => {
+  const result = await sendSampleInboundForward();
+  if (!result.ok) {
+    res.status(502).json({ message: result.error ?? "Failed to send sample SMS" });
+    return;
+  }
+  res.json({ ok: true });
 });
 
 router.get("/admin/bookings/:id/timeline", requireAdmin, async (req, res) => {

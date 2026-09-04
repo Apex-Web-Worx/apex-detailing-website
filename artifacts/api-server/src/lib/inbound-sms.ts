@@ -142,6 +142,27 @@ export async function handleInboundSms(payload: InboundSmsPayload): Promise<{
   return { forwarded: true, bookingId: booking?.id ?? null };
 }
 
+/** Demo text so the owner can see how a client reply forward looks. */
+export async function sendSampleInboundForward(): Promise<{
+  ok: boolean;
+  error?: string;
+}> {
+  const sample =
+    `Apex SMS reply from Jane Doe (booking #42) · 2022 BMW M4\n` +
+    `+14175551234:\n` +
+    `thank you but i cant come this time\n\n` +
+    `To answer them, text or call +14175551234 (replying here stays on the Twilio line).\n\n` +
+    `(This is a SAMPLE — not a real client.)`;
+
+  const result = await sendSmsWithResult({
+    to: OWNER_SMS_TO,
+    body: sample,
+    context: "inbound-forward-sample",
+  });
+  if (!result.ok) return { ok: false, error: result.error ?? "SMS send failed" };
+  return { ok: true };
+}
+
 export async function listRecentInboundSms(limit = 40) {
   const rows = await db
     .select({
