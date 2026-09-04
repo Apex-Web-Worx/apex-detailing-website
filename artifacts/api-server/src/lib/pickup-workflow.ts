@@ -6,7 +6,7 @@ import {
   notificationTemplatesTable,
   shopSettingsTable,
 } from "@workspace/db";
-import { and, asc, desc, eq, inArray } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, lte } from "drizzle-orm";
 import {
   formatDateLong,
   formatTime12h,
@@ -360,6 +360,61 @@ export async function markInProgress(bookingId: number) {
     action: "status_in_progress",
     status: "in_progress",
     detail: "Job started — detailing timer running",
+    occurredAt: now,
+  });
+  return updated;
+}
+
+/** Auto-start confirmed jobs whose scheduled time has arrived (or passed). */
+export async function autoStartDueJobs(now = new Date()): Promise<number> {
+  const due = await db
+    .select()
+    .from(bookingsTable)
+    .where(
+      and(eq(bookingsTable.status, "confirmed"), lte(bookingsTable.scheduledAt, now)),
+    );
+
+  let started = 0;
+  for (const booking of due) {
+    const startedAt = booking.scheduledAt;
+    const [updated] = await db
+      .update(bookingsTable)
+      .set({ status: "in_progress", inProgressAt: startedAt })
+      .where(
+        and(eq(bookingsTable.id, booking.id), eq(bookingsTable.status, "confirmed")),
+      )
+      .returning();
+    if (!updated) continue;
+    await logEvent({
+      bookingId: booking.id,
+      actor: "system",
+      action: "status_in_progress",
+      status: "in_progress",
+      detail: "Auto-started at scheduled time — detailing timer running",
+      occurredAt: startedAt,
+    });
+    started += 1;
+  }
+  return started;
+}
+
+/** Stop the live detailing timer and return the job to confirmed. */
+export async function stopDetailingTimer(bookingId: number) {
+  const now = new Date();
+  const [updated] = await db
+    .update(bookingsTable)
+    .set({ status: "confirmed", inProgressAt: null })
+    .where(
+      and(eq(bookingsTable.id, bookingId), eq(bookingsTable.status, "in_progress")),
+    )
+    .returning();
+  if (!updated) return null;
+  await logEvent({
+    bookingId,
+    actor: "admin",
+    action: "timer_stopped",
+    status: "confirmed",
+    detail: "Detailing timer stopped — job returned to confirmed",
     occurredAt: now,
   });
   return updated;

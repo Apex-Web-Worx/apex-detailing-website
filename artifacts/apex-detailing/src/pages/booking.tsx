@@ -1,4 +1,11 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import {
+  useState,
+  useMemo,
+  useEffect,
+  useRef,
+  type MouseEvent as ReactMouseEvent,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 import { forceDismissSplash } from "@/lib/bootSplash";
 import { Link } from "wouter";
 import {
@@ -22,6 +29,7 @@ import VehiclePhotoPicker from "@/components/VehiclePhotoPicker";
 import LanguageToggle from "@/components/LanguageToggle";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { packageDescKey, packageTitleKey, BOOKING_SLUG_TO_PKG, PKG_PHOTO } from "@/i18n/packageMap";
+import PriceTiers from "@/components/PriceTiers";
 import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
 import {
   revokePickedPhotos,
@@ -243,7 +251,7 @@ export default function BookingPage() {
         ) : step === "service" ? (
           <ServiceStep
             selected={service}
-            onSelect={(s) => {
+            onPick={(s) => {
               // Clear any previously-picked slot when the service changes,
               // since service-specific availability (e.g. Friday Express
               // only) means the prior slot may no longer be valid.
@@ -252,8 +260,8 @@ export default function BookingPage() {
                 setTime(null);
               }
               setService(s);
-              setStep("datetime");
             }}
+            onContinue={() => setStep("datetime")}
           />
         ) : step === "datetime" ? (
           <DateTimeStep
@@ -349,25 +357,108 @@ export default function BookingPage() {
   );
 }
 
+/** True when this interaction should use two-tap confirm (phones / touch). */
+function isTwoTapInteraction(e?: ReactMouseEvent | ReactPointerEvent): boolean {
+  if (typeof window === "undefined") return false;
+  const ne = e?.nativeEvent as
+    | (Event & {
+        pointerType?: string;
+        sourceCapabilities?: { firesTouchEvents?: boolean };
+      })
+    | undefined;
+  if (ne?.pointerType === "touch" || ne?.pointerType === "pen") return true;
+  if (ne?.sourceCapabilities?.firesTouchEvents) return true;
+  if (window.matchMedia("(max-width: 1023px)").matches) return true;
+  if (window.matchMedia("(hover: none), (pointer: coarse)").matches) return true;
+  return false;
+}
+
+function readTwoTapUi(): boolean {
+  if (typeof window === "undefined") return false;
+  return (
+    window.matchMedia("(max-width: 1023px)").matches ||
+    window.matchMedia("(hover: none), (pointer: coarse)").matches
+  );
+}
+
 /* ---------- Service step ---------- */
 function ServiceStep({
   selected,
-  onSelect,
+  onPick,
+  onContinue,
 }: {
   selected: Service | null;
-  onSelect: (s: Service) => void;
+  onPick: (s: Service) => void;
+  onContinue: () => void;
 }) {
   const { t } = useLanguage();
   const { data, isLoading, error } = useListServices();
-  const phone =
-    typeof window !== "undefined" &&
-    window.matchMedia("(max-width: 1023px)").matches;
+  // Sync init so the first paint / first tap is not treated as desktop.
+  const [twoTapUi, setTwoTapUi] = useState(readTwoTapUi);
+  const [highlightedId, setHighlightedId] = useState<number | null>(
+    selected?.id != null ? Number(selected.id) : null,
+  );
+  // Refs survive re-renders and ignore ghost double-clicks from one physical tap.
+  const pendingIdRef = useRef<number | null>(
+    selected?.id != null ? Number(selected.id) : null,
+  );
+  const armedAtRef = useRef<number>(0);
+
+  useEffect(() => {
+    const sync = () => setTwoTapUi(readTwoTapUi());
+    sync();
+    const mqs = [
+      window.matchMedia("(max-width: 1023px)"),
+      window.matchMedia("(hover: none), (pointer: coarse)"),
+    ];
+    mqs.forEach((mq) => mq.addEventListener("change", sync));
+    return () => mqs.forEach((mq) => mq.removeEventListener("change", sync));
+  }, []);
+
+  useEffect(() => {
+    const id = selected?.id != null ? Number(selected.id) : null;
+    setHighlightedId(id);
+    pendingIdRef.current = id;
+    if (id != null) armedAtRef.current = Date.now();
+  }, [selected?.id]);
+
+  const handleServiceTap = (s: Service, e: ReactMouseEvent) => {
+    const id = Number(s.id);
+    const twoTap = isTwoTapInteraction(e);
+
+    // Mouse / trackpad desktop: one click selects and advances.
+    if (!twoTap) {
+      pendingIdRef.current = null;
+      armedAtRef.current = 0;
+      onPick(s);
+      onContinue();
+      return;
+    }
+
+    const pending = pendingIdRef.current;
+    const elapsed = Date.now() - armedAtRef.current;
+    // Same card + enough time since arming = intentional second tap.
+    // Ignore <320ms repeats (ghost click / touch+click from one finger press).
+    if (pending != null && pending === id && elapsed >= 320) {
+      pendingIdRef.current = null;
+      armedAtRef.current = 0;
+      onPick(s);
+      onContinue();
+      return;
+    }
+
+    // First tap (or switch to another package): arm + highlight only.
+    pendingIdRef.current = id;
+    armedAtRef.current = Date.now();
+    setHighlightedId(id);
+    onPick(s);
+  };
 
   return (
-    <section>
+    <section className={twoTapUi && selected ? "pb-28" : undefined}>
       <h1 className="text-3xl sm:text-4xl font-black mb-2 font-display">{t("book.choose")}</h1>
       <p className="text-gray-300 mb-8">
-        {t("book.chooseSub")}
+        {twoTapUi ? t("book.chooseSubMobile") : t("book.chooseSub")}
       </p>
 
       {isLoading && <Loading label={t("book.loadingServices")} />}
@@ -375,7 +466,8 @@ function ServiceStep({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
         {data?.map((s) => {
-          const isSelected = selected?.id === s.id;
+          const id = Number(s.id);
+          const isSelected = highlightedId === id || Number(selected?.id) === id;
           const iconMeta = SERVICE_ICONS[s.slug];
           const Icon = iconMeta?.icon;
           const badge = SERVICE_BADGES[s.slug];
@@ -385,18 +477,21 @@ function ServiceStep({
             <button
               key={s.id}
               type="button"
-              onClick={() => onSelect(s)}
-              onTouchEnd={(e) => {
-                e.preventDefault();
-                onSelect(s);
-              }}
-              className={`relative flex h-full min-h-[12rem] flex-col text-left rounded-2xl border overflow-hidden transition [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-2xl [@media(hover:hover)_and_(pointer:fine)]:hover:border-[#00E5FF]/40 ${
+              aria-pressed={isSelected}
+              onClick={(e) => handleServiceTap(s, e)}
+              className={`relative flex h-full min-h-[12rem] flex-col text-left rounded-2xl border overflow-hidden transition touch-manipulation select-none [-webkit-tap-highlight-color:transparent] [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-2xl [@media(hover:hover)_and_(pointer:fine)]:hover:border-[#00E5FF]/40 ${
                 isSelected
-                  ? "border-[#00E5FF] bg-[#00E5FF]/10"
+                  ? "border-[#FF1AD8] bg-[#FF1AD8]/10 shadow-[0_0_24px_rgba(255,26,216,0.22)] ring-1 ring-[#FF1AD8]/50"
                   : "border-white/10 bg-white/[0.02]"
               }`}
             >
-              {photo && !phone && (
+              {isSelected && (
+                <span className="absolute top-3 right-3 z-10 inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-[#FF1AD8] via-[#9D00FF] to-[#00E5FF] px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white shadow-lg">
+                  <Check className="w-3 h-3" />
+                  {t("book.selected")}
+                </span>
+              )}
+              {photo && !twoTapUi && (
                 <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden bg-[#111]">
                   <OptimizedImage
                     src={imageUrl(photo)}
@@ -415,11 +510,13 @@ function ServiceStep({
               <div className="flex flex-1 flex-col p-6">
               <div className="flex items-start gap-3 mb-3">
                 {Icon && (
-                  <span className="shrink-0 p-2 rounded-lg bg-white/5 inline-flex items-center justify-center">
+                  <span className={`shrink-0 p-2 rounded-lg inline-flex items-center justify-center ${
+                    isSelected ? "bg-[#FF1AD8]/15 border border-[#FF1AD8]/40" : "bg-white/5"
+                  }`}>
                     <Icon className={`w-5 h-5 ${iconMeta.color}`} />
                   </span>
                 )}
-                <div className="min-w-0 flex-1">
+                <div className="min-w-0 flex-1 pr-16">
                   <h3 className="text-lg font-bold text-white leading-snug">
                     {packageTitleKey(s.slug) ? t(packageTitleKey(s.slug)!) : s.name}
                   </h3>
@@ -444,7 +541,7 @@ function ServiceStep({
                 </div>
               </div>
 
-              <div className="flex items-baseline gap-2 mb-3 flex-wrap">
+              <div className="flex items-baseline gap-2 mb-2 flex-wrap">
                 {s.priceCents > 0 ? (
                   <>
                     <span className="text-xs uppercase tracking-wider text-gray-500 font-semibold">
@@ -464,6 +561,7 @@ function ServiceStep({
                   {formatDuration(s.durationMinutes)}
                 </span>
               </div>
+              <PriceTiers pkg={BOOKING_SLUG_TO_PKG[s.slug] ?? ""} className="mb-3" />
 
               <p className="text-sm text-gray-300 mb-4 leading-relaxed flex-1">
                 {packageDescKey(s.slug) ? t(packageDescKey(s.slug)!) : s.description}
@@ -476,8 +574,13 @@ function ServiceStep({
               </p>
 
               <div className="mt-auto flex items-center justify-end pt-1">
-                <span className="text-[#00E5FF] font-bold text-xs flex items-center gap-1">
-                  {t("book.select")} <ArrowRight className="w-3.5 h-3.5" />
+                <span
+                  className={`font-bold text-xs flex items-center gap-1 ${
+                    isSelected && twoTapUi ? "text-[#FF1AD8]" : "text-[#00E5FF]"
+                  }`}
+                >
+                  {isSelected && twoTapUi ? t("book.tapAgain") : t("book.select")}{" "}
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </div>
               </div>
@@ -485,6 +588,27 @@ function ServiceStep({
           );
         })}
       </div>
+
+      {twoTapUi && selected && (
+        <div
+          className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#0a0a0a]/95 backdrop-blur-md"
+          style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
+        >
+          <div className="mx-auto max-w-5xl px-4 pt-3">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onContinue();
+              }}
+              className="btn-cyber btn-cyber-lg btn-cyber-block w-full min-h-12"
+            >
+              <span>{t("book.continue")}</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

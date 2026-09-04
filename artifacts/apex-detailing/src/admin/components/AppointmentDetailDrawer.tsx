@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { Mail, MessageSquare, Phone, X, Check, Play, Star } from "lucide-react";
+import { Mail, MessageSquare, Phone, X, Check, Play, Square, Star } from "lucide-react";
 import { formatDateTimeLong, formatDuration } from "@/lib/format";
 import { useAdmin } from "../context";
 import {
@@ -52,6 +52,7 @@ export default function AppointmentDetailDrawer() {
     refetch,
     openReadyModal,
     startBooking,
+    stopTimer,
     completeBooking,
     sendReviewRequest,
     skipReviewRequest,
@@ -320,7 +321,7 @@ export default function AppointmentDetailDrawer() {
                 <StatusStep
                   n={1}
                   label="Confirmed"
-                  hint="Tap Start detailing when you begin the job."
+                  hint="Starts automatically at the scheduled time if you forget — or tap Start when you begin."
                   current={status === "confirmed"}
                   done={status === "in_progress" || status === "ready_for_pickup" || status === "completed"}
                 />
@@ -472,6 +473,23 @@ export default function AppointmentDetailDrawer() {
             <PrimaryButton type="button" className="w-full min-h-12" disabled={busy} onClick={markInProgress}>
               <Play className="w-4 h-4" /> Start detailing
             </PrimaryButton>
+          )}
+          {status === "in_progress" && (
+            <GhostButton
+              type="button"
+              className="w-full min-h-12"
+              disabled={busy}
+              onClick={async () => {
+                setBusy(true);
+                try {
+                  await stopTimer(detail.id);
+                } finally {
+                  setBusy(false);
+                }
+              }}
+            >
+              <Square className="w-4 h-4" /> Stop timer
+            </GhostButton>
           )}
           {ready && (
             <PrimaryButton

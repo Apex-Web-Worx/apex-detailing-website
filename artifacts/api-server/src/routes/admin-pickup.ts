@@ -18,6 +18,7 @@ import {
   markCompleted,
   markInProgress,
   markReadyAndNotify,
+  stopDetailingTimer,
   renderVehicleReadyPreview,
   retryReviewRequest,
   seedNotificationDefaults,
@@ -190,6 +191,25 @@ router.post("/admin/bookings/:id/in-progress", requireAdmin, async (req, res) =>
   const updated = await markInProgress(id);
   if (!updated) {
     res.status(404).json({ message: "Booking not found" });
+    return;
+  }
+  res.json(updated);
+});
+
+router.post("/admin/bookings/:id/stop-timer", requireAdmin, async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isFinite(id)) {
+    res.status(400).json({ message: "Invalid id" });
+    return;
+  }
+  const updated = await stopDetailingTimer(id);
+  if (!updated) {
+    const [existing] = await db.select().from(bookingsTable).where(eq(bookingsTable.id, id));
+    if (!existing) {
+      res.status(404).json({ message: "Booking not found" });
+      return;
+    }
+    res.status(400).json({ message: "Only in-progress jobs can stop the timer." });
     return;
   }
   res.json(updated);
