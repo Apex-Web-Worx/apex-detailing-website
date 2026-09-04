@@ -35,7 +35,7 @@ export default function CustomersPage() {
     setDeleting(true);
     try {
       const res = await fetch(
-        `/api/admin/customers?email=${encodeURIComponent(selected.email)}`,
+        `/api/admin/customers?email=${encodeURIComponent(selected.key)}`,
         {
           method: "DELETE",
           headers: { "x-admin-token": token },
