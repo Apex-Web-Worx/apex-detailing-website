@@ -201,7 +201,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
                     setSearchOpen(true);
                   }}
                   onFocus={() => setSearchOpen(true)}
-                  placeholder="Search customers, vehicles, appointments…"
+                  placeholder="Search customers, appointments…"
                   className={cn(fieldClass, "pl-9 h-11 py-0")}
                 />
                 {searchOpen && searchQuery.trim() && (
@@ -233,7 +233,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
               <input
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search customers, vehicles…"
+                placeholder="Search customers…"
                 autoFocus
                 className={fieldClass}
               />
