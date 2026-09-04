@@ -92,13 +92,9 @@ export default function CustomersPage() {
               <p className="text-sm text-[#9CA3AF]">None on file.</p>
             ) : (
               selected.vehicles.map((v) => (
-                <Link
-                  key={v}
-                  href={`/admin/vehicles/${encodeURIComponent(`${selected.key}||${v.toLowerCase()}`)}`}
-                  className="block text-sm text-white hover:text-[#23B9FF] py-1"
-                >
+                <p key={v} className="text-sm text-white py-1">
                   {v}
-                </Link>
+                </p>
               ))
             )}
           </AdminCard>
