@@ -223,6 +223,12 @@ router.post("/admin/bookings/:id/stop-timer", requireAdmin, async (req, res) => 
       res.status(404).json({ message: "Booking not found" });
       return;
     }
+    // Already stopped / not running — treat as success so a stale UI click
+    // after auto-heal does not show an error alert.
+    if (existing.status === "confirmed" && !existing.inProgressAt) {
+      res.json(existing);
+      return;
+    }
     res.status(400).json({ message: "Only in-progress jobs can stop the timer." });
     return;
   }
