@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { Mail, MessageSquare, Phone, X, Check, Play, Star } from "lucide-react";
+import { Mail, MessageSquare, Phone, X, Check, Play, Square, Star } from "lucide-react";
 import { formatDateTimeLong, formatDuration } from "@/lib/format";
 import { useAdmin } from "../context";
 import {
@@ -35,6 +35,8 @@ type Communication = {
   id: number;
   messageType: string;
   channel: string;
+  direction?: string;
+  body?: string;
   status: string;
   error: string | null;
   scheduledAt: string | null;
@@ -52,6 +54,8 @@ export default function AppointmentDetailDrawer() {
     refetch,
     openReadyModal,
     startBooking,
+    stopTimer,
+    resetToStart,
     completeBooking,
     sendReviewRequest,
     skipReviewRequest,
@@ -105,6 +109,9 @@ export default function AppointmentDetailDrawer() {
   const alreadyReady = status === "ready_for_pickup" || status === "completed";
   const storedDetailMs = bookingStoredDetailMs(detail);
   const smsHref = `sms:${detail.phone}`;
+  const inboundReplies = comms.filter(
+    (c) => c.messageType === "customer_reply" || c.direction === "inbound",
+  );
   const pickupNote = comms.find((c) => c.messageType === "vehicle_ready" && (c.status === "sent" || c.status === "delivered"));
   const reviewFailed = comms.find((c) => c.messageType === "review_request" && c.status === "failed");
   const reviewSkipped = comms.find((c) => c.messageType === "review_request" && c.status === "skipped");
@@ -320,7 +327,7 @@ export default function AppointmentDetailDrawer() {
                 <StatusStep
                   n={1}
                   label="Confirmed"
-                  hint="Tap Start detailing when you begin the job."
+                  hint="Starts automatically at the scheduled time if you forget — or tap Start when you begin."
                   current={status === "confirmed"}
                   done={status === "in_progress" || status === "ready_for_pickup" || status === "completed"}
                 />
@@ -346,6 +353,30 @@ export default function AppointmentDetailDrawer() {
                   done={false}
                 />
               </ol>
+              {status !== "confirmed" ? (
+                <GhostButton
+                  type="button"
+                  className="mt-3 w-full h-11 text-xs"
+                  disabled={busy}
+                  onClick={async () => {
+                    if (
+                      !confirm(
+                        "Reset this appointment to Confirmed / Start? This clears the timer and pickup status. No messages will be sent to the customer.",
+                      )
+                    ) {
+                      return;
+                    }
+                    setBusy(true);
+                    try {
+                      await resetToStart(detail.id);
+                    } finally {
+                      setBusy(false);
+                    }
+                  }}
+                >
+                  Reset to Start (clear timer, no messages)
+                </GhostButton>
+              ) : null}
             </section>
           ) : null}
 
@@ -439,6 +470,24 @@ export default function AppointmentDetailDrawer() {
           ) : null}
 
           <section>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">Customer SMS replies</h3>
+            {inboundReplies.length === 0 ? (
+              <p className="text-sm text-[#9CA3AF]">No replies from this customer yet.</p>
+            ) : (
+              <ul className="space-y-3">
+                {inboundReplies.map((row) => (
+                  <li key={row.id} className="border-l border-orange-500/40 pl-3">
+                    <p className="text-xs text-[#9CA3AF]">
+                      {formatDateTimeLong(row.sentAt ?? row.createdAt)}
+                    </p>
+                    <p className="text-sm text-white whitespace-pre-wrap">{row.body?.trim() || "(empty)"}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+
+          <section>
             <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">Timeline</h3>
             {events.length === 0 ? (
               <p className="text-sm text-[#9CA3AF]">No workflow events yet.</p>
@@ -472,6 +521,23 @@ export default function AppointmentDetailDrawer() {
             <PrimaryButton type="button" className="w-full min-h-12" disabled={busy} onClick={markInProgress}>
               <Play className="w-4 h-4" /> Start detailing
             </PrimaryButton>
+          )}
+          {status === "in_progress" && (
+            <GhostButton
+              type="button"
+              className="w-full min-h-12"
+              disabled={busy}
+              onClick={async () => {
+                setBusy(true);
+                try {
+                  await stopTimer(detail.id);
+                } finally {
+                  setBusy(false);
+                }
+              }}
+            >
+              <Square className="w-4 h-4" /> Stop timer
+            </GhostButton>
           )}
           {ready && (
             <PrimaryButton

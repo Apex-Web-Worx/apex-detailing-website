@@ -8,7 +8,7 @@ import {
   serviceDayRulesTable,
   serviceDaySlotsTable,
 } from "@workspace/db";
-import { and, asc, eq, gte, inArray, lte, ne } from "drizzle-orm";
+import { and, asc, eq, gte, inArray, lte, ne, sql } from "drizzle-orm";
 import {
   buildScheduledAt,
   isClosedShopDate,
@@ -184,6 +184,60 @@ router.delete("/admin/bookings/:id", requireAdmin, async (req, res) => {
     notifyBookingCancelled(bookingToEmailData(cancelled), "admin");
     void syncBookingCalendar(cancelled.id);
   }
+});
+
+/**
+ * Permanently remove a customer by deleting all bookings for their email.
+ * No customer SMS/email is sent. Calendar events and photos are cleaned up.
+ */
+router.delete("/admin/customers", requireAdmin, async (req, res) => {
+  const raw = typeof req.query.email === "string" ? req.query.email : "";
+  const email = raw.trim().toLowerCase();
+  if (!email || !email.includes("@")) {
+    res.status(400).json({ message: "Valid email is required" });
+    return;
+  }
+
+  const rows = await db
+    .select()
+    .from(bookingsTable)
+    .where(sql`lower(trim(${bookingsTable.email})) = ${email}`);
+
+  if (rows.length === 0) {
+    res.status(404).json({ message: "No bookings found for that customer." });
+    return;
+  }
+
+  for (const row of rows) {
+    if (row.status !== "cancelled") {
+      await db
+        .update(bookingsTable)
+        .set({ status: "cancelled" })
+        .where(eq(bookingsTable.id, row.id));
+    }
+    try {
+      await cancelScheduledReviews(row.id, "Customer deleted by admin");
+    } catch (err) {
+      console.error("[admin] review cancel on customer delete failed:", err);
+    }
+    try {
+      await syncBookingCalendar(row.id);
+    } catch (err) {
+      console.error("[admin] calendar clear on customer delete failed:", err);
+    }
+    try {
+      await deletePhotosForBooking(row.id);
+    } catch (err) {
+      console.error("[admin] photo delete on customer delete failed:", err);
+    }
+  }
+
+  const deleted = await db
+    .delete(bookingsTable)
+    .where(sql`lower(trim(${bookingsTable.email})) = ${email}`)
+    .returning({ id: bookingsTable.id });
+
+  res.json({ deleted: deleted.length });
 });
 
 // Walk the cause chain looking for a Postgres error code (e.g. 23505).
