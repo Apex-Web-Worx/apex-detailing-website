@@ -276,12 +276,6 @@ export default function AppointmentDetailDrawer() {
               </div>
             ) : null}
             <p className="text-white">{detail.vehicle}</p>
-            <Link
-              href={`/admin/vehicles/${encodeURIComponent(`${detail.email.toLowerCase()}||${detail.vehicle.toLowerCase()}`)}`}
-              className="inline-block mt-3 text-sm text-[#23B9FF] hover:underline py-1"
-            >
-              Open vehicle
-            </Link>
           </section>
 
           <section>
