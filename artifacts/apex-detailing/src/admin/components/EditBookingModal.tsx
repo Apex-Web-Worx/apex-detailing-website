@@ -22,7 +22,7 @@ import {
   formatTime12h,
   todayDateString,
 } from "@/lib/format";
-import { scheduledAtToShopDate, scheduledAtToShopTime } from "../utils";
+import { parseScheduledAt, scheduledAtToShopDate, scheduledAtToShopTime } from "../utils";
 import { fieldClass, PrimaryButton } from "./ui";
 
 export default function EditBookingModal({
@@ -253,10 +253,10 @@ function RescheduleTab({
   token: string;
   onSaved: () => void;
 }) {
-  const scheduledIso =
-    typeof booking.scheduledAt === "string"
-      ? booking.scheduledAt
-      : new Date(booking.scheduledAt as unknown as string).toISOString();
+  const scheduledDate = parseScheduledAt(
+    booking.scheduledAt as unknown as string | Date | number | null,
+  );
+  const scheduledIso = scheduledDate?.toISOString() ?? "";
   const currentDate = scheduledAtToShopDate(scheduledIso);
   const currentTime = scheduledAtToShopTime(scheduledIso);
   const today = todayDateString();
