@@ -87,7 +87,7 @@ export default function AdminDatePicker({
         <p className="font-bold text-white mr-auto">{monthLabel(month)}</p>
         <button
           type="button"
-          className="h-8 px-3 text-xs rounded-lg border border-white/10 text-[#9CA3AF] hover:text-white hover:bg-white/5 touch-manipulation"
+          className="min-h-11 h-11 px-3 text-xs rounded-xl border border-white/10 text-[#9CA3AF] hover:text-white hover:bg-white/5 touch-manipulation"
           onClick={() => {
             const next = today.slice(0, 7);
             setMonth(next);
@@ -98,7 +98,7 @@ export default function AdminDatePicker({
         </button>
         <button
           type="button"
-          className="w-9 h-9 rounded-lg border border-white/10 hover:bg-white/5 touch-manipulation"
+          className="w-11 h-11 rounded-xl border border-white/10 hover:bg-white/5 touch-manipulation"
           onClick={() => setMonth(addMonths(month, -1))}
           aria-label="Previous month"
         >
@@ -106,7 +106,7 @@ export default function AdminDatePicker({
         </button>
         <button
           type="button"
-          className="w-9 h-9 rounded-lg border border-white/10 hover:bg-white/5 touch-manipulation"
+          className="w-11 h-11 rounded-xl border border-white/10 hover:bg-white/5 touch-manipulation"
           onClick={() => setMonth(addMonths(month, 1))}
           aria-label="Next month"
         >
@@ -154,7 +154,7 @@ export default function AdminDatePicker({
               }
               aria-label={`${formatDateShort(date)}${blockedOut ? ", blocked" : ""}${appointmentCount ? `, ${appointmentCount} appointment${appointmentCount === 1 ? "" : "s"}` : ""}`}
               className={cn(
-                "min-h-10 rounded-lg p-1 text-center border transition duration-150 touch-manipulation",
+                "min-h-11 rounded-xl p-1 text-center border transition duration-150 touch-manipulation",
                 isSelected
                   ? "border-[#FF2AD4]/60 bg-[#FF2AD4]/15"
                   : "border-transparent",

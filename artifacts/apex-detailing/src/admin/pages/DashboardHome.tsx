@@ -6,19 +6,15 @@ import { useAdmin } from "../context";
 import {
   bookingShopDate,
   bookingShopTime,
-  bookingStoredDetailMs,
   computeKpis,
-  customerKey,
   deriveTasks,
   displayStatus,
-  formatElapsedLong,
   greetingForNow,
   isClientHold,
   isDuplicateHoldBooking,
   linkedHoldBooking,
   scheduledAtToShopTime,
   bookingIso,
-  vehicleKey,
 } from "../utils";
 import AppointmentRow from "../components/AppointmentRow";
 import HeldAppointmentRow from "../components/HeldAppointmentRow";
@@ -89,16 +85,8 @@ export default function DashboardHome() {
   const linkedTodayHold = todayBlocked ? linkedHoldBooking(bookings, todayBlocked) : null;
   const showHoldRow =
     Boolean(todayBlocked && isClientHold(todayBlocked) && !linkedTodayHold);
-  const shopEmpty = todayAppts.length === 0 && !todayBlocked;
   const readyForPickup = bookings.filter((b) => displayStatus(b) === "ready_for_pickup");
-  const recentDetailTimes = bookings
-    .filter((b) => bookingStoredDetailMs(b) != null)
-    .sort((a, b) => {
-      const aAt = a.readyAt ? new Date(a.readyAt).getTime() : +new Date(bookingIso(a));
-      const bAt = b.readyAt ? new Date(b.readyAt).getTime() : +new Date(bookingIso(b));
-      return bAt - aAt;
-    })
-    .slice(0, 8);
+  const shopEmpty = todayAppts.length === 0 && !todayBlocked;
 
   return (
     <div className="w-full space-y-4">
@@ -106,16 +94,16 @@ export default function DashboardHome() {
         <h2 className="text-xl md:text-2xl font-bold">
           {greetingForNow()}, {ADMIN_FIRST}
         </h2>
-        <div className="flex flex-wrap gap-2">
-          <GhostButton type="button" onClick={() => void refetch()} disabled={isRefreshing} className="px-3">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 w-full sm:w-auto">
+          <GhostButton type="button" onClick={() => void refetch()} disabled={isRefreshing} className="px-3 w-full sm:w-auto">
             <RefreshCw className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`} /> Refresh
           </GhostButton>
-          <GhostButton type="button" onClick={() => openBlockDate()} className="px-3">
+          <GhostButton type="button" onClick={() => openBlockDate()} className="px-3 w-full sm:w-auto">
             <CalendarOff className="w-4 h-4" /> Block
           </GhostButton>
           <Link
             href="/book"
-            className="inline-flex items-center justify-center gap-2 min-h-11 h-11 px-4 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold transition duration-200 hover:bg-[#ff4adc] touch-manipulation"
+            className="inline-flex items-center justify-center gap-2 min-h-11 h-11 px-4 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold transition duration-200 hover:bg-[#ff4adc] touch-manipulation w-full sm:w-auto"
           >
             <Plus className="w-4 h-4" /> New Appointment
           </Link>
@@ -136,17 +124,11 @@ export default function DashboardHome() {
           </p>
           <div className="space-y-3">
             {readyForPickup.map((b) => {
-              const took = bookingStoredDetailMs(b);
               return (
                 <div key={b.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div>
                     <p className="text-sm font-medium text-white">{b.customerName}</p>
                     <p className="text-xs text-[#9CA3AF]">{b.vehicle}</p>
-                    {took != null ? (
-                      <p className="text-xs font-semibold text-[#23B9FF]">
-                        Detailed {formatElapsedLong(took)}
-                      </p>
-                    ) : null}
                     <p className="text-xs text-[#9CA3AF]">
                       Pickup: {formatTime12h(scheduledAtToShopTime(b.pickupAt || bookingIso(b)))}
                     </p>
@@ -189,7 +171,7 @@ export default function DashboardHome() {
                 <div className="flex flex-wrap gap-2 shrink-0">
                   <PrimaryButton
                     type="button"
-                    className="h-10 text-xs px-3"
+                    className="min-h-11 h-11 text-xs px-3"
                     disabled={reviewBusyId === item.bookingId}
                     onClick={() => {
                       setReviewBusyId(item.bookingId);
@@ -215,7 +197,7 @@ export default function DashboardHome() {
                   </PrimaryButton>
                   <GhostButton
                     type="button"
-                    className="h-10 text-xs px-3"
+                    className="min-h-11 h-11 text-xs px-3"
                     disabled={reviewBusyId === item.bookingId}
                     onClick={() => {
                       setReviewBusyId(item.bookingId);
@@ -240,46 +222,6 @@ export default function DashboardHome() {
                 </div>
               </div>
             ))}
-          </div>
-        )}
-      </AdminCard>
-
-      <AdminCard hover={false} className="p-4 md:p-5">
-        <div className="flex items-center justify-between gap-2 mb-3">
-          <h3 className="text-base font-bold">Detailing times</h3>
-          <Link href="/admin/vehicles" className="text-xs font-semibold text-[#9CA3AF] hover:text-white py-1">
-            Vehicles
-          </Link>
-        </div>
-        {recentDetailTimes.length === 0 ? (
-          <p className="text-sm text-[#9CA3AF]">
-            Tap Start on a job, then Ready for Pickup. Time for that car is saved here.
-          </p>
-        ) : (
-          <div className="space-y-3">
-            {recentDetailTimes.map((b) => {
-              const took = bookingStoredDetailMs(b);
-              return (
-                <Link
-                  key={b.id}
-                  href={`/admin/vehicles/${encodeURIComponent(`${customerKey(b.email)}||${vehicleKey(b.vehicle)}`)}`}
-                  className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 pb-3 last:border-0 last:pb-0"
-                >
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-white truncate">{b.vehicle}</p>
-                    <p className="text-xs text-[#9CA3AF] truncate">
-                      {b.serviceName}
-                      {b.readyAt
-                        ? ` · ${new Date(b.readyAt).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "America/Chicago" })}`
-                        : ""}
-                    </p>
-                  </div>
-                  <p className="text-sm font-bold tabular-nums text-[#23B9FF] shrink-0">
-                    {took != null ? formatElapsedLong(took) : "—"}
-                  </p>
-                </Link>
-              );
-            })}
           </div>
         )}
       </AdminCard>
