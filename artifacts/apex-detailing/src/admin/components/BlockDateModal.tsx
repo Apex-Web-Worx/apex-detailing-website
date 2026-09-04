@@ -211,7 +211,7 @@ export default function BlockDateModal() {
           <button
             type="button"
             onClick={closeBlockDate}
-            className="w-9 h-9 rounded-lg text-[#9CA3AF] hover:text-white hover:bg-white/5"
+            className="w-11 h-11 rounded-xl text-[#9CA3AF] hover:text-white hover:bg-white/5 touch-manipulation"
             aria-label="Close"
           >
             <X className="w-5 h-5 mx-auto" />
@@ -301,15 +301,15 @@ export default function BlockDateModal() {
             {successNote}
           </div>
         )}
-        <div className="flex justify-end gap-2 mt-5">
-          <GhostButton type="button" onClick={closeBlockDate}>
-            Cancel
-          </GhostButton>
-          <PrimaryButton type="submit" disabled={!date || submitting}>
-            {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-            {isEditing ? "Save" : "Block Date"}
-          </PrimaryButton>
-        </div>
+      <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 mt-5">
+        <GhostButton type="button" onClick={closeBlockDate} className="w-full sm:w-auto min-h-12">
+          Cancel
+        </GhostButton>
+        <PrimaryButton type="submit" disabled={!date || submitting} className="w-full sm:w-auto min-h-12">
+          {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+          {isEditing ? "Save" : "Block Date"}
+        </PrimaryButton>
+      </div>
       </form>
     </div>
   );
