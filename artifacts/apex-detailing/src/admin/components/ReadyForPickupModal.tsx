@@ -30,18 +30,13 @@ export default function ReadyForPickupModal({
   const [pickupDate, setPickupDate] = useState(defaults.date);
   const [pickupTime, setPickupTime] = useState(() => snapTimeToFiveMinutes(defaults.time));
   const [sendSms, setSendSms] = useState(canSms);
-  const [sendEmail, setSendEmail] = useState(true);
   const [preview, setPreview] = useState<Preview | null>(null);
   const [smsBody, setSmsBody] = useState("");
-  const [emailSubject, setEmailSubject] = useState("");
-  const [emailBody, setEmailBody] = useState("");
   const [smsDirty, setSmsDirty] = useState(false);
-  const [emailDirty, setEmailDirty] = useState(false);
   const smsDirtyRef = useRef(false);
-  const emailDirtyRef = useRef(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [warnBothOff, setWarnBothOff] = useState(false);
+  const [warnSmsOff, setWarnSmsOff] = useState(false);
 
   useEffect(() => {
     const prev = document.body.style.overflow;
@@ -67,10 +62,6 @@ export default function ReadyForPickupModal({
         if (cancelled) return;
         setPreview(json);
         if (!smsDirtyRef.current) setSmsBody(json.sms);
-        if (!emailDirtyRef.current) {
-          setEmailSubject(json.emailSubject);
-          setEmailBody(json.emailBody);
-        }
       } catch {
         /* preview is best-effort */
       }
@@ -81,11 +72,9 @@ export default function ReadyForPickupModal({
     };
   }, [booking.id, pickupDate, pickupTime, token]);
 
-  const bothOff = !sendSms && !sendEmail;
-
   const submit = async () => {
-    if (bothOff && !warnBothOff) {
-      setWarnBothOff(true);
+    if (!sendSms && !warnSmsOff) {
+      setWarnSmsOff(true);
       return;
     }
     setSubmitting(true);
@@ -101,11 +90,9 @@ export default function ReadyForPickupModal({
           pickupDate,
           pickupTime,
           sendSms,
-          sendEmail,
+          sendEmail: false,
           resend,
           smsBody,
-          emailSubject,
-          emailBody,
         }),
       });
       if (!res.ok) {
@@ -192,95 +179,46 @@ export default function ReadyForPickupModal({
                 : " (customer opted out)"
               : ""}
           </label>
-          <label className="flex items-center gap-3 min-h-11 text-sm text-white">
-            <input
-              type="checkbox"
-              checked={sendEmail}
-              onChange={(e) => setSendEmail(e.target.checked)}
-              className="accent-[#FF2AD4]"
-            />
-            Email
-          </label>
         </div>
 
-        {(sendSms || sendEmail) && (
+        {sendSms ? (
           <div className="mb-4 space-y-3">
-            {sendSms ? (
-              <label className="block">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
-                  SMS message
-                </span>
-                <textarea
-                  value={smsBody}
-                  onChange={(e) => {
-                    smsDirtyRef.current = true;
-                    setSmsDirty(true);
-                    setSmsBody(e.target.value);
-                  }}
-                  rows={7}
-                  className={`${fieldClass} resize-y min-h-32`}
-                />
-              </label>
-            ) : null}
-            {sendEmail ? (
-              <div className="space-y-3">
-                <label className="block">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
-                    Email subject
-                  </span>
-                  <input
-                    type="text"
-                    value={emailSubject}
-                    onChange={(e) => {
-                      emailDirtyRef.current = true;
-                      setEmailDirty(true);
-                      setEmailSubject(e.target.value);
-                    }}
-                    className={fieldClass}
-                  />
-                </label>
-                <label className="block">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
-                    Email message
-                  </span>
-                  <textarea
-                    value={emailBody}
-                    onChange={(e) => {
-                      emailDirtyRef.current = true;
-                      setEmailDirty(true);
-                      setEmailBody(e.target.value);
-                    }}
-                    rows={7}
-                    className={`${fieldClass} resize-y min-h-32`}
-                  />
-                </label>
-              </div>
-            ) : null}
-            {(smsDirty || emailDirty) && preview ? (
+            <label className="block">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
+                SMS message
+              </span>
+              <textarea
+                value={smsBody}
+                onChange={(e) => {
+                  smsDirtyRef.current = true;
+                  setSmsDirty(true);
+                  setSmsBody(e.target.value);
+                }}
+                rows={7}
+                className={`${fieldClass} resize-y min-h-32`}
+              />
+            </label>
+            {smsDirty && preview ? (
               <button
                 type="button"
                 className="text-xs font-semibold text-[#9CA3AF] hover:text-white"
                 onClick={() => {
                   smsDirtyRef.current = false;
-                  emailDirtyRef.current = false;
                   setSmsDirty(false);
-                  setEmailDirty(false);
                   setSmsBody(preview.sms);
-                  setEmailSubject(preview.emailSubject);
-                  setEmailBody(preview.emailBody);
                 }}
               >
                 Reset to template
               </button>
             ) : null}
           </div>
-        )}
+        ) : null}
 
-        {bothOff && (
+        {!sendSms && (
           <div className="mb-3 p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-200 text-sm">
-            {warnBothOff
-              ? "No notification will be sent. Click again to mark ready anyway."
-              : "SMS and email are both off. The customer will not be notified."}
+            {warnSmsOff
+              ? "No SMS will be sent. Click again to mark ready anyway."
+              : "SMS is off. The customer will not be notified."}
           </div>
         )}
         {error && (
