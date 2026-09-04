@@ -35,6 +35,8 @@ type Communication = {
   id: number;
   messageType: string;
   channel: string;
+  direction?: string;
+  body?: string;
   status: string;
   error: string | null;
   scheduledAt: string | null;
@@ -106,6 +108,9 @@ export default function AppointmentDetailDrawer() {
   const alreadyReady = status === "ready_for_pickup" || status === "completed";
   const storedDetailMs = bookingStoredDetailMs(detail);
   const smsHref = `sms:${detail.phone}`;
+  const inboundReplies = comms.filter(
+    (c) => c.messageType === "customer_reply" || c.direction === "inbound",
+  );
   const pickupNote = comms.find((c) => c.messageType === "vehicle_ready" && (c.status === "sent" || c.status === "delivered"));
   const reviewFailed = comms.find((c) => c.messageType === "review_request" && c.status === "failed");
   const reviewSkipped = comms.find((c) => c.messageType === "review_request" && c.status === "skipped");
@@ -438,6 +443,24 @@ export default function AppointmentDetailDrawer() {
               ) : null}
             </section>
           ) : null}
+
+          <section>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">Customer SMS replies</h3>
+            {inboundReplies.length === 0 ? (
+              <p className="text-sm text-[#9CA3AF]">No replies from this customer yet.</p>
+            ) : (
+              <ul className="space-y-3">
+                {inboundReplies.map((row) => (
+                  <li key={row.id} className="border-l border-orange-500/40 pl-3">
+                    <p className="text-xs text-[#9CA3AF]">
+                      {formatDateTimeLong(row.sentAt ?? row.createdAt)}
+                    </p>
+                    <p className="text-sm text-white whitespace-pre-wrap">{row.body?.trim() || "(empty)"}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
 
           <section>
             <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">Timeline</h3>

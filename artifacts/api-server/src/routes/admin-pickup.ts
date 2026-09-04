@@ -27,6 +27,7 @@ import {
   skipReviewRequest,
   unskipReviewRequest,
 } from "../lib/pickup-workflow";
+import { listRecentInboundSms } from "../lib/inbound-sms";
 import {
   DEFAULT_VEHICLE_READY_EMAIL,
   DEFAULT_VEHICLE_READY_SMS,
@@ -133,6 +134,10 @@ router.get("/admin/communications", requireAdmin, async (req, res) => {
     return;
   }
   res.status(400).json({ message: "email or bookingId is required" });
+});
+
+router.get("/admin/inbound-sms", requireAdmin, async (_req, res) => {
+  res.json(await listRecentInboundSms());
 });
 
 router.get("/admin/bookings/:id/timeline", requireAdmin, async (req, res) => {
