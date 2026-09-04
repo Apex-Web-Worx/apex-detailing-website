@@ -175,9 +175,6 @@ export default function ReviewsPage() {
         ) : (
           <p className="text-sm text-[#9CA3AF]">No review URL saved yet.</p>
         )}
-        <Link href="/admin/messages" className="text-xs font-semibold text-[#9CA3AF] hover:text-white">
-          Edit link and message templates in Communications
-        </Link>
       </AdminCard>
 
       <div className="flex flex-wrap gap-2">
