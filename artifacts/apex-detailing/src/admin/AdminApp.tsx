@@ -15,7 +15,6 @@ import AppointmentsPage from "./pages/AppointmentsPage";
 import CalendarPage from "./pages/CalendarPage";
 import CustomersPage from "./pages/CustomersPage";
 import VehiclesPage from "./pages/VehiclesPage";
-import ServicesPage from "./pages/ServicesPage";
 import CommunicationsPage from "./pages/CommunicationsPage";
 import ReviewsPage from "./pages/ReviewsPage";
 import SettingsPage from "./pages/SettingsPage";
@@ -65,7 +64,8 @@ function AdminSection() {
     case "vehicles":
       return <VehiclesPage />;
     case "services":
-      return <ServicesPage />;
+      // Services admin page removed — fall through to dashboard.
+      return <DashboardHome />;
     case "payments":
     case "analytics":
       return <DashboardHome />;
