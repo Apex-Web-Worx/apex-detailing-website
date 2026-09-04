@@ -6,7 +6,7 @@ import {
   notificationTemplatesTable,
   shopSettingsTable,
 } from "@workspace/db";
-import { and, asc, desc, eq, inArray, lte } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, lte, gte, lt } from "drizzle-orm";
 import {
   formatDateLong,
   formatTime12h,
@@ -365,17 +365,90 @@ export async function markInProgress(bookingId: number) {
   return updated;
 }
 
-/** Auto-start confirmed jobs whose scheduled time has arrived (or passed). */
+/** Auto-start only if scheduled time is within this window (not ancient jobs). */
+const AUTO_START_WINDOW_MS = 2 * 60 * 60 * 1000;
+
+/**
+ * Undo mass auto-starts of old confirmed bookings (timers showing hundreds
+ * of hours). Auto-start sets inProgressAt === scheduledAt; manual Start uses
+ * wall-clock time, so we only revert the auto-start fingerprint when the
+ * scheduled time is outside the live window.
+ */
+export async function revertStaleAutoStarts(now = new Date()): Promise<number> {
+  const cutoff = new Date(now.getTime() - AUTO_START_WINDOW_MS);
+  const candidates = await db
+    .select()
+    .from(bookingsTable)
+    .where(
+      and(
+        eq(bookingsTable.status, "in_progress"),
+        lt(bookingsTable.scheduledAt, cutoff),
+      ),
+    );
+
+  let reverted = 0;
+  for (const booking of candidates) {
+    const startedAt = booking.inProgressAt?.getTime();
+    const scheduledAt = booking.scheduledAt.getTime();
+    if (startedAt == null || Math.abs(startedAt - scheduledAt) > 1000) continue;
+
+    const [updated] = await db
+      .update(bookingsTable)
+      .set({ status: "confirmed", inProgressAt: null })
+      .where(
+        and(
+          eq(bookingsTable.id, booking.id),
+          eq(bookingsTable.status, "in_progress"),
+        ),
+      )
+      .returning();
+    if (!updated) continue;
+
+    await logEvent({
+      bookingId: booking.id,
+      actor: "system",
+      action: "timer_stopped",
+      status: "confirmed",
+      detail: "Reverted stale auto-start (scheduled time too old)",
+      occurredAt: now,
+    });
+    reverted += 1;
+  }
+  return reverted;
+}
+
+/**
+ * Auto-start confirmed jobs whose scheduled time has arrived — but only
+ * within a short window, so deploy/cron never mass-starts months-old rows.
+ * Skips jobs the admin already stopped via Stop timer.
+ */
 export async function autoStartDueJobs(now = new Date()): Promise<number> {
+  const windowStart = new Date(now.getTime() - AUTO_START_WINDOW_MS);
   const due = await db
     .select()
     .from(bookingsTable)
     .where(
-      and(eq(bookingsTable.status, "confirmed"), lte(bookingsTable.scheduledAt, now)),
+      and(
+        eq(bookingsTable.status, "confirmed"),
+        lte(bookingsTable.scheduledAt, now),
+        gte(bookingsTable.scheduledAt, windowStart),
+      ),
     );
 
   let started = 0;
   for (const booking of due) {
+    const [stopped] = await db
+      .select({ id: appointmentEventsTable.id })
+      .from(appointmentEventsTable)
+      .where(
+        and(
+          eq(appointmentEventsTable.bookingId, booking.id),
+          eq(appointmentEventsTable.action, "timer_stopped"),
+        ),
+      )
+      .limit(1);
+    if (stopped) continue;
+
     const startedAt = booking.scheduledAt;
     const [updated] = await db
       .update(bookingsTable)

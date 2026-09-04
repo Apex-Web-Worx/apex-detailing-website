@@ -20,7 +20,7 @@ import { and, eq, gte, isNull, lte } from "drizzle-orm";
 import { shopLocalDateString, shopLocalTimeString } from "./availability";
 import type { BookingEmailData } from "./email";
 import { notifyReminder24h } from "./notify";
-import { sendDueReviewRequests, autoStartDueJobs } from "./pickup-workflow";
+import { sendDueReviewRequests, autoStartDueJobs, revertStaleAutoStarts } from "./pickup-workflow";
 import { purgeExpiredBookingPhotos } from "./booking-photos";
 
 const REMINDER_TICK_MS = 5 * 60 * 1000; // every 5 minutes
@@ -30,6 +30,17 @@ const WINDOW_UPPER_MS = 25 * 60 * 60 * 1000;
 
 let timer: NodeJS.Timeout | null = null;
 let autoStartTimer: NodeJS.Timeout | null = null;
+
+async function runAutoStartTick(): Promise<void> {
+  const reverted = await revertStaleAutoStarts();
+  if (reverted > 0) {
+    console.log(`[auto-start] reverted ${reverted} stale auto-start(s)`);
+  }
+  const started = await autoStartDueJobs();
+  if (started > 0) {
+    console.log(`[auto-start] started ${started} job(s)`);
+  }
+}
 
 async function runOnce(): Promise<void> {
   const now = Date.now();
@@ -102,10 +113,7 @@ async function runOnce(): Promise<void> {
   }
 
   try {
-    const started = await autoStartDueJobs();
-    if (started > 0) {
-      console.log(`[reminders] auto-started ${started} job(s) at scheduled time`);
-    }
+    await runAutoStartTick();
   } catch (err) {
     console.error("[reminders] auto-start failed:", err);
   }
@@ -145,16 +153,12 @@ export function startReminderCron(): void {
   }, REMINDER_TICK_MS);
   console.log(`[reminders] cron started (every ${REMINDER_TICK_MS / 1000}s)`);
 
-  // Faster loop just for auto-start so forgotten Start presses kick in near on time.
-  const runAutoStart = () =>
-    autoStartDueJobs()
-      .then((started) => {
-        if (started > 0) {
-          console.log(`[auto-start] started ${started} job(s)`);
-        }
-      })
-      .catch((err) => console.error("[auto-start] tick failed:", err));
-  setTimeout(runAutoStart, 5 * 1000);
-  autoStartTimer = setInterval(runAutoStart, AUTO_START_TICK_MS);
+  // Faster loop for auto-start + self-heal of stale mass auto-starts.
+  setTimeout(() => {
+    runAutoStartTick().catch((err) => console.error("[auto-start] first run failed:", err));
+  }, 5 * 1000);
+  autoStartTimer = setInterval(() => {
+    runAutoStartTick().catch((err) => console.error("[auto-start] tick failed:", err));
+  }, AUTO_START_TICK_MS);
   console.log(`[auto-start] cron started (every ${AUTO_START_TICK_MS / 1000}s)`);
 }
