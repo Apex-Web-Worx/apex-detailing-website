@@ -404,7 +404,9 @@ function ServiceStep({
     selected?.id != null ? Number(selected.id) : null,
   );
   const armedAtRef = useRef<number>(0);
-  const deepLinkedRef = useRef(false);
+  const deepLinkedPkgRef = useRef<string | null>(null);
+  const onPickRef = useRef(onPick);
+  onPickRef.current = onPick;
 
   useEffect(() => {
     const sync = () => setTwoTapUi(readTwoTapUi());
@@ -424,27 +426,45 @@ function ServiceStep({
     if (id != null) armedAtRef.current = Date.now();
   }, [selected?.id]);
 
-  // Homepage "View Details" → /book?pkg=ceramic lands on that package card.
+  // Homepage "View Details" → /book?pkg=ceramic selects + scrolls to that card.
+  // Keep onPick out of deps: selecting updates parent state, which would recreate
+  // onPick and clear the scroll timer before it runs.
   useEffect(() => {
-    if (deepLinkedRef.current || !data?.length) return;
+    if (!data?.length) return;
     const pkg = new URLSearchParams(window.location.search).get("pkg")?.trim().toLowerCase();
     if (!pkg) return;
     const match = data.find((s) => BOOKING_SLUG_TO_PKG[s.slug] === pkg);
     if (!match) return;
-    deepLinkedRef.current = true;
-    const id = Number(match.id);
-    setHighlightedId(id);
-    pendingIdRef.current = id;
-    armedAtRef.current = Date.now();
-    onPick(match);
-    const timer = window.setTimeout(() => {
-      document.getElementById(`book-pkg-${pkg}`)?.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-    }, 80);
-    return () => window.clearTimeout(timer);
-  }, [data, onPick]);
+
+    if (deepLinkedPkgRef.current !== pkg) {
+      deepLinkedPkgRef.current = pkg;
+      const id = Number(match.id);
+      setHighlightedId(id);
+      pendingIdRef.current = id;
+      armedAtRef.current = Date.now();
+      onPickRef.current(match);
+    }
+
+    let cancelled = false;
+    const scrollToPkg = () => {
+      if (cancelled) return false;
+      const el = document.getElementById(`book-pkg-${pkg}`);
+      if (!el) return false;
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      return true;
+    };
+
+    // Retry: Strict Mode remount + image layout can cancel the first attempt.
+    const timers = [50, 180, 400, 800].map((ms) =>
+      window.setTimeout(() => {
+        scrollToPkg();
+      }, ms),
+    );
+    return () => {
+      cancelled = true;
+      timers.forEach((timer) => window.clearTimeout(timer));
+    };
+  }, [data]);
 
   const handleServiceTap = (s: Service, e: ReactMouseEvent) => {
     const id = Number(s.id);

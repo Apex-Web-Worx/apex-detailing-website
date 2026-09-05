@@ -4590,6 +4590,12 @@
   color: #00e5ff;
 }
 
+/* Deep-linked package cards clear the sticky booking header */
+[id^="book-pkg-"] {
+  scroll-margin-top: 6.5rem;
+  scroll-margin-bottom: 6rem;
+}
+
 /* Booking package picker — ceramic photo + Cerakote logos */
 .book-pkg-photo--ceramic .book-pkg-photo__img--ceramic,
 .book-pkg-photo--ceramic .book-pkg-photo__img--ceramic img {
