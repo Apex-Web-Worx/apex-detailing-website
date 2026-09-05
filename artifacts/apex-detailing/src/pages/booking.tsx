@@ -30,6 +30,7 @@ import LanguageToggle from "@/components/LanguageToggle";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { packageDescKey, packageTitleKey, BOOKING_SLUG_TO_PKG, PKG_PHOTO } from "@/i18n/packageMap";
 import PriceTiers from "@/components/PriceTiers";
+import CerakoteCert from "@/components/CerakoteCert";
 import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
 import {
   revokePickedPhotos,
@@ -403,6 +404,7 @@ function ServiceStep({
     selected?.id != null ? Number(selected.id) : null,
   );
   const armedAtRef = useRef<number>(0);
+  const deepLinkedRef = useRef(false);
 
   useEffect(() => {
     const sync = () => setTwoTapUi(readTwoTapUi());
@@ -421,6 +423,28 @@ function ServiceStep({
     pendingIdRef.current = id;
     if (id != null) armedAtRef.current = Date.now();
   }, [selected?.id]);
+
+  // Homepage "View Details" → /book?pkg=ceramic lands on that package card.
+  useEffect(() => {
+    if (deepLinkedRef.current || !data?.length) return;
+    const pkg = new URLSearchParams(window.location.search).get("pkg")?.trim().toLowerCase();
+    if (!pkg) return;
+    const match = data.find((s) => BOOKING_SLUG_TO_PKG[s.slug] === pkg);
+    if (!match) return;
+    deepLinkedRef.current = true;
+    const id = Number(match.id);
+    setHighlightedId(id);
+    pendingIdRef.current = id;
+    armedAtRef.current = Date.now();
+    onPick(match);
+    const timer = window.setTimeout(() => {
+      document.getElementById(`book-pkg-${pkg}`)?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }, 80);
+    return () => window.clearTimeout(timer);
+  }, [data, onPick]);
 
   const handleServiceTap = (s: Service, e: ReactMouseEvent) => {
     const id = Number(s.id);
@@ -476,6 +500,7 @@ function ServiceStep({
           return (
             <button
               key={s.id}
+              id={pkg ? `book-pkg-${pkg}` : undefined}
               type="button"
               aria-pressed={isSelected}
               onClick={(e) => handleServiceTap(s, e)}
@@ -491,12 +516,18 @@ function ServiceStep({
                   {t("book.selected")}
                 </span>
               )}
-              {photo && !twoTapUi && (
-                <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden bg-[#111]">
+              {photo && (!twoTapUi || pkg === "ceramic") && (
+                <div
+                  className={`relative aspect-[16/9] w-full shrink-0 overflow-hidden bg-[#111]${
+                    pkg === "ceramic" ? " book-pkg-photo--ceramic" : ""
+                  }`}
+                >
                   <OptimizedImage
                     src={imageUrl(photo)}
                     alt={t(`pkg.${pkg}.photoAlt`)}
-                    className="pointer-events-none absolute inset-0 block h-full w-full object-cover"
+                    className={`pointer-events-none absolute inset-0 block h-full w-full object-cover${
+                      pkg === "ceramic" ? " book-pkg-photo__img--ceramic" : ""
+                    }`}
                     sizes="(max-width: 768px) 100vw, 50vw"
                     loading="lazy"
                     noBlur
@@ -562,6 +593,10 @@ function ServiceStep({
                 </span>
               </div>
               <PriceTiers pkg={BOOKING_SLUG_TO_PKG[s.slug] ?? ""} className="mb-3" />
+
+              {pkg === "ceramic" ? (
+                <CerakoteCert variant="card" className="book-pkg-cerakote" />
+              ) : null}
 
               <p className="text-sm text-gray-300 mb-4 leading-relaxed flex-1">
                 {packageDescKey(s.slug) ? t(packageDescKey(s.slug)!) : s.description}

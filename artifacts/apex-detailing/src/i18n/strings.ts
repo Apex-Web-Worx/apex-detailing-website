@@ -495,9 +495,9 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
 
     "pkg.ceramic.title": "Apex Ceramic Coating",
     "pkg.ceramic.cardDesc":
-      "Official Cerakote ceramic protection that enhances gloss, repels water, and helps protect your vehicle’s paint from environmental contaminants.",
+      "Official Cerakote ceramic protection with up to 5 years of protection — enhances gloss, repels water, and helps protect your vehicle’s paint from environmental contaminants.",
     "pkg.ceramic.desc":
-      "Official Cerakote ceramic protection that enhances gloss, repels water, and helps protect your vehicle’s paint from environmental contaminants.",
+      "Official Cerakote ceramic protection with up to 5 years of protection — enhances gloss, repels water, and helps protect your vehicle’s paint from environmental contaminants.",
     "pkg.ceramic.feat.0": "1-Step or 2-Step Paint Correction — needed so coating bonds to swirl-free paint",
     "pkg.ceramic.feat.1": "Professional Paint Decontamination",
     "pkg.ceramic.feat.2": "9H Ceramic Coating Application",
@@ -1050,9 +1050,9 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
 
     "pkg.ceramic.title": "Керамика Apex",
     "pkg.ceramic.cardDesc":
-      "Официальная керамика Cerakote: усиливает блеск, отталкивает воду и помогает защитить ЛКП от внешних загрязнений.",
+      "Официальная керамика Cerakote с защитой до 5 лет — усиливает блеск, отталкивает воду и помогает защитить ЛКП от внешних загрязнений.",
     "pkg.ceramic.desc":
-      "Официальная керамика Cerakote: усиливает блеск, отталкивает воду и помогает защитить ЛКП от внешних загрязнений.",
+      "Официальная керамика Cerakote с защитой до 5 лет — усиливает блеск, отталкивает воду и помогает защитить ЛКП от внешних загрязнений.",
     "pkg.ceramic.feat.0": "1-этапная или 2-этапная коррекция ЛКП — чтобы керамика легла на ровную поверхность без кругов",
     "pkg.ceramic.feat.1": "Профессиональная деконтаминация ЛКП",
     "pkg.ceramic.feat.2": "Нанесение керамики 9H",

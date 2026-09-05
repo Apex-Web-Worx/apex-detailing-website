@@ -297,8 +297,8 @@ export default function EliteServicesSection({
                     })}
                   </ul>
                   <a
-                    href={bookingUrl()}
-                    onClick={goBookNow}
+                    href={bookingUrl(card.pkg)}
+                    onClick={(e) => goBookNow(e, card.pkg)}
                     className="btn-cyber elite-card__cta"
                   >
                     <span>{t("services.viewDetails")}</span>
@@ -385,8 +385,8 @@ export default function EliteServicesSection({
                       })}
                     </ul>
                     <a
-                      href={bookingUrl()}
-                      onClick={goBookNow}
+                      href={bookingUrl(service.pkg)}
+                      onClick={(e) => goBookNow(e, service.pkg)}
                       className="btn-cyber elite-card__cta"
                     >
                       <span>{t("services.viewDetails")}</span>

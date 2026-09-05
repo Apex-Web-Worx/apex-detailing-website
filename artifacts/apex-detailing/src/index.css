@@ -4589,3 +4589,27 @@
 .apex-reviews__more:hover {
   color: #00e5ff;
 }
+
+/* Booking package picker — ceramic photo + Cerakote logos */
+.book-pkg-photo--ceramic .book-pkg-photo__img--ceramic,
+.book-pkg-photo--ceramic .book-pkg-photo__img--ceramic img {
+  object-fit: cover;
+  object-position: 72% 12%;
+}
+
+.book-pkg-cerakote.cerakote-card {
+  margin: 0 0 0.75rem;
+  padding: 0.45rem 0;
+}
+
+.book-pkg-cerakote .cerakote-card__wordmark {
+  height: 1.35rem;
+}
+
+.book-pkg-cerakote .cerakote-card__badge {
+  height: 2.25rem;
+}
+
+.book-pkg-cerakote .cerakote-card__label {
+  font-size: 0.58rem;
+}
