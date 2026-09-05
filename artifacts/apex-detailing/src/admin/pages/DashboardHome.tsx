@@ -6,26 +6,22 @@ import { useAdmin } from "../context";
 import {
   bookingShopDate,
   bookingShopTime,
-  bookingStoredDetailMs,
   computeKpis,
-  customerKey,
   deriveTasks,
   displayStatus,
-  formatElapsedLong,
   greetingForNow,
   isClientHold,
   isDuplicateHoldBooking,
   linkedHoldBooking,
   scheduledAtToShopTime,
   bookingIso,
-  vehicleKey,
 } from "../utils";
 import AppointmentRow from "../components/AppointmentRow";
 import HeldAppointmentRow from "../components/HeldAppointmentRow";
 import MonthCalendar from "../components/MonthCalendar";
-import { AdminCard, GhostButton, PrimaryButton } from "../components/ui";
+import { AdminCard, GhostButton } from "../components/ui";
 import { useOwnerCalendarEvents } from "../useOwnerCalendarEvents";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function DashboardHome() {
   const {
@@ -40,40 +36,10 @@ export default function DashboardHome() {
     openBlockDate,
     openEditBlockedDate,
     token,
-    sendReviewRequest,
-    skipReviewRequest,
   } = useAdmin();
   const [, setLocation] = useLocation();
   const today = todayDateString();
   const [calMonth, setCalMonth] = useState(today.slice(0, 7));
-  const [reviewItems, setReviewItems] = useState<
-    Array<{
-      bookingId: number;
-      customerName: string;
-      vehicle: string;
-      reviewStatus: string;
-    }>
-  >([]);
-  const [reviewBusyId, setReviewBusyId] = useState<number | null>(null);
-  const [reviewNote, setReviewNote] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    fetch("/api/admin/review-requests", { headers: { "x-admin-token": token } })
-      .then((res) => (res.ok ? res.json() : null))
-      .then((json) => {
-        if (cancelled || !json || !Array.isArray(json.items)) return;
-        setReviewItems(json.items);
-      })
-      .catch(() => undefined);
-    return () => {
-      cancelled = true;
-    };
-  }, [token, bookings]);
-
-  const pendingReviews = reviewItems.filter(
-    (item) => item.reviewStatus === "none" || item.reviewStatus === "failed",
-  );
   const { data: personalEvents = [] } = useOwnerCalendarEvents(token, calMonth);
   const kpis = computeKpis(bookings, blockedDates);
   const todayBlocked = blockedDates.find((b) => b.date === today);
@@ -89,16 +55,8 @@ export default function DashboardHome() {
   const linkedTodayHold = todayBlocked ? linkedHoldBooking(bookings, todayBlocked) : null;
   const showHoldRow =
     Boolean(todayBlocked && isClientHold(todayBlocked) && !linkedTodayHold);
-  const shopEmpty = todayAppts.length === 0 && !todayBlocked;
   const readyForPickup = bookings.filter((b) => displayStatus(b) === "ready_for_pickup");
-  const recentDetailTimes = bookings
-    .filter((b) => bookingStoredDetailMs(b) != null)
-    .sort((a, b) => {
-      const aAt = a.readyAt ? new Date(a.readyAt).getTime() : +new Date(bookingIso(a));
-      const bAt = b.readyAt ? new Date(b.readyAt).getTime() : +new Date(bookingIso(b));
-      return bAt - aAt;
-    })
-    .slice(0, 8);
+  const shopEmpty = todayAppts.length === 0 && !todayBlocked;
 
   return (
     <div className="w-full space-y-4">
@@ -106,16 +64,16 @@ export default function DashboardHome() {
         <h2 className="text-xl md:text-2xl font-bold">
           {greetingForNow()}, {ADMIN_FIRST}
         </h2>
-        <div className="flex flex-wrap gap-2">
-          <GhostButton type="button" onClick={() => void refetch()} disabled={isRefreshing} className="px-3">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 w-full sm:w-auto">
+          <GhostButton type="button" onClick={() => void refetch()} disabled={isRefreshing} className="px-3 w-full sm:w-auto">
             <RefreshCw className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`} /> Refresh
           </GhostButton>
-          <GhostButton type="button" onClick={() => openBlockDate()} className="px-3">
+          <GhostButton type="button" onClick={() => openBlockDate()} className="px-3 w-full sm:w-auto">
             <CalendarOff className="w-4 h-4" /> Block
           </GhostButton>
           <Link
             href="/book"
-            className="inline-flex items-center justify-center gap-2 min-h-11 h-11 px-4 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold transition duration-200 hover:bg-[#ff4adc] touch-manipulation"
+            className="inline-flex items-center justify-center gap-2 min-h-11 h-11 px-4 rounded-xl bg-[#FF2AD4] text-white text-sm font-semibold transition duration-200 hover:bg-[#ff4adc] touch-manipulation w-full sm:w-auto"
           >
             <Plus className="w-4 h-4" /> New Appointment
           </Link>
@@ -135,155 +93,23 @@ export default function DashboardHome() {
             {readyForPickup.length} vehicle{readyForPickup.length === 1 ? "" : "s"} ready
           </p>
           <div className="space-y-3">
-            {readyForPickup.map((b) => {
-              const took = bookingStoredDetailMs(b);
-              return (
-                <div key={b.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <div>
-                    <p className="text-sm font-medium text-white">{b.customerName}</p>
-                    <p className="text-xs text-[#9CA3AF]">{b.vehicle}</p>
-                    {took != null ? (
-                      <p className="text-xs font-semibold text-[#23B9FF]">
-                        Detailed {formatElapsedLong(took)}
-                      </p>
-                    ) : null}
-                    <p className="text-xs text-[#9CA3AF]">
-                      Pickup: {formatTime12h(scheduledAtToShopTime(b.pickupAt || bookingIso(b)))}
-                    </p>
-                  </div>
-                  <GhostButton type="button" className="shrink-0" onClick={() => setDetail(b)}>
-                    View appointment
-                  </GhostButton>
+            {readyForPickup.map((b) => (
+              <div key={b.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <p className="text-sm font-medium text-white">{b.customerName}</p>
+                  <p className="text-xs text-[#9CA3AF]">{b.vehicle}</p>
+                  <p className="text-xs text-[#9CA3AF]">
+                    Pickup: {formatTime12h(scheduledAtToShopTime(b.pickupAt || bookingIso(b)))}
+                  </p>
                 </div>
-              );
-            })}
-          </div>
-        </AdminCard>
-      )}
-
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 items-start">
-      <AdminCard hover={false} className="p-4 md:p-5">
-        <div className="flex items-center justify-between gap-2 mb-3">
-          <h3 className="text-base font-bold">Reviews</h3>
-          <Link href="/admin/reviews" className="text-xs font-semibold text-[#9CA3AF] hover:text-white py-1">
-            All reviews
-          </Link>
-        </div>
-        <p className="text-sm text-[#9CA3AF] mb-3">
-          Reviews are not sent automatically. Send the Google review link here when you want.
-        </p>
-        {reviewNote ? <p className="text-sm text-[#23B9FF] mb-3">{reviewNote}</p> : null}
-        {pendingReviews.length === 0 ? (
-          <p className="text-sm text-[#9CA3AF]">No reviews waiting to send.</p>
-        ) : (
-          <div className="space-y-3">
-            {pendingReviews.map((item) => (
-              <div
-                key={item.bookingId}
-                className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-3 last:border-0 last:pb-0"
-              >
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-white truncate">{item.customerName}</p>
-                  <p className="text-xs text-[#9CA3AF] truncate">{item.vehicle}</p>
-                </div>
-                <div className="flex flex-wrap gap-2 shrink-0">
-                  <PrimaryButton
-                    type="button"
-                    className="h-10 text-xs px-3"
-                    disabled={reviewBusyId === item.bookingId}
-                    onClick={() => {
-                      setReviewBusyId(item.bookingId);
-                      setReviewNote(null);
-                      void sendReviewRequest(item.bookingId)
-                        .then((result) => {
-                          setReviewNote(
-                            result === "already" ? "Review link already sent." : "Review link sent.",
-                          );
-                          setReviewItems((rows) =>
-                            rows.map((row) =>
-                              row.bookingId === item.bookingId ? { ...row, reviewStatus: "sent" } : row,
-                            ),
-                          );
-                        })
-                        .catch((e) => {
-                          setReviewNote(e instanceof Error ? e.message : "Could not send review");
-                        })
-                        .finally(() => setReviewBusyId(null));
-                    }}
-                  >
-                    Send review link
-                  </PrimaryButton>
-                  <GhostButton
-                    type="button"
-                    className="h-10 text-xs px-3"
-                    disabled={reviewBusyId === item.bookingId}
-                    onClick={() => {
-                      setReviewBusyId(item.bookingId);
-                      setReviewNote(null);
-                      void skipReviewRequest(item.bookingId)
-                        .then(() => {
-                          setReviewNote("Review will not be sent to this client.");
-                          setReviewItems((rows) =>
-                            rows.map((row) =>
-                              row.bookingId === item.bookingId ? { ...row, reviewStatus: "skipped" } : row,
-                            ),
-                          );
-                        })
-                        .catch((e) => {
-                          setReviewNote(e instanceof Error ? e.message : "Could not skip review");
-                        })
-                        .finally(() => setReviewBusyId(null));
-                    }}
-                  >
-                    Don’t send
-                  </GhostButton>
-                </div>
+                <GhostButton type="button" className="shrink-0" onClick={() => setDetail(b)}>
+                  View appointment
+                </GhostButton>
               </div>
             ))}
           </div>
-        )}
-      </AdminCard>
-
-      <AdminCard hover={false} className="p-4 md:p-5">
-        <div className="flex items-center justify-between gap-2 mb-3">
-          <h3 className="text-base font-bold">Detailing times</h3>
-          <Link href="/admin/vehicles" className="text-xs font-semibold text-[#9CA3AF] hover:text-white py-1">
-            Vehicles
-          </Link>
-        </div>
-        {recentDetailTimes.length === 0 ? (
-          <p className="text-sm text-[#9CA3AF]">
-            Tap Start on a job, then Ready for Pickup. Time for that car is saved here.
-          </p>
-        ) : (
-          <div className="space-y-3">
-            {recentDetailTimes.map((b) => {
-              const took = bookingStoredDetailMs(b);
-              return (
-                <Link
-                  key={b.id}
-                  href={`/admin/vehicles/${encodeURIComponent(`${customerKey(b.email)}||${vehicleKey(b.vehicle)}`)}`}
-                  className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 pb-3 last:border-0 last:pb-0"
-                >
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-white truncate">{b.vehicle}</p>
-                    <p className="text-xs text-[#9CA3AF] truncate">
-                      {b.serviceName}
-                      {b.readyAt
-                        ? ` · ${new Date(b.readyAt).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "America/Chicago" })}`
-                        : ""}
-                    </p>
-                  </div>
-                  <p className="text-sm font-bold tabular-nums text-[#23B9FF] shrink-0">
-                    {took != null ? formatElapsedLong(took) : "—"}
-                  </p>
-                </Link>
-              );
-            })}
-          </div>
-        )}
-      </AdminCard>
-      </div>
+        </AdminCard>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:items-stretch">
         <div className="flex flex-col gap-4 min-h-0">

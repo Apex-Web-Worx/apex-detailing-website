@@ -8,7 +8,7 @@ import {
   serviceDayRulesTable,
   serviceDaySlotsTable,
 } from "@workspace/db";
-import { and, asc, eq, gte, inArray, lte, ne } from "drizzle-orm";
+import { and, asc, eq, gte, inArray, lte, ne, sql } from "drizzle-orm";
 import {
   buildScheduledAt,
   isClosedShopDate,
@@ -38,8 +38,11 @@ import {
 import { notifyBookingCancelled, notifyBookingRescheduled } from "../lib/notify";
 import { sendSms, smsBlockedDateConfirm } from "../lib/sms";
 import {
-  cancelIdleHoldBooking,
+  deleteClientHoldRow,
   ensureClientHoldBookings,
+  isClientHold,
+  parseHoldIdFromEmail,
+  purgeHoldBookings,
   startHoldBooking,
   syncHoldBookingFromRow,
 } from "../lib/hold-bookings";
@@ -184,6 +187,111 @@ router.delete("/admin/bookings/:id", requireAdmin, async (req, res) => {
     notifyBookingCancelled(bookingToEmailData(cancelled), "admin");
     void syncBookingCalendar(cancelled.id);
   }
+});
+
+/**
+ * Permanently remove a customer by deleting all bookings for their email.
+ * Linked client holds (blocked dates) are removed first so list-bookings
+ * cannot recreate hold-* appointments via ensureClientHoldBookings.
+ * No customer SMS/email is sent. Calendar events and photos are cleaned up.
+ */
+router.delete("/admin/customers", requireAdmin, async (req, res) => {
+  const raw = typeof req.query.email === "string" ? req.query.email : "";
+  const email = raw.trim().toLowerCase();
+  if (!email || !email.includes("@")) {
+    res.status(400).json({ message: "Valid email is required" });
+    return;
+  }
+
+  const rows = await db
+    .select()
+    .from(bookingsTable)
+    .where(sql`lower(trim(${bookingsTable.email})) = ${email}`);
+
+  if (rows.length === 0) {
+    res.status(404).json({ message: "No bookings found for that customer." });
+    return;
+  }
+
+  const holdIds = new Set<number>();
+  const fromEmail = parseHoldIdFromEmail(email);
+  if (fromEmail != null) holdIds.add(fromEmail);
+
+  const phoneDigits = new Set(
+    rows
+      .map((row) => row.phone.replace(/\D/g, ""))
+      .filter((digits) => digits.length >= 7),
+  );
+
+  if (phoneDigits.size > 0 || holdIds.size > 0) {
+    const holds = await db.select().from(blockedDatesTable);
+    for (const hold of holds) {
+      if (holdIds.has(hold.id)) continue;
+      if (!isClientHold(hold)) continue;
+      const holdPhone = (hold.phone ?? "").replace(/\D/g, "");
+      if (holdPhone.length >= 7 && phoneDigits.has(holdPhone)) {
+        holdIds.add(hold.id);
+      }
+    }
+  }
+
+  for (const holdId of holdIds) {
+    try {
+      const removed = await deleteClientHoldRow(holdId);
+      if (removed?.googleEventId) {
+        void deleteBlockedDateEvent(removed.googleEventId);
+      }
+    } catch (err) {
+      console.error("[admin] hold delete on customer delete failed:", holdId, err);
+    }
+  }
+
+  // Include any leftover hold-* booking rows for those hold ids (same client).
+  const bookingIds = new Set(rows.map((row) => row.id));
+  for (const holdId of holdIds) {
+    const holdEmail = `hold-${holdId}@apexdetailing.net`;
+    const extras = await db
+      .select()
+      .from(bookingsTable)
+      .where(sql`lower(trim(${bookingsTable.email})) = ${holdEmail}`);
+    for (const extra of extras) bookingIds.add(extra.id);
+  }
+
+  const toRemove = await db
+    .select()
+    .from(bookingsTable)
+    .where(inArray(bookingsTable.id, [...bookingIds]));
+
+  for (const row of toRemove) {
+    if (row.status !== "cancelled") {
+      await db
+        .update(bookingsTable)
+        .set({ status: "cancelled" })
+        .where(eq(bookingsTable.id, row.id));
+    }
+    try {
+      await cancelScheduledReviews(row.id, "Customer deleted by admin");
+    } catch (err) {
+      console.error("[admin] review cancel on customer delete failed:", err);
+    }
+    try {
+      await syncBookingCalendar(row.id);
+    } catch (err) {
+      console.error("[admin] calendar clear on customer delete failed:", err);
+    }
+    try {
+      await deletePhotosForBooking(row.id);
+    } catch (err) {
+      console.error("[admin] photo delete on customer delete failed:", err);
+    }
+  }
+
+  const deleted = await db
+    .delete(bookingsTable)
+    .where(inArray(bookingsTable.id, [...bookingIds]))
+    .returning({ id: bookingsTable.id });
+
+  res.json({ deleted: deleted.length, holdsRemoved: holdIds.size });
 });
 
 // Walk the cause chain looking for a Postgres error code (e.g. 23505).
@@ -803,9 +911,11 @@ router.delete("/admin/blocked-dates/:date", requireAdmin, async (req, res) => {
     .where(eq(blockedDatesTable.date, date));
   await db.delete(blockedDatesTable).where(eq(blockedDatesTable.date, date));
   if (row?.id) {
-    void cancelIdleHoldBooking(row.id).catch((err) =>
-      console.error("[admin] cancel hold booking failed:", err),
-    );
+    try {
+      await purgeHoldBookings(row.id);
+    } catch (err) {
+      console.error("[admin] purge hold booking failed:", err);
+    }
   }
   if (row?.googleEventId) {
     void deleteBlockedDateEvent(row.googleEventId);

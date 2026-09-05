@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { Mail, MessageSquare, Phone, X, Check, Play, Star } from "lucide-react";
+import { Mail, MessageSquare, Phone, X, Check, Play, Square, Star } from "lucide-react";
 import { formatDateTimeLong, formatDuration } from "@/lib/format";
 import { useAdmin } from "../context";
 import {
@@ -35,6 +35,8 @@ type Communication = {
   id: number;
   messageType: string;
   channel: string;
+  direction?: string;
+  body?: string;
   status: string;
   error: string | null;
   scheduledAt: string | null;
@@ -52,6 +54,8 @@ export default function AppointmentDetailDrawer() {
     refetch,
     openReadyModal,
     startBooking,
+    stopTimer,
+    resetToStart,
     completeBooking,
     sendReviewRequest,
     skipReviewRequest,
@@ -105,6 +109,9 @@ export default function AppointmentDetailDrawer() {
   const alreadyReady = status === "ready_for_pickup" || status === "completed";
   const storedDetailMs = bookingStoredDetailMs(detail);
   const smsHref = `sms:${detail.phone}`;
+  const inboundReplies = comms.filter(
+    (c) => c.messageType === "customer_reply" || c.direction === "inbound",
+  );
   const pickupNote = comms.find((c) => c.messageType === "vehicle_ready" && (c.status === "sent" || c.status === "delivered"));
   const reviewFailed = comms.find((c) => c.messageType === "review_request" && c.status === "failed");
   const reviewSkipped = comms.find((c) => c.messageType === "review_request" && c.status === "skipped");
@@ -269,12 +276,6 @@ export default function AppointmentDetailDrawer() {
               </div>
             ) : null}
             <p className="text-white">{detail.vehicle}</p>
-            <Link
-              href={`/admin/vehicles/${encodeURIComponent(`${detail.email.toLowerCase()}||${detail.vehicle.toLowerCase()}`)}`}
-              className="inline-block mt-3 text-sm text-[#23B9FF] hover:underline py-1"
-            >
-              Open vehicle
-            </Link>
           </section>
 
           <section>
@@ -320,7 +321,7 @@ export default function AppointmentDetailDrawer() {
                 <StatusStep
                   n={1}
                   label="Confirmed"
-                  hint="Tap Start detailing when you begin the job."
+                  hint="Starts automatically at the scheduled time if you forget — or tap Start when you begin."
                   current={status === "confirmed"}
                   done={status === "in_progress" || status === "ready_for_pickup" || status === "completed"}
                 />
@@ -346,6 +347,30 @@ export default function AppointmentDetailDrawer() {
                   done={false}
                 />
               </ol>
+              {status !== "confirmed" ? (
+                <GhostButton
+                  type="button"
+                  className="mt-3 w-full h-11 text-xs"
+                  disabled={busy}
+                  onClick={async () => {
+                    if (
+                      !confirm(
+                        "Reset this appointment to Confirmed / Start? This clears the timer and pickup status. No messages will be sent to the customer.",
+                      )
+                    ) {
+                      return;
+                    }
+                    setBusy(true);
+                    try {
+                      await resetToStart(detail.id);
+                    } finally {
+                      setBusy(false);
+                    }
+                  }}
+                >
+                  Reset to Start (clear timer, no messages)
+                </GhostButton>
+              ) : null}
             </section>
           ) : null}
 
@@ -382,7 +407,7 @@ export default function AppointmentDetailDrawer() {
                   </button>
                 </div>
               )}
-              <GhostButton type="button" className="h-10 text-xs" onClick={() => openReadyModal(detail, true)}>
+              <GhostButton type="button" className="min-h-11 h-11 text-xs" onClick={() => openReadyModal(detail, true)}>
                 Resend notification
               </GhostButton>
             </section>
@@ -409,7 +434,7 @@ export default function AppointmentDetailDrawer() {
               {status !== "confirmed" && !reviewSkipped ? (
                 <GhostButton
                   type="button"
-                  className="h-10 text-xs w-full"
+                  className="min-h-11 h-11 text-xs w-full"
                   disabled={busy || Boolean(reviewSent)}
                   onClick={() => void sendReview()}
                 >
@@ -419,7 +444,7 @@ export default function AppointmentDetailDrawer() {
               {reviewSkipped ? (
                 <GhostButton
                   type="button"
-                  className="h-10 text-xs w-full"
+                  className="min-h-11 h-11 text-xs w-full"
                   disabled={busy}
                   onClick={() => void allowReview()}
                 >
@@ -428,7 +453,7 @@ export default function AppointmentDetailDrawer() {
               ) : !reviewSent ? (
                 <GhostButton
                   type="button"
-                  className="h-10 text-xs w-full"
+                  className="min-h-11 h-11 text-xs w-full"
                   disabled={busy}
                   onClick={() => void skipReview()}
                 >
@@ -437,6 +462,24 @@ export default function AppointmentDetailDrawer() {
               ) : null}
             </section>
           ) : null}
+
+          <section>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">Customer SMS replies</h3>
+            {inboundReplies.length === 0 ? (
+              <p className="text-sm text-[#9CA3AF]">No replies from this customer yet.</p>
+            ) : (
+              <ul className="space-y-3">
+                {inboundReplies.map((row) => (
+                  <li key={row.id} className="border-l border-orange-500/40 pl-3">
+                    <p className="text-xs text-[#9CA3AF]">
+                      {formatDateTimeLong(row.sentAt ?? row.createdAt)}
+                    </p>
+                    <p className="text-sm text-white whitespace-pre-wrap">{row.body?.trim() || "(empty)"}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
 
           <section>
             <h3 className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">Timeline</h3>
@@ -473,6 +516,23 @@ export default function AppointmentDetailDrawer() {
               <Play className="w-4 h-4" /> Start detailing
             </PrimaryButton>
           )}
+          {status === "in_progress" && (
+            <GhostButton
+              type="button"
+              className="w-full min-h-12"
+              disabled={busy}
+              onClick={async () => {
+                setBusy(true);
+                try {
+                  await stopTimer(detail.id);
+                } finally {
+                  setBusy(false);
+                }
+              }}
+            >
+              <Square className="w-4 h-4" /> Stop timer
+            </GhostButton>
+          )}
           {ready && (
             <PrimaryButton
               type="button"
@@ -503,10 +563,10 @@ export default function AppointmentDetailDrawer() {
             </a>
           </div>
           {canAct && (
-            <div className="flex gap-2">
+            <div className="grid grid-cols-2 gap-2">
               <GhostButton
                 type="button"
-                className="flex-1"
+                className="min-h-12 w-full"
                 onClick={() => {
                   setEditing(detail);
                 }}
@@ -515,7 +575,7 @@ export default function AppointmentDetailDrawer() {
               </GhostButton>
               <GhostButton
                 type="button"
-                className="flex-1 text-red-400 border-red-500/20 hover:bg-red-500/10"
+                className="min-h-12 w-full text-red-400 border-red-500/20 hover:bg-red-500/10"
                 onClick={() => cancelBooking(detail.id)}
               >
                 Cancel
@@ -525,7 +585,7 @@ export default function AppointmentDetailDrawer() {
           {(status === "in_progress" || status === "ready_for_pickup") && (
             <GhostButton
               type="button"
-              className="w-full text-red-400 border-red-500/20 hover:bg-red-500/10"
+              className="w-full min-h-12 text-red-400 border-red-500/20 hover:bg-red-500/10"
               onClick={() => cancelBooking(detail.id)}
             >
               Cancel appointment
