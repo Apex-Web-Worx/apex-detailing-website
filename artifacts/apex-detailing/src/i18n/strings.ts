@@ -503,7 +503,7 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.ceramic.feat.2": "9H Ceramic Coating Application",
     "pkg.ceramic.feat.3": "Hydrophobic Protection",
     "pkg.ceramic.feat.4": "UV & Chemical Resistance",
-    "pkg.ceramic.feat.5": "Long-Lasting Gloss & Durability",
+    "pkg.ceramic.feat.5": "Up to 5 Years of Protection",
 
     "pkg.paint.title": "Apex Paint Correction",
     "pkg.paint.desc":
@@ -1058,7 +1058,7 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.ceramic.feat.2": "Нанесение керамики 9H",
     "pkg.ceramic.feat.3": "Гидрофобная защита",
     "pkg.ceramic.feat.4": "Устойчивость к УФ и химии",
-    "pkg.ceramic.feat.5": "Долговечный блеск и стойкость",
+    "pkg.ceramic.feat.5": "Защита до 5 лет",
 
     "pkg.paint.title": "Коррекция ЛКП Apex",
     "pkg.paint.desc":
