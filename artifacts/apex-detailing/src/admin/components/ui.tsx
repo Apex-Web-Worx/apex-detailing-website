@@ -82,7 +82,7 @@ export function AdminSelect({
                     setOpen(false);
                   }}
                   className={cn(
-                    "w-full text-left px-3.5 py-2.5 text-sm transition duration-150",
+                    "w-full text-left px-3.5 min-h-11 py-3 text-sm transition duration-150 touch-manipulation",
                     option.disabled && "opacity-40 cursor-not-allowed",
                     isActive
                       ? "bg-[#FF2AD4]/20 text-white"
@@ -115,14 +115,22 @@ export function StatusBadge({ status }: { status: DisplayStatus }) {
     completed: "COMPLETED",
     cancelled: "CANCELLED",
   };
+  const short: Record<DisplayStatus, string> = {
+    confirmed: "CONFIRMED",
+    in_progress: "IN PROG",
+    ready_for_pickup: "READY",
+    completed: "DONE",
+    cancelled: "CANCELLED",
+  };
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold tracking-[0.08em] whitespace-nowrap",
+        "inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold tracking-[0.06em] whitespace-nowrap",
         map[status],
       )}
     >
-      {label[status]}
+      <span className="sm:hidden">{short[status]}</span>
+      <span className="hidden sm:inline">{label[status]}</span>
     </span>
   );
 }

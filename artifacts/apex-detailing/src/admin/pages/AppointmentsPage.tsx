@@ -7,7 +7,6 @@ import {
   bookingShopDate,
   displayStatus,
   holdDisplayStatus,
-  holdServiceLabel,
   isClientHold,
   linkedHoldBooking,
   isDuplicateHoldBooking,
@@ -27,29 +26,32 @@ type ListItem =
   | { kind: "hold"; key: string; date: string; status: "confirmed" | "completed"; hold: BlockedDate };
 
 export default function AppointmentsPage() {
-  const { bookings, blockedDates, isLoading, isRefreshing, refetch, setDetail, setEditing, cancelBooking, openBlockDate, searchQuery, setSearchQuery, token } = useAdmin();
+  const {
+    bookings,
+    blockedDates,
+    isLoading,
+    isRefreshing,
+    refetch,
+    setDetail,
+    setEditing,
+    cancelBooking,
+    openBlockDate,
+    searchQuery,
+    setSearchQuery,
+    token,
+  } = useAdmin();
   const [filterDate, setFilterDate] = useState("");
-  const [filterService, setFilterService] = useState("");
   const [filterStatus, setFilterStatus] = useState<DisplayStatus | "">("");
   const [view, setView] = useState<"list" | "calendar">("list");
   const [calMonth, setCalMonth] = useState(todayDateString().slice(0, 7));
   const [selectedDate, setSelectedDate] = useState(todayDateString());
   const { data: personalEvents = [] } = useOwnerCalendarEvents(token, calMonth);
 
-  const serviceOptions = useMemo(() => {
-    const names = new Set(bookings.map((b) => b.serviceName));
-    for (const hold of blockedDates.filter(isClientHold)) {
-      names.add(holdServiceLabel(hold));
-    }
-    return Array.from(names).sort();
-  }, [bookings, blockedDates]);
-
   const items = useMemo(() => {
     const today = todayDateString();
     const list: ListItem[] = [];
     for (const booking of bookings) {
       if (searchQuery && !matchesSearch(booking, searchQuery)) continue;
-      if (filterService && booking.serviceName !== filterService) continue;
       const date = bookingShopDate(booking);
       if (filterDate && date !== filterDate) continue;
       const status = displayStatus(booking);
@@ -70,7 +72,6 @@ export default function AppointmentsPage() {
     for (const hold of blockedDates.filter(isClientHold)) {
       if (linkedHoldBooking(bookings, hold)) continue;
       if (searchQuery && !matchesHold(hold, searchQuery)) continue;
-      if (filterService && holdServiceLabel(hold) !== filterService) continue;
       if (filterDate && hold.date !== filterDate) continue;
       const status = holdDisplayStatus(hold);
       if (status === "completed" && filterStatus !== "completed") continue;
@@ -106,7 +107,7 @@ export default function AppointmentsPage() {
       return 0;
     });
     return list;
-  }, [bookings, blockedDates, searchQuery, filterService, filterDate, filterStatus, view]);
+  }, [bookings, blockedDates, searchQuery, filterDate, filterStatus, view]);
 
   const visible = view === "calendar" ? items.filter((item) => item.date === selectedDate) : items;
 
@@ -115,66 +116,53 @@ export default function AppointmentsPage() {
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between gap-3">
           <h2 className="text-xl md:text-2xl font-bold">Appointments</h2>
-          <div className="flex items-center gap-2 shrink-0">
-            <GhostButton type="button" onClick={() => void refetch()} disabled={isRefreshing} className="px-3">
-              <RefreshCw className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`} /> Refresh
-            </GhostButton>
-            <GhostButton type="button" onClick={() => openBlockDate()} className="px-3">
-              Block
-            </GhostButton>
-          </div>
         </div>
-        <div className="grid grid-cols-2 rounded-xl border border-white/10 overflow-hidden md:inline-grid md:w-72">
-          <button
-            type="button"
-            onClick={() => setView("list")}
-            className={`min-h-11 text-sm touch-manipulation ${view === "list" ? "bg-[#111111] text-white" : "text-[#9CA3AF]"}`}
-          >
-            List
-          </button>
-          <button
-            type="button"
-            onClick={() => setView("calendar")}
-            className={`min-h-11 text-sm touch-manipulation ${view === "calendar" ? "bg-[#111111] text-white" : "text-[#9CA3AF]"}`}
-          >
-            Calendar
-          </button>
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
+          <div className="col-span-2 grid grid-cols-2 rounded-xl border border-white/10 overflow-hidden sm:w-56">
+            <button
+              type="button"
+              onClick={() => setView("list")}
+              className={`min-h-11 text-sm touch-manipulation ${view === "list" ? "bg-[#111111] text-white" : "text-[#9CA3AF]"}`}
+            >
+              List
+            </button>
+            <button
+              type="button"
+              onClick={() => setView("calendar")}
+              className={`min-h-11 text-sm touch-manipulation ${view === "calendar" ? "bg-[#111111] text-white" : "text-[#9CA3AF]"}`}
+            >
+              Calendar
+            </button>
+          </div>
+          <GhostButton type="button" onClick={() => void refetch()} disabled={isRefreshing} className="min-h-11 px-3">
+            <RefreshCw className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`} /> Refresh
+          </GhostButton>
+          <GhostButton type="button" onClick={() => openBlockDate()} className="min-h-11 px-3">
+            Block
+          </GhostButton>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_12rem_12rem_auto] gap-2 items-stretch">
         <input
           type="search"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search appointments"
-          className={`${fieldClass} sm:max-w-sm`}
+          className={`${fieldClass} min-h-11`}
           aria-label="Search appointments"
         />
-        <div className="sm:max-w-xs w-full">
-          <AdminDatePicker
-            value={filterDate}
-            onChange={setFilterDate}
-            bookings={bookings}
-            blockedDates={blockedDates}
-            compact
-          />
-        </div>
-        <AdminSelect
-          value={filterService}
-          onChange={setFilterService}
-          aria-label="Filter by service"
-          className="lg:w-52"
-          options={[
-            { value: "", label: "All services" },
-            ...serviceOptions.map((s) => ({ value: s, label: s })),
-          ]}
+        <AdminDatePicker
+          value={filterDate}
+          onChange={setFilterDate}
+          bookings={bookings}
+          blockedDates={blockedDates}
+          compact
         />
         <AdminSelect
           value={filterStatus}
           onChange={(value) => setFilterStatus(value as DisplayStatus | "")}
           aria-label="Filter by status"
-          className="lg:w-52"
           options={[
             { value: "", label: "Upcoming" },
             { value: "confirmed", label: "Confirmed" },
@@ -184,13 +172,12 @@ export default function AppointmentsPage() {
             { value: "cancelled", label: "Cancelled" },
           ]}
         />
-        {(filterDate || filterService || filterStatus) && (
+        {(filterDate || filterStatus) && (
           <GhostButton
             type="button"
-            className="h-10"
+            className="min-h-11 w-full sm:w-auto"
             onClick={() => {
               setFilterDate("");
-              setFilterService("");
               setFilterStatus("");
             }}
           >
@@ -212,9 +199,9 @@ export default function AppointmentsPage() {
       )}
 
       {isLoading ? (
-        <p className="text-sm text-[#9CA3AF]">Loading bookings…</p>
+        <p className="text-sm text-[#9CA3AF]">Loading…</p>
       ) : visible.length === 0 ? (
-        <EmptyState title="No appointments" body="No bookings match these filters." />
+        <EmptyState title="No appointments" body="Try another filter or block a day for a walk-in." />
       ) : (
         <div className="space-y-2">
           {visible.map((item) =>
