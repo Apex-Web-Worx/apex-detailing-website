@@ -32,7 +32,3 @@ Regenerate after edits:
 ```bash
 python3 attached_assets/sticker/generate-bumper-sticker.py
 ```
-
-## Extra: hex logo stickers
-
-Die-cut hex and circle vinyl files from the real AD logo are in this same folder (`apex-sticker-hex-4in.png`, `apex-sticker-circle-4in.png`) if you also want shop merch or a “Detailed by Apex” window sticker.
