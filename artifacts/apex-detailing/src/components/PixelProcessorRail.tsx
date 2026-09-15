@@ -53,9 +53,9 @@ export default function PixelProcessorRail({
       b: lerp(a.b, b.b, t),
     });
 
-    /** Smooth brand tint for time t (seconds). Full cycle ~26s (calmer pace). */
+    /** Smooth brand tint for time t (seconds). Full cycle ~36s (slower, calmer). */
     const brandAt = (tSec: number): RGB => {
-      const cycle = ((tSec / 26) % 1 + 1) % 1;
+      const cycle = ((tSec / 36) % 1 + 1) % 1;
       const scaled = cycle * (PALETTE.length - 1);
       const i = Math.floor(scaled);
       const f = scaled - i;
@@ -98,22 +98,22 @@ export default function PixelProcessorRail({
       frame++;
       const t = frame / 60; // ~seconds at 60fps
 
-      // Live respeckle — grain churns without LED sparkle (calmer cadence).
-      if (!reduceMotion && frame % 3 === 0) {
-        const count = Math.max(10, (nw * nh * 0.01) | 0);
+      // Live respeckle — grain churns without LED sparkle (slower cadence).
+      if (!reduceMotion && frame % 5 === 0) {
+        const count = Math.max(8, (nw * nh * 0.007) | 0);
         for (let k = 0; k < count; k++) {
           const i = (Math.random() * noise.length) | 0;
           noise[i] = (Math.random() * 200 + 30) | 0;
         }
       }
 
-      // Drift: grain field scrolls up the edge + slight horizontal shimmer (~1.45× slower).
-      const driftY = reduceMotion ? 0 : t * 12.5;
-      const driftX = reduceMotion ? 0 : Math.sin(t * 0.38) * 4.5;
+      // Drift: grain field scrolls up the edge + slight horizontal shimmer (~1.4× slower again).
+      const driftY = reduceMotion ? 0 : t * 9;
+      const driftX = reduceMotion ? 0 : Math.sin(t * 0.27) * 4.5;
       // Edge pulse — atmosphere breathes in/out.
-      const pulse = reduceMotion ? 1 : 0.82 + 0.18 * Math.sin(t * 0.75);
+      const pulse = reduceMotion ? 1 : 0.82 + 0.18 * Math.sin(t * 0.52);
       // Secondary shimmer wave traveling along the rail.
-      const shimmerPhase = t * 1.1;
+      const shimmerPhase = t * 0.78;
 
       const tint = brandAt(reduceMotion ? 0 : t);
       // Secondary tint lagged for wash depth (purple-leaning companion).
