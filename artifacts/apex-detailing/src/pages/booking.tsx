@@ -47,6 +47,7 @@ const SERVICE_BADGES: Record<
   "apex-interior-detailing": { label: "Most Booked", tone: "popular" },
   "apex-full-detailing": { label: "Best Value", tone: "value" },
   "apex-express-interior-detailing": { label: "Express", tone: "express" },
+  "apex-moto": { label: "Motorcycle", tone: "express" },
   "apex-ceramic-coating": { label: "3-Day Notice", tone: "notice" },
 };
 import {
