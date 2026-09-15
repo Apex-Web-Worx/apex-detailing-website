@@ -2044,117 +2044,69 @@
     opacity: 0.7;
   }
 
-  /* Soft SoC pixel rails — thin edge atmosphere on typical desktops.
-     Never blocks hero copy/CTAs/trust (pointer-events none + edge fade). */
-  .apex-pixel-rail {
-    display: none;
+  /* Homepage SoC edge — full-height film-grain strip (phone-processor vibe),
+     matching the soft rose/red edge glow in the reference. Home only.
+     pointer-events none; fades into content so copy/CTAs stay clear. */
+  .apex-soc-edge {
+    display: block;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: clamp(36px, 9vw, 72px);
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.85;
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      #000 0%,
+      #000 28%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(90deg, #000 0%, #000 28%, transparent 100%);
+  }
+
+  .apex-soc-edge--left {
+    left: 0;
+  }
+
+  .apex-soc-edge--right {
+    right: 0;
+    opacity: 0.55;
+    -webkit-mask-image: linear-gradient(
+      270deg,
+      #000 0%,
+      #000 28%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(270deg, #000 0%, #000 28%, transparent 100%);
+  }
+
+  .apex-soc-edge__canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .apex-soc-edge {
+      width: clamp(44px, 5.5vw, 88px);
+    }
   }
 
   @media (min-width: 1280px) {
-    .apex-pixel-rail {
-      display: block;
-      position: fixed;
-      top: max(7rem, calc(50% - min(30vh, 260px)));
-      width: 22px;
-      height: min(50vh, 440px);
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0.44;
-      /* Fade top/bottom + toward content so the strip stays atmospheric. */
-      -webkit-mask-image: linear-gradient(
-          180deg,
-          transparent 0%,
-          #000 12%,
-          #000 88%,
-          transparent 100%
-        ),
-        linear-gradient(90deg, #000 0%, #000 45%, transparent 100%);
-      mask-image: linear-gradient(
-          180deg,
-          transparent 0%,
-          #000 12%,
-          #000 88%,
-          transparent 100%
-        ),
-        linear-gradient(90deg, #000 0%, #000 45%, transparent 100%);
-      -webkit-mask-composite: source-in;
-      mask-composite: intersect;
-    }
-
-    .apex-pixel-rail--left {
-      left: max(0.4rem, env(safe-area-inset-left, 0px));
-    }
-
-    .apex-pixel-rail--right {
-      right: max(0.4rem, env(safe-area-inset-right, 0px));
-      -webkit-mask-image: linear-gradient(
-          180deg,
-          transparent 0%,
-          #000 12%,
-          #000 88%,
-          transparent 100%
-        ),
-        linear-gradient(270deg, #000 0%, #000 45%, transparent 100%);
-      mask-image: linear-gradient(
-          180deg,
-          transparent 0%,
-          #000 12%,
-          #000 88%,
-          transparent 100%
-        ),
-        linear-gradient(270deg, #000 0%, #000 45%, transparent 100%);
-    }
-
-    .apex-pixel-rail__canvas {
-      display: block;
-      width: 100%;
-      height: 100%;
+    .apex-soc-edge {
+      width: clamp(52px, 4.5vw, 96px);
       opacity: 0.9;
     }
 
-    /* Keep nav / Book Now clear of the thin edge rails. */
-    .apex-site-nav .container {
-      padding-left: max(1.5rem, env(safe-area-inset-left, 0px));
-      padding-right: max(1.75rem, env(safe-area-inset-right, 0px));
-    }
-  }
-
-  /* On ultra-wide, park rails in the side gutter outside the 1600px shell. */
-  @media (min-width: 1600px) {
-    .apex-pixel-rail {
-      width: 26px;
-      height: min(52vh, 460px);
-      opacity: 0.48;
-    }
-
-    .apex-pixel-rail--left {
-      left: max(
-        0.4rem,
-        env(safe-area-inset-left, 0px),
-        calc((100vw - 1600px) / 2 - 32px)
-      );
-    }
-
-    .apex-pixel-rail--right {
-      right: max(
-        0.4rem,
-        env(safe-area-inset-right, 0px),
-        calc((100vw - 1600px) / 2 - 32px)
-      );
-    }
-  }
-
-  @media (min-width: 1800px) {
-    .apex-pixel-rail {
-      width: 28px;
-      height: min(54vh, 480px);
-      opacity: 0.5;
+    .apex-soc-edge--right {
+      opacity: 0.62;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .apex-pixel-rail {
-      opacity: 0.32;
+    .apex-soc-edge {
+      opacity: 0.55;
     }
   }
 

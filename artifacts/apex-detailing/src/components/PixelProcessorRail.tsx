@@ -8,8 +8,9 @@ type PixelProcessorRailProps = {
 };
 
 /**
- * Minimal LED / SoC-style pixel rail — thin side atmosphere on desktop.
- * Soft contrast + CSS edge fade so it never blocks hero copy/CTAs.
+ * Homepage-only SoC edge — soft film-grain / live-pixel strip like a phone
+ * processor glow along the viewport edge. Matches the reference: full-height
+ * tinted noise that fades into the page, never blocking copy.
  */
 export default function PixelProcessorRail({
   side,
@@ -27,135 +28,100 @@ export default function PixelProcessorRail({
 
     let raf = 0;
     let running = true;
-    let cols = 0;
-    let rows = 0;
-    let cell = 0;
     let dpr = 1;
-    let heat: Float32Array = new Float32Array(0);
-    const cores: Array<{ c: number; r: number; w: number; h: number; phase: number }> = [];
+    let cssW = 1;
+    let cssH = 1;
+    // Persistent grain field (0..1), refreshed cheaply each frame.
+    let grain: Float32Array = new Float32Array(0);
+    let gw = 0;
+    let gh = 0;
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
       dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const cssW = Math.max(1, rect.width);
-      const cssH = Math.max(1, rect.height);
+      cssW = Math.max(1, rect.width);
+      cssH = Math.max(1, rect.height);
       canvas.width = Math.round(cssW * dpr);
       canvas.height = Math.round(cssH * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      cell = 3;
-      cols = Math.max(4, Math.floor(cssW / cell));
-      rows = Math.max(20, Math.floor(cssH / cell));
-      heat = new Float32Array(cols * rows);
-
-      cores.length = 0;
-      const coreCount = 2 + Math.floor(rows / 55);
-      for (let i = 0; i < coreCount; i++) {
-        const w = 1 + Math.floor(Math.random() * 2);
-        const h = 2 + Math.floor(Math.random() * 3);
-        cores.push({
-          c: Math.floor(Math.random() * Math.max(1, cols - w)),
-          r: 2 + Math.floor(Math.random() * Math.max(1, rows - h - 4)),
-          w,
-          h,
-          phase: Math.random() * Math.PI * 2,
-        });
+      // ~2px cells — fine grain like the reference edge texture.
+      gw = Math.max(8, Math.floor(cssW / 2));
+      gh = Math.max(40, Math.floor(cssH / 2));
+      grain = new Float32Array(gw * gh);
+      for (let i = 0; i < grain.length; i++) {
+        grain[i] = Math.random();
       }
     };
 
-    const paintStatic = () => {
-      const w = canvas.clientWidth;
-      const h = canvas.clientHeight;
-      ctx.clearRect(0, 0, w, h);
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          const n = ((c * 17 + r * 31) % 10) / 10;
-          if (n < 0.7) continue;
-          const pink = n > 0.85;
-          ctx.fillStyle = pink
-            ? `rgba(255, 26, 216, ${0.1 + n * 0.12})`
-            : `rgba(0, 229, 255, ${0.08 + n * 0.1})`;
-          ctx.fillRect(c * cell + 0.4, r * cell + 0.4, cell - 0.8, cell - 0.8);
-        }
-      }
-    };
-
-    const tick = (t: number) => {
+    const paint = (t: number) => {
       if (!running) return;
-      const w = canvas.clientWidth;
-      const h = canvas.clientHeight;
-      ctx.clearRect(0, 0, w, h);
+      ctx.clearRect(0, 0, cssW, cssH);
 
       const time = t * 0.001;
-      const scan = ((time * 16) % (rows + 18)) - 8;
-      const drift = side === "left" ? 1 : -1;
+      const cellW = cssW / gw;
+      const cellH = cssH / gh;
+      const towardContent = side === "left" ? 1 : -1;
 
-      for (let i = 0; i < heat.length; i++) heat[i]! *= 0.9;
-
-      for (let c = 0; c < cols; c++) {
-        const rr = Math.floor(scan + Math.sin(time * 1.8 + c * 0.4 * drift) * 1.2);
-        if (rr >= 0 && rr < rows) {
-          heat[rr * cols + c]! = Math.min(1, heat[rr * cols + c]! + 0.32);
-        }
-        const rr2 = rr - 1;
-        if (rr2 >= 0 && rr2 < rows) {
-          heat[rr2 * cols + c]! = Math.min(1, heat[rr2 * cols + c]! + 0.12);
-        }
+      // Slow vertical drift + sparse sparkle (processor “alive”).
+      const drift = Math.floor(time * 9) % gh;
+      if (!reduceMotion && Math.random() < 0.45) {
+        const i = Math.floor(Math.random() * grain.length);
+        grain[i] = Math.min(1, grain[i]! + 0.55);
       }
 
-      for (const core of cores) {
-        const pulse = 0.25 + 0.45 * (0.5 + 0.5 * Math.sin(time * 1.4 + core.phase));
-        for (let y = 0; y < core.h; y++) {
-          for (let x = 0; x < core.w; x++) {
-            const c = core.c + x;
-            const r = core.r + y;
-            if (c < 0 || c >= cols || r < 0 || r >= rows) continue;
-            const idx = r * cols + c;
-            heat[idx]! = Math.min(1, heat[idx]! + pulse * 0.28);
-          }
-        }
-      }
+      for (let y = 0; y < gh; y++) {
+        const sy = (y + drift) % gh;
+        for (let x = 0; x < gw; x++) {
+          const g = grain[sy * gw + x]!;
+          // Stronger on the outer edge, soft falloff toward content.
+          const edge =
+            side === "left" ? 1 - x / (gw - 1) : x / (gw - 1);
+          const fall = Math.pow(Math.max(0, edge), 1.35);
+          let a = (0.04 + g * 0.22) * fall;
+          if (a < 0.02) continue;
 
-      if (Math.random() < 0.18) {
-        const c = Math.floor(Math.random() * cols);
-        const r = Math.floor(Math.random() * rows);
-        heat[r * cols + c]! = 0.75;
-      }
+          // Magenta/rose grain (reference) with rare cyan flecks.
+          const cyan = ((x * 19 + y * 7 + Math.floor(time * 3)) % 29) === 0;
+          const pulse =
+            0.85 +
+            0.15 * Math.sin(time * 2.1 + y * 0.08 * towardContent + x * 0.2);
+          a = Math.min(0.55, a * pulse);
 
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          const v = heat[r * cols + c]!;
-          const base = ((c * 13 + r * 7) % 11) === 0 ? 0.055 : 0.014;
-          const a = Math.min(0.62, base + v * 0.55);
-          if (a < 0.04) continue;
-
-          const inCore = cores.some(
-            (core) =>
-              c >= core.c &&
-              c < core.c + core.w &&
-              r >= core.r &&
-              r < core.r + core.h,
-          );
-          const pinkBias = inCore || (c + r + Math.floor(time * 2)) % 13 === 0;
-          ctx.fillStyle = pinkBias
-            ? `rgba(255, 26, 216, ${a})`
-            : `rgba(0, 229, 255, ${a * 0.9})`;
-          ctx.fillRect(c * cell + 0.4, r * cell + 0.4, cell - 0.8, cell - 0.8);
+          ctx.fillStyle = cyan
+            ? `rgba(0, 229, 255, ${a * 0.75})`
+            : `rgba(255, 40, 120, ${a})`;
+          ctx.fillRect(x * cellW, y * cellH, cellW + 0.4, cellH + 0.4);
         }
       }
 
-      raf = requestAnimationFrame(tick);
+      // Soft vertical wash so it reads as one edge glow, not a grid.
+      const wash = ctx.createLinearGradient(
+        side === "left" ? 0 : cssW,
+        0,
+        side === "left" ? cssW : 0,
+        0,
+      );
+      wash.addColorStop(0, "rgba(180, 20, 60, 0.18)");
+      wash.addColorStop(0.45, "rgba(120, 10, 40, 0.06)");
+      wash.addColorStop(1, "rgba(0, 0, 0, 0)");
+      ctx.fillStyle = wash;
+      ctx.fillRect(0, 0, cssW, cssH);
+
+      if (!reduceMotion) {
+        // Cool a few grains so sparkle stays alive.
+        for (let k = 0; k < 12; k++) {
+          const i = Math.floor(Math.random() * grain.length);
+          grain[i] = grain[i]! * 0.92;
+        }
+        raf = requestAnimationFrame(paint);
+      }
     };
 
     resize();
     const onResize = () => resize();
     window.addEventListener("resize", onResize);
-
-    if (reduceMotion) {
-      paintStatic();
-    } else {
-      raf = requestAnimationFrame(tick);
-    }
+    raf = requestAnimationFrame(paint);
 
     return () => {
       running = false;
@@ -166,10 +132,10 @@ export default function PixelProcessorRail({
 
   return (
     <div
-      className={`apex-pixel-rail apex-pixel-rail--${side} ${className}`.trim()}
+      className={`apex-soc-edge apex-soc-edge--${side} ${className}`.trim()}
       aria-hidden="true"
     >
-      <canvas ref={canvasRef} className="apex-pixel-rail__canvas" />
+      <canvas ref={canvasRef} className="apex-soc-edge__canvas" />
     </div>
   );
 }
