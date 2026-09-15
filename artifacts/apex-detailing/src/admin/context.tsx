@@ -40,6 +40,8 @@ type AdminContextValue = {
   onLogout: () => void;
   cancelBooking: (id: number) => Promise<void>;
   startBooking: (id: number) => Promise<void>;
+  stopTimer: (id: number) => Promise<void>;
+  resetToStart: (id: number) => Promise<void>;
   startHold: (id: number) => Promise<void>;
   completeBooking: (id: number) => Promise<void>;
   sendReviewRequest: (id: number) => Promise<"sent" | "already">;
@@ -85,7 +87,13 @@ export function AdminProvider({
 
   const bookingsQuery = useAdminListBookings({
     request: { headers },
-    query: { queryKey: getAdminListBookingsQueryKey(), retry: false, staleTime: 0 },
+    query: {
+      queryKey: getAdminListBookingsQueryKey(),
+      retry: false,
+      staleTime: 0,
+      // Pick up server auto-starts quickly when a scheduled time arrives.
+      refetchInterval: 15_000,
+    },
   });
   const blockedQuery = useAdminListBlockedDates({
     request: { headers },
@@ -175,6 +183,54 @@ export function AdminProvider({
       }
     },
     [headers, refetch],
+  );
+
+  const stopTimer = useCallback(
+    async (id: number) => {
+      try {
+        const res = await fetch(`/api/admin/bookings/${id}/stop-timer`, {
+          method: "POST",
+          headers,
+        });
+        if (!res.ok) {
+          const text = await res.text().catch(() => "");
+          throw new Error(text || `Could not stop timer (${res.status})`);
+        }
+        const json = await res.json();
+        queryClient.setQueryData<Booking[]>(getAdminListBookingsQueryKey(), (current) =>
+          (current ?? []).map((row) => (row.id === id ? { ...row, ...json } : row)),
+        );
+        setDetail((current) => (current?.id === id ? json : current));
+        void refetch();
+      } catch (e) {
+        alert(`Could not stop timer: ${e instanceof Error ? e.message : "unknown"}`);
+      }
+    },
+    [headers, queryClient, refetch],
+  );
+
+  const resetToStart = useCallback(
+    async (id: number) => {
+      try {
+        const res = await fetch(`/api/admin/bookings/${id}/reset-to-start`, {
+          method: "POST",
+          headers,
+        });
+        if (!res.ok) {
+          const text = await res.text().catch(() => "");
+          throw new Error(text || `Could not reset (${res.status})`);
+        }
+        const json = await res.json();
+        queryClient.setQueryData<Booking[]>(getAdminListBookingsQueryKey(), (current) =>
+          (current ?? []).map((row) => (row.id === id ? { ...row, ...json } : row)),
+        );
+        setDetail((current) => (current?.id === id ? json : current));
+        void refetch();
+      } catch (e) {
+        alert(`Could not reset to start: ${e instanceof Error ? e.message : "unknown"}`);
+      }
+    },
+    [headers, queryClient, refetch],
   );
 
   const startHold = useCallback(
@@ -343,6 +399,8 @@ export function AdminProvider({
       },
       cancelBooking,
       startBooking,
+      stopTimer,
+      resetToStart,
       startHold,
       completeBooking,
       sendReviewRequest,
@@ -377,6 +435,8 @@ export function AdminProvider({
       onLogout,
       cancelBooking,
       startBooking,
+      stopTimer,
+      resetToStart,
       startHold,
       completeBooking,
       sendReviewRequest,
