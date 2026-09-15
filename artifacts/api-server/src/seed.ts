@@ -154,41 +154,61 @@ export async function runSeed(): Promise<void> {
     }
   }
 
-  await seedDefaultDayRulesIfEmpty();
+  await ensureDefaultDayRulesForCatalog();
 }
 
-async function seedDefaultDayRulesIfEmpty(): Promise<void> {
-  const existing = await db.select({ id: serviceDayRulesTable.id }).from(serviceDayRulesTable).limit(1);
-  if (existing.length > 0) {
-    return; // owner has configured rules — never overwrite
-  }
+/**
+ * Install default Mon–Sat schedule rules for any catalog service that still
+ * has zero rules. Safe on re-run: services the owner already configured are
+ * left alone. Needed when a new package (e.g. Apex Moto) is added to `seeds`
+ * after the shop already has day rules for older services — the old
+ * "seed only when empty" path left the new package with no bookable slots.
+ */
+async function ensureDefaultDayRulesForCatalog(): Promise<void> {
   const services = await db
     .select({ id: servicesTable.id, slug: servicesTable.slug })
     .from(servicesTable)
     .where(inArray(servicesTable.slug, seeds.map((s) => s.slug)));
+
+  const existing = await db
+    .select({ serviceId: serviceDayRulesTable.serviceId })
+    .from(serviceDayRulesTable);
+  const haveRules = new Set(existing.map((r) => r.serviceId));
+
   for (const svc of services) {
-    if (FRIDAY_SHORT_SLUGS.has(svc.slug)) {
-      const [rule] = await db
-        .insert(serviceDayRulesTable)
-        .values({ serviceId: svc.id, dayOfWeek: 5, wholeDayLock: false, active: true })
-        .returning();
-      await db
-        .insert(serviceDaySlotsTable)
-        .values(FRIDAY_SHORT_SLOTS.map((time) => ({ ruleId: rule.id, time })));
-      console.log(`[seed] rules: ${svc.slug} → Fri ${FRIDAY_SHORT_SLOTS.join(",")} (per-slot)`);
-    } else {
-      for (const dow of MON_THRU_SAT_NON_FRI) {
-        const [rule] = await db
-          .insert(serviceDayRulesTable)
-          .values({ serviceId: svc.id, dayOfWeek: dow, wholeDayLock: true, active: true })
-          .returning();
-        await db
-          .insert(serviceDaySlotsTable)
-          .values(REGULAR_LONG_SLOTS.map((time) => ({ ruleId: rule.id, time })));
-      }
-      console.log(`[seed] rules: ${svc.slug} → Mon-Thu+Sat ${REGULAR_LONG_SLOTS.join(",")} (whole-day)`);
-    }
+    if (haveRules.has(svc.id)) continue;
+    await insertDefaultDayRules(svc);
   }
+}
+
+async function insertDefaultDayRules(svc: {
+  id: number;
+  slug: string;
+}): Promise<void> {
+  if (FRIDAY_SHORT_SLUGS.has(svc.slug)) {
+    const [rule] = await db
+      .insert(serviceDayRulesTable)
+      .values({ serviceId: svc.id, dayOfWeek: 5, wholeDayLock: false, active: true })
+      .returning();
+    await db
+      .insert(serviceDaySlotsTable)
+      .values(FRIDAY_SHORT_SLOTS.map((time) => ({ ruleId: rule.id, time })));
+    console.log(`[seed] rules: ${svc.slug} → Fri ${FRIDAY_SHORT_SLOTS.join(",")} (per-slot)`);
+    return;
+  }
+
+  for (const dow of MON_THRU_SAT_NON_FRI) {
+    const [rule] = await db
+      .insert(serviceDayRulesTable)
+      .values({ serviceId: svc.id, dayOfWeek: dow, wholeDayLock: true, active: true })
+      .returning();
+    await db
+      .insert(serviceDaySlotsTable)
+      .values(REGULAR_LONG_SLOTS.map((time) => ({ ruleId: rule.id, time })));
+  }
+  console.log(
+    `[seed] rules: ${svc.slug} → Mon-Thu+Sat ${REGULAR_LONG_SLOTS.join(",")} (whole-day)`,
+  );
 }
 
 // CLI entrypoint: only runs when invoked directly via `tsx ./src/seed.ts`,
