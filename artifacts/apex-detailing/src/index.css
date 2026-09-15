@@ -2672,6 +2672,13 @@
     }
   }
 
+  @media (min-width: 1280px) and (max-width: 1599px) {
+    .apex-hero-shell {
+      padding-left: max(48px, calc(0.4rem + 28px));
+      padding-right: max(48px, calc(0.4rem + 28px));
+    }
+  }
+
   @media (min-width: 1024px) and (max-width: 1199px) {
     .apex-hero-shell {
       padding-left: 32px;
