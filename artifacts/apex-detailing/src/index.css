@@ -2193,6 +2193,8 @@
 
     .apex-page--soc .apex-soc-atmosphere {
       opacity: 0.28;
+      animation: none;
+      filter: none;
     }
   }
 
