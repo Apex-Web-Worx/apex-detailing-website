@@ -8,8 +8,8 @@ type PixelProcessorRailProps = {
 };
 
 /**
- * Live LED / SoC-style pixel matrix rail — simulated phone-processor activity
- * (scan waves, core blocks, sparse spark activity) for desktop side atmosphere.
+ * Minimal LED / processor pixel rail — soft side atmosphere only.
+ * Intentionally thin and low-contrast so it never competes with hero copy.
  */
 export default function PixelProcessorRail({
   side,
@@ -31,9 +31,7 @@ export default function PixelProcessorRail({
     let rows = 0;
     let cell = 0;
     let dpr = 1;
-    // Persistent heat field for soft trails.
     let heat: Float32Array = new Float32Array(0);
-    // Sparse "core" blocks (like SoC islands).
     const cores: Array<{ c: number; r: number; w: number; h: number; phase: number }> = [];
 
     const resize = () => {
@@ -45,18 +43,18 @@ export default function PixelProcessorRail({
       canvas.height = Math.round(cssH * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      cell = cssW >= 56 ? 5 : 4;
-      cols = Math.max(6, Math.floor(cssW / cell));
+      cell = 3;
+      cols = Math.max(4, Math.floor(cssW / cell));
       rows = Math.max(20, Math.floor(cssH / cell));
       heat = new Float32Array(cols * rows);
 
       cores.length = 0;
-      const coreCount = 4 + Math.floor(rows / 40);
+      const coreCount = 2 + Math.floor(rows / 55);
       for (let i = 0; i < coreCount; i++) {
-        const w = 2 + Math.floor(Math.random() * 3);
-        const h = 3 + Math.floor(Math.random() * 5);
+        const w = 1 + Math.floor(Math.random() * 2);
+        const h = 2 + Math.floor(Math.random() * 3);
         cores.push({
-          c: 1 + Math.floor(Math.random() * Math.max(1, cols - w - 1)),
+          c: Math.floor(Math.random() * Math.max(1, cols - w)),
           r: 2 + Math.floor(Math.random() * Math.max(1, rows - h - 4)),
           w,
           h,
@@ -72,12 +70,12 @@ export default function PixelProcessorRail({
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           const n = ((c * 17 + r * 31) % 10) / 10;
-          if (n < 0.55) continue;
-          const pink = n > 0.78;
+          if (n < 0.7) continue;
+          const pink = n > 0.85;
           ctx.fillStyle = pink
-            ? `rgba(255, 26, 216, ${0.18 + n * 0.25})`
-            : `rgba(0, 229, 255, ${0.12 + n * 0.2})`;
-          ctx.fillRect(c * cell + 0.5, r * cell + 0.5, cell - 1, cell - 1);
+            ? `rgba(255, 26, 216, ${0.1 + n * 0.12})`
+            : `rgba(0, 229, 255, ${0.08 + n * 0.1})`;
+          ctx.fillRect(c * cell + 0.4, r * cell + 0.4, cell - 0.8, cell - 0.8);
         }
       }
     };
@@ -89,53 +87,48 @@ export default function PixelProcessorRail({
       ctx.clearRect(0, 0, w, h);
 
       const time = t * 0.001;
-      const scan = ((time * 22) % (rows + 18)) - 8;
+      const scan = ((time * 16) % (rows + 18)) - 8;
       const drift = side === "left" ? 1 : -1;
 
-      // Cool heat + inject activity.
-      for (let i = 0; i < heat.length; i++) heat[i]! *= 0.92;
+      for (let i = 0; i < heat.length; i++) heat[i]! *= 0.9;
 
-      // Vertical scan / bus wave.
       for (let c = 0; c < cols; c++) {
-        const rr = Math.floor(scan + Math.sin(time * 2.2 + c * 0.35 * drift) * 1.5);
+        const rr = Math.floor(scan + Math.sin(time * 1.8 + c * 0.4 * drift) * 1.2);
         if (rr >= 0 && rr < rows) {
-          heat[rr * cols + c]! = Math.min(1, heat[rr * cols + c]! + 0.55);
+          heat[rr * cols + c]! = Math.min(1, heat[rr * cols + c]! + 0.32);
         }
         const rr2 = rr - 1;
         if (rr2 >= 0 && rr2 < rows) {
-          heat[rr2 * cols + c]! = Math.min(1, heat[rr2 * cols + c]! + 0.22);
+          heat[rr2 * cols + c]! = Math.min(1, heat[rr2 * cols + c]! + 0.12);
         }
       }
 
-      // SoC core blocks pulse.
       for (const core of cores) {
-        const pulse = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(time * 1.6 + core.phase));
+        const pulse = 0.25 + 0.45 * (0.5 + 0.5 * Math.sin(time * 1.4 + core.phase));
         for (let y = 0; y < core.h; y++) {
           for (let x = 0; x < core.w; x++) {
             const c = core.c + x;
             const r = core.r + y;
             if (c < 0 || c >= cols || r < 0 || r >= rows) continue;
             const idx = r * cols + c;
-            heat[idx]! = Math.min(1, heat[idx]! + pulse * 0.45);
+            heat[idx]! = Math.min(1, heat[idx]! + pulse * 0.28);
           }
         }
       }
 
-      // Sparse spark traffic (instruction-like blips).
-      if (Math.random() < 0.35) {
+      if (Math.random() < 0.18) {
         const c = Math.floor(Math.random() * cols);
         const r = Math.floor(Math.random() * rows);
-        heat[r * cols + c]! = 1;
+        heat[r * cols + c]! = 0.75;
       }
 
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           const v = heat[r * cols + c]!;
-          const base = ((c * 13 + r * 7) % 9) === 0 ? 0.08 : 0.02;
-          const a = Math.min(1, base + v * 0.95);
-          if (a < 0.05) continue;
+          const base = ((c * 13 + r * 7) % 11) === 0 ? 0.045 : 0.01;
+          const a = Math.min(0.55, base + v * 0.5);
+          if (a < 0.04) continue;
 
-          // Cyan traces vs magenta cores — phone die vibe.
           const inCore = cores.some(
             (core) =>
               c >= core.c &&
@@ -143,11 +136,11 @@ export default function PixelProcessorRail({
               r >= core.r &&
               r < core.r + core.h,
           );
-          const pinkBias = inCore || (c + r + Math.floor(time * 3)) % 11 === 0;
+          const pinkBias = inCore || (c + r + Math.floor(time * 2)) % 13 === 0;
           ctx.fillStyle = pinkBias
             ? `rgba(255, 26, 216, ${a})`
-            : `rgba(0, 229, 255, ${a * 0.92})`;
-          ctx.fillRect(c * cell + 0.6, r * cell + 0.6, cell - 1.2, cell - 1.2);
+            : `rgba(0, 229, 255, ${a * 0.9})`;
+          ctx.fillRect(c * cell + 0.4, r * cell + 0.4, cell - 0.8, cell - 0.8);
         }
       }
 
@@ -176,11 +169,7 @@ export default function PixelProcessorRail({
       className={`apex-pixel-rail apex-pixel-rail--${side} ${className}`.trim()}
       aria-hidden="true"
     >
-      <div className="apex-pixel-rail__die">
-        <span className="apex-pixel-rail__label">SoC</span>
-        <canvas ref={canvasRef} className="apex-pixel-rail__canvas" />
-        <span className="apex-pixel-rail__pins" />
-      </div>
+      <canvas ref={canvasRef} className="apex-pixel-rail__canvas" />
     </div>
   );
 }
