@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Link } from "wouter";
 import { RefreshCw, Star } from "lucide-react";
 import { formatDateTimeLong } from "@/lib/format";
 import { useAdmin } from "../context";
@@ -175,12 +174,9 @@ export default function ReviewsPage() {
         ) : (
           <p className="text-sm text-[#9CA3AF]">No review URL saved yet.</p>
         )}
-        <Link href="/admin/messages" className="text-xs font-semibold text-[#9CA3AF] hover:text-white">
-          Edit link and message templates in Communications
-        </Link>
       </AdminCard>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
         {(
           [
             ["action", `Needs send (${counts.action})`],
@@ -245,7 +241,7 @@ export default function ReviewsPage() {
                   {item.reviewStatus !== "sent" && item.reviewStatus !== "skipped" ? (
                     <PrimaryButton
                       type="button"
-                      className="h-10 text-xs px-3"
+                      className="min-h-11 h-11 text-xs px-3"
                       disabled={busy}
                       onClick={() =>
                         void run(item.bookingId, async () => {
@@ -262,7 +258,7 @@ export default function ReviewsPage() {
                   {item.reviewStatus === "failed" ? (
                     <GhostButton
                       type="button"
-                      className="h-10 text-xs px-3"
+                      className="min-h-11 h-11 text-xs px-3"
                       disabled={busy}
                       onClick={() =>
                         void run(item.bookingId, async () => {
@@ -277,7 +273,7 @@ export default function ReviewsPage() {
                   {item.reviewStatus === "skipped" ? (
                     <GhostButton
                       type="button"
-                      className="h-10 text-xs px-3"
+                      className="min-h-11 h-11 text-xs px-3"
                       disabled={busy}
                       onClick={() =>
                         void run(item.bookingId, async () => {
@@ -291,7 +287,7 @@ export default function ReviewsPage() {
                   ) : item.reviewStatus !== "sent" ? (
                     <GhostButton
                       type="button"
-                      className="h-10 text-xs px-3"
+                      className="min-h-11 h-11 text-xs px-3"
                       disabled={busy}
                       onClick={() =>
                         void run(item.bookingId, async () => {
@@ -305,7 +301,7 @@ export default function ReviewsPage() {
                   ) : null}
                   <GhostButton
                     type="button"
-                    className="h-10 text-xs px-3"
+                    className="min-h-11 h-11 text-xs px-3"
                     onClick={() => openAppointment(item.bookingId)}
                   >
                     View appointment
