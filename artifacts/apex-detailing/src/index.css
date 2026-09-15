@@ -2108,7 +2108,7 @@
     top: 0;
     bottom: 0;
     /* Edge atmosphere only — keep clear of hero copy / CTAs. */
-    width: clamp(56px, 12vw, 120px);
+    width: clamp(44px, 9vw, 88px);
     z-index: 36;
     pointer-events: none;
     opacity: 1;
@@ -2168,7 +2168,7 @@
 
   @media (min-width: 768px) {
     .apex-soc-edge {
-      width: clamp(64px, 9vw, 140px);
+      width: clamp(48px, 7vw, 100px);
     }
 
     .apex-soc-edge--right {
@@ -2178,7 +2178,7 @@
 
   @media (min-width: 1280px) {
     .apex-soc-edge {
-      width: clamp(72px, 7vw, 150px);
+      width: clamp(52px, 5.5vw, 110px);
     }
 
     .apex-soc-edge--right {
