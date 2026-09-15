@@ -59,19 +59,21 @@ Shows past confirmed appointments (same card format as upcoming).
 - Sundays (automatic, not configurable)
 - Any dates manually added by owner
 
-### 5. Service Rules Panel
+### 5. Booking Rules (`/admin/rules`)
 
-**Purpose:** Configure which services run on which days and at what times.
+**Purpose:** Configure which services run on which days and at what times. This is a first-class admin tab (labeled **Rules**), not buried in the Services catalog.
 
 **Features:**
-- View all service-day combinations
+- View all service-day combinations, grouped by service
 - Toggle active/inactive for any rule
 - Set `wholeDayLock` (true = one booking consumes the day)
-- Configure time slots per rule (e.g., "07:30", "08:00")
-- Add new rules
+- Configure time slots per rule (e.g., "07:00", "11:00", "15:00")
+- Add new rules (including Friday short-service presets)
 - Delete rules
 
 **Important:** Changes affect the booking calendar immediately. Existing bookings are not affected by rule changes.
+
+The Services catalog page (`/admin/services`) links here; the editor itself lives on this tab.
 
 ---
 

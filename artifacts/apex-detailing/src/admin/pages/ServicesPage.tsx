@@ -1,10 +1,11 @@
+import { Link } from "wouter";
+import { Clock } from "lucide-react";
 import { formatDuration, formatPrice } from "@/lib/format";
 import { useAdmin } from "../context";
-import ServiceRulesPanel from "../components/ServiceRulesPanel";
-import { AdminCard, EmptyState } from "../components/ui";
+import { AdminCard, EmptyState, GhostButton } from "../components/ui";
 
 export default function ServicesPage() {
-  const { token, services } = useAdmin();
+  const { services } = useAdmin();
   return (
     <div className="space-y-6">
       <div>
@@ -34,7 +35,24 @@ export default function ServicesPage() {
           ))}
         </div>
       )}
-      <ServiceRulesPanel token={token} />
+      <AdminCard hover={false} className="p-5">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:justify-between">
+          <div className="flex items-start gap-3 min-w-0">
+            <Clock className="w-5 h-5 text-[#23B9FF] shrink-0 mt-0.5" />
+            <div>
+              <h3 className="font-bold text-white">Booking days & times</h3>
+              <p className="text-sm text-[#9CA3AF] mt-1">
+                Weekday hours, Friday short-service slots, and whole-day lock are edited on the Rules tab.
+              </p>
+            </div>
+          </div>
+          <Link href="/admin/rules" className="shrink-0">
+            <GhostButton type="button" className="w-full sm:w-auto">
+              Open Rules
+            </GhostButton>
+          </Link>
+        </div>
+      </AdminCard>
     </div>
   );
 }

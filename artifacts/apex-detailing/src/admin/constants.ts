@@ -6,6 +6,7 @@ import {
   Users,
   Car,
   Sparkles,
+  Clock,
   Settings,
   MessageSquare,
   Star,
@@ -24,6 +25,7 @@ export type AdminSection =
   | "customers"
   | "vehicles"
   | "services"
+  | "rules"
   | "payments"
   | "reviews"
   | "messages"
@@ -44,6 +46,7 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/admin/customers", section: "customers", label: "Customers", icon: Users },
   { href: "/admin/vehicles", section: "vehicles", label: "Vehicles", icon: Car },
   { href: "/admin/services", section: "services", label: "Services", icon: Sparkles },
+  { href: "/admin/rules", section: "rules", label: "Rules", icon: Clock },
   { href: "/admin/messages", section: "messages", label: "Communications", icon: MessageSquare },
   { href: "/admin/reviews", section: "reviews", label: "Reviews", icon: Star },
   { href: "/admin/settings", section: "settings", label: "Settings", icon: Settings },
@@ -56,6 +59,7 @@ export const PAGE_TITLES: Record<AdminSection, string> = {
   customers: "Customers",
   vehicles: "Vehicles",
   services: "Services",
+  rules: "Booking rules",
   payments: "Payments",
   reviews: "Reviews",
   messages: "Communications",
