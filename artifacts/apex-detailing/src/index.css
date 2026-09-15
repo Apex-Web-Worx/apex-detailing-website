@@ -2044,25 +2044,91 @@
     opacity: 0.7;
   }
 
-  /* Homepage SoC edge — full-height film-grain strip (phone-processor vibe),
-     matching the soft rose/red edge glow in the reference. Home only.
-     pointer-events none; fades into content so copy/CTAs stay clear. */
+  /* Homepage SoC — full-page film grain + soft Apex brand edge atmosphere
+     (magenta / purple / cyan / gold). Mounted only from home.tsx. Non-blocking. */
+  .apex-soc-atmosphere {
+    display: none;
+  }
+
+  .apex-page--soc .apex-soc-atmosphere {
+    display: block;
+    position: fixed;
+    inset: 0;
+    /* Above section backgrounds, below nav/sticky chrome; never blocks input. */
+    z-index: 35;
+    pointer-events: none;
+    opacity: 0.28;
+    mix-blend-mode: soft-light;
+    background-image:
+      linear-gradient(
+        90deg,
+        rgba(255, 26, 216, 0.14) 0%,
+        rgba(157, 0, 255, 0.06) 8%,
+        transparent 18%,
+        transparent 82%,
+        rgba(157, 0, 255, 0.04) 92%,
+        rgba(255, 26, 216, 0.08) 100%
+      ),
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: auto, 160px 160px;
+    animation:
+      apex-soc-grain-drift 44s linear infinite,
+      apex-soc-tint-shift 36s ease-in-out infinite;
+  }
+
+  @keyframes apex-soc-grain-drift {
+    0% {
+      background-position: 0 0, 0 0;
+    }
+    100% {
+      background-position: 0 0, 0 -160px;
+    }
+  }
+
+  /* Soft brand tint wash behind the noise — magenta → purple → cyan whisper → magenta. */
+  @keyframes apex-soc-tint-shift {
+    0%,
+    100% {
+      filter: hue-rotate(0deg) saturate(1.05);
+      opacity: 0.34;
+    }
+    33% {
+      filter: hue-rotate(-18deg) saturate(1.12);
+      opacity: 0.4;
+    }
+    66% {
+      filter: hue-rotate(28deg) saturate(1.08);
+      opacity: 0.36;
+    }
+  }
+
   .apex-soc-edge {
     display: block;
     position: fixed;
     top: 0;
     bottom: 0;
-    width: clamp(36px, 9vw, 72px);
-    z-index: 0;
+    /* Edge atmosphere only — keep clear of hero copy / CTAs. */
+    width: clamp(44px, 9vw, 88px);
+    z-index: 36;
     pointer-events: none;
-    opacity: 0.85;
+    opacity: 1;
+    /* Soft falloff: solid at the bezel, mostly gone before content. */
     -webkit-mask-image: linear-gradient(
       90deg,
       #000 0%,
-      #000 28%,
+      #000 22%,
+      rgba(0, 0, 0, 0.55) 48%,
+      rgba(0, 0, 0, 0.15) 72%,
       transparent 100%
     );
-    mask-image: linear-gradient(90deg, #000 0%, #000 28%, transparent 100%);
+    mask-image: linear-gradient(
+      90deg,
+      #000 0%,
+      #000 22%,
+      rgba(0, 0, 0, 0.55) 48%,
+      rgba(0, 0, 0, 0.15) 72%,
+      transparent 100%
+    );
   }
 
   .apex-soc-edge--left {
@@ -2071,42 +2137,69 @@
 
   .apex-soc-edge--right {
     right: 0;
-    opacity: 0.55;
+    /* Reference is left-dominant; keep a whisper on the right for balance. */
+    opacity: 0.34;
+    width: clamp(36px, 8vw, 72px);
     -webkit-mask-image: linear-gradient(
       270deg,
       #000 0%,
-      #000 28%,
+      #000 20%,
+      rgba(0, 0, 0, 0.45) 48%,
+      rgba(0, 0, 0, 0.12) 72%,
       transparent 100%
     );
-    mask-image: linear-gradient(270deg, #000 0%, #000 28%, transparent 100%);
+    mask-image: linear-gradient(
+      270deg,
+      #000 0%,
+      #000 20%,
+      rgba(0, 0, 0, 0.45) 48%,
+      rgba(0, 0, 0, 0.12) 72%,
+      transparent 100%
+    );
   }
 
   .apex-soc-edge__canvas {
     display: block;
     width: 100%;
     height: 100%;
+    /* Soft upscale — film grain, not crisp LED pixels. */
+    image-rendering: auto;
   }
 
   @media (min-width: 768px) {
     .apex-soc-edge {
-      width: clamp(44px, 5.5vw, 88px);
+      width: clamp(48px, 7vw, 100px);
+    }
+
+    .apex-soc-edge--right {
+      width: clamp(40px, 6vw, 88px);
     }
   }
 
   @media (min-width: 1280px) {
     .apex-soc-edge {
-      width: clamp(52px, 4.5vw, 96px);
-      opacity: 0.9;
+      width: clamp(52px, 5.5vw, 110px);
     }
 
     .apex-soc-edge--right {
-      opacity: 0.62;
+      width: clamp(48px, 5vw, 96px);
+      opacity: 0.4;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .apex-soc-edge {
-      opacity: 0.55;
+      opacity: 0.82;
+    }
+
+    .apex-soc-edge--right {
+      opacity: 0.32;
+    }
+
+    .apex-page--soc .apex-soc-atmosphere {
+      opacity: 0.28;
+      animation: none;
+      filter: none;
     }
   }
 
@@ -2626,15 +2719,16 @@
 
   @media (min-width: 1280px) and (max-width: 1599px) {
     .apex-hero-shell {
-      padding-left: max(48px, calc(0.4rem + 28px));
-      padding-right: max(48px, calc(0.4rem + 28px));
+      /* Match shell gutters to the tighter SoC edge so hero copy stays aligned. */
+      padding-left: 40px;
+      padding-right: 40px;
     }
   }
 
   @media (min-width: 1024px) and (max-width: 1199px) {
     .apex-hero-shell {
-      padding-left: 32px;
-      padding-right: 32px;
+      padding-left: 40px;
+      padding-right: 36px;
     }
 
     .apex-hero-ctas {
