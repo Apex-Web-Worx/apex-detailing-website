@@ -22,6 +22,7 @@ import {
   shopLocalTimeString,
   todayInShopLocal,
 } from "../lib/availability";
+import { ensureMissingCatalogServices } from "../seed";
 import {
   getAllActiveRulesByDow,
   getRuleForServiceIdDay,
@@ -102,6 +103,13 @@ function bookingToEmailData(
 }
 
 router.get("/booking/services", async (_req, res) => {
+  // Self-heal: insert any new catalog packages (e.g. Apex Moto) that are in
+  // seed but missing from this database, without clobbering live edits.
+  try {
+    await ensureMissingCatalogServices();
+  } catch (err) {
+    console.error("[booking/services] ensure catalog failed:", err);
+  }
   const rows = await db
     .select()
     .from(servicesTable)
