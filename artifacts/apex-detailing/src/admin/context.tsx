@@ -21,6 +21,7 @@ import {
   type BlockedDate,
   type Service,
 } from "@workspace/api-client-react";
+import { mergeServiceCatalog } from "@/i18n/catalogFallback";
 import { TOKEN_KEY } from "./constants";
 import { parseAdminLocation } from "./utils";
 import type { AdminSection } from "./constants";
@@ -124,7 +125,7 @@ export function AdminProvider({
 
   const bookings = bookingsQuery.data ?? [];
   const blockedDates = blockedQuery.data ?? [];
-  const services = servicesQuery.data ?? [];
+  const services = mergeServiceCatalog(servicesQuery.data) ?? [];
 
   useEffect(() => {
     if (routeId && section === "appointments") {
