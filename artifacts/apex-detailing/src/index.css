@@ -2107,28 +2107,26 @@
     position: fixed;
     top: 0;
     bottom: 0;
-    /* Extra width so sparse breakaway grains can drift toward content. */
-    width: clamp(72px, 26vw, 200px);
+    /* Edge atmosphere only — keep clear of hero copy / CTAs. */
+    width: clamp(56px, 12vw, 120px);
     z-index: 36;
     pointer-events: none;
     opacity: 1;
-    /* Long soft mask — solid near the bezel, then allows stray pixels inland. */
+    /* Soft falloff: solid at the bezel, mostly gone before content. */
     -webkit-mask-image: linear-gradient(
       90deg,
       #000 0%,
-      #000 14%,
-      rgba(0, 0, 0, 0.7) 36%,
-      rgba(0, 0, 0, 0.28) 62%,
-      rgba(0, 0, 0, 0.08) 82%,
+      #000 22%,
+      rgba(0, 0, 0, 0.55) 48%,
+      rgba(0, 0, 0, 0.15) 72%,
       transparent 100%
     );
     mask-image: linear-gradient(
       90deg,
       #000 0%,
-      #000 14%,
-      rgba(0, 0, 0, 0.7) 36%,
-      rgba(0, 0, 0, 0.28) 62%,
-      rgba(0, 0, 0, 0.08) 82%,
+      #000 22%,
+      rgba(0, 0, 0, 0.55) 48%,
+      rgba(0, 0, 0, 0.15) 72%,
       transparent 100%
     );
   }
@@ -2140,24 +2138,22 @@
   .apex-soc-edge--right {
     right: 0;
     /* Reference is left-dominant; keep a whisper on the right for balance. */
-    opacity: 0.38;
-    width: clamp(48px, 14vw, 120px);
+    opacity: 0.34;
+    width: clamp(36px, 8vw, 72px);
     -webkit-mask-image: linear-gradient(
       270deg,
       #000 0%,
-      #000 12%,
-      rgba(0, 0, 0, 0.55) 38%,
-      rgba(0, 0, 0, 0.2) 64%,
-      rgba(0, 0, 0, 0.06) 84%,
+      #000 20%,
+      rgba(0, 0, 0, 0.45) 48%,
+      rgba(0, 0, 0, 0.12) 72%,
       transparent 100%
     );
     mask-image: linear-gradient(
       270deg,
       #000 0%,
-      #000 12%,
-      rgba(0, 0, 0, 0.55) 38%,
-      rgba(0, 0, 0, 0.2) 64%,
-      rgba(0, 0, 0, 0.06) 84%,
+      #000 20%,
+      rgba(0, 0, 0, 0.45) 48%,
+      rgba(0, 0, 0, 0.12) 72%,
       transparent 100%
     );
   }
@@ -2172,22 +2168,22 @@
 
   @media (min-width: 768px) {
     .apex-soc-edge {
-      width: clamp(96px, 14vw, 220px);
+      width: clamp(64px, 9vw, 140px);
     }
 
     .apex-soc-edge--right {
-      width: clamp(60px, 9vw, 140px);
+      width: clamp(40px, 6vw, 88px);
     }
   }
 
   @media (min-width: 1280px) {
     .apex-soc-edge {
-      width: clamp(112px, 12vw, 240px);
+      width: clamp(72px, 7vw, 150px);
     }
 
     .apex-soc-edge--right {
-      width: clamp(72px, 7.5vw, 150px);
-      opacity: 0.45;
+      width: clamp(48px, 5vw, 96px);
+      opacity: 0.4;
     }
   }
 
@@ -2723,15 +2719,15 @@
 
   @media (min-width: 1280px) and (max-width: 1599px) {
     .apex-hero-shell {
-      /* Keep hero copy clear of the wider SoC edge atmosphere. */
-      padding-left: max(64px, calc(0.4rem + 48px));
-      padding-right: max(56px, calc(0.4rem + 36px));
+      /* Match shell gutters to the tighter SoC edge so hero copy stays aligned. */
+      padding-left: 40px;
+      padding-right: 40px;
     }
   }
 
   @media (min-width: 1024px) and (max-width: 1199px) {
     .apex-hero-shell {
-      padding-left: 44px;
+      padding-left: 40px;
       padding-right: 36px;
     }
 
