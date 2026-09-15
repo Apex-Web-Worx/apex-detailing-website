@@ -3153,7 +3153,7 @@
 .elite-card__icon-wrap {
   position: absolute;
   left: 1rem;
-  bottom: 1rem;
+  top: 1rem;
   display: inline-flex;
   padding: 0.6rem;
   border-radius: 0.75rem;
@@ -3170,8 +3170,10 @@
 
 .elite-card__badge {
   position: absolute;
-  top: 0.85rem;
-  right: 0.85rem;
+  left: 0.85rem;
+  right: auto;
+  top: auto;
+  bottom: 0.85rem;
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
@@ -3185,6 +3187,7 @@
   background: rgba(20, 14, 4, 0.82);
   border: 1px solid rgba(232, 197, 71, 0.45);
   box-shadow: 0 0 10px rgba(232, 197, 71, 0.16);
+  z-index: 2;
 }
 
 .elite-card__badge-icon {
