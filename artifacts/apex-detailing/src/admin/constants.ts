@@ -4,10 +4,7 @@ import {
   CalendarClock,
   CalendarDays,
   Users,
-  Car,
-  Sparkles,
   Settings,
-  MessageSquare,
   Star,
 } from "lucide-react";
 
@@ -42,9 +39,6 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/admin/appointments", section: "appointments", label: "Appointments", icon: CalendarClock },
   { href: "/admin/calendar", section: "calendar", label: "Calendar", icon: CalendarDays },
   { href: "/admin/customers", section: "customers", label: "Customers", icon: Users },
-  { href: "/admin/vehicles", section: "vehicles", label: "Vehicles", icon: Car },
-  { href: "/admin/services", section: "services", label: "Services", icon: Sparkles },
-  { href: "/admin/messages", section: "messages", label: "Communications", icon: MessageSquare },
   { href: "/admin/reviews", section: "reviews", label: "Reviews", icon: Star },
   { href: "/admin/settings", section: "settings", label: "Settings", icon: Settings },
 ];
