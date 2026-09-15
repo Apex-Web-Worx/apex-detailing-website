@@ -26,6 +26,7 @@ import {
 import BrandLogo from "@/components/BrandLogo";
 import LanguageToggle from "@/components/LanguageToggle";
 import ApexHero from "@/components/hero/ApexHero";
+import PixelProcessorRail from "@/components/PixelProcessorRail";
 import HeroDip from "@/components/hero/HeroDip";
 import EliteServicesSection from "@/components/EliteServicesSection";
 import AddonsSection from "@/components/AddonsSection";
@@ -601,6 +602,8 @@ export default function Home() {
           />
         ))}
       </div>
+      <PixelProcessorRail side="left" />
+      <PixelProcessorRail side="right" />
       {/* Navigation */}
       <nav
         className={`apex-site-nav fixed top-0 w-full z-50 overflow-visible transition-all duration-300 ${
