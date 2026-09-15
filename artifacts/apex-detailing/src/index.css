@@ -2044,92 +2044,117 @@
     opacity: 0.7;
   }
 
-  /* Soft pixel rails — ultra-wide side atmosphere only (never over hero copy). */
+  /* Soft SoC pixel rails — thin edge atmosphere on typical desktops.
+     Never blocks hero copy/CTAs/trust (pointer-events none + edge fade). */
   .apex-pixel-rail {
     display: none;
   }
 
-  /* Hero shell is max 1600px; only paint rails when side gutters exist. */
-  @media (min-width: 1600px) {
+  @media (min-width: 1280px) {
     .apex-pixel-rail {
       display: block;
       position: fixed;
-      top: max(7rem, calc(50% - min(28vh, 240px)));
-      width: 26px;
-      height: min(48vh, 420px);
+      top: max(7rem, calc(50% - min(30vh, 260px)));
+      width: 22px;
+      height: min(50vh, 440px);
       z-index: 0;
       pointer-events: none;
-      opacity: 0.3;
+      opacity: 0.44;
       /* Fade top/bottom + toward content so the strip stays atmospheric. */
       -webkit-mask-image: linear-gradient(
           180deg,
           transparent 0%,
-          #000 14%,
-          #000 86%,
+          #000 12%,
+          #000 88%,
           transparent 100%
         ),
-        linear-gradient(90deg, #000 0%, #000 40%, transparent 100%);
+        linear-gradient(90deg, #000 0%, #000 45%, transparent 100%);
       mask-image: linear-gradient(
           180deg,
           transparent 0%,
-          #000 14%,
-          #000 86%,
+          #000 12%,
+          #000 88%,
           transparent 100%
         ),
-        linear-gradient(90deg, #000 0%, #000 40%, transparent 100%);
+        linear-gradient(90deg, #000 0%, #000 45%, transparent 100%);
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
     }
 
     .apex-pixel-rail--left {
-      left: max(
-        env(safe-area-inset-left, 0px),
-        calc((100vw - 1600px) / 2 - 34px)
-      );
+      left: max(0.4rem, env(safe-area-inset-left, 0px));
     }
 
     .apex-pixel-rail--right {
-      right: max(
-        env(safe-area-inset-right, 0px),
-        calc((100vw - 1600px) / 2 - 34px)
-      );
+      right: max(0.4rem, env(safe-area-inset-right, 0px));
       -webkit-mask-image: linear-gradient(
           180deg,
           transparent 0%,
-          #000 14%,
-          #000 86%,
+          #000 12%,
+          #000 88%,
           transparent 100%
         ),
-        linear-gradient(270deg, #000 0%, #000 40%, transparent 100%);
+        linear-gradient(270deg, #000 0%, #000 45%, transparent 100%);
       mask-image: linear-gradient(
           180deg,
           transparent 0%,
-          #000 14%,
-          #000 86%,
+          #000 12%,
+          #000 88%,
           transparent 100%
         ),
-        linear-gradient(270deg, #000 0%, #000 40%, transparent 100%);
+        linear-gradient(270deg, #000 0%, #000 45%, transparent 100%);
     }
 
     .apex-pixel-rail__canvas {
       display: block;
       width: 100%;
       height: 100%;
-      opacity: 0.85;
+      opacity: 0.9;
+    }
+
+    /* Keep nav / Book Now clear of the thin edge rails. */
+    .apex-site-nav .container {
+      padding-left: max(1.5rem, env(safe-area-inset-left, 0px));
+      padding-right: max(1.75rem, env(safe-area-inset-right, 0px));
+    }
+  }
+
+  /* On ultra-wide, park rails in the side gutter outside the 1600px shell. */
+  @media (min-width: 1600px) {
+    .apex-pixel-rail {
+      width: 26px;
+      height: min(52vh, 460px);
+      opacity: 0.48;
+    }
+
+    .apex-pixel-rail--left {
+      left: max(
+        0.4rem,
+        env(safe-area-inset-left, 0px),
+        calc((100vw - 1600px) / 2 - 32px)
+      );
+    }
+
+    .apex-pixel-rail--right {
+      right: max(
+        0.4rem,
+        env(safe-area-inset-right, 0px),
+        calc((100vw - 1600px) / 2 - 32px)
+      );
     }
   }
 
   @media (min-width: 1800px) {
     .apex-pixel-rail {
       width: 28px;
-      height: min(52vh, 460px);
-      opacity: 0.34;
+      height: min(54vh, 480px);
+      opacity: 0.5;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .apex-pixel-rail {
-      opacity: 0.22;
+      opacity: 0.32;
     }
   }
 
@@ -3440,7 +3465,31 @@
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .cerakote-nav__wordmark {
+    height: 1.85rem;
+    max-width: 6.6rem;
+  }
+
+  .cerakote-nav__badge {
+    height: 3rem;
+    max-width: 10.5rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .cerakote-nav__wordmark {
+    height: 2.05rem;
+    max-width: 7.4rem;
+  }
+
+  .cerakote-nav__badge {
+    height: 3.35rem;
+    max-width: 12rem;
+  }
+}
+
+@media (min-width: 1536px) {
   .cerakote-nav__wordmark {
     height: 2.2rem;
     max-width: 7.9rem;

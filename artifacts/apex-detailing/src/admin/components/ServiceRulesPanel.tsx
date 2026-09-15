@@ -246,7 +246,7 @@ export default function ServiceRulesPanel({ token }: { token: string }) {
   const authFailed = isError && /401|Unauthorized/i.test(error instanceof Error ? error.message : String(error ?? ""));
 
   return (
-    <section className="mt-8" id="booking-schedule">
+    <section id="booking-schedule">
       <div className="flex flex-wrap items-center gap-3 mb-2">
         <Clock className="w-5 h-5 text-[#23B9FF]" />
         <h2 className="text-xl font-bold">Booking schedule</h2>

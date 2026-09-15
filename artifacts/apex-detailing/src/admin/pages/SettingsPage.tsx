@@ -1,11 +1,9 @@
 import { Link } from "wouter";
-import { Clock } from "lucide-react";
 import { ADMIN_NAME, ADMIN_ROLE } from "../constants";
 import { useAdmin } from "../context";
 import { formatDateLong, todayDateString } from "@/lib/format";
 import { heldCustomerName, isClientHold } from "../utils";
 import { GhostButton, PrimaryButton, AdminCard } from "../components/ui";
-import ServiceRulesPanel from "../components/ServiceRulesPanel";
 import { adminUnblockDate, getAdminListBlockedDatesQueryKey } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -47,23 +45,6 @@ export default function SettingsPage() {
               Sign out
             </PrimaryButton>
           </div>
-          <AdminCard hover={false} className="p-4">
-            <div className="flex items-start gap-3">
-              <Clock className="w-5 h-5 text-[#23B9FF] shrink-0 mt-0.5" />
-              <div className="min-w-0">
-                <p className="font-semibold text-white">Booking schedule</p>
-                <p className="text-xs text-[#9CA3AF] mt-1">
-                  Day rules and time slots also live under <span className="text-white">Services</span> in the sidebar.
-                </p>
-                <Link
-                  href="/admin/services"
-                  className="inline-flex mt-3 text-sm font-semibold text-[#23B9FF] hover:text-white"
-                >
-                  Open Services →
-                </Link>
-              </div>
-            </div>
-          </AdminCard>
         </div>
 
         <AdminCard hover={false} className="p-5">
@@ -117,8 +98,6 @@ export default function SettingsPage() {
           )}
         </AdminCard>
       </div>
-
-      <ServiceRulesPanel token={token} />
     </div>
   );
 }

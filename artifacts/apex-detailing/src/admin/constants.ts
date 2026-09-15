@@ -40,7 +40,7 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/admin/appointments", section: "appointments", label: "Appointments", icon: CalendarClock },
   { href: "/admin/calendar", section: "calendar", label: "Calendar", icon: CalendarDays },
   { href: "/admin/customers", section: "customers", label: "Customers", icon: Users },
-  // Booking day/time rules live on Services — keep this label so owners can find it.
+  // Booking schedule (ServiceRulesPanel) lives on Services — not in Settings.
   { href: "/admin/services", section: "services", label: "Services", icon: Clock },
   { href: "/admin/reviews", section: "reviews", label: "Reviews", icon: Star },
   { href: "/admin/settings", section: "settings", label: "Settings", icon: Settings },
