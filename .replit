@@ -30,7 +30,7 @@ timeoutMs = 20000
 
 [userenv.shared]
 ADMIN_TOKEN = "!3Lopasas123"
-OWNER_CALENDAR_VIEWER_EMAILS = "gurova.krista@gmail.com"
+OWNER_CALENDAR_VIEWER_EMAILS = ""
 
 [nix]
 channel = "stable-25_05"
