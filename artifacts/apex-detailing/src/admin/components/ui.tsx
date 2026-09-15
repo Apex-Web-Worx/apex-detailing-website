@@ -110,14 +110,14 @@ export function StatusBadge({ status }: { status: DisplayStatus }) {
   };
   const label: Record<DisplayStatus, string> = {
     confirmed: "CONFIRMED",
-    in_progress: "IN PROGRESS",
+    in_progress: "DETAILING",
     ready_for_pickup: "READY FOR PICKUP",
     completed: "COMPLETED",
     cancelled: "CANCELLED",
   };
   const short: Record<DisplayStatus, string> = {
     confirmed: "CONFIRMED",
-    in_progress: "IN PROG",
+    in_progress: "DETAILING",
     ready_for_pickup: "READY",
     completed: "DONE",
     cancelled: "CANCELLED",

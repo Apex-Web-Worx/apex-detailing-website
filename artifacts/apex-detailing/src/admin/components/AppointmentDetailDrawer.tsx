@@ -327,8 +327,8 @@ export default function AppointmentDetailDrawer() {
                 />
                 <StatusStep
                   n={2}
-                  label="In progress"
-                  hint="Timer runs until Ready for pickup."
+                  label="Detailing"
+                  hint="Timer runs automatically from the scheduled start until Ready for pickup."
                   current={status === "in_progress"}
                   done={status === "ready_for_pickup" || status === "completed"}
                 />

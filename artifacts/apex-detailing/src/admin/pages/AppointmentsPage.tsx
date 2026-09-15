@@ -166,7 +166,7 @@ export default function AppointmentsPage() {
           options={[
             { value: "", label: "Upcoming" },
             { value: "confirmed", label: "Confirmed" },
-            { value: "in_progress", label: "In progress" },
+            { value: "in_progress", label: "Detailing" },
             { value: "ready_for_pickup", label: "Ready for pickup" },
             { value: "completed", label: "Completed" },
             { value: "cancelled", label: "Cancelled" },

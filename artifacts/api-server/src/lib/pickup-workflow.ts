@@ -6,7 +6,7 @@ import {
   notificationTemplatesTable,
   shopSettingsTable,
 } from "@workspace/db";
-import { and, asc, desc, eq, inArray, lte, gte, lt } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, lte, gte } from "drizzle-orm";
 import {
   formatDateLong,
   formatTime12h,
@@ -404,32 +404,29 @@ export async function resetWorkflowToStart(bookingId: number) {
   return { booking: updated };
 }
 
-/** Auto-start only if scheduled time is within this window (not ancient jobs). */
-const AUTO_START_WINDOW_MS = 2 * 60 * 60 * 1000;
+/** Auto-start covers the whole shop day once the scheduled time has passed. */
+const AUTO_START_DAY_PAD_MS = 14 * 60 * 60 * 1000; // allow late-day catch-up after morning slots
 
 /**
  * Undo mass auto-starts of old confirmed bookings (timers showing hundreds
  * of hours). Auto-start sets inProgressAt === scheduledAt; manual Start uses
  * wall-clock time, so we only revert the auto-start fingerprint when the
- * scheduled time is outside the live window.
+ * scheduled shop day is over.
  */
 export async function revertStaleAutoStarts(now = new Date()): Promise<number> {
-  const cutoff = new Date(now.getTime() - AUTO_START_WINDOW_MS);
+  const todayShop = shopLocalDateString(now);
   const candidates = await db
     .select()
     .from(bookingsTable)
-    .where(
-      and(
-        eq(bookingsTable.status, "in_progress"),
-        lt(bookingsTable.scheduledAt, cutoff),
-      ),
-    );
+    .where(eq(bookingsTable.status, "in_progress"));
 
   let reverted = 0;
   for (const booking of candidates) {
     const startedAt = booking.inProgressAt?.getTime();
     const scheduledAt = booking.scheduledAt.getTime();
     if (startedAt == null || Math.abs(startedAt - scheduledAt) > 1000) continue;
+    // Keep live same-day auto-starts; only undo leftover days.
+    if (shopLocalDateString(booking.scheduledAt) >= todayShop) continue;
 
     const [updated] = await db
       .update(bookingsTable)
@@ -446,9 +443,9 @@ export async function revertStaleAutoStarts(now = new Date()): Promise<number> {
     await logEvent({
       bookingId: booking.id,
       actor: "system",
-      action: "timer_stopped",
+      action: "stale_autostart_reverted",
       status: "confirmed",
-      detail: "Reverted stale auto-start (scheduled time too old)",
+      detail: "Reverted stale auto-start (scheduled day already passed)",
       occurredAt: now,
     });
     reverted += 1;
@@ -457,12 +454,13 @@ export async function revertStaleAutoStarts(now = new Date()): Promise<number> {
 }
 
 /**
- * Auto-start confirmed jobs whose scheduled time has arrived — but only
- * within a short window, so deploy/cron never mass-starts months-old rows.
- * Skips jobs the admin already stopped via Stop timer.
+ * Auto-start confirmed jobs once their scheduled time arrives on the shop day.
+ * Sets status to in_progress (Detailing) and starts the timer from scheduledAt.
+ * Skips only jobs an admin explicitly Stop-timer'd for this appointment day.
  */
 export async function autoStartDueJobs(now = new Date()): Promise<number> {
-  const windowStart = new Date(now.getTime() - AUTO_START_WINDOW_MS);
+  const todayShop = shopLocalDateString(now);
+  const windowStart = new Date(now.getTime() - AUTO_START_DAY_PAD_MS);
   const due = await db
     .select()
     .from(bookingsTable)
@@ -476,6 +474,10 @@ export async function autoStartDueJobs(now = new Date()): Promise<number> {
 
   let started = 0;
   for (const booking of due) {
+    if (shopLocalDateString(booking.scheduledAt) !== todayShop) continue;
+
+    // Only honor deliberate admin stops — system stale-reverts must not
+    // permanently block auto-start on the real appointment day.
     const [stopped] = await db
       .select({ id: appointmentEventsTable.id })
       .from(appointmentEventsTable)
@@ -483,6 +485,8 @@ export async function autoStartDueJobs(now = new Date()): Promise<number> {
         and(
           eq(appointmentEventsTable.bookingId, booking.id),
           eq(appointmentEventsTable.action, "timer_stopped"),
+          eq(appointmentEventsTable.actor, "admin"),
+          gte(appointmentEventsTable.occurredAt, booking.scheduledAt),
         ),
       )
       .limit(1);
@@ -502,7 +506,7 @@ export async function autoStartDueJobs(now = new Date()): Promise<number> {
       actor: "system",
       action: "status_in_progress",
       status: "in_progress",
-      detail: "Auto-started at scheduled time — detailing timer running",
+      detail: "Auto-started at scheduled time — status Detailing, timer running",
       occurredAt: startedAt,
     });
     started += 1;
