@@ -8,8 +8,8 @@ type PixelProcessorRailProps = {
 };
 
 /**
- * Minimal LED / SoC-style pixel rail — thin side atmosphere on desktop.
- * Soft contrast + CSS edge fade so it never blocks hero copy/CTAs.
+ * Minimal LED / processor pixel rail — soft side atmosphere only.
+ * Intentionally thin and low-contrast so it never competes with hero copy.
  */
 export default function PixelProcessorRail({
   side,

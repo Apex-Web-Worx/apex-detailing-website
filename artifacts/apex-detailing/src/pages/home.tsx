@@ -631,14 +631,14 @@ export default function Home() {
               <LanguageToggle className="hidden md:inline-grid shrink-0 ml-0.5" />
             </div>
 
-            <div className="hidden md:flex items-center justify-end gap-1.5 lg:gap-2 xl:gap-2.5 min-w-0 flex-1 overflow-visible">
+            <div className="hidden md:flex items-center justify-end gap-2 lg:gap-2.5 xl:gap-3 min-w-0 flex-1">
               <a
                 href="tel:417-527-6165"
                 className="inline-flex items-center gap-1.5 text-[11px] lg:text-xs font-semibold text-white hover:text-[#00E5FF] transition-colors whitespace-nowrap shrink-0"
                 aria-label="Call Apex Detailing"
               >
                 <Phone className="w-3.5 h-3.5 text-[#00E5FF]" />
-                <span className="hidden xl:inline">{t("nav.call")}</span>
+                <span>{t("nav.call")}</span>
               </a>
               {NAV_ITEMS.map((item) => {
                 const href =
@@ -650,7 +650,6 @@ export default function Home() {
                   item.id === "journal" ||
                   item.id === "gift" ||
                   item.id === "testimonials";
-                const midPriority = item.id === "about" || item.id === "gallery";
                 return (
                   <a
                     key={item.id}
@@ -661,11 +660,7 @@ export default function Home() {
                       scrollToSection(item.id);
                     }}
                     className={`font-semibold text-[11px] lg:text-xs tracking-wide uppercase transition-colors relative group whitespace-nowrap shrink-0 ${
-                      secondary
-                        ? "hidden xl:inline-flex"
-                        : midPriority
-                          ? "hidden lg:inline-flex"
-                          : ""
+                      secondary ? "hidden xl:inline-flex" : ""
                     } ${
                       activeSection === item.id
                         ? "text-white header-shine"
@@ -680,7 +675,7 @@ export default function Home() {
               <a
                 href={bookingUrl()}
                 onClick={goBookNow}
-                className="btn-cyber btn-cyber-sm whitespace-nowrap shrink-0 ml-0.5"
+                className="btn-cyber btn-cyber-sm whitespace-nowrap shrink-0"
               >
                 <span>{t("nav.book")}</span>
               </a>
