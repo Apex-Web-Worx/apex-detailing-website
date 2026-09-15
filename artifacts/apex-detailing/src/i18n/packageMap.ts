@@ -6,8 +6,9 @@ export const PKG_PHOTO: Record<string, string> = {
   exterior: "pkg-exterior.jpg",
   wax: "pkg-wax.jpg",
   headlight: "pkg-headlight.jpg",
-  ceramic: "pkg-ceramic.jpg",
+  ceramic: "ceramic-bmw-proteam.jpg",
   paint: "pkg-paint.jpg",
+  moto: "pkg-moto.jpg",
 };
 
 /** Maps booking API slugs to homepage package copy keys. */
@@ -20,6 +21,7 @@ export const BOOKING_SLUG_TO_PKG: Record<string, string> = {
   "apex-headlight-restoration": "headlight",
   "apex-ceramic-coating": "ceramic",
   "apex-paint-correction": "paint",
+  "apex-moto": "moto",
 };
 
 export function packageTitleKey(slug: string): string | null {
@@ -30,5 +32,25 @@ export function packageTitleKey(slug: string): string | null {
 export function packageDescKey(slug: string): string | null {
   const pkg = BOOKING_SLUG_TO_PKG[slug];
   return pkg ? `pkg.${pkg}.desc` : null;
+}
+
+export type PackagePriceTier = { label: string; amount: string };
+
+/** Vehicle-size price rows from `pkg.{name}.tier.{n}.label` / `.amount`. */
+export function packagePriceTiers(
+  t: (key: string) => string,
+  pkg: string | undefined,
+): PackagePriceTier[] {
+  if (!pkg) return [];
+  const rows: PackagePriceTier[] = [];
+  for (let i = 0; i < 8; i++) {
+    const labelKey = `pkg.${pkg}.tier.${i}.label`;
+    const amountKey = `pkg.${pkg}.tier.${i}.amount`;
+    const label = t(labelKey);
+    const amount = t(amountKey);
+    if (label === labelKey || amount === amountKey) break;
+    rows.push({ label, amount });
+  }
+  return rows;
 }
 

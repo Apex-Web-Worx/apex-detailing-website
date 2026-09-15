@@ -2,28 +2,41 @@ import type { Booking, BlockedDate } from "@workspace/api-client-react";
 import { formatPrice, todayDateString } from "@/lib/format";
 import type { AdminSection } from "./constants";
 
+/** Parse any scheduledAt payload into a valid Date, or null if unusable. */
+export function parseScheduledAt(
+  value: string | Date | number | null | undefined,
+): Date | null {
+  if (value == null || value === "") return null;
+  const date = value instanceof Date ? value : new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
 export function bookingIso(booking: Booking): string {
-  return typeof booking.scheduledAt === "string"
-    ? booking.scheduledAt
-    : new Date(booking.scheduledAt as unknown as string).toISOString();
+  const date = parseScheduledAt(booking.scheduledAt as unknown as string | Date | number | null);
+  if (!date) return "";
+  return date.toISOString();
 }
 
 export function scheduledAtToShopDate(iso: string): string {
+  const date = parseScheduledAt(iso);
+  if (!date) return "";
   return new Intl.DateTimeFormat("en-CA", {
     timeZone: "America/Chicago",
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-  }).format(new Date(iso));
+  }).format(date);
 }
 
 export function scheduledAtToShopTime(iso: string): string {
+  const date = parseScheduledAt(iso);
+  if (!date) return "";
   return new Intl.DateTimeFormat("en-GB", {
     timeZone: "America/Chicago",
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,
-  }).format(new Date(iso));
+  }).format(date);
 }
 
 export function bookingShopDate(booking: Booking): string {
@@ -480,6 +493,7 @@ export function computeKpis(
   for (const booking of bookings) {
     if (booking.status === "cancelled") continue;
     const date = bookingShopDate(booking);
+    if (!date) continue;
     const status = displayStatus(booking, now);
     if (date === today) todayCount += 1;
     if (date >= weekStart && date <= weekEnd) weekCount += 1;

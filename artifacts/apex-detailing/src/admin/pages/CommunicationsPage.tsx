@@ -24,6 +24,18 @@ type Communication = {
   createdAt: string;
 };
 
+type InboundRow = {
+  id: number;
+  bookingId: number;
+  body: string;
+  status: string;
+  createdAt: string;
+  customerName: string;
+  phone: string;
+  vehicle: string;
+  serviceName: string;
+};
+
 export default function CommunicationsPage() {
   const { token, bookings, setDetail } = useAdmin();
   const [tab, setTab] = useState<"inbox" | "templates">("inbox");
@@ -31,8 +43,30 @@ export default function CommunicationsPage() {
   const [reviewLink, setReviewLink] = useState("");
   const [saving, setSaving] = useState(false);
   const [note, setNote] = useState<string | null>(null);
+  const [inbound, setInbound] = useState<InboundRow[]>([]);
+  const [sampleBusy, setSampleBusy] = useState(false);
 
   const ready = bookings.filter((b) => displayStatus(b) === "ready_for_pickup" || b.readyAt);
+
+  const sendSample = async () => {
+    setSampleBusy(true);
+    setNote(null);
+    try {
+      const res = await fetch("/api/admin/inbound-sms/sample", {
+        method: "POST",
+        headers: { "x-admin-token": token },
+      });
+      if (!res.ok) {
+        const json = (await res.json().catch(() => null)) as { message?: string } | null;
+        throw new Error(json?.message ?? `Send failed (${res.status})`);
+      }
+      setNote("Sample reply sent to your phone.");
+    } catch (e) {
+      setNote(e instanceof Error ? e.message : "Send failed");
+    } finally {
+      setSampleBusy(false);
+    }
+  };
 
   useEffect(() => {
     fetch("/api/admin/notification-templates", { headers: { "x-admin-token": token } })
@@ -44,6 +78,10 @@ export default function CommunicationsPage() {
       .then((row) => {
         if (row?.reviewLink != null) setReviewLink(row.reviewLink);
       })
+      .catch(() => undefined);
+    fetch("/api/admin/inbound-sms", { headers: { "x-admin-token": token } })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((rows) => setInbound(Array.isArray(rows) ? rows : []))
       .catch(() => undefined);
   }, [token]);
 
@@ -108,14 +146,72 @@ export default function CommunicationsPage() {
       </div>
 
       {tab === "inbox" && (
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
-          {ready.length === 0 ? (
-            <EmptyState title="No pickup notifications yet" body="Mark a vehicle ready for pickup to see it here." />
-          ) : (
-            ready.map((b) => (
-              <CommCard key={b.id} bookingId={b.id} token={token} onOpen={() => setDetail(b)} />
-            ))
-          )}
+        <div className="space-y-6">
+          <section className="space-y-3">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div className="space-y-1 min-w-0">
+                <h3 className="text-sm font-semibold text-white">Customer SMS replies</h3>
+                <p className="text-xs text-[#9CA3AF]">
+                  When a client texts your Twilio number, the message is forwarded to your phone and listed here.
+                </p>
+              </div>
+              <PrimaryButton
+                type="button"
+                className="h-10 text-xs shrink-0"
+                disabled={sampleBusy}
+                onClick={() => void sendSample()}
+              >
+                {sampleBusy ? "Sending…" : "Send sample to my phone"}
+              </PrimaryButton>
+            </div>
+            {note && tab === "inbox" ? <p className="text-sm text-emerald-300">{note}</p> : null}
+            {inbound.length === 0 ? (
+              <EmptyState
+                title="No customer replies yet"
+                body="Replies to ready/confirm SMS will show up here once the Twilio inbound webhook is connected."
+              />
+            ) : (
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
+                {inbound.map((row) => {
+                  const booking = bookings.find((b) => b.id === row.bookingId);
+                  return (
+                    <AdminCard key={row.id} hover={false} className="p-4 space-y-2">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="font-semibold text-white">{row.customerName}</p>
+                          <p className="text-xs text-[#9CA3AF] mt-1">
+                            {row.phone} · {row.vehicle} · {row.serviceName}
+                          </p>
+                          <p className="text-[11px] text-[#9CA3AF] mt-1">
+                            {formatDateTimeLong(row.createdAt)}
+                          </p>
+                        </div>
+                        {booking ? (
+                          <GhostButton type="button" className="h-9 text-xs" onClick={() => setDetail(booking)}>
+                            View
+                          </GhostButton>
+                        ) : null}
+                      </div>
+                      <p className="text-sm text-white whitespace-pre-wrap">{row.body}</p>
+                    </AdminCard>
+                  );
+                })}
+              </div>
+            )}
+          </section>
+
+          <section className="space-y-3">
+            <h3 className="text-sm font-semibold text-white">Pickup notifications</h3>
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
+              {ready.length === 0 ? (
+                <EmptyState title="No pickup notifications yet" body="Mark a vehicle ready for pickup to see it here." />
+              ) : (
+                ready.map((b) => (
+                  <CommCard key={b.id} bookingId={b.id} token={token} onOpen={() => setDetail(b)} />
+                ))
+              )}
+            </div>
+          </section>
         </div>
       )}
 

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   useAdminListServiceRules,
@@ -8,15 +8,19 @@ import {
   adminAddRuleSlot,
   adminRemoveRuleSlot,
   getAdminListServiceRulesQueryKey,
+  getListServicesQueryKey,
   useListServices,
   type ServiceDayRule,
   type Service,
 } from "@workspace/api-client-react";
 import { Clock, Loader2, Plus, Trash2, X as XIcon } from "lucide-react";
+import { mergeServiceCatalog } from "@/i18n/catalogFallback";
 import { AdminSelect, fieldClass, GhostButton, PrimaryButton } from "./ui";
 
 const DOW_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const DOW_LONG = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const DEFAULT_LONG_DOWS = [1, 2, 3, 4, 6]; // Mon–Thu + Sat
+const DEFAULT_LONG_SLOTS = ["07:30", "08:00"];
 
 function formatHHMM12h(time: string): string {
   const [hStr, mStr] = time.split(":");
@@ -35,19 +39,78 @@ export default function ServiceRulesPanel({ token }: { token: string }) {
     request: { headers },
     query: { queryKey: getAdminListServiceRulesQueryKey(), retry: false },
   });
-  const { data: services } = useListServices();
+  const { data: apiServices } = useListServices();
+  const services = mergeServiceCatalog(apiServices);
   const refresh = () =>
     queryClient.invalidateQueries({ queryKey: getAdminListServiceRulesQueryKey() });
 
+  const [ensuring, setEnsuring] = useState(false);
+  const [ensureNote, setEnsureNote] = useState<string | null>(null);
+
+  // Insert missing catalog packages (Apex Moto, etc.) + default day rules.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setEnsuring(true);
+      try {
+        const res = await fetch("/api/admin/ensure-catalog", {
+          method: "POST",
+          headers: { "x-admin-token": token, Accept: "application/json" },
+        });
+        if (cancelled) return;
+        if (res.ok) {
+          setEnsureNote(null);
+          await Promise.all([
+            queryClient.invalidateQueries({ queryKey: getListServicesQueryKey() }),
+            queryClient.invalidateQueries({ queryKey: getAdminListServiceRulesQueryKey() }),
+          ]);
+        } else if (res.status === 404) {
+          setEnsureNote(
+            "Live API is still on an older build — Publish elite-services-redesign so Apex Moto can be added to admin rules.",
+          );
+        } else {
+          setEnsureNote("Could not refresh the service catalog.");
+        }
+      } catch {
+        if (!cancelled) {
+          setEnsureNote("Could not refresh the service catalog.");
+        }
+      } finally {
+        if (!cancelled) setEnsuring(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [token, queryClient]);
+
   const byService = useMemo(() => {
-    const map = new Map<number, { name: string; slug: string; rules: ServiceDayRule[] }>();
+    const map = new Map<
+      number,
+      { name: string; slug: string; sortOrder: number; rules: ServiceDayRule[] }
+    >();
+    for (const s of services ?? []) {
+      map.set(s.id, {
+        name: s.name,
+        slug: s.slug,
+        sortOrder: s.sortOrder,
+        rules: [],
+      });
+    }
     for (const r of rules ?? []) {
-      const entry = map.get(r.serviceId) ?? { name: r.serviceName, slug: r.serviceSlug, rules: [] };
+      const entry = map.get(r.serviceId) ?? {
+        name: r.serviceName,
+        slug: r.serviceSlug,
+        sortOrder: 999,
+        rules: [] as ServiceDayRule[],
+      };
       entry.rules.push(r);
       map.set(r.serviceId, entry);
     }
-    return map;
-  }, [rules]);
+    return Array.from(map.entries()).sort(
+      (a, b) => a[1].sortOrder - b[1].sortOrder || a[0] - b[0],
+    );
+  }, [rules, services]);
 
   const [newServiceId, setNewServiceId] = useState<number | "">("");
   const [newDow, setNewDow] = useState<number>(1);
@@ -55,10 +118,15 @@ export default function ServiceRulesPanel({ token }: { token: string }) {
   const [newSlotsCsv, setNewSlotsCsv] = useState<string>("07:30, 08:00");
   const [adding, setAdding] = useState(false);
   const [addError, setAddError] = useState<string | null>(null);
+  const [seedingId, setSeedingId] = useState<number | null>(null);
 
   const addRule = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newServiceId === "") return;
+    if (Number(newServiceId) < 0) {
+      setAddError("Publish the latest API first so this service exists in the live catalog.");
+      return;
+    }
     setAddError(null);
     setAdding(true);
     try {
@@ -80,6 +148,38 @@ export default function ServiceRulesPanel({ token }: { token: string }) {
     }
   };
 
+  const seedDefaultSchedule = async (service: Service) => {
+    if (service.id < 0) {
+      setAddError("Publish the latest API first so Apex Moto exists in the live catalog.");
+      return;
+    }
+    setAddError(null);
+    setSeedingId(service.id);
+    try {
+      for (const dayOfWeek of DEFAULT_LONG_DOWS) {
+        try {
+          await adminCreateServiceRule(
+            {
+              serviceId: service.id,
+              dayOfWeek,
+              wholeDayLock: true,
+              slots: DEFAULT_LONG_SLOTS,
+            },
+            { headers },
+          );
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : "";
+          if (!/409/.test(msg)) throw err;
+        }
+      }
+      refresh();
+    } catch (err) {
+      setAddError(err instanceof Error ? err.message : "Could not add default schedule");
+    } finally {
+      setSeedingId(null);
+    }
+  };
+
   const toggleLock = async (rule: ServiceDayRule) => {
     try {
       await adminUpdateServiceRule(rule.id, { wholeDayLock: !rule.wholeDayLock }, { headers });
@@ -97,14 +197,13 @@ export default function ServiceRulesPanel({ token }: { token: string }) {
     }
   };
   const deleteRule = async (rule: ServiceDayRule) => {
-    if (!confirm(`Delete the ${DOW_LONG[rule.dayOfWeek]} rule for ${rule.serviceName}? Customers will no longer be able to book it on ${DOW_LONG[rule.dayOfWeek]}s.`)) {
-      return;
-    }
-    try {
-      await adminDeleteServiceRule(rule.id, { headers });
-      refresh();
-    } catch (e) {
-      alert(`Could not delete: ${e instanceof Error ? e.message : "unknown"}`);
+    if (confirm(`Delete the ${DOW_LONG[rule.dayOfWeek]} rule for ${rule.serviceName}? Customers will no longer be able to book it on ${DOW_LONG[rule.dayOfWeek]}s.`)) {
+      try {
+        await adminDeleteServiceRule(rule.id, { headers });
+        refresh();
+      } catch (e) {
+        alert(`Could not delete: ${e instanceof Error ? e.message : "unknown"}`);
+      }
     }
   };
   const addSlot = async (rule: ServiceDayRule, time: string) => {
@@ -135,10 +234,20 @@ export default function ServiceRulesPanel({ token }: { token: string }) {
       <div className="flex items-center gap-3 mb-2">
         <Clock className="w-5 h-5 text-[#23B9FF]" />
         <h2 className="text-xl font-bold">Booking schedule</h2>
+        {ensuring ? (
+          <span className="inline-flex items-center gap-1.5 text-xs text-[#9CA3AF]">
+            <Loader2 className="w-3.5 h-3.5 animate-spin" /> Syncing catalog…
+          </span>
+        ) : null}
       </div>
       <p className="text-sm text-[#9CA3AF] mb-5">
         Choose which days each service is bookable, the times offered, and whether one booking takes the whole day. Sundays stay closed automatically.
       </p>
+      {ensureNote ? (
+        <div className="mb-4 p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-200 text-sm">
+          {ensureNote}
+        </div>
+      ) : null}
       <form onSubmit={addRule} className="grid grid-cols-1 md:grid-cols-[1.2fr_0.6fr_0.5fr_1.4fr_auto] gap-3 mb-5 p-4 rounded-2xl border border-white/10 bg-[#111111]">
         <AdminSelect
           value={newServiceId === "" ? "" : String(newServiceId)}
@@ -185,33 +294,69 @@ export default function ServiceRulesPanel({ token }: { token: string }) {
         <div className="flex items-center gap-3 text-[#9CA3AF] py-6 justify-center">
           <Loader2 className="w-4 h-4 animate-spin" /> Loading rules…
         </div>
-      ) : byService.size === 0 ? (
+      ) : byService.length === 0 ? (
         <div className="rounded-2xl border border-white/10 bg-[#111111] p-8 text-center text-sm text-[#9CA3AF]">
           No rules yet. Add one above to make a service bookable.
         </div>
       ) : (
         <div className="space-y-4">
-          {Array.from(byService.entries()).map(([sid, group]) => (
-            <div key={sid} className="rounded-2xl border border-white/10 bg-[#111111] overflow-hidden">
-              <div className="px-4 py-3 border-b border-white/10">
-                <div className="font-bold text-white">{group.name}</div>
-                <div className="text-xs text-[#9CA3AF]">{group.slug}</div>
+          {byService.map(([sid, group]) => {
+            const service = (services ?? []).find((s) => s.id === sid);
+            return (
+              <div key={sid} className="rounded-2xl border border-white/10 bg-[#111111] overflow-hidden">
+                <div className="px-4 py-3 border-b border-white/10 flex flex-wrap items-center gap-3">
+                  <div className="min-w-0">
+                    <div className="font-bold text-white">{group.name}</div>
+                    <div className="text-xs text-[#9CA3AF]">{group.slug}</div>
+                  </div>
+                  {group.rules.length === 0 ? (
+                    <div className="ml-auto">
+                      <PrimaryButton
+                        type="button"
+                        className="h-9 px-3 text-xs"
+                        disabled={seedingId === sid || sid < 0}
+                        onClick={() => {
+                          if (service) void seedDefaultSchedule(service);
+                        }}
+                      >
+                        {seedingId === sid ? (
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        ) : (
+                          <Plus className="w-3.5 h-3.5" />
+                        )}
+                        Add default Mon–Sat schedule
+                      </PrimaryButton>
+                    </div>
+                  ) : null}
+                </div>
+                {group.rules.length === 0 ? (
+                  <div className="p-4 text-sm text-[#9CA3AF]">
+                    No booking days yet
+                    {sid < 0
+                      ? " — publish the latest API so this package can be activated in the live catalog."
+                      : " — use the button above for the standard Mon–Thu + Sat 7:30 / 8:00 schedule."}
+                  </div>
+                ) : (
+                  <div className="divide-y divide-white/5">
+                    {group.rules
+                      .slice()
+                      .sort((a, b) => a.dayOfWeek - b.dayOfWeek)
+                      .map((r) => (
+                        <RuleRow
+                          key={r.id}
+                          rule={r}
+                          onToggleLock={() => toggleLock(r)}
+                          onToggleActive={() => toggleActive(r)}
+                          onDelete={() => deleteRule(r)}
+                          onAddSlot={(t) => addSlot(r, t)}
+                          onRemoveSlot={(slotId) => removeSlot(r, slotId)}
+                        />
+                      ))}
+                  </div>
+                )}
               </div>
-              <div className="divide-y divide-white/5">
-                {group.rules.slice().sort((a, b) => a.dayOfWeek - b.dayOfWeek).map((r) => (
-                  <RuleRow
-                    key={r.id}
-                    rule={r}
-                    onToggleLock={() => toggleLock(r)}
-                    onToggleActive={() => toggleActive(r)}
-                    onDelete={() => deleteRule(r)}
-                    onAddSlot={(t) => addSlot(r, t)}
-                    onRemoveSlot={(slotId) => removeSlot(r, slotId)}
-                  />
-                ))}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </section>
