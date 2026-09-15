@@ -144,9 +144,16 @@ export async function runSeed(): Promise<void> {
       .from(servicesTable)
       .where(eq(servicesTable.slug, s.slug));
     if (existing.length > 0) {
+      // Keep live priceCents (e.g. ceramic "call for quote" at 0).
       await db
         .update(servicesTable)
-        .set({ ...s, active: true })
+        .set({
+          name: s.name,
+          description: s.description,
+          durationMinutes: s.durationMinutes,
+          sortOrder: s.sortOrder,
+          active: true,
+        })
         .where(eq(servicesTable.slug, s.slug));
     } else {
       await db.insert(servicesTable).values({ ...s, active: true });
@@ -154,6 +161,34 @@ export async function runSeed(): Promise<void> {
     }
   }
 
+  await ensureDefaultDayRulesForCatalog();
+}
+
+/**
+ * Insert any seed packages that are still missing from the DB, and attach
+ * default day rules when needed. Does NOT overwrite existing rows (so live
+ * price tweaks like ceramic "call for quote" stay intact). Safe to call from
+ * the public services list so a new package appears as soon as the API
+ * build that includes it is running.
+ */
+export async function ensureMissingCatalogServices(): Promise<void> {
+  for (const s of seeds) {
+    const existing = await db
+      .select({ id: servicesTable.id })
+      .from(servicesTable)
+      .where(eq(servicesTable.slug, s.slug))
+      .limit(1);
+    if (existing.length > 0) {
+      // Re-activate if it was soft-disabled but is still in the catalog.
+      await db
+        .update(servicesTable)
+        .set({ active: true })
+        .where(eq(servicesTable.slug, s.slug));
+      continue;
+    }
+    await db.insert(servicesTable).values({ ...s, active: true });
+    console.log(`[seed] inserted (ensure): ${s.slug}`);
+  }
   await ensureDefaultDayRulesForCatalog();
 }
 

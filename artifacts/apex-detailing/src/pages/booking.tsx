@@ -29,6 +29,7 @@ import VehiclePhotoPicker from "@/components/VehiclePhotoPicker";
 import LanguageToggle from "@/components/LanguageToggle";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { packageDescKey, packageTitleKey, BOOKING_SLUG_TO_PKG, PKG_PHOTO } from "@/i18n/packageMap";
+import { mergeServiceCatalog } from "@/i18n/catalogFallback";
 import PriceTiers from "@/components/PriceTiers";
 import CerakoteCert from "@/components/CerakoteCert";
 import OptimizedImage, { imageUrl } from "@/components/OptimizedImage";
@@ -396,7 +397,8 @@ function ServiceStep({
   onContinue: () => void;
 }) {
   const { t } = useLanguage();
-  const { data, isLoading, error } = useListServices();
+  const { data: apiData, isLoading, error } = useListServices();
+  const data = mergeServiceCatalog(apiData);
   // Sync init so the first paint / first tap is not treated as desktop.
   const [twoTapUi, setTwoTapUi] = useState(readTwoTapUi);
   const [highlightedId, setHighlightedId] = useState<number | null>(

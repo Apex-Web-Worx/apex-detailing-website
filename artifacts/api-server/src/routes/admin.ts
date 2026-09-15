@@ -935,6 +935,28 @@ function isValidTimeStr(t: unknown): t is string {
   return h !== undefined && m !== undefined && h >= 0 && h <= 23 && m >= 0 && m <= 59;
 }
 
+/** Insert any seed catalog packages still missing (e.g. Apex Moto) + day rules. */
+router.post("/admin/ensure-catalog", requireAdmin, async (_req, res) => {
+  try {
+    const { ensureMissingCatalogServices } = await import("../seed");
+    await ensureMissingCatalogServices();
+    const rows = await db
+      .select({
+        id: servicesTable.id,
+        slug: servicesTable.slug,
+        name: servicesTable.name,
+        active: servicesTable.active,
+        sortOrder: servicesTable.sortOrder,
+      })
+      .from(servicesTable)
+      .orderBy(asc(servicesTable.sortOrder), asc(servicesTable.id));
+    res.json({ ok: true, services: rows });
+  } catch (err) {
+    console.error("[admin/ensure-catalog]", err);
+    res.status(500).json({ message: "Failed to ensure catalog" });
+  }
+});
+
 router.get("/admin/service-rules", requireAdmin, async (_req, res) => {
   const ruleRows = await db
     .select({
