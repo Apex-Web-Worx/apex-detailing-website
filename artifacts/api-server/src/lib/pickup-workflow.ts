@@ -6,7 +6,7 @@ import {
   notificationTemplatesTable,
   shopSettingsTable,
 } from "@workspace/db";
-import { and, asc, desc, eq, inArray } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, lte, gte } from "drizzle-orm";
 import {
   formatDateLong,
   formatTime12h,
@@ -360,6 +360,177 @@ export async function markInProgress(bookingId: number) {
     action: "status_in_progress",
     status: "in_progress",
     detail: "Job started — detailing timer running",
+    occurredAt: now,
+  });
+  return updated;
+}
+
+/**
+ * Put a job back to Confirmed (step 1 / Start) and clear the detailing timer
+ * + pickup workflow fields. Does NOT send any customer SMS/email.
+ * Customer, vehicle, schedule, and notes are left unchanged.
+ */
+export async function resetWorkflowToStart(bookingId: number) {
+  const [booking] = await db.select().from(bookingsTable).where(eq(bookingsTable.id, bookingId));
+  if (!booking) return { error: "not_found" as const };
+  if (booking.status === "cancelled") return { error: "cancelled" as const };
+
+  await cancelScheduledReviews(bookingId, "Workflow reset by admin — no customer notify");
+
+  const now = new Date();
+  const [updated] = await db
+    .update(bookingsTable)
+    .set({
+      status: "confirmed",
+      inProgressAt: null,
+      readyAt: null,
+      pickupAt: null,
+      completedAt: null,
+      detailDurationMinutes: null,
+    })
+    .where(eq(bookingsTable.id, bookingId))
+    .returning();
+  if (!updated) return { error: "not_found" as const };
+
+  await logEvent({
+    bookingId,
+    actor: "admin",
+    action: "workflow_reset",
+    status: "confirmed",
+    detail: "Reset to Confirmed / Start — timer cleared, no customer messages",
+    occurredAt: now,
+  });
+
+  return { booking: updated };
+}
+
+/** Auto-start covers the whole shop day once the scheduled time has passed. */
+const AUTO_START_DAY_PAD_MS = 14 * 60 * 60 * 1000; // allow late-day catch-up after morning slots
+
+/**
+ * Undo mass auto-starts of old confirmed bookings (timers showing hundreds
+ * of hours). Auto-start sets inProgressAt === scheduledAt; manual Start uses
+ * wall-clock time, so we only revert the auto-start fingerprint when the
+ * scheduled shop day is over.
+ */
+export async function revertStaleAutoStarts(now = new Date()): Promise<number> {
+  const todayShop = shopLocalDateString(now);
+  const candidates = await db
+    .select()
+    .from(bookingsTable)
+    .where(eq(bookingsTable.status, "in_progress"));
+
+  let reverted = 0;
+  for (const booking of candidates) {
+    const startedAt = booking.inProgressAt?.getTime();
+    const scheduledAt = booking.scheduledAt.getTime();
+    if (startedAt == null || Math.abs(startedAt - scheduledAt) > 1000) continue;
+    // Keep live same-day auto-starts; only undo leftover days.
+    if (shopLocalDateString(booking.scheduledAt) >= todayShop) continue;
+
+    const [updated] = await db
+      .update(bookingsTable)
+      .set({ status: "confirmed", inProgressAt: null })
+      .where(
+        and(
+          eq(bookingsTable.id, booking.id),
+          eq(bookingsTable.status, "in_progress"),
+        ),
+      )
+      .returning();
+    if (!updated) continue;
+
+    await logEvent({
+      bookingId: booking.id,
+      actor: "system",
+      action: "stale_autostart_reverted",
+      status: "confirmed",
+      detail: "Reverted stale auto-start (scheduled day already passed)",
+      occurredAt: now,
+    });
+    reverted += 1;
+  }
+  return reverted;
+}
+
+/**
+ * Auto-start confirmed jobs once their scheduled time arrives on the shop day.
+ * Sets status to in_progress (Detailing) and starts the timer from scheduledAt.
+ * Skips only jobs an admin explicitly Stop-timer'd for this appointment day.
+ */
+export async function autoStartDueJobs(now = new Date()): Promise<number> {
+  const todayShop = shopLocalDateString(now);
+  const windowStart = new Date(now.getTime() - AUTO_START_DAY_PAD_MS);
+  const due = await db
+    .select()
+    .from(bookingsTable)
+    .where(
+      and(
+        eq(bookingsTable.status, "confirmed"),
+        lte(bookingsTable.scheduledAt, now),
+        gte(bookingsTable.scheduledAt, windowStart),
+      ),
+    );
+
+  let started = 0;
+  for (const booking of due) {
+    if (shopLocalDateString(booking.scheduledAt) !== todayShop) continue;
+
+    // Only honor deliberate admin stops — system stale-reverts must not
+    // permanently block auto-start on the real appointment day.
+    const [stopped] = await db
+      .select({ id: appointmentEventsTable.id })
+      .from(appointmentEventsTable)
+      .where(
+        and(
+          eq(appointmentEventsTable.bookingId, booking.id),
+          eq(appointmentEventsTable.action, "timer_stopped"),
+          eq(appointmentEventsTable.actor, "admin"),
+          gte(appointmentEventsTable.occurredAt, booking.scheduledAt),
+        ),
+      )
+      .limit(1);
+    if (stopped) continue;
+
+    const startedAt = booking.scheduledAt;
+    const [updated] = await db
+      .update(bookingsTable)
+      .set({ status: "in_progress", inProgressAt: startedAt })
+      .where(
+        and(eq(bookingsTable.id, booking.id), eq(bookingsTable.status, "confirmed")),
+      )
+      .returning();
+    if (!updated) continue;
+    await logEvent({
+      bookingId: booking.id,
+      actor: "system",
+      action: "status_in_progress",
+      status: "in_progress",
+      detail: "Auto-started at scheduled time — status Detailing, timer running",
+      occurredAt: startedAt,
+    });
+    started += 1;
+  }
+  return started;
+}
+
+/** Stop the live detailing timer and return the job to confirmed. */
+export async function stopDetailingTimer(bookingId: number) {
+  const now = new Date();
+  const [updated] = await db
+    .update(bookingsTable)
+    .set({ status: "confirmed", inProgressAt: null })
+    .where(
+      and(eq(bookingsTable.id, bookingId), eq(bookingsTable.status, "in_progress")),
+    )
+    .returning();
+  if (!updated) return null;
+  await logEvent({
+    bookingId,
+    actor: "admin",
+    action: "timer_stopped",
+    status: "confirmed",
+    detail: "Detailing timer stopped — job returned to confirmed",
     occurredAt: now,
   });
   return updated;
