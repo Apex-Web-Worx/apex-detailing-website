@@ -8,8 +8,8 @@ type PixelProcessorRailProps = {
 };
 
 /**
- * Homepage-only SoC edge — soft full-height rose film-grain atmosphere
- * (humble-yoga reference). Fades into the page; never blocks copy/CTAs.
+ * Homepage-only SoC edge — soft full-height Apex brand film-grain atmosphere
+ * (magenta → purple). Fades into the page; never blocks copy/CTAs.
  */
 export default function PixelProcessorRail({
   side,
@@ -35,9 +35,13 @@ export default function PixelProcessorRail({
     let noise: Uint8ClampedArray = new Uint8ClampedArray(0);
     let frame = 0;
 
+    // Apex brand accents (index.css --brand-magenta / --brand-purple).
+    const MAGENTA = { r: 255, g: 26, b: 216 }; // #FF1AD8
+    const PURPLE = { r: 157, g: 0, b: 255 }; // #9D00FF
+
     const seedNoise = () => {
       for (let i = 0; i < noise.length; i++) {
-        // Bias toward mid-dark so the rose wash reads through the speckles.
+        // Bias toward mid-dark so the brand wash reads through the speckles.
         noise[i] = (Math.random() * 180 + 40) | 0;
       }
     };
@@ -85,27 +89,28 @@ export default function PixelProcessorRail({
             0.12 * Math.sin((y / nh) * Math.PI * 2.2 + frame * 0.008);
           const a = Math.min(0.85, (0.12 + g * 0.7) * fall * vWave);
           const o = i * 4;
-          // Deep rose / magenta grain — no cyan flecks (reference is red-tinted only).
-          data[o] = 220;
-          data[o + 1] = 24;
-          data[o + 2] = 72;
+          // Apex magenta→purple grain (no cyan flecks — keeps one cohesive brand wash).
+          const mix = g * 0.55;
+          data[o] = (MAGENTA.r * (1 - mix) + PURPLE.r * mix) | 0;
+          data[o + 1] = (MAGENTA.g * (1 - mix) + PURPLE.g * mix) | 0;
+          data[o + 2] = (MAGENTA.b * (1 - mix) + PURPLE.b * mix) | 0;
           data[o + 3] = (a * 255) | 0;
         }
       }
 
       ctx.putImageData(img, 0, 0);
 
-      // Soft rose wash — one continuous edge glow under the grain.
+      // Soft Apex brand wash — magenta at the outer edge, purple depth inward.
       const wash = ctx.createLinearGradient(
         towardContent ? 0 : nw,
         0,
         towardContent ? nw : 0,
         0,
       );
-      wash.addColorStop(0, "rgba(170, 16, 46, 0.55)");
-      wash.addColorStop(0.3, "rgba(130, 10, 38, 0.22)");
-      wash.addColorStop(0.65, "rgba(70, 6, 22, 0.07)");
-      wash.addColorStop(1, "rgba(0, 0, 0, 0)");
+      wash.addColorStop(0, "rgba(255, 26, 216, 0.52)");
+      wash.addColorStop(0.28, "rgba(157, 0, 255, 0.24)");
+      wash.addColorStop(0.62, "rgba(80, 0, 120, 0.08)");
+      wash.addColorStop(1, "rgba(5, 5, 5, 0)");
       ctx.globalCompositeOperation = "source-over";
       ctx.fillStyle = wash;
       ctx.fillRect(0, 0, nw, nh);
