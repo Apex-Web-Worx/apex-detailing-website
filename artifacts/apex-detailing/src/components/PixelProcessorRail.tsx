@@ -12,6 +12,7 @@ type RGB = { r: number; g: number; b: number };
 /**
  * Homepage-only SoC edge — soft full-height Apex brand film-grain atmosphere.
  * Drift + shimmer motion; slow tint shifts across brand accents.
+ * Sparse grains occasionally break formation and drift toward page content.
  * Fades into the page; never blocks copy/CTAs.
  */
 export default function PixelProcessorRail({
@@ -123,6 +124,9 @@ export default function PixelProcessorRail({
       const data = img.data;
       const towardContent = side === "left";
 
+      // Occasional inward pull — stray grains leave the edge line toward content.
+      const escapePull = reduceMotion ? 0 : 0.55 + 0.45 * Math.sin(t * 0.33);
+
       for (let y = 0; y < nh; y++) {
         const yN = y / Math.max(1, nh - 1);
         const vWave =
@@ -131,11 +135,27 @@ export default function PixelProcessorRail({
           0.08 * Math.sin(yN * Math.PI * 5.4 - t * 0.62);
         for (let x = 0; x < nw; x++) {
           const i = y * nw + x;
+          // Sample with a slight content-ward bias so breakaways look out of line.
           const g = sampleNoise(x + driftX, y + driftY);
-          // Outer edge strongest; long soft falloff into content (atmosphere, not a bar).
           const edgeT = towardContent ? 1 - x / Math.max(1, nw - 1) : x / Math.max(1, nw - 1);
-          const fall = Math.pow(Math.max(0, edgeT), 1.1);
-          const a = Math.min(0.9, (0.14 + g * 0.78) * fall * vWave * pulse);
+          // Sparse bright cells that "break formation" and poke toward the page.
+          const breakGate = sampleNoise(x * 2.7 - t * 0.15, y * 3.1 + t * 0.11);
+          const breakaway =
+            !reduceMotion && g > 0.68 && breakGate > 0.86 && edgeT < 0.72;
+          const escape =
+            breakaway
+              ? Math.pow(breakGate, 1.6) * escapePull * (0.55 + g * 0.45)
+              : 0;
+          // Soft falloff; breakaways get a flatter curve so they reach further in.
+          const fall = Math.pow(
+            Math.max(0, edgeT + escape * (1.15 - edgeT)),
+            breakaway ? 0.45 : 1.1,
+          );
+          let a = Math.min(0.9, (0.14 + g * 0.78) * fall * vWave * pulse);
+          // Tiny bright flecks that look like pixels leaving the edge.
+          if (breakaway) {
+            a = Math.min(0.95, a + 0.22 * g * escape);
+          }
           const o = i * 4;
           // Mix primary/secondary brand tint by grain brightness.
           const mix = g * 0.5;

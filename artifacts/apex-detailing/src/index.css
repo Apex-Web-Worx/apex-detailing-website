@@ -2107,23 +2107,28 @@
     position: fixed;
     top: 0;
     bottom: 0;
-    /* Wider soft bleed — atmosphere, not a thin processor rail. */
-    width: clamp(64px, 22vw, 160px);
+    /* Extra width so sparse breakaway grains can drift toward content. */
+    width: clamp(72px, 26vw, 200px);
     z-index: 36;
     pointer-events: none;
     opacity: 1;
+    /* Long soft mask — solid near the bezel, then allows stray pixels inland. */
     -webkit-mask-image: linear-gradient(
       90deg,
       #000 0%,
-      #000 18%,
-      rgba(0, 0, 0, 0.55) 48%,
+      #000 14%,
+      rgba(0, 0, 0, 0.7) 36%,
+      rgba(0, 0, 0, 0.28) 62%,
+      rgba(0, 0, 0, 0.08) 82%,
       transparent 100%
     );
     mask-image: linear-gradient(
       90deg,
       #000 0%,
-      #000 18%,
-      rgba(0, 0, 0, 0.55) 48%,
+      #000 14%,
+      rgba(0, 0, 0, 0.7) 36%,
+      rgba(0, 0, 0, 0.28) 62%,
+      rgba(0, 0, 0, 0.08) 82%,
       transparent 100%
     );
   }
@@ -2136,19 +2141,23 @@
     right: 0;
     /* Reference is left-dominant; keep a whisper on the right for balance. */
     opacity: 0.38;
-    width: clamp(40px, 12vw, 96px);
+    width: clamp(48px, 14vw, 120px);
     -webkit-mask-image: linear-gradient(
       270deg,
       #000 0%,
-      #000 16%,
-      rgba(0, 0, 0, 0.4) 45%,
+      #000 12%,
+      rgba(0, 0, 0, 0.55) 38%,
+      rgba(0, 0, 0, 0.2) 64%,
+      rgba(0, 0, 0, 0.06) 84%,
       transparent 100%
     );
     mask-image: linear-gradient(
       270deg,
       #000 0%,
-      #000 16%,
-      rgba(0, 0, 0, 0.4) 45%,
+      #000 12%,
+      rgba(0, 0, 0, 0.55) 38%,
+      rgba(0, 0, 0, 0.2) 64%,
+      rgba(0, 0, 0, 0.06) 84%,
       transparent 100%
     );
   }
@@ -2163,21 +2172,21 @@
 
   @media (min-width: 768px) {
     .apex-soc-edge {
-      width: clamp(80px, 12vw, 180px);
+      width: clamp(96px, 14vw, 220px);
     }
 
     .apex-soc-edge--right {
-      width: clamp(52px, 8vw, 120px);
+      width: clamp(60px, 9vw, 140px);
     }
   }
 
   @media (min-width: 1280px) {
     .apex-soc-edge {
-      width: clamp(96px, 10vw, 200px);
+      width: clamp(112px, 12vw, 240px);
     }
 
     .apex-soc-edge--right {
-      width: clamp(60px, 6.5vw, 130px);
+      width: clamp(72px, 7.5vw, 150px);
       opacity: 0.45;
     }
   }
