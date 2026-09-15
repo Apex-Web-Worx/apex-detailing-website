@@ -613,7 +613,7 @@ export default function Home() {
         }`}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between gap-3 min-w-0">
             <div className="flex items-center gap-2 md:gap-2.5 shrink-0 min-w-0">
               <div
                 className="brand-logo-nav relative z-10 flex items-center cursor-pointer shrink-0"
@@ -628,10 +628,10 @@ export default function Home() {
                 <span className="brand-logo-nav__sheen" aria-hidden="true" />
               </div>
               <CerakoteCert variant="nav" />
+              <LanguageToggle className="hidden md:inline-grid shrink-0 ml-0.5" />
             </div>
 
-            <div className="hidden md:flex items-center gap-2.5 lg:gap-3.5 min-w-0">
-              <LanguageToggle className="shrink-0" />
+            <div className="hidden md:flex items-center justify-end gap-2 lg:gap-2.5 xl:gap-3 min-w-0 flex-1">
               <a
                 href="tel:417-527-6165"
                 className="inline-flex items-center gap-1.5 text-[11px] lg:text-xs font-semibold text-white hover:text-[#00E5FF] transition-colors whitespace-nowrap shrink-0"
@@ -645,6 +645,11 @@ export default function Home() {
                   item.kind === "path"
                     ? `${import.meta.env.BASE_URL}${item.path}`
                     : `#${item.id}`;
+                const secondary =
+                  item.id === "faq" ||
+                  item.id === "journal" ||
+                  item.id === "gift" ||
+                  item.id === "testimonials";
                 return (
                   <a
                     key={item.id}
@@ -654,7 +659,9 @@ export default function Home() {
                       e.preventDefault();
                       scrollToSection(item.id);
                     }}
-                    className={`font-semibold text-[11px] lg:text-xs tracking-wide uppercase transition-colors relative group whitespace-nowrap ${
+                    className={`font-semibold text-[11px] lg:text-xs tracking-wide uppercase transition-colors relative group whitespace-nowrap shrink-0 ${
+                      secondary ? "hidden xl:inline-flex" : ""
+                    } ${
                       activeSection === item.id
                         ? "text-white header-shine"
                         : "text-gray-300 hover:text-white"
@@ -674,7 +681,8 @@ export default function Home() {
               </a>
             </div>
 
-            <div className="md:hidden flex items-center">
+            <div className="md:hidden flex items-center gap-2 shrink-0">
+              <LanguageToggle className="shrink-0" />
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="text-white p-2 focus:outline-none drop-shadow-[0_0_10px_rgba(157,0,255,0.65)]"
@@ -694,7 +702,6 @@ export default function Home() {
           }`}
         >
           <div className="flex flex-col space-y-4 px-6">
-            <LanguageToggle />
             {NAV_ITEMS.map((item) => {
               const href =
                 item.kind === "path"

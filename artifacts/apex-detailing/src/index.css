@@ -2053,21 +2053,26 @@
     .apex-pixel-rail {
       display: block;
       position: fixed;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 52px;
-      height: min(72vh, 640px);
-      z-index: 3;
+      top: max(6.5rem, calc(50% - min(36vh, 320px)));
+      transform: none;
+      width: 44px;
+      height: min(62vh, 560px);
+      z-index: 1;
       pointer-events: none;
-      opacity: 0.9;
+      opacity: 0.72;
     }
 
     .apex-pixel-rail--left {
-      left: max(0.35rem, env(safe-area-inset-left));
+      left: max(0.25rem, env(safe-area-inset-left));
     }
 
     .apex-pixel-rail--right {
-      right: max(0.35rem, env(safe-area-inset-right));
+      right: max(0.25rem, env(safe-area-inset-right));
+    }
+
+    .apex-site-nav .container {
+      padding-left: max(1.5rem, env(safe-area-inset-left));
+      padding-right: max(1.5rem, env(safe-area-inset-right));
     }
 
     .apex-pixel-rail__die {
