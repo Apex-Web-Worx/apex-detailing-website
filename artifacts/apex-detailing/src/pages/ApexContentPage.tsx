@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import LanguageToggle from "@/components/LanguageToggle";
+import CerakoteCert from "@/components/CerakoteCert";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { bookingUrl, goBookNow } from "@/lib/openBooking";
 
@@ -259,19 +260,22 @@ function SiteNavigation() {
     <nav className="fixed top-0 z-50 w-full overflow-visible bg-[#0a0a0a]/95 py-3 backdrop-blur-md border-b border-white/10">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          <Link
-            href="/"
-            className="brand-logo-nav relative z-10 flex shrink-0 items-center"
-            aria-label="Apex Detailing home"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            <BrandLogo
-              variant="nav"
-              priority
-              className="brand-logo-nav__mark h-14 w-auto max-w-[7.5rem] object-contain opacity-100 md:h-16 md:max-w-[9.5rem] lg:h-[4.25rem]"
-            />
-            <span className="brand-logo-nav__sheen" aria-hidden="true" />
-          </Link>
+          <div className="flex min-w-0 shrink-0 items-center gap-2 md:gap-2.5">
+            <Link
+              href="/"
+              className="brand-logo-nav relative z-10 flex shrink-0 items-center"
+              aria-label="Apex Detailing home"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <BrandLogo
+                variant="nav"
+                priority
+                className="brand-logo-nav__mark h-14 w-auto max-w-[7.5rem] object-contain opacity-100 md:h-16 md:max-w-[9.5rem] lg:h-[4.25rem]"
+              />
+              <span className="brand-logo-nav__sheen" aria-hidden="true" />
+            </Link>
+            <CerakoteCert variant="nav" />
+          </div>
 
           <div className="hidden md:flex items-center gap-2.5 lg:gap-3.5 min-w-0">
             <LanguageToggle className="shrink-0" />
@@ -426,6 +430,7 @@ function SiteFooter() {
                 <span className="font-bold text-white">G</span>
               </a>
             </div>
+            <CerakoteCert variant="footer" />
           </div>
 
           <div>

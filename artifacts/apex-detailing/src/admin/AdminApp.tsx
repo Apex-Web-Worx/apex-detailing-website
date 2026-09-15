@@ -14,9 +14,6 @@ import DashboardHome from "./pages/DashboardHome";
 import AppointmentsPage from "./pages/AppointmentsPage";
 import CalendarPage from "./pages/CalendarPage";
 import CustomersPage from "./pages/CustomersPage";
-import VehiclesPage from "./pages/VehiclesPage";
-import ServicesPage from "./pages/ServicesPage";
-import CommunicationsPage from "./pages/CommunicationsPage";
 import ReviewsPage from "./pages/ReviewsPage";
 import SettingsPage from "./pages/SettingsPage";
 
@@ -63,16 +60,19 @@ function AdminSection() {
     case "customers":
       return <CustomersPage />;
     case "vehicles":
-      return <VehiclesPage />;
+      // Vehicles tab removed — fall through to dashboard.
+      return <DashboardHome />;
     case "services":
-      return <ServicesPage />;
+      // Services admin page removed — fall through to dashboard.
+      return <DashboardHome />;
+    case "messages":
+      // Communications tab removed — fall through to dashboard.
+      return <DashboardHome />;
     case "payments":
     case "analytics":
       return <DashboardHome />;
     case "reviews":
       return <ReviewsPage />;
-    case "messages":
-      return <CommunicationsPage />;
     case "settings":
       return <SettingsPage />;
     default:
