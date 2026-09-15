@@ -13,10 +13,15 @@ import {
   type Service,
 } from "@workspace/api-client-react";
 import { Clock, Loader2, Plus, Trash2, X as XIcon } from "lucide-react";
-import { AdminSelect, fieldClass, GhostButton, PrimaryButton } from "./ui";
+import { AdminSelect, GhostButton, PrimaryButton } from "./ui";
 
 const DOW_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const DOW_LONG = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+const PRESETS: Array<{ label: string; slots: string[]; wholeDay: boolean; dow?: number }> = [
+  { label: "Weekday full-day", slots: ["07:30", "08:00"], wholeDay: true },
+  { label: "Friday short", slots: ["07:00", "11:00", "15:00"], wholeDay: false, dow: 5 },
+];
 
 function formatHHMM12h(time: string): string {
   const [hStr, mStr] = time.split(":");
@@ -26,6 +31,16 @@ function formatHHMM12h(time: string): string {
   const period = h >= 12 ? "PM" : "AM";
   const h12 = ((h + 11) % 12) + 1;
   return `${h12}:${String(m).padStart(2, "0")} ${period}`;
+}
+
+/** Native time inputs may return HH:MM:SS; API slots are HH:MM. */
+function normalizeHHMM(value: string): string | null {
+  const match = value.trim().match(/^(\d{1,2}):(\d{2})(?::\d{2})?$/);
+  if (!match) return null;
+  const hour = Number(match[1]);
+  const minute = Number(match[2]);
+  if (hour > 23 || minute > 59) return null;
+  return `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
 }
 
 export default function ServiceRulesPanel({ token }: { token: string }) {
@@ -52,9 +67,21 @@ export default function ServiceRulesPanel({ token }: { token: string }) {
   const [newServiceId, setNewServiceId] = useState<number | "">("");
   const [newDow, setNewDow] = useState<number>(1);
   const [newWholeDay, setNewWholeDay] = useState<boolean>(true);
-  const [newSlotsCsv, setNewSlotsCsv] = useState<string>("07:30, 08:00");
+  const [newSlots, setNewSlots] = useState<string[]>(["07:30", "08:00"]);
+  const [draftTime, setDraftTime] = useState("");
   const [adding, setAdding] = useState(false);
   const [addError, setAddError] = useState<string | null>(null);
+
+  const addDraftSlot = (raw: string) => {
+    const time = normalizeHHMM(raw);
+    if (!time) {
+      setAddError("Time must be HH:MM (24-hour), e.g. 07:30 or 14:00.");
+      return;
+    }
+    setAddError(null);
+    setNewSlots((current) => (current.includes(time) ? current : [...current, time].sort()));
+    setDraftTime("");
+  };
 
   const addRule = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,15 +89,13 @@ export default function ServiceRulesPanel({ token }: { token: string }) {
     setAddError(null);
     setAdding(true);
     try {
-      const slots = newSlotsCsv.split(/[,\s]+/).map((s) => s.trim()).filter(Boolean);
-      for (const t of slots) {
-        if (!/^\d{2}:\d{2}$/.test(t)) throw new Error(`"${t}" is not a valid HH:MM time.`);
-      }
+      if (newSlots.length === 0) throw new Error("Add at least one time slot.");
       await adminCreateServiceRule(
-        { serviceId: Number(newServiceId), dayOfWeek: newDow, wholeDayLock: newWholeDay, slots },
+        { serviceId: Number(newServiceId), dayOfWeek: newDow, wholeDayLock: newWholeDay, slots: newSlots },
         { headers },
       );
-      setNewSlotsCsv("07:30, 08:00");
+      setNewSlots(["07:30", "08:00"]);
+      setNewWholeDay(true);
       refresh();
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Could not add rule";
@@ -108,12 +133,13 @@ export default function ServiceRulesPanel({ token }: { token: string }) {
     }
   };
   const addSlot = async (rule: ServiceDayRule, time: string) => {
-    if (!/^\d{2}:\d{2}$/.test(time)) {
+    const normalized = normalizeHHMM(time);
+    if (!normalized) {
       alert("Time must be HH:MM (24-hour), e.g. 07:30 or 14:00.");
       return;
     }
     try {
-      await adminAddRuleSlot(rule.id, { time }, { headers });
+      await adminAddRuleSlot(rule.id, { time: normalized }, { headers });
       refresh();
     } catch (e) {
       const msg = e instanceof Error ? e.message : "unknown";
@@ -131,49 +157,124 @@ export default function ServiceRulesPanel({ token }: { token: string }) {
   };
 
   return (
-    <section className="mt-8">
-      <div className="flex items-center gap-3 mb-2">
-        <Clock className="w-5 h-5 text-[#23B9FF]" />
-        <h2 className="text-xl font-bold">Booking schedule</h2>
-      </div>
-      <p className="text-sm text-[#9CA3AF] mb-5">
-        Choose which days each service is bookable, the times offered, and whether one booking takes the whole day. Sundays stay closed automatically.
-      </p>
-      <form onSubmit={addRule} className="grid grid-cols-1 md:grid-cols-[1.2fr_0.6fr_0.5fr_1.4fr_auto] gap-3 mb-5 p-4 rounded-2xl border border-white/10 bg-[#111111]">
-        <AdminSelect
-          value={newServiceId === "" ? "" : String(newServiceId)}
-          onChange={(value) => setNewServiceId(value === "" ? "" : Number(value))}
-          aria-label="Service"
-          options={[
-            { value: "", label: "Pick a service…" },
-            ...(services ?? []).map((s: Service) => ({
-              value: String(s.id),
-              label: s.name,
-            })),
-          ]}
-        />
-        <AdminSelect
-          value={String(newDow)}
-          onChange={(value) => setNewDow(Number(value))}
-          aria-label="Day of week"
-          options={DOW_LABELS.map((label, i) => ({
-            value: String(i),
-            label,
-            disabled: i === 0,
-          }))}
-        />
-        <label className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-sm cursor-pointer">
-          <input type="checkbox" checked={newWholeDay} onChange={(e) => setNewWholeDay(e.target.checked)} className="accent-[#FF2AD4]" />
-          Whole-day lock
+    <section>
+      <form
+        onSubmit={addRule}
+        className="grid grid-cols-1 gap-3 mb-5 p-4 rounded-2xl border border-white/10 bg-[#111111]"
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <label className="block">
+            <span className="block text-[10px] font-bold uppercase tracking-[0.12em] text-[#9CA3AF] mb-1.5">
+              Service
+            </span>
+            <AdminSelect
+              value={newServiceId === "" ? "" : String(newServiceId)}
+              onChange={(value) => setNewServiceId(value === "" ? "" : Number(value))}
+              aria-label="Service"
+              options={[
+                { value: "", label: "Pick a service…" },
+                ...(services ?? []).map((s: Service) => ({
+                  value: String(s.id),
+                  label: s.name,
+                })),
+              ]}
+            />
+          </label>
+          <label className="block">
+            <span className="block text-[10px] font-bold uppercase tracking-[0.12em] text-[#9CA3AF] mb-1.5">
+              Day
+            </span>
+            <AdminSelect
+              value={String(newDow)}
+              onChange={(value) => setNewDow(Number(value))}
+              aria-label="Day of week"
+              options={DOW_LABELS.map((label, i) => ({
+                value: String(i),
+                label: DOW_LONG[i],
+                disabled: i === 0,
+              }))}
+            />
+          </label>
+        </div>
+
+        <div>
+          <span className="block text-[10px] font-bold uppercase tracking-[0.12em] text-[#9CA3AF] mb-1.5">
+            Times
+          </span>
+          <div className="flex flex-wrap gap-2 mb-2">
+            {PRESETS.map((preset) => (
+              <button
+                key={preset.label}
+                type="button"
+                onClick={() => {
+                  setNewSlots(preset.slots);
+                  setNewWholeDay(preset.wholeDay);
+                  if (preset.dow != null) setNewDow(preset.dow);
+                }}
+                className="min-h-11 px-3 rounded-xl border border-white/10 text-xs font-semibold text-[#9CA3AF] hover:text-white hover:bg-white/5 touch-manipulation"
+              >
+                {preset.label}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-2 items-center">
+            {newSlots.length === 0 && (
+              <span className="text-xs text-[#9CA3AF] italic">No times yet — add one</span>
+            )}
+            {newSlots.map((time) => (
+              <span
+                key={time}
+                className="inline-flex items-center gap-1 text-xs bg-white/[0.04] border border-white/10 rounded-full pl-3 pr-1 py-1 min-h-8"
+              >
+                <Clock className="w-3 h-3 text-[#23B9FF]" />
+                {formatHHMM12h(time)}
+                <button
+                  type="button"
+                  onClick={() => setNewSlots((current) => current.filter((slot) => slot !== time))}
+                  className="p-1.5 rounded-full text-[#9CA3AF] hover:text-red-300 touch-manipulation"
+                  title={`Remove ${time}`}
+                >
+                  <XIcon className="w-3 h-3" />
+                </button>
+              </span>
+            ))}
+            <input
+              type="time"
+              value={draftTime}
+              onChange={(e) => setDraftTime(e.target.value)}
+              aria-label="Add time slot"
+              className="bg-white/[0.04] border border-white/10 rounded-full px-3 py-2 text-sm text-white min-h-11 focus:border-[#FF2AD4] focus:outline-none"
+            />
+            <GhostButton
+              type="button"
+              className="h-11 px-3 text-xs"
+              onClick={() => {
+                if (!draftTime) return;
+                addDraftSlot(draftTime);
+              }}
+              disabled={!draftTime}
+            >
+              + Add time
+            </GhostButton>
+          </div>
+        </div>
+
+        <label className="flex items-center gap-3 min-h-11 px-3 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-sm cursor-pointer">
+          <input
+            type="checkbox"
+            checked={newWholeDay}
+            onChange={(e) => setNewWholeDay(e.target.checked)}
+            className="accent-[#FF2AD4] w-4 h-4"
+          />
+          <span>
+            Whole-day lock
+            <span className="block text-xs text-[#9CA3AF] font-normal">
+              One booking on this day blocks every other service.
+            </span>
+          </span>
         </label>
-        <input
-          type="text"
-          value={newSlotsCsv}
-          onChange={(e) => setNewSlotsCsv(e.target.value)}
-          placeholder="Times (HH:MM, comma-separated)"
-          className={fieldClass}
-        />
-        <PrimaryButton type="submit" disabled={newServiceId === "" || adding} className="whitespace-nowrap">
+
+        <PrimaryButton type="submit" disabled={newServiceId === "" || adding} className="w-full sm:w-auto">
           {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
           Add rule
         </PrimaryButton>
@@ -236,27 +337,34 @@ function RuleRow({
   const [newTime, setNewTime] = useState("");
   return (
     <div className={`p-4 ${rule.active ? "" : "opacity-50"}`}>
-      <div className="flex flex-wrap items-center gap-3 mb-3">
-        <div className="font-bold text-white min-w-[60px]">{DOW_LONG[rule.dayOfWeek]}</div>
+      <div className="flex flex-wrap items-center gap-2 mb-3">
+        <div className="font-bold text-white min-w-[72px]">{DOW_LONG[rule.dayOfWeek]}</div>
         <button
+          type="button"
           onClick={onToggleLock}
           title={rule.wholeDayLock ? "One booking on this day blocks all other bookings of any service." : "Multiple bookings can coexist across the configured time slots."}
-          className={`text-xs px-3 py-1 rounded-full border transition ${
+          className={`text-xs px-3 min-h-11 rounded-full border transition touch-manipulation ${
             rule.wholeDayLock ? "bg-amber-500/10 border-amber-500/40 text-amber-300" : "bg-emerald-500/10 border-emerald-500/40 text-emerald-300"
           }`}
         >
           {rule.wholeDayLock ? "Whole day" : "Per slot"}
         </button>
         <button
+          type="button"
           onClick={onToggleActive}
-          className={`text-xs px-3 py-1 rounded-full border transition ${
+          className={`text-xs px-3 min-h-11 rounded-full border transition touch-manipulation ${
             rule.active ? "bg-white/5 border-white/20 text-gray-300" : "bg-red-500/10 border-red-500/40 text-red-300"
           }`}
         >
           {rule.active ? "Active" : "Paused"}
         </button>
         <div className="ml-auto">
-          <button onClick={onDelete} className="p-1.5 rounded-lg text-[#9CA3AF] hover:text-red-300 hover:bg-red-500/10" title="Delete this rule">
+          <button
+            type="button"
+            onClick={onDelete}
+            className="p-2.5 min-h-11 min-w-11 rounded-lg text-[#9CA3AF] hover:text-red-300 hover:bg-red-500/10 touch-manipulation"
+            title="Delete this rule"
+          >
             <Trash2 className="w-4 h-4" />
           </button>
         </div>
@@ -264,18 +372,29 @@ function RuleRow({
       <div className="flex flex-wrap gap-2 items-center">
         {rule.slots.length === 0 && <span className="text-xs text-[#9CA3AF] italic">No times yet — add one →</span>}
         {rule.slots.map((s) => (
-          <span key={s.id} className="inline-flex items-center gap-1 text-xs bg-white/[0.04] border border-white/10 rounded-full px-3 py-1">
+          <span key={s.id} className="inline-flex items-center gap-1 text-xs bg-white/[0.04] border border-white/10 rounded-full pl-3 pr-1 py-1 min-h-8">
             <Clock className="w-3 h-3 text-[#23B9FF]" />
             {formatHHMM12h(s.time)}
-            <button onClick={() => onRemoveSlot(s.id)} className="ml-1 text-[#9CA3AF] hover:text-red-300" title={`Remove ${s.time}`}>
+            <button
+              type="button"
+              onClick={() => onRemoveSlot(s.id)}
+              className="p-1.5 rounded-full text-[#9CA3AF] hover:text-red-300 touch-manipulation"
+              title={`Remove ${s.time}`}
+            >
               <XIcon className="w-3 h-3" />
             </button>
           </span>
         ))}
-        <input type="time" value={newTime} onChange={(e) => setNewTime(e.target.value)} className="bg-white/[0.04] border border-white/10 rounded-full px-3 py-1 text-xs text-white focus:border-[#FF2AD4] focus:outline-none" />
+        <input
+          type="time"
+          value={newTime}
+          onChange={(e) => setNewTime(e.target.value)}
+          aria-label={`Add time for ${DOW_LONG[rule.dayOfWeek]}`}
+          className="bg-white/[0.04] border border-white/10 rounded-full px-3 py-2 text-sm text-white min-h-11 focus:border-[#FF2AD4] focus:outline-none"
+        />
         <GhostButton
           type="button"
-          className="h-8 px-3 text-xs"
+          className="h-11 px-3 text-xs"
           onClick={() => {
             if (!newTime) return;
             onAddSlot(newTime);
