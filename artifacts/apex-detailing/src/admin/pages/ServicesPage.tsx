@@ -10,7 +10,8 @@ export default function ServicesPage() {
       <div>
         <h2 className="text-2xl font-bold">Services</h2>
         <p className="text-sm text-[#9CA3AF] mt-1">
-          Catalog prices come from the database. There is no admin API to edit name, price, or duration yet.
+          Package catalog plus the <span className="text-white font-medium">Booking schedule</span>{" "}
+          (bookable days and times). Scroll down to edit day rules — they are not deleted; open this page after a hard refresh.
         </p>
       </div>
       {services.length === 0 ? (

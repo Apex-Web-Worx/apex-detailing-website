@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { CalendarOff, Plus, RefreshCw } from "lucide-react";
+import { CalendarOff, Clock, Plus, RefreshCw } from "lucide-react";
 import { todayDateString, formatTime12h } from "@/lib/format";
 import { ADMIN_FIRST } from "../constants";
 import { useAdmin } from "../context";
@@ -85,6 +85,18 @@ export default function DashboardHome() {
         <Kpi href="/admin/appointments" label="This week" value={String(kpis.weekCount)} />
         <Kpi href="/admin/appointments" label="Upcoming" value={String(kpis.upcomingQuotedCount)} />
       </div>
+
+      <Link href="/admin/services" className="block touch-manipulation">
+        <AdminCard hover={false} className="p-4 md:p-5 flex items-start gap-3">
+          <Clock className="w-5 h-5 text-[#23B9FF] shrink-0 mt-0.5" />
+          <div className="min-w-0">
+            <p className="font-bold text-white">Booking schedule</p>
+            <p className="text-sm text-[#9CA3AF] mt-1">
+              Edit which days and times each package is bookable. Open <span className="text-white">Services</span> in the sidebar, or tap here.
+            </p>
+          </div>
+        </AdminCard>
+      </Link>
 
       {readyForPickup.length > 0 && (
         <AdminCard hover={false} className="p-4 md:p-5">

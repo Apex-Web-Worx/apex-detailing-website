@@ -35,9 +35,16 @@ function formatHHMM12h(time: string): string {
 export default function ServiceRulesPanel({ token }: { token: string }) {
   const queryClient = useQueryClient();
   const headers = { "x-admin-token": token };
-  const { data: rules, isLoading } = useAdminListServiceRules({
+  const rulesQueryKey = [...getAdminListServiceRulesQueryKey(), token] as const;
+  const {
+    data: rules,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useAdminListServiceRules({
     request: { headers },
-    query: { queryKey: getAdminListServiceRulesQueryKey(), retry: false },
+    query: { queryKey: rulesQueryKey, retry: false },
   });
   const { data: apiServices } = useListServices();
   const services = mergeServiceCatalog(apiServices);
@@ -48,6 +55,7 @@ export default function ServiceRulesPanel({ token }: { token: string }) {
   const [ensureNote, setEnsureNote] = useState<string | null>(null);
 
   // Insert missing catalog packages (Apex Moto, etc.) + default day rules.
+  // Never blocks rendering of existing rules — sync runs in the background.
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -89,7 +97,11 @@ export default function ServiceRulesPanel({ token }: { token: string }) {
       number,
       { name: string; slug: string; sortOrder: number; rules: ServiceDayRule[] }
     >();
+    // Prefer live catalog ids. Skip negative fallback placeholders when the
+    // same slug already has a real row so rules never attach to id -65.
+    const liveBySlug = new Map((apiServices ?? []).map((s: Service) => [s.slug, s]));
     for (const s of services ?? []) {
+      if (s.id < 0 && liveBySlug.has(s.slug)) continue;
       map.set(s.id, {
         name: s.name,
         slug: s.slug,
@@ -110,7 +122,9 @@ export default function ServiceRulesPanel({ token }: { token: string }) {
     return Array.from(map.entries()).sort(
       (a, b) => a[1].sortOrder - b[1].sortOrder || a[0] - b[0],
     );
-  }, [rules, services]);
+  }, [rules, services, apiServices]);
+
+  const ruleCount = rules?.length ?? 0;
 
   const [newServiceId, setNewServiceId] = useState<number | "">("");
   const [newDow, setNewDow] = useState<number>(1);
@@ -229,11 +243,18 @@ export default function ServiceRulesPanel({ token }: { token: string }) {
     }
   };
 
+  const authFailed = isError && /401|Unauthorized/i.test(error instanceof Error ? error.message : String(error ?? ""));
+
   return (
-    <section className="mt-8">
-      <div className="flex items-center gap-3 mb-2">
+    <section className="mt-8" id="booking-schedule">
+      <div className="flex flex-wrap items-center gap-3 mb-2">
         <Clock className="w-5 h-5 text-[#23B9FF]" />
         <h2 className="text-xl font-bold">Booking schedule</h2>
+        {!isLoading && !isError && ruleCount > 0 ? (
+          <span className="text-xs font-semibold text-[#9CA3AF] tabular-nums">
+            {ruleCount} day rule{ruleCount === 1 ? "" : "s"}
+          </span>
+        ) : null}
         {ensuring ? (
           <span className="inline-flex items-center gap-1.5 text-xs text-[#9CA3AF]">
             <Loader2 className="w-3.5 h-3.5 animate-spin" /> Syncing catalog…
@@ -246,6 +267,18 @@ export default function ServiceRulesPanel({ token }: { token: string }) {
       {ensureNote ? (
         <div className="mb-4 p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-200 text-sm">
           {ensureNote}
+        </div>
+      ) : null}
+      {isError ? (
+        <div className="mb-4 p-4 rounded-2xl border border-red-500/30 bg-red-500/10 text-sm text-red-200 space-y-3">
+          <p>
+            {authFailed
+              ? "Admin session rejected while loading schedule rules. Sign out and sign back in, then reopen Services."
+              : `Could not load booking schedule rules${error instanceof Error && error.message ? `: ${error.message}` : ""}.`}
+          </p>
+          <GhostButton type="button" className="h-9 px-3 text-xs" onClick={() => void refetch()}>
+            Retry loading rules
+          </GhostButton>
         </div>
       ) : null}
       <form onSubmit={addRule} className="grid grid-cols-1 md:grid-cols-[1.2fr_0.6fr_0.5fr_1.4fr_auto] gap-3 mb-5 p-4 rounded-2xl border border-white/10 bg-[#111111]">
@@ -282,7 +315,7 @@ export default function ServiceRulesPanel({ token }: { token: string }) {
           placeholder="Times (HH:MM, comma-separated)"
           className={fieldClass}
         />
-        <PrimaryButton type="submit" disabled={newServiceId === "" || adding} className="whitespace-nowrap">
+        <PrimaryButton type="submit" disabled={newServiceId === "" || adding || isError} className="whitespace-nowrap">
           {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
           Add rule
         </PrimaryButton>
@@ -294,7 +327,7 @@ export default function ServiceRulesPanel({ token }: { token: string }) {
         <div className="flex items-center gap-3 text-[#9CA3AF] py-6 justify-center">
           <Loader2 className="w-4 h-4 animate-spin" /> Loading rules…
         </div>
-      ) : byService.length === 0 ? (
+      ) : isError ? null : byService.length === 0 ? (
         <div className="rounded-2xl border border-white/10 bg-[#111111] p-8 text-center text-sm text-[#9CA3AF]">
           No rules yet. Add one above to make a service bookable.
         </div>
