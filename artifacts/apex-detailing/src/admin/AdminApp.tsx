@@ -16,6 +16,7 @@ import CalendarPage from "./pages/CalendarPage";
 import CustomersPage from "./pages/CustomersPage";
 import ReviewsPage from "./pages/ReviewsPage";
 import SettingsPage from "./pages/SettingsPage";
+import ServicesPage from "./pages/ServicesPage";
 
 export default function AdminApp() {
   const [token, setToken] = useState<string | null>(() => {
@@ -63,8 +64,7 @@ function AdminSection() {
       // Vehicles tab removed — fall through to dashboard.
       return <DashboardHome />;
     case "services":
-      // Services admin page removed — fall through to dashboard.
-      return <DashboardHome />;
+      return <ServicesPage />;
     case "messages":
       // Communications tab removed — fall through to dashboard.
       return <DashboardHome />;

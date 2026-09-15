@@ -6,6 +6,7 @@ import {
   Users,
   Settings,
   Star,
+  Clock,
 } from "lucide-react";
 
 export const TOKEN_KEY = "apex_admin_token";
@@ -39,6 +40,7 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/admin/appointments", section: "appointments", label: "Appointments", icon: CalendarClock },
   { href: "/admin/calendar", section: "calendar", label: "Calendar", icon: CalendarDays },
   { href: "/admin/customers", section: "customers", label: "Customers", icon: Users },
+  { href: "/admin/services", section: "services", label: "Services", icon: Clock },
   { href: "/admin/reviews", section: "reviews", label: "Reviews", icon: Star },
   { href: "/admin/settings", section: "settings", label: "Settings", icon: Settings },
 ];
