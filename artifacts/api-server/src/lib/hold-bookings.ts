@@ -5,7 +5,7 @@ import {
   blockedDatesTable,
   servicesTable,
 } from "@workspace/db";
-import { and, asc, eq } from "drizzle-orm";
+import { and, asc, eq, sql } from "drizzle-orm";
 import { buildScheduledAt, shopLocalDateString } from "./availability";
 import { OCCUPYING_STATUS_LIST } from "./occupying-statuses";
 import { markInProgress } from "./pickup-workflow";
@@ -30,9 +30,19 @@ export function isClientHold(row: {
   );
 }
 
+export function parseHoldIdFromEmail(email: string | null | undefined): number | null {
+  const match = /^hold-(\d+)@apexdetailing\.net$/i.exec((email ?? "").trim());
+  if (!match) return null;
+  const id = Number(match[1]);
+  return Number.isFinite(id) ? id : null;
+}
+
 export async function findHoldBookings(holdId: number): Promise<BookingRow[]> {
-  const email = holdBookingEmail(holdId);
-  return db.select().from(bookingsTable).where(eq(bookingsTable.email, email));
+  const email = holdBookingEmail(holdId).toLowerCase();
+  return db
+    .select()
+    .from(bookingsTable)
+    .where(sql`lower(trim(${bookingsTable.email})) = ${email}`);
 }
 
 export async function findLiveHoldBooking(holdId: number): Promise<BookingRow | null> {
@@ -170,11 +180,35 @@ export async function startHoldBooking(hold: HoldRow): Promise<BookingRow | null
 }
 
 export async function cancelIdleHoldBooking(holdId: number): Promise<void> {
-  const email = holdBookingEmail(holdId);
+  const email = holdBookingEmail(holdId).toLowerCase();
   await db
     .update(bookingsTable)
     .set({ status: "cancelled" })
-    .where(and(eq(bookingsTable.email, email), eq(bookingsTable.status, "confirmed")));
+    .where(
+      and(
+        sql`lower(trim(${bookingsTable.email})) = ${email}`,
+        eq(bookingsTable.status, "confirmed"),
+      ),
+    );
+}
+
+/** Hard-delete synthetic hold-* bookings for a blocked-date hold. */
+export async function purgeHoldBookings(holdId: number): Promise<number> {
+  const email = holdBookingEmail(holdId).toLowerCase();
+  const deleted = await db
+    .delete(bookingsTable)
+    .where(sql`lower(trim(${bookingsTable.email})) = ${email}`)
+    .returning({ id: bookingsTable.id });
+  return deleted.length;
+}
+
+/** Remove a client hold so ensureClientHoldBookings cannot recreate its booking. */
+export async function deleteClientHoldRow(holdId: number): Promise<HoldRow | null> {
+  const [removed] = await db
+    .delete(blockedDatesTable)
+    .where(eq(blockedDatesTable.id, holdId))
+    .returning();
+  return removed ?? null;
 }
 
 export async function syncHoldBookingFromRow(hold: HoldRow): Promise<void> {
