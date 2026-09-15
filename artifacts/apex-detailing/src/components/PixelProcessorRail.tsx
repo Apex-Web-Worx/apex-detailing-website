@@ -8,9 +8,8 @@ type PixelProcessorRailProps = {
 };
 
 /**
- * Homepage-only SoC edge — soft film-grain / live-pixel strip like a phone
- * processor glow along the viewport edge. Matches the reference: full-height
- * tinted noise that fades into the page, never blocking copy.
+ * Homepage-only SoC edge — soft full-height rose film-grain atmosphere
+ * (humble-yoga reference). Fades into the page; never blocks copy/CTAs.
  */
 export default function PixelProcessorRail({
   side,
@@ -23,105 +22,110 @@ export default function PixelProcessorRail({
     if (!canvas) return;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const ctx = canvas.getContext("2d", { alpha: true });
+    const ctx = canvas.getContext("2d", { alpha: true, willReadFrequently: true });
     if (!ctx) return;
 
     let raf = 0;
     let running = true;
-    let dpr = 1;
     let cssW = 1;
     let cssH = 1;
-    // Persistent grain field (0..1), refreshed cheaply each frame.
-    let grain: Float32Array = new Float32Array(0);
-    let gw = 0;
-    let gh = 0;
+    // Low-res noise buffer (upscaled softly) — fine film grain, not LED cells.
+    let nw = 0;
+    let nh = 0;
+    let noise: Uint8ClampedArray = new Uint8ClampedArray(0);
+    let frame = 0;
 
-    const resize = () => {
-      const rect = canvas.getBoundingClientRect();
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      cssW = Math.max(1, rect.width);
-      cssH = Math.max(1, rect.height);
-      canvas.width = Math.round(cssW * dpr);
-      canvas.height = Math.round(cssH * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-      // ~2px cells — fine grain like the reference edge texture.
-      gw = Math.max(8, Math.floor(cssW / 2));
-      gh = Math.max(40, Math.floor(cssH / 2));
-      grain = new Float32Array(gw * gh);
-      for (let i = 0; i < grain.length; i++) {
-        grain[i] = Math.random();
+    const seedNoise = () => {
+      for (let i = 0; i < noise.length; i++) {
+        // Bias toward mid-dark so the rose wash reads through the speckles.
+        noise[i] = (Math.random() * 180 + 40) | 0;
       }
     };
 
-    const paint = (t: number) => {
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      cssW = Math.max(1, rect.width);
+      cssH = Math.max(1, rect.height);
+      // ~1.25 CSS-px grain cells → fine film texture when stretched.
+      nw = Math.max(24, Math.round(cssW / 1.25));
+      nh = Math.max(80, Math.round(cssH / 1.25));
+      canvas.width = nw;
+      canvas.height = nh;
+      noise = new Uint8ClampedArray(nw * nh);
+      seedNoise();
+    };
+
+    const paint = () => {
       if (!running) return;
-      ctx.clearRect(0, 0, cssW, cssH);
+      frame++;
 
-      const time = t * 0.001;
-      const cellW = cssW / gw;
-      const cellH = cssH / gh;
-      const towardContent = side === "left" ? 1 : -1;
-
-      // Slow vertical drift + sparse sparkle (processor “alive”).
-      const drift = Math.floor(time * 9) % gh;
-      if (!reduceMotion && Math.random() < 0.45) {
-        const i = Math.floor(Math.random() * grain.length);
-        grain[i] = Math.min(1, grain[i]! + 0.55);
-      }
-
-      for (let y = 0; y < gh; y++) {
-        const sy = (y + drift) % gh;
-        for (let x = 0; x < gw; x++) {
-          const g = grain[sy * gw + x]!;
-          // Stronger on the outer edge, soft falloff toward content.
-          const edge =
-            side === "left" ? 1 - x / (gw - 1) : x / (gw - 1);
-          const fall = Math.pow(Math.max(0, edge), 1.35);
-          let a = (0.04 + g * 0.22) * fall;
-          if (a < 0.02) continue;
-
-          // Magenta/rose grain (reference) with rare cyan flecks.
-          const cyan = ((x * 19 + y * 7 + Math.floor(time * 3)) % 29) === 0;
-          const pulse =
-            0.85 +
-            0.15 * Math.sin(time * 2.1 + y * 0.08 * towardContent + x * 0.2);
-          a = Math.min(0.55, a * pulse);
-
-          ctx.fillStyle = cyan
-            ? `rgba(0, 229, 255, ${a * 0.75})`
-            : `rgba(255, 40, 120, ${a})`;
-          ctx.fillRect(x * cellW, y * cellH, cellW + 0.4, cellH + 0.4);
+      // Rare micro-respeckle so the grain feels alive without “processor sparkle”.
+      if (!reduceMotion && frame % 3 === 0) {
+        const count = Math.max(4, (nw * nh * 0.004) | 0);
+        for (let k = 0; k < count; k++) {
+          const i = (Math.random() * noise.length) | 0;
+          noise[i] = (Math.random() * 200 + 30) | 0;
         }
       }
 
-      // Soft vertical wash so it reads as one edge glow, not a grid.
+      const img = ctx.createImageData(nw, nh);
+      const data = img.data;
+      const towardContent = side === "left";
+
+      for (let y = 0; y < nh; y++) {
+        for (let x = 0; x < nw; x++) {
+          const i = y * nw + x;
+          const g = noise[i]! / 255;
+          // Outer edge strongest; long soft falloff into content (atmosphere, not a bar).
+          const edgeT = towardContent ? 1 - x / Math.max(1, nw - 1) : x / Math.max(1, nw - 1);
+          const fall = Math.pow(Math.max(0, edgeT), 1.15);
+          // Vertical breathing so the edge isn’t a flat column.
+          const vWave =
+            0.88 +
+            0.12 * Math.sin((y / nh) * Math.PI * 2.2 + frame * 0.008);
+          const a = Math.min(0.72, (0.08 + g * 0.55) * fall * vWave);
+          const o = i * 4;
+          // Deep rose / magenta grain — no cyan flecks (reference is red-tinted only).
+          data[o] = 210;
+          data[o + 1] = 28;
+          data[o + 2] = 78;
+          data[o + 3] = (a * 255) | 0;
+        }
+      }
+
+      ctx.putImageData(img, 0, 0);
+
+      // Soft rose wash — one continuous edge glow under the grain.
       const wash = ctx.createLinearGradient(
-        side === "left" ? 0 : cssW,
+        towardContent ? 0 : nw,
         0,
-        side === "left" ? cssW : 0,
+        towardContent ? nw : 0,
         0,
       );
-      wash.addColorStop(0, "rgba(180, 20, 60, 0.18)");
-      wash.addColorStop(0.45, "rgba(120, 10, 40, 0.06)");
+      wash.addColorStop(0, "rgba(160, 18, 48, 0.42)");
+      wash.addColorStop(0.35, "rgba(120, 12, 40, 0.16)");
+      wash.addColorStop(0.7, "rgba(60, 6, 20, 0.05)");
       wash.addColorStop(1, "rgba(0, 0, 0, 0)");
+      ctx.globalCompositeOperation = "source-over";
       ctx.fillStyle = wash;
-      ctx.fillRect(0, 0, cssW, cssH);
+      ctx.fillRect(0, 0, nw, nh);
 
       if (!reduceMotion) {
-        // Cool a few grains so sparkle stays alive.
-        for (let k = 0; k < 12; k++) {
-          const i = Math.floor(Math.random() * grain.length);
-          grain[i] = grain[i]! * 0.92;
-        }
         raf = requestAnimationFrame(paint);
       }
     };
 
     resize();
-    const onResize = () => resize();
+    const onResize = () => {
+      resize();
+      if (reduceMotion) paint();
+    };
     window.addEventListener("resize", onResize);
-    raf = requestAnimationFrame(paint);
+    if (reduceMotion) {
+      paint();
+    } else {
+      raf = requestAnimationFrame(paint);
+    }
 
     return () => {
       running = false;
