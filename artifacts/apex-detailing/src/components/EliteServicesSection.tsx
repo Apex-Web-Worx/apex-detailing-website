@@ -126,9 +126,9 @@ const UvProtectIcon = createLucideIcon("UvProtect", [
 ]);
 
 type FeaturedPkg = {
-  pkg: "full" | "interior" | "express";
+  pkg: "full" | "interior" | "ceramic";
   price: string;
-  badgeKey: "services.bestValue" | "services.mostBooked" | "services.express";
+  badgeKey: "services.bestValue" | "services.mostBooked" | "services.premiumProtection";
   BadgeIcon: LucideIcon;
   Icon: LucideIcon;
   featPrefix: string;
@@ -155,13 +155,13 @@ const FEATURED: FeaturedPkg[] = [
     featIcons: [Sparkles, Droplets, Shield, Wind, Zap, Car, AppWindow],
   },
   {
-    pkg: "express",
-    price: "$100",
-    badgeKey: "services.express",
-    BadgeIcon: Zap,
-    Icon: Zap,
-    featPrefix: "pkg.express.cardFeat",
-    featIcons: [Sparkles, Droplets, Car, Wind, CheckCircle2],
+    pkg: "ceramic",
+    price: "$900",
+    badgeKey: "services.premiumProtection",
+    BadgeIcon: Shield,
+    Icon: Shield,
+    featPrefix: "pkg.ceramic.feat",
+    featIcons: [Wand2, Sparkles, Shield, WaterRepelIcon, UvProtectIcon, ShieldShineIcon],
   },
 ];
 
@@ -212,14 +212,13 @@ const MORE_SERVICES: MoreService[] = [
     featIcons: [Droplets, SprayCan, Sparkles, ShieldShineIcon, WaterRepelIcon],
   },
   {
-    id: "ceramic-coating",
-    pkg: "ceramic",
-    pricing: "$900",
-    Icon: Shield,
-    
-    descKey: "pkg.ceramic.cardDesc",
-    // Paint correction / decon / 9H / hydrophobic / UV / gloss
-    featIcons: [Wand2, Sparkles, Shield, WaterRepelIcon, UvProtectIcon, ShieldShineIcon],
+    id: "express-interior",
+    pkg: "express",
+    pricing: "$100",
+    Icon: Zap,
+    descKey: "pkg.express.cardDesc",
+    // Vacuum / wipe / mats / glass / light refresh
+    featIcons: [Sparkles, Droplets, Car, Wind, CheckCircle2],
   },
 ];
 
@@ -264,6 +263,7 @@ export default function EliteServicesSection({
 
         <div className="elite-services__grid">
           {FEATURED.map((card, index) => {
+            const isCeramic = card.pkg === "ceramic";
             const feats = list(card.featPrefix);
             return (
               <article
@@ -271,20 +271,24 @@ export default function EliteServicesSection({
                 className={`elite-card${anim}`}
                 style={{ ["--elite-delay" as string]: `${index * 100}ms` }}
               >
-                <div className="elite-card__media">
+                <div className={`elite-card__media${isCeramic ? " elite-card__media--ceramic" : ""}`}>
                   <OptimizedImage
                     src={imageUrl(PKG_PHOTO[card.pkg])}
                     alt={t(`pkg.${card.pkg}.photoAlt`)}
-                    className="elite-card__img"
+                    className={`elite-card__img${isCeramic ? " elite-card__img--ceramic" : ""}`}
                     sizes="(max-width: 699px) calc(100vw - 32px), (max-width: 1099px) 46vw, 420px"
                     loading="lazy"
+                    noBlur={isCeramic}
                   />
                   <div className="elite-card__media-shade" aria-hidden="true" />
                   <div className="elite-card__icon-wrap" aria-hidden="true">
                     <card.Icon className="elite-card__icon" strokeWidth={2} />
                   </div>
                   <span className="elite-card__badge">
-                    <card.BadgeIcon className="elite-card__badge-icon" fill="currentColor" />
+                    <card.BadgeIcon
+                      className="elite-card__badge-icon"
+                      {...(isCeramic ? {} : { fill: "currentColor" })}
+                    />
                     {t(card.badgeKey)}
                   </span>
                 </div>
@@ -295,6 +299,7 @@ export default function EliteServicesSection({
                   <p className="elite-card__price">{card.price}</p>
                   <PriceTiers pkg={card.pkg} />
                   <p className="elite-card__desc">{t(`pkg.${card.pkg}.cardDesc`)}</p>
+                  {isCeramic ? <CerakoteCert variant="card" /> : null}
                   <ul className="elite-card__feats">
                     {feats.map((feature, i) => {
                       const FeatIcon = card.featIcons[i] ?? CheckCircle2;
@@ -338,24 +343,22 @@ export default function EliteServicesSection({
           <h3 className="elite-more__title">{t("services.moreTitle")}</h3>
           <div className="elite-services__grid elite-more__grid">
             {MORE_SERVICES.map((service, index) => {
-              const feats = list(`pkg.${service.pkg}.feat`).slice(
-                0,
-                service.pkg === "ceramic" ? 6 : 5,
-              );
+              const featKey =
+                service.pkg === "express" ? "pkg.express.cardFeat" : `pkg.${service.pkg}.feat`;
+              const feats = list(featKey).slice(0, 5);
               return (
                 <article
                   key={service.id}
                   className={`elite-card${anim}`}
                   style={{ ["--elite-delay" as string]: `${180 + index * 80}ms` }}
                 >
-                  <div className={`elite-card__media${service.pkg === "ceramic" ? " elite-card__media--ceramic" : ""}`}>
+                  <div className="elite-card__media">
                     <OptimizedImage
                       src={imageUrl(PKG_PHOTO[service.pkg])}
                       alt={t(`pkg.${service.pkg}.photoAlt`)}
-                      className={`elite-card__img${service.pkg === "ceramic" ? " elite-card__img--ceramic" : ""}`}
+                      className="elite-card__img"
                       sizes="(max-width: 699px) calc(100vw - 32px), (max-width: 1099px) 46vw, 320px"
                       loading="lazy"
-                      noBlur={service.pkg === "ceramic"}
                     />
                     <div className="elite-card__media-shade" aria-hidden="true" />
                     <div className="elite-card__icon-wrap" aria-hidden="true">
@@ -382,7 +385,6 @@ export default function EliteServicesSection({
                     <p className="elite-card__desc">
                       {t(service.descKey ?? `pkg.${service.pkg}.desc`)}
                     </p>
-                    {service.pkg === "ceramic" ? <CerakoteCert variant="card" /> : null}
                     <ul className="elite-card__feats">
                       {feats.map((feature, featIndex) => {
                         const FeatIcon = service.featIcons[featIndex] ?? Sparkles;
