@@ -83,12 +83,12 @@ export default function PixelProcessorRail({
           const vWave =
             0.88 +
             0.12 * Math.sin((y / nh) * Math.PI * 2.2 + frame * 0.008);
-          const a = Math.min(0.72, (0.08 + g * 0.55) * fall * vWave);
+          const a = Math.min(0.85, (0.12 + g * 0.7) * fall * vWave);
           const o = i * 4;
           // Deep rose / magenta grain — no cyan flecks (reference is red-tinted only).
-          data[o] = 210;
-          data[o + 1] = 28;
-          data[o + 2] = 78;
+          data[o] = 220;
+          data[o + 1] = 24;
+          data[o + 2] = 72;
           data[o + 3] = (a * 255) | 0;
         }
       }
@@ -102,9 +102,9 @@ export default function PixelProcessorRail({
         towardContent ? nw : 0,
         0,
       );
-      wash.addColorStop(0, "rgba(160, 18, 48, 0.42)");
-      wash.addColorStop(0.35, "rgba(120, 12, 40, 0.16)");
-      wash.addColorStop(0.7, "rgba(60, 6, 20, 0.05)");
+      wash.addColorStop(0, "rgba(170, 16, 46, 0.55)");
+      wash.addColorStop(0.3, "rgba(130, 10, 38, 0.22)");
+      wash.addColorStop(0.65, "rgba(70, 6, 22, 0.07)");
       wash.addColorStop(1, "rgba(0, 0, 0, 0)");
       ctx.globalCompositeOperation = "source-over";
       ctx.fillStyle = wash;
