@@ -66,14 +66,14 @@ export default function ServiceRulesPanel({ token }: { token: string }) {
           ]);
         } else if (res.status === 404) {
           setEnsureNote(
-            "Live API is still on an older build — Publish elite-services-redesign so Apex Moto can be added to admin rules.",
+            "Catalog sync endpoint not available on this API build. Your existing schedule rules are unchanged.",
           );
         } else {
-          setEnsureNote("Could not refresh the service catalog.");
+          setEnsureNote("Could not refresh the service catalog. Existing schedule rules are unchanged.");
         }
       } catch {
         if (!cancelled) {
-          setEnsureNote("Could not refresh the service catalog.");
+          setEnsureNote("Could not refresh the service catalog. Existing schedule rules are unchanged.");
         }
       } finally {
         if (!cancelled) setEnsuring(false);
