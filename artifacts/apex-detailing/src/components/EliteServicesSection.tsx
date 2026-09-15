@@ -126,9 +126,13 @@ const UvProtectIcon = createLucideIcon("UvProtect", [
 ]);
 
 type FeaturedPkg = {
-  pkg: "full" | "interior" | "ceramic";
+  pkg: "full" | "interior" | "ceramic" | "express";
   price: string;
-  badgeKey: "services.bestValue" | "services.mostBooked" | "services.premiumProtection";
+  badgeKey:
+    | "services.bestValue"
+    | "services.mostBooked"
+    | "services.premiumProtection"
+    | "services.express";
   BadgeIcon: LucideIcon;
   Icon: LucideIcon;
   featPrefix: string;
@@ -162,6 +166,15 @@ const FEATURED: FeaturedPkg[] = [
     Icon: Shield,
     featPrefix: "pkg.ceramic.feat",
     featIcons: [Wand2, Sparkles, Shield, WaterRepelIcon, UvProtectIcon, ShieldShineIcon],
+  },
+  {
+    pkg: "express",
+    price: "$100",
+    badgeKey: "services.express",
+    BadgeIcon: Zap,
+    Icon: Zap,
+    featPrefix: "pkg.express.cardFeat",
+    featIcons: [Sparkles, Droplets, Car, Wind, CheckCircle2],
   },
 ];
 
@@ -210,15 +223,6 @@ const MORE_SERVICES: MoreService[] = [
     descKey: "pkg.moto.cardDesc",
     // Hand wash / ceramic spray / polish / wax-sealant / 6-8 mo
     featIcons: [Droplets, SprayCan, Sparkles, ShieldShineIcon, WaterRepelIcon],
-  },
-  {
-    id: "express-interior",
-    pkg: "express",
-    pricing: "$100",
-    Icon: Zap,
-    descKey: "pkg.express.cardDesc",
-    // Vacuum / wipe / mats / glass / light refresh
-    featIcons: [Sparkles, Droplets, Car, Wind, CheckCircle2],
   },
 ];
 
@@ -276,7 +280,7 @@ export default function EliteServicesSection({
                     src={imageUrl(PKG_PHOTO[card.pkg])}
                     alt={t(`pkg.${card.pkg}.photoAlt`)}
                     className={`elite-card__img${isCeramic ? " elite-card__img--ceramic" : ""}`}
-                    sizes="(max-width: 699px) calc(100vw - 32px), (max-width: 1099px) 46vw, 420px"
+                    sizes="(max-width: 699px) calc(100vw - 32px), (max-width: 1099px) 46vw, 280px"
                     loading="lazy"
                     noBlur={isCeramic}
                   />
@@ -343,9 +347,7 @@ export default function EliteServicesSection({
           <h3 className="elite-more__title">{t("services.moreTitle")}</h3>
           <div className="elite-services__grid elite-more__grid">
             {MORE_SERVICES.map((service, index) => {
-              const featKey =
-                service.pkg === "express" ? "pkg.express.cardFeat" : `pkg.${service.pkg}.feat`;
-              const feats = list(featKey).slice(0, 5);
+              const feats = list(`pkg.${service.pkg}.feat`).slice(0, 5);
               return (
                 <article
                   key={service.id}
