@@ -7,9 +7,12 @@ type PixelProcessorRailProps = {
   className?: string;
 };
 
+type RGB = { r: number; g: number; b: number };
+
 /**
- * Homepage-only SoC edge — soft full-height Apex brand film-grain atmosphere
- * (magenta → purple). Fades into the page; never blocks copy/CTAs.
+ * Homepage-only SoC edge — soft full-height Apex brand film-grain atmosphere.
+ * Drift + shimmer motion; slow tint shifts across brand accents.
+ * Fades into the page; never blocks copy/CTAs.
  */
 export default function PixelProcessorRail({
   side,
@@ -35,9 +38,33 @@ export default function PixelProcessorRail({
     let noise: Uint8ClampedArray = new Uint8ClampedArray(0);
     let frame = 0;
 
-    // Apex brand accents (index.css --brand-magenta / --brand-purple).
-    const MAGENTA = { r: 255, g: 26, b: 216 }; // #FF1AD8
-    const PURPLE = { r: 157, g: 0, b: 255 }; // #9D00FF
+    // Apex brand palette — slow cycle, no rainbow disco.
+    const MAGENTA: RGB = { r: 255, g: 26, b: 216 }; // #FF1AD8
+    const PURPLE: RGB = { r: 157, g: 0, b: 255 }; // #9D00FF
+    const CYAN: RGB = { r: 0, g: 229, b: 255 }; // #00E5FF
+    const GOLD: RGB = { r: 212, g: 175, b: 55 }; // #D4AF37
+    // Soft stops: mostly magenta↔purple, brief cyan/gold whispers.
+    const PALETTE: RGB[] = [MAGENTA, PURPLE, CYAN, PURPLE, MAGENTA, GOLD, PURPLE];
+
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+    const lerpRGB = (a: RGB, b: RGB, t: number): RGB => ({
+      r: lerp(a.r, b.r, t),
+      g: lerp(a.g, b.g, t),
+      b: lerp(a.b, b.b, t),
+    });
+
+    /** Smooth brand tint for time t (seconds). Full cycle ~18s. */
+    const brandAt = (tSec: number): RGB => {
+      const cycle = ((tSec / 18) % 1 + 1) % 1;
+      const scaled = cycle * (PALETTE.length - 1);
+      const i = Math.floor(scaled);
+      const f = scaled - i;
+      // Ease in/out so hue shifts feel atmospheric, not stepped.
+      const ease = f * f * (3 - 2 * f);
+      const a = PALETTE[i]!;
+      const b = PALETTE[Math.min(i + 1, PALETTE.length - 1)]!;
+      return lerpRGB(a, b, ease);
+    };
 
     const seedNoise = () => {
       for (let i = 0; i < noise.length; i++) {
@@ -59,57 +86,82 @@ export default function PixelProcessorRail({
       seedNoise();
     };
 
+    const sampleNoise = (x: number, y: number) => {
+      // Wrapped sample so vertical/horizontal drift scrolls the grain field.
+      const sx = ((x % nw) + nw) % nw;
+      const sy = ((y % nh) + nh) % nh;
+      return noise[(sy | 0) * nw + (sx | 0)]! / 255;
+    };
+
     const paint = () => {
       if (!running) return;
       frame++;
+      const t = frame / 60; // ~seconds at 60fps
 
-      // Rare micro-respeckle so the grain feels alive without “processor sparkle”.
-      if (!reduceMotion && frame % 3 === 0) {
-        const count = Math.max(4, (nw * nh * 0.004) | 0);
+      // Heavier live respeckle — grain churns without LED sparkle.
+      if (!reduceMotion && frame % 2 === 0) {
+        const count = Math.max(12, (nw * nh * 0.012) | 0);
         for (let k = 0; k < count; k++) {
           const i = (Math.random() * noise.length) | 0;
           noise[i] = (Math.random() * 200 + 30) | 0;
         }
       }
 
+      // Drift: grain field scrolls up the edge + slight horizontal shimmer.
+      const driftY = reduceMotion ? 0 : t * 18;
+      const driftX = reduceMotion ? 0 : Math.sin(t * 0.55) * 4.5;
+      // Edge pulse — atmosphere breathes in/out.
+      const pulse = reduceMotion ? 1 : 0.82 + 0.18 * Math.sin(t * 1.1);
+      // Secondary shimmer wave traveling along the rail.
+      const shimmerPhase = t * 1.6;
+
+      const tint = brandAt(reduceMotion ? 0 : t);
+      // Secondary tint lagged for wash depth (purple-leaning companion).
+      const tintB = brandAt(reduceMotion ? 2.5 : t + 4.2);
+
       const img = ctx.createImageData(nw, nh);
       const data = img.data;
       const towardContent = side === "left";
 
       for (let y = 0; y < nh; y++) {
+        const yN = y / Math.max(1, nh - 1);
+        const vWave =
+          0.78 +
+          0.22 * Math.sin(yN * Math.PI * 2.8 + shimmerPhase) +
+          0.08 * Math.sin(yN * Math.PI * 5.4 - t * 0.9);
         for (let x = 0; x < nw; x++) {
           const i = y * nw + x;
-          const g = noise[i]! / 255;
+          const g = sampleNoise(x + driftX, y + driftY);
           // Outer edge strongest; long soft falloff into content (atmosphere, not a bar).
           const edgeT = towardContent ? 1 - x / Math.max(1, nw - 1) : x / Math.max(1, nw - 1);
-          const fall = Math.pow(Math.max(0, edgeT), 1.15);
-          // Vertical breathing so the edge isn’t a flat column.
-          const vWave =
-            0.88 +
-            0.12 * Math.sin((y / nh) * Math.PI * 2.2 + frame * 0.008);
-          const a = Math.min(0.85, (0.12 + g * 0.7) * fall * vWave);
+          const fall = Math.pow(Math.max(0, edgeT), 1.1);
+          const a = Math.min(0.9, (0.14 + g * 0.78) * fall * vWave * pulse);
           const o = i * 4;
-          // Apex magenta→purple grain (no cyan flecks — keeps one cohesive brand wash).
-          const mix = g * 0.55;
-          data[o] = (MAGENTA.r * (1 - mix) + PURPLE.r * mix) | 0;
-          data[o + 1] = (MAGENTA.g * (1 - mix) + PURPLE.g * mix) | 0;
-          data[o + 2] = (MAGENTA.b * (1 - mix) + PURPLE.b * mix) | 0;
+          // Mix primary/secondary brand tint by grain brightness.
+          const mix = g * 0.5;
+          data[o] = (tint.r * (1 - mix) + tintB.r * mix) | 0;
+          data[o + 1] = (tint.g * (1 - mix) + tintB.g * mix) | 0;
+          data[o + 2] = (tint.b * (1 - mix) + tintB.b * mix) | 0;
           data[o + 3] = (a * 255) | 0;
         }
       }
 
       ctx.putImageData(img, 0, 0);
 
-      // Soft Apex brand wash — magenta at the outer edge, purple depth inward.
+      // Soft brand wash — follows the live tint, stronger at the outer edge.
       const wash = ctx.createLinearGradient(
         towardContent ? 0 : nw,
         0,
         towardContent ? nw : 0,
         0,
       );
-      wash.addColorStop(0, "rgba(255, 26, 216, 0.52)");
-      wash.addColorStop(0.28, "rgba(157, 0, 255, 0.24)");
-      wash.addColorStop(0.62, "rgba(80, 0, 120, 0.08)");
+      const washPulse = reduceMotion ? 0.5 : 0.42 + 0.16 * Math.sin(t * 0.85);
+      wash.addColorStop(0, `rgba(${tint.r | 0}, ${tint.g | 0}, ${tint.b | 0}, ${washPulse})`);
+      wash.addColorStop(
+        0.28,
+        `rgba(${tintB.r | 0}, ${tintB.g | 0}, ${tintB.b | 0}, ${washPulse * 0.45})`,
+      );
+      wash.addColorStop(0.62, `rgba(${(tint.r * 0.35) | 0}, ${(tint.g * 0.2) | 0}, ${(tint.b * 0.45) | 0}, 0.08)`);
       wash.addColorStop(1, "rgba(5, 5, 5, 0)");
       ctx.globalCompositeOperation = "source-over";
       ctx.fillStyle = wash;
