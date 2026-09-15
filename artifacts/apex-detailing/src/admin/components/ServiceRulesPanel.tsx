@@ -98,16 +98,14 @@ export default function ServiceRulesPanel({ token }: { token: string }) {
       });
     }
     for (const r of rules ?? []) {
-      const entry =
-        map.get(r.serviceId) ??
-        ({
-          name: r.serviceName,
-          slug: r.serviceSlug,
-          sortOrder: 999,
-          rules: [],
-        } as const);
-      const next = { ...entry, rules: [...entry.rules, r] };
-      map.set(r.serviceId, next);
+      const entry = map.get(r.serviceId) ?? {
+        name: r.serviceName,
+        slug: r.serviceSlug,
+        sortOrder: 999,
+        rules: [] as ServiceDayRule[],
+      };
+      entry.rules.push(r);
+      map.set(r.serviceId, entry);
     }
     return Array.from(map.entries()).sort(
       (a, b) => a[1].sortOrder - b[1].sortOrder || a[0] - b[0],
