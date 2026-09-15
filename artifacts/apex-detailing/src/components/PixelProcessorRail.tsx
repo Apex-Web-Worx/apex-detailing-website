@@ -8,8 +8,8 @@ type PixelProcessorRailProps = {
 };
 
 /**
- * Minimal LED / processor pixel rail — soft side atmosphere only.
- * Intentionally thin and low-contrast so it never competes with hero copy.
+ * Minimal LED / SoC-style pixel rail — thin side atmosphere on desktop.
+ * Soft contrast + CSS edge fade so it never blocks hero copy/CTAs.
  */
 export default function PixelProcessorRail({
   side,
@@ -125,8 +125,8 @@ export default function PixelProcessorRail({
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           const v = heat[r * cols + c]!;
-          const base = ((c * 13 + r * 7) % 11) === 0 ? 0.045 : 0.01;
-          const a = Math.min(0.55, base + v * 0.5);
+          const base = ((c * 13 + r * 7) % 11) === 0 ? 0.055 : 0.014;
+          const a = Math.min(0.62, base + v * 0.55);
           if (a < 0.04) continue;
 
           const inCore = cores.some(
