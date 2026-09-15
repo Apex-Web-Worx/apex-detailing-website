@@ -68,6 +68,7 @@ import {
   Sparkles,
   CheckCircle2,
   Shield,
+  Bike,
 } from "lucide-react";
 
 const SERVICE_ICONS: Record<string, { icon: typeof Wand2; color: string }> = {
@@ -77,6 +78,7 @@ const SERVICE_ICONS: Record<string, { icon: typeof Wand2; color: string }> = {
   "apex-exterior-detailing": { icon: Car, color: "text-[#00E5FF]" },
   "apex-wash-clay-wax": { icon: Sparkles, color: "text-[#FF1AD8]" },
   "apex-headlight-restoration": { icon: CheckCircle2, color: "text-[#00E5FF]" },
+  "apex-moto": { icon: Bike, color: "text-[#00E5FF]" },
   "apex-ceramic-coating": { icon: Shield, color: "text-[#00E5FF]" },
   "apex-paint-correction": { icon: Sparkles, color: "text-[#FF1AD8]" },
 };

@@ -87,6 +87,15 @@ const seeds = [
     sortOrder: 60,
   },
   {
+    slug: "apex-moto",
+    name: "Apex Moto",
+    description:
+      "Motorcycle detailing starting at $150. $150 hand wash with 1-month ceramic spray protection. $250 polish for paint and chrome plus carnauba wax or polymer sealant for up to 6–8 months of shine and protection.",
+    durationMinutes: 120,
+    priceCents: 15000,
+    sortOrder: 65,
+  },
+  {
     slug: "apex-ceramic-coating",
     name: "Apex Ceramic Coating",
     description:

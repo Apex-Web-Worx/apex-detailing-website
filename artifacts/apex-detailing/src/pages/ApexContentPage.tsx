@@ -379,6 +379,7 @@ function SiteFooter() {
     "pkg.full.title",
     "pkg.interior.title",
     "pkg.exterior.title",
+    "pkg.moto.title",
     "pkg.ceramic.title",
     "pkg.paint.title",
     "pkg.headlight.title",

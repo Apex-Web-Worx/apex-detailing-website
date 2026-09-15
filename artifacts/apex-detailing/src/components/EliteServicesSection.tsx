@@ -1,6 +1,7 @@
 import { type ReactNode } from "react";
 import {
   AppWindow,
+  Bike,
   Calendar,
   Car,
   CheckCircle2,
@@ -200,6 +201,15 @@ const MORE_SERVICES: MoreService[] = [
     Icon: HeadlightRestoreIcon,
     // Safety / Oxidation removal / UV protection
     featIcons: [HeadlightRestoreIcon, Sparkles, UvProtectIcon],
+  },
+  {
+    id: "apex-moto",
+    pkg: "moto",
+    pricing: "$150",
+    Icon: Bike,
+    descKey: "pkg.moto.cardDesc",
+    // Hand wash / ceramic spray / polish / wax-sealant / 6-8 mo
+    featIcons: [Droplets, SprayCan, Sparkles, ShieldShineIcon, WaterRepelIcon],
   },
   {
     id: "ceramic-coating",

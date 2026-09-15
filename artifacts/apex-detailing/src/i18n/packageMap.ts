@@ -8,6 +8,7 @@ export const PKG_PHOTO: Record<string, string> = {
   headlight: "pkg-headlight.jpg",
   ceramic: "ceramic-bmw-proteam.jpg",
   paint: "pkg-paint.jpg",
+  moto: "pkg-moto.jpg",
 };
 
 /** Maps booking API slugs to homepage package copy keys. */
@@ -20,6 +21,7 @@ export const BOOKING_SLUG_TO_PKG: Record<string, string> = {
   "apex-headlight-restoration": "headlight",
   "apex-ceramic-coating": "ceramic",
   "apex-paint-correction": "paint",
+  "apex-moto": "moto",
 };
 
 export function packageTitleKey(slug: string): string | null {

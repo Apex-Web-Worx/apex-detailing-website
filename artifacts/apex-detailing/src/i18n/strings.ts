@@ -372,6 +372,8 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
       "Finished wash, clay, and wax in the hex-lit garage",
     "pkg.headlight.photoAlt":
       "Restored crystal-clear headlight in the hex-lit garage",
+    "pkg.moto.photoAlt":
+      "Finished motorcycle detail in the hex-lit Apex garage — glossy black paint and polished chrome",
     "pkg.ceramic.photoAlt":
       "Ceramic-coated paint with hexagon light reflections in the garage",
     "pkg.paint.photoAlt":
@@ -492,6 +494,21 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.headlight.feat.0": "Improves Safety",
     "pkg.headlight.feat.1": "Removes Oxidation",
     "pkg.headlight.feat.2": "UV Protection Applied",
+
+    "pkg.moto.title": "Apex Moto",
+    "pkg.moto.cardDesc":
+      "Motorcycle detailing from $150–$250 — hand wash with ceramic spray, or polish paint & chrome with wax or polymer sealant for lasting shine.",
+    "pkg.moto.desc":
+      "Motorcycle detailing starting at $150. The $150 package is a hand wash with 1-month ceramic spray protection. The $250 package adds polishing for paint and chrome, then carnauba wax or a polymer sealant for extra protection and shine lasting up to 6–8 months.",
+    "pkg.moto.tier.0.label": "Hand wash + ceramic spray",
+    "pkg.moto.tier.0.amount": "$150",
+    "pkg.moto.tier.1.label": "Polish + wax / sealant",
+    "pkg.moto.tier.1.amount": "$250",
+    "pkg.moto.feat.0": "Hand wash",
+    "pkg.moto.feat.1": "1-month ceramic spray protection ($150)",
+    "pkg.moto.feat.2": "Paint & chrome polishing ($250)",
+    "pkg.moto.feat.3": "Carnauba wax or polymer sealant",
+    "pkg.moto.feat.4": "Up to 6–8 months protection & shine",
 
     "pkg.ceramic.title": "Apex Ceramic Coating",
     "pkg.ceramic.cardDesc":
@@ -927,6 +944,8 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
       "Мойка, глина и воск в гараже с шестиугольным светом",
     "pkg.headlight.photoAlt":
       "Восстановленная фара в гараже с шестиугольным светом",
+    "pkg.moto.photoAlt":
+      "Готовый детейлинг мотоцикла в гараже Apex с шестиугольным светом — глянцевый чёрный кузов и полированный хром",
     "pkg.ceramic.photoAlt":
       "Керамическое покрытие с отражением шестиугольников",
     "pkg.paint.photoAlt":
@@ -1047,6 +1066,21 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     "pkg.headlight.feat.0": "Безопасность на дороге",
     "pkg.headlight.feat.1": "Снятие окисления",
     "pkg.headlight.feat.2": "УФ-защита",
+
+    "pkg.moto.title": "Apex Moto",
+    "pkg.moto.cardDesc":
+      "Детейлинг мотоцикла от $150–$250 — мойка с керамическим спреем или полировка ЛКП и хрома с воском/полимером для стойкого блеска.",
+    "pkg.moto.desc":
+      "Детейлинг мотоцикла от $150. Пакет $150 — ручная мойка и керамический спрей на 1 месяц. Пакет $250 — полировка ЛКП и хрома плюс карнаубский воск или полимерный силант для защиты и блеска до 6–8 месяцев.",
+    "pkg.moto.tier.0.label": "Мойка + керамический спрей",
+    "pkg.moto.tier.0.amount": "$150",
+    "pkg.moto.tier.1.label": "Полировка + воск / силант",
+    "pkg.moto.tier.1.amount": "$250",
+    "pkg.moto.feat.0": "Ручная мойка",
+    "pkg.moto.feat.1": "Керамический спрей на 1 месяц ($150)",
+    "pkg.moto.feat.2": "Полировка ЛКП и хрома ($250)",
+    "pkg.moto.feat.3": "Карнаубский воск или полимерный силант",
+    "pkg.moto.feat.4": "Защита и блеск до 6–8 месяцев",
 
     "pkg.ceramic.title": "Керамика Apex",
     "pkg.ceramic.cardDesc":

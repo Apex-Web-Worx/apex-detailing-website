@@ -21,6 +21,7 @@ import {
   ExternalLink,
   Wand2,
   Zap,
+  Bike,
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import LanguageToggle from "@/components/LanguageToggle";
@@ -87,6 +88,12 @@ const services = [
     pkg: "headlight",
     icon: <CheckCircle2 className="w-10 h-10 text-[#00E5FF]" />,
     pricing: "$125",
+  },
+  {
+    id: "apex-moto",
+    pkg: "moto",
+    icon: <Bike className="w-10 h-10 text-[#00E5FF]" />,
+    pricing: "$150",
   },
   {
     id: "ceramic-coating",
