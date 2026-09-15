@@ -1,13 +1,20 @@
 import { forceDismissSplash } from "@/lib/bootSplash";
 
-export function bookingUrl(): string {
+/** Optional `pkg` deep-links to that package card on the booking picker (e.g. `ceramic`). */
+export function bookingUrl(pkg?: string): string {
   const base = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
+  if (pkg) {
+    return `${base}/book?pkg=${encodeURIComponent(pkg)}`;
+  }
   return `${base}/book`;
 }
 
 /** Leave the heavy homepage behind so booking is a fresh, tappable page. */
-export function goBookNow(event?: { preventDefault?: () => void }) {
+export function goBookNow(
+  event?: { preventDefault?: () => void },
+  pkg?: string,
+) {
   event?.preventDefault?.();
   forceDismissSplash();
-  window.location.assign(bookingUrl());
+  window.location.assign(bookingUrl(pkg));
 }
