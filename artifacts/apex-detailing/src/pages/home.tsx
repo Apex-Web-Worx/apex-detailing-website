@@ -583,7 +583,11 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-['Mulish'] selection:bg-[#FF1AD8] selection:text-white apex-page">
+    <div className="min-h-screen bg-[#050505] text-white font-['Mulish'] selection:bg-[#FF1AD8] selection:text-white apex-page apex-page--soc">
+      {/* Homepage-only SoC atmosphere — soft grain + edge glow; non-blocking. */}
+      <div className="apex-soc-atmosphere" aria-hidden="true" />
+      <PixelProcessorRail side="left" />
+      <PixelProcessorRail side="right" />
       <div className="relative z-10">
       {/* Ambient neon bubbles — inside content stack so they stay above section BGs */}
       <div className="page-bubbles" aria-hidden="true">
@@ -602,8 +606,6 @@ export default function Home() {
           />
         ))}
       </div>
-      <PixelProcessorRail side="left" />
-      <PixelProcessorRail side="right" />
       {/* Navigation */}
       <nav
         className={`apex-site-nav fixed top-0 w-full z-50 overflow-visible transition-all duration-300 ${

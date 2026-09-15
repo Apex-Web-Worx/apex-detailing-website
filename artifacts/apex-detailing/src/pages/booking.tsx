@@ -541,7 +541,7 @@ function ServiceStep({
                   {t("book.selected")}
                 </span>
               )}
-              {photo && (!twoTapUi || pkg === "ceramic") && (
+              {photo && (
                 <div
                   className={`relative aspect-[16/9] w-full shrink-0 overflow-hidden bg-[#111]${
                     pkg === "ceramic" ? " book-pkg-photo--ceramic" : ""
