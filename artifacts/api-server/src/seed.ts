@@ -29,8 +29,8 @@ const MON_THRU_SAT_NON_FRI = [1, 2, 3, 4, 6]; // 0=Sun..6=Sat
 // New "Apex" elite catalog (replaces the prior 6-service list).
 // priceCents represents the "starting at" price shown on the booking
 // service-picker. A value of 0 is treated as "Call for quote" by the
-// frontend (currently only Ceramic Coating). Final pricing is always
-// confirmed in person and may vary by vehicle size / condition.
+// frontend. Final pricing is always confirmed in person and may vary
+// by vehicle size / condition.
 const seeds = [
   {
     slug: "apex-full-detailing",
@@ -74,7 +74,7 @@ const seeds = [
     description:
       "Thorough hand wash, clay bar treatment to remove embedded contaminants, and a protective wax coating to enhance shine, protect the paint, and repel water and dirt.",
     durationMinutes: 180,
-    priceCents: 25000,
+    priceCents: 30000,
     sortOrder: 50,
   },
   {
@@ -87,13 +87,21 @@ const seeds = [
     sortOrder: 60,
   },
   {
+    slug: "apex-moto",
+    name: "Apex Moto",
+    description:
+      "Motorcycle detailing starting at $150. $150 hand wash with 1-month ceramic spray protection. $250 polish for paint and chrome plus carnauba wax or polymer sealant for up to 6–8 months of shine and protection.",
+    durationMinutes: 120,
+    priceCents: 15000,
+    sortOrder: 65,
+  },
+  {
     slug: "apex-ceramic-coating",
     name: "Apex Ceramic Coating",
     description:
       "Ultimate protection and extreme gloss for your vehicle's paint. Lasts for years, making maintenance washes a breeze. Up to 5 years of protection, extreme hydrophobics, scratch resistance.",
     durationMinutes: 600,
-    // Custom-quoted — frontend shows "Call for quote" when priceCents === 0.
-    priceCents: 0,
+    priceCents: 90000,
     sortOrder: 70,
   },
   {
@@ -136,9 +144,16 @@ export async function runSeed(): Promise<void> {
       .from(servicesTable)
       .where(eq(servicesTable.slug, s.slug));
     if (existing.length > 0) {
+      // Keep live priceCents (e.g. ceramic "call for quote" at 0).
       await db
         .update(servicesTable)
-        .set({ ...s, active: true })
+        .set({
+          name: s.name,
+          description: s.description,
+          durationMinutes: s.durationMinutes,
+          sortOrder: s.sortOrder,
+          active: true,
+        })
         .where(eq(servicesTable.slug, s.slug));
     } else {
       await db.insert(servicesTable).values({ ...s, active: true });
@@ -146,41 +161,89 @@ export async function runSeed(): Promise<void> {
     }
   }
 
-  await seedDefaultDayRulesIfEmpty();
+  await ensureDefaultDayRulesForCatalog();
 }
 
-async function seedDefaultDayRulesIfEmpty(): Promise<void> {
-  const existing = await db.select({ id: serviceDayRulesTable.id }).from(serviceDayRulesTable).limit(1);
-  if (existing.length > 0) {
-    return; // owner has configured rules — never overwrite
+/**
+ * Insert any seed packages that are still missing from the DB, and attach
+ * default day rules when needed. Does NOT overwrite existing rows (so live
+ * price tweaks like ceramic "call for quote" stay intact). Safe to call from
+ * the public services list so a new package appears as soon as the API
+ * build that includes it is running.
+ */
+export async function ensureMissingCatalogServices(): Promise<void> {
+  for (const s of seeds) {
+    const existing = await db
+      .select({ id: servicesTable.id })
+      .from(servicesTable)
+      .where(eq(servicesTable.slug, s.slug))
+      .limit(1);
+    if (existing.length > 0) {
+      // Re-activate if it was soft-disabled but is still in the catalog.
+      await db
+        .update(servicesTable)
+        .set({ active: true })
+        .where(eq(servicesTable.slug, s.slug));
+      continue;
+    }
+    await db.insert(servicesTable).values({ ...s, active: true });
+    console.log(`[seed] inserted (ensure): ${s.slug}`);
   }
+  await ensureDefaultDayRulesForCatalog();
+}
+
+/**
+ * Install default Mon–Sat schedule rules for any catalog service that still
+ * has zero rules. Safe on re-run: services the owner already configured are
+ * left alone. Needed when a new package (e.g. Apex Moto) is added to `seeds`
+ * after the shop already has day rules for older services — the old
+ * "seed only when empty" path left the new package with no bookable slots.
+ */
+async function ensureDefaultDayRulesForCatalog(): Promise<void> {
   const services = await db
     .select({ id: servicesTable.id, slug: servicesTable.slug })
     .from(servicesTable)
     .where(inArray(servicesTable.slug, seeds.map((s) => s.slug)));
+
+  const existing = await db
+    .select({ serviceId: serviceDayRulesTable.serviceId })
+    .from(serviceDayRulesTable);
+  const haveRules = new Set(existing.map((r) => r.serviceId));
+
   for (const svc of services) {
-    if (FRIDAY_SHORT_SLUGS.has(svc.slug)) {
-      const [rule] = await db
-        .insert(serviceDayRulesTable)
-        .values({ serviceId: svc.id, dayOfWeek: 5, wholeDayLock: false, active: true })
-        .returning();
-      await db
-        .insert(serviceDaySlotsTable)
-        .values(FRIDAY_SHORT_SLOTS.map((time) => ({ ruleId: rule.id, time })));
-      console.log(`[seed] rules: ${svc.slug} → Fri ${FRIDAY_SHORT_SLOTS.join(",")} (per-slot)`);
-    } else {
-      for (const dow of MON_THRU_SAT_NON_FRI) {
-        const [rule] = await db
-          .insert(serviceDayRulesTable)
-          .values({ serviceId: svc.id, dayOfWeek: dow, wholeDayLock: true, active: true })
-          .returning();
-        await db
-          .insert(serviceDaySlotsTable)
-          .values(REGULAR_LONG_SLOTS.map((time) => ({ ruleId: rule.id, time })));
-      }
-      console.log(`[seed] rules: ${svc.slug} → Mon-Thu+Sat ${REGULAR_LONG_SLOTS.join(",")} (whole-day)`);
-    }
+    if (haveRules.has(svc.id)) continue;
+    await insertDefaultDayRules(svc);
   }
+}
+
+async function insertDefaultDayRules(svc: {
+  id: number;
+  slug: string;
+}): Promise<void> {
+  if (FRIDAY_SHORT_SLUGS.has(svc.slug)) {
+    const [rule] = await db
+      .insert(serviceDayRulesTable)
+      .values({ serviceId: svc.id, dayOfWeek: 5, wholeDayLock: false, active: true })
+      .returning();
+    await db
+      .insert(serviceDaySlotsTable)
+      .values(FRIDAY_SHORT_SLOTS.map((time) => ({ ruleId: rule.id, time })));
+    console.log(`[seed] rules: ${svc.slug} → Fri ${FRIDAY_SHORT_SLOTS.join(",")} (per-slot)`);
+    return;
+  }
+
+  for (const dow of MON_THRU_SAT_NON_FRI) {
+    const [rule] = await db
+      .insert(serviceDayRulesTable)
+      .values({ serviceId: svc.id, dayOfWeek: dow, wholeDayLock: true, active: true })
+      .returning();
+    await db
+      .insert(serviceDaySlotsTable)
+      .values(REGULAR_LONG_SLOTS.map((time) => ({ ruleId: rule.id, time })));
+  }
+  console.log(
+    `[seed] rules: ${svc.slug} → Mon-Thu+Sat ${REGULAR_LONG_SLOTS.join(",")} (whole-day)`,
+  );
 }
 
 // CLI entrypoint: only runs when invoked directly via `tsx ./src/seed.ts`,
