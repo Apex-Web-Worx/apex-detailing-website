@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1050" height="600" viewBox="0 0 1050 600">
+
+  <defs>
+    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E040A0"/>
+      <stop offset="50%" stop-color="#A060D0"/>
+      <stop offset="100%" stop-color="#40D0F0"/>
+    </linearGradient>
+    <linearGradient id="brandGradV" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E040A0"/>
+      <stop offset="100%" stop-color="#40D0F0"/>
+    </linearGradient>
+    <linearGradient id="accentLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E040A0" stop-opacity="0"/>
+      <stop offset="20%" stop-color="#E040A0"/>
+      <stop offset="50%" stop-color="#A060D0"/>
+      <stop offset="80%" stop-color="#40D0F0"/>
+      <stop offset="100%" stop-color="#40D0F0" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1050" height="600" fill="#000000"/>
+  <g transform="translate(525,300) scale(0.82) translate(-210,-240)">
+    <!-- Inline logo on front -->
+    <path d="M210 18 L372 112 L372 308 L210 402 L48 308 L48 112 Z"
+          fill="none" stroke="url(#brandGrad)" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M210 34 L356 120 L356 300 L210 386 L64 300 L64 120 Z"
+          fill="none" stroke="url(#brandGrad)" stroke-width="1.5" stroke-linejoin="round" opacity="0.7"/>
+    <g transform="translate(210,118)" opacity="0.85">
+      <circle cx="0" cy="0" r="8" fill="none" stroke="url(#brandGrad)" stroke-width="1.2"/>
+      <line x1="0" y1="-34" x2="0" y2="-52" stroke="url(#brandGrad)" stroke-width="1.2"/>
+      <line x1="24" y1="-24" x2="37" y2="-37" stroke="url(#brandGrad)" stroke-width="1.2"/>
+      <line x1="34" y1="0" x2="52" y2="0" stroke="url(#brandGrad)" stroke-width="1.2"/>
+      <line x1="24" y1="24" x2="37" y2="37" stroke="url(#brandGrad)" stroke-width="1.2"/>
+      <line x1="0" y1="34" x2="0" y2="52" stroke="url(#brandGrad)" stroke-width="1.2"/>
+      <line x1="-24" y1="24" x2="-37" y2="37" stroke="url(#brandGrad)" stroke-width="1.2"/>
+      <line x1="-34" y1="0" x2="-52" y2="0" stroke="url(#brandGrad)" stroke-width="1.2"/>
+      <line x1="-24" y1="-24" x2="-37" y2="-37" stroke="url(#brandGrad)" stroke-width="1.2"/>
+    </g>
+    <path d="M72 168 L98 132 L124 168" fill="none" stroke="url(#brandGrad)" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M296 168 L322 132 L348 168" fill="none" stroke="url(#brandGrad)" stroke-width="1.8" stroke-linejoin="round"/>
+    <g transform="translate(210,118)" fill="none" stroke="url(#brandGrad)" stroke-width="2" stroke-linejoin="round">
+      <path d="M-42 8 C-28 -10 28 -10 42 8 L48 18 C52 24 52 30 48 36 L42 46 C28 64 -28 64 -42 46 L-48 36 C-52 30 -52 24 -48 18 Z"/>
+      <path d="M-18 8 L18 8" stroke-width="1.5"/>
+      <path d="M-30 46 L30 46" stroke-width="1.5"/>
+      <ellipse cx="-28" cy="30" rx="7" ry="10" stroke-width="1.5"/>
+      <ellipse cx="28" cy="30" rx="7" ry="10" stroke-width="1.5"/>
+      <path d="M-8 -2 L8 -2" stroke-width="1.2"/>
+    </g>
+    <path d="M95 178 Q130 188 165 178 T235 178 T305 178" fill="none" stroke="url(#brandGrad)" stroke-width="1.5" opacity="0.8"/>
+    <path d="M95 188 Q130 198 165 188 T235 188 T305 188" fill="none" stroke="url(#brandGrad)" stroke-width="1.5" opacity="0.6"/>
+    <text x="210" y="268" text-anchor="middle"
+          font-family="Inter, Helvetica Neue, Arial, sans-serif"
+          font-size="62" font-weight="800" font-style="italic"
+          fill="none" stroke="url(#brandGrad)" stroke-width="2.2"
+          letter-spacing="2">APEX</text>
+    <text x="210" y="302" text-anchor="middle"
+          font-family="Inter, Helvetica Neue, Arial, sans-serif"
+          font-size="18" font-weight="500"
+          fill="url(#brandGrad)" letter-spacing="12">DETAILING</text>
+    <line x1="150" y1="352" x2="270" y2="352" stroke="url(#brandGrad)" stroke-width="1.2" opacity="0.7"/>
+    <path d="M210 362 L214 370 L210 378 L206 370 Z" fill="url(#brandGrad)" opacity="0.9"/>
+    <line x1="150" y1="388" x2="270" y2="388" stroke="url(#brandGrad)" stroke-width="1.2" opacity="0.7"/>
+  </g>
+</svg>
