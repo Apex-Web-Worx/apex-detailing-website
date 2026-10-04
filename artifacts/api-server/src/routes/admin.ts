@@ -11,18 +11,11 @@ import {
 import { and, asc, eq, gte, inArray, lte, ne } from "drizzle-orm";
 import {
   buildScheduledAt,
-  isClosedShopDate,
-  isPastSlot,
   parseDateString,
   shopLocalDateString,
   shopLocalTimeString,
   todayInShopLocal,
 } from "../lib/availability";
-import {
-  getRuleForServiceIdDay,
-  isDayWholeDayLocked,
-  hasOtherConfirmedBookingOnDate,
-} from "../lib/availability-rules";
 import pickupRouter, { cancelScheduledReviews } from "./admin-pickup";
 import { OCCUPYING_STATUS_LIST } from "../lib/occupying-statuses";
 import { type BookingEmailData, formatDateLong } from "../lib/email";
@@ -321,7 +314,20 @@ router.post("/admin/bookings/:id/reschedule", requireAdmin, async (req, res) => 
     return;
   }
   const newDate = body.date;
-  const newTime = body.time;
+  // Accept HH:MM or HH:MM:SS from native / admin time pickers.
+  const newTimeRaw = body.time.trim();
+  const timeMatch = newTimeRaw.match(/^(\d{1,2}):(\d{2})(?::\d{2})?$/);
+  if (!timeMatch) {
+    res.status(400).json({ message: "Invalid time format. Use HH:MM." });
+    return;
+  }
+  const hour = Number(timeMatch[1]);
+  const minute = Number(timeMatch[2]);
+  if (hour > 23 || minute > 59) {
+    res.status(400).json({ message: "Invalid time format. Use HH:MM." });
+    return;
+  }
+  const newTime = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
 
   const [booking] = await db
     .select()
@@ -332,14 +338,10 @@ router.post("/admin/bookings/:id/reschedule", requireAdmin, async (req, res) => 
     return;
   }
 
-  if (booking.status !== "confirmed") {
-    res.status(400).json({ message: "This booking is cancelled and cannot be rescheduled." });
-    return;
-  }
-  if (booking.scheduledAt < new Date()) {
-    res
-      .status(400)
-      .json({ message: "This appointment has already passed and cannot be rescheduled." });
+  if (booking.status === "cancelled" || booking.status === "completed") {
+    res.status(400).json({
+      message: "This booking cannot be rescheduled in its current status.",
+    });
     return;
   }
   if (!parseDateString(newDate)) {
@@ -350,59 +352,10 @@ router.post("/admin/bookings/:id/reschedule", requireAdmin, async (req, res) => 
     res.status(400).json({ message: "Cannot reschedule to a date in the past" });
     return;
   }
-  if (isClosedShopDate(newDate)) {
-    res.status(400).json({ message: "Shop is closed on this day" });
-    return;
-  }
 
-  const [blockedRow] = await db
-    .select({ id: blockedDatesTable.id })
-    .from(blockedDatesTable)
-    .where(eq(blockedDatesTable.date, newDate));
-  if (blockedRow) {
-    res.status(400).json({ message: "Shop is closed on this day" });
-    return;
-  }
-
-  const newDateObj = parseDateString(newDate);
-  if (!newDateObj) {
-    res.status(400).json({ message: "Invalid date format. Use YYYY-MM-DD." });
-    return;
-  }
-  const newRule = await getRuleForServiceIdDay(
-    booking.serviceId,
-    newDateObj.getUTCDay(),
-  );
-  if (!newRule || !newRule.slots.includes(newTime)) {
-    res.status(400).json({
-      message: "That time slot is not available for this service.",
-    });
-    return;
-  }
-  if (isPastSlot(newDate, newTime)) {
-    res
-      .status(400)
-      .json({ message: "That time has already passed. Please pick a later slot." });
-    return;
-  }
-  // Admin reschedule intentionally skips customer lead-time rules
-  // (10-hour early-slot notice and Ceramic 3-day notice) so the owner
-  // can move a booking to any still-valid shop day/slot.
-
-  // Whole-day-lock semantics (excluding this booking).
-  if (newRule.wholeDayLock) {
-    if (await hasOtherConfirmedBookingOnDate(newDate, booking.id)) {
-      res.status(409).json({
-        message: "That day is fully booked. Please choose another day.",
-      });
-      return;
-    }
-  } else if (await isDayWholeDayLocked(newDate, booking.id)) {
-    res.status(409).json({
-      message: "That day is fully booked. Please choose another day.",
-    });
-    return;
-  }
+  // Admin override: no Sunday / blocked-date / service-rule / lead-time /
+  // whole-day-lock checks. Those limits apply only to public booking and
+  // customer self-manage. Exact-slot uniqueness is still enforced by the DB.
 
   const newScheduledAt = buildScheduledAt(newDate, newTime);
   if (!newScheduledAt) {
@@ -426,7 +379,7 @@ router.post("/admin/bookings/:id/reschedule", requireAdmin, async (req, res) => 
       .where(
         and(
           eq(bookingsTable.id, booking.id),
-          eq(bookingsTable.status, "confirmed"),
+          eq(bookingsTable.status, booking.status),
           eq(bookingsTable.scheduledAt, booking.scheduledAt),
         ),
       )
@@ -455,7 +408,7 @@ router.post("/admin/bookings/:id/reschedule", requireAdmin, async (req, res) => 
   } catch (err) {
     if (pgErrorCode(err) === "23505") {
       res.status(409).json({
-        message: "Sorry — that time slot was just taken. Please pick another.",
+        message: "Sorry — that exact time already has another booking. Pick a different time.",
       });
       return;
     }

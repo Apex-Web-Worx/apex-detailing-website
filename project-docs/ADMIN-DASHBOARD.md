@@ -115,12 +115,7 @@ When clicking "Edit" on a booking:
 1. Admin clicks "Reschedule" on a booking
 2. System opens a date/time picker
 3. Admin picks new date and time
-4. System validates:
-   - Date is not blocked
-   - Date is not Sunday
-   - Slot is available for that service (service-day rules)
-   - Slot is available (no whole-day lock / double-book conflict)
-   - Customer lead-time rules do **not** apply to admin (Ceramic 3-day notice and 10-hour early-slot notice are skipped)
+4. Admin may pick **any** future date and time (date picker + time picker). Customer limits do **not** apply: Ceramic 3-day notice, early-slot lead time, Sunday closure, blocked dates, and service-day rules are skipped. The only hard conflicts are past calendar dates and an exact datetime already taken by another booking.
 5. Admin clicks "Confirm new time"
 6. System updates the booking
 7. Customer receives reschedule email + SMS

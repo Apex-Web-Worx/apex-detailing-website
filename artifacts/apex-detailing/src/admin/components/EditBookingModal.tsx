@@ -1,29 +1,20 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   adminUpdateBooking,
   adminRescheduleBooking,
-  useGetAvailability,
   type Booking,
 } from "@workspace/api-client-react";
+import { Check, Loader2, X as XIcon } from "lucide-react";
 import {
-  Calendar,
-  Check,
-  ChevronLeft,
-  ChevronRight,
-  Clock,
-  Loader2,
-  X as XIcon,
-} from "lucide-react";
-import {
-  addDaysToDateString,
   formatDateLong,
-  formatDateShort,
   formatDateTimeLong,
   formatTime12h,
   todayDateString,
 } from "@/lib/format";
 import { scheduledAtToShopDate, scheduledAtToShopTime } from "../utils";
 import { fieldClass, PrimaryButton } from "./ui";
+import AdminDatePicker from "./AdminDatePicker";
+import AdminTimePicker, { snapTimeToFiveMinutes } from "./AdminTimePicker";
 
 export default function EditBookingModal({
   booking,
@@ -260,34 +251,11 @@ function RescheduleTab({
   const currentDate = scheduledAtToShopDate(scheduledIso);
   const currentTime = scheduledAtToShopTime(scheduledIso);
   const today = todayDateString();
-  const [windowStart, setWindowStart] = useState(today);
-  const [pickedDate, setPickedDate] = useState<string | null>(null);
-  const [pickedTime, setPickedTime] = useState<string | null>(null);
+  const [pickedDate, setPickedDate] = useState(currentDate < today ? today : currentDate);
+  const [pickedTime, setPickedTime] = useState(snapTimeToFiveMinutes(currentTime || "07:30"));
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<{ date: string; time: string } | null>(null);
-  const endDate = useMemo(() => addDaysToDateString(windowStart, 13), [windowStart]);
-  const availabilityParams = {
-    startDate: windowStart,
-    endDate,
-    serviceId: booking.serviceId,
-  };
-  const { data, isLoading } = useGetAvailability(availabilityParams, {
-    // Authenticated admin availability skips customer lead-time rules
-    // (Ceramic 3-day notice / 10h early-slot) so nearer days stay selectable.
-    // Separate query key so this never poisons the public /book cache.
-    request: { headers: { "x-admin-token": token } },
-    query: {
-      queryKey: ["/api/booking/availability", "admin", availabilityParams],
-    },
-  });
-  const days = data ?? [];
-  const selectedDay = days.find((d) => d.date === pickedDate);
-  const goPrev = () => {
-    const prev = addDaysToDateString(windowStart, -14);
-    setWindowStart(prev < today ? today : prev);
-  };
-  const goNext = () => setWindowStart(addDaysToDateString(windowStart, 14));
 
   useEffect(() => {
     setError(null);
@@ -302,10 +270,10 @@ function RescheduleTab({
     try {
       await adminRescheduleBooking(
         booking.id,
-        { date: pickedDate, time: pickedTime },
+        { date: pickedDate, time: snapTimeToFiveMinutes(pickedTime) },
         { headers: { "x-admin-token": token } },
       );
-      setSuccess({ date: pickedDate, time: pickedTime });
+      setSuccess({ date: pickedDate, time: snapTimeToFiveMinutes(pickedTime) });
       setTimeout(() => onSaved(), 1800);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not reschedule.");
@@ -335,111 +303,25 @@ function RescheduleTab({
   }
 
   return (
-    <div>
-      <p className="text-sm text-[#9CA3AF] mb-5">
+    <div className="space-y-4">
+      <p className="text-sm text-[#9CA3AF]">
         Current: <span className="text-white font-semibold">{formatDateTimeLong(scheduledIso)}</span>
       </p>
-      <div className="rounded-xl border border-white/10 bg-white/[0.02] p-4 mb-4">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xs font-bold text-gray-300 uppercase tracking-wide">
-            <Calendar className="w-3.5 h-3.5 inline mr-2 -mt-0.5" />
-            Select a day
-          </h3>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={goPrev}
-              disabled={windowStart === today}
-              className="w-8 h-8 rounded-lg border border-white/10 hover:bg-white/5 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
-              aria-label="Previous"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <button
-              onClick={goNext}
-              className="w-8 h-8 rounded-lg border border-white/10 hover:bg-white/5 flex items-center justify-center"
-              aria-label="Next"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-        {isLoading ? (
-          <div className="flex items-center gap-3 text-[#9CA3AF] py-8 justify-center text-sm">
-            <Loader2 className="w-4 h-4 animate-spin" /> Checking availability…
-          </div>
-        ) : (
-          <div className="grid grid-cols-3 sm:grid-cols-7 gap-2">
-            {days.map((d) => {
-              const allFull = d.slots.every((s) => !s.available);
-              const dayHasOurCurrent = d.date === currentDate;
-              const isPast = d.date < today;
-              const disabled = isPast || d.closed || (allFull && !dayHasOurCurrent);
-              const isPicked = pickedDate === d.date;
-              return (
-                <button
-                  key={d.date}
-                  onClick={() => {
-                    setPickedDate(d.date);
-                    setPickedTime(null);
-                  }}
-                  disabled={disabled}
-                  className={`p-3 rounded-xl text-center transition ${
-                    isPicked
-                      ? "bg-[#FF2AD4] text-white"
-                      : disabled
-                        ? "bg-white/[0.02] text-gray-600 cursor-not-allowed opacity-50"
-                        : "bg-white/[0.04] hover:bg-white/[0.08] text-white"
-                  }`}
-                >
-                  <div className="text-[10px] uppercase font-bold tracking-wider opacity-80">
-                    {formatDateShort(d.date).split(",")[0]}
-                  </div>
-                  <div className="text-lg font-bold leading-tight mt-1">{Number(d.date.split("-")[2])}</div>
-                  <div className="text-[10px] mt-1 opacity-70">
-                    {isPast ? "Past" : d.closed ? "Closed" : allFull && !dayHasOurCurrent ? "Full" : "Open"}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        )}
+      <p className="text-xs text-[#9CA3AF] rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2.5">
+        Admin can move this booking to any day and time. Customer lead-time rules (Ceramic 3-day notice, early-slot limits, Sunday / service-day blocks) do not apply here.
+      </p>
+      <div>
+        <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#9CA3AF] mb-2">New date</p>
+        <AdminDatePicker value={pickedDate} onChange={setPickedDate} minDate={today} />
       </div>
-      {selectedDay && !selectedDay.closed && (
-        <div className="rounded-xl border border-white/10 bg-white/[0.02] p-4 mb-5">
-          <h3 className="text-xs font-bold text-gray-300 uppercase tracking-wide mb-3">
-            <Clock className="w-3.5 h-3.5 inline mr-2 -mt-0.5" />
-            {formatDateLong(selectedDay.date)}
-          </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            {selectedDay.slots.map((slot) => {
-              const isOwnCurrent = selectedDay.date === currentDate && slot.time === currentTime;
-              const available = slot.available || isOwnCurrent;
-              const isPicked = pickedTime === slot.time;
-              return (
-                <button
-                  key={slot.time}
-                  onClick={() => setPickedTime(slot.time)}
-                  disabled={!available}
-                  className={`py-3 rounded-xl font-bold transition text-sm ${
-                    isPicked
-                      ? "bg-[#FF2AD4] text-white"
-                      : available
-                        ? "bg-white/[0.04] hover:bg-white/[0.08] text-white border border-white/10"
-                        : "bg-white/[0.02] text-gray-600 cursor-not-allowed line-through"
-                  }`}
-                >
-                  {formatTime12h(slot.time)}
-                  {isOwnCurrent && <div className="text-[10px] font-normal opacity-70 mt-0.5">(current)</div>}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      )}
+      <div>
+        <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#9CA3AF] mb-2">New time</p>
+        <AdminTimePicker value={pickedTime} onChange={setPickedTime} />
+      </div>
       {error && (
-        <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-sm">{error}</div>
+        <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-sm">{error}</div>
       )}
-      <p className="text-xs text-[#9CA3AF] mb-4">
+      <p className="text-xs text-[#9CA3AF]">
         Confirming sends the customer the standard reschedule email and moves the Google Calendar event.
       </p>
       <div className="flex justify-end gap-3">

@@ -72,7 +72,7 @@ The following services allow multiple bookings per day:
 The following actions require the admin dashboard:
 
 1. **Cancel any booking** — Admin can cancel any client's booking
-2. **Reschedule any booking** — Admin can move any booking to a new valid shop slot. Customer lead-time rules (Ceramic 3-day notice, 10-hour early-slot notice) do **not** apply to admin; Sundays, blocked dates, service-day rules, and conflict checks still apply.
+2. **Reschedule any booking** — Admin can move a booking to **any** future date/time. Customer limits (Ceramic 3-day notice, early-slot lead time, Sunday closure, blocked dates, service-day rules, whole-day lock) do **not** apply to admin. Only past dates and an exact datetime already taken by another booking are rejected.
 3. **Edit customer details** — Name, email, phone, vehicle, notes
 4. **Block dates** — Add/remove shop closure days
 5. **Configure service rules** — Change which days/times each service runs
