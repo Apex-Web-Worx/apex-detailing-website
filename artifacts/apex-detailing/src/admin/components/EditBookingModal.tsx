@@ -267,10 +267,19 @@ function RescheduleTab({
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<{ date: string; time: string } | null>(null);
   const endDate = useMemo(() => addDaysToDateString(windowStart, 13), [windowStart]);
-  const { data, isLoading } = useGetAvailability({
+  const availabilityParams = {
     startDate: windowStart,
     endDate,
     serviceId: booking.serviceId,
+  };
+  const { data, isLoading } = useGetAvailability(availabilityParams, {
+    // Authenticated admin availability skips customer lead-time rules
+    // (Ceramic 3-day notice / 10h early-slot) so nearer days stay selectable.
+    // Separate query key so this never poisons the public /book cache.
+    request: { headers: { "x-admin-token": token } },
+    query: {
+      queryKey: ["/api/booking/availability", "admin", availabilityParams],
+    },
   });
   const days = data ?? [];
   const selectedDay = days.find((d) => d.date === pickedDate);

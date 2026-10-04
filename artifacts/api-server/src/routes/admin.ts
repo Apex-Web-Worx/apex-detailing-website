@@ -13,8 +13,6 @@ import {
   buildScheduledAt,
   isClosedShopDate,
   isPastSlot,
-  isTooSoon,
-  isTooSoonForCeramic,
   parseDateString,
   shopLocalDateString,
   shopLocalTimeString,
@@ -387,28 +385,9 @@ router.post("/admin/bookings/:id/reschedule", requireAdmin, async (req, res) => 
       .json({ message: "That time has already passed. Please pick a later slot." });
     return;
   }
-  if (isTooSoon(newDate, newTime)) {
-    res.status(400).json({
-      message: "That appointment is too soon. Please pick a slot at least 10 hours from now.",
-    });
-    return;
-  }
-
-  // Ceramic Coating requires 3-day advance notice.
-  const adminBookingService = await db
-    .select({ slug: servicesTable.slug })
-    .from(servicesTable)
-    .where(eq(servicesTable.id, booking.serviceId))
-    .then((r) => r[0]);
-  if (
-    adminBookingService?.slug === "apex-ceramic-coating" &&
-    isTooSoonForCeramic(newDate)
-  ) {
-    res.status(400).json({
-      message: "Ceramic Coating requires at least 3 days advance notice. Please choose a later date.",
-    });
-    return;
-  }
+  // Admin reschedule intentionally skips customer lead-time rules
+  // (10-hour early-slot notice and Ceramic 3-day notice) so the owner
+  // can move a booking to any still-valid shop day/slot.
 
   // Whole-day-lock semantics (excluding this booking).
   if (newRule.wholeDayLock) {

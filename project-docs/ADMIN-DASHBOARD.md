@@ -118,7 +118,9 @@ When clicking "Edit" on a booking:
 4. System validates:
    - Date is not blocked
    - Date is not Sunday
-   - Slot is available (no whole-day lock conflict)
+   - Slot is available for that service (service-day rules)
+   - Slot is available (no whole-day lock / double-book conflict)
+   - Customer lead-time rules do **not** apply to admin (Ceramic 3-day notice and 10-hour early-slot notice are skipped)
 5. Admin clicks "Confirm new time"
 6. System updates the booking
 7. Customer receives reschedule email + SMS

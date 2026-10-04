@@ -121,7 +121,7 @@ Change these Tailwind classes throughout the codebase to retheme.
 **Files to change:**
 - `artifacts/api-server/src/lib/availability.ts` — Sunday closure rule, timezone
 - `artifacts/api-server/src/seed.ts` — Default service-day rules and time slots
-- `artifacts/api-server/src/routes/booking.ts` — Minimum notice rules (10h early-slot, 3-day for ceramic)
+- `artifacts/api-server/src/routes/booking.ts` — Minimum notice rules for customers (10h early-slot, 3-day for ceramic); admin availability/reschedule can bypass via `x-admin-token`
 
 ### 10. Gift Cards
 
