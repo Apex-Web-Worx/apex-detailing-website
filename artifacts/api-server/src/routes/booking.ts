@@ -128,6 +128,13 @@ router.get("/booking/availability", async (req, res) => {
     return;
   }
 
+  // Admin calendar (valid x-admin-token) skips customer lead-time so the
+  // owner can reschedule into nearer days. Public /book and customer
+  // self-manage keep the 10h early-slot and Ceramic 3-day notice rules.
+  const adminToken = process.env["ADMIN_TOKEN"];
+  const isAdminCalendar =
+    !!adminToken && req.header("x-admin-token") === adminToken;
+
   // Date strings cover the full window in local time. Pad the SQL window
   // generously so we don't miss any bookings due to TZ offset.
   const rangeStartUtc = new Date(startDate.getTime() - 24 * 60 * 60 * 1000);
@@ -270,7 +277,9 @@ router.get("/booking/availability", async (req, res) => {
 
     // Ceramic Coating: 3-day advance notice (first 3 days unavailable).
     const isCeramicTooSoon =
-      serviceSlug === "apex-ceramic-coating" && isTooSoonForCeramic(dateStr);
+      !isAdminCalendar &&
+      serviceSlug === "apex-ceramic-coating" &&
+      isTooSoonForCeramic(dateStr);
 
     const slots = slotsForDay.map((time) => ({
       time,
@@ -281,7 +290,7 @@ router.get("/booking/availability", async (req, res) => {
         !isCeramicTooSoon &&
         !taken.has(`${dateStr} ${time}`) &&
         !isPastSlot(dateStr, time) &&
-        !isTooSoon(dateStr, time),
+        (isAdminCalendar || !isTooSoon(dateStr, time)),
     }));
     out.push({ date: dateStr, closed, slots });
   }

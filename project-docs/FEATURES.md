@@ -12,7 +12,7 @@ The booking process guides customers through 4 steps:
    - Service-specific time slots
    - Existing bookings (whole-day lock prevents overbooking)
    - Blocked dates (holidays, owner time off)
-   - Minimum notice rules (e.g., Ceramic Coating requires 3-day advance notice)
+   - Minimum notice rules for customers (e.g., Ceramic Coating requires 3-day advance notice; admin reschedule can bypass)
 
 3. **Enter Information** — Customer provides:
    - Name (required)

@@ -64,171 +64,171 @@ export default function AppointmentRow({
     </StatusAction>
   ) : null;
 
-  const icons = (
-    <div className="flex flex-row items-center gap-1.5 shrink-0 ml-auto">
-      {primaryAction}
-      <a
-        href={`tel:${booking.phone}`}
-        className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-[#23B9FF] hover:bg-white/5 touch-manipulation"
-        aria-label={`Call ${booking.customerName}`}
+  const moreMenu = (
+    <div className="relative shrink-0">
+      <button
+        type="button"
+        onClick={() => setMenu((v) => !v)}
+        className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center hover:bg-white/5 touch-manipulation"
+        aria-label="More actions"
       >
-        <Phone className="w-4 h-4" />
-      </a>
-      <div className="relative">
-        <button
-          type="button"
-          onClick={() => setMenu((v) => !v)}
-          className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center hover:bg-white/5 touch-manipulation"
-          aria-label="More actions"
-        >
-          <MoreHorizontal className="w-4 h-4" />
-        </button>
-        {menu && (
-          <div className="absolute right-0 bottom-full mb-1 w-44 rounded-xl border border-white/10 bg-[#0B0B0B] py-1 z-20 shadow-xl">
+        <MoreHorizontal className="w-4 h-4" />
+      </button>
+      {menu && (
+        <div className="absolute right-0 bottom-full mb-1 w-44 rounded-xl border border-white/10 bg-[#0B0B0B] py-1 z-20 shadow-xl">
+          <button
+            type="button"
+            className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
+            onClick={() => {
+              setMenu(false);
+              onView();
+            }}
+          >
+            View
+          </button>
+          {canStart ? (
             <button
               type="button"
               className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
               onClick={() => {
                 setMenu(false);
-                onView();
+                void startBooking(booking.id);
               }}
             >
-              View
+              Start detailing
             </button>
-            {canStart ? (
+          ) : null}
+          {ready ? (
+            <button
+              type="button"
+              className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
+              onClick={() => {
+                setMenu(false);
+                openReadyModal(booking);
+              }}
+            >
+              Ready for pickup
+            </button>
+          ) : null}
+          {canComplete ? (
+            <button
+              type="button"
+              className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
+              onClick={() => {
+                setMenu(false);
+                void completeBooking(booking.id);
+              }}
+            >
+              Mark completed
+            </button>
+          ) : null}
+          {status === "in_progress" || status === "ready_for_pickup" || status === "completed" ? (
+            <button
+              type="button"
+              className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
+              onClick={() => {
+                setMenu(false);
+                void sendReviewRequest(booking.id)
+                  .then((result) => {
+                    alert(
+                      result === "already"
+                        ? "Review link already sent. It will not send again."
+                        : "Review link sent.",
+                    );
+                  })
+                  .catch((e) => {
+                    alert(e instanceof Error ? e.message : "Could not send review link");
+                  });
+              }}
+            >
+              Send review link
+            </button>
+          ) : null}
+          {status !== "cancelled" ? (
+            <>
               <button
                 type="button"
                 className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
                 onClick={() => {
                   setMenu(false);
-                  void startBooking(booking.id);
-                }}
-              >
-                Start detailing
-              </button>
-            ) : null}
-            {ready ? (
-              <button
-                type="button"
-                className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
-                onClick={() => {
-                  setMenu(false);
-                  openReadyModal(booking);
-                }}
-              >
-                Ready for pickup
-              </button>
-            ) : null}
-            {canComplete ? (
-              <button
-                type="button"
-                className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
-                onClick={() => {
-                  setMenu(false);
-                  void completeBooking(booking.id);
-                }}
-              >
-                Mark completed
-              </button>
-            ) : null}
-            {status === "in_progress" || status === "ready_for_pickup" || status === "completed" ? (
-              <button
-                type="button"
-                className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
-                onClick={() => {
-                  setMenu(false);
-                  void sendReviewRequest(booking.id)
+                  void skipReviewRequest(booking.id)
                     .then((result) => {
                       alert(
                         result === "already"
-                          ? "Review link already sent. It will not send again."
-                          : "Review link sent.",
+                          ? "Review is already skipped for this client."
+                          : "Review will not be sent to this client.",
                       );
                     })
                     .catch((e) => {
-                      alert(e instanceof Error ? e.message : "Could not send review link");
+                      alert(e instanceof Error ? e.message : "Could not skip review");
                     });
                 }}
               >
-                Send review link
+                Don’t send review to this client
               </button>
-            ) : null}
-            {status !== "cancelled" ? (
-              <>
-                <button
-                  type="button"
-                  className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
-                  onClick={() => {
-                    setMenu(false);
-                    void skipReviewRequest(booking.id)
-                      .then((result) => {
-                        alert(
-                          result === "already"
-                            ? "Review is already skipped for this client."
-                            : "Review will not be sent to this client.",
-                        );
-                      })
-                      .catch((e) => {
-                        alert(e instanceof Error ? e.message : "Could not skip review");
-                      });
-                  }}
-                >
-                  Don’t send review to this client
-                </button>
-                <button
-                  type="button"
-                  className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
-                  onClick={() => {
-                    setMenu(false);
-                    void unskipReviewRequest(booking.id)
-                      .then(() => {
-                        alert("Review is allowed again for this client.");
-                      })
-                      .catch((e) => {
-                        alert(e instanceof Error ? e.message : "Could not allow review");
-                      });
-                  }}
-                >
-                  Allow review for this client
-                </button>
-              </>
-            ) : null}
-            {canAct && onEdit && (
               <button
                 type="button"
                 className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
                 onClick={() => {
                   setMenu(false);
-                  onEdit();
+                  void unskipReviewRequest(booking.id)
+                    .then(() => {
+                      alert("Review is allowed again for this client.");
+                    })
+                    .catch((e) => {
+                      alert(e instanceof Error ? e.message : "Could not allow review");
+                    });
                 }}
               >
-                Edit
+                Allow review for this client
               </button>
-            )}
-            {booking.manageToken && (
-              <Link
-                href={`/manage/${booking.id}?token=${booking.manageToken}`}
-                className="block px-3 py-3 text-sm hover:bg-white/5 min-h-11"
-              >
-                Customer link
-              </Link>
-            )}
-            {(canAct || status === "in_progress" || status === "ready_for_pickup") && onCancel && (
-              <button
-                type="button"
-                className="w-full text-left px-3 py-3 text-sm text-red-400 hover:bg-red-500/10 min-h-11"
-                onClick={() => {
-                  setMenu(false);
-                  onCancel();
-                }}
-              >
-                Cancel
-              </button>
-            )}
-          </div>
-        )}
-      </div>
+            </>
+          ) : null}
+          {canAct && onEdit && (
+            <button
+              type="button"
+              className="w-full text-left px-3 py-3 text-sm hover:bg-white/5 min-h-11"
+              onClick={() => {
+                setMenu(false);
+                onEdit();
+              }}
+            >
+              Edit
+            </button>
+          )}
+          {booking.manageToken && (
+            <Link
+              href={`/manage/${booking.id}?token=${booking.manageToken}`}
+              className="block px-3 py-3 text-sm hover:bg-white/5 min-h-11"
+            >
+              Customer link
+            </Link>
+          )}
+          {(canAct || status === "in_progress" || status === "ready_for_pickup") && onCancel && (
+            <button
+              type="button"
+              className="w-full text-left px-3 py-3 text-sm text-red-400 hover:bg-red-500/10 min-h-11"
+              onClick={() => {
+                setMenu(false);
+                onCancel();
+              }}
+            >
+              Cancel
+            </button>
+          )}
+        </div>
+      )}
     </div>
+  );
+
+  const callButton = (
+    <a
+      href={`tel:${booking.phone}`}
+      className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-[#23B9FF] hover:bg-white/5 touch-manipulation shrink-0"
+      aria-label={`Call ${booking.customerName}`}
+    >
+      <Phone className="w-4 h-4" />
+    </a>
   );
 
   const photo = photoIds[0] ? (
@@ -244,13 +244,13 @@ export default function AppointmentRow({
 
   return (
     <div className="rounded-2xl border border-white/10 bg-[#111111] px-3 py-3 md:px-4 hover:bg-[#161616] transition duration-200">
-      <div className="md:hidden">
+      <div className="md:hidden space-y-3">
         <div className="flex items-start gap-3">
           <button type="button" onClick={onView} className="flex-1 min-w-0 text-left touch-manipulation">
             <div className="flex items-start gap-3">
               {photo}
               <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <span className="text-sm font-bold text-white shrink-0">{time}</span>
                   <StatusBadge status={status} />
                 </div>
@@ -259,7 +259,7 @@ export default function AppointmentRow({
                     <DetailTimer booking={booking} size="sm" />
                   </div>
                 ) : null}
-                <p className="mt-0.5 font-semibold text-white leading-snug">{booking.serviceName}</p>
+                <p className="mt-0.5 font-semibold text-white leading-snug break-words">{booking.serviceName}</p>
                 <p className="mt-0.5 text-sm text-[#9CA3AF] truncate">
                   {booking.customerName} · {booking.vehicle}
                 </p>
@@ -271,12 +271,16 @@ export default function AppointmentRow({
               </div>
             </div>
           </button>
-          {icons}
+          <div className="flex items-center gap-1.5 shrink-0">
+            {callButton}
+            {moreMenu}
+          </div>
         </div>
+        {primaryAction ? <div className="w-full">{primaryAction}</div> : null}
       </div>
 
       <div className="hidden md:flex md:items-center md:gap-3">
-        <button type="button" onClick={onView} className="flex items-center gap-4 min-w-0 text-left">
+        <button type="button" onClick={onView} className="flex items-center gap-4 min-w-0 flex-1 text-left">
           {photo}
           <div className="shrink-0">
             <p className="text-sm font-bold text-white tabular-nums leading-none">{time}</p>
@@ -301,7 +305,11 @@ export default function AppointmentRow({
             </p>
           </div>
         </button>
-        {icons}
+        <div className="flex items-center gap-1.5 shrink-0 ml-auto">
+          {primaryAction}
+          {callButton}
+          {moreMenu}
+        </div>
       </div>
     </div>
   );
@@ -318,7 +326,7 @@ function StatusAction({
     <button
       type="button"
       onClick={onClick}
-      className="h-11 px-3 rounded-xl bg-[#FF2AD4] text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 hover:bg-[#ff4adc] touch-manipulation whitespace-nowrap shrink-0"
+      className="h-11 w-full md:w-auto px-3 rounded-xl bg-[#FF2AD4] text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 hover:bg-[#ff4adc] touch-manipulation whitespace-nowrap shrink-0"
     >
       {children}
     </button>
