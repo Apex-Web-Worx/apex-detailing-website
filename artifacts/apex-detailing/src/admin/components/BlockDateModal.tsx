@@ -9,7 +9,6 @@ import { Loader2, X } from "lucide-react";
 import { todayDateString } from "@/lib/format";
 import { useAdmin } from "../context";
 import { fieldClass, GhostButton, PrimaryButton } from "./ui";
-import AdminDatePicker from "./AdminDatePicker";
 
 function formatPhone(raw: string) {
   const digits = raw.replace(/\D/g, "").slice(0, 10);
@@ -30,6 +29,8 @@ function daySpan(start: string, end: string): number {
   if (b < a) return 0;
   return Math.floor((b - a) / 86_400_000) + 1;
 }
+
+const dateFieldClass = `${fieldClass} min-h-12 text-base [color-scheme:dark]`;
 
 async function adminUpdateBlockedDate(
   originalDate: string,
@@ -93,8 +94,7 @@ async function adminAddBlockedDateRange(
 }
 
 export default function BlockDateModal() {
-  const { token, blockOpen, blockPrefillDate, editingBlocked, closeBlockDate, bookings, blockedDates } =
-    useAdmin();
+  const { token, blockOpen, blockPrefillDate, editingBlocked, closeBlockDate } = useAdmin();
   const queryClient = useQueryClient();
   const [date, setDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -287,63 +287,80 @@ export default function BlockDateModal() {
       <form
         onClick={(e) => e.stopPropagation()}
         onSubmit={save}
-        className="w-full sm:max-w-lg bg-[#0B0B0B] border border-white/10 rounded-t-2xl sm:rounded-2xl p-5 max-h-[92dvh] overflow-y-auto pb-[max(1.25rem,env(safe-area-inset-bottom))]"
+        className="w-full sm:max-w-md bg-[#0B0B0B] border border-white/10 rounded-t-2xl sm:rounded-2xl p-4 sm:p-5 max-h-[92dvh] overflow-y-auto pb-[max(1.25rem,env(safe-area-inset-bottom))]"
       >
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-4 gap-3">
           <h2 className="text-lg font-bold">
             {isEditing ? "Edit blocked date" : isRange ? "Block Dates" : "Block Date"}
           </h2>
           <button
             type="button"
             onClick={closeBlockDate}
-            className="w-9 h-9 rounded-lg text-[#9CA3AF] hover:text-white hover:bg-white/5"
+            className="w-11 h-11 shrink-0 rounded-xl text-[#9CA3AF] hover:text-white hover:bg-white/5 touch-manipulation"
             aria-label="Close"
           >
             <X className="w-5 h-5 mx-auto" />
           </button>
         </div>
-        <div className="space-y-3">
-          <div className={`grid gap-3 ${isEditing ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2"}`}>
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
-                {isEditing ? "Date" : "From"}
-              </span>
-              <AdminDatePicker
-                value={date}
-                onChange={(next) => {
-                  setDate(next);
-                  if (!isEditing && (!endDate || endDate < next)) setEndDate(next);
-                }}
-                minDate={dateMin}
-                bookings={bookings}
-                blockedDates={blockedDates}
-                allowDate={editingBlocked?.date}
-                disableBlocked
-                required
-              />
-            </div>
-            {!isEditing && (
-              <div>
+
+        <div className="space-y-4">
+          {/* Google-style From / To — native date fields, stacked for mobile */}
+          <div className="rounded-xl border border-white/10 bg-white/[0.02] p-3 space-y-3">
+            {isEditing ? (
+              <label className="block">
                 <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
-                  To
+                  Date
                 </span>
-                <AdminDatePicker
-                  value={effectiveEnd}
-                  onChange={setEndDate}
-                  minDate={date || today}
-                  bookings={bookings}
-                  blockedDates={blockedDates}
-                  disableBlocked={false}
+                <input
+                  type="date"
+                  value={date}
+                  min={dateMin}
                   required
+                  onChange={(e) => setDate(e.target.value)}
+                  className={dateFieldClass}
                 />
-                <p className="mt-1.5 text-xs text-[#9CA3AF]">
+              </label>
+            ) : (
+              <>
+                <label className="block">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
+                    From
+                  </span>
+                  <input
+                    type="date"
+                    value={date}
+                    min={dateMin}
+                    required
+                    onChange={(e) => {
+                      const next = e.target.value;
+                      setDate(next);
+                      if (!endDate || endDate < next) setEndDate(next);
+                    }}
+                    className={dateFieldClass}
+                  />
+                </label>
+                <label className="block">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
+                    To
+                  </span>
+                  <input
+                    type="date"
+                    value={effectiveEnd}
+                    min={date || today}
+                    required
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className={dateFieldClass}
+                  />
+                </label>
+                <p className="text-xs text-[#9CA3AF] leading-relaxed">
                   {isRange
-                    ? `Blocks ${rangeDays} days (shop closed). Max 31.`
-                    : "Same as start = one day. Pick a later end to block a week trip."}
+                    ? `${rangeDays} days will be blocked (shop closed). Max 31.`
+                    : "Same date = one day. Later To date = whole trip (e.g. a week)."}
                 </p>
-              </div>
+              </>
             )}
           </div>
+
           <label className="block">
             <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
               Reason
@@ -354,27 +371,29 @@ export default function BlockDateModal() {
               onChange={(e) => setReason(e.target.value)}
               placeholder="Optional, e.g. Family trip"
               maxLength={200}
-              className={fieldClass}
+              className={`${fieldClass} min-h-12 text-base`}
             />
           </label>
+
           {!isRange && (
             <div className="rounded-xl border border-white/10 bg-white/[0.02] p-3 space-y-3">
               <p className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF]">
                 Optional customer / contact
               </p>
-              <p className="text-xs text-[#9CA3AF]">
+              <p className="text-xs text-[#9CA3AF] leading-relaxed">
                 {isEditing
-                  ? "Name, phone, or vehicle makes this day count as an appointment. Changing the phone or moving the date sends a confirmation text. Name-only changes do not resend."
-                  : "Add a name, phone, or vehicle to hold this day as an appointment. A phone number also sends a confirmation text. For a multi-day shop close, set a later To date instead."}
+                  ? "Name, phone, or vehicle makes this day an appointment. Changing phone or date sends a confirmation text."
+                  : "Add contact to hold one day as an appointment. For a multi-day shop close, set a later To date instead."}
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 gap-3">
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Name"
                   maxLength={100}
-                  className={fieldClass}
+                  className={`${fieldClass} min-h-12 text-base`}
+                  autoComplete="given-name"
                 />
                 <input
                   type="text"
@@ -382,7 +401,8 @@ export default function BlockDateModal() {
                   onChange={(e) => setSurname(e.target.value)}
                   placeholder="Surname"
                   maxLength={100}
-                  className={fieldClass}
+                  className={`${fieldClass} min-h-12 text-base`}
+                  autoComplete="family-name"
                 />
                 <input
                   type="tel"
@@ -390,26 +410,30 @@ export default function BlockDateModal() {
                   onChange={(e) => setPhone(formatPhone(e.target.value))}
                   placeholder="Phone"
                   maxLength={14}
-                  className={fieldClass}
+                  className={`${fieldClass} min-h-12 text-base`}
+                  inputMode="tel"
+                  autoComplete="tel"
+                />
+                <input
+                  type="text"
+                  value={vehicle}
+                  onChange={(e) => setVehicle(e.target.value)}
+                  placeholder="Vehicle, e.g. 2022 BMW M4"
+                  maxLength={120}
+                  className={`${fieldClass} min-h-12 text-base`}
                 />
               </div>
-              <input
-                type="text"
-                value={vehicle}
-                onChange={(e) => setVehicle(e.target.value)}
-                placeholder="Vehicle, e.g. 2022 BMW M4"
-                maxLength={120}
-                className={fieldClass}
-              />
             </div>
           )}
+
           {isRange && (
-            <p className="text-xs text-[#9CA3AF] rounded-xl border border-white/10 bg-white/[0.02] p-3">
-              Multi-day blocks close the shop for every day in the range. Customer holds stay
-              single-day — clear the To date (or set it equal to From) to add a contact hold.
+            <p className="text-xs text-[#9CA3AF] rounded-xl border border-white/10 bg-white/[0.02] p-3 leading-relaxed">
+              Multi-day blocks close the shop for the whole range. Customer holds stay single-day —
+              set To equal to From to add a contact hold.
             </p>
           )}
         </div>
+
         {error && (
           <div className="mt-3 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-sm">
             {error}
@@ -420,11 +444,16 @@ export default function BlockDateModal() {
             {successNote}
           </div>
         )}
-        <div className="flex justify-end gap-2 mt-5">
-          <GhostButton type="button" onClick={closeBlockDate}>
+
+        <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 mt-5">
+          <GhostButton type="button" onClick={closeBlockDate} className="min-h-12 w-full sm:w-auto">
             Cancel
           </GhostButton>
-          <PrimaryButton type="submit" disabled={!date || submitting}>
+          <PrimaryButton
+            type="submit"
+            disabled={!date || submitting}
+            className="min-h-12 w-full sm:w-auto"
+          >
             {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
             {isEditing ? "Save" : isRange ? `Block ${rangeDays} Days` : "Block Date"}
           </PrimaryButton>
