@@ -120,8 +120,9 @@ export default function BlockDateModal() {
       setPhone(formatPhone(editingBlocked.phone ?? ""));
       setVehicle(editingBlocked.vehicle ?? "");
     } else {
-      setDate(blockPrefillDate);
-      setEndDate(blockPrefillDate);
+      const start = blockPrefillDate || todayDateString();
+      setDate(start);
+      setEndDate(start);
       setReason("");
       setName("");
       setSurname("");

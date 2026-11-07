@@ -22,7 +22,13 @@ function RouteFallback() {
 function BootOnBook() {
   const [location] = useLocation();
   useEffect(() => {
-    if (location === "/book" || location.startsWith("/book?") || location.endsWith("/book")) {
+    const path = location.split("?")[0] || "/";
+    if (
+      path === "/book" ||
+      path.endsWith("/book") ||
+      path === "/admin" ||
+      path.startsWith("/admin/")
+    ) {
       forceDismissSplash();
     }
   }, [location]);
