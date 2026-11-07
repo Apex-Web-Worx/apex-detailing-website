@@ -3,8 +3,10 @@ import { Link } from "wouter";
 import { Loader2, Lock } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import { AdminPwaInstallHint } from "@/components/PwaManifestSwitch";
+import { forceDismissSplash } from "@/lib/bootSplash";
 import { TOKEN_KEY } from "./constants";
 import { AdminProvider, useAdmin } from "./context";
+import AdminErrorBoundary from "./AdminErrorBoundary";
 import AdminShell from "./components/AdminShell";
 import AppointmentDetailDrawer from "./components/AppointmentDetailDrawer";
 import BlockDateModal from "./components/BlockDateModal";
@@ -30,6 +32,8 @@ export default function AdminApp() {
   });
 
   useEffect(() => {
+    // Don't leave /admin stuck behind the marketing splash (common on phone).
+    forceDismissSplash();
     const meta = document.createElement("meta");
     meta.name = "robots";
     meta.content = "noindex, nofollow";
@@ -40,16 +44,22 @@ export default function AdminApp() {
   }, []);
 
   if (!token) {
-    return <Login onSubmit={setToken} />;
+    return (
+      <AdminErrorBoundary>
+        <Login onSubmit={setToken} />
+      </AdminErrorBoundary>
+    );
   }
 
   return (
-    <AdminProvider token={token} onLogout={() => setToken(null)}>
-      <AdminShell>
-        <AdminSection />
-      </AdminShell>
-      <AdminOverlays />
-    </AdminProvider>
+    <AdminErrorBoundary>
+      <AdminProvider token={token} onLogout={() => setToken(null)}>
+        <AdminShell>
+          <AdminSection />
+        </AdminShell>
+        <AdminOverlays />
+      </AdminProvider>
+    </AdminErrorBoundary>
   );
 }
 

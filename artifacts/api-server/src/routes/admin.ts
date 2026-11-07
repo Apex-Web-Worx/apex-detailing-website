@@ -496,9 +496,30 @@ router.get("/admin/blocked-dates", requireAdmin, async (_req, res) => {
   res.json(rows);
 });
 
+/** Inclusive YYYY-MM-DD list from start→end (UTC calendar days). Max 31 days. */
+function enumerateBlockedDates(start: string, end: string): string[] | null {
+  const startD = parseDateString(start);
+  const endD = parseDateString(end);
+  if (!startD || !endD || end < start) return null;
+  const out: string[] = [];
+  const cursor = new Date(startD.getTime());
+  const last = endD.getTime();
+  while (cursor.getTime() <= last) {
+    const y = cursor.getUTCFullYear();
+    const m = String(cursor.getUTCMonth() + 1).padStart(2, "0");
+    const d = String(cursor.getUTCDate()).padStart(2, "0");
+    out.push(`${y}-${m}-${d}`);
+    if (out.length > 31) return null;
+    cursor.setUTCDate(cursor.getUTCDate() + 1);
+  }
+  return out;
+}
+
 router.post("/admin/blocked-dates", requireAdmin, async (req, res) => {
-  const { date, reason, name, surname, phone, vehicle } = (req.body ?? {}) as {
+  const { date, endDate, reason, name, surname, phone, vehicle } = (req.body ??
+    {}) as {
     date?: unknown;
+    endDate?: unknown;
     reason?: unknown;
     name?: unknown;
     surname?: unknown;
@@ -513,6 +534,26 @@ router.post("/admin/blocked-dates", requireAdmin, async (req, res) => {
     res.status(400).json({ message: "Cannot block a date in the past." });
     return;
   }
+
+  const end =
+    typeof endDate === "string" && endDate.trim() ? endDate.trim() : date;
+  if (!parseDateString(end)) {
+    res.status(400).json({ message: "Invalid end date. Use YYYY-MM-DD." });
+    return;
+  }
+  if (end < date) {
+    res.status(400).json({ message: "End date must be on or after the start date." });
+    return;
+  }
+
+  const dates = enumerateBlockedDates(date, end);
+  if (!dates) {
+    res.status(400).json({
+      message: "Date range is invalid or longer than 31 days.",
+    });
+    return;
+  }
+
   const reasonStr =
     typeof reason === "string" ? reason.trim().slice(0, 200) : "";
   const nameStr =
@@ -523,37 +564,77 @@ router.post("/admin/blocked-dates", requireAdmin, async (req, res) => {
     typeof phone === "string" ? phone.trim().slice(0, 40) : "";
   const vehicleStr =
     typeof vehicle === "string" ? vehicle.trim().slice(0, 120) : "";
-  try {
-    const [created] = await db
-      .insert(blockedDatesTable)
-      .values({
-        date,
-        reason: reasonStr,
-        name: nameStr || null,
-        surname: surnameStr || null,
-        phone: phoneStr || null,
-        vehicle: vehicleStr || null,
-      })
-      .returning();
-    // Fire-and-forget calendar sync so admin response stays fast even if
-    // Google is slow. On success we persist the event id back to the row
-    // so the matching DELETE can clean it up later.
-    void createBlockedDateEvent(date, reasonStr, {
-      name: nameStr || null,
-      surname: surnameStr || null,
-      phone: phoneStr || null,
-      vehicle: vehicleStr || null,
-    }).then(async (eventId) => {
-      if (eventId) {
-        await db
-          .update(blockedDatesTable)
-          .set({ googleEventId: eventId })
-          .where(eq(blockedDatesTable.id, created.id));
-      }
-    });
 
-    // If admin entered a phone, send an appointment confirmation SMS to that number.
-    if (phoneStr) {
+  const isRange = dates.length > 1;
+  const hasContact = Boolean(nameStr || surnameStr || phoneStr || vehicleStr);
+  // Multi-day blocks are for shop-closed vacations — holds stay single-day.
+  if (isRange && hasContact) {
+    res.status(400).json({
+      message:
+        "Contact holds are single-day only. Clear the contact fields or block one day.",
+    });
+    return;
+  }
+
+  try {
+    const createdRows: (typeof blockedDatesTable.$inferSelect)[] = [];
+    const skipped: string[] = [];
+
+    for (const day of dates) {
+      try {
+        const [created] = await db
+          .insert(blockedDatesTable)
+          .values({
+            date: day,
+            reason: reasonStr,
+            name: nameStr || null,
+            surname: surnameStr || null,
+            phone: phoneStr || null,
+            vehicle: vehicleStr || null,
+          })
+          .returning();
+        createdRows.push(created);
+
+        void createBlockedDateEvent(day, reasonStr, {
+          name: nameStr || null,
+          surname: surnameStr || null,
+          phone: phoneStr || null,
+          vehicle: vehicleStr || null,
+        }).then(async (eventId) => {
+          if (eventId) {
+            await db
+              .update(blockedDatesTable)
+              .set({ googleEventId: eventId })
+              .where(eq(blockedDatesTable.id, created.id));
+          }
+        });
+
+        void syncHoldBookingFromRow(created).catch((err) =>
+          console.error("[admin] hold booking create failed:", err),
+        );
+      } catch (err) {
+        const pgCode = pgErrorCode(err);
+        if (pgCode === "23505") {
+          skipped.push(day);
+          continue;
+        }
+        throw err;
+      }
+    }
+
+    if (createdRows.length === 0) {
+      res.status(409).json({
+        message:
+          dates.length === 1
+            ? "That date is already blocked."
+            : "All dates in that range are already blocked.",
+        skipped,
+      });
+      return;
+    }
+
+    // Single-day hold with phone: one confirmation SMS (unchanged).
+    if (!isRange && phoneStr) {
       const customerName = [nameStr, surnameStr].filter(Boolean).join(" ").trim();
       void sendSms({
         to: phoneStr,
@@ -566,17 +647,21 @@ router.post("/admin/blocked-dates", requireAdmin, async (req, res) => {
       });
     }
 
-    void syncHoldBookingFromRow(created).catch((err) =>
-      console.error("[admin] hold booking create failed:", err),
-    );
-
-    res.status(201).json(created);
-  } catch (err) {
-    const pgCode = pgErrorCode(err);
-    if (pgCode === "23505") {
-      res.status(409).json({ message: "That date is already blocked." });
+    // Keep single-day clients happy (api-client expects one BlockedDate).
+    if (!isRange) {
+      res.status(201).json(createdRows[0]);
       return;
     }
+
+    res.status(201).json({
+      created: createdRows,
+      skipped,
+      count: createdRows.length,
+      startDate: date,
+      endDate: end,
+    });
+  } catch (err) {
+    const pgCode = pgErrorCode(err);
     // Postgres undefined_column — schema push hasn't run yet.
     if (pgCode === "42703") {
       console.error("[admin] blocked-dates insert missing column:", err);

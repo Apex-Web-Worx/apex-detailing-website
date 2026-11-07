@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   adminAddBlockedDate,
@@ -9,7 +9,6 @@ import { Loader2, X } from "lucide-react";
 import { todayDateString } from "@/lib/format";
 import { useAdmin } from "../context";
 import { fieldClass, GhostButton, PrimaryButton } from "./ui";
-import AdminDatePicker from "./AdminDatePicker";
 
 function formatPhone(raw: string) {
   const digits = raw.replace(/\D/g, "").slice(0, 10);
@@ -21,6 +20,17 @@ function formatPhone(raw: string) {
 function phoneDigits(value: string) {
   return value.replace(/\D/g, "");
 }
+
+/** Inclusive day count between YYYY-MM-DD strings (UTC calendar). */
+function daySpan(start: string, end: string): number {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(start) || !/^\d{4}-\d{2}-\d{2}$/.test(end)) return 0;
+  const a = Date.UTC(+start.slice(0, 4), +start.slice(5, 7) - 1, +start.slice(8, 10));
+  const b = Date.UTC(+end.slice(0, 4), +end.slice(5, 7) - 1, +end.slice(8, 10));
+  if (b < a) return 0;
+  return Math.floor((b - a) / 86_400_000) + 1;
+}
+
+const dateFieldClass = `${fieldClass} min-h-12 text-base [color-scheme:dark]`;
 
 async function adminUpdateBlockedDate(
   originalDate: string,
@@ -51,11 +61,43 @@ async function adminUpdateBlockedDate(
   }
 }
 
+async function adminAddBlockedDateRange(
+  payload: {
+    date: string;
+    endDate: string;
+    reason?: string;
+  },
+  token: string,
+) {
+  const res = await fetch("/api/admin/blocked-dates", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-admin-token": token,
+    },
+    body: JSON.stringify(payload),
+  });
+  const text = await res.text().catch(() => "");
+  if (!res.ok) {
+    throw new Error(`${res.status} ${text}`);
+  }
+  try {
+    return JSON.parse(text) as {
+      count?: number;
+      skipped?: string[];
+      startDate?: string;
+      endDate?: string;
+    };
+  } catch {
+    return {};
+  }
+}
+
 export default function BlockDateModal() {
-  const { token, blockOpen, blockPrefillDate, editingBlocked, closeBlockDate, bookings, blockedDates } =
-    useAdmin();
+  const { token, blockOpen, blockPrefillDate, editingBlocked, closeBlockDate } = useAdmin();
   const queryClient = useQueryClient();
   const [date, setDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [reason, setReason] = useState("");
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
@@ -71,13 +113,16 @@ export default function BlockDateModal() {
     if (!blockOpen) return;
     if (editingBlocked) {
       setDate(editingBlocked.date);
+      setEndDate(editingBlocked.date);
       setReason(editingBlocked.reason ?? "");
       setName(editingBlocked.name ?? "");
       setSurname(editingBlocked.surname ?? "");
       setPhone(formatPhone(editingBlocked.phone ?? ""));
       setVehicle(editingBlocked.vehicle ?? "");
     } else {
-      setDate(blockPrefillDate);
+      const start = blockPrefillDate || todayDateString();
+      setDate(start);
+      setEndDate(start);
       setReason("");
       setName("");
       setSurname("");
@@ -102,8 +147,6 @@ export default function BlockDateModal() {
     };
   }, [blockOpen, closeBlockDate]);
 
-  if (!blockOpen) return null;
-
   const today = todayDateString();
   const dateMin =
     isEditing &&
@@ -113,9 +156,26 @@ export default function BlockDateModal() {
       ? editingBlocked.date
       : today;
 
+  const effectiveEnd = endDate && endDate >= date ? endDate : date;
+  const rangeDays = useMemo(
+    () => (date ? daySpan(date, effectiveEnd) : 0),
+    [date, effectiveEnd],
+  );
+  const isRange = !isEditing && rangeDays > 1;
+
+  if (!blockOpen) return null;
+
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!date) return;
+    if (isRange && endDate < date) {
+      setError("End date must be on or after the start date.");
+      return;
+    }
+    if (isRange && rangeDays > 31) {
+      setError("You can block at most 31 days at once.");
+      return;
+    }
     setSubmitting(true);
     setError(null);
     setSuccessNote(null);
@@ -146,6 +206,20 @@ export default function BlockDateModal() {
           phoneTrim && (phoneChanged || dateChanged)
             ? `Saved. Confirmation text sent to ${phoneTrim}.`
             : "Blocked date updated.",
+        );
+      } else if (isRange) {
+        const payload: { date: string; endDate: string; reason?: string } = {
+          date,
+          endDate: effectiveEnd,
+        };
+        if (reasonTrim) payload.reason = reasonTrim;
+        const result = await adminAddBlockedDateRange(payload, token);
+        const created = result.count ?? rangeDays;
+        const skipped = result.skipped?.length ?? 0;
+        setSuccessNote(
+          skipped > 0
+            ? `Blocked ${created} day${created === 1 ? "" : "s"}. Skipped ${skipped} already blocked.`
+            : `Blocked ${created} day${created === 1 ? "" : "s"} (${date} → ${effectiveEnd}).`,
         );
       } else {
         const payload: {
@@ -181,11 +255,23 @@ export default function BlockDateModal() {
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Could not save blocked date";
       if (/409/.test(msg)) {
-        setError("That date is already blocked.");
+        setError(
+          isRange
+            ? "All dates in that range are already blocked."
+            : "That date is already blocked.",
+        );
       } else if (/404/.test(msg)) {
         setError("That blocked date was not found. It may have already been re-opened.");
       } else if (/400/.test(msg)) {
-        setError("Pick a valid date that is today or later.");
+        if (/Contact holds/i.test(msg)) {
+          setError("Contact holds are single-day only. Clear contact fields or block one day.");
+        } else if (/31 days/i.test(msg)) {
+          setError("You can block at most 31 days at once.");
+        } else if (/End date/i.test(msg)) {
+          setError("End date must be on or after the start date.");
+        } else {
+          setError("Pick a valid date that is today or later.");
+        }
       } else {
         setError(msg);
       }
@@ -202,37 +288,80 @@ export default function BlockDateModal() {
       <form
         onClick={(e) => e.stopPropagation()}
         onSubmit={save}
-        className="w-full sm:max-w-lg bg-[#0B0B0B] border border-white/10 rounded-t-2xl sm:rounded-2xl p-5 max-h-[92dvh] overflow-y-auto pb-[max(1.25rem,env(safe-area-inset-bottom))]"
+        className="w-full sm:max-w-md bg-[#0B0B0B] border border-white/10 rounded-t-2xl sm:rounded-2xl p-4 sm:p-5 max-h-[92dvh] overflow-y-auto pb-[max(1.25rem,env(safe-area-inset-bottom))]"
       >
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-4 gap-3">
           <h2 className="text-lg font-bold">
-            {isEditing ? "Edit blocked date" : "Block Date"}
+            {isEditing ? "Edit blocked date" : isRange ? "Block Dates" : "Block Date"}
           </h2>
           <button
             type="button"
             onClick={closeBlockDate}
-            className="w-9 h-9 rounded-lg text-[#9CA3AF] hover:text-white hover:bg-white/5"
+            className="w-11 h-11 shrink-0 rounded-xl text-[#9CA3AF] hover:text-white hover:bg-white/5 touch-manipulation"
             aria-label="Close"
           >
             <X className="w-5 h-5 mx-auto" />
           </button>
         </div>
-        <div className="space-y-3">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
-              Date
-            </span>
-            <AdminDatePicker
-              value={date}
-              onChange={setDate}
-              minDate={dateMin}
-              bookings={bookings}
-              blockedDates={blockedDates}
-              allowDate={editingBlocked?.date}
-              disableBlocked
-              required
-            />
+
+        <div className="space-y-4">
+          {/* Google-style From / To — native date fields, stacked for mobile */}
+          <div className="rounded-xl border border-white/10 bg-white/[0.02] p-3 space-y-3">
+            {isEditing ? (
+              <label className="block">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
+                  Date
+                </span>
+                <input
+                  type="date"
+                  value={date}
+                  min={dateMin}
+                  required
+                  onChange={(e) => setDate(e.target.value)}
+                  className={dateFieldClass}
+                />
+              </label>
+            ) : (
+              <>
+                <label className="block">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
+                    From
+                  </span>
+                  <input
+                    type="date"
+                    value={date}
+                    min={dateMin}
+                    required
+                    onChange={(e) => {
+                      const next = e.target.value;
+                      setDate(next);
+                      if (!endDate || endDate < next) setEndDate(next);
+                    }}
+                    className={dateFieldClass}
+                  />
+                </label>
+                <label className="block">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
+                    To
+                  </span>
+                  <input
+                    type="date"
+                    value={effectiveEnd}
+                    min={date || today}
+                    required
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className={dateFieldClass}
+                  />
+                </label>
+                <p className="text-xs text-[#9CA3AF] leading-relaxed">
+                  {isRange
+                    ? `${rangeDays} days will be blocked (shop closed). Max 31.`
+                    : "Same date = one day. Later To date = whole trip (e.g. a week)."}
+                </p>
+              </>
+            )}
           </div>
+
           <label className="block">
             <span className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5 block">
               Reason
@@ -243,54 +372,69 @@ export default function BlockDateModal() {
               onChange={(e) => setReason(e.target.value)}
               placeholder="Optional, e.g. Family trip"
               maxLength={200}
-              className={fieldClass}
+              className={`${fieldClass} min-h-12 text-base`}
             />
           </label>
-          <div className="rounded-xl border border-white/10 bg-white/[0.02] p-3 space-y-3">
-            <p className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF]">
-              Optional customer / contact
-            </p>
-            <p className="text-xs text-[#9CA3AF]">
-              {isEditing
-                ? "Name, phone, or vehicle makes this day count as an appointment. Changing the phone or moving the date sends a confirmation text. Name-only changes do not resend."
-                : "Add a name, phone, or vehicle to hold this day as an appointment. A phone number also sends a confirmation text."}
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Name"
-                maxLength={100}
-                className={fieldClass}
-              />
-              <input
-                type="text"
-                value={surname}
-                onChange={(e) => setSurname(e.target.value)}
-                placeholder="Surname"
-                maxLength={100}
-                className={fieldClass}
-              />
-              <input
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(formatPhone(e.target.value))}
-                placeholder="Phone"
-                maxLength={14}
-                className={fieldClass}
-              />
+
+          {!isRange && (
+            <div className="rounded-xl border border-white/10 bg-white/[0.02] p-3 space-y-3">
+              <p className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF]">
+                Optional customer / contact
+              </p>
+              <p className="text-xs text-[#9CA3AF] leading-relaxed">
+                {isEditing
+                  ? "Name, phone, or vehicle makes this day an appointment. Changing phone or date sends a confirmation text."
+                  : "Add contact to hold one day as an appointment. For a multi-day shop close, set a later To date instead."}
+              </p>
+              <div className="grid grid-cols-1 gap-3">
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Name"
+                  maxLength={100}
+                  className={`${fieldClass} min-h-12 text-base`}
+                  autoComplete="given-name"
+                />
+                <input
+                  type="text"
+                  value={surname}
+                  onChange={(e) => setSurname(e.target.value)}
+                  placeholder="Surname"
+                  maxLength={100}
+                  className={`${fieldClass} min-h-12 text-base`}
+                  autoComplete="family-name"
+                />
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(formatPhone(e.target.value))}
+                  placeholder="Phone"
+                  maxLength={14}
+                  className={`${fieldClass} min-h-12 text-base`}
+                  inputMode="tel"
+                  autoComplete="tel"
+                />
+                <input
+                  type="text"
+                  value={vehicle}
+                  onChange={(e) => setVehicle(e.target.value)}
+                  placeholder="Vehicle, e.g. 2022 BMW M4"
+                  maxLength={120}
+                  className={`${fieldClass} min-h-12 text-base`}
+                />
+              </div>
             </div>
-            <input
-              type="text"
-              value={vehicle}
-              onChange={(e) => setVehicle(e.target.value)}
-              placeholder="Vehicle, e.g. 2022 BMW M4"
-              maxLength={120}
-              className={fieldClass}
-            />
-          </div>
+          )}
+
+          {isRange && (
+            <p className="text-xs text-[#9CA3AF] rounded-xl border border-white/10 bg-white/[0.02] p-3 leading-relaxed">
+              Multi-day blocks close the shop for the whole range. Customer holds stay single-day —
+              set To equal to From to add a contact hold.
+            </p>
+          )}
         </div>
+
         {error && (
           <div className="mt-3 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-sm">
             {error}
@@ -301,13 +445,18 @@ export default function BlockDateModal() {
             {successNote}
           </div>
         )}
-        <div className="flex justify-end gap-2 mt-5">
-          <GhostButton type="button" onClick={closeBlockDate}>
+
+        <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 mt-5">
+          <GhostButton type="button" onClick={closeBlockDate} className="min-h-12 w-full sm:w-auto">
             Cancel
           </GhostButton>
-          <PrimaryButton type="submit" disabled={!date || submitting}>
+          <PrimaryButton
+            type="submit"
+            disabled={!date || submitting}
+            className="min-h-12 w-full sm:w-auto"
+          >
             {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-            {isEditing ? "Save" : "Block Date"}
+            {isEditing ? "Save" : isRange ? `Block ${rangeDays} Days` : "Block Date"}
           </PrimaryButton>
         </div>
       </form>
